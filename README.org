@@ -6,8 +6,38 @@
 4. 第三阶段： 局部微调
 
 * 术语对照表
-| face   | 面   |
-| thread | 线程 |
+  针对不合适的术语表述，欢迎提交修正。
+| Face         | 面       |
+| Eval         | 评估     |
+| Kill Ring    | 环       |
+| Numbers                            | 数字                 |
+| Lists                              | 列表                 |
+| Sequences, Arrays, and Vectors     | 序列、数组和向量     |
+| Records                            | 记录                 |
+| Hash Tables                        | 哈希表               |
+| Symbols                            | 符号                 |
+| Evaluation                         | 评价                 |
+| Control Structures                 | 控制结构             |
+| Variables                          | 变量                 |
+| Functions                          | 函数                 |
+| Macros                             | 宏                   |
+| Loading                            | 加载                 |
+| Byte Compilation                   | 字节编译             |
+| Minibuffers                        | 小缓冲区             |
+| Command Loop                       | 命令循环             |
+| Keymaps                            | 键映射               |
+| Major and Minor Modes              | 主要和次要模式       |
+| Documentation                      | 文档                 |
+| Files                              | 文件                 |
+| Buffers                            | 缓冲器               |
+| Windows                            | 窗口                 |
+| Frames                             | 帧                   |
+| Positions                          | 位置                 |
+| Markers                            | 标记                 |
+| Text                               | 文本                 |
+| Non-ASCII Characters               | 非ASCII字符          |
+| Syntax Tables                      | 语法表               |
+| Threads                            | 线程                 |
 
 * 翻译进度
 ** 1 简介
@@ -29,7 +59,7 @@
 ** 2 Lisp 数据类型
 | 2.1 打印表示和读取语法                | TODO |
 | 2.2 特殊读语法                        | TODO |
-| 2.3 评论                              | TODO |
+| 2.3 评估                            | TODO |
 | 2.4 编程类型                          | TODO |
 | 2.4.1 整数类型                        | TODO |
 | 2.4.2 浮点型                          | TODO |
