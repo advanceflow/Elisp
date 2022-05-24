@@ -4,14 +4,7 @@
 #+OPTIONS: ^:nil
 
 
-* DONE 1 简介
-  CLOSED: [2022-05-24 Tue 09:40]
-  :LOGBOOK:
-  - State "DONE"       from "TODO"       [2022-05-24 Tue 09:40]
-  - State "TODO"       from "DONE"       [2022-05-23 Mon 10:54]
-  - State "DONE"       from "DONE"       [2022-05-23 Mon 10:54]
-  - State "DONE"       from "TODO"       [2022-05-21 Sat 16:38]
-  :END:
+* TODO 1 简介
 大多数GNU Emacs文本编辑器都是用称为Emacs Lisp的编程语言编写的。您可以在Emacs Lisp中编写新代码，并将其作为编辑器的扩展安装。然而，Emacs Lisp不仅仅是一种扩展语言；它本身就是一种完整的计算机编程语言。您可以像使用任何其他编程语言一样使用它。
 
 由于Emacs Lisp是为在编辑器中使用而设计的，因此它具有扫描和解析文本的特殊功能，以及处理文件、缓冲区、显示、子进程等的功能。Emacs Lisp与编辑设施紧密集成；因此，编辑命令是也可以方便地从Lisp程序调用的函数，自定义参数是普通的Lisp变量。
@@ -21,26 +14,14 @@
 一般来说，前面的章节描述了Emacs Lisp的特性，这些特性在许多编程语言中都有对应的特性，后面的章节描述了Emacs Lisp特有的特性或与编辑相关的特性。
 
 这是GNU Emacs Lisp参考手册，对应于Emacs版本28.1。
-** DONE 1.1 注意事项
-   CLOSED: [2022-05-24 Tue 09:40]
-   :LOGBOOK:
-   - State "DONE"       from "TODO"       [2022-05-24 Tue 09:40]
-   - State "TODO"       from "DONE"       [2022-05-23 Mon 10:54]
-   - State "DONE"       from "TODO"       [2022-05-21 Sat 16:38]
-   :END:
+** TODO 1.1 注意事项
 这本手册已经起草了许多草稿。它几乎是完整的，但并非完美无缺。有几个主题没有涵盖，要么是因为我们认为它们是次要的（如大多数单独的模式），要么是因为它们尚未编写。由于我们无法完全处理这些问题，我们特意省略了几个部分。
 
 手册所涵盖的内容应该完全正确，因此，从具体的示例和描述性文本到章节的顺序，手册所说的任何内容都可能受到批评。如果有什么东西让人困惑，或者你发现你必须查看来源或实验来学习手册中没有涵盖的东西，那么也许应该修改手册。请让我们知道。
 
 在您使用本手册时，我们要求您在找到更正后尽快发送更正。如果您想到一个简单的、真实的函数或函数组示例，请努力将其写出来并发送进来。请参考节点名称和函数或变量名称的任何注释（视情况而定）。同时说明你批评的版本号。
 请使用M-x report emacs bug发送评论和更正。如果您希望贡献新代码（或发送补丁来修复问题），请使用M-x submit-emacs-patch。
-** DONE 1.2 Lisp 历史
-   CLOSED: [2022-05-24 Tue 09:40]
-   :LOGBOOK:
-   - State "DONE"       from "TODO"       [2022-05-24 Tue 09:40]
-   - State "TODO"       from "DONE"       [2022-05-23 Mon 10:54]
-   - State "DONE"       from "TODO"       [2022-05-21 Sat 16:38]
-   :END:
+** TODO 1.2 Lisp 历史
 Lisp（列表处理语言）最早于20世纪50年代末在麻省理工学院人工智能研究所开发。Lisp语言强大的功能使其非常适合用于其他用途，例如编写编辑命令。
 
 多年来已经构建了数十个Lisp实现，每个都有自己的特性。他们中的许多人都受到了Maclisp的启发，该书于20世纪60年代在麻省理工学院的MAC项目中写成。最终，Maclisp后代的实现者走到了一起，为Lisp系统开发了一个标准，称为Common Lisp。与此同时，麻省理工学院的格里·苏斯曼（GerrySussman）和盖伊·斯蒂尔（GuySteele）开发了一种简化但功能强大的Lisp方言，名为Scheme。
@@ -49,13 +30,7 @@ GNU Emacs Lisp主要受Maclisp的启发，也有一点受Common Lisp的启发。
 
 通过cl lib库可以获得一定数量的公共Lisp仿真。请参见Common Lisp扩展中的概述。
 Emacs Lisp完全不受Scheme的影响；但是GNU项目有一个方案的实现，叫做Guile。我们在所有要求可扩展性的新GNU软件中使用它。
-** DONE 1.3 约定
-   CLOSED: [2022-05-24 Tue 09:40]
-   :LOGBOOK:
-   - State "DONE"       from "TODO"       [2022-05-24 Tue 09:40]
-   - State "TODO"       from "DONE"       [2022-05-23 Mon 10:54]
-   - State "DONE"       from "TODO"       [2022-05-21 Sat 16:38]
-   :END:
+** TODO 1.3 约定
 本节说明本手册中使用的符号约定。  您可能想跳过本节，稍后再参考。
 *** TODO 1.3.1 一些条款
 在本手册中，短语“Lisp 阅读器”和“Lisp 打印机”指的是 Lisp 中将 Lisp 对象的文本表示形式转换为实际 Lisp 对象的那些例程，反之亦然。  有关详细信息，请参阅打印表示和读取语法。  你，阅读本手册的人，被认为是程序员，被称为“你”。  用户是使用 Lisp 程序的人，包括您编写的程序。
@@ -83,8 +58,8 @@ Emacs Lisp完全不受Scheme的影响；但是GNU项目有一个方案的实现�
 如果 object 是两个规范布尔值之一，则返回非 nil：t 或 nil。
 *** TODO 1.3.3 评估符号
     :LOGBOOK:
-    - State "TODO"       from "DONE"       [2022-05-23 Mon 11:00]
-    - State "DONE"       from "TODO"       [2022-05-23 Mon 10:38]
+    - State "TODO"       from "TODO"       [2022-05-23 Mon 11:00]
+    - State "TODO"       from "TODO"       [2022-05-23 Mon 10:38]
     :END:
  您可以计算的 Lisp 表达式称为表单。  计算一个表单总是会产生一个结果，它是一个 Lisp 对象。  在本手册的示例中，这用“⇒”表示：
 
@@ -207,13 +182,7 @@ Emacs Lisp完全不受Scheme的影响；但是GNU项目有一个方案的实现�
 此变量的值是 Electric Command Future 模式使用的完整键盘映射。  此地图中的功能允许您编辑尚未考虑执行的命令。 
 
 用户选项描述具有相同的格式，但“变量”被“用户选项”取代。
-** DONE 1.4 版本信息
-   CLOSED: [2022-05-24 Tue 09:40]
-   :LOGBOOK:
-   - State "DONE"       from "TODO"       [2022-05-24 Tue 09:40]
-   - State "TODO"       from "DONE"       [2022-05-23 Mon 10:54]
-   - State "DONE"       from "TODO"       [2022-05-21 Sat 16:38]
-   :END:
+** TODO 1.4 版本信息
 这些工具提供有关正在使用的 Emacs 版本的信息。
 
 #+begin_src emacs-lisp
@@ -269,13 +238,7 @@ Emacs 的次要版本号，为整数。  对于 Emacs 版本 23.1，该值为 1�
 一个字符串，它给出了构建 Emacs 的存储库分支。  在大多数情况下，这是“主人”。  如果 Emacs 是在版本控制之外构建的，则该值为 nil。
 
 
-** DONE 1.5 致谢
-   CLOSED: [2022-05-23 Mon 10:53]
-   :LOGBOOK:
-   - State "DONE"       from "TODO"       [2022-05-23 Mon 10:53]
-   - State "TODO"       from "DONE"       [2022-05-23 Mon 10:53]
-   - State "DONE"       from "TODO"       [2022-05-21 Sat 16:38]
-   :END:
+** TODO 1.5 致谢
 本手册最初由GNU手册小组的志愿者Robert Krawitz、Bil Lewis、Dan LaLiberte、Richard M.Stallman和Chris Welty编写，历时数年。Robert J.Chassell在国防高级研究计划局的支持下，协助审查和编辑了该手册，ARPA 6082号令，由计算逻辑公司的Warren A.Hunt Jr.安排。此后，Miles Bader、Lars Brinkhoff、Chong Yidong、Kenichi Handa、Lute Kamstra、Juri Linkov、Glenn Morris、Thien Thi Nguyen、Dan Nicolaescu、Martin Rudaliss、，Kim F.Storm、Luc Teirlinck、Eli Zaretskii和其他人。
 
 更正由Drew Adams、Juanma Barrankero、Karl Berry、Jim Blandy、Bard Bloom、Stephane Boucher、David Boyes、Alan Carroll、Richard Davis、Lawrence R.Dodd、Peter Doornbosch、David A.Duff、Chris Eich、Beverly Erlebacher、David Eckelkamp、Ralf Fassel、Eirik Fuller、Stephen Gildea、Bob Glickstein、Eric Hanchrow、Jesper Harder、George Hartzell、Nathan Hess、Masayuki Ida、，Dan Jacobson、Jak Kirman、Bob Knighten、Frederick M.Korz、Joe Lammens、Glenn M.Lewis、K.Richard Magill、Brian Marick、Roland McGrath、Stefan Monnier、Skip Montanaro、John Gardiner Myers、Thomas A.Peterson、Francesco Potortì、Friedrich Pukelsheim、Arnold D.Robbins、Raul Rockwell、Jason Rumney、Per Starbä、Shinichrou Sugou、Kimmo Suominen、Edward Tharp、Bill Trost、Rickard Westman、，Jean White、Eduard Wiebe、Matthew Wilding、Carl Witty、Dale Worley、Rusty Wright和David D.Zuhn。
