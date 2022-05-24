@@ -7,171 +7,171 @@
 
 缩写或缩写是可以扩展为更长字符串的字符串。  用户可以插入缩写字符串并发现它自动替换为缩写的扩展。  这样可以节省打字。
 
- 当前有效的缩写集记录在缩写表中。  每个缓冲区都有一个本地缩写表，但通常同一主模式下的所有缓冲区共享一个缩写表。  还有一个全局缩写表。  通常两者都使用。
+当前有效的缩写集记录在缩写表中。  每个缓冲区都有一个本地缩写表，但通常同一主模式下的所有缓冲区共享一个缩写表。  还有一个全局缩写表。  通常两者都使用。
 
- 缩写表表示为 obarray。  有关 obarrays 的信息，请参阅创建和内部符号。  每个缩写都由 obarray 中的一个符号表示。  符号名称是缩写；  它的价值是扩展；  它的函数定义是执行扩展的钩子函数（参见定义缩写）；  其属性列表单元格包含各种附加属性，包括使用次数和缩写扩展的次数（参见缩写属性）。
+缩写表表示为 obarray。  有关 obarrays 的信息，请参阅创建和内部符号。  每个缩写都由 obarray 中的一个符号表示。  符号名称是缩写；  它的价值是扩展；  它的函数定义是执行扩展的钩子函数（参见定义缩写）；  其属性列表单元格包含各种附加属性，包括使用次数和缩写扩展的次数（参见缩写属性）。
 
- 某些缩写，称为系统缩写，由主模式而不是用户定义。  系统缩写由其非 nil :system 属性标识（请参阅缩写属性）。  将缩写保存到缩写文件时，系统缩写将被省略。  请参阅在文件中保存缩写。
+某些缩写，称为系统缩写，由主模式而不是用户定义。  系统缩写由其非 nil :system 属性标识（请参阅缩写属性）。  将缩写保存到缩写文件时，系统缩写将被省略。  请参阅在文件中保存缩写。
 
- 因为用于缩写的符号没有被嵌入到通常的 obarray 中，所以它们永远不会作为读取 Lisp 表达式的结果出现；  事实上，除了处理缩写的代码之外，它们通常从不使用。  因此，以非标准方式使用它们是安全的。
+因为用于缩写的符号没有被嵌入到通常的 obarray 中，所以它们永远不会作为读取 Lisp 表达式的结果出现；  事实上，除了处理缩写的代码之外，它们通常从不使用。  因此，以非标准方式使用它们是安全的。
 
- 如果启用了次要模式 Abbrev 模式，则缓冲区局部变量 abbrev-mode 为非 nil，并且 abbrevs 会自动在缓冲区中展开。  有关 abbrevs 的用户级命令，请参阅 The GNU Emacs Manual 中的 Abbrev Mode。
+如果启用了次要模式 Abbrev 模式，则缓冲区局部变量 abbrev-mode 为非 nil，并且 abbrevs 会自动在缓冲区中展开。  有关 abbrevs 的用户级命令，请参阅 The GNU Emacs Manual 中的 Abbrev Mode。
 
 ** TODO 37.1 缩略表
 
 本节介绍如何创建和操作缩写表。
 
- 功能：make-abbrev-table &optional props ¶
+功能：make-abbrev-table &optional props ¶
 
-     该函数创建并返回一个新的空缩写表——一个不包含符号的 obarray。  它是一个用零填充的向量。  props 是应用于新表的属性列表（请参阅 Abbrev Table Properties）。
+    该函数创建并返回一个新的空缩写表——一个不包含符号的 obarray。  它是一个用零填充的向量。  props 是应用于新表的属性列表（请参阅 Abbrev Table Properties）。
 
- 功能：abbrev-table-p 对象 ¶
+功能：abbrev-table-p 对象 ¶
 
-     如果 object 是缩写表，则此函数返回非 nil 值。
+    如果 object 是缩写表，则此函数返回非 nil 值。
 
- 功能：clear-abbrev-table abbrev-table ¶
+功能：clear-abbrev-table abbrev-table ¶
 
-     此函数取消定义 abbrev-table 中的所有缩写，使其为空。
+    此函数取消定义 abbrev-table 中的所有缩写，使其为空。
 
- 功能：复制缩写表 缩写表¶
+功能：复制缩写表 缩写表¶
 
-     此函数返回 abbrev-table 的副本——一个包含相同缩写定义的新缩写表。  它不复制任何属性列表；  只有名称、值和函数。
+    此函数返回 abbrev-table 的副本——一个包含相同缩写定义的新缩写表。  它不复制任何属性列表；  只有名称、值和函数。
 
- 功能：define-abbrev-table tabname 定义 &optional docstring &rest props ¶
+功能：define-abbrev-table tabname 定义 &optional docstring &rest props ¶
 
-     该函数将tabname（一个符号）定义为一个缩写表名，即作为一个变量，其值为一个缩写表。  它根据定义在表中定义了缩写，一个元素列表的形式（缩写名展开[hook][props...]）。  这些元素作为参数传递给define-abbrev。
+    该函数将tabname（一个符号）定义为一个缩写表名，即作为一个变量，其值为一个缩写表。  它根据定义在表中定义了缩写，一个元素列表的形式（缩写名展开[hook][props...]）。  这些元素作为参数传递给define-abbrev。
 
-     可选字符串 docstring 是变量 tabname 的文档字符串。  属性列表 props 应用于缩写表（请参阅缩写表属性）。
+    可选字符串 docstring 是变量 tabname 的文档字符串。  属性列表 props 应用于缩写表（请参阅缩写表属性）。
 
-     如果为同一个选项卡名多次调用此函数，则后续调用会将定义中的定义添加到选项卡名，而不是覆盖整个原始内容。  （后续调用仅覆盖定义中显式重新定义或未定义的缩写。）
+    如果为同一个选项卡名多次调用此函数，则后续调用会将定义中的定义添加到选项卡名，而不是覆盖整个原始内容。  （后续调用仅覆盖定义中显式重新定义或未定义的缩写。）
 
- 变量：缩写表名称列表¶
+变量：缩写表名称列表¶
 
-     这是一个符号列表，其值为缩写表。  define-abbrev-table 将新的缩写表名称添加到此列表中。
+    这是一个符号列表，其值为缩写表。  define-abbrev-table 将新的缩写表名称添加到此列表中。
 
- 功能：插入缩写表描述名称&可选人类¶
+功能：插入缩写表描述名称&可选人类¶
 
-     此函数在点之前插入名为 name 的缩写表的描述。  参数名称是一个符号，其值为一个缩写表。
+    此函数在点之前插入名为 name 的缩写表的描述。  参数名称是一个符号，其值为一个缩写表。
 
-     如果 human 不是 nil，则描述是面向人的。  系统缩写会这样列出和标识。  否则，描述是一个 Lisp 表达式——对 define-abbrev-table 的调用，它将按照当前定义的方式定义名称，但没有系统缩写。  （使用名称的模式或包应该将这些添加到单独的名称中。）
+    如果 human 不是 nil，则描述是面向人的。  系统缩写会这样列出和标识。  否则，描述是一个 Lisp 表达式——对 define-abbrev-table 的调用，它将按照当前定义的方式定义名称，但没有系统缩写。  （使用名称的模式或包应该将这些添加到单独的名称中。）
 
 ** TODO 37.2 定义缩写
 
 define-abbrev 是用于在缩写表中定义缩写的低级基本函数。
 
- 当主要模式定义系统缩写时，它应该调用 define-abbrev 并为 :system 属性指定 t。  请注意，任何保存的非系统缩写都会在启动时恢复，即在加载某些主要模式之前。  因此，主要模式不应假定它们的缩写表在首次加载时为空。
+当主要模式定义系统缩写时，它应该调用 define-abbrev 并为 :system 属性指定 t。  请注意，任何保存的非系统缩写都会在启动时恢复，即在加载某些主要模式之前。  因此，主要模式不应假定它们的缩写表在首次加载时为空。
 
- 功能：define-abbrev abbrev-table 名称扩展 &optional hook &rest props ¶
+功能：define-abbrev abbrev-table 名称扩展 &optional hook &rest props ¶
 
-     该函数在 abbrev-table 中定义了一个名为 name 的缩写，用于扩展为展开和调用钩子，带有属性 props（参见缩写属性）。  返回值为名称。  props 中的 :system 属性在这里被特殊对待：如果它具有值 force，那么即使对于同名的非系统缩写，它也会覆盖现有定义。
+    该函数在 abbrev-table 中定义了一个名为 name 的缩写，用于扩展为展开和调用钩子，带有属性 props（参见缩写属性）。  返回值为名称。  props 中的 :system 属性在这里被特殊对待：如果它具有值 force，那么即使对于同名的非系统缩写，它也会覆盖现有定义。
 
-     名称应该是一个字符串。  参数扩展通常是所需的扩展（字符串），或者 nil 取消定义缩写。  如果它不是字符串或 nil，则缩写仅通过运行 hook 扩展。
+    名称应该是一个字符串。  参数扩展通常是所需的扩展（字符串），或者 nil 取消定义缩写。  如果它不是字符串或 nil，则缩写仅通过运行 hook 扩展。
 
-     参数挂钩是一个函数或 nil。  如果 hook 不为 nil，则在将缩写替换为展开式后不带参数调用它；  当调用 hook 时，point 位于展开的末尾。
+    参数挂钩是一个函数或 nil。  如果 hook 不为 nil，则在将缩写替换为展开式后不带参数调用它；  当调用 hook 时，point 位于展开的末尾。
 
-     如果 hook 是一个非 nil 符号，其 no-self-insert 属性为非 nil，则 hook 可以显式控制是否插入触发扩展的自插入输入字符。  如果在这种情况下钩子返回非零，则禁止插入字符。  相反，如果钩子返回 nil，expand-abbrev（或 abbrev-insert）也返回 nil，就好像展开并没有真正发生一样。
+    如果 hook 是一个非 nil 符号，其 no-self-insert 属性为非 nil，则 hook 可以显式控制是否插入触发扩展的自插入输入字符。  如果在这种情况下钩子返回非零，则禁止插入字符。  相反，如果钩子返回 nil，expand-abbrev（或 abbrev-insert）也返回 nil，就好像展开并没有真正发生一样。
 
-     通常，define-abbrev 将变量 abbrevs-changed 设置为 t，如果它实际上更改了 abbrev。  这样一些命令将提供保存缩写。  它不会对系统缩写执行此操作，因为无论如何都不会保存这些缩写。
+    通常，define-abbrev 将变量 abbrevs-changed 设置为 t，如果它实际上更改了 abbrev。  这样一些命令将提供保存缩写。  它不会对系统缩写执行此操作，因为无论如何都不会保存这些缩写。
 
- 用户选项：only-global-abbrevs ¶
+用户选项：only-global-abbrevs ¶
 
-     如果此变量非零，则表示用户计划仅使用全局缩写。  这告诉定义特定模式缩写的命令改为定义全局缩写。  该变量不会改变本节中函数的行为；  他们的来电者会检查它。
+    如果此变量非零，则表示用户计划仅使用全局缩写。  这告诉定义特定模式缩写的命令改为定义全局缩写。  该变量不会改变本节中函数的行为；  他们的来电者会检查它。
 
 ** TODO 37.3 在文件中保存缩写
 
 保存的缩写定义文件实际上是一个 Lisp 代码文件。  缩写以 Lisp 程序的形式保存，以定义具有相同内容的相同缩写表。  因此，您可以使用 load 加载文件（请参阅程序如何加载）。  但是，作为更方便的接口提供了 quiet-read-abbrev-file 功能。  Emacs 在启动时会自动调用这个函数。
 
- 用户级工具（例如 save-some-buffers）可以在此处描述的变量控制下自动将缩写保存在文件中。
+用户级工具（例如 save-some-buffers）可以在此处描述的变量控制下自动将缩写保存在文件中。
 
- 用户选项：缩写文件名¶
+用户选项：缩写文件名¶
 
-     这是读取和保存缩写的默认文件名。  默认情况下，Emacs 将查找 ~/.emacs.d/abbrev_defs，如果没有找到，则查找 ~/.abbrev_defs；  如果两个文件都不存在，Emacs 将创建 ~/.emacs.d/abbrev_defs。
+    这是读取和保存缩写的默认文件名。  默认情况下，Emacs 将查找 ~/.emacs.d/abbrev_defs，如果没有找到，则查找 ~/.abbrev_defs；  如果两个文件都不存在，Emacs 将创建 ~/.emacs.d/abbrev_defs。
 
- 功能：安静地阅读缩写文件和可选文件名¶
+功能：安静地阅读缩写文件和可选文件名¶
 
-     此函数从名为 filename 的文件中读取缩写定义，该文件之前使用 write-abbrev-file 编写。  如果 filename 省略或为零，则使用 abbrev-file-name 中指定的文件。
+    此函数从名为 filename 的文件中读取缩写定义，该文件之前使用 write-abbrev-file 编写。  如果 filename 省略或为零，则使用 abbrev-file-name 中指定的文件。
 
-     顾名思义，此函数不显示任何消息。
+    顾名思义，此函数不显示任何消息。
 
- 用户选项：保存缩写¶
+用户选项：保存缩写¶
 
-     save-abbrevs 的非 nil 值意味着 Emacs 应该在保存文件时提供保存缩写（如果有任何更改）。  如果值是静默的，Emacs 会保存缩写而不询问用户。  abbrev-file-name 指定保存缩写的文件。默认值为 t。
+    save-abbrevs 的非 nil 值意味着 Emacs 应该在保存文件时提供保存缩写（如果有任何更改）。  如果值是静默的，Emacs 会保存缩写而不询问用户。  abbrev-file-name 指定保存缩写的文件。默认值为 t。
 
- 变量：缩写更改¶
+变量：缩写更改¶
 
-     通过定义或更改任何缩写（系统缩写除外）将此变量设置为非零。  这用作各种 Emacs 命令的标志，用于保存您的缩写。
+    通过定义或更改任何缩写（系统缩写除外）将此变量设置为非零。  这用作各种 Emacs 命令的标志，用于保存您的缩写。
 
- 命令：write-abbrev-file &optional filename ¶
+命令：write-abbrev-file &optional filename ¶
 
-     保存所有缩写定义（系统缩写除外），对于 abbrev-table-name-list 中列出的所有缩写表，在文件 filename 中，以 Lisp 程序的形式，在加载时将定义相同的缩写。  没有任何要保存的缩写的表将被省略。  如果 filename 为 nil 或省略，则使用 abbrev-file-name。  此函数返回零。
+    保存所有缩写定义（系统缩写除外），对于 abbrev-table-name-list 中列出的所有缩写表，在文件 filename 中，以 Lisp 程序的形式，在加载时将定义相同的缩写。  没有任何要保存的缩写的表将被省略。  如果 filename 为 nil 或省略，则使用 abbrev-file-name。  此函数返回零。
 
 ** TODO 37.4 查找和扩展缩略语
 
 缩写通常由某些交互式命令扩展，包括 self-insert-command。  本节介绍编写此类命令时使用的子程序，以及它们用于通信的变量。
 
- 功能：abbrev-symbol abbrev &optional table ¶
+功能：abbrev-symbol abbrev &optional table ¶
 
-     此函数返回代表名为 abbrev 的缩写的符号。  如果未定义该缩写，则返回 nil。  可选的第二个参数表是要在其中查找的缩写表。  如果 table 为 nil，此函数首先尝试当前缓冲区的本地缩写表，然后尝试全局缩写表。
+    此函数返回代表名为 abbrev 的缩写的符号。  如果未定义该缩写，则返回 nil。  可选的第二个参数表是要在其中查找的缩写表。  如果 table 为 nil，此函数首先尝试当前缓冲区的本地缩写表，然后尝试全局缩写表。
 
- 功能：abbrev-expansion abbrev & optional table ¶
+功能：abbrev-expansion abbrev & optional table ¶
 
-     此函数返回 abbrev 将扩展成的字符串（由用于当前缓冲区的 abbrev 表定义）。  如果 abbrev 不是有效的缩写，则返回 nil。  可选参数表指定要使用的缩写表，如 abbrev-symbol。
+    此函数返回 abbrev 将扩展成的字符串（由用于当前缓冲区的 abbrev 表定义）。  如果 abbrev 不是有效的缩写，则返回 nil。  可选参数表指定要使用的缩写表，如 abbrev-symbol。
 
- 命令：扩展缩写¶
+命令：扩展缩写¶
 
-     此命令扩展点之前的缩写（如果有）。  如果 point 不跟随缩写，则此命令不执行任何操作。  为了进行扩展，它调用作为 abbrev-expand-function 变量值的函数，不带参数，并返回该函数所做的任何事情。
+    此命令扩展点之前的缩写（如果有）。  如果 point 不跟随缩写，则此命令不执行任何操作。  为了进行扩展，它调用作为 abbrev-expand-function 变量值的函数，不带参数，并返回该函数所做的任何事情。
 
-     默认扩展函数在进行扩展时返回缩写符号，否则返回 nil。  如果缩写符号有一个钩子函数，它是一个非自插入属性为非 nil 的符号，并且如果钩子函数返回 nil 作为其值，则默认扩展函数返回 nil，即使扩展确实发生了。
+    默认扩展函数在进行扩展时返回缩写符号，否则返回 nil。  如果缩写符号有一个钩子函数，它是一个非自插入属性为非 nil 的符号，并且如果钩子函数返回 nil 作为其值，则默认扩展函数返回 nil，即使扩展确实发生了。
 
- 功能：abbrev-insert abbrev &optional name start end ¶
+功能：abbrev-insert abbrev &optional name start end ¶
 
-     此函数插入​​ abbrev 的 abbrev 扩展，替换 start 和 end 之间的文本。  如果省略 start，则默认为 point。  name，如果非零，应该是找到这个缩写的名字（一个字符串）；  用于判断是否调整扩张的资本化。  如果 abbrev 插入成功，该函数返回 abbrev，否则返回 nil。
+    此函数插入​​ abbrev 的 abbrev 扩展，替换 start 和 end 之间的文本。  如果省略 start，则默认为 point。  name，如果非零，应该是找到这个缩写的名字（一个字符串）；  用于判断是否调整扩张的资本化。  如果 abbrev 插入成功，该函数返回 abbrev，否则返回 nil。
 
- 命令：abbrev-prefix-mark &optional arg ¶
+命令：abbrev-prefix-mark &optional arg ¶
 
-     此命令将点的当前位置标记为缩写的开头。  对 expand-abbrev 的下一次调用将使用从这里到点（当时在哪里）的文本作为展开的缩写，而不是像往常一样使用前一个单词。
+    此命令将点的当前位置标记为缩写的开头。  对 expand-abbrev 的下一次调用将使用从这里到点（当时在哪里）的文本作为展开的缩写，而不是像往常一样使用前一个单词。
 
-     首先，此命令扩展点之前的任何缩写，除非 arg 不为 nil。  （交互式地，arg 是前缀参数。）然后它在点之前插入一个连字符，以指示要扩展的下一个缩写的开始。  实际的扩展删除了连字符。
+    首先，此命令扩展点之前的任何缩写，除非 arg 不为 nil。  （交互式地，arg 是前缀参数。）然后它在点之前插入一个连字符，以指示要扩展的下一个缩写的开始。  实际的扩展删除了连字符。
 
- 用户选项：abbrev-all-caps ¶
+用户选项：abbrev-all-caps ¶
 
-     当此设置为非零时，完全以大写输入的缩写将使用全部大写进行扩展。  否则，通过大写扩展的每个单词来扩展完全以大写形式输入的缩写。
+    当此设置为非零时，完全以大写输入的缩写将使用全部大写进行扩展。  否则，通过大写扩展的每个单词来扩展完全以大写形式输入的缩写。
 
- 变量：缩写开始位置¶
+变量：缩写开始位置¶
 
-     此变量的值是一个缓冲区位置（整数或标记），用于 expand-abbrev 用作下一个要扩展的缩写的开始。  该值也可以为 nil，这意味着使用 point 之前的单词代替。  每次调用 expand-abbrev 时，abbrev-start-location 都设置为 nil。  此变量也由 abbrev-prefix-mark 设置。
+    此变量的值是一个缓冲区位置（整数或标记），用于 expand-abbrev 用作下一个要扩展的缩写的开始。  该值也可以为 nil，这意味着使用 point 之前的单词代替。  每次调用 expand-abbrev 时，abbrev-start-location 都设置为 nil。  此变量也由 abbrev-prefix-mark 设置。
 
- 变量：abbrev-start-location-buffer ¶
+变量：abbrev-start-location-buffer ¶
 
-     此变量的值是已设置 abbrev-start-location 的缓冲区。  尝试在任何其他缓冲区中扩展缩写会清除 abbrev-start-location。  此变量由 abbrev-prefix-mark 设置。
+    此变量的值是已设置 abbrev-start-location 的缓冲区。  尝试在任何其他缓冲区中扩展缩写会清除 abbrev-start-location。  此变量由 abbrev-prefix-mark 设置。
 
- 变量：last-abbrev ¶
+变量：last-abbrev ¶
 
-     这是最近扩展的缩写的缩写符号。  为了使用 unexpand-abbrev 命令，这些信息由 expand-abbrev 留下（参见 GNU Emacs 手册中的扩展缩写）。
+    这是最近扩展的缩写的缩写符号。  为了使用 unexpand-abbrev 命令，这些信息由 expand-abbrev 留下（参见 GNU Emacs 手册中的扩展缩写）。
 
- 变量：last-abbrev-location ¶
+变量：last-abbrev-location ¶
 
-     这是最近扩展的缩写的位置。  这包含为 unexpand-abbrev 命令而由 expand-abbrev 留下的信息。
+    这是最近扩展的缩写的位置。  这包含为 unexpand-abbrev 命令而由 expand-abbrev 留下的信息。
 
- 变量：last-abbrev-text ¶
+变量：last-abbrev-text ¶
 
-     这是在大小写转换（如果有）之后最近扩展的缩写的确切扩展文本。  如果缩写已经展开，它的值为 nil。  这包含为 unexpand-abbrev 命令而由 expand-abbrev 留下的信息。
+    这是在大小写转换（如果有）之后最近扩展的缩写的确切扩展文本。  如果缩写已经展开，它的值为 nil。  这包含为 unexpand-abbrev 命令而由 expand-abbrev 留下的信息。
 
- 变量：缩写扩展函数¶
+变量：缩写扩展函数¶
 
-     这个变量的值是一个函数，expand-abbrev 将不带参数调用来进行扩展。  该函数可以在执行扩展之前和之后做任何它想做的事情。  如果发生扩展，它应该返回缩写符号。
+    这个变量的值是一个函数，expand-abbrev 将不带参数调用来进行扩展。  该函数可以在执行扩展之前和之后做任何它想做的事情。  如果发生扩展，它应该返回缩写符号。
 
- 以下示例代码显示了 abbrev-expand-function 的简单使用。  它假定 foo-mode 是一种用于编辑某些文件的模式，其中以“#”开头的行是注释。  您想对这些行使用文本模式缩写。  常规的本地缩写表 foo-mode-abbrev-table 适用于所有其他行。  有关 local-abbrev-table 和 text-mode-abbrev-table 的定义，请参见标准缩写表。  有关 add-function 的详细信息，请参阅 Advising Emacs Lisp Functions。
+以下示例代码显示了 abbrev-expand-function 的简单使用。  它假定 foo-mode 是一种用于编辑某些文件的模式，其中以“#”开头的行是注释。  您想对这些行使用文本模式缩写。  常规的本地缩写表 foo-mode-abbrev-table 适用于所有其他行。  有关 local-abbrev-table 和 text-mode-abbrev-table 的定义，请参见标准缩写表。  有关 add-function 的详细信息，请参阅 Advising Emacs Lisp Functions。
 
- (defun foo-mode-abbrev-expand-function (expand)
-   (if (not (save-excursion (forward-line 0) (eq (char-after) ?#)))
-       ;;  执行正常扩展。
-       （功能扩展）
-     ;;  我们在评论中：使用文本模式缩写。
-     (let ((local-abbrev-table text-mode-abbrev-table))
-       （功能扩展））））
+(defun foo-mode-abbrev-expand-function (expand)
+  (if (not (save-excursion (forward-line 0) (eq (char-after) ?#)))
+      ;;  执行正常扩展。
+      （功能扩展）
+    ;;  我们在评论中：使用文本模式缩写。
+    (let ((local-abbrev-table text-mode-abbrev-table))
+      （功能扩展））））
 
- (add-hook 'foo-mode-hook
+(add-hook 'foo-mode-hook
 	   （拉姆达（）
 	     (add-function :around (local 'abbrev-expand-function)
 			   #'foo-mode-abbrev-expand-function)))
@@ -180,83 +180,83 @@ define-abbrev 是用于在缩写表中定义缩写的低级基本函数。
 
 在这里，我们列出了保存 Emacs 预加载主要模式的缩写表的变量。
 
- 变量：全局缩写表¶
+变量：全局缩写表¶
 
-     这是与模式无关的缩写的缩写表。  其中定义的缩写适用于所有缓冲区。  每个缓冲区也可能有一个本地缩写表，其缩写定义优先于全局表中的定义。
+    这是与模式无关的缩写的缩写表。  其中定义的缩写适用于所有缓冲区。  每个缓冲区也可能有一个本地缩写表，其缩写定义优先于全局表中的定义。
 
- 变量：local-abbrev-table ¶
+变量：local-abbrev-table ¶
 
-     此缓冲区局部变量的值是当前缓冲区的（特定于模式的）缩写表。  它也可以是此类表的列表。
+    此缓冲区局部变量的值是当前缓冲区的（特定于模式的）缩写表。  它也可以是此类表的列表。
 
- 变量：abbrev-minor-mode-table-alist ¶
+变量：abbrev-minor-mode-table-alist ¶
 
-     此变量的值是 (mode . abbrev-table) 形式的元素列表，其中 mode 是变量的名称：如果变量绑定到非 nil 值，则 abbrev-table 处于活动状态，否则它被忽略了。  abbrev-table 也可以是缩写表的列表。
+    此变量的值是 (mode . abbrev-table) 形式的元素列表，其中 mode 是变量的名称：如果变量绑定到非 nil 值，则 abbrev-table 处于活动状态，否则它被忽略了。  abbrev-table 也可以是缩写表的列表。
 
- 变量：基本模式缩写表¶
+变量：基本模式缩写表¶
 
-     这是基本模式中使用的本地缩写表；  换句话说，它是基本模式下所有缓冲区中的本地缩写表。
+    这是基本模式中使用的本地缩写表；  换句话说，它是基本模式下所有缓冲区中的本地缩写表。
 
- 变量：文本模式缩写表¶
+变量：文本模式缩写表¶
 
-     这是文本模式中使用的本地缩写表。
+    这是文本模式中使用的本地缩写表。
 
- 变量：lisp-mode-abbrev-table ¶
+变量：lisp-mode-abbrev-table ¶
 
-     这是在 Lisp 模式中使用的本地缩写表。  它是 Emacs Lisp 模式中使用的本地缩写表的父级。  请参阅缩写表属性。
+    这是在 Lisp 模式中使用的本地缩写表。  它是 Emacs Lisp 模式中使用的本地缩写表的父级。  请参阅缩写表属性。
 
 ** TODO 37.6 缩写属性
 
 缩写具有属性，其中一些会影响它们的工作方式。  您可以将它们作为参数提供给 define-abbrev，并使用以下函数操作它们：
 
- 功能：abbrev-put abbrev prop val ¶
+功能：abbrev-put abbrev prop val ¶
 
-     将 abbrev 的属性 prop 设置为值 val。
+    将 abbrev 的属性 prop 设置为值 val。
 
- 功能：abbrev-get abbrev prop ¶
+功能：abbrev-get abbrev prop ¶
 
-     返回 abbrev 的属性 prop，如果 abbrev 没有这样的属性，则返回 nil。
+    返回 abbrev 的属性 prop，如果 abbrev 没有这样的属性，则返回 nil。
 
- 以下属性具有特殊含义：
+以下属性具有特殊含义：
 
- ：数数
+：数数
 
-     此属性计算缩写扩展的次数。  如果未显式设置，则由 define-abbrev 将其初始化为 0。
- ：系统
+    此属性计算缩写扩展的次数。  如果未显式设置，则由 define-abbrev 将其初始化为 0。
+：系统
 
-     如果非零，则此属性将缩写标记为系统缩写。  不会保存此类缩写（请参阅将缩写保存在文件中）。
- ：启用功能
+    如果非零，则此属性将缩写标记为系统缩写。  不会保存此类缩写（请参阅将缩写保存在文件中）。
+：启用功能
 
-     如果非 nil，则此属性应该是一个无参数的函数，如果不应该使用缩写，则返回 nil，否则返回 t。
- :case-fixed
+    如果非 nil，则此属性应该是一个无参数的函数，如果不应该使用缩写，则返回 nil，否则返回 t。
+:case-fixed
 
-     如果非零，则此属性表示缩写名称的大小写是重要的，并且应该只匹配具有相同大写模式的文本。  它还禁用修改扩展大小写的代码。
+    如果非零，则此属性表示缩写名称的大小写是重要的，并且应该只匹配具有相同大写模式的文本。  它还禁用修改扩展大小写的代码。
 
 ** TODO 37.7 缩写表属性
 
 与缩写一样，缩写表也有一些属性，其中一些会影响它们的工作方式。  您可以将它们作为参数提供给 define-abbrev-table，并使用以下函数操作它们：
 
- 功能：abbrev-table-put table prop val ¶
+功能：abbrev-table-put table prop val ¶
 
-     将 abbrev table table 的 property prop 设置为 value val。
+    将 abbrev table table 的 property prop 设置为 value val。
 
- 功能：abbrev-table-get table prop ¶
+功能：abbrev-table-get table prop ¶
 
-     返回 abbrev table table 的属性 prop，如果 table 没有这样的属性，则返回 nil。
+    返回 abbrev table table 的属性 prop，如果 table 没有这样的属性，则返回 nil。
 
- 以下属性具有特殊含义：
+以下属性具有特殊含义：
 
- ：启用功能
+：启用功能
 
-     这类似于 :enable-function abbrev 属性，只是它适用于表中的所有缩写。  它甚至在尝试查找点之前的缩写之前使用，因此它可以动态修改缩写表。
- :case-fixed
+    这类似于 :enable-function abbrev 属性，只是它适用于表中的所有缩写。  它甚至在尝试查找点之前的缩写之前使用，因此它可以动态修改缩写表。
+:case-fixed
 
-     这类似于 :case-fixed abbrev 属性，只是它适用于表中的所有缩写词。
- :正则表达式
+    这类似于 :case-fixed abbrev 属性，只是它适用于表中的所有缩写词。
+:正则表达式
 
-     如果非零，则此属性是一个正则表达式，指示如何在点之前提取缩写的名称，然后在表中查找它。  当正则表达式在点之前匹配时，缩写名称应在子匹配1中。如果此属性为nil，则默认使用backward-word和forward-word查找名称。  此属性允许使用名称中包含非单词语法字符的缩写。
- ：父母
+    如果非零，则此属性是一个正则表达式，指示如何在点之前提取缩写的名称，然后在表中查找它。  当正则表达式在点之前匹配时，缩写名称应在子匹配1中。如果此属性为nil，则默认使用backward-word和forward-word查找名称。  此属性允许使用名称中包含非单词语法字符的缩写。
+：父母
 
-     此属性包含要从中继承其他缩写的表的列表。
- :abbrev-table-modiff
+    此属性包含要从中继承其他缩写的表的列表。
+:abbrev-table-modiff
 
-     每次向表中添加新的缩写时，此属性都会增加一个计数器。
+    每次向表中添加新的缩写时，此属性都会增加一个计数器。
