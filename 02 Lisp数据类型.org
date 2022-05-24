@@ -146,10 +146,13 @@ Emacs Lisp 中的类型一般分为两类：与 Lisp 编程有关的类型，以
 
  整数的读取语法是一个（以十为基数）数字序列，开头有一个可选的符号，结尾有一个可选的句点。  Lisp 解释器生成的打印表示从不具有前导“+”或结尾“.”。
 
- -1 ;  整数 -1。
- 1;  整数 1。
- 1.;  也是整数 1。
- +1 ;  也是整数 1。
+ #+begin_src emacs-lisp
+   -1               ; The integer -1.
+   1                ; The integer 1.
+   1.               ; Also the integer 1.
+   +1               ; Also the integer 1.
+
+ #+end_src
 
  有关详细信息，请参阅数字。
 
@@ -258,19 +261,20 @@ GNU Emacs Lisp 中的符号是一个有名字的对象。  符号名称用作符
 
  以下是符号名称的几个示例。  请注意，第四个示例中的“+”被转义以防止它被读取为数字。  在第六个示例中这不是必需的，因为名称的其余部分使其作为数字无效。
 
- 富;  一个名为“foo”的符号。
- 福；  一个名为“FOO”的符号，不同于“foo”。
+ #+begin_src emacs-lisp
+   foo                 ; A symbol named ‘foo’.
+   FOO                 ; A symbol named ‘FOO’, different from ‘foo’.
 
- 1+;  一个名为“1+”的符号
-		     ;  （不是'+1'，它是一个整数）。
+   1+                  ; A symbol named ‘1+’
+		       ;   (not ‘+1’, which is an integer).
 
- \+1 ;  一个名为“+1”的符号
-		     ;  （不是一个非常易读的名称）。
+   \+1                 ; A symbol named ‘+1’
+		       ;   (not a very readable name).
 
- \(*\ 1\ 2\) ;  一个名为 '(* 1 2)' 的符号（更糟糕的名称）。
- +-*/_~!@$%^&=:<>{} ;  一个名为 '+-*/_~!@$%^&=:<>{}' 的符号。
-		     ;  这些字符不需要转义。
-
+   \(*\ 1\ 2\)         ; A symbol named ‘(* 1 2)’ (a worse name).
+   +-*/_~!@$%^&=:<>{}  ; A symbol named ‘+-*/_~!@$%^&=:<>{}’.
+		       ;   These characters need not be escaped.
+ #+end_src
  作为符号名称作为其打印表示的规则的一个例外，“##”是名称为空字符串的内部符号的打印表示。  此外，'#:foo' 是名称为 foo 的非内部符号的打印表示。  （通常，Lisp 阅读器会实习所有符号；请参阅创建和实习符号。）
 
 *** TODO 2.4.5 序列类型
@@ -297,14 +301,16 @@ GNU Emacs Lisp 中的符号是一个有名字的对象。  符号名称用作符
 
  列表的读取语法和打印表示是相同的，并且由左括号、任意数量的元素和右括号组成。  以下是列表示例：
 
- (A 2 "A") ;  三个元素的列表。
- ();  没有元素的列表（空列表）。
- 无；  没有元素的列表（空列表）。
- （“一种 （）”） ;  一个元素的列表：字符串“A ()”。
- （一种 （）） ;  一个包含两个元素的列表：A 和空列表。
- （零）；  相当于上一个。
- ((ABC)) ;  一个元素的列表
-		      ;  （这是三个元素的列表）。
+#+begin_src emacs-lisp
+  (A 2 "A")            ; A list of three elements.
+  ()                   ; A list of no elements (the empty list).
+  nil                  ; A list of no elements (the empty list).
+  ("A ()")             ; A list of one element: the string "A ()".
+  (A ())               ; A list of two elements: A and the empty list.
+  (A nil)              ; Equivalent to the previous.
+  ((A B C))            ; A list of one element
+		       ;   (which is a list of three elements).
+#+end_src
 
  读取后，括号内的每个对象都成为列表的一个元素。  也就是说，为每个元素制作一个 cons 单元格。  cons cell的CAR slot保存元素，它的CDR slot指向list的下一个cons cell，它保存list中的下一个元素。  最后一个 cons 信元的 CDR 时隙设置为空。
 
@@ -313,109 +319,120 @@ GNU Emacs Lisp 中的符号是一个有名字的对象。  符号名称用作符
 **** TODO 2.4.6.1 以框图形式绘制列表
 
 列表可以通过图表来说明，其中 cons 单元显示为成对的框，就像多米诺骨牌一样。  （Lisp 读者无法阅读这样的插图；与文本符号不同，人类和计算机都可以理解，盒子插图只能由人类理解。）这张图片代表三元素列表（玫瑰紫毛茛）：
-
-     --- --- --- --- --- ---
-    |  |  |--> |  |  |--> |  |  |--> 无
-     --- --- --- --- --- ---
-      |  |  |
-      |  |  |
-       --> 玫瑰 --> 紫罗兰 --> 毛茛
-
+#+begin_src emacs-lisp
+  --- ---      --- ---      --- ---
+  |   |   |--> |   |   |--> |   |   |--> nil
+   --- ---      --- ---      --- ---
+    |            |            |
+    |            |            |
+     --> rose     --> violet   --> buttercup
+#+end_src
  在此图中，每个框代表一个可以容纳或引用任何 Lisp 对象的插槽。  每对框代表一个 cons 单元格。  每个箭头表示对 Lisp 对象的引用，可以是原子或另一个 cons 单元。
 
  在此示例中，保存第一个 cons 单元的 CAR 的第一个框引用或保存了玫瑰（一个符号）。  第二个盒子，保存第一个 cons 单元的 CDR，指的是下一对盒子，第二个 cons 单元。  第二个cons cell的CAR是紫色的，它的CDR是第三个cons cell。  第三个（也是最后一个）cons 单元的 CDR 为零。
 
  这是同一列表的另一个图表（玫瑰紫毛茛），以不同的方式绘制：
 
-  --------------- ------------------------------------
- |  汽车 |  cdr |  |  汽车 |  cdr |  |  汽车 |  cdr |
- |  玫瑰|  o-------->|  紫|  o-------->|  毛茛| 高分辨率照片| CLIPARTO  无 |
- |  |  |  |  |  |  |  |  |
-  --------------- ------------------------------------
+#+begin_src emacs-lisp
+ ---------------       ----------------       -------------------
+| car   | cdr   |     | car    | cdr   |     | car       | cdr   |
+| rose  |   o-------->| violet |   o-------->| buttercup |  nil  |
+|       |       |     |        |       |     |           |       |
+ ---------------       ----------------       -------------------
+#+end_src
 
  没有元素的列表是空列表；  它与符号 nil 相同。  换句话说，nil 既是符号又是列表。
 
  这是列表 (A ())，或等效的 (A nil)，用方框和箭头表示：
-
-     --- --- --- ---
-    |  |  |--> |  |  |--> 无
-     --- --- --- ---
-      |  |
-      |  |
-       --> A --> 无
-
+ #+begin_src emacs-lisp
+    --- ---      --- ---
+   |   |   |--> |   |   |--> nil
+    --- ---      --- ---
+     |            |
+     |            |
+      --> A        --> nil
+ #+end_src
  这是一个更复杂的插图，显示了三元素列表（（松针）橡木枫），其中第一个元素是二元素列表：
 
-     --- --- --- --- --- ---
-    |  |  |--> |  |  |--> |  |  |--> 无
-     --- --- --- --- --- ---
-      |  |  |
-      |  |  |
-      |  --> 橡木 --> 枫木
-      |
-      |  --- --- --- ---
-       --> |  |  |--> |  |  |--> 无
-	    --- --- --- ---
-	     |  |
-	     |  |
-	      --> 松树 --> 针
+#+begin_src emacs-lisp
+   --- ---      --- ---      --- ---
+  |   |   |--> |   |   |--> |   |   |--> nil
+   --- ---      --- ---      --- ---
+    |            |            |
+    |            |            |
+    |             --> oak      --> maple
+    |
+    |     --- ---      --- ---
+     --> |   |   |--> |   |   |--> nil
+	  --- ---      --- ---
+	   |            |
+	   |            |
+	    --> pine     --> needles
+#+end_src
 
  第二个框符号中表示的相同列表如下所示：
-
-  -------------- -------------- --------------
- |  汽车 |  cdr |  |  汽车 |  cdr |  |  汽车 |  cdr |
- |  ○ |  o-------->|  橡木| 家企业 o-------->|  枫 |  无 |
- |  |  |  |  |  |  |  |  |  |
-  -- |  --------- -------------- --------------
-     |
-     |
-     |  -------------- ----------------
-     |  |  汽车 |  cdr |  |  汽车 |  cdr |
-      ------>|  松 |  o-------->|  针|  无 |
-	     |  |  |  |  |  |
-	      -------------- ----------------
-
+#+begin_src emacs-lisp
+   --------------       --------------       --------------
+  | car   | cdr  |     | car   | cdr  |     | car   | cdr  |
+  |   o   |   o------->| oak   |   o------->| maple |  nil |
+  |   |   |      |     |       |      |     |       |      |
+   -- | ---------       --------------       --------------
+      |
+      |
+      |        --------------       ----------------
+      |       | car   | cdr  |     | car     | cdr  |
+       ------>| pine  |   o------->| needles |  nil |
+	      |       |      |     |         |      |
+	       --------------       ----------------
+#+end_src
 **** TODO 2.4.6.2 点对符号
 
 点对表示法是用于明确表示 CAR 和 CDR 的 cons 单元格的通用语法。  在这种语法中，(a . b) 代表一个 cons 单元，其 CAR 是对象 a，其 CDR 是对象 b。  点对符号比列表语法更通用，因为 CDR 不必是列表。  但是，在列表语法可以工作的情况下，它会更加麻烦。  在点对符号中，列表'(1 2 3)' 写为'(1 . (2 . (3 . nil)))'。  对于以 nil 结尾的列表，您可以使用任何一种表示法，但列表表示法通常更清晰、更方便。  打印列表时，仅当 cons 单元的 CDR 不是列表时才使用点对符号。
 
  这是一个使用方框来说明点对符号的示例。  这个例子显示了这对（玫瑰.紫罗兰）：
-
-     --- ---
-    |  |  |--> 紫罗兰色
-     --- ---
-      |
-      |
-       --> 玫瑰
+ #+begin_src emacs-lisp
+    --- ---
+   |   |   |--> violet
+    --- ---
+     |
+     |
+      --> rose
+ #+end_src
 
  您可以将点对表示法与列表表示法结合起来，以方便地表示具有非 nil 最终 CDR 的 cons 单元链。  您在列表的最后一个元素之后写一个点，然后是最后一个 cons 单元格的 CDR。  例如，（玫瑰紫.毛茛）等价于（玫瑰.（紫罗兰.毛茛））。  该对象如下所示：
+ #+begin_src emacs-lisp
+   --- ---      --- ---
+     |   |   |--> |   |   |--> buttercup
+      --- ---      --- ---
+       |            |
+       |            |
+	--> rose     --> violet
+ #+end_src
 
-     --- --- --- ---
-    |  |  |--> |  |  |--> 毛茛
-     --- --- --- ---
-      |  |
-      |  |
-       --> 玫瑰色 --> 紫罗兰色
 
  语法（rose.violet.buttercup）是无效的，因为它没有任何含义。  如果有的话，它会说将毛茛放在 CDR 已经用于紫罗兰色的 cons 单元的 CDR 中。
 
  列表（玫瑰紫）等价于（玫瑰。（紫罗兰色）），如下所示：
 
-     --- --- --- ---
-    |  |  |--> |  |  |--> 无
-     --- --- --- ---
-      |  |
-      |  |
-       --> 玫瑰色 --> 紫罗兰色
+ #+begin_src emacs-lisp
+    --- ---      --- ---
+   |   |   |--> |   |   |--> nil
+    --- ---      --- ---
+     |            |
+     |            |
+      --> rose     --> violet
+ #+end_src
+
 
  类似地，三元素列表 (rose Purple buttercup) 等价于 (rose . (violet . (buttercup)))。  它看起来像这样：
-
-     --- --- --- --- --- ---
-    |  |  |--> |  |  |--> |  |  |--> 无
-     --- --- --- --- --- ---
-      |  |  |
-      |  |  |
-       --> 玫瑰 --> 紫罗兰 --> 毛茛
+#+begin_src emacs-lisp
+   --- ---      --- ---      --- ---
+  |   |   |--> |   |   |--> |   |   |--> nil
+   --- ---      --- ---      --- ---
+    |            |            |
+    |            |            |
+     --> rose     --> violet   --> buttercup
+#+end_src
 
  作为 (ab . c) 和 (a . (b . c)) 等效的一个有点特殊的副作用，为了保持一致性，这意味着如果你在这里用空序列替换 b ，那么它遵循 (a . c) 和(a . ( . c)) 也是等价的。  这也意味着 (.c) 等价于 c，但很少使用。
 
@@ -424,9 +441,10 @@ GNU Emacs Lisp 中的符号是一个有名字的对象。  符号名称用作符
 关联列表或 alist 是一个特殊构造的列表，其元素是 cons 单元格。  在每个元素中，CAR 被认为是一个键，而 CDR 被认为是一个关联的值。  （在某些情况下，关联值存储在 CDR 的 CAR 中。）关联列表通常用作堆栈，因为在列表的前面添加或删除关联很容易。
 
  例如，
-
- (setq alist-of-colors
-       '（（（玫瑰。红色）（百合。白色）（毛茛。黄色）））
+ #+begin_src emacs-lisp
+   (setq alist-of-colors
+	 '((rose . red) (lily . white) (buttercup . yellow)))
+ #+end_src
 
  将变量 alist-of-colors 设置为包含三个元素的列表。  在第一个元素中，rose 是键，red 是值。
 
@@ -457,14 +475,15 @@ GNU Emacs Lisp 中的符号是一个有名字的对象。  符号名称用作符
 字符串的读取语法是双引号、任意数量的字符和另一个双引号，“like this”。  要在字符串中包含双引号，请在其前面加上反斜杠；  因此，"\"" 是一个只包含一个双引号字符的字符串。同样，您可以通过在它前面加上另一个反斜杠来包含一个反斜杠，例如：“this \\ is a single embedded backslash”。
 
  换行符在字符串的读取语法中并不特殊；  如果你在双引号之间写一个新行，它就会变成字符串中的一个字符。  但是转义的换行符——前面有'\'的换行符——不会成为字符串的一部分；  即，Lisp 阅读器在读取字符串时会忽略转义的换行符。  转义的空格“\”同样被忽略。
-
- “包含换行符很有用
- 在文档字符串中，
- 但换行符是 \
- 如果逃脱则忽略。”
-      ⇒ “包含换行符很有用
- 在文档字符串中，
- 但如果转义，则忽略换行符。”
+ #+begin_src emacs-lisp
+   "It is useful to include newlines
+   in documentation strings,
+   but the newline is \
+   ignored if escaped."
+	⇒ "It is useful to include newlines
+   in documentation strings,
+   but the newline is ignored if escaped.
+ #+end_src
 
 **** TODO 2.4.8.2 字符串中的非 ASCII 字符
 
@@ -495,15 +514,21 @@ Emacs 字符串中的非 ASCII 字符有两种文本表示：多字节和单字�
 
 除了字符本身之外，字符串还可以保存它所包含的字符的属性。  这使得在字符串和缓冲区之间复制文本的程序无需特别努力即可复制文本的属性。  请参阅文本属性，了解文本属性的含义。  具有文本属性的字符串使用特殊的读取和打印语法：
 
- #(“字符”属性数据...)
+ #+begin_src emacs-lisp
+#("characters" property-data...)
+ #+end_src
 
  其中 property-data 由零个或多个元素组成，以三个为一组，如下所示：
 
- 求结束plist
+#+begin_src emacs-lisp
+beg end plist
+#+end_src
 
  元素 beg 和 end 是整数，它们共同指定字符串中的索引范围；  plist 是该范围的属性列表。  例如，
 
- #("foo bar" 0 3 (粗体字) 3 4 nil 4 7 (斜体字))
+ #+begin_src emacs-lisp
+   #("foo bar" 0 3 (face bold) 3 4 nil 4 7 (face italic))
+ #+end_src
 
  表示文本内容为 'foo bar' 的字符串，其中前三个字符具有值为粗体的面属性，后三个字符具有值为斜体的面属性。  （第四个字符没有文本属性，所以它的属性列表是 nil。实际上没有必要以 nil 作为属性列表来提及范围，因为任何范围内未提及的任何字符都将默认没有属性。）
 
@@ -514,8 +539,11 @@ Emacs 字符串中的非 ASCII 字符有两种文本表示：多字节和单字�
 
  矢量的打印表示由左方括号、元素和右方括号组成。  这也是读取语法。  像数字和字符串一样，向量被认为是评估的常数。
 
- [1“二”（三）]；  三个元素的向量。
-      ⇒ [1“二”（三）]
+ #+begin_src emacs-lisp
+   [1 "two" (three)]      ; A vector of three elements.
+	⇒ [1 "two" (three)]
+ #+end_src
+
 
  有关使用向量的函数，请参阅向量。
 
@@ -533,31 +561,37 @@ char-table 是任何类型的元素的一维数组，由字符代码索引。  �
      语法表（请参阅语法表）。
 
 *** TODO 2.4.11 Bool-Vector 类型
-
 bool-vector 是一个一维数组，其元素必须为 t 或 nil。
 
- 布尔向量的打印表示类似于字符串，只是它以 '#&' 开头，后跟长度。  后面的字符串常量实际上将 bool-vector 的内容指定为位图——字符串中的每个字符包含 8 位，它们指定 bool-vector 的下 8 个元素（1 代表 t，0 代表 nil）。  字符的最低有效位对应于布尔向量中的最低索引。
+布尔向量的打印表示类似于字符串，只是它以 '#&' 开头，后跟长度。  后面的字符串常量实际上将 bool-vector 的内容指定为位图——字符串中的每个字符包含 8 位，它们指定 bool-vector 的下 8 个元素（1 代表 t，0 代表 nil）。  字符的最低有效位对应于布尔向量中的最低索引。
 
- (make-bool-vector 3 t)
-      ⇒ #&3"^G"
- (make-bool-vector 3 nil)
-      ⇒ #&3"^@"
+#+begin_src emacs-lisp
+(make-bool-vector 3 t)
+     ⇒ #&3"^G"
+(make-bool-vector 3 nil)
+     ⇒ #&3"^@"
+#+end_src
+
 
  这些结果是有意义的，因为“C-g”的二进制代码是 111，而“C-@”是代码为 0 的字符。
 
  如果长度不是 8 的倍数，则打印的表示会显示额外的元素，但这些额外的元素实际上并没有什么区别。  例如，在下一个示例中，两个布尔向量相等，因为只使用了前 3 位：
 
- （等于 #&3"\377" #&3"\007"）
-      ⇒ 吨
+ #+begin_src emacs-lisp
+   (equal #&3"\377" #&3"\007")
+	⇒ t
+ #+end_src
 
 *** TODO 2.4.12 哈希表类型
 
 
 哈希表是一种非常快速的查找表，有点像 alist，因为它将键映射到相应的值，但要快得多。  哈希表的打印表示指定了它的属性和内容，如下所示：
 
- （制作哈希表）
-      ⇒ #s(hash-table size 65 test eql rehash-size 1.5
-			      rehash-threshold 0.8125 数据 ())
+#+begin_src emacs-lisp
+  (make-hash-table)
+       ⇒ #s(hash-table size 65 test eql rehash-size 1.5
+			       rehash-threshold 0.8125 data ())
+#+end_src
 
  有关哈希表的更多信息，请参阅哈希表。
 
@@ -587,11 +621,13 @@ Lisp 宏是扩展 Lisp 语言的用户定义结构。  它被表示为一个与�
 
  原始函数没有读取语法，并以散列表示法打印子例程的名称。
 
- （符号功能'汽车）;  访问功能单元
-				 ;  的符号。
-      ⇒ #<subr car>
- (subrp (symbol-function 'car)) ;  这是原始功能吗？
-      ⇒ t;  是的。
+#+begin_src emacs-lisp
+  (symbol-function 'car)          ; Access the function cell
+				  ;   of the symbol.
+       ⇒ #<subr car>
+  (subrp (symbol-function 'car))  ; Is this a primitive function?
+       ⇒ t                       ; Yes.
+#+end_src
 
 *** TODO 2.4.16 字节码函数类型
 
@@ -625,7 +661,9 @@ Lisp 宏是扩展 Lisp 语言的用户定义结构。  它被表示为一个与�
 
  终结器中的错误会打印到 *Messages*。  Emacs 只运行给定终结器对象的关联函数一次，即使该函数失败。
 
- 函数：make-finalizer函数¶
+ #+begin_src emacs-lisp
+   Function: make-finalizer function
+ #+end_src
 
      制作一个将运行函数的终结器。  当返回的终结器对象变得无法访问时，将在垃圾回收后调用函数。  如果终结器对象只能通过来自终结器对象的引用来访问，则在决定是否运行函数时，它不算是可达的。  函数将为每个终结器对象运行一次。
 
@@ -656,8 +694,10 @@ Lisp 宏是扩展 Lisp 语言的用户定义结构。  它被表示为一个与�
 
  缓冲区没有读取语法。  它们以哈希表示法打印，显示缓冲区名称。
 
- （电流缓冲器）
-      ⇒ #<缓冲区对象.texi>
+ #+begin_src emacs-lisp
+   (current-buffer)
+	⇒ #<buffer objects.texi>
+ #+end_src
 
 *** TODO 2.5.2 标记类型
     CLOSED: [2022-05-24 Tue 09:41]
@@ -669,8 +709,11 @@ Lisp 宏是扩展 Lisp 语言的用户定义结构。  它被表示为一个与�
 
  标记没有读取语法。  它们以散列表示法打印，给出当前字符位置和缓冲区名称。
 
- （点标记）
-      ⇒ #<objects.texi 中 10779 处的标记>
+ #+begin_src emacs-lisp
+   (point-marker)
+	⇒ #<marker at 10779 in objects.texi>
+ #+end_src
+
 
  有关如何测试、创建、复制和移动标记的信息，请参阅标记。
 
@@ -682,8 +725,10 @@ Lisp 宏是扩展 Lisp 语言的用户定义结构。  它被表示为一个与�
 
  Windows 没有读取语法。  它们以哈希表示法打印，给出窗口编号和正在显示的缓冲区的名称。  窗口编号的存在是为了唯一标识窗口，因为任何给定窗口中显示的缓冲区都可能经常更改。
 
- （选定窗口）
-      ⇒ #<objects.texi 上的窗口 1>
+ #+begin_src emacs-lisp
+   (selected-window)
+	⇒ #<window 1 on objects.texi>
+ #+end_src
 
  有关在 Windows 上工作的功能的描述，请参阅 Windows。
 
@@ -693,8 +738,11 @@ Lisp 宏是扩展 Lisp 语言的用户定义结构。  它被表示为一个与�
 
  帧没有读取语法。  它们以哈希表示法打印，给出框架的标题，加上它的核心地址（用于唯一地识别框架）。
 
- （选定帧）
-      ⇒ #<frame emacs@psilocin.gnu.org 0xdac80>
+ #+begin_src emacs-lisp
+   (selected-frame)
+	⇒ #<frame emacs@psilocin.gnu.org 0xdac80>
+ #+end_src
+
 
  有关适用于框架的功能的描述，请参阅框架。
 
@@ -704,8 +752,10 @@ Lisp 宏是扩展 Lisp 语言的用户定义结构。  它被表示为一个与�
 
  终端没有读取语法。  它们以散列符号打印，给出终端的序号及其 TTY 设备文件名。
 
- （获取设备终端无）
-      ⇒ #</dev/tty 上的终端 1>
+ #+begin_src emacs-lisp
+   (get-device-terminal nil)
+	⇒ #<terminal 1 on /dev/tty>
+ #+end_src
 
 *** TODO 2.5.6 窗口配置类型
 
@@ -725,30 +775,35 @@ Lisp 宏是扩展 Lisp 语言的用户定义结构。  它被表示为一个与�
 
  进程对象没有读取语法。  它们以哈希表示法打印，并给出进程的名称：
 
- （进程列表）
-      ⇒ (#<进程外壳>)
-
+ #+begin_src emacs-lisp
+   (process-list)
+	⇒ (#<process shell>)
+ #+end_src
  有关创建、删除、返回有关信息、向进程发送输入或信号以及从进程接收输出的函数的信息，请参阅进程。
 
-*** TODO 2.5.9 螺纹类型
+*** TODO 2.5.9 线程类型
 
 Emacs 中的一个线程代表 Emacs Lisp 执行的一个单独线程。  它运行自己的 Lisp 程序，拥有自己的当前缓冲区，并且可以将子进程锁定到它，即只有该线程可以接受其输出的子进程。  请参阅线程。
 
  线程对象没有读取语法。  它们以哈希表示法打印，给出线程的名称（如果它已被赋予名称）或其在核心中的地址：
 
- （所有线程）
-     ⇒ (#<thread 0176fc40>)
+ #+begin_src emacs-lisp
+   (all-threads)
+       ⇒ (#<thread 0176fc40>)
+ #+end_src
+
 
 *** TODO 2.5.10 互斥体类型
 
 互斥锁是线程可以拥有和不拥有的排他锁，以便在它们之间进行同步。  请参阅互斥体。
 
  互斥对象没有读取语法。  它们以哈希表示法打印，给出互斥体的名称（如果它已被命名）或其在核心中的地址：
-
- （使互斥锁“我的互斥锁”）
-     ⇒ #<互斥锁我的互斥锁>
- (make-mutex)
-     ⇒ #<互斥锁 01c7e4e0>
+ #+begin_src emacs-lisp
+   (make-mutex "my-mutex")
+       ⇒ #<mutex my-mutex>
+   (make-mutex)
+       ⇒ #<mutex 01c7e4e0>
+ #+end_src
 
 *** TODO 2.5.11 条件变量类型
 
@@ -756,8 +811,11 @@ Emacs 中的一个线程代表 Emacs Lisp 执行的一个单独线程。  它运
 
  条件变量对象没有读取语法。  它们以哈希表示法打印，给出条件变量的名称（如果它已被命名）或其在核心中的地址：
 
- (make-condition-variable (make-mutex))
-     ⇒ #<condvar 01c45ae8>
+
+#+begin_src emacs-lisp
+  (make-condition-variable (make-mutex))
+      ⇒ #<condvar 01c45ae8>
+#+end_src
 
 *** TODO 2.5.12 流类型
 
