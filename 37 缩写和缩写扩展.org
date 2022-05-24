@@ -1,0 +1,13 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
+* TODO 37 缩写和缩写扩展
+** TODO 37.1 缩略表
+** TODO 37.2 定义缩写
+** TODO 37.3 在文件中保存缩写
+** TODO 37.4 查找和扩展缩略语
+** TODO 37.5 标准缩写表
+** TODO 37.6 缩写属性
+** TODO 37.7 缩写表属性

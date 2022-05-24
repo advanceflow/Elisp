@@ -1,0 +1,6 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
+* TODO 附录 B GNU自由文档许可证

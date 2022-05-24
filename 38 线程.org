@@ -1,0 +1,10 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
+* TODO 38 线程
+** TODO 38.1 基本线程函数
+** TODO 38.2 互斥体
+** TODO 38.3 条件变量
+** TODO 38.4 线程列表

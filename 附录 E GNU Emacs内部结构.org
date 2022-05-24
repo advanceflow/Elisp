@@ -1,0 +1,24 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
+* TODO 附录 E GNU Emacs内部结构
+** TODO E.1 构建 Emacs
+** TODO E.2 纯存储
+** TODO E.3 垃圾收集
+** TODO E.4 堆栈分配的对象
+** TODO E.5 内存使用
+** TODO E.6 C方言
+** TODO E.7 编写Emacs原语
+** TODO E.8 编写动态加载的模块
+*** TODO E.8.1 模块初始化代码
+*** TODO E.8.2 编写模块函数
+*** TODO E.8.3 Lisp和模块值之间的转换
+*** TODO E.8.4 模块的其他便利功能
+*** TODO E.8.5 模块中的非本地出口
+** TODO E.9 对象内部
+*** TODO E.9.1 缓冲器内部
+*** TODO E.9.2 窗口内部
+*** TODO E.9.3 过程内部
+** TODO E.10 C 整数类型

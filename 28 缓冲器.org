@@ -1,0 +1,19 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
+* TODO 28 缓冲器
+** TODO 28.1 缓冲区基础
+** TODO 28.2 当前缓冲区
+** TODO 28.3 缓冲区名称
+** TODO 28.4 缓冲区文件名
+** TODO 28.5 缓冲区修改
+** TODO 28.6 缓冲区修改时间
+** TODO 28.7 只读缓冲区
+** TODO 28.8 缓冲区列表
+** TODO 28.9 创建缓冲区
+** TODO 28.10 终止缓冲区
+** TODO 28.11 间接缓冲区
+** TODO 28.12 在两个缓冲区之间交换文本
+** TODO 28.13 缓冲间隙

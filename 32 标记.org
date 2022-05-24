@@ -1,0 +1,14 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
+* TODO 32 标记
+** TODO 32.1 标记概述
+** TODO 32.2 关于标记的谓词
+** TODO 32.3 创建标记的函数
+** TODO 32.4 来自标记的信息
+** TODO 32.5 标记插入类型
+** TODO 32.6 移动标记位置
+** TODO 32.7 标记
+** TODO 32.8 区域

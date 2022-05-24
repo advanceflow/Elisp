@@ -1,0 +1,17 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
+* TODO 31 位置
+** TODO 31.1 点
+** TODO 31.2 运动
+*** TODO 31.2.1 角色动作
+*** TODO 31.2.2 词动
+*** TODO 31.2.3 移动到缓冲区末端
+*** TODO 31.2.4 文本行的运动
+*** TODO 31.2.5 屏幕线运动
+*** TODO 31.2.6 移动平衡表达式
+*** TODO 31.2.7 跳过字符
+** TODO 31.3 远足
+** TODO 31.4 收窄

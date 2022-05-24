@@ -1,0 +1,14 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
+* TODO 附录 D 提示和约定
+** TODO D.1 Emacs Lisp 编码约定
+** TODO D.2 键绑定约定
+** TODO D.3 Emacs 编程技巧
+** TODO D.4 快速编译代码的技巧
+** TODO D.5 避免编译器警告的技巧
+** TODO D.6 文档字符串提示
+** TODO D.7 撰写评论的技巧
+** TODO D.8 Emacs 库的常规头文件

@@ -1,0 +1,26 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
+* TODO 34 非ASCII字符
+** TODO 34.1 文本表示
+** TODO 34.2 禁用多字节字符
+** TODO 34.3 转换文本表示
+** TODO 34.4 选择表示
+** TODO 34.5 字符代码
+** TODO 34.6 字符属性
+** TODO 34.7 字符集
+** TODO 34.8 扫描字符集
+** TODO 34.9 字符翻译
+** TODO 34.10 编码系统
+*** TODO 34.10.1 编码系统的基本概念
+*** TODO 34.10.2 编码和 I/O
+*** TODO 34.10.3 Lisp 中的编码系统
+*** TODO 34.10.4 用户选择的编码系统
+*** TODO 34.10.5 默认编码系统
+*** TODO 34.10.6 为一个操作指定编码系统
+*** TODO 34.10.7 显式编码和解码
+*** TODO 34.10.8 终端 I/O 编码
+** TODO 34.11 输入法
+** TODO 34.12 语言环境

@@ -1,0 +1,11 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
+* TODO 42 准备分发的Lisp代码
+** TODO 42.1 包装基础
+** TODO 42.2 简单包
+** TODO 42.3 多文件包
+** TODO 42.4 创建和维护包档案
+** TODO 42.5 与存档 Web 服务器的接口

@@ -1,0 +1,13 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
+* TODO 25 文档
+** TODO 25.1 文档基础
+** TODO 25.2 访问文档字符串
+** TODO 25.3 替换文档中的键绑定
+** TODO 25.4 文本引用样式
+** TODO 25.5 描述帮助信息的字符
+** TODO 25.6 帮助功能
+** TODO 25.7 文档组

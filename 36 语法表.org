@@ -1,0 +1,21 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
+* TODO 36 语法表
+** TODO 36.1 语法表概念
+** TODO 36.2 语法描述符
+*** TODO 36.2.1 语法类表
+*** TODO 36.2.2 语法标志
+** TODO 36.3 语法表函数
+** TODO 36.4 语法属性
+** TODO 36.5 运动和句法
+** TODO 36.6 解析表达式
+*** TODO 36.6.1 基于解析的运动命令
+*** TODO 36.6.2 查找位置的解析状态
+*** TODO 36.6.3 解析器状态
+*** TODO 36.6.4 低级解析
+*** TODO 36.6.5 控制解析的参数
+** TODO 36.7 语法表内部
+** TODO 36.8 类别
