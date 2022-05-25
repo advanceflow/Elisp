@@ -88,17 +88,21 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
     这个列表提供了与 :package-version 关键字中列出的包的版本相关联的 Emacs 版本的映射。  它的元素是：
 
-    （包（pversion。外翻）...）
+    #+begin_src emacs-lisp
+      (package (pversion . eversion)…)
+    #+end_src
+
 
     对于每个包，这是一个符号，有一个或多个元素包含一个包版本 pversion 和一个关联的 Emacs 版本版本。  这些版本是字符串。  例如，MH-E 程序包使用以下内容更新此列表：
 
-    （添加到列表'customize-package-emacs-version-alist
-		  '（MH-E（“6.0”。“22.1”）（“6.1”。“22.1”）（“7.0”。“22.1”）
-			 ("7.1" . "22.1") ("7.2" . "22.1") ("7.3" . "22.1")
-			 （“7.4”。“22.1”）（“8.0”。“22.1”）））
+    #+begin_src emacs-lisp
+      (add-to-list 'customize-package-emacs-version-alist
+		   '(MH-E ("6.0" . "22.1") ("6.1" . "22.1") ("7.0" . "22.1")
+			  ("7.1" . "22.1") ("7.2" . "22.1") ("7.3" . "22.1")
+			  ("7.4" . "22.1") ("8.0" . "22.1")))
+    #+end_src
 
     package 的值必须是唯一的，并且需要匹配 :package-version 关键字中出现的包值。  由于用户可能会在错误消息中看到该值，因此最好选择包的正式名称，例如 MH-E 或 Gnus。
-
 ** 15.2 定义自定义组
 
 每个 Emacs Lisp 包都应该有一个主要的自定义组，其中包含包中的所有选项、面孔和其他组。  如果包装中的选项和面孔数量较少，请仅使用一组并将所有内容都放入其中。  当有二十多个左右的选项和面孔时，您应该将它们构造成子组，并将子组放在软件包的主要自定义组下。  可以将一些选项和面孔放在包的主要组中与子组一起。
@@ -210,16 +214,20 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 为打开某个功能的选项指定 :require 关键字很有用。  这会导致 Emacs 加载该功能（如果尚未加载），只要设置了该选项。  请参阅常用项关键字。  这是一个例子：
 
-（defcustom frobncate-自动为零
-  “非零意味着自动对所有缓冲区进行过滤。”
-  :type '布尔值
-  :require '防护模式
-  :group 'frobnicate)
+#+begin_src emacs-lisp
+  (defcustom frobnicate-automatically nil
+    "Non-nil means automatically frobnicate all buffers."
+    :type 'boolean
+    :require 'frobnicate-mode
+    :group 'frobnicate)
+#+end_src
 
 如果自定义项具有支持 :options 的类型（例如 hook 或 alist），则可以通过调用 custom-add-frequent-value 从 defcustom 声明之外向列表添加其他值。  例如，如果您定义了一个旨在从 emacs-lisp-mode-hook 调用的函数 my-lisp-mode-initialization，您可能希望将其添加到 emacs-lisp-mode-hook 的合理值列表中，但是而不是通过编辑其定义。  你可以这样做：
 
-（自定义添加频率值'emacs-lisp-mode-hook
-   '我的lisp模式初始化）
+#+begin_src emacs-lisp
+  (custom-add-frequent-value 'emacs-lisp-mode-hook
+     'my-lisp-mode-initialization)
+#+end_src
 
 功能：自定义加频符号值¶
 
@@ -247,10 +255,12 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 您可以使用 :type 关键字在 defcustom 中指定自定义类型。  :type 的参数被评估，但只在执行 defcustom 时评估一次，因此改变值没有用。  通常我们使用带引号的常量。  例如：
 
-（defcustom 差异命令“差异”
-  “用于运行差异的命令。”
-  :type '(字符串)
-  :group '差异)
+#+begin_src emacs-lisp
+  (defcustom diff-command "diff"
+    "The command to use to run diff."
+    :type '(string)
+    :group 'diff)
+#+end_src
 
 通常，自定义类型是一个列表，其第一个元素是一个符号，它是以下部分中定义的自定义类型名称之一。  在这个符号之后是一些参数，具体取决于符号。  在类型符号及其参数之间，您可以选择编写关键字-值对（请参阅类型关键字）。
 
@@ -328,11 +338,16 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 当简单类型都不合适时，您可以使用复合类型，它从其他类型或从指定数据构建新类型。  指定的类型或数据称为复合类型的参数。  复合类型通常如下所示：
 
-（构造函数参数…）
+#+begin_src emacs-lisp
+  (constructor arguments…)
+#+end_src
+
 
 但您也可以在参数之前添加关键字-值对，如下所示：
 
-（构造函数{关键字值}…参数…）
+#+begin_src emacs-lisp
+  (constructor {keyword value}… arguments…)
+#+end_src
 
 下面是一个构造函数表以及如何使用它们来编写复合类型：
 
@@ -364,48 +379,64 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
     :options 关键字的参数应该是 alist 中合理键的规范列表。  通常，它们只是代表自己的原子。  例如：
 
-    :options '("foo" "bar" "baz")
+    #+begin_src emacs-lisp
+      :options '("foo" "bar" "baz")
+    #+end_src
+
 
     指定有三个已知键，即“foo”、“bar”和“baz”，它们总是首先显示。
 
     您可能希望限制特定键的值类型，例如，与“bar”键关联的值只能是整数。  您可以通过使用列表而不是列表中的原子来指定这一点。  像以前一样，第一个元素将指定键，而第二个元素将指定值类型。  例如：
 
-    :options '("foo" ("bar" 整数) "baz")
+    #+begin_src emacs-lisp
+      :options '("foo" ("bar" integer) "baz")
+    #+end_src
 
     最后，您可能想要更改键的呈现方式。  默认情况下，键仅显示为 const，因为用户无法更改 :options 关键字指定的特殊键。  但是，您可能希望使用更专业的类型来表示键，例如 function-item 如果您知道它是具有函数绑定的符号。  这是通过使用自定义类型规范而不是键的符号来完成的。
 
-    :options '("foo"
-		((function-item some-function) integer)
-		“巴兹”）
+    #+begin_src emacs-lisp
+      :options '("foo"
+		 ((function-item some-function) integer)
+		 "baz")
+    #+end_src
 
     许多 alists 使用带有两个元素的列表，而不是 cons 单元格。  例如，
 
-    (defcustom list-alist
-      '(("foo" 1) ("bar" 2) ("baz" 3))
-      “每个元素都是表单（键值）的列表。”）
+    #+begin_src emacs-lisp
+      (defcustom list-alist
+	'(("foo" 1) ("bar" 2) ("baz" 3))
+	"Each element is a list of the form (KEY VALUE).")
+    #+end_src
 
     代替
 
-    (defcustom cons-alist
-      '(("foo" . 1) ("bar" . 2) ("baz" . 3))
-      “每个元素都是一个 cons-cell (KEY . VALUE)。”)
+    #+begin_src emacs-lisp
+      (defcustom cons-alist
+	'(("foo" . 1) ("bar" . 2) ("baz" . 3))
+	"Each element is a cons-cell (KEY . VALUE).")
+    #+end_src
+
 
     由于列表在 cons 单元之上实现的方式，您可以将上面示例中的 list-alist 视为 cons 单元 alist，其中值类型是具有包含实际值的单个元素的列表。
 
-    (defcustom list-alist '(("foo" 1) ("bar" 2) ("baz" 3))
-      “每个元素都是表单（KEY VALUE）的列表。”
-      :type '(alist :value-type (组整数)))
+    #+begin_src emacs-lisp
+      (defcustom list-alist '(("foo" 1) ("bar" 2) ("baz" 3))
+	"Each element is a list of the form (KEY VALUE)."
+	:type '(alist :value-type (group integer)))
+    #+end_src
 
     此处仅使用组小部件而不是列表，因为格式更适合此目的。
 
     同样，您可以使用此技巧的变体，让列表具有与每个键关联的更多值：
 
-    (defcustom 个人数据 '(("brian" 50 t)
-			      （“多丽丝”55 无）
-			      （“肯” 52 吨））
-      “关于人的基本信息列表。
-    每个元素都有形式 (NAME AGE MALE-FLAG)。”
-      :type '(alist :value-type (group integer boolean)))
+    #+begin_src emacs-lisp
+      (defcustom person-data '(("brian"  50 t)
+			       ("dorith" 55 nil)
+			       ("ken"    52 t))
+	"Alist of basic info about people.
+      Each element has the form (NAME AGE MALE-FLAG)."
+	:type '(alist :value-type (group integer boolean)))
+    #+end_src
 
 （plist：键类型键类型：值类型值类型）
 
@@ -418,8 +449,10 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
     通常，此菜单中的字符串是根据选项自动确定的；  但是，您可以通过在替代项中包含 :tag 关键字来为菜单指定不同的字符串。  例如，如果整数代表多个空格，而字符串是要逐字使用的文本，则可以这样编写自定义类型，
 
-    （选择（整数：标签“空格数”）
-	     （字符串：标签“文字”））
+    #+begin_src emacs-lisp
+      (choice (integer :tag "Number of spaces")
+	      (string :tag "Literal text"))
+    #+end_src
 
     以便菜单提供“空格数”和“文字文本”。
 
@@ -427,8 +460,10 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
     如果某些值被多个备选方案覆盖，customize 将选择该值适合的第一个备选方案。  这意味着您应该始终首先列出最具体的类型，最后列出最通用的类​​型。  下面是一个正确使用的例子：
 
-    (选择 (const :tag "Off" nil)
-	     符号（性别：标签“其他”））
+    #+begin_src emacs-lisp
+      (choice (const :tag "Off" nil)
+	      symbol (sexp :tag "Other"))
+    #+end_src
 
     这样，特殊值 nil 就不会像其他符号一样被对待，符号也不会像其他 Lisp 表达式那样被对待。
 （无线电元件类型……）
@@ -442,9 +477,12 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
     :tag 经常与 const 一起使用，在选择范围内。  例如，
 
-    (选择 (const :tag "Yes" t)
-	     （常量：标签“否”无）
-	     (const :tag "问" foo))
+    #+begin_src emacs-lisp
+      (choice (const :tag "Yes" t)
+	      (const :tag "No" nil)
+	      (const :tag "Ask" foo))
+    #+end_src
+
 
     描述一个变量，其中 t 表示是，nil 表示否，foo 表示“询问”。
 （其他值）
@@ -453,9 +491,11 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
     other 的主要用途是作为选择的最后一个元素。  例如，
 
-    (选择 (const :tag "Yes" t)
-	     （常量：标签“否”无）
-	     （其他：标签“问”富））
+    #+begin_src emacs-lisp
+      (choice (const :tag "Yes" t)
+	      (const :tag "No" nil)
+	      (other :tag "Ask" foo))
+    #+end_src
 
     描述一个变量，其中 t 表示是，nil 表示否，任何其他都表示“询问”。  如果用户从备选菜单中选择“询问”，则指定值 foo；  但任何其他值（不是 t、nil 或 foo）都显示为“Ask”，就像 foo。
 （功能项功能）
@@ -472,18 +512,23 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
     大多数情况下，集合中的类型是 const 类型，如下所示：
 
-    （设置（常量：粗体）（常量：斜体））
+    #+begin_src emacs-lisp
+      (set (const :bold) (const :italic))
+    #+end_src
 
     有时他们会描述 alist 中可能的元素：
 
-    （设置（缺点：标签“高度”（常量高度）整数）
-	  （缺点：标签“宽度”（常量宽度）整数））
+    #+begin_src emacs-lisp
+      (set (cons :tag "Height" (const height) integer)
+	   (cons :tag "Width" (const width) integer))
+    #+end_src
 
     这让用户可以选择指定一个高度值和一个可选择的宽度值。
 （重复元素类型）
 
     该值必须是一个列表，并且列表的每个元素都必须适合类型 element-type。  这在自定义缓冲区中显示为元素列表，带有用于添加更多元素或删除元素的“[INS]”和“[DEL]”按钮。
 (restricted-sexp :match-alternatives 标准)
+
 
     这是最通用的复合类型构造。  该值可以是满足条件之一的任何 Lisp 对象。  标准应该是一个列表，每个元素应该是以下可能性之一：
 
@@ -492,9 +537,10 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
     例如，
 
-    （限制性：匹配替代品
-		      （整数't'nil））
-
+#+begin_src emacs-lisp
+(restricted-sexp :match-alternatives
+		 (integerp 't 'nil))
+#+end_src
     允许整数、t 和 nil 作为合法值。
 
     自定义缓冲区使用其读取语法显示所有合法值，并且用户以文本方式对其进行编辑。
@@ -519,15 +565,20 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 例如，要指定一个列表，其第一个元素必须是 baz 并且其剩余参数应该是 foo 和 bar 的零个或多个，请使用此自定义类型：
 
-(list (const baz) (set :inline t (const foo) (const bar)))
+#+begin_src emacs-lisp
+  (list (const baz) (set :inline t (const foo) (const bar)))
+#+end_src
+
 
 这匹配诸如 (baz)、(baz foo)、(baz bar) 和 (baz foo bar) 之类的值。
 
 当元素类型是一个选项时，您使用 :inline 不是在选项本身中，而是在（某些）选项的选项中。  例如，要匹配必须以文件名开头、后跟符号 t 或两个字符串的列表，请使用以下自定义类型：
 
-（列表文件
-      （选择（常数 t）
-	       (list :inline t string string)))
+#+begin_src emacs-lisp
+  (list file
+	(choice (const t)
+		(list :inline t string string)))
+#+end_src
 
 如果用户在选项中选择了第一个选项，那么整个列表有两个元素，第二个元素是 t。  如果用户选择第二个选项，那么整个列表包含三个元素，第二个和第三个必须是字符串。
 
@@ -625,19 +676,21 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 由于自定义类型是作为小部件实现的，因此定义新的自定义类型的方法是定义一个新的小部件。  我们不打算在这里详细描述小部件界面，请参阅 The Emacs 小部件库中的介绍。  相反，我们将通过一个简单的示例来演示定义新的自定义类型所需的最小功能。
 
-(define-widget 'binary-tree-of-string 'lazy
-  “由 cons 单元和字符串组成的二叉树。”
-  ：偏移量 4
-  :tag "节点"
-  :type '(choice (string :tag "Leaf" :value "")
-		  （缺点：标签“内部”
-			：价值 （”” 。 ””）
-			字符串二叉树
-			字符串的二叉树）））
+#+begin_src emacs-lisp
+  (define-widget 'binary-tree-of-string 'lazy
+    "A binary tree made of cons-cells and strings."
+    :offset 4
+    :tag "Node"
+    :type '(choice (string :tag "Leaf" :value "")
+		   (cons :tag "Interior"
+			 :value ("" . "")
+			 binary-tree-of-string
+			 binary-tree-of-string)))
 
-(defcustom foo-bar ""
-  “保存字符串二叉树的示例变量。”
-  :type '二叉树的字符串)
+  (defcustom foo-bar ""
+    "Sample variable holding a binary tree of strings."
+    :type 'binary-tree-of-string)
+#+end_src
 
 定义新小部件的函数称为define-widget。  第一个参数是我们想要创建一个新的小部件类型的符号。  第二个参数是表示现有小部件的符号，新小部件将根据与现有小部件的差异来定义。  为了定义新的自定义类型，惰性小部件是完美的，因为它接受 :type 关键字参数，其语法与 defcustom 的关键字参数相同的名称。  第三个参数是新小部件的文档字符串。  您将能够使用 Mx widget-browse RET binary-tree-of-string RET 命令查看该字符串。
 
@@ -655,7 +708,10 @@ defcustom 显示了如何将新的小部件用作普通的自定义类型。
 
     此函数安装由 args 指定的变量自定义。  args 中的每个参数都应具有以下形式
 
-    (var 表达式 [现在 [请求 [评论]]])
+    #+begin_src emacs-lisp
+      (var expression [now [request [comment]]])
+    #+end_src
+
 
     var 是一个变量名（一个符号），而 expression 是一个计算结果为所需自定义值的表达式。
 
@@ -667,12 +723,13 @@ defcustom 显示了如何将新的小部件用作普通的自定义类型。
 
     此函数安装由 args 指定的面部自定义。  args 中的每个参数都应具有以下形式
 
-    （面部规格[现在[评论]]）
+    #+begin_src emacs-lisp
+      (face spec [now [comment]])
+    #+end_src
 
     face 是一个面名称（一个符号），而 spec 是该面的自定义面规范（请参阅定义面）。
 
     now 和 comment 条目仅供内部使用，可以省略。  现在，如果非零，则意味着现在安装面规范，即使尚未评估去面形式。  注释是描述自定义的字符串。
-
 ** 15.6 自定义主题
 
 自定义主题是可以作为一个单元启用或禁用的设置集合。  请参阅 GNU Emacs 手册中的自定义主题。  每个自定义主题都由 Emacs Lisp 源文件定义，该源文件应遵循本节中描述的约定。  （除了手动编写自定义主题，您还可以使用类似自定义的界面创建一个；请参阅 GNU Emacs 手册中的创建自定义主题。）
@@ -695,16 +752,18 @@ defcustom 显示了如何将新的小部件用作普通的自定义类型。
 
     此函数指定自定义主题主题的变量设置。  主题应该是一个符号。  args 中的每个参数都应该是形式的列表
 
-    (var 表达式 [现在 [请求 [评论]]])
-
+    #+begin_src emacs-lisp
+      (var expression [now [request [comment]]])
+    #+end_src
     其中列表条目的含义与自定义设置变量中的含义相同。  请参阅应用自定义。
 
 功能：custom-theme-set-faces 主题 &rest args ¶
 
     此函数指定自定义主题主题的面部设置。  主题应该是一个符号。  args 中的每个参数都应该是形式的列表
 
-    （面部规格[现在[评论]]）
-
+    #+begin_src emacs-lisp
+      (face spec [now [comment]])
+    #+end_src
     其中列表条目与 custom-set-faces 中的含义相同。  请参阅应用自定义。
 
 理论上，主题文件还可以包含其他 Lisp 表单，在加载主题时会对其进行评估，但这是错误的表单。  为了防止加载包含恶意代码的主题，Emacs 会在首次加载任何非内置主题之前显示源文件并要求用户确认。  因此，主题通常不是字节编译的，当 Emacs 寻找要加载的主题时，源文件通常优先。
