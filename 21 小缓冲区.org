@@ -55,10 +55,12 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
 
     如果用户想要完全控制提示的外观，最方便的方法是在所有人脸列表的末尾指定默认人脸。  例如：
 
-    （从迷你缓冲区读取
-     （连接
-      (properize "Bold" 'face '(粗体默认))
-      (properize " and normal: " 'face '(默认))))
+    #+begin_src emacs-lisp
+      (read-from-minibuffer
+       (concat
+	(propertize "Bold" 'face '(bold default))
+	(propertize " and normal: " 'face '(default))))
+    #+end_src
 
     如果参数inherit-input-method 不为nil，那么minibuffer 会继承当前输入法（参见Input Methods）和enable-multibyte-characters 的设置（参见Text Representations）从进入minibuffer 之前的当前缓冲区。
 
@@ -71,15 +73,16 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
     可选参数 default 在 read-from-minibuffer 中使用，除了如果非零，它还指定用户输入空输入时返回的默认值。  就像在 read-from-minibuffer 中一样，它应该是一个字符串、一个字符串列表或 nil，相当于一个空字符串。  当 default 是一个字符串时，该字符串是默认值。  当它是一个字符串列表时，第一个字符串是默认值。  （所有这些字符串都可以在“未来的 minibuffer 历史”中供用户使用。）
 
     此函数通过调用 read-from-minibuffer 函数来工作：
-
-    （读取字符串提示初始历史默认继承）
-    ≡
-    （让（（值
-	    (read-from-minibuffer prompt initial nil nil
-				  历史默认继承）））
-      (if (and (equal value "") default)
-	   (if (consp default) (car default) default)
-	 价值））
+    #+begin_src emacs-lisp
+      (read-string prompt initial history default inherit)
+      ≡
+      (let ((value
+	     (read-from-minibuffer prompt initial nil nil
+				   history default inherit)))
+	(if (and (equal value "") default)
+	    (if (consp default) (car default) default)
+	  value))
+    #+end_src
 
 功能：读取正则表达式提示&可选的默认历史记录¶
 
@@ -117,10 +120,12 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
     如果此变量为 nil，则 read-from-minibuffer 和 read-string 在返回之前从 minibuffer 输入中去除所有文本属性。  然而，read-no-blanks-input（见下文），以及 read-minibuffer 和相关函数（见Reading Lisp Objects With the Minibuffer），以及所有完成 minibuffer 输入的函数，无条件移除 face 属性，不管这个变量的值。
 
     如果此变量不为 nil，则完成表中字符串的大多数文本属性都将保留——但仅保留在已完成的部分字符串上。
+    #+begin_src emacs-lisp
+      (let ((minibuffer-allow-text-properties t))
+	(completing-read "String: " (list (propertize "foobar" 'data 'zot))))
+      => #("foobar" 3 6 (data zot))
+    #+end_src
 
-    (let ((minibuffer-allow-text-properties t))
-      (完成-读取 "String:" (list (properize "foobar" 'data 'zot))))
-    => #("foobar" 3 6 (data zot))
 
     在此示例中，用户键入“foo”，然后按 TAB 键，因此仅保留最后三个字符的文本属性。
 
@@ -163,10 +168,12 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
 
     无论 minibuffer-allow-text-properties 的值如何，此函数都会丢弃文本属性。
 
-    (read-no-blanks-input 提示初始)
-    ≡
-    (让 (minibuffer-allow-text-properties)
-      (read-from-minibuffer 提示初始 minibuffer-local-ns-map))
+    #+begin_src emacs-lisp
+      (read-no-blanks-input prompt initial)
+      ≡
+      (let (minibuffer-allow-text-properties)
+	(read-from-minibuffer prompt initial minibuffer-local-ns-map))
+    #+end_src
 
 变量：minibuffer-local-ns-map ¶
 
@@ -190,9 +197,11 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
 
     为了允许用户自定义其显示方式，提示用户输入值（并具有默认值）的代码应类似于以下代码片段：
 
-    （读取文件名
-     （格式提示“本地文件名”文件）
-     零文件）
+    #+begin_src emacs-lisp
+      (read-file-name
+       (format-prompt "Local filename" file)
+       nil file)
+    #+end_src
 
     如果 format-args 为 nil，则将 prompt 用作文字字符串。  如果 format-args 不为零，则将 prompt 用作格式控制字符串，并将 prompt 和 format-args 传递给 format（请参阅格式化字符串）。
 
@@ -216,22 +225,28 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
 
     这是 read-from-minibuffer 函数的简化接口：
 
-    （读取迷你缓冲区提示初始）
-    ≡
-    (让 (minibuffer-allow-text-properties)
-      (read-from-minibuffer prompt initial nil t))
+    #+begin_src emacs-lisp
+(read-minibuffer prompt initial)
+≡
+(let (minibuffer-allow-text-properties)
+  (read-from-minibuffer prompt initial nil t))
+    #+end_src
 
     这是一个示例，其中我们提供字符串“(testing)”作为初始输入：
-
-    （读取迷你缓冲区
-     "输入一个表达式：" (format "%s" '(testing)))
-
-    ;;  下面是 minibuffer 的显示方式：
+    #+begin_src emacs-lisp
 
 
-    ---------- 缓冲区：迷你缓冲区 ----------
-    输入一个表达式：（测试）*
-    ---------- 缓冲区：迷你缓冲区 ----------
+      (read-minibuffer
+       "Enter an expression: " (format "%s" '(testing)))
+
+      ;; Here is how the minibuffer is displayed:
+
+
+      ---------- Buffer: Minibuffer ----------
+      Enter an expression: (testing)∗
+      ---------- Buffer: Minibuffer ----------
+    #+end_src
+
 
     用户可以立即键入 RET 以使用初始输入作为默认值，或者可以编辑输入。
 
@@ -240,27 +255,28 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
     这个函数使用 minibuffer 读取一个 Lisp 表达式，计算它，然后返回结果。  参数 prompt 和 initial 与 read-from-minibuffer 一样使用。
 
     这个函数只计算调用 read-minibuffer 的结果：
-
-    （eval-minibuffer 提示初始）
-    ≡
-    (eval (read-minibuffer prompt initial))
+    #+begin_src emacs-lisp
+      (eval-minibuffer prompt initial)
+      ≡
+      (eval (read-minibuffer prompt initial))
+    #+end_src
 
 功能：edit-and-eval-command prompt form ¶
 
     这个函数读取 minibuffer 中的 Lisp 表达式，计算它，然后返回结果。  该命令和 eval-minibuffer 的区别在于，这里的初始形式不是可选的，它被视为要转换为打印表示的 Lisp 对象，而不是文本字符串。  它使用 prin1 打印，因此如果是字符串，则双引号字符 ('"') 会出现在初始文本中。请参阅输出函数。
 
     在以下示例中，我们为用户提供了一个初始文本已经是有效形式的表达式：
+    #+begin_src emacs-lisp
+      (edit-and-eval-command "Please edit: " '(forward-word 1))
 
-    (edit-and-eval-command "请编辑：" '(forward-word 1))
-
-    ;;  在对前面的表达式求值后，
-    ;;  迷你缓冲区中出现以下内容：
+      ;; After evaluation of the preceding expression,
+      ;;   the following appears in the minibuffer:
 
 
-    ---------- 缓冲区：迷你缓冲区 ----------
-    请编辑：（转发词 1）*
-    ---------- 缓冲区：迷你缓冲区 ----------
-
+      ---------- Buffer: Minibuffer ----------
+      Please edit: (forward-word 1)∗
+      ---------- Buffer: Minibuffer ----------
+    #+end_src
     立即键入 RET 将退出 minibuffer 并评估表达式，从而向前移动一个单词。
 
 ** TODO 21.4 小缓冲区历史
@@ -408,32 +424,37 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     此外，为了被接受，补全还必须匹配completion-regexp-list 中的所有正则表达式。  （除非 collection 是一个函数，在这种情况下，该函数必须自己处理 completion-regexp-list。）
 
     在下面的第一个示例中，字符串 'foo' 与三个 alist CAR 匹配。  所有的匹配都以字符 'fooba' 开头，所以这就是结果。  在第二个例子中，只有一个可能的匹配，而且是精确的，所以返回值为 t。
+    #+begin_src emacs-lisp
+      (try-completion
+       "foo"
+       '(("foobar1" 1) ("barfoo" 2) ("foobaz" 3) ("foobar2" 4)))
+	   ⇒ "fooba"
 
-    （尝试完成
-     “富”
-     '(("foobar1" 1) ("barfoo" 2) ("foobaz" 3) ("foobar2" 4)))
-	  ⇒ "fooba"
 
-
-    (try-completion "foo" '(("barfoo" 2) ("foo" 3)))
-	  ⇒ 吨
+      (try-completion "foo" '(("barfoo" 2) ("foo" 3)))
+	   ⇒ t
+    #+end_src
 
     在以下示例中，许多符号以字符“forw”开头，并且所有符号都以单词“forward”开头。  在大多数符号中，这后面都带有一个“-”，但不是全部，所以最多只能完成“前进”。
 
-    (try-completion "forw" obarray)
-	  ⇒ “前进”
+    #+begin_src emacs-lisp
+      (try-completion "forw" obarray)
+	   ⇒ "forward"
+    #+end_src
+
 
     最后，在以下示例中，三个可能的匹配项中只有两个通过了谓词测试（字符串 'foobaz' 太短）。  两者都以字符串 'foobar' 开头。
+    #+begin_src emacs-lisp
+      (defun test (s)
+	(> (length (car s)) 6))
+	   ⇒ test
 
-    （defun 测试）
-      (> (长度 (车 s)) 6))
-	  ⇒ 测试
-
-    （尝试完成
-     “富”
-     '(("foobar1" 1) ("barfoo" 2) ("foobaz" 3) ("foobar2" 4))
-     '测试）
-	  ⇒ "foobar"
+      (try-completion
+       "foo"
+       '(("foobar1" 1) ("barfoo" 2) ("foobaz" 3) ("foobar2" 4))
+       'test)
+	   ⇒ "foobar"
+    #+end_src
 
 功能：全完成字符串集合&可选谓词¶
 
@@ -442,17 +463,18 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     如果collection是一个函数，它会用三个参数调用：字符串、谓词和t；  然后所有完成返回函数返回的任何内容。  请参阅程序完成。
 
     这是一个示例，使用示例中显示的函数 test 进行尝试完成：
+    #+begin_src emacs-lisp
+      (defun test (s)
+	(> (length (car s)) 6))
+	   ⇒ test
 
-    （defun 测试）
-      (> (长度 (车 s)) 6))
-	  ⇒ 测试
 
-
-    （全部完成
-     “富”
-     '(("foobar1" 1) ("barfoo" 2) ("foobaz" 3) ("foobar2" 4))
-     '测试）
-	  ⇒ ("foobar1" "foobar2")
+      (all-completions
+       "foo"
+       '(("foobar1" 1) ("barfoo" 2) ("foobaz" 3) ("foobar2" 4))
+       'test)
+	   ⇒ ("foobar1" "foobar2")
+    #+end_src
 
 功能：测试完成字符串集合&可选谓词¶
 
@@ -485,9 +507,9 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     此宏提供了一种将变量 var 初始化为以惰性方式完成的集合的方法，在第一次需要它们之前不计算其实际内容。  您可以使用此宏生成一个值，并将其存储在 var 中。  正确值的实际计算是在您第一次使用 var 完成时完成的。  这是通过不带参数调用 fun 来完成的。  fun 返回的值成为 var 的永久值。
 
     这是一个例子：
-
-    (defvar foo (lazy-completion-table foo make-my-alist))
-
+    #+begin_src emacs-lisp
+      (defvar foo (lazy-completion-table foo make-my-alist))
+    #+end_src
 有几个函数采用现有的完成表并返回修改后的版本。  完成表大小写折叠返回一个不区分大小写的表。  completion-table-in-turn 和 completion-table-merge 以不同的方式组合多个输入表。  完成表颠覆改变表以使用不同的初始前缀。  completion-table-with-quoting 返回一个适合对引用文本进行操作的表。  completion-table-with-predicate 过滤带有谓词函数的表。  completion-table-with-terminator 添加一个终止字符串。
 
 *** TODO 21.6.2 完成和小缓冲区
@@ -524,18 +546,22 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     以下是使用完成读取的示例：
 
-    （完成阅读
-     “完成一个 foo：”
-     '(("foobar1" 1) ("barfoo" 2) ("foobaz" 3) ("foobar2" 4))
-     无 t "fo")
+    #+begin_src emacs-lisp
 
 
-    ;;  在对前面的表达式求值后，
-    ;;  迷你缓冲区中出现以下内容：
+      (completing-read
+       "Complete a foo: "
+       '(("foobar1" 1) ("barfoo" 2) ("foobaz" 3) ("foobar2" 4))
+       nil t "fo")
 
-    ---------- 缓冲区：迷你缓冲区 ----------
-    完成一个 foo：fo∗
-    ---------- 缓冲区：迷你缓冲区 ----------
+
+      ;; After evaluation of the preceding expression,
+      ;;   the following appears in the minibuffer:
+
+      ---------- Buffer: Minibuffer ----------
+      Complete a foo: fo∗
+      ---------- Buffer: Minibuffer ----------
+    #+end_src
 
     如果用户随后键入 DEL DEL b RET，则完成读取返回 barfoo。
 
@@ -586,10 +612,11 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     此函数在标准输出中显示流的完成，通常是缓冲区。  （有关流的更多信息，请参阅阅读和打印 Lisp 对象。）参数完成通常是由所有完成返回的完成列表，但并非必须如此。  每个元素可以是一个符号或一个字符串，其中任何一个都可以简单地打印出来。  它也可以是两个字符串的列表，就像字符串被连接一样打印。  两个字符串中的第一个是实际完成，第二个字符串用作注释。
 
     该函数由 minibuffer-completion-help 调用。  使用它的一种常见方法是与 with-output-to-temp-buffer 一起使用，如下所示：
-
-    （带有输出到临时缓冲区“*Completions*”
-      （显示完成列表
-	 （所有完成（缓冲区字符串）my-alist）））
+    #+begin_src emacs-lisp
+      (with-output-to-temp-buffer "*Completions*"
+	(display-completion-list
+	  (all-completions (buffer-string) my-alist)))
+    #+end_src
 
 用户选项：完成自动帮助¶
 
@@ -649,21 +676,23 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     可选参数谓词，如果非 nil，则指定一个函数来过滤应考虑的缓冲区：该函数将以每个潜在候选者作为其参数调用，并应返回 nil 拒绝候选者，非 nil 接受它.
 
     在以下示例中，用户输入“minibuffer.t”，然后键入 RET。  参数 require-match 是 t，唯一以给定输入开头的缓冲区名称是“minibuffer.texi”，因此该名称就是值。
+    #+begin_src emacs-lisp
+      (read-buffer "Buffer name: " "foo" t)
 
-    （读取缓冲区“缓冲区名称：”“foo”t）
-
-    ;;  在对前面的表达式求值后，
-    ;;  出现以下提示，
-    ;;  有一个空的小缓冲区：
-
-
-    ---------- 缓冲区：迷你缓冲区 ----------
-    缓冲区名称（默认 foo）：*
-    ---------- 缓冲区：迷你缓冲区 ----------
+      ;; After evaluation of the preceding expression,
+      ;;   the following prompt appears,
+      ;;   with an empty minibuffer:
 
 
-    ;;  用户键入 minibuffer.t RET。
-	  ⇒ “minibuffer.texi”
+      ---------- Buffer: Minibuffer ----------
+      Buffer name (default foo): ∗
+      ---------- Buffer: Minibuffer ----------
+
+
+      ;; The user types minibuffer.t RET.
+	   ⇒ "minibuffer.texi"
+    #+end_src
+
 
 用户选项：读取缓冲区功能¶
 
@@ -678,25 +707,31 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     此函数读取命令的名称并将其作为 Lisp 符号返回。  参数提示在 read-from-minibuffer 中使用。  回想一下，命令是 commandp 返回 t 的任何东西，命令名称是 commandp 返回 t 的符号。  请参阅交互式呼叫。
 
     参数 default 指定用户输入空输入时返回的内容。  它可以是符号、字符串或字符串列表。  如果它是一个字符串，read-command 会在返回它之前对其进行实习。  如果它是一个列表，则 read-command 会实习该列表的第一个元素。  如果 default 为 nil，则表示没有指定默认值；  那么如果用户输入 null 输入，则返回值为 (intern "")，即名称为空字符串的符号，其打印表示为 ##（参见符号类型）。
-
-    （读取命令“命令名称？”）
-
-    ;;  在对前面的表达式求值后，
-    ;;  出现以下提示，并带有一个空的 minibuffer：
+    #+begin_src emacs-lisp
 
 
-    ---------- 缓冲区：迷你缓冲区 ----------
-    命令名称？
-    ---------- 缓冲区：迷你缓冲区 ----------
+      (read-command "Command name? ")
+
+      ;; After evaluation of the preceding expression,
+      ;;   the following prompt appears with an empty minibuffer:
+
+
+      ---------- Buffer: Minibuffer ----------
+      Command name?
+      ---------- Buffer: Minibuffer ----------
+    #+end_src
 
     如果用户键入 forward-c RET，则此函数返回 forward-char。
 
     读取命令函数是完成读取的简化接口。  它使用变量 obarray 以便在现存的 Lisp 符号集中完成，它使用 commandp 谓词以便只接受命令名称：
 
-    （读取命令提示符）
-    ≡
-    （实习生（完成阅读提示obarray
-			      'commandp t nil))
+    #+begin_src emacs-lisp
+      (read-command prompt)
+      ≡
+      (intern (completing-read prompt obarray
+			       'commandp t nil))
+    #+end_src
+
 
 功能：读取变量提示&可选默认值¶
 
@@ -748,22 +783,23 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     如果谓词非零，它指定一个参数的函数，该函数决定哪些文件名是可接受的完成替代。  如果谓词为其返回非零，则文件名是可接受的值。
 
     以下是使用读取文件名的示例：
+    #+begin_src emacs-lisp
+      (read-file-name "The file is ")
 
-    （读取文件名“文件是”）
-
-    ;;  在对前面的表达式求值后，
-    ;;  迷你缓冲区中出现以下内容：
+      ;; After evaluation of the preceding expression,
+      ;;   the following appears in the minibuffer:
 
 
-    ---------- 缓冲区：迷你缓冲区 ----------
-    该文件是 /gp/gnu/elisp/∗
-    ---------- 缓冲区：迷你缓冲区 ----------
-
+      ---------- Buffer: Minibuffer ----------
+      The file is /gp/gnu/elisp/∗
+      ---------- Buffer: Minibuffer ----------
+    #+end_src
     键入手动 TAB 会导致以下结果：
-
-    ---------- 缓冲区：迷你缓冲区 ----------
-    该文件是 /gp/gnu/elisp/manual.texi∗
-    ---------- 缓冲区：迷你缓冲区 ----------
+    #+begin_src emacs-lisp
+      ---------- Buffer: Minibuffer ----------
+      The file is /gp/gnu/elisp/manual.texi∗
+      ---------- Buffer: Minibuffer ----------
+    #+end_src
 
     如果用户键入 RET，read-file-name 以字符串“/gp/gnu/elisp/manual.texi”的形式返回文件名。
 
@@ -788,27 +824,29 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     如果此变量为 nil 并且初始 minibuffer 内容为空，则用户可能必须显式获取下一个历史元素以访问默认值。  如果变量不为 nil，则初始 minibuffer 内容总是非空的，用户总是可以通过立即在未编辑的 minibuffer 中键入 RET 来请求默认值。  （往上看。）
 
     例如：
-
-    ;;  这里的 minibuffer 从默认目录开始。
-    (让 ((插入默认目录 t))
-      （读取文件名“文件是”））
+    #+begin_src emacs-lisp
 
 
-    ---------- 缓冲区：迷你缓冲区 ----------
-    该文件是 ~lewis/manual/*
-    ---------- 缓冲区：迷你缓冲区 ----------
+      ;; Here the minibuffer starts out with the default directory.
+      (let ((insert-default-directory t))
+	(read-file-name "The file is "))
 
 
-    ;;  这里的 minibuffer 是空的，只有提示
-    ;;  出现在它的行上。
-    (let ((insert-default-directory nil))
-      （读取文件名“文件是”））
+      ---------- Buffer: Minibuffer ----------
+      The file is ~lewis/manual/∗
+      ---------- Buffer: Minibuffer ----------
 
 
-    ---------- 缓冲区：迷你缓冲区 ----------
-    文件为 *
-    ---------- 缓冲区：迷你缓冲区 ----------
+      ;; Here the minibuffer is empty and only the prompt
+      ;;   appears on its line.
+      (let ((insert-default-directory nil))
+	(read-file-name "The file is "))
 
+
+      ---------- Buffer: Minibuffer ----------
+      The file is ∗
+      ---------- Buffer: Minibuffer ----------
+    #+end_src
 功能：read-shell-command prompt &optional 初始历史 &rest args ¶
 
     该函数从 minibuffer 中读取一个 shell 命令，以提示符提示并提供智能完成。  它使用适合命令名称的候选词来完成命令的第一个单词，其余的命令单词作为文件名。
@@ -831,7 +869,9 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     此变量存储可用完成样式的列表。  列表中的每个元素都有以下形式
 
-    （样式尝试完成所有完成文档）
+    #+begin_src emacs-lisp
+      (style try-completion all-completions doc)
+    #+end_src
 
     这里的style是完成样式的名称（一个符号），可以在completion-styles变量中用来指代这个样式；  try-completion 是完成完成的函数；  all-completions 是列出完成的函数；  doc 是描述完成样式的字符串。
 
@@ -943,7 +983,9 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     当completion-at-point命令运行时，它会一一调用列表中的函数，不带任何参数。  每个函数都应该返回 nil ，除非它可以并且想要对当前文本的完成数据负责。  否则，它应该返回以下形式的列表：
 
-    （开始结束收集。道具）
+    #+begin_src emacs-lisp
+      (start end collection . props)
+    #+end_src
 
     start 和 end 分隔要完成的文本（应该包含点）。  collection 是用于完成该文本的完成表，其形式适合作为第二个参数传递给 try-completion（请参阅基本完成函数）；  通过完成样式中定义的完成样式（请参阅完成变量），将以通常的方式从此完成表生成完成替代项。  props 是附加信息的属性列表；  识别完成额外属性中的任何属性（请参阅完成变量），以及以下附加属性：
 
@@ -956,17 +998,19 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     这个钩子上的函数通常应该快速返回，因为它们可能会被非常频繁地调用（例如，从 post-command-hook）。  如果生成完成列表是一项昂贵的操作，强烈建议提供收集功能。  Emacs 可能会在内部多次调用完成点函数中的函数，但只关心其中一些调用的集合值。  通过提供收集功能，Emacs 可以推迟生成完成，直到需要。  您可以使用 completion-table-dynamic 创建一个包装函数：
 
-    ;;  避免这种模式。
-    (let ((beg ...) (end ...) (my-completions (my-make-completions)))
-      （列表请求结束我的完成））
+    #+begin_src emacs-lisp
+      ;; Avoid this pattern.
+      (let ((beg ...) (end ...) (my-completions (my-make-completions)))
+	(list beg end my-completions))
 
-    ;;  改用这个。
-    （让（（乞求...）（结束...））
-      （清单乞求
-	     结尾
-	     （完成表动态
-	       (λ (_)
-		 （我的完成）））））
+      ;; Use this instead.
+      (let ((beg ...) (end ...))
+	(list beg
+	      end
+	      (completion-table-dynamic
+		(lambda (_)
+		  (my-make-completions)))))
+    #+end_src
 
     此外，集合通常不应根据开始和结束之间的当前文本进行预过滤，因为这是完成点函数的调用者根据它决定使用的完成样式来执行此操作的责任。
 
@@ -1017,24 +1061,27 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
     yes-or-no-p 比 y-or-np 需要用户更多的工作，并且适用于更关键的决策。
 
     这是一个例子：
+    #+begin_src emacs-lisp
+      (yes-or-no-p "Do you really want to remove everything?")
 
-    （是或否-p“你真的要删除所有内容吗？”）
-
-    ;;  在对前面的表达式求值后，
-    ;;  出现以下提示，
-    ;;  有一个空的小缓冲区：
+      ;; After evaluation of the preceding expression,
+      ;;   the following prompt appears,
+      ;;   with an empty minibuffer:
 
 
-    ---------- 缓冲区：迷你缓冲区 ----------
-    您真的要删除所有内容吗？  （是还是不是）
-    ---------- 缓冲区：迷你缓冲区 ----------
+      ---------- Buffer: minibuffer ----------
+      Do you really want to remove everything? (yes or no)
+      ---------- Buffer: minibuffer ----------
+    #+end_src
 
     如果用户首先键入 y RET，这是无效的，因为此函数需要整个单词 'yes'，它会通过显示这些提示来响应，在它们之间有一个短暂的停顿：
 
-    ---------- 缓冲区：迷你缓冲区 ----------
-    请回答是或否。
-    您真的要删除所有内容吗？  （是还是不是）
-    ---------- 缓冲区：迷你缓冲区 ----------
+    #+begin_src emacs-lisp
+      ---------- Buffer: minibuffer ----------
+      Please answer yes or no.
+      Do you really want to remove everything? (yes or no)
+      ---------- Buffer: minibuffer ----------
+    #+end_src
 
 ** TODO 21.8 提出多项选择题
 
@@ -1050,7 +1097,10 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
 
     参数提示器指定如何提出每个问题。  如果 prompter 是一个字符串，那么问题文本的计算方式如下：
 
-    （格式提示对象）
+    #+begin_src emacs-lisp
+(format prompter object)
+    #+end_src
+
 
     其中 object 是下一个要询问的对象（从列表中获得）。  有关格式的更多信息，请参阅格式化字符串。
 
@@ -1060,7 +1110,9 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
 
     如果给出参数帮助，它应该是这种形式的列表：
 
-    （单数复数作用）
+#+begin_src emacs-lisp
+  (singular plural action)
+#+end_src
 
     其中单数是包含单数名词的字符串，它描述要作用的单个对象，复数是对应的复数名词，动作是及物动词，描述演员对对象所做的事情。
 
@@ -1102,22 +1154,23 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
 功能：阅读答案问题答案¶
 
     此功能会提示用户有问题的文本，该文本应以“SPC”字符结尾。  该功能通过将答案附加到问题的末尾来在提示中包含可能的答案。  可能的响应以列表形式在答案中提供，其元素具有以下形式：
-
-    （长答案短答案帮助消息）
-
+    #+begin_src emacs-lisp
+      (long-answer short-answer help-message)
+    #+end_src
     其中 long-answer 是用户响应的完整文本，一个字符串；  short-answer 是相同响应、单个字符或功能键的缩写形式；  help-message 是描述答案含义的文本。  如果变量 read-answer-short 不为零，则提示将显示可能答案的简短变体，并且用户应键入提示中显示的单个字符/键；  否则提示将显示答案的长变体，并且用户应键入其中一个答案的全文并按 RET 键结束。  如果 use-dialog-box 不为 nil，并且此函数由鼠标事件调用，则问题和答案将显示在 GUI 对话框中。
 
     该函数返回用户选择的长答案的文本，无论提示中显示长答案还是短答案并由用户键入。
 
     下面是一个使用这个函数的例子：
-
-    (let ((read-answer-short t))
-      （阅读答案“Foo”
-	  '(("是" ?y "执行动作")
-	    ("否" ?n "跳到下一个")
-	    （“全部”？！“在没有更多问题的情况下执行其余部分”）
-	    （“帮助”？h“显示帮助”）
-	    ("退出" ?q "退出"))))
+    #+begin_src emacs-lisp
+      (let ((read-answer-short t))
+	(read-answer "Foo "
+	   '(("yes"  ?y "perform the action")
+	     ("no"   ?n "skip to the next")
+	     ("all"  ?! "perform for the rest without more questions")
+	     ("help" ?h "show help")
+	     ("quit" ?q "exit"))))
+    #+end_src
 
 功能：read-char-from-minibuffer prompt & optional chars history ¶
 
@@ -1280,15 +1333,16 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
 将禁止交互变量绑定到非 nil 的东西会使 Emacs 发出禁止交互错误而不是提示，然后服务器进程可以使用它来处理这些情况。
 
 这是一个典型的用例：
-
+#+begin_src emacs-lisp
 (let ((inhibit-interaction t))
-  （回复客户
-   （条件案例错误
-	（我的客户处理功能）
-     （抑制交互错误））））
+  (respond-to-client
+   (condition-case err
+       (my-client-handling-function)
+     (inhibited-interaction err))))
+#+end_src
+
 
 如果 my-client-handling-function 最终调用了向用户询问某事的内容（通过 y-or-np 或 read-from-minibuffer 等），则会发出禁止交互错误的信号。  然后服务器代码捕获该错误并将其报告给客户端。
-
 ** TODO 21.15 小缓冲区杂记
 
 功能：minibufferp &optional buffer-or-name live ¶
