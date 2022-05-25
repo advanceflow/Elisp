@@ -67,19 +67,21 @@ Lisp 程序主要由 Lisp 函数组成。  本章解释什么是函数，它们�
 功能：subrp 对象 ¶
 
     如果 object 是内置函数（即 Lisp 原语），则此函数返回 t。
+    #+begin_src emacs-lisp
+      (subrp 'message)            ; message is a symbol,
+	   ⇒ nil                 ;   not a subr object.
 
-    (subrp '消息) ;  消息是一个符号，
-	  ⇒ 无；  不是 subr 对象。
-
-    (subrp (symbol-function 'message))
-	  ⇒ 吨
+      (subrp (symbol-function 'message))
+	   ⇒ t
+    #+end_src
 
 函数：字节码函数-p 对象¶
 
     如果 object 是字节码函数，则此函数返回 t。  例如：
-
-    (byte-code-function-p (symbol-function 'next-line))
-	  ⇒ 吨
+    #+begin_src emacs-lisp
+      (byte-code-function-p (symbol-function 'next-line))
+	   ⇒ t
+    #+end_src
 
 功能：subr-arity subr ¶
 
@@ -89,9 +91,11 @@ Lisp 程序主要由 Lisp 函数组成。  本章解释什么是函数，它们�
 
 lambda 表达式是用 Lisp 编写的函数对象。  这是一个例子：
 
-(λ (x)
-  “返回 X 的双曲余弦。”
-  (* 0.5 (+ (exp x) (exp (- x)))))
+#+begin_src emacs-lisp
+  (lambda (x)
+    "Return the hyperbolic cosine of X."
+    (* 0.5 (+ (exp x) (exp (- x)))))
+#+end_src
 
 在 Emacs Lisp 中，这样的列表是一个有效的表达式，它的计算结果是一个函数对象。
 
@@ -100,11 +104,12 @@ lambda 表达式本身没有名称。  它是一个匿名函数。  尽管可以
 *** TODO 13.2.1 Lambda 表达式的组成部分
 
 lambda 表达式是一个如下所示的列表：
-
-(lambda (arg 变量...)
-  [文档字符串]
-  [交互式声明]
-  身体形态……）
+#+begin_src emacs-lisp
+  (lambda (arg-variables…)
+    [documentation-string]
+    [interactive-declaration]
+    body-forms…)
+#+end_src
 
 lambda 表达式的第一个元素始终是符号 lambda。  这表明该列表表示一个函数。  将函数定义为以 lambda 开头的原因是，其他用于其他用途的列表不会意外地作为函数有效。
 
@@ -120,19 +125,26 @@ lambda 表达式的第一个元素始终是符号 lambda。  这表明该列表�
 
 考虑以下示例：
 
-(λ (abc) (+ abc))
+#+begin_src emacs-lisp
+  (lambda (a b c) (+ a b c))
+#+end_src
+
 
 我们可以通过将其传递给 funcall 来调用此函数，如下所示：
+#+begin_src emacs-lisp
+  (funcall (lambda (a b c) (+ a b c))
+	   1 2 3)
+#+end_src
 
-(funcall (lambda (abc) (+ abc))
-	  1 2 3)
 
 此调用计算 lambda 表达式的主体，其中变量 a 绑定到 1，b 绑定到 2，c 绑定到 3。对主体的求值将这三个数字相加，产生结果 6；  因此，此函数调用返回值 6。
 
 请注意，参数可以是其他函数调用的结果，如下例所示：
 
-(funcall (lambda (abc) (+ abc))
-	  1 (* 2 3) (- 5 4))
+#+begin_src emacs-lisp
+  (funcall (lambda (a b c) (+ a b c))
+	   1 (* 2 3) (- 5 4))
+#+end_src
 
 这将从左到右评估参数 1、(* 2 3) 和 (- 5 4)。  然后它将 lambda 表达式应用于参数值 1、6 和 1 以产生值 8。
 
@@ -147,10 +159,11 @@ lambda 表达式的第一个元素始终是符号 lambda。  这表明该列表�
 要指定在调用函数时可以省略的可选参数，只需在可选参数之前包含关键字 &optional 即可。  要指定零个或多个额外参数的列表，请在最后一个参数之前包含关键字 &rest。
 
 因此，参数列表的完整语法如下：
-
-（必需的变量...
- [&可选的[可选变量…]]
- [&rest 休息变量])
+#+begin_src emacs-lisp
+  (required-vars…
+   [&optional [optional-vars…]]
+   [&rest rest-var])
+#+end_src
 
 方括号表示 &optional 和 &rest 子句以及它们后面的变量是可选的。
 
@@ -162,7 +175,9 @@ lambda 表达式的第一个元素始终是符号 lambda。  这表明该列表�
 
 例如，如下所示的参数列表：
 
-(ab &optional cd &rest e)
+#+begin_src emacs-lisp
+  (a b &optional c d &rest e)
+#+end_src
 
 将 a 和 b 绑定到前两个实际参数，这是必需的。  如果提供了一个或两个以上参数，则 c 和 d 分别绑定到它们；  前四个之后的任何参数都被收集到一个列表中，并且 e 绑定到该列表。  因此，如果只有两个参数，c、d 和 e 为零；  如果两个或三个参数，d 和 e 为零；  如果四个参数或更少，e 为零。  请注意，恰好为 e 提供了具有显式 nil 参数的五个参数将导致该 nil 参数作为具有一个元素 (nil) 的列表传递，与 e 的任何其他单个值一样。
 
@@ -170,18 +185,19 @@ lambda 表达式的第一个元素始终是符号 lambda。  这表明该列表�
 
 以下是参数列表和正确调用的一些示例：
 
-(funcall (lambda (n) (1+ n)) ; 一项必填：
-	  1) ;  只需要一个参数。
-     ⇒ 2
-(funcall (lambda (n &optional n1) ; 一个必需，一个可选：
-	    (如果 n1 (+ n n1) (1+ n))) ;  1 或 2 个参数。
-	  1 2)
-     ⇒ 3
-(funcall (lambda (n &rest ns) ; 一个需要，一个休息：
-	    (+ n (应用 '+ ns))) ;  1 个或多个参数。
-	  1 2 3 4 5)
-     ⇒ 15
-
+#+begin_src emacs-lisp
+  (funcall (lambda (n) (1+ n))        ; One required:
+	   1)                         ; requires exactly one argument.
+       ⇒ 2
+  (funcall (lambda (n &optional n1)   ; One required and one optional:
+	     (if n1 (+ n n1) (1+ n))) ; 1 or 2 arguments.
+	   1 2)
+       ⇒ 3
+  (funcall (lambda (n &rest ns)       ; One required and one rest:
+	     (+ n (apply '+ ns)))     ; 1 or more arguments.
+	   1 2 3 4 5)
+       ⇒ 15
+#+end_src
 *** TODO 13.2.4 函数的文档字符串
 
 lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。  该字符串不影响函数的执行；  它是一种注释，是一种系统化的注释，它实际上出现在 Lisp 世界中，并且可以被 Emacs 帮助工具使用。  请参阅文档，了解如何访问文档字符串。
@@ -196,7 +212,10 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。  
 
 文档字符串的最后一行可以指定不同于实际函数参数的调用约定。  像这样写文本：
 
-\(fn 参数列表)
+#+begin_src emacs-lisp
+  \(fn arglist)
+#+end_src
+
 
 在行首的空行之后，文档字符串中没有换行符。  （'\' 用于避免混淆 Emacs 运动命令。）以这种方式指定的调用约定出现在帮助消息中，代替从函数的实际参数派生的调用约定。
 
@@ -233,31 +252,34 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。  
     defun 的返回值是未定义的。
 
     这里有些例子：
-
-    (defun foo () 5)
-    （富）
-	  ⇒ 5
-
-
-    (defun bar (a &optional b &rest c)
-	 (列表 abc))
-    （酒吧 1 2 3 4 5）
-	  ⇒ (1 2 (3 4 5))
-
-    （条 1）
-	  ⇒ (1 无 无)
-
-    （酒吧）
-    错误→参数数量错误。
+    #+begin_src emacs-lisp
+      (defun foo () 5)
+      (foo)
+	   ⇒ 5
 
 
-    (defun capitalize-backwards ()
-      “将单词的最后一个字母大写。”
-      （交互的）
-      （倒序词 1）
-      （前向词 1）
-      （向后字符 1）
-      （大写单词 1））
+      (defun bar (a &optional b &rest c)
+	  (list a b c))
+      (bar 1 2 3 4 5)
+	   ⇒ (1 2 (3 4 5))
+
+      (bar 1)
+	   ⇒ (1 nil nil)
+
+      (bar)
+      error→ Wrong number of arguments.
+
+
+      (defun capitalize-backwards ()
+	"Upcase the last letter of the word at point."
+	(interactive)
+	(backward-word 1)
+	(forward-word 1)
+	(backward-char 1)
+	(capitalize-word 1))
+
+    #+end_src
+
 
     注意不要无意中重新定义现有功能。  defun 甚至毫不犹豫地重新定义了汽车等原始功能。  Emacs 不会阻止你这样做，因为重新定义一个函数有时是故意的，没有办法区分故意的重新定义和无意的重新定义。
 
@@ -297,17 +319,21 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。  
 
     如果您需要使用 funcall 来调用命令并使其表现得像交互式调用一样，请使用 funcall-interactively（请参阅交互式调用）。
 
-    (setq f '列表)
-	  ⇒ 列表
+    #+begin_src emacs-lisp
 
-    (funcall f 'x 'y 'z)
-	  ⇒ (xyz)
 
-    (funcall f'x'y'(z))
-	  ⇒ (xy (z))
+      (setq f 'list)
+	   ⇒ list
 
-    （funcall ' 和 t 无）
-    错误→无效函数：#<subr and>
+      (funcall f 'x 'y 'z)
+	   ⇒ (x y z)
+
+      (funcall f 'x 'y '(z))
+	   ⇒ (x y (z))
+
+      (funcall 'and t nil)
+      error→ Invalid function: #<subr and>
+    #+end_src
 
     将这些示例与 apply 的示例进行比较。
 
@@ -318,26 +344,29 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。  
     带有单个参数的 apply 是特殊的：参数的第一个元素必须是一个非空列表，它作为一个函数调用，其余元素作为单独的参数。  传递两个或更多参数会更快。
 
     apply 返回调用函数的结果。  与 funcall 一样，函数必须是 Lisp 函数或原始函数；  特殊形式和宏在 apply 中没有意义。
-
-    (setq f '列表)
-	  ⇒ 列表
-
-    （应用 f 'x 'y 'z）
-    错误→错误的类型参数：listp，z
-
-    （应用'+ 1 2'（3 4））
-	  ⇒ 10
-
-    （应用'+'（1 2 3 4））
-	  ⇒ 10
+    #+begin_src emacs-lisp
 
 
-    （应用'追加'（（abc）无（xyz）无））
-	  ⇒ (abcxyz)
+      (setq f 'list)
+	   ⇒ list
+
+      (apply f 'x 'y 'z)
+      error→ Wrong type argument: listp, z
+
+      (apply '+ 1 2 '(3 4))
+	   ⇒ 10
+
+      (apply '+ '(1 2 3 4))
+	   ⇒ 10
 
 
-    （应用'（+ 3 4））
-	  ⇒ 7
+      (apply 'append '((a b c) nil (x y z) nil))
+	   ⇒ (a b c x y z)
+
+
+      (apply '(+ 3 4))
+	   ⇒ 7
+    #+end_src
 
     有关使用 apply 的有趣示例，请参阅 mapcar 的定义。
 
@@ -350,12 +379,14 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。  
     此函数返回一个新函数，当调用该函数时，将调用 func 并使用由 args 和调用时指定的附加参数组成的参数列表。  如果 func 接受 n 个参数，那么使用 m <= n 个参数调用 apply-partially 将产生一个具有 n - m 个参数的新函数12。
 
     下面是我们如何定义内置函数 1+，如果它不存在，使用 apply-partially 和 +，另一个内置函数 13：
+    #+begin_src emacs-lisp
+      (defalias '1+ (apply-partially '+ 1)
+	"Increment argument by one.")
 
-    （defalias '1+（应用部分'+ 1）
-      “将参数增加一。”）
+      (1+ 10)
+	   ⇒ 11
+    #+end_src
 
-    (1+ 10)
-	  ⇒ 11
 
 Lisp 函数通常接受函数作为参数或在数据结构中找到它们（尤其是在钩子变量和属性列表中）并使用 funcall 或 apply 调用它们。  接受函数参数的函数通常称为函数。
 
@@ -397,43 +428,49 @@ Lisp 函数通常接受函数作为参数或在数据结构中找到它们（尤
 
     参数序列可以是除字符表之外的任何类型的序列；  即列表、向量、布尔向量或字符串。  结果始终是一个列表。  结果的长度与序列的长度相同。  例如：
 
-    (mapcar #'汽车'((ab) (cd) (ef)))
-	  ⇒ (王牌)
-    （地图车#'1+ [1 2 3]）
-	  ⇒ (2 3 4)
-    (mapcar #'string "abc")
-	  ⇒ ("a" "b" "c")
+    #+begin_src emacs-lisp
 
 
-    ;;  调用 my-hooks 中的每个函数。
-    (mapcar 'funcall my-hooks)
+      (mapcar #'car '((a b) (c d) (e f)))
+	   ⇒ (a c e)
+      (mapcar #'1+ [1 2 3])
+	   ⇒ (2 3 4)
+      (mapcar #'string "abc")
+	   ⇒ ("a" "b" "c")
 
 
-    (defun mapcar* (function &rest args)
-      “将 FUNCTION 应用于所有 ARGS 的后续汽车。
-    返回结果列表。”
-      ;;  如果没有用完列表，
-      （如果（不是（memq nil args））
-	   ;;  将功能应用于 CAR。
-	   （缺点（应用功能（mapcar #'car args））
-		 （应用#'mapcar* 功能
-			;;  递归其余元素。
-			（地图车#'cdr args）））））
+      ;; Call each function in my-hooks.
+      (mapcar 'funcall my-hooks)
 
 
-    (mapcar* #'cons '(abc) '(1 2 3 4))
-	  ⇒ ((a . 1) (b . 2) (c . 3))
+      (defun mapcar* (function &rest args)
+	"Apply FUNCTION to successive cars of all ARGS.
+      Return the list of results."
+	;; If no list is exhausted,
+	(if (not (memq nil args))
+	    ;; apply function to CARs.
+	    (cons (apply function (mapcar #'car args))
+		  (apply #'mapcar* function
+			 ;; Recurse for rest of elements.
+			 (mapcar #'cdr args)))))
+
+
+      (mapcar* #'cons '(a b c) '(1 2 3 4))
+	   ⇒ ((a . 1) (b . 2) (c . 3))
+    #+end_src
 
 功能：mapcan函数序列¶
 
     此函数将函数应用于序列的每个元素，如 mapcar，但不是将结果收集到列表中，而是通过更改结果（使用 nconc;请参阅重新排列列表的函数）。  与 mapcar 一样，序列可以是除字符表之外的任何类型。
 
-    ;;  对比一下：
-    （地图车#'列表'（abcd））
-	  ⇒ ((a) (b) (c) (d))
-    ;;  有了这个：
-    (mapcan #'list '(abcd))
-	  ⇒ (abcd)
+    #+begin_src emacs-lisp
+      ;; Contrast this:
+      (mapcar #'list '(a b c d))
+	   ⇒ ((a) (b) (c) (d))
+      ;; with this:
+      (mapcan #'list '(a b c d))
+	   ⇒ (a b c d)
+    #+end_src
 
 功能：mapc函数序列¶
 
@@ -445,17 +482,18 @@ Lisp 函数通常接受函数作为参数或在数据结构中找到它们（尤
 
     参数函数必须是一个可以接受一个参数并返回一系列字符的函数：字符串、向量或列表。  参数序列可以是除字符表之外的任何类型的序列；  即列表、向量、布尔向量或字符串。
 
-    (mapconcat #'符号名
-		'（帽子里的猫）
-		" ")
-	  ⇒ 《戴帽子的猫》
+    #+begin_src emacs-lisp
+      (mapconcat #'symbol-name
+		 '(The cat in the hat)
+		 " ")
+	   ⇒ "The cat in the hat"
 
 
-    (mapconcat (lambda (x) (格式 "%c" (1+ x)))
-		“HAL-8000”
-		"")
-	  ⇒ "IBM.9111"
-
+      (mapconcat (lambda (x) (format "%c" (1+ x)))
+		 "HAL-8000"
+		 "")
+	   ⇒ "IBM.9111"
+    #+end_src
 ** TODO 13.7 匿名函数
 
 尽管函数通常同时使用 defun 和给定名称定义，但有时使用显式 lambda 表达式（匿名函数）会很方便。  匿名函数在函数名所在的地方都是有效的。  它们通常被分配为变量值，或作为函数的参数；  例如，您可以将一个作为函数参数传递给 mapcar，该函数将该函数应用于列表的每个元素（请参阅映射函数）。  请参阅 describe-symbols 示例，了解一个实际的示例。
@@ -468,8 +506,10 @@ Lisp 函数通常接受函数作为参数或在数据结构中找到它们（尤
 
     在动态绑定下，此宏有效地使 lambda 表单自引用：评估 CAR 为 lambda 的表单会产生表单本身：
 
-    (λ (x) (* xx))
-	  ⇒ (λ (x) (* xx))
+    #+begin_src emacs-lisp
+      (lambda (x) (* x x))
+	   ⇒ (lambda (x) (* x x))
+    #+end_src
 
     请注意，在词法绑定下进行评估时，结果是一个闭包对象（请参阅闭包）。
 
@@ -485,28 +525,34 @@ Lisp 函数通常接受函数作为参数或在数据结构中找到它们（尤
     当函数对象是一个符号并且代码是字节编译时，如果该函数未定义或在运行时可能不知道，字节编译器将发出警告。
 
 读取语法 #' 是使用函数的简写。  以下形式都是等价的：
-
-(λ (x) (* xx))
-(函数 (lambda (x) (* xx)))
-#'(λ (x) (* xx))
+#+begin_src emacs-lisp
+  (lambda (x) (* x x))
+  (function (lambda (x) (* x x)))
+  #'(lambda (x) (* x x))
+#+end_src
 
 在下面的示例中，我们定义了一个 change-property 函数，该函数将一个函数作为其第三个参数，然后是一个双属性函数，该函数通过向其传递一个匿名函数来使用 change-property：
 
-(defun change-property (symbol prop 函数)
-  (let ((value (get symbol prop)))
-    （放置符号道具（funcall函数值））））
+
+#+begin_src emacs-lisp
+  (defun change-property (symbol prop function)
+    (let ((value (get symbol prop)))
+      (put symbol prop (funcall function value))))
 
 
-（defun 双属性（符号属性）
-  (更改属性符号 prop (lambda (x) (* 2 x))))
+  (defun double-property (symbol prop)
+    (change-property symbol prop (lambda (x) (* 2 x))))
+#+end_src
+
 
 请注意，我们不引用 lambda 形式。
 
 如果编译上面的代码，匿名函数也会被编译。  如果您通过将匿名函数引用为列表来构造匿名函数，则不会发生这种情况：
 
-（defun 双属性（符号属性）
-  (更改属性符号 prop '(lambda (x) (* 2 x))))
-
+#+begin_src emacs-lisp
+  (defun double-property (symbol prop)
+    (change-property symbol prop '(lambda (x) (* 2 x))))
+#+end_src
 在这种情况下，匿名函数将作为 lambda 表达式保存在编译的代码中。  字节编译器不能假定这个列表是一个函数，即使它看起来像一个，因为它不知道 change-property 打算将它用作一个函数。
 
 
@@ -644,16 +690,19 @@ Emacs 提供对多态性的支持。  与其他 Lisp 环境一样，尤其是 Co
     这将返回符号函数单元格中的对象。  它不检查返回的对象是否是合法函数。
 
     如果函数单元格为 void，则返回值为 nil。  要区分为 void 的函数单元格和设置为 nil 的函数单元格，请使用 fboundp（见下文）。
+    #+begin_src emacs-lisp
 
-    (defun bar (n) (+ n 2))
-    （符号功能'栏）
-	  ⇒ (λ (n) (+ n 2))
 
-    （fset 'baz'吧）
-	  ⇒ 酒吧
+      (defun bar (n) (+ n 2))
+      (symbol-function 'bar)
+	   ⇒ (lambda (n) (+ n 2))
 
-    （符号函数'baz）
-	  ⇒ 酒吧
+      (fset 'baz 'bar)
+	   ⇒ bar
+
+      (symbol-function 'baz)
+	   ⇒ bar
+    #+end_src
 
 如果您从未给符号任何函数定义，我们说该符号的函数单元格是无效的。  换句话说，函数单元格中没有任何 Lisp 对象。  如果您尝试将符号作为函数调用，Emacs 会发出 void-function 错误信号。
 
@@ -668,16 +717,17 @@ Emacs 提供对多态性的支持。  与其他 Lisp 环境一样，尤其是 Co
 功能：fmakunbound 符号¶
 
     此函数使符号的函数单元格无效，因此随后尝试访问此单元格将导致无效函数错误。  它返回符号。  （另见 makunbound，在当变量为空时。）
+    #+begin_src emacs-lisp
+      (defun foo (x) x)
+      (foo 1)
+	   ⇒1
 
-    (defun foo (x) x)
-    （富 1）
-	  ⇒1
+      (fmakunbound 'foo)
+	   ⇒ foo
 
-    (fmakunbound 'foo)
-	  ⇒ 富
-
-    （富 1）
-    错误→ Symbol 的函数定义为 void: foo
+      (foo 1)
+      error→ Symbol's function definition is void: foo
+    #+end_src
 
 功能：fset 符号定义 ¶
 
@@ -685,12 +735,13 @@ Emacs 提供对多态性的支持。  与其他 Lisp 环境一样，尤其是 Co
 
     此函数的主要用途是作为定义或更改函数的构造的子例程，例如 defun 或advice-add（请参阅Advising Emacs Lisp Functions）。  您还可以使用它为符号提供不是函数的函数定义，例如键盘宏（请参阅键盘宏）：
 
-    ;;  定义一个命名的键盘宏。
-    (fset 'kill-two-lines "\^u2\^k")
-	  ⇒ "\^u2\^k"
+    #+begin_src emacs-lisp
+      ;; Define a named keyboard macro.
+      (fset 'kill-two-lines "\^u2\^k")
+	   ⇒ "\^u2\^k"
+    #+end_src
 
     如果您希望使用 fset 为函数创建备用名称，请考虑改用 defalias。  请参见defalias 的定义。
-
 ** TODO 13.10 闭包
 
 正如变量绑定的范围规则中所解释的，Emacs 可以选择启用变量的词法绑定。  启用词法绑定后，您创建的任何命名函数（例如，使用 defun）以及您使用 lambda 宏或函数特殊形式或 #' 语法（请参阅匿名函数）创建的任何匿名函数都会自动转换为闭包。
@@ -701,9 +752,11 @@ Emacs 提供对多态性的支持。  与其他 Lisp 环境一样，尤其是 Co
 
 目前，Emacs Lisp 闭包对象由一个列表表示，其中符号闭包作为第一个元素，一个表示词法环境的列表作为第二个元素，参数列表和主体形式作为其余元素：
 
-;;  启用词法绑定。
-(λ (x) (* xx))
-     ⇒ (关闭 (t) (x) (* xx))
+#+begin_src emacs-lisp
+  ;; lexical binding is enabled.
+  (lambda (x) (* x x))
+       ⇒ (closure (t) (x) (* x x))
+#+end_src
 
 然而，闭包的内部结构暴露给 Lisp 世界的其余部分这一事实被认为是内部实现细节。  因此，我们建议不要直接检查或更改闭包对象的结构。
 
@@ -716,41 +769,54 @@ Emacs 提供对多态性的支持。  与其他 Lisp 环境一样，尤其是 Co
 Emacs 的建议系统为此提供了两组原语：核心集，用于保存在变量和对象字段中的函数值（相应的原语是 add-function 和 remove-function），另一组在其之上分层用于命名函数（主要原语是建议添加和建议删除）。
 
 作为一个简单的例子，下面是如何添加建议，以在每次调用函数时修改函数的返回值：
-
-(defun my-double (x)
-  (* x 2))
-(defun my-increase (x)
-  (+ x 1))
-(advice-add 'my-double :filter-return #'my-increase)
+#+begin_src emacs-lisp
+  (defun my-double (x)
+    (* x 2))
+  (defun my-increase (x)
+    (+ x 1))
+  (advice-add 'my-double :filter-return #'my-increase)
+#+end_src
 
 添加此建议后，如果您使用 '3' 调用 my-double，则返回值将是 '7'。  要删除此建议，请说
 
-(advice-remove 'my-double #'my-increase)
+#+begin_src emacs-lisp
+  (advice-remove 'my-double #'my-increase)
+#+end_src
+
 
 一个更高级的示例是跟踪对进程 proc 的进程过滤器的调用：
 
-(defun my-tracing-function (proc 字符串)
-  （消息“Proc %S 收到 %S”proc 字符串））
+#+begin_src emacs-lisp
+  (defun my-tracing-function (proc string)
+    (message "Proc %S received %S" proc string))
 
-(add-function :before (process-filter proc) #'my-tracing-function)
+  (add-function :before (process-filter proc) #'my-tracing-function)
+#+end_src
+
 
 这将导致进程的输出在传递给原始进程过滤器之前传递给 my-tracing-function。  my-tracing-function 接收与原始函数相同的参数。  完成后，您可以通过以下方式恢复未跟踪的行为：
 
-(remove-function (process-filter proc) #'my-tracing-function)
+#+begin_src emacs-lisp
+  (remove-function (process-filter proc) #'my-tracing-function)
+#+end_src
+
 
 同样，如果要跟踪名为 display-buffer 的函数的执行，可以使用：
+#+begin_src emacs-lisp
+  (defun his-tracing-function (orig-fun &rest args)
+    (message "display-buffer called with args %S" args)
+    (let ((res (apply orig-fun args)))
+      (message "display-buffer returned %S" res)
+      res))
 
-(defun his-tracing-function (orig-fun &rest args)
-  （消息“使用 args %S 调用显示缓冲区”args）
-  (let ((res (apply orig-fun args)))
-    （消息“显示缓冲区返回 %S”res）
-    资源））
-
-(advice-add 'display-buffer :around #'his-tracing-function)
+  (advice-add 'display-buffer :around #'his-tracing-function)
+#+end_src
 
 在这里，他的跟踪函数被调用而不是原始函数，并接收原始函数（除了该函数的参数）作为参数，因此它可以在需要时调用它。  当您厌倦了看到此输出时，您可以通过以下方式恢复未跟踪的行为：
 
-(advice-remove 'display-buffer #'his-tracing-function)
+#+begin_src emacs-lisp
+  (advice-remove 'display-buffer #'his-tracing-function)
+#+end_src
 
 上面示例中使用的参数 :before 和 :around 指定了这两个函数的组合方式，因为有许多不同的方法可以做到这一点。  添加的功能也称为一条建议。
 
@@ -799,29 +865,33 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
     例如，如果您想让 Cx m（撰写邮件）命令提示符为“发件人：”标头，您可以这样说：
 
-    (defun my-compose-mail-advice (orig &rest args)
-      “阅读自：交互式地址。”
-      （交互的
-	（拉姆达（规格）
-	  (让* ((用户邮件地址
-		  （完成-阅读“发件人：”
-				   '("one.address@example.net"
-				     “alternative.address@example.net”）））
-		 (from (message-make-from user-full-name
-					  用户邮件地址））
-		 (spec (advice-eval-interactive-spec spec)))
-	    ;;  将 From 标头放入 OTHER-HEADERS 参数中。
-	    (push (cons 'From from) (nth 2 spec))
-	    规格）））
-      （应用原始参数））
+    #+begin_src emacs-lisp
+      (defun my-compose-mail-advice (orig &rest args)
+	"Read From: address interactively."
+	(interactive
+	 (lambda (spec)
+	   (let* ((user-mail-address
+		   (completing-read "From: "
+				    '("one.address@example.net"
+				      "alternative.address@example.net")))
+		  (from (message-make-from user-full-name
+					   user-mail-address))
+		  (spec (advice-eval-interactive-spec spec)))
+	     ;; Put the From header into the OTHER-HEADERS argument.
+	     (push (cons 'From from) (nth 2 spec))
+	     spec)))
+	(apply orig args))
 
-    (advice-add 'compose-mail :around #'my-compose-mail-advice)
-
+      (advice-add 'compose-mail :around #'my-compose-mail-advice)
+    #+end_src
 *** TODO 13.11.2 建议命名函数
 
 建议的常见用途是命名函数和宏。  您可以只使用 add-function ，如下所示：
 
-(add-function :around (symbol-function 'fun) #'his-tracing-function)
+#+begin_src emacs-lisp
+  (add-function :around (symbol-function 'fun) #'his-tracing-function)
+#+end_src
+
 
 但是你应该使用advice-add 和advice-remove 来代替。  这组单独的函数用于操作应用于命名函数的建议片段，与 add-function 相比，它们提供了以下额外功能：它们知道如何处理宏和自动加载的函数，它们让 describe-function 保留原始文档字符串和文档添加的建议，它们允许您在定义函数之前添加和删除建议。
 
@@ -863,14 +933,20 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
     在旧函数之前调用函数。  两个函数接收相同的参数，组合的返回值是旧函数的返回值。  更具体地说，这两个函数的组合行为如下：
 
-    (lambda (&rest r) (应用函数 r) (应用 oldfun r))
+    #+begin_src emacs-lisp
+      (lambda (&rest r) (apply function r) (apply oldfun r))
+    #+end_src
+
 
     (add-function :before funvar function) 与普通钩子的 (add-hook 'hookvar function) 相当。
 ：后
 
     在旧函数之后调用函数。  两个函数接收相同的参数，组合的返回值是旧函数的返回值。  更具体地说，这两个函数的组合行为如下：
 
-    (lambda (&rest r) (prog1 (apply oldfun r) (apply function r)))
+    #+begin_src emacs-lisp
+      (lambda (&rest r) (prog1 (apply oldfun r) (apply function r)))
+    #+end_src
+
 
     (add-function :after funvar function) 对于单功能挂钩与 (add-hook 'hookvar function 'append) 对于普通挂钩相当。
 :覆盖
@@ -880,99 +956,119 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
     调用函数而不是旧函数，但提供旧函数作为函数的额外参数。  这是最灵活的组合。  例如，它允许您使用不同的参数调用旧函数，或者多次调用，或者在 let-binding 中调用，或者您有时可以将工作委托给旧函数，有时完全覆盖它。  更具体地说，这两个函数的组合行为如下：
 
-    (lambda (&rest r) (应用函数 oldfun r))
+    #+begin_src emacs-lisp
+      (lambda (&rest r) (apply function oldfun r))
+    #+end_src
 
 :之前
 
     在旧函数之前调用函数，如果函数返回 nil，则不要调用旧函数。  两个函数接收相同的参数，组合的返回值是旧函数的返回值。  更具体地说，这两个函数的组合行为如下：
 
-    (lambda (&rest r) (and (apply function r) (apply oldfun r)))
+    #+begin_src emacs-lisp
+      (lambda (&rest r) (and (apply function r) (apply oldfun r)))
+    #+end_src
 
     (add-function :before-while funvar function) 当 hookvar 通过 run-hook-with-args-until-failure 运行时，单函数钩子与 (add-hook 'hookvar function) 相当。
 ：之前，直到
 
     在旧函数之前调用函数，并且仅在函数返回 nil 时才调用旧函数。  更具体地说，这两个函数的组合行为如下：
 
-    (lambda (&rest r) (或 (apply function r) (apply oldfun r)))
-
+    #+begin_src emacs-lisp
+      (lambda (&rest r) (or (apply function r) (apply oldfun r)))
+    #+end_src
     (add-function :before-until funvar function) 当 hookvar 通过 run-hook-with-args-until-success 运行时，单函数钩子与 (add-hook 'hookvar function) 相当。
 ：过了一阵子
 
     在旧函数之后调用函数，并且仅当旧函数返回非零时。  两个函数接收相同的参数，组合的返回值是函数的返回值。  更具体地说，这两个函数的组合行为如下：
 
-    (lambda (&rest r) (and (apply oldfun r) (apply function r)))
-
+    #+begin_src emacs-lisp
+      (lambda (&rest r) (and (apply oldfun r) (apply function r)))
+    #+end_src
     (add-function :after-while funvar function) 当 hookvar 通过 run-hook-with-args-until-failure 运行时，单函数钩子与 (add-hook 'hookvar function 'append) 相当。
 : 之后直到
 
     在旧函数之后调用函数，并且仅当旧函数返回 nil 时。  更具体地说，这两个函数的组合行为如下：
 
-    (lambda (&rest r) (或 (apply oldfun r) (apply function r)))
+    #+begin_src emacs-lisp
+      (lambda (&rest r) (or  (apply oldfun r) (apply function r)))
+    #+end_src
+
 
     (add-function :after-until funvar function) 当 hookvar 通过 run-hook-with-args-until-success 运行时，单函数钩子与 (add-hook 'hookvar function 'append) 相当。
 :filter-args
 
     首先调用函数并将结果（应该是一个列表）作为新参数传递给旧函数。  更具体地说，这两个函数的组合行为如下：
 
-    (lambda (&rest r) (apply oldfun (funcall function r)))
+    #+begin_src emacs-lisp
+      (lambda (&rest r) (apply oldfun (funcall function r)))
+    #+end_src
+
 
 :filter-return
 
     首先调用旧函数并将结果传递给函数。  更具体地说，这两个函数的组合行为如下：
 
-    (lambda (&rest r) (funcall function (apply oldfun r)))
-
+    #+begin_src emacs-lisp
+      (lambda (&rest r) (funcall function (apply oldfun r)))
+    #+end_src
 *** TODO 13.11.4 使用旧的 defadvice 适配代码
 
 很多代码使用旧的 defadvice 机制，新的advice-add 在很大程度上使这种机制过时了，它的实现和语义要简单得多。
 
 一条古老的建议，例如：
-
-(defadvice previous-line (before next-line-at-end
-				  (&optional arg try-vscroll))
-  “从顶行向上移动时插入空行。”
-  (if (and next-line-add-newlines (= arg 1)
-	    （保存游览（行首）（bobp）））
-      （预测
-	 （行首）
-	 （新队））））
+#+begin_src emacs-lisp
+  (defadvice previous-line (before next-line-at-end
+				   (&optional arg try-vscroll))
+    "Insert an empty line when moving up from the top line."
+    (if (and next-line-add-newlines (= arg 1)
+	     (save-excursion (beginning-of-line) (bobp)))
+	(progn
+	  (beginning-of-line)
+	  (newline))))
+#+end_src
 
 可以在新的建议机制中翻译成一个简单的函数：
 
+#+begin_src emacs-lisp
 (defun previous-line--next-line-at-end (&optional arg try-vscroll)
-  “从顶行向上移动时插入空行。”
+  "Insert an empty line when moving up from the top line."
   (if (and next-line-add-newlines (= arg 1)
-	    （保存游览（行首）（bobp）））
-      （预测
-	 （行首）
-	 （新队））））
+	   (save-excursion (beginning-of-line) (bobp)))
+      (progn
+	(beginning-of-line)
+	(newline))))
+#+end_src
+
 
 显然，这实际上并没有修改上一行。  为此，需要旧的建议：
 
-(ad-activate '上一行)
+#+begin_src emacs-lisp
+  (ad-activate 'previous-line)
+#+end_src
 
 而新的建议机制需要：
-
-(advice-add 'previous-line :before #'previous-line--next-line-at-end)
+#+begin_src emacs-lisp
+  (advice-add 'previous-line :before #'previous-line--next-line-at-end)
+#+end_src
 
 请注意 ad-activate 具有全局效果：它激活了为该指定功能启用的所有建议。  如果您只想激活或停用特定部分，则需要使用 ad-enable-advice 和 ad-disable-advice 启用或禁用它。  新机制消除了这种区别。
 
 周围的建议，例如：
-
-(defadvice foo (around foo-around)
-  “忽略‘foo’中的大小写。”
-  (让 ((case-fold-search t))
-    做它））
-（广告激活'foo）
-
+#+begin_src emacs-lisp
+  (defadvice foo (around foo-around)
+    "Ignore case in `foo'."
+    (let ((case-fold-search t))
+      ad-do-it))
+  (ad-activate 'foo)
+#+end_src
 可以翻译成：
-
-(defun foo--foo-around (orig-fun &rest args)
-  “忽略‘foo’中的大小写。”
-  (让 ((case-fold-search t))
-    （应用原始有趣的参数）））
-(advice-add 'foo :around #'foo--foo-around)
-
+#+begin_src emacs-lisp
+  (defun foo--foo-around (orig-fun &rest args)
+    "Ignore case in `foo'."
+    (let ((case-fold-search t))
+      (apply orig-fun args)))
+  (advice-add 'foo :around #'foo--foo-around)
+#+end_src
 关于通知的类，请注意新的 :before 并不完全等同于旧的 before，因为在旧的通知中您可以修改函数的参数（例如，使用 ad-set-arg），这会影响看到的参数值通过原始函数，而在新的 :before 中，通过通知中的 setq 修改参数对原始函数看到的参数没有影响。  在移植依赖于这种行为的通知之前，您需要将其转换为新的 :around 或 :filter-args 通知。
 
 类似地，旧的 after 通知可以通过更改 ad-return-value 来修改返回值，而新的 :after 通知不能，因此在移植这种旧的 after 通知时，您需要将其转换为新的 :around 或 :filter-return 通知.
@@ -997,8 +1093,10 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
     此便利宏将函数 obsolete-name 标记为已过时，并将其定义为函数 current-name 的别名。  它等价于以下内容：
 
-    (defalias obsolete-name current-name doc)
-    (make-obsolete obsolete-name current-name when)
+    #+begin_src emacs-lisp
+      (defalias obsolete-name current-name doc)
+      (make-obsolete obsolete-name current-name when)
+    #+end_src
 
 此外，您可以将函数的特定调用约定标记为过时：
 
@@ -1008,15 +1106,19 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
     例如，在旧版本的 Emacs 中，sit-for 函数接受三个参数，像这样
 
-      （静坐几秒毫秒 nodisp）
+    #+begin_src emacs-lisp
+      (sit-for seconds milliseconds nodisp)
+    #+end_src
 
     但是，以这种方式调用 sit-for 被认为是过时的（请参阅等待经过的时间或输入）。  不推荐使用旧的调用约定，如下所示：
 
-    （设置广告呼叫约定
-      'sit-for '(秒 &optional nodisp) "22.1")
+    #+begin_src emacs-lisp
+      (set-advertised-calling-convention
+	'sit-for '(seconds &optional nodisp) "22.1")
+    #+end_src
+
 
 ** TODO 13.13 内联函数
-
 内联函数是一个像普通函数一样工作的函数，除了一件事：当您对函数的调用进行字节编译时（请参阅字节编译），函数的定义会扩展到调用者。
 
 定义内联函数的简单方法是编写 defsubst 而不是 defun。  定义的其余部分看起来一样，但使用 defsubst 表示使其内联以进行字节编译。
@@ -1082,14 +1184,19 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
 下面是一个使用define-inline的例子：
 
-（定义内联 myaccessor (obj)
-  (内联-letevals (obj)
-    (inline-quote (if (foo-p ,obj) (aref (cdr ,obj) 3) (aref ,obj 2)))))
+#+begin_src emacs-lisp
+  (define-inline myaccessor (obj)
+    (inline-letevals (obj)
+      (inline-quote (if (foo-p ,obj) (aref (cdr ,obj) 3) (aref ,obj 2)))))
+#+end_src
 
 这相当于
 
-(defsubst myaccessor (obj)
-  (if (foo-p obj) (aref (cdr obj) 3) (aref obj 2)))
+#+begin_src emacs-lisp
+  (defsubst myaccessor (obj)
+    (if (foo-p obj) (aref (cdr obj) 3) (aref obj 2)))
+#+end_src
+
 
 ** TODO 13.14 declare形式
 
@@ -1139,22 +1246,25 @@ declare 是一个特殊的宏，可用于向函数或宏添加元属性：例如
 
 字节编译文件通常会产生有关编译器不知道的函数的警告（请参阅编译器错误）。  有时这表明一个真正的问题，但通常有问题的函数是在其他文件中定义的，如果该代码运行，这些文件将被加载。  例如，字节编译 simple.el 用于警告：
 
-simple.el:8727:1:Warning: 函数 'shell-mode' 未知
-    定义。
+#+begin_src emacs-lisp
+simple.el:8727:1:Warning: the function ‘shell-mode’ is not known to be
+    defined.
+#+end_src
 
 实际上，shell-mode 只在调用 shell-mode 之前执行（需要 'shell）的函数中使用，因此 shell-mode 将在运行时正确定义。  当您知道这样的警告并不表示真正的问题时，最好抑制警告。  这使得可能意味着实际问题的新警告更加明显。  你可以用声明函数来做到这一点。
 
 您需要做的就是在第一次使用相关函数之前添加一个 declare-function 语句：
 
-(declare-function shell-mode "shell" ())
-
+#+begin_src emacs-lisp
+  (declare-function shell-mode "shell" ())
+#+end_src
 这表示 shell 模式是在 shell.el 中定义的（“.el”可以省略）。  编译器理所当然地认为该文件确实定义了函数，并且不检查。
 
 可选的第三个参数指定 shell-mode 的参数列表。  在这种情况下，它不接受任何参数（nil 与不指定值不同）。  在其他情况下，这可能类似于（文件和可选覆盖）。  您不必指定参数列表，但如果您这样做，字节编译器可以检查调用是否与声明匹配。
 
 宏：declare-function function file &optional arglist fileonly ¶
 
-    告诉字节编译器假设函数是在文件文件中定义的。  可选的第三个参数 arglist 要么是 t，即未指定参数列表，要么是与 defun 样式相同的形式参数列表。  省略的 arglist 默认为 t，而不是 nil；  这是省略参数的非典型行为，这意味着要提供第四个但不提供第三个参数，必须为第三个参数占位符指定 t 而不是通常的 nil。  可选的第四个参数 fileonly non-nil 表示只检查该文件是否存在，而不是它实际上定义了函数。
+告诉字节编译器假设函数是在文件文件中定义的。  可选的第三个参数 arglist 要么是 t，即未指定参数列表，要么是与 defun 样式相同的形式参数列表。  省略的 arglist 默认为 t，而不是 nil；  这是省略参数的非典型行为，这意味着要提供第四个但不提供第三个参数，必须为第三个参数占位符指定 t 而不是通常的 nil。  可选的第四个参数 fileonly non-nil 表示只检查该文件是否存在，而不是它实际上定义了函数。
 
 要验证这些函数是否确实在 declare-function 所说的位置声明，请使用 check-declare-file 检查一个源文件中的所有 declare-function 调用，或使用 check-declare-directory 检查某个文件中和下的所有文件目录。
 
@@ -1178,60 +1288,59 @@ simple.el:8727:1:Warning: 函数 'shell-mode' 未知
 
 ** TODO 13.17 其他与函数相关的话题
 
+下面是几个函数的表格，这些函数执行与函数调用和函数定义相关的事情。  它们记录在其他地方，但我们在此处提供交叉引用。
 
-Here is a table of several functions that do things related to function calling and function definitions. They are documented elsewhere, but we provide cross references here.
+ 申请
 
-apply
+     请参阅调用函数。
+ 自动加载
 
-   See Calling Functions.
-autoload
+     请参阅自动加载。
+ 交互调用
 
-   See Autoload.
-call-interactively
+     请参阅交互式呼叫。
+ 交互式调用-p
 
-   See Interactive Call.
-called-interactively-p
+     请参阅区分交互式呼叫。
+ 命令
 
-   See Distinguish Interactive Calls.
-commandp
+     请参阅交互式呼叫。
+ 文件
 
-   See Interactive Call.
-documentation
+     请参阅访问文档字符串。
+ 评估
 
-   See Access to Documentation Strings.
-eval
+     见评估。
+ 函数调用
 
-   See Eval.
-funcall
+     请参阅调用函数。
+ 功能
 
-   See Calling Functions.
-function
+     请参阅匿名函数。
+ 忽视
 
-   See Anonymous Functions.
-ignore
+     请参阅调用函数。
+ 间接函数
 
-   See Calling Functions.
-indirect-function
+     请参阅符号函数间接。
+ 交互的
 
-   See Symbol Function Indirection.
-interactive
+     请参阅使用交互式。
+ 交互式-p
 
-   See Using interactive.
-interactive-p
+     请参阅区分交互式呼叫。
+ 地图原子
 
-   See Distinguish Interactive Calls.
-mapatoms
+     请参阅创建和嵌入符号。
+ 地图车
 
-   See Creating and Interning Symbols.
-mapcar
+     请参阅映射函数。
+ 地图字符表
 
-   See Mapping Functions.
-map-char-table
+     请参阅字符表。
+ 地图连接
 
-   See Char-Tables.
-mapconcat
+     请参阅映射函数。
+ 不明确的
 
-   See Mapping Functions.
-undefined
-
-   See Functions for Key Lookup.
+     请参阅键查找函数。
