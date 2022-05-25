@@ -12,31 +12,34 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 一般来说，任何版本的 Emacs 都可以运行由最近早期版本的 Emacs 生成的字节编译代码，但反之则不然。
 
 如果您不希望编译 Lisp 文件，请在其中放置一个用于无字节编译的文件局部变量绑定，如下所示：
-
-;;  -*-无字节编译：t;  -*-
+#+begin_src emacs-lisp
+  ;; -*-no-byte-compile: t; -*-
+#+end_src
 
 ** TODO 17.1 字节编译代码的性能
 
 字节编译函数不如用 C 编写的原始函数高效，但运行速度比用 Lisp 编写的版本快得多。  这是一个例子：
-
-（defun 傻循环（n）
-  “以秒为单位返回运行 N 次循环迭代的时间。”
-  （让（（t1（浮动时间）））
-    (while (> (setq n (1- n)) 0))
-    (- (浮动时间) t1)))
-⇒ 傻循环
-
-
-（傻循环50000000）
-⇒ 10.235304117202759
+#+begin_src emacs-lisp
+  (defun silly-loop (n)
+    "Return the time, in seconds, to run N iterations of a loop."
+    (let ((t1 (float-time)))
+      (while (> (setq n (1- n)) 0))
+      (- (float-time) t1)))
+  ⇒ silly-loop
 
 
-（字节编译'傻循环）
-⇒ [未显示编译代码]
+  (silly-loop 50000000)
+  ⇒ 10.235304117202759
 
 
-（傻循环50000000）
-⇒ 3.705854892730713
+  (byte-compile 'silly-loop)
+  ⇒ [Compiled code not shown]
+
+
+  (silly-loop 50000000)
+  ⇒ 3.705854892730713
+
+#+end_src
 
 在此示例中，解释代码需要 10 秒才能运行，而字节编译代码需要不到 4 秒。  这些结果具有代表性，但实际结果可能会有所不同。
 
@@ -54,19 +57,23 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
     该函数对符号的函数定义进行字节编译，将之前的定义替换为编译后的定义。  symbol的函数定义必须是函数的实际代码；  字节编译不处理函数间接。  返回值是字节码函数对象，它是符号的编译定义（参见字节码函数对象）。
 
-    （defun 阶乘（整数）
-      “计算 INTEGER 的阶乘。”
-      （如果（= 1 个整数）1
-	 (* 整数 (阶乘 (1- 整数)))))
-    ⇒ 阶乘
+    #+begin_src emacs-lisp
 
 
-    （字节编译'阶乘）
-    ⇒
-    ＃[（整数）
-      "^H\301U\203^H^@\301\207\302^H\303^HS!\"\207"
-      [整数 1 * 阶乘]
-      4 “计算 INTEGER 的阶乘。”]
+      (defun factorial (integer)
+	"Compute factorial of INTEGER."
+	(if (= 1 integer) 1
+	  (* integer (factorial (1- integer)))))
+      ⇒ factorial
+
+
+      (byte-compile 'factorial)
+      ⇒
+      #[(integer)
+	"^H\301U\203^H^@\301\207\302^H\303^HS!\"\207"
+	[integer 1 * factorial]
+	4 "Compute factorial of INTEGER."]
+    #+end_src
 
     如果 symbol 的定义是一个字节码函数对象，byte-compile 什么都不做并且返回 nil。  它不会再次编译符号的定义，因为原始（未编译的）代码已经在符号的函数单元中被字节编译代码替换。
 
@@ -85,18 +92,19 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
     编译通过一次读取一种形式的输入文件来工作。  如果是函数或宏的定义，则写出编译后的函数或宏定义。  其他形式一起批处理，然后每个批处理都被编译和编写，以便在读取文件时执行其编译的代码。  读取输入文件时，所有注释都将被丢弃。
 
     如果没有错误，此命令返回 t，否则返回 nil。  当以交互方式调用时，它会提示输入文件名。
-
-    $ ls -l 推*
-    -rw-r--r-- 1 lewis 刘易斯 791 Oct 5 20:31 push.el
-
-
-    （字节编译文件“~/emacs/push.el”）
-	  ⇒ 吨
+    #+begin_src sh
+      $ ls -l push*
+      -rw-r--r-- 1 lewis lewis 791 Oct  5 20:31 push.el
 
 
-    $ ls -l 推*
-    -rw-r--r-- 1 lewis 刘易斯 791 Oct 5 20:31 push.el
-    -rw-rw-rw- 1 lewis lewis 638 Oct 8 20:25 push.elc
+      (byte-compile-file "~/emacs/push.el")
+	   ⇒ t
+
+
+      $ ls -l push*
+      -rw-r--r-- 1 lewis lewis 791 Oct  5 20:31 push.el
+      -rw-rw-rw- 1 lewis lewis 638 Oct  8 20:25 push.elc
+    #+end_src
 
 命令： byte-recompile-directory 目录 &optional flag force follow-symlinks ¶
 
@@ -117,9 +125,9 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
     此函数在命令行上指定的文件上运行 byte-compile-file。  该函数只能在 Emacs 的批处理执行中使用，因为它会在完成时杀死 Emacs。  一个文件中的错误不会阻止后续文件的处理，但不会为其生成输出文件，并且 Emacs 进程将以非零状态码终止。
 
     如果 noforce 不为零，则此函数不会重新编译具有最新 '.elc' 文件的文件。
-
-    $ emacs -batch -f 批处理字节编译 *.el
-
+    #+begin_src sh
+      $ emacs -batch -f batch-byte-compile *.el
+    #+end_src
 ** TODO 17.3 文档字符串和编译
 
 当 Emacs 从字节编译文件加载函数和变量时，它通常不会将它们的文档字符串加载到内存中。  每个文档字符串仅在需要时从字节编译文件中动态加载。  这样可以节省内存，并通过跳过文档字符串的处理来加快加载速度。
@@ -134,7 +142,9 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
     要禁用特定文件的动态加载功能，请在其标题行中将此选项设置为 nil（请参阅 GNU Emacs 手册中的文件中的局部变量），如下所示：
 
-    -*-byte-compile-dynamic-docstrings: nil;-*-
+    #+begin_src emacs-lisp
+      -*-byte-compile-dynamic-docstrings: nil;-*-
+    #+end_src
 
     这主要在您希望更改文件时很有用，并且您希望已经加载它的 Emacs 会话在文件更改时继续工作。
 
@@ -157,7 +167,9 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
 如果变量 byte-compile-dynamic 在编译时不为零，则字节编译器使用动态函数加载功能。  不要全局设置此变量，因为动态加载仅适用于某些文件。  相反，为具有文件局部变量绑定的特定源文件启用该功能。  例如，您可以通过在源文件的第一行写入以下文本来做到这一点：
 
--*-byte-compile-dynamic: t;-*-
+#+begin_src emacs-lisp
+  -*-byte-compile-dynamic: t;-*-
+#+end_src
 
 变量：字节编译动态¶
 
@@ -191,25 +203,31 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
     如果你有一个常量需要一些计算来产生，eval-when-compile 可以在编译时完成。  例如，
 
-    (defvar 我的正则表达式
-      (eval-when-compile (regexp-opt '("aaa" "aba" "abb"))))
+    #+begin_src emacs-lisp
+      (defvar my-regexp
+	(eval-when-compile (regexp-opt '("aaa" "aba" "abb"))))
+    #+end_src
 
     如果您正在使用另一个包，但只需要其中的宏（字节编译器将扩​​展这些宏），则可以使用 eval-when-compile 加载它以进行编译，但不执行。  例如，
 
-    （编译时评估
-      （需要'我的宏包））
+    #+begin_src emacs-lisp
+      (eval-when-compile
+	(require 'my-macro-package))
+    #+end_src
+
 
     同样的事情也适用于本地定义的宏和 defsubst 函数，并且只能在文件中使用。  编译文件需要它们，但在大多数情况下，执行编译文件不需要它们。  例如，
 
-    （编译时评估
-      （除非（fboundp '一些新事物）
-	 (defmacro '一些新事物 ()
-	   （兼容代码））））
+    #+begin_src emacs-lisp
+      (eval-when-compile
+	(unless (fboundp 'some-new-thing)
+	  (defmacro 'some-new-thing ()
+	    (compatibility code))))
+    #+end_src
 
     这通常适用于仅作为与其他 Emacs 版本兼容的后备代码的代码。
 
     Common Lisp 注意：在顶层，eval-when-compile 类似于 Common Lisp 习语（eval-when (compile eval) ...）。  在其他地方，Common Lisp '#.'  reader 宏（但不是在解释时）更接近 eval-when-compile 所做的。
-
 ** TODO 17.6 编译器错误
 
 来自字节编译的错误和警告消息打印在名为 *Compile-Log* 的缓冲区中。  这些消息包括标识问题位置的文件名和行号。  用于操作编译器输出的常用 Emacs 命令可用于这些消息。
@@ -222,12 +240,16 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
     您可以通过在 fboundp 测试上对其进行条件化来抑制对函数 func 的特定调用的警告，如下所示：
 
-    (如果 (fboundp 'func) ...(func ...)...)
+    #+begin_src emacs-lisp
+      (if (fboundp 'func) ...(func ...)...)
+    #+end_src
 
     对 func 的调用必须是 if 的 then 形式，并且 func 必须出现在对 fboundp 的调用中。  （此功能也适用于 cond。）
     同样，您可以通过在 boundp 测试上对其进行条件化来抑制对变量变量的特定使用的警告：
 
-    （如果（boundp'变量）...变量...）
+    #+begin_src emacs-lisp
+      (if (boundp 'variable) ...variable...)
+    #+end_src
 
     对变量的引用必须是 if 的 then 形式，并且变量必须出现在对 boundp 的调用中。
     您可以告诉编译器一个函数是使用 declare-function 定义的。  请参阅告诉编译器定义了一个函数。
@@ -239,8 +261,10 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
     在执行中，这等价于 (progn body...)，但编译器不会针对 body 中的指定条件发出警告。  warnings 是它们适用的警告符号和函数/变量符号的关联列表。  例如，如果您想调用一个名为 foo 的过时函数，但又想禁止编译警告，请说：
 
-    (with-suppressed-warnings ((obsolete foo))
-      （富...））
+    #+begin_src emacs-lisp
+      (with-suppressed-warnings ((obsolete foo))
+	(foo ...))
+    #+end_src
 
 要更粗粒度地抑制编译器警告，您可以使用 with-no-warnings 构造：
 
@@ -283,12 +307,14 @@ argdesc
 
 这是一个字节码函数对象的示例，以印刷形式表示。  它是命令backward-sexp 的定义。
 
-#[256
-  "\211\204^G^@\300\262^A\301^A[!\207"
-  [1 前向性]
-  3
-  1793299
-  "^p"]
+#+begin_src emacs-lisp
+  #[256
+    "\211\204^G^@\300\262^A\301^A[!\207"
+    [1 forward-sexp]
+    3
+    1793299
+    "^p"]
+#+end_src
 
 创建字节码对象的原始方法是使用 make-byte-code：
 
@@ -313,102 +339,108 @@ argdesc
     参数对象可以是函数名称、lambda 表达式（请参阅 Lambda 表达式）或字节码对象（请参阅字节码函数对象）。  如果它是一个 lambda 表达式，则 disassemble 对其进行编译并反汇编生成的编译代码。
 
 这里有两个使用反汇编函数的例子。  我们添加了解释性注释来帮助您将字节码与 Lisp 源代码相关联；  这些不会出现在 disassemble 的输出中。
-
-（defun 阶乘（整数）
-  “计算整数的阶乘。”
-  （如果（= 1 个整数）1
-    (* 整数 (阶乘 (1- 整数)))))
-     ⇒ 阶乘
+#+begin_src emacs-lisp
 
 
-（因子 4）
+(defun factorial (integer)
+  "Compute factorial of an integer."
+  (if (= 1 integer) 1
+    (* integer (factorial (1- integer)))))
+     ⇒ factorial
+
+
+(factorial 4)
      ⇒ 24
 
 
-（拆解'阶乘）
-     -|  阶乘的字节码：
- doc：计算整数的阶乘。
- 参数：（整数）
+(disassemble 'factorial)
+     -| byte-code for factorial:
+ doc: Compute factorial of an integer.
+ args: (integer)
 
 
-0 varref 整数；  获取整数的值和
-			   ;  将其推入堆栈。
-1 常数 1 ;  将 1 压入堆栈。
+0   varref   integer      ; Get the value of integer and
+			  ;   push it onto the stack.
+1   constant 1            ; Push 1 onto stack.
 
-2 等号；  从堆栈中弹出前两个值，比较
-			   ;  他们，并将结果压入堆栈。
+2   eqlsign               ; Pop top two values off stack, compare
+			  ;   them, and push result onto stack.
 
-3 goto-if-nil 1 ;  弹出并测试栈顶；
-			   ;  如果为零，则转到 1，否则继续。
-6常数1；  将 1 压入栈顶。
-7返回；  返回栈顶元素。
+3   goto-if-nil 1         ; Pop and test top of stack;
+			  ;   if nil, go to 1, else continue.
+6   constant 1            ; Push 1 onto top of stack.
+7   return                ; Return the top element of the stack.
 
-8:1 varref 整数；  将整数的值压入堆栈。
-9 常数阶乘；  将阶乘推入堆栈。
-10 varref 整数；  将整数的值压入堆栈。
-11子1;  弹出整数，递减值，
-			   ;  将新值压入堆栈。
-12 呼叫 1 ;  使用 first 调用函数阶乘
-			   ;  （即顶部）堆栈元素作为参数；
-			   ;  将返回值压入堆栈。
+8:1 varref   integer      ; Push value of integer onto stack.
+9   constant factorial    ; Push factorial onto stack.
+10  varref   integer      ; Push value of integer onto stack.
+11  sub1                  ; Pop integer, decrement value,
+			  ;   push new value onto stack.
+12  call     1            ; Call function factorial using first
+			  ;   (i.e., top) stack element as argument;
+			  ;   push returned value onto stack.
 
-13 倍;  从堆栈中弹出顶部两个值，相乘
-			   ;  他们，并将结果压入堆栈。
-14返回；  返回栈顶元素。
+13 mult                   ; Pop top two values off stack, multiply
+			  ;   them, and push result onto stack.
+14 return                 ; Return the top element of the stack.
+#+end_src
 
-傻循环函数稍微复杂一些：
-
-（defun 傻循环（n）
-  “在循环的 N 次迭代之前和之后返回时间。”
-  （让（（t1（当前时间字符串）））
-    (while (> (setq n (1- n)))
-	       0))
-    （列表 t1（当前时间字符串））））
-     ⇒ 傻循环
+silly-loop 函数稍微复杂一些：
+#+begin_src emacs-lisp
 
 
-（拆卸'傻循环）
-     -|  傻循环的字节码：
- doc：在循环的 N 次迭代之前和之后返回时间。
- 参数：（n）
+  (defun silly-loop (n)
+    "Return time before and after N iterations of a loop."
+    (let ((t1 (current-time-string)))
+      (while (> (setq n (1- n))
+		0))
+      (list t1 (current-time-string))))
+       ⇒ silly-loop
 
 
-0 恒流时间字符串；  推送当前时间字符串
-				   ;  到栈顶。
-
-1 呼叫 0 ;  调用当前时间字符串，没有
-			   ;  参数，将结果压入堆栈。
-
-2 变量绑定 t1 ;  弹出堆栈并将 t1 绑定到弹出值。
-
-3:1 变量引用 n ；  从环境中获取 n 的值
-			   ;  并将值压入堆栈。
-4个子1；  从堆栈顶部减去 1。
-
-5重复;  重复栈顶；  即，复制顶部
-			   ;  堆栈并将副本压入堆栈。
-6 变量集 n ；  弹出栈顶，
-			   ;  并将 n 绑定到该值。
-
-;;  （实际上，序列 dup varset 复制栈顶
-;;  进入 n 的值而不弹出它。）
+  (disassemble 'silly-loop)
+       -| byte-code for silly-loop:
+   doc: Return time before and after N iterations of a loop.
+   args: (n)
 
 
-7 常数 0 ;  将 0 压入堆栈。
-8个；  从堆栈中弹出前两个值，
-			   ;  测试 n 是否大于 0
-			   ;  并将结果压入堆栈。
+  0   constant current-time-string  ; Push current-time-string
+				    ;   onto top of stack.
 
-9 goto-if-not-nil 1 ;  如果 n > 0 则转到 1
-			   ;  （这将继续 while 循环）
-			   ;  否则继续。
+  1   call     0            ; Call current-time-string with no
+			    ;   argument, push result onto stack.
 
-12 变量引用 t1 ;  将 t1 的值压入堆栈。
-13 恒流-时间-串；  推送当前时间字符串
-				   ;  到栈顶。
-14 呼叫 0 ;  再次调用 current-time-string。
+  2   varbind  t1           ; Pop stack and bind t1 to popped value.
 
-15 解绑 1 ;  在本地环境中取消绑定 t1。
-16 名单2;  从堆栈中弹出顶部两个元素，创建一个
-			   ;  它们的列表，并将其压入堆栈。
-17返回；  返回栈顶的值。
+  3:1 varref   n            ; Get value of n from the environment
+			    ;   and push the value on the stack.
+  4   sub1                  ; Subtract 1 from top of stack.
+
+  5   dup                   ; Duplicate top of stack; i.e., copy the top
+			    ;   of the stack and push copy onto stack.
+  6   varset   n            ; Pop the top of the stack,
+			    ;   and bind n to the value.
+
+  ;; (In effect, the sequence dup varset copies the top of the stack
+  ;; into the value of n without popping it.)
+
+
+  7   constant 0            ; Push 0 onto stack.
+  8   gtr                   ; Pop top two values off stack,
+			    ;   test if n is greater than 0
+			    ;   and push result onto stack.
+
+  9   goto-if-not-nil 1     ; Goto 1 if n > 0
+			    ;   (this continues the while loop)
+			    ;   else continue.
+
+  12  varref   t1           ; Push value of t1 onto stack.
+  13  constant current-time-string  ; Push current-time-string
+				    ;   onto the top of the stack.
+  14  call     0            ; Call current-time-string again.
+
+  15  unbind   1            ; Unbind t1 in local environment.
+  16  list2                 ; Pop top two elements off stack, create a
+			    ;   list of them, and push it onto stack.
+  17  return                ; Return value of the top of stack.
+#+end_src
