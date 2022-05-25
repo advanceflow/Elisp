@@ -153,7 +153,9 @@ Lisp 解释器或评估器是 Emacs 的一部分，它计算给它的表达式�
 
 内置函数indirect-function 提供了一种显式执行符号函数间接的简便方法。
 
-函数：间接函数函数 &optional noerror ¶
+#+begin_src emacs-lisp
+  Function: indirect-function function &optional noerror ¶
+#+end_src
 
     该函数返回函数作为函数的含义。  如果函数是一个符号，那么它会找到函数的函数定义并从那个值开始。  如果函数不是符号，则返回函数本身。
 
@@ -213,77 +215,125 @@ Lisp 解释器或评估器是 Emacs 的一部分，它计算给它的表达式�
 
 如果表达式的第一个符号是特殊形式的符号，则表达式应遵循该特殊形式的规则；  否则，Emacs 的行为没有明确定义（尽管它不会崩溃）。  例如， ((lambda (x) x . 3) 4) 包含一个以 lambda 开头但不是格式良好的 lambda 表达式的子表达式，因此 Emacs 可能会发出错误信号，或者可能返回 3 或 4 或 nil，或者可能以其他方式行事。
 
-功能：特殊形式-p对象¶
+#+begin_src emacs-lisp
+  Function: special-form-p object ¶
+#+end_src
 
     此谓词测试其参数是否为特殊形式，如果是则返回 t，否则返回 nil。 
 
 这是 Emacs Lisp 中所有特殊形式的列表，按字母顺序排列，并参考了每种形式的描述位置。
 
-和
+#+begin_src emacs-lisp
+  catch
+#+end_src
 
     请参阅组合条件的构造
-抓住
+#+begin_src emacs-lisp
+  cond
+#+end_src
 
     请参阅显式非本地退出：catch and throw
-条件
+#+begin_src emacs-lisp
+  cond
+#+end_src
 
     见条件
-条件案例
+#+begin_src emacs-lisp
+  condition-case
+#+end_src
 
     请参阅编写代码以处理错误
-定义常量
+#+begin_src emacs-lisp
+  defconst
+#+end_src
 
     请参阅定义全局变量
-定义变量
+#+begin_src emacs-lisp
+  defvar
+#+end_src
 
     请参阅定义全局变量
-功能
+#+begin_src emacs-lisp
+  function
+#+end_src
 
     请参阅匿名函数
-如果
-
+#+begin_src emacs-lisp
+  if
+#+end_src
     见条件
-交互的
 
+#+begin_src emacs-lisp
+  interactive
+#+end_src
     请参阅交互式呼叫
-拉姆达
 
+#+begin_src emacs-lisp
+  lambda
+#+end_src
     请参阅 Lambda 表达式
-让
-让*
 
+#+begin_src emacs-lisp
+  let
+#+end_src
+#+begin_src emacs-lisp
+  let*
+#+end_src
     见局部变量
-或者
 
+#+begin_src emacs-lisp
+  or
+#+end_src
     请参阅组合条件的构造
-编1
-编2
-预后
 
+#+begin_src emacs-lisp
+  prog1
+#+end_src
+#+begin_src emacs-lisp
+  prog2
+#+end_src
+#+begin_src emacs-lisp
+  progn
+#+end_src
     见测序
-引用
 
-    见报价
-保存当前缓冲区
+#+begin_src emacs-lisp
+  quote
+#+end_src
+    见引用
 
+#+begin_src emacs-lisp
+  save-current-buffer
+#+end_src
     请参阅当前缓冲区
-保存游览
 
+#+begin_src emacs-lisp
+  save-excursion
+#+end_src
     见游览
-保存限制
 
+#+begin_src emacs-lisp
+  save-restriction
+#+end_src
     见收窄
-设置
 
+#+begin_src emacs-lisp
+  setq
+#+end_src
     请参阅设置变量值
-setq-默认值
 
+#+begin_src emacs-lisp
+  setq-default
+#+end_src
     请参阅创建和删除缓冲区本地绑定
-放松保护
 
+#+begin_src emacs-lisp
+  unwind-protect
+#+end_src
     参见非本地出口
-尽管
-
+#+begin_src emacs-lisp
+  while
+#+end_src
     见迭代 
 
     Common Lisp 注意：以下是 GNU Emacs Lisp 和 Common Lisp 中特殊形式的一些比较。  setq、if 和 catch 在 Emacs Lisp 和 Common Lisp 中都是特殊形式。  save-excursion 是 Emacs Lisp 中的一种特殊形式，但在 Common Lisp 中不存在。  throw 是 Common Lisp 中的一种特殊形式（因为它必须能够抛出多个值），但它是 Emacs Lisp 中的一个函数（它没有多个值）。
@@ -295,7 +345,9 @@ setq-默认值
 ** TODO 10.3 引用
 特殊形式的引号返回其单个参数，如所写，而不对其进行评估。  这提供了一种在程序中包含不是自评估对象的常量符号和列表的方法。  （不必引用数字、字符串和向量等自评估对象。）
 
-特殊形式：引用对象¶
+#+begin_src emacs-lisp
+  Special Form: quote object ¶
+#+end_src
 
     这种特殊形式返回对象，而不对其进行评估。  返回的值可能是共享的，不应修改。  请参阅自我评估表。 
 
@@ -393,7 +445,10 @@ setq-默认值
 
 将函数存储在数据结构中并使用 funcall 或 apply 调用它通常比将表达式存储在数据结构中并对其评估更简洁和灵活。  使用函数提供了将信息作为参数传递给它们的能力。
 
-功能：eval 形式 &optional lexical ¶
+
+#+begin_src emacs-lisp
+  Function: eval form &optional lexical ¶
+#+end_src
 
     这是评估表达式的基本函数。  它在当前环境中评估表单，并返回结果。  表单对象的类型决定了它的评估方式。  请参阅表格种类。
 
@@ -416,7 +471,9 @@ setq-默认值
 
     当前对 eval 的活动调用数限制为 max-lisp-eval-depth（见下文）。 
 
-命令：eval-region start end &optional stream read-function ¶
+#+begin_src emacs-lisp
+  Command: eval-region start end &optional stream read-function ¶
+#+end_src
 
     此函数在由位置 start 和 end 定义的区域中评估当前缓冲区中的表单。  它从区域中读取表单并在它们上调用 eval 直到到达区域的末尾，或者直到发出错误信号并且未处理。
 
@@ -426,13 +483,17 @@ setq-默认值
 
     eval-region 不移动点。  它总是返回零。 
 
-命令：eval-buffer &optional buffer-or-name stream filename unibyte print ¶
+#+begin_src emacs-lisp
+  Command: eval-buffer &optional buffer-or-name stream filename unibyte print ¶
+#+end_src
 
     这类似于 eval-region，但参数提供了不同的可选特性。  eval-buffer 对缓冲区 buffer-or-name 的整个可访问部分进行操作（参见 GNU Emacs 手册中的 Narrowing）。  buffer-or-name 可以是缓冲区、缓冲区名称（字符串）或 nil（或省略），表示使用当前缓冲区。  流在 eval-region 中使用，除非流为 nil 并且打印非 nil。  在这种情况下，计算表达式产生的值仍然会被丢弃，但输出函数的输出会打印在回显区域中。  filename 是用于加载历史的文件名（请参阅卸载），默认为缓冲区文件名（请参阅缓冲区文件名）。  如果 unibyte 不是 nil，read 会尽可能将字符串转换为 unibyte。
 
     eval-current-buffer 是此命令的别名。 
 
-用户选项：max-lisp-eval-depth ¶
+#+begin_src emacs-lisp
+  User Option: max-lisp-eval-depth ¶
+#+end_src
 
     此变量定义在发出错误信号之前调用 eval、apply 和 funcall 允许的最大深度（错误消息“Lisp 嵌套超过 max-lisp-eval-depth”）。
 
@@ -444,7 +505,9 @@ setq-默认值
 
     max-specpdl-size 为嵌套提供了另一个限制。  请参阅局部变量。 
 
-变量：值¶
+#+begin_src emacs-lisp
+  Variable: values ¶
+#+end_src
 
     该变量的值是由执行此操作的标准 Emacs 命令从缓冲区（包括迷你缓冲区）读取、评估和打印的所有表达式返回的值的列表。  （请注意，这不包括在 *ielm* 缓冲区中的评估，也不包括在 lisp-interaction-mode 中使用 Cj、Cx Ce 和类似评估命令的评估。）
 
@@ -487,42 +550,50 @@ setq-默认值
 
 有时延迟表达式的计算是有用的，例如，如果你想避免执行耗时的计算，如果结果证明在程序的未来不需要结果。  thunk 库提供以下函数和宏来支持这种延迟评估：
 
-宏：thunk-delay 形式... ¶
+#+begin_src emacs-lisp
+  Macro: thunk-delay forms… ¶
+#+end_src
 
     返回一个用于评估表单的 thunk。  thunk 是一个闭包（参见 Closures），它继承了 thunk-delay 调用的词法环境。  使用这个宏需要词法绑定。 
 
-功能：thunk-force thunk ¶
+#+begin_src emacs-lisp
+  Function: thunk-force thunk ¶
+#+end_src
 
     强制 thunk 执行创建 thunk 的 thunk-delay 中指定的表单的评估。  返回最后一个表单的评估结果。  thunk 还“记住”它是被强制的：任何使用相同 thunk 的 thunk-force 进一步调用将只返回相同的结果，而无需再次评估表单。 
 
-宏：thunk-let (bindings...) forms... ¶
+#+begin_src emacs-lisp
+  Macro: thunk-let (bindings…) forms… ¶
+#+end_src
 
     这个宏类似于 let 但创建“惰性”变量绑定。  任何绑定都有形式（符号值形式）。  与 let 不同，任何值形式的评估都被推迟到在评估形式时第一次使用相应符号的绑定。  任何值形式最多被评估一次。  使用这个宏需要词法绑定。 
 
 例子：
 
 #+begin_src emacs-lisp
-(defun f (number)
-  (thunk-let ((derived-number
-              (progn (message "Calculating 1 plus 2 times %d" number)
-                     (1+ (* 2 number)))))
-    (if (> number 10)
-        derived-number
-      number)))
+  (defun f (number)
+    (thunk-let ((derived-number
+		(progn (message "Calculating 1 plus 2 times %d" number)
+		       (1+ (* 2 number)))))
+      (if (> number 10)
+	  derived-number
+	number)))
 
 
-(f 5)
-⇒ 5
+  (f 5)
+  ⇒ 5
 
 
-(f 12)
--| Calculating 1 plus 2 times 12
-⇒ 25
+  (f 12)
+  -| Calculating 1 plus 2 times 12
+  ⇒ 25
 #+end_src
 
 由于惰性绑定变量的特殊性质，设置它们是错误的（例如使用 setq）。
 
-宏：thunk-let* (bindings...) forms... ¶
+#+begin_src emacs-lisp
+  Macro: thunk-let* (bindings…) forms… ¶
+#+end_src
 
     这类似于 thunk-let，但允许绑定中的任何表达式引用此 thunk-let* 形式中的先前绑定。  使用这个宏需要词法绑定。 
     #+begin_src emacs-lisp
