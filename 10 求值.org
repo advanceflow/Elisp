@@ -4,15 +4,15 @@
 #+OPTIONS: ^:nil
 
 
-* TODO 10 求值
+* TODO 10 评估
 
-Emacs Lisp 中表达式的求值由 Lisp 解释器执行——一个接收 Lisp 对象作为输入并将其值作为表达式计算的程序。  根据本章中描述的规则，它如何做到这一点取决于对象的数据类型。  解释器自动运行以评估程序的某些部分，但也可以通过 Lisp 原语函数 eval 显式调用。
+Emacs Lisp 中表达式的评估由 Lisp 解释器执行——一个接收 Lisp 对象作为输入并将其值作为表达式计算的程序。  根据本章中描述的规则，它如何做到这一点取决于对象的数据类型。  解释器自动运行以评估程序的某些部分，但也可以通过 Lisp 原语函数 eval 显式调用。
 
-** TODO 10.1 评价简介
+** TODO 10.1 评估简介
 
-Lisp 解释器或求值器是 Emacs 的一部分，它计算给它的表达式的值。  当一个用 Lisp 编写的函数被调用时，求值器通过计算函数体中的表达式来计算函数的值。  因此，运行任何 Lisp 程序实际上意味着运行 Lisp 解释器。
+Lisp 解释器或评估器是 Emacs 的一部分，它计算给它的表达式的值。  当一个用 Lisp 编写的函数被调用时，评估器通过计算函数体中的表达式来计算函数的值。  因此，运行任何 Lisp 程序实际上意味着运行 Lisp 解释器。
 
-用于求值的 Lisp 对象称为表单或表达式6。  表单是数据对象而不仅仅是文本这一事实是类 Lisp 语言与典型编程语言之间的根本区别之一。  可以评估任何对象，但实际上只有数字、符号、列表和字符串会被经常评估。
+用于评估的 Lisp 对象称为表单或表达式6。  表单是数据对象而不仅仅是文本这一事实是类 Lisp 语言与典型编程语言之间的根本区别之一。  可以评估任何对象，但实际上只有数字、符号、列表和字符串会被经常评估。
 
 在随后的部分中，我们将详细描述评估对每种形式的含义。
 
@@ -20,7 +20,7 @@ Lisp 解释器或求值器是 Emacs 的一部分，它计算给它的表达式�
 
 评估是一个递归过程，评估表单通常涉及评估该表单中的部分。  例如，当您评估一个函数调用形式（例如 (car x)）时，Emacs 首先评估参数（子形式 x）。  在评估参数之后，Emacs 执行函数 (car)，如果函数是用 Lisp 编写的，则执行通过评估函数体来进行（然而，在这个例子中，car 不是 Lisp 函数；它是一个原始函数在 C) 中实现。  有关函数和函数调用的更多信息，请参阅函数。
 
-评估发生在称为环境的上下文中，它由所有 Lisp 变量的当前值和绑定组成（请参阅变量）。7 每当表单引用变量而不为其创建新绑定时，该变量的求值结果为给定的值以目前的环境。  评估表单也可以通过绑定变量来临时改变环境（请参阅局部变量）。
+评估发生在称为环境的上下文中，它由所有 Lisp 变量的当前值和绑定组成（请参阅变量）。7 每当表单引用变量而不为其创建新绑定时，该变量的评估结果为给定的值以目前的环境。  评估表单也可以通过绑定变量来临时改变环境（请参阅局部变量）。
 
 评估表单也可能使更改持续存在；  这些变化称为副作用。  产生副作用的一个例子是 (setq foo 1)。
 
@@ -39,32 +39,37 @@ Lisp 解释器或求值器是 Emacs 的一部分，它计算给它的表达式�
 
 *** TODO 10.2.1 自我评估表
 
-自我评估表格是任何不是列表或符号的表格。  自我评估形式对自己进行评估：评估的结果与被评估的对象相同。  因此，数字 25 的计算结果为 25，字符串“foo”的计算结果为字符串“foo”。  同样，对向量求值不会导致对向量元素的求值——它返回相同的向量，但其内容不变。
+自我评估表格是任何不是列表或符号的表格。  自我评估形式对自己进行评估：评估的结果与被评估的对象相同。  因此，数字 25 的计算结果为 25，字符串“foo”的计算结果为字符串“foo”。  同样，对向量评估不会导致对向量元素的评估——它返回相同的向量，但其内容不变。
 
-'123;  一个数字，未经评估显示。
-     ⇒ 123
+#+begin_src emacs-lisp
+  '123               ; A number, shown without evaluation.
+       ⇒ 123
 
-123;  像往常一样评估——结果是一样的。
-     ⇒ 123
+  123                ; Evaluated as usual—result is the same.
+       ⇒ 123
 
-（评估'123）；  “手工”评估——结果是一样的。
-     ⇒ 123
+  (eval '123)        ; Evaluated "by hand"—result is the same.
+       ⇒ 123
 
-（评估（评估'123））；  评估两次没有任何改变。
-     ⇒ 123
+  (eval (eval '123)) ; Evaluating twice changes nothing.
+       ⇒ 123
+#+end_src
 
 自评估表单产生的值会成为程序的一部分，您不应尝试通过 setcar、aset 或类似操作来修改它。  Lisp 解释器可能会统一程序的自评估形式产生的常量，以便这些常量可以共享结构。  请参阅可变性。
 
 在 Lisp 代码中编写数字、字符、字符串甚至向量是很常见的，利用它们自评估的事实。  但是，对于缺少读取语法的类型，这样做是很不寻常的，因为没有办法以文本方式编写它们。  可以通过 Lisp 程序构造包含这些类型的 Lisp 表达式。  这是一个例子：
 
-;;  构建一个包含缓冲区对象的表达式。
-(setq print-exp (list 'print (current-buffer)))
-     ⇒ (打印#<buffer eval.texi>)
+#+begin_src emacs-lisp
+  ;; Build an expression containing a buffer object.
+  (setq print-exp (list 'print (current-buffer)))
+       ⇒ (print #<buffer eval.texi>)
 
-;;  评估它。
-（评估打印-exp）
-     -|  #<缓冲区评估.texi>
-     ⇒ #<缓冲区评估.texi>
+  ;; Evaluate it.
+  (eval print-exp)
+       -| #<buffer eval.texi>
+       ⇒ #<buffer eval.texi>
+#+end_src
+
 
 *** TODO 10.2.2 符号形式
 
@@ -72,14 +77,16 @@ Lisp 解释器或求值器是 Emacs 的一部分，它计算给它的表达式�
 
 在以下示例中，我们使用 setq 设置符号的值。  然后我们评估符号，并取回 setq 存储的值。
 
-(setq a 123)
-     ⇒ 123
+#+begin_src emacs-lisp
+  (setq a 123)
+       ⇒ 123
 
-（评估'一）
-     ⇒ 123
+  (eval 'a)
+       ⇒ 123
 
-一种
-     ⇒ 123
+  a
+       ⇒ 123
+#+end_src
 
 对符号 nil 和 t 进行特殊处理，使得 nil 的值始终为 nil，而 t 的值始终为 t；  您不能将它们设置或绑定到任何其他值。  因此，这两个符号就像自我评估形式一样，尽管 eval 将它们视为任何其他符号。  名称以“：”开头的符号也以相同的方式自我评估；  同样，它的值通常也不能改变。  请参阅永不改变的变量。
 
@@ -98,40 +105,51 @@ Lisp 解释器或求值器是 Emacs 的一部分，它计算给它的表达式�
 更准确地说，我们现在应该有一个 Lisp 函数（一个 lambda 表达式）、一个字节码函数、一个原始函数、一个 Lisp 宏、一个特殊形式或一个自动加载对象。  这些类型中的每一种都是以下部分之一中描述的案例。  如果对象不是这些类型之一，Emacs 会发出无效函数错误信号。
 
 以下示例说明了符号间接过程。  我们使用 fset 设置符号的函数单元格，使用 symbol-function 获取函数单元格内容（请参阅访问函数单元格内容）。  具体来说，我们将符号 car 存储到 first 的函数单元中，并将符号 first 存储到 erste 的函数单元中。
+#+begin_src emacs-lisp
 
-;;  构建此功能单元链接：
-;;  ------------- ----- -------- --------
-;;  |  #<subr 车> |  <-- |  汽车 |  <-- |  第一 |  <-- |  以前 |
-;;  ------------- ----- -------- --------
 
-（符号功能'汽车）
-     ⇒ #<subr car>
+  ;; Build this function cell linkage:
+  ;;   -------------       -----        -------        -------
+  ;;  | #<subr car> | <-- | car |  <-- | first |  <-- | erste |
+  ;;   -------------       -----        -------        -------
 
-(fset '第一'车)
-     ⇒ 车
+  (symbol-function 'car)
+       ⇒ #<subr car>
 
-（fset 'erste' 第一）
-     ⇒ 第一个
+  (fset 'first 'car)
+       ⇒ car
 
-(erste '(1 2 3)) ;  调用 erste 引用的函数。
-     ⇒ 1
+  (fset 'erste 'first)
+       ⇒ first
+
+  (erste '(1 2 3))   ; Call the function referenced by erste.
+       ⇒ 1
+#+end_src
+
+
 
 相比之下，下面的例子调用了一个没有任何符号函数间接的函数，因为第一个元素是一个匿名 Lisp 函数，而不是一个符号。
 
+#+begin_src emacs-lisp
 ((lambda (arg) (erste arg))
  '(1 2 3))
      ⇒ 1
+#+end_src
 
 执行函数本身会评估它的主体；  这在调用 erste 时确实涉及符号函数间接。
 
 这种形式很少使用，现在已弃用。  相反，你应该把它写成：
+#+begin_src emacs-lisp
 
 (funcall (lambda (arg) (erste arg))
          '(1 2 3))
+#+end_src
+
 
 要不就
-
-(让 ((arg '(1 2 3))) (erste arg))
+#+begin_src emacs-lisp
+  (let ((arg '(1 2 3))) (erste arg))
+#+end_src
 
 内置函数indirect-function 提供了一种显式执行符号函数间接的简便方法。
 
@@ -144,24 +162,27 @@ Lisp 解释器或求值器是 Emacs 的一部分，它计算给它的表达式�
     可选参数 noerror 已过时，为了向后兼容而保留，并且没有效果。
 
     以下是如何在 Lisp 中定义间接函数：
-
-    (defun 间接函数 (函数)
-      （如果（和函数
-               （符号函数））
-          （间接函数（符号函数函数））
-        功能））
+    #+begin_src emacs-lisp
+      (defun indirect-function (function)
+	(if (and function
+		 (symbolp function))
+	    (indirect-function (symbol-function function))
+	  function))
+    #+end_src
 
 *** TODO 10.2.5 函数形式的评估
 
 如果要评估的列表的第一个元素是 Lisp 函数对象、字节码对象或原始函数对象，则该列表是函数调用。  例如，这是对函数 + 的调用：
 
-(+ 1 x)
+#+begin_src emacs-lisp
+  (+ 1 x)
+#+end_src
 
-评估函数调用的第一步是从左到右评估列表的其余元素。  结果是实际的参数值，每个列表元素一个值。  下一步是使用此参数列表调用函数，有效地使用函数 apply（请参阅调用函数）。  如果函数是用 Lisp 编写的，则参数用于绑定函数的参数变量（参见 Lambda 表达式）；  然后函数体中的形式依次求值，最后一个体形式的值成为函数调用的值。
+评估函数调用的第一步是从左到右评估列表的其余元素。  结果是实际的参数值，每个列表元素一个值。  下一步是使用此参数列表调用函数，有效地使用函数 apply（请参阅调用函数）。  如果函数是用 Lisp 编写的，则参数用于绑定函数的参数变量（参见 Lambda 表达式）；  然后函数体中的形式依次评估，最后一个体形式的值成为函数调用的值。
 
-*** TODO 10.2.6 Lisp 宏求值
+*** TODO 10.2.6 Lisp 宏评估
 
-如果正在评估的列表的第一个元素是宏对象，则该列表是宏调用。  评估宏调用时，最初不会评估列表其余部分的元素。  相反，这些元素本身被用作宏的参数。  宏定义计算一个替换形式，称为宏的扩展，以代替原始形式进行评估。  展开可以是任何形式：自求值常数、符号或列表。  如果扩展本身是一个宏调用，则此扩展过程将重复直到某种其他形式的结果。
+如果正在评估的列表的第一个元素是宏对象，则该列表是宏调用。  评估宏调用时，最初不会评估列表其余部分的元素。  相反，这些元素本身被用作宏的参数。  宏定义计算一个替换形式，称为宏的扩展，以代替原始形式进行评估。  展开可以是任何形式：自评估常数、符号或列表。  如果扩展本身是一个宏调用，则此扩展过程将重复直到某种其他形式的结果。
 
 宏调用的普通评估通过评估扩展来完成。  但是，宏扩展不一定会立即评估，或者根本就不会评估，因为其他程序也会扩展宏调用，它们可能会或可能不会评估扩展。
 
@@ -169,18 +190,21 @@ Lisp 解释器或求值器是 Emacs 的一部分，它计算给它的表达式�
 
 例如，给定一个宏定义如下：
 
-(defmacro cadr (x)
-  （列表'汽车（列表'cdr x）））
+#+begin_src emacs-lisp
+  (defmacro cadr (x)
+    (list 'car (list 'cdr x)))
+#+end_src
+
 
 (cadr (assq 'handler list)) 这样的表达式是一个宏调用，它的扩展是：
 
-(汽车 (cdr (assq 'handler list)))
+#+begin_src emacs-lisp
+(car (cdr (assq 'handler list)))
+#+end_src
 
 请注意，参数 (assq 'handler list) 出现在扩展中。
 
 有关 Emacs Lisp 宏的完整描述，请参阅宏。
-
-
 *** TODO 10.2.7 特殊表格
 
 特殊形式是特别标记的原始函数，因此它的参数不会全部被评估。  大多数特殊形式定义控制结构或执行变量绑定——函数不能做的事情。
@@ -268,8 +292,7 @@ setq-默认值
 
 自动加载功能允许您调用尚未加载到 Emacs 中的函数定义的函数或宏。  它指定哪个文件包含定义。  当自动加载对象作为符号的函数定义出现时，将该符号作为函数调用会自动加载指定的文件；  然后它调用从该文件加载的真实定义。  安排自动加载对象作为符号函数定义出现的方法在自动加载中进行了描述。
 
-** TODO 10.3 报价
-
+** TODO 10.3 引用
 特殊形式的引号返回其单个参数，如所写，而不对其进行评估。  这提供了一种在程序中包含不是自评估对象的常量符号和列表的方法。  （不必引用数字、字符串和向量等自评估对象。）
 
 特殊形式：引用对象¶
@@ -279,24 +302,27 @@ setq-默认值
 因为引号在程序中经常使用，所以 Lisp 为它提供了一种方便的读取语法。  一个撇号字符 (''') 后跟一个 Lisp 对象（在读取语法中）扩展为一个列表，其第一个元素是引号，其第二个元素是对象。  因此，读语法 'x 是 (quote x) 的缩写。
 
 以下是一些使用引号的表达式示例：
+#+begin_src emacs-lisp
+  (quote (+ 1 2))
+       ⇒ (+ 1 2)
 
-（报价（+ 1 2））
-     ⇒ (+ 1 2)
+  (quote foo)
+       ⇒ foo
 
-（引用 foo）
-     ⇒ 富
+  'foo
+       ⇒ foo
 
-'富
-     ⇒ 富
+  ''foo
+       ⇒ 'foo
 
-''富
-     ⇒ '富
+  '(quote foo)
+       ⇒ 'foo
 
-'（引用 foo）
-     ⇒ '富
+  ['foo]
+       ⇒ ['foo]
 
-['富]
-     ⇒ ['foo]
+#+end_src
+
 
 尽管表达式 (list '+ 1 2) 和 '(+ 1 2) 都产生等于 (+ 1 2) 的列表，但前者产生一个新生成的可变列表，而后者产生一个由可能共享的 conses 构建的列表并且不应修改。  请参阅自我评估表。
 
@@ -307,44 +333,55 @@ setq-默认值
 
 反引号结构允许您引用列表，但有选择地评估该列表的元素。  在最简单的情况下，它与特殊形式的引号相同（在上一节中描述；请参阅引用）。  例如，这两种形式产生相同的结果：
 
-`（（+ 2 3）个元素的列表）
-     ⇒（（+ 2 3）个元素的列表）
+#+begin_src emacs-lisp
+  `(a list of (+ 2 3) elements)
+       ⇒ (a list of (+ 2 3) elements)
 
-'（（+ 2 3）个元素的列表）
-     ⇒（（+ 2 3）个元素的列表）
+  '(a list of (+ 2 3) elements)
+       ⇒ (a list of (+ 2 3) elements)
+#+end_src
 
-反引号参数中的特殊标记“，”表示一个不是常量的值。  Emacs Lisp 求值器求值 ',' 的参数，并将值放入列表结构中：
 
-`（一个 ,(+ 2 3) 个元素的列表）
-     ⇒（5 个元素的列表）
+反引号参数中的特殊标记“，”表示一个不是常量的值。  Emacs Lisp 评估器评估 ',' 的参数，并将值放入列表结构中：
+
+#+begin_src emacs-lisp
+`(a list of ,(+ 2 3) elements)
+     ⇒ (a list of 5 elements)
+#+end_src
+
 
 在列表结构的更深层次上也允许使用 ',' 进行替换。  例如：
 
-`(1 2 (3 ,(+ 4 5)))
-     ⇒ (1 2 (3 9))
+#+begin_src emacs-lisp
+  `(1 2 (3 ,(+ 4 5)))
+       ⇒ (1 2 (3 9))
+#+end_src
+
 
 您还可以使用特殊标记“，@”将评估值拼接到结果列表中。  拼接列表的元素成为与结果列表的其他元素处于同一级别的元素。  不使用 '`' 的等效代码通常是不可读的。  这里有些例子：
 
-(setq some-list '(2 3))
-     ⇒ (2 3)
+#+begin_src emacs-lisp
+  (setq some-list '(2 3))
+       ⇒ (2 3)
 
-（缺点 1（附加一些列表'（4）一些列表））
-     ⇒ (1 2 3 4 2 3)
+  (cons 1 (append some-list '(4) some-list))
+       ⇒ (1 2 3 4 2 3)
 
-`(1 ,@some-list 4 ,@some-list)
-     ⇒ (1 2 3 4 2 3)
+  `(1 ,@some-list 4 ,@some-list)
+       ⇒ (1 2 3 4 2 3)
 
 
-(setq list '(hack foo bar))
-     ⇒ (hack foo bar)
+  (setq list '(hack foo bar))
+       ⇒ (hack foo bar)
 
-（缺点'使用
-  （缺点'的
-    (cons 'words (append (cdr list) '(作为元素)))))
-     ⇒ （使用单词 foo bar 作为元素）
+  (cons 'use
+    (cons 'the
+      (cons 'words (append (cdr list) '(as elements)))))
+       ⇒ (use the words foo bar as elements)
 
-`（使用单词 ,@(cdr list) 作为元素）
-     ⇒ （使用单词 foo bar 作为元素）
+  `(use the words ,@(cdr list) as elements)
+       ⇒ (use the words foo bar as elements)
+#+end_src
 
 如果反引号构造的子表达式没有替换或拼接，则它的行为类似于引号，因为它产生可能共享且不应修改的 conses、向量和字符串。  请参阅自我评估表。
 
@@ -354,7 +391,7 @@ setq-默认值
 
 本节中描述的函数和变量评估表单，指定评估过程的限制，或记录最近返回的值。  加载文件也会进行评估（请参阅加载）。
 
-将函数存储在数据结构中并使用 funcall 或 apply 调用它通常比将表达式存储在数据结构中并对其求值更简洁和灵活。  使用函数提供了将信息作为参数传递给它们的能力。
+将函数存储在数据结构中并使用 funcall 或 apply 调用它通常比将表达式存储在数据结构中并对其评估更简洁和灵活。  使用函数提供了将信息作为参数传递给它们的能力。
 
 功能：eval 形式 &optional lexical ¶
 
@@ -363,18 +400,19 @@ setq-默认值
     参数 lexical 指定局部变量的范围规则（请参阅变量绑定的范围规则）。  如果省略或为零，则意味着使用默认的动态范围规则评估表单。  如果是 t，则意味着使用词法作用域规则。  lexical 的值也可以是一个非空列表，为词法绑定指定一个特定的词法环境；  但是，此功能仅对特定用途有用，例如在 Emacs Lisp 调试器中。  请参阅词法绑定。
 
     由于 eval 是一个函数，出现在 eval 调用中的参数表达式会被计算两次：一次是在调用 eval 之前的准备，另一次是由 eval 函数本身。  这是一个例子：
+    #+begin_src emacs-lisp
+      (setq foo 'bar)
+	   ⇒ bar
 
-    (setq foo 'bar)
-         ⇒ 酒吧
-
-    (setq bar 'baz)
-         ⇒ 巴兹
-    ;;  这里 eval 接收参数 foo
-    （评估'富）
-         ⇒ 酒吧
-    ;;  这里eval接收参数bar，也就是foo的值
-    （评估富）
-         ⇒ 巴兹
+      (setq bar 'baz)
+	   ⇒ baz
+      ;; Here eval receives argument foo
+      (eval 'foo)
+	   ⇒ bar
+      ;; Here eval receives argument bar, which is the value of foo
+      (eval foo)
+	   ⇒ baz
+    #+end_src
 
     当前对 eval 的活动调用数限制为 max-lisp-eval-depth（见下文）。 
 
@@ -400,7 +438,7 @@ setq-默认值
 
     这个限制，以及当它被超过时的相关错误，是 Emacs Lisp 避免对定义不明确的函数进行无限递归的一种方式。  如果将 max-lisp-eval-depth 的值增加太多，这样的代码反而会导致堆栈溢出。  在某些系统上，可以处理此溢出。  在这种情况下，正常的 Lisp 评估被中断，控制权被转移回顶层命令循环（顶层）。  请注意，在这种情况下无法进入 Emacs Lisp 调试器。  请参阅出现错误时进入调试器。
 
-    深度限制计算 eval、apply 和 funcall 的内部使用，例如调用 Lisp 表达式中提到的函数、函数调用参数和函数体形式的递归求值，以及 Lisp 代码中的显式调用。
+    深度限制计算 eval、apply 和 funcall 的内部使用，例如调用 Lisp 表达式中提到的函数、函数调用参数和函数体形式的递归评估，以及 Lisp 代码中的显式调用。
 
     此变量的默认值为 800。如果将其设置为小于 100 的值，如果达到给定值，Lisp 会将其重置为 100。  如果剩余空间很小，进入 Lisp 调试器会增加该值，以确保调试器本身有执行空间。
 
@@ -414,30 +452,36 @@ setq-默认值
 
     values 的元素按最近的顺序排列。
 
-    (setq x 1)
-         ⇒ 1
+    #+begin_src emacs-lisp
+      (setq x 1)
+	   ⇒ 1
 
-    (list 'A (1+ 2) 自动保存-默认)
-         ⇒ (A 3 吨)
+      (list 'A (1+ 2) auto-save-default)
+	   ⇒ (A 3 t)
 
-    价值观
-         ⇒ ((A 3 t) 1 …)
+      values
+	   ⇒ ((A 3 t) 1 …)
+    #+end_src
+
 
     此变量可用于引用最近评估的表单的值。  打印 values 本身的值通常是一个坏主意，因为这可能很长。  相反，检查特定元素，如下所示：
 
-    ;;  参考最近的评估结果。
-    （第 n 个 0 值）
-         ⇒ (A 3 吨)
+    #+begin_src emacs-lisp
+      ;; Refer to the most recent evaluation result.
+      (nth 0 values)
+	   ⇒ (A 3 t)
 
-    ;;  加入了一个新的元素，
-    ;;  所以所有元素都向后移动一个。
-    （第 1 个值）
-         ⇒ (A 3 吨)
+      ;; That put a new element on,
+      ;;   so all elements move back one.
+      (nth 1 values)
+	   ⇒ (A 3 t)
 
-    ;;  这将获取最近的元素
-    ;;  在这个例子之前。
-    （第 3 个值）
-         ⇒ 1
+      ;; This gets the element that was next-to-most-recent
+      ;;   before this example.
+      (nth 3 values)
+	   ⇒ 1
+    #+end_src
+
 
 ** TODO 10.6 延迟和惰性评估
 
@@ -453,55 +497,57 @@ setq-默认值
 
 宏：thunk-let (bindings...) forms... ¶
 
-    这个宏类似于 let 但创建“惰性”变量绑定。  任何绑定都有形式（符号值形式）。  与 let 不同，任何值形式的求值都被推迟到在求值形式时第一次使用相应符号的绑定。  任何值形式最多被评估一次。  使用这个宏需要词法绑定。 
+    这个宏类似于 let 但创建“惰性”变量绑定。  任何绑定都有形式（符号值形式）。  与 let 不同，任何值形式的评估都被推迟到在评估形式时第一次使用相应符号的绑定。  任何值形式最多被评估一次。  使用这个宏需要词法绑定。 
 
 例子：
 
-(defun f (数字)
-  (thunk-let ((派生数
+#+begin_src emacs-lisp
+(defun f (number)
+  (thunk-let ((derived-number
               (progn (message "Calculating 1 plus 2 times %d" number)
-                     (1+ (* 2 数字)))))
-    （如果（> 数字 10）
-        派生数
-      数字）））
+                     (1+ (* 2 number)))))
+    (if (> number 10)
+        derived-number
+      number)))
 
 
 (f 5)
 ⇒ 5
 
 
-(女 12)
--|  计算 1 加 2 乘以 12
+(f 12)
+-| Calculating 1 plus 2 times 12
 ⇒ 25
-
+#+end_src
 
 由于惰性绑定变量的特殊性质，设置它们是错误的（例如使用 setq）。
 
 宏：thunk-let* (bindings...) forms... ¶
 
     这类似于 thunk-let，但允许绑定中的任何表达式引用此 thunk-let* 形式中的先前绑定。  使用这个宏需要词法绑定。 
+    #+begin_src emacs-lisp
+      (thunk-let* ((x (prog2 (message "Calculating x...")
+			  (+ 1 1)
+			(message "Finished calculating x")))
+		   (y (prog2 (message "Calculating y...")
+			  (+ x 1)
+			(message "Finished calculating y")))
+		   (z (prog2 (message "Calculating z...")
+			  (+ y 1)
+			(message "Finished calculating z")))
+		   (a (prog2 (message "Calculating a...")
+			  (+ z 1)
+			(message "Finished calculating a"))))
+	(* z x))
 
-(thunk-let* ((x (prog2 (message "Calculating x...")
-                    (+ 1 1)
-                  （消息“完成计算 x”）））
-             (y (prog2 (message "Calculating y...")
-                    (+ x 1)
-                  （消息“完成计算 y”）））
-             (z (prog2 (消息“计算 z...”)
-                    (+ y 1)
-                  （消息“完成计算 z”）））
-             (a (prog2 (message "Calculating a...")
-                    (+ z 1)
-                  （消息“完成计算 a”））））
-  (* zx))
-
--|  计算 z...
--|  计算你...
--|  计算 x...
--|  完成计算 x
--|  完成计算 y
--|  完成计算 z
-⇒ 8
+      -| Calculating z...
+      -| Calculating y...
+      -| Calculating x...
+      -| Finished calculating x
+      -| Finished calculating y
+      -| Finished calculating z
+      ⇒ 8
+    #+end_src
 
 thunk-let 和 thunk-let* 隐式使用 thunk：它们的扩展创建辅助符号并将它们绑定到包装绑定表达式的 thunk。  然后，对正文形式中原始变量的所有引用都将替换为调用 thunk-force 的表达式，并将相应的辅助变量作为参数。  因此，任何使用 thunk-let 或 thunk-let* 的代码都可以重写为使用 thunk，但在许多情况下，使用这些宏会产生比显式使用 thunk 更好的代码。
 
