@@ -25,8 +25,10 @@ point 的值是一个不小于 1 且不大于缓冲区大小加 1 的数字。�
 
     此函数以整数形式返回当前缓冲区中点的值。
 
-    （观点）
-	  ⇒ 175
+    #+begin_src emacs-lisp
+      (point)
+	   ⇒ 175
+    #+end_src
 
 函数：point-min ¶
 
@@ -45,12 +47,13 @@ point 的值是一个不小于 1 且不大于缓冲区大小加 1 的数字。�
     此函数返回当前缓冲区中的字符总数。  在没有任何缩小的情况下（请参阅缩小），point-max 返回一个比这大一的值。
 
     如果你指定一个缓冲区，buffer，那么这个值就是缓冲区的大小。
+    #+begin_src emacs-lisp
+      (buffer-size)
+	   ⇒ 35
 
-    （缓冲区大小）
-	  ⇒ 35
-
-    （点最大值）
-	  ⇒ 36
+      (point-max)
+	   ⇒ 36
+    #+end_src
 
 ** TODO 31.2 运动
 
@@ -124,11 +127,15 @@ point 的值是一个不小于 1 且不大于缓冲区大小加 1 的数字。�
 
 要将点移动到缓冲区的开头，请编写：
 
-(goto-char (point-min))
+#+begin_src emacs-lisp
+  (goto-char (point-min))
+#+end_src
 
 同样，要移动到缓冲区的末尾，请使用：
+#+begin_src emacs-lisp
+  (goto-char (point-max))
+#+end_src
 
-(goto-char (point-max))
 
 以下是用户用来执行这些操作的两个命令。  此处记录它们是为了警告您不要在 Lisp 程序中使用它们，因为它们会在回显区域设置标记并显示消息。
 
@@ -263,24 +270,26 @@ point 的值是一个不小于 1 且不大于缓冲区大小加 1 的数字。�
     窗口窗口仅用于指定要使用的显示表。  无论窗口中显示什么缓冲区，计算运动始终在当前缓冲区上运行。
 
     返回值是五个元素的列表：
+    #+begin_src emacs-lisp
+      (pos hpos vpos prevhpos contin)
+    #+end_src
 
-    (pos hpos vpos prevhpos contin)
 
     这里pos是扫描停止的缓冲位置，vpos是竖屏位置，hpos是横屏位置。
 
     结果 prevhpos 是从 pos 向后一个字符的水平位置。  如果最后一行在前一个字符之后（或之内）继续，则结果 contin 为 t。
 
     例如，要查找某个窗口的屏幕行行列col的缓冲位置，将窗口的显示起始位置作为from，窗口的左上角坐标作为frompos。  将缓冲区的 (point-max) 传递给 to，以将扫描限制在缓冲区可访问部分的末尾，并将 line 和 col 作为 topos 传递。  这是一个执行此操作的函数：
-
-    (defun 位置坐标 (col 线)
-      （汽车（计算运动（窗口启动）
-			    '(0 . 0)
-			    （点最大值）
-			    （缺点线）
-			    （窗口宽度）
-			    （缺点（窗口-hscroll）0）
-			    （选定窗口））））
-
+    #+begin_src emacs-lisp
+      (defun coordinates-of-position (col line)
+	(car (compute-motion (window-start)
+			     '(0 . 0)
+			     (point-max)
+			     (cons col line)
+			     (window-width)
+			     (cons (window-hscroll) 0)
+			     (selected-window))))
+    #+end_src
     当您对 minibuffer 使用 compute-motion 时，您需要使用 minibuffer-prompt-width 来获取屏幕第一行开头的水平位置。  请参阅 Minibuffer 内容。
 
 *** TODO 31.2.6 移动平衡表达式
@@ -310,18 +319,21 @@ point 的值是一个不小于 1 且不大于缓冲区大小加 1 的数字。�
 命令：forward-sexp &optional arg ¶
 
     此函数在 arg（默认为 1）平衡表达式中向前移动。  平衡表达式既包括由括号分隔的表达式，也包括其他类型的表达式，例如单词和字符串常量。  请参阅解析表达式。  例如，
-
-    ---------- 缓冲区： foo ----------
-    (concat∗ "foo" (car x) yz)
-    ---------- 缓冲区： foo ----------
+    #+begin_src emacs-lisp
 
 
-    （前向性 3）
-	  ⇒ 无
+      ---------- Buffer: foo ----------
+      (concat∗ "foo " (car x) y z)
+      ---------- Buffer: foo ----------
 
-    ---------- 缓冲区： foo ----------
-    （连接“foo”（汽车 x）y∗z）
-    ---------- 缓冲区： foo ----------
+
+      (forward-sexp 3)
+	   ⇒ nil
+
+      ---------- Buffer: foo ----------
+      (concat "foo " (car x) y∗ z)
+      ---------- Buffer: foo ----------
+    #+end_src
 
 命令：backward-sexp &optional arg ¶
 
@@ -366,20 +378,23 @@ point 的值是一个不小于 1 且不大于缓冲区大小加 1 的数字。�
     如果提供了限制（它必须是数字或标记），则它指定缓冲区中可以跳过该点的最大位置。  点将在限制处或之前停止。
 
     在以下示例中，点最初直接位于“T”之前。  评估表单后，point 位于该行的末尾（在 'hat' 的 't' 和换行符之间）。  该函数跳过所有字母和空格，但不跳过换行符。
-
-    ---------- 缓冲区： foo ----------
-    我读到“∗帽子里的猫
-    回来”两次。
-    ---------- 缓冲区： foo ----------
+    #+begin_src emacs-lisp
 
 
-    （跳过字符转发“a-zA-Z”）
-	  ⇒ 18
+      ---------- Buffer: foo ----------
+      I read "∗The cat in the hat
+      comes back" twice.
+      ---------- Buffer: foo ----------
 
-    ---------- 缓冲区： foo ----------
-    我读到“戴帽子的猫∗
-    回来”两次。
-    ---------- 缓冲区： foo ----------
+
+      (skip-chars-forward "a-zA-Z ")
+	   ⇒ 18
+
+      ---------- Buffer: foo ----------
+      I read "The cat in the hat∗
+      comes back" twice.
+      ---------- Buffer: foo ----------
+    #+end_src
 
 功能：skip-chars-backward 字符集&可选限制¶
 
@@ -401,17 +416,20 @@ point 的值是一个不小于 1 且不大于缓冲区大小加 1 的数字。�
 
 因为 save-excursion 仅保存在偏移开始时当前的缓冲区的点，所以在偏移期间对指向其他缓冲区所做的任何更改都将在之后保持有效。  这经常会导致意想不到的后果，因此如果您在偏移期间调用 set-buffer，字节编译器会发出警告：
 
-警告：使用 'with-current-buffer' 而不是
-	  保存游览+设置缓冲区
+#+begin_src emacs-lisp
+  Warning: Use ‘with-current-buffer’ rather than
+	   save-excursion+set-buffer
+#+end_src
 
 为避免此类问题，您应仅在设置所需的当前缓冲区后调用 save-excursion，如下例所示：
-
-(defun append-string-to-buffer (字符串缓冲区)
-  “将 STRING 附加到 BUFFER 的末尾。”
-  (with-current-buffer buffer
-    （保存游览
-      (goto-char (point-max))
-      （插入字符串））））
+#+begin_src emacs-lisp
+  (defun append-string-to-buffer (string buffer)
+    "Append STRING to the end of BUFFER."
+    (with-current-buffer buffer
+      (save-excursion
+	(goto-char (point-max))
+	(insert string))))
+#+end_src
 
 同样，save-excursion 不会恢复由 switch-to-buffer 等函数更改的窗口缓冲区对应关系。
 
@@ -447,7 +465,9 @@ point 的值是一个不小于 1 且不大于缓冲区大小加 1 的数字。�
 
     此函数取消当前缓冲区中的任何缩小，以便可以访问整个内容。  这称为加宽。  它等价于以下表达式：
 
-    （缩小到区域 1（1+（缓冲区大小）））
+    #+begin_src emacs-lisp
+      (narrow-to-region 1 (1+ (buffer-size)))
+    #+end_src
 
 功能：缓冲区缩小-p ¶
 
@@ -466,24 +486,27 @@ point 的值是一个不小于 1 且不大于缓冲区大小加 1 的数字。�
     保存限制不恢复点；  为此使用保存游览。  如果同时使用 save-restriction 和 save-excursion，那么 save-excursion 应该放在第一位（在外面）。  否则，将恢复旧的点值，但暂时变窄仍然有效。  如果旧点值超出临时收窄的范围，则无法准确恢复。
 
     这是正确使用保存限制的简单示例：
-
-    ---------- 缓冲区： foo ----------
-    这是 foo 的内容
-    这是 foo 的内容
-    这是 foo∗ 的内容
-    ---------- 缓冲区： foo ----------
+    #+begin_src emacs-lisp
 
 
-    （保存游览
-      （保存限制
-	 （转到字符 1）
-	 （前线2）
-	 （缩小到区域 1（点））
-	 (goto-char (point-min))
-	 （替换字符串“foo”“bar”）））
+      ---------- Buffer: foo ----------
+      This is the contents of foo
+      This is the contents of foo
+      This is the contents of foo∗
+      ---------- Buffer: foo ----------
 
-    ---------- 缓冲区： foo ----------
-    这是吧的内容
-    这是吧的内容
-    这是 foo∗ 的内容
-    ---------- 缓冲区： foo ----------
+
+      (save-excursion
+	(save-restriction
+	  (goto-char 1)
+	  (forward-line 2)
+	  (narrow-to-region 1 (point))
+	  (goto-char (point-min))
+	  (replace-string "foo" "bar")))
+
+      ---------- Buffer: foo ----------
+      This is the contents of bar
+      This is the contents of bar
+      This is the contents of foo∗
+      ---------- Buffer: foo ----------
+    #+end_src
