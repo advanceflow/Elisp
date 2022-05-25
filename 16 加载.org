@@ -114,7 +114,10 @@ Emacs Lisp 有几个用于加载的接口。  例如，自动加载为文件中�
 
 当 Emacs 启动时，它会分几步设置 load-path 的值。  首先，它使用编译 Emacs 时设置的默认位置初始化加载路径。  通常，这是一个类似的目录
 
-“/usr/local/share/emacs/version/lisp”
+#+begin_src emacs-lisp
+"/usr/local/share/emacs/version/lisp"
+#+end_src
+
 
 （在本示例和以下示例中，将 /usr/local 替换为适合您的 Emacs 的安装前缀。）这些目录包含 Emacs 附带的标准 Lisp 文件。  如果 Emacs 找不到它们，它将无法正确启动。
 
@@ -122,11 +125,13 @@ Emacs Lisp 有几个用于加载的接口。  例如，自动加载为文件中�
 
 除非您使用 --no-site-lisp 选项启动 Emacs，否则它会在 load-path 的前面添加另外两个 site-lisp 目录。  这些适用于本地安装的 Lisp 文件，通常采用以下形式：
 
-“/usr/local/share/emacs/version/site-lisp”
-
+#+begin_src emacs-lisp
+  "/usr/local/share/emacs/version/site-lisp"
+#+end_src
 和
-
-“/usr/local/share/emacs/site-lisp”
+#+begin_src emacs-lisp
+  "/usr/local/share/emacs/site-lisp"
+#+end_src
 
 第一个是针对特定 Emacs 版本的本地安装文件；  第二个是本地安装的文件，用于所有已安装的 Emacs 版本。  （如果 Emacs 正在卸载运行，它还会从源目录和构建目录中添加 site-lisp 目录，如果它们存在的话。通常这些目录不包含 site-lisp 目录。）
 
@@ -134,7 +139,10 @@ Emacs Lisp 有几个用于加载的接口。  例如，自动加载为文件中�
 
 EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'，在某些操作系统上）分隔。  以下是如何设置 EMACSLOADPATH 变量的示例（来自 sh 样式的 shell）：
 
-导出 EMACSLOADPATH=/home/foo/.emacs.d/lisp：
+#+begin_src emacs-lisp
+  export EMACSLOADPATH=/home/foo/.emacs.d/lisp:
+#+end_src
+
 
 环境变量值中的空元素，无论是尾随（如上例）、前导还是嵌入，都将替换为由标准初始化过程确定的 load-path 的默认值。  如果没有这样的空元素，则 EMACSLOADPATH 指定整个加载路径。  您必须包含一个空元素，或者包含标准 Lisp 文件的目录的显式路径，否则 Emacs 将无法运行。  （修改加载路径的另一种方法是在启动 Emacs 时使用 -L 命令行选项；见下文。）
 
@@ -144,7 +152,10 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
 通常将代码添加到一个初始化文件（请参阅初始化文件）以将一个或多个目录添加到加载路径。  例如：
 
-（推“~/.emacs.d/lisp”加载路径）
+#+begin_src emacs-lisp
+  (push "~/.emacs.d/lisp" load-path)
+#+end_src
+
 
 转储 Emacs 使用 load-path 的特殊值。  如果您使用 site-load.el 或 site-init.el 文件来自定义转储的 Emacs（请参阅构建 Emacs），这些文件对加载路径所做的任何更改都将在转储后丢失。
 
@@ -162,7 +173,9 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
     例如，假设 load-path 设置为
 
+    #+begin_src emacs-lisp
       ("/opt/emacs/site-lisp" "/usr/share/emacs/23.3/lisp")
+    #+end_src
 
     并且这两个目录都包含一个名为 foo.el 的文件。  然后 (require 'foo) 永远不会将文件加载到第二个目录中。  这种情况可能表明 Emacs 的安装方式存在问题。
 
@@ -173,10 +186,7 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 变量：native-comp-eln-load-path ¶
 
     这个变量包含一个目录列表，Emacs 在其中查找本地编译的 '.eln' 文件。  列表中非绝对的文件名被解释为相对于调用目录（请参阅操作系统环境）。  列表中的最后一个目录是系统目录，即 Emacs 构建和安装过程安装的带有“.eln”文件的目录。  在列表中的每个目录中，Emacs 在子目录中查找“.eln”文件，其名称由 Emacs 版本和取决于当前本地编译 ABI 的 8 字符散列构成；  此子目录的名称存储在变量 comp-native-version-dir 中。
-
-
 ** TODO 16.4 加载非 ASCII 字符
-
 当 Emacs Lisp 程序包含带有非 ASCII 字符的字符串常量时，这些常量可以在 Emacs 中表示为单字节字符串或多字节字符串（请参阅文本表示）。  使用哪种表示取决于如何将文件读入 Emacs。  如果通过解码读取成多字节表示，则 Lisp 程序的文本将是多字节文本，其字符串常量将是多字节字符串。  如果读取包含 Latin-1 字符（例如）的文件而不进行解码，则程序的文本将是单字节文本，其字符串常量将是单字节字符串。  请参阅编码系统。
 
 在大多数 Emacs Lisp 程序中，非 ASCII 字符串是多字节字符串这一事实不应该引起注意，因为将它们插入单字节缓冲区会自动将它们转换为单字节。  但是，如果这确实产生了影响，您可以通过在局部变量部分写入“coding: raw-text”来强制将特定的 Lisp 文件解释为单字节文件。  使用该指示符，文件将无条件地解释为单字节。  这在对写为 ?vliteral 的非 ASCII 字符进行键绑定时可能很重要。
@@ -205,12 +215,16 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
     如果 function 已经有一个非自动加载对象的非 void 函数定义，则此函数不执行任何操作并返回 nil。  否则，它会构造一个自动加载对象（请参阅自动加载类型），并将其存储为函数的函数定义。  自动加载对象具有以下形式：
 
-    （自动加载文件名文档字符串交互类型）
+    #+begin_src emacs-lisp
+      (autoload filename docstring interactive type)
+    #+end_src
 
     例如，
 
-    （符号功能'运行序言）
-	  ⇒（自动加载“序言”169681 t nil）
+    #+begin_src emacs-lisp
+      (symbol-function 'run-prolog)
+	   ⇒ (autoload "prolog" 169681 t nil)
+    #+end_src
 
     在这种情况下，“prolog”是要加载的文件的名称，169681 是指 emacs/etc/DOC 文件中的文档字符串（参见文档基础），t 表示函数是交互式的，nil 表示它不是宏或键盘映射。
 
@@ -218,8 +232,9 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
     如果 object 是自动加载对象，则此函数返回非 nil。  例如，要检查 run-prolog 是否定义为自动加载函数，请评估
 
-    (autoloadp (symbol-function 'run-prolog))
-
+    #+begin_src emacs-lisp
+      (autoloadp (symbol-function 'run-prolog))
+    #+end_src
 自动加载的文件通常包含其他定义，并且可能需要或提供一项或多项功能。  如果文件未完全加载（由于对其内容的评估错误），则在加载期间发生的任何函数定义或提供调用都将撤消。  这是为了确保下次尝试从该文件调用任何自动加载函数时将再次尝试加载该文件。  如果不是这样，那么文件中的某些函数可能由中止的加载定义，但由于缺少某些未成功加载的子例程而无法正常工作，因为它们在文件中稍后出现。
 
 如果自动加载的文件未能定义所需的 Lisp 函数或宏，则会用数据“自动加载未能定义函数函数名”发出错误信号。
@@ -242,27 +257,33 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
 下面的例子展示了医生是如何准备用一个神奇的注释自动加载的：
 
-;;;###自动加载
-（德芬医生（）
-  “切换到*医生*缓冲区并开始进行心理治疗。”
-  （交互的）
-  （切换到缓冲区“*医生*”）
-  （医生模式））
+#+begin_src emacs-lisp
+  ;;;###autoload
+  (defun doctor ()
+    "Switch to *doctor* buffer and start giving psychotherapy."
+    (interactive)
+    (switch-to-buffer "*doctor*")
+    (doctor-mode))
+#+end_src
 
 这是在 loaddefs.el 中产生的内容：
+#+begin_src emacs-lisp
+  (autoload 'doctor "doctor" "\
+  Switch to *doctor* buffer and start giving psychotherapy.
 
-（自动加载'医生“医生”“\
-切换到*医生*缓冲区并开始进行心理治疗。
-
-\(fn)" 无）
+  \(fn)" t nil)
+#+end_src
 
 双引号后的反斜杠和换行符是一种约定，仅在预加载的未编译的 Lisp 文件中使用，例如 loaddefs.el；  他们告诉 make-docfile 将文档字符串放在 etc/DOC 文件中。  请参阅构建 Emacs。  另请参阅 lib-src/make-docfile.c 中的注释。  当各种帮助函数（参见帮助函数）显示它时，文档字符串的使用部分中的“（fn）”被替换为函数的名称。
 
 如果您使用非已知和公认的函数定义方法之一的异常宏编写函数定义，则使用普通的魔术自动加载注释会将整个定义复制到 loaddefs.el。  这是不可取的。  您可以通过编写以下代码将所需的自动加载调用放入 loaddefs.el 中：
 
-;;;###autoload (autoload 'foo "myfile")
-(mydefunmacro foo
-  ...)
+#+begin_src emacs-lisp
+  ;;;###autoload (autoload 'foo "myfile")
+  (mydefunmacro foo
+    ...)
+#+end_src
+
 
 您可以使用非默认字符串作为自动加载 cookie，并将相应的自动加载调用写入名称与默认 loaddefs.el 不同的文件中。  Emacs 提供了两个变量来控制它：
 
@@ -303,22 +324,24 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
 将元素添加到 alist 的最简单方法是这样的：
 
-(push '(leif-mode "Leif") minor-mode-alist)
+#+begin_src emacs-lisp
+  (push '(leif-mode " Leif") minor-mode-alist)
+#+end_src
 
 但是，如果重新加载库，这将添加多个元素。  为避免此问题，请使用 add-to-list（请参阅修改列表变量）：
 
-(add-to-list 'minor-mode-alist '(leif-mode "Leif"))
-
+#+begin_src emacs-lisp
+  (add-to-list 'minor-mode-alist '(leif-mode " Leif"))
+#+end_src
 有时你会想要明确地测试一个库是否已经被加载。  如果库使用 provide 来提供命名功能，您可以在文件的前面使用 featurep 来测试之前是否执行过提供调用（请参阅功能）。  或者，您可以使用以下内容：
+#+begin_src emacs-lisp
+  (defvar foo-was-loaded nil)
 
-(defvar foo-was-loaded nil)
-
-（除非 foo-was-loaded
-  只执行第一次
-  (setq foo-was-loaded t))
-
+  (unless foo-was-loaded
+    execute-first-time-only
+    (setq foo-was-loaded t))
+#+end_src
 ** TODO 16.7 特点
-
 调用一个特定的函数，但是当另一个程序第一次通过名称请求它时加载一个特性。
 
 功能名称是代表函数、变量等集合的符号。定义它们的文件应提供该功能。  另一个使用它们的程序可以确保它们是通过要求该特性来定义的。  如果尚未加载定义文件，则会加载它。
@@ -327,29 +350,34 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
 例如，在 idlwave.el 中，idlwave-complete-filename 的定义包括以下代码：
 
-(defun idlwave-complete-filename ()
-  “使用 comint 的东西来完成一个文件名。”
-   （需要'comint）
-   (let* ((comint-file-name-chars "~/A-Za-z0-9+@:_.$#%={}\\-")
-	   (comint-completion-addsuffix nil)
-	   ...)
-	(comint-dynamic-complete-filename)))
+#+begin_src emacs-lisp
+  (defun idlwave-complete-filename ()
+    "Use the comint stuff to complete a file name."
+     (require 'comint)
+     (let* ((comint-file-name-chars "~/A-Za-z0-9+@:_.$#%={}\\-")
+	    (comint-completion-addsuffix nil)
+	    ...)
+	 (comint-dynamic-complete-filename)))
+#+end_src
 
 如果文件 comint.el 尚未加载，则表达式 (require 'comint) 会加载文件，确保定义了 comint-dynamic-complete-filename。  功能通常以提供它们的文件命名，因此不需要为 require 提供文件名。  （请注意，要求语句位于 let 的主体之外很重要。在其变量为 let 绑定时加载库可能会产生意想不到的后果，即变量在 let 退出后变得未绑定。）
 
 comint.el 文件包含以下顶级表达式：
 
-（提供'comint）
+#+begin_src emacs-lisp
+  (provide 'comint)
+#+end_src
 
 这会将 comint 添加到全局功能列表中，因此 (require 'comint) 将从此知道无需执行任何操作。
 
 当在文件的顶层使用 require 时，它​​会在您对该文件进行字节编译（请参阅字节编译）以及加载它时生效。  这是为了防止所需的包包含字节编译器必须知道的宏。  它还避免了对使用 require 加载的文件中定义的函数和变量的字节编译器警告。
 
 尽管在字节编译期间会评估对 require 的顶级调用，但不会对提供调用进行评估。  因此，您可以确保在对定义文件进行字节编译之前加载定义文件，方法是在提供相同功能的同时包含一个要求，如下例所示。
-
-（提供“我的功能”）；  被字节编译器忽略，
-			;  通过负载评估。
-（需要'我的功能）；  由字节编译器评估。
+#+begin_src emacs-lisp
+  (provide 'my-feature)  ; Ignored by byte compiler,
+			 ;   evaluated by load.
+  (require 'my-feature)  ; Evaluated by byte compiler.
+#+end_src
 
 编译器忽略提供，然后通过加载相关文件来处理需求。  加载文件确实会执行 provide 调用，因此在加载文件时后续的 require 调用不会执行任何操作。
 
@@ -361,13 +389,15 @@ comint.el 文件包含以下顶级表达式：
 
     如果提供，子功能应该是一个符号列表，指示此版本功能提供的一组特定子功能。  您可以使用 featurep 测试子功能的存在。  子功能的想法是，当包（这是一个功能）足够复杂时，您可以使用它们，以便为包的各个部分或功能命名有用，这些部分或功能可能会或可能不会被加载，或者可能会或可能不会出现在给定的版本中。  例如，请参阅测试网络功能的可用性。
 
-    特征
-	  ⇒（酒吧比什）
+    #+begin_src emacs-lisp
+      features
+	   ⇒ (bar bish)
 
-    （提供'foo）
-	  ⇒ 富
-    特征
-	  ⇒ (foo bar bish)
+      (provide 'foo)
+	   ⇒ foo
+      features
+	   ⇒ (foo bar bish)
+    #+end_src
 
     当一个文件被加载以满足自动加载，并且由于对其内容的评估错误而停止时，加载期间发生的任何函数定义或提供调用都将被撤消。  请参阅自动加载。
 
@@ -475,12 +505,15 @@ unload-feature 函数是用 Lisp 编写的；  它的动作基于可变负载历
     该宏安排在加载文件库结束时评估正文，每次加载库时。  如果库已经加载，它会立即评估 body。
 
     您不需要在文件名库中提供目录或扩展名。  通常，您只需提供一个裸文件名，如下所示：
+    #+begin_src emacs-lisp
+      (with-eval-after-load "js" (define-key js-mode-map "\C-c\C-c" 'js-eval))
+    #+end_src
 
-    (with-eval-after-load "js" (define-key js-mode-map "\Cc\Cc" 'js-eval))
 
     要限制哪些文件可以触发评估，请在库中包含目录或扩展名或两者。  只有绝对真实名称（即，所有符号链接被排除的名称）与所有给定名称组件匹配的文件才会匹配。  在以下示例中，某个目录 ..../foo/bar 中的 my_inst.elc 或 my_inst.elc.gz 将触发评估，但不会触发 my_inst.el：
-
-    (with-eval-after-load "foo/bar/my_inst.elc" ...)
+    #+begin_src emacs-lisp
+      (with-eval-after-load "foo/bar/my_inst.elc" …)
+    #+end_src
 
     library 也可以是一个特征（即，一个符号），在这种情况下，body 会在调用（provide library）的任何文件的末尾进行评估。
 
