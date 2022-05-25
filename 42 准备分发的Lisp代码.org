@@ -59,28 +59,32 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。  包
 
 一个简单的包由一个 Emacs Lisp 源文件组成。  该文件必须符合 Emacs Lisp 库头文件约定（请参阅 Emacs 库的约定头文件）。  包的属性取自各种标头，如下例所示：
 
-;;;  superfrobnicator.el --- Frobnicate 和分叉法兰
-
-;;  版权所有 (C) 2011 Free Software Foundation, Inc.
+#+begin_src emacs-lisp
 
 
-;;  作者：JR Hacker <jrh@example.com>
-;;  版本：1.3
-;;  包装要求：（（法兰“1.0”））
-;;  关键词：多媒体、超媒体
-;;  网址：https://example.com/jrhacker/superfrobncate
+  ;;; superfrobnicator.el --- Frobnicate and bifurcate flanges
 
-…
+  ;; Copyright (C) 2011 Free Software Foundation, Inc.
 
-;;;  评论：
 
-;;  这个包提供了一个次要模式来实现和/或
-;;  分叉您想要的任何法兰。  要激活它，只需键入
-…
+  ;; Author: J. R. Hacker <jrh@example.com>
+  ;; Version: 1.3
+  ;; Package-Requires: ((flange "1.0"))
+  ;; Keywords: multimedia, hypermedia
+  ;; URL: https://example.com/jrhacker/superfrobnicate
 
-;;;###自动加载
-(define-minor-mode superfrobnicator-mode
-…
+  …
+
+  ;;; Commentary:
+
+  ;; This package provides a minor mode to frobnicate and/or
+  ;; bifurcate any flanges you desire.  To activate it, just type
+  …
+
+  ;;;###autoload
+  (define-minor-mode superfrobnicator-mode
+    …
+#+end_src
 
 包的名称与文件的基本名称相同，如第一行所写。  在这里，它是'superfrobnicator'。
 
@@ -124,11 +128,12 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。  包
 
 如果多文件包包含辅助数据文件（例如图像），则包的 Lisp 代码可以通过变量 load-file-name 引用这些文件（请参阅加载）。  这是一个例子：
 
-(defconst superfrobnicator-base (file-name-directory load-file-name))
+#+begin_src emacs-lisp
+  (defconst superfrobnicator-base (file-name-directory load-file-name))
 
-(defun superfrobnicator-fetch-image (文件)
-  （扩展文件名文件 superfrobnicator-base））
-
+  (defun superfrobnicator-fetch-image (file)
+    (expand-file-name file superfrobnicator-base))
+#+end_src
 ** TODO 42.4 创建和维护包档案
 
 通过包菜单，用户可以从包档案中下载包。  此类档案由变量 package-archives 指定，其默认值列出了托管在 GNU ELPA 和非 GNU ELPA 上的档案。  本节介绍如何设置和维护包存档。
@@ -153,7 +158,10 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。  包
 
 提高包安全性的一种方法是使用加密密钥对其进行签名。  如果您生成了一个私有/公共 gpg 密钥对，您可以使用 gpg 对包进行签名，如下所示：
 
-gpg -ba -o 文件.sig 文件
+#+begin_src emacs-lisp
+  gpg -ba -o file.sig file
+#+end_src
+
 
 对于单文件包，file 是包 Lisp 文件；  对于多文件包，它是包 tar 文件。  您也可以以相同的方式签署存档的内容文件。  使 .sig 文件在与包相同的位置可用。  您还应该使您的公钥可供人们下载；  例如，通过将其上传到密钥服务器，例如 https://pgp.mit.edu/。  当人们从您的档案中安装软件包时，他们可以使用您的公钥来验证签名。
 
