@@ -44,10 +44,12 @@
 
 因为每个符号都有单独的值和函数单元格，所以变量名称和函数名称不会冲突。  例如，符号 buffer-file-name 有一个值（在当前缓冲区中被访问的文件的名称）以及一个函数定义（一个返回文件名的原始函数）：
 
-缓冲区文件名
+#+begin_src emacs-lisp
+buffer-file-name
      ⇒ "/gnu/elisp/symbols.texi"
-（符号函数'缓冲区文件名）
-     ⇒ #<subr 缓冲区文件名>
+(symbol-function 'buffer-file-name)
+     ⇒ #<subr buffer-file-name>
+#+end_src
 
 ** TODO 9.2 定义符号
 
@@ -96,8 +98,11 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
     此函数返回作为符号名称的字符串。  例如：
 
-    （符号名称'foo）
-	  ⇒ “富”
+    #+begin_src emacs-lisp
+      (symbol-name 'foo)
+	   ⇒ "foo"
+    #+end_src
+
 
     警告：通过替换字符来更改字符串确实会更改符号的名称，但无法更新 obarray，所以不要这样做！
 
@@ -107,10 +112,12 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
     这个函数返回一个新分配的、名称为 name（必须是字符串）的非内部符号。  它的值和函数定义为 void，其属性列表为 nil。  在下面的示例中，sym 的值不是 eq 到 foo，因为它是一个不同的 uninterned 符号，其名称也是 'foo'。
 
-    (setq sym (make-symbol "foo"))
-	  ⇒ 富
-    (eq sym 'foo)
-	  ⇒ 无
+    #+begin_src emacs-lisp
+      (setq sym (make-symbol "foo"))
+	   ⇒ foo
+      (eq sym 'foo)
+	   ⇒ nil
+    #+end_src
 
 功能：gensym &可选前缀¶
 
@@ -122,15 +129,17 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
     此函数返回名称为 name 的内部符号。  如果 obarray obarray 中没有这样的符号，intern 创建一个新符号，将其添加到 obarray，然后返回。  如果省略 obarray，则使用全局变量 obarray 的值。
 
-    (setq sym (实习生 "foo"))
-	  ⇒ 富
-    (eq sym 'foo)
-	  ⇒ 吨
+    #+begin_src emacs-lisp
+      (setq sym (intern "foo"))
+	   ⇒ foo
+      (eq sym 'foo)
+	   ⇒ t
 
-    (setq sym1 (intern "foo" other-obarray))
-	  ⇒ 富
-    (eq sym1 'foo)
-	  ⇒ 无
+      (setq sym1 (intern "foo" other-obarray))
+	   ⇒ foo
+      (eq sym1 'foo)
+	   ⇒ nil
+    #+end_src
 
     Common Lisp 注意：在 Common Lisp 中，您可以在 obarray 中实习现有的符号。  在 Emacs Lisp 中，您不能这样做，因为 intern 的参数必须是字符串，而不是符号。
 
@@ -140,22 +149,27 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
     参数名称也可以是符号；  在这种情况下，如果 name 被实习在指定的 obarray 中，则该函数返回 name，否则返回 nil。
 
-    (intern-soft "frazzle") ;  不存在这样的符号。
-	  ⇒ 无
-    (make-symbol "frazzle") ;  创建一个无人值守的。
-	  ⇒ 疲倦
+    #+begin_src emacs-lisp
 
-    (intern-soft "frazzle") ;  那个找不到。
-	  ⇒ 无
 
-    （setq sym（实习生“frazzle”））；  创建一个实习生。
-	  ⇒ 疲倦
+      (intern-soft "frazzle")        ; No such symbol exists.
+	   ⇒ nil
+      (make-symbol "frazzle")        ; Create an uninterned one.
+	   ⇒ frazzle
 
-    (intern-soft "frazzle") ;  可以找到那个！
-	  ⇒ 疲倦
+      (intern-soft "frazzle")        ; That one cannot be found.
+	   ⇒ nil
 
-    (eq sym 'frazzle) ;  这是同一个。
-	  ⇒ 吨
+      (setq sym (intern "frazzle"))  ; Create an interned one.
+	   ⇒ frazzle
+
+      (intern-soft "frazzle")        ; That one can be found!
+	   ⇒ frazzle
+
+      (eq sym 'frazzle)              ; And it is the same one.
+	   ⇒ t
+    #+end_src
+
 
 变量：obarray ¶
 
@@ -165,15 +179,17 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
     此函数对 obarray obarray 中的每个符号调用一次函数。  然后它返回零。  如果省略 obarray，则默认为 obarray 的值，即普通符号的标准 obarray。
 
-    (setq 计数 0)
-	  ⇒ 0
-    (defun count-syms (s)
-      (setq 计数 (1+ 计数)))
-	  ⇒ 计数符号
-    （mapatoms'count-syms）
-	  ⇒ 无
-    数数
-	  ⇒ 1871
+    #+begin_src emacs-lisp
+      (setq count 0)
+	   ⇒ 0
+      (defun count-syms (s)
+	(setq count (1+ count)))
+	   ⇒ count-syms
+      (mapatoms 'count-syms)
+	   ⇒ nil
+      count
+	   ⇒ 1871
+    #+end_src
 
     有关使用 mapatoms 的另一个示例，请参阅访问文档字符串中的文档。
 
@@ -206,15 +222,17 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 功能：放符号属性值¶
 
     此函数将值放在属性名称属性下的符号属性列表中，替换任何先前的属性值。  put 函数返回值。
+    #+begin_src emacs-lisp
+      (put 'fly 'verb 'transitive)
+	   ⇒'transitive
+      (put 'fly 'noun '(a buzzing little bug))
+	   ⇒ (a buzzing little bug)
+      (get 'fly 'verb)
+	   ⇒ transitive
+      (symbol-plist 'fly)
+	   ⇒ (verb transitive noun (a buzzing little bug))
+    #+end_src
 
-    （把'fly'动词'及物）
-	  ⇒'传递的
-    （把'fly'名词'（一个嗡嗡的小虫子））
-	  ⇒ （一个嗡嗡作响的小虫子）
-    （得到“飞”动词）
-	  ⇒ 及物
-    （符号plist'飞）
-	  ⇒ （动词及物名词（一个嗡嗡的小虫子））
 
 功能：symbol-plist 符号¶
 
@@ -223,19 +241,23 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 功能：setplist 符号 plist ¶
 
     此函数将符号的属性列表设置为 plist。  通常，plist 应该是一个格式良好的属性列表，但这不是强制的。  返回值为 plist。
+    #+begin_src emacs-lisp
+      (setplist 'foo '(a 1 b (2 3) c nil))
+	   ⇒ (a 1 b (2 3) c nil)
+      (symbol-plist 'foo)
+	   ⇒ (a 1 b (2 3) c nil)
+    #+end_src
 
-    (setplist 'foo'(a 1 b (2 3) c nil))
-	  ⇒ (a 1 b (2 3) c 无)
-    （符号列表'foo）
-	  ⇒ (a 1 b (2 3) c 无)
 
     对于不用于普通目的的特殊 obarray 中的符号，以非标准方式使用属性列表单元格可能是有意义的；  事实上，缩写机制就是这样做的（参见缩写和缩写扩展）。
 
     您可以根据 setplist 和 plist-put 定义 put，如下所示：
+    #+begin_src emacs-lisp
+      (defun put (symbol prop value)
+	(setplist symbol
+		  (plist-put (symbol-plist symbol) prop value)))
+    #+end_src
 
-    (defun put (符号属性值)
-      （设置列表符号
-		 (plist-put (symbol-plist symbol) 道具值)))
 
 功能：函数获取符号属性&可选自动加载¶
 
@@ -255,65 +277,102 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 字符表额外插槽
 
     该值（如果非零）指定命名字符表类型中的额外槽数。  请参阅字符表。
-定制面
-面容规格
-面子
-主题脸
+#+begin_src emacs-lisp
+customized-face
+face-defface-spec
+saved-face
+theme-face
+#+end_src
+
 
     这些属性用于记录人脸的标准、已保存、自定义和主题人脸规格。  不要直接设置它们；  它们由 defface 和相关函数管理。  请参见定义面。
-定制价值
-保存价值
-标准值
-主题价值
+#+begin_src emacs-lisp
+customized-value
+saved-value
+standard-value
+theme-value
+#+end_src
+
 
     这些属性用于记录可自定义变量的标准值、已保存值、已自定义但未保存的值和主题值。  不要直接设置它们；  它们由 defcustom 和相关函数管理。  请参阅定义自定义变量。
-禁用
+#+begin_src emacs-lisp
+disabled
+#+end_src
 
     如果该值为非零，则命名函数作为命令被禁用。  请参阅禁用命令。
-人脸文件
+#+begin_src emacs-lisp
+face-documentation
+#+end_src
 
     该值存储命名人脸的文档字符串。  这是由 defface 自动设置的。  请参见定义面。
-历史长度
+#+begin_src emacs-lisp
+history-length
+#+end_src
 
     该值，如果非零，指定命名历史列表变量的最大迷你缓冲区历史长度。  请参阅小缓冲区历史记录。
-交互形式
+#+begin_src emacs-lisp
+interactive-form
+#+end_src
 
     该值是命名函数的交互形式。  通常，您不应该直接设置它；  请改用交互式特殊形式。  请参阅交互式呼叫。
-菜单启用
+#+begin_src emacs-lisp
+menu-enable
+#+end_src
 
     该值是一个表达式，用于确定是否应在菜单中启用命名菜单项。  请参阅简单菜单项。
-模式级
+#+begin_src emacs-lisp
+mode-class
+#+end_src
 
     如果该值是特殊的，则命名的主要模式是特殊的。  请参阅主要模式约定。
-永久本地
+#+begin_src emacs-lisp
+permanent-local
+#+end_src
 
     如果值为非零，则命名变量是缓冲区局部变量，其值不应在更改主要模式时重置。  请参阅创建和删除缓冲区本地绑定。
-永久本地挂钩
+#+begin_src emacs-lisp
+permanent-local-hook
+#+end_src
 
     如果该值为非 nil，则在更改主要模式时不应从挂钩变量的本地值中删除命名函数。  请参阅设置挂钩。
-纯的 ¶
+#+begin_src emacs-lisp
+pure
+#+end_src
 
     如果该值不是 nil，则命名函数被认为是纯函数（请参阅什么是函数？）。  可以在编译时评估带有常量参数的调用。  这可能会将运行时错误转移到编译时。  不要与纯存储混淆（请参阅纯存储）。
-风险局部变量
+#+begin_src emacs-lisp
+risky-local-variable
+#+end_src
 
     如果该值为非 nil，则命名变量被视为文件局部变量有风险。  请参阅文件局部变量。
-安全功能
+#+begin_src emacs-lisp
+safe-function
+#+end_src
 
     如果该值为非零，则命名函数通常被认为是安全的评估。  请参阅确定函数是否可以安全调用。
-安全本地评估功能
+#+begin_src emacs-lisp
+safe-local-eval-function
+#+end_src
 
     如果该值为非零，则命名函数可以安全地在文件本地评估表单中调用。  请参阅文件局部变量。
-安全局部变量
+#+begin_src emacs-lisp
+safe-local-variable
+#+end_src
 
     该值指定用于确定命名变量的安全文件本地值的函数。  请参阅文件局部变量。
-无副作用¶
+#+begin_src emacs-lisp
+side-effect-free
+#+end_src
 
     非 nil 值表示命名函数没有副作用（请参阅什么是函数？），因此字节编译器可能会忽略其值未使用的调用。  如果属性的值没有错误，字节编译器甚至可以删除这些未使用的调用。  除了字节编译器优化之外，此属性还用于确定函数安全性（请参阅确定函数是否可以安全调用）。
-撤消禁止区域
+#+begin_src emacs-lisp
+undo-inhibit-region
+#+end_src
 
     如果非零，则命名函数阻止撤消操作被限制在活动区域​​，如果撤消是在函数之后立即调用的。  请参阅撤消。
-可变文档
-
+#+begin_src emacs-lisp
+variable-documentation
+#+end_src
     如果非零，则指定命名变量的文档字符串。  这是由 defvar 和相关函数自动设置的。  请参见定义面。
 
 ** TODO 9.5 速记
@@ -332,38 +391,43 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
 这是一个假设的字符串操作库 some-nice-string-utils.el 中的速记用法示例。
 
-(defun some-nice-string-utils-split (separator s &optional omit-nulls)
-  “‘split-string’的匹配数据保存变体。”
-  (save-match-data (split-string s separator omit-nulls)))
+#+begin_src emacs-lisp
+  (defun some-nice-string-utils-split (separator s &optional omit-nulls)
+    "A match-data saving variant of `split-string'."
+    (save-match-data (split-string s separator omit-nulls)))
 
-(defun some-nice-string-utils-lines (s)
-  “将换行符处的字符串 S 拆分为字符串列表。”
-  (some-nice-string-utils-split "\\(\r\n\\|[\n\r]\\)" s))
+  (defun some-nice-string-utils-lines (s)
+    "Split string S at newline characters into a list of strings."
+    (some-nice-string-utils-split "\\(\r\n\\|[\n\r]\\)" s))
+#+end_src
 
 可以看出，由于要输入的符号名称很长，因此阅读或开发此代码非常乏味。  我们可以使用速记来缓解这种情况。
 
-(defun snu-split (separator s &optional omit-nulls)
-  “'split-string'上的匹配数据保存变体。”
-  (save-match-data (split-string s separator omit-nulls)))
+#+begin_src emacs-lisp
+  (defun snu-split (separator s &optional omit-nulls)
+    "A match-data saving variation on `split-string'."
+    (save-match-data (split-string s separator omit-nulls)))
 
-(defun snu-lines (s)
-  “将字符串 S 拆分为换行符的字符串列表。”
-  (snu-split "\\(\r\n\\|[\n\r]\\)" s))
+  (defun snu-lines (s)
+    "Split string S into a list of strings on newline characters."
+    (snu-split "\\(\r\n\\|[\n\r]\\)" s))
 
-;;  局部变量：
-;;  阅读符号简写：（（“snu-”。“some-nice-string-utils-”））
-;;  结尾：
+  ;; Local Variables:
+  ;; read-symbol-shorthands: (("snu-" . "some-nice-string-utils-"))
+  ;; End:
+#+end_src
 
 尽管这两个摘录看起来不同，但在 Lisp 阅读器处理它们之后它们是完全相同的。  两者都将导致相同的符号被实习（请参阅创建和实习符号）。  因此，加载或字节编译这两个文件中的任何一个都具有相同的结果。  在第二个版本中使用的简写 snu-split 和 snu-lines 没有被嵌入到 obarray 中。  这很容易通过将点移动到使用速记的位置并等待 ElDoc（参见 GNU Emacs 手册中的文件中的局部变量）提示回显区域中点下符号的真实全名。
 
 由于 read-symbol-shorthands 是文件局部变量，因此依赖于 some-nice-string-utils-lines.el 的多个库可能会在不同的简写下引用相同的符号，或者根本不使用简写。  在下一个示例中，my-tricks.el 库使用 sns- 前缀而不是 snu- 来引用符号 some-nice-string-utils-lines。
+#+begin_src emacs-lisp
+  (defun t-reverse-lines (s) (string-join (reverse (sns-lines s)) "\n")
 
-(defun t-reverse-lines (s) (string-join (reverse (sns-lines s)) "\n")
-
-;;  局部变量：
-;;  阅读符号速记：（（“t-”。“my-tricks-”）
-;;  ("sns-" . "some-nice-string-utils-"))
-;;  结尾：
+  ;; Local Variables:
+  ;; read-symbol-shorthands: (("t-" . "my-tricks-")
+  ;;                          ("sns-" . "some-nice-string-utils-"))
+	 ;; End:
+#+end_src
 
 *** TODO 9.5.1 例外
 
