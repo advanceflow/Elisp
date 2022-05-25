@@ -858,33 +858,43 @@ Emacs 中的一个线程代表 Emacs Lisp 执行的一个单独线程。  它运
 
 在对象之前使用#n= 标记它以供以后参考；  随后，您可以使用#n# 在另一个地方引用相同的对象。  这里，n 是某个整数。  例如，这里是如何制作一个列表，其中第一个元素作为第三个元素重复出现：
 
-(#1=(a) b #1#)
+#+begin_src emacs-lisp
+  (#1=(a) b #1#)
+#+end_src
+
 
 这不同于像这样的普通语法
-
-（（一）乙（一））
+#+begin_src emacs-lisp
+  ((a) b (a))
+#+end_src
 
 这将导致列表的第一个和第三个元素看起来相似但不是同一个 Lisp 对象。  这显示了差异：
 
-（prog1 无
- (setq x '(#1=(a) b #1#)))
-(eq (nth 0 x) (nth 2 x))
-    ⇒ 吨
-(setq x '((a) b (a)))
-(eq (nth 0 x) (nth 2 x))
-    ⇒ 无
+#+begin_src emacs-lisp
+  (prog1 nil
+    (setq x '(#1=(a) b #1#)))
+  (eq (nth 0 x) (nth 2 x))
+       ⇒ t
+  (setq x '((a) b (a)))
+  (eq (nth 0 x) (nth 2 x))
+       ⇒ nil
+#+end_src
 
 您还可以使用相同的语法来创建一个循环结构，它作为一个元素出现在其内部。  这是一个例子：
 
-#1=（一个#1#）
+#+begin_src emacs-lisp
+  #1=(a #1#)
+#+end_src
+
 
 这将创建一个列表，其第二个元素是列表本身。  您可以通过以下方式看到它确实有效：
 
-（prog1 无
- (setq x '#1=(a #1#)))
-(eq x (cadr x))
-    ⇒ 吨
-
+#+begin_src emacs-lisp
+  (prog1 nil
+    (setq x '#1=(a #1#)))
+  (eq x (cadr x))
+       ⇒ t
+#+end_src
 如果将变量 print-circle 绑定到非零值，Lisp 打印机可以生成此语法来记录 Lisp 对象中的循环和共享结构。  请参阅影响输出的变量。
 
 
@@ -894,8 +904,10 @@ Emacs Lisp 解释器本身不会在调用函数时对传递给函数的实际参
 
 所有内置函数都会在适当的时候检查其实际参数的类型，并在参数类型错误时发出错误类型参数错误信号。  例如，如果您将参数传递给 + 它无法处理，则会发生以下情况：
 
-(+ 2'一)
-    错误→错误的类型参数：number-or-marker-p, a
+#+begin_src emacs-lisp
+  (+ 2 'a)
+       error→ Wrong type argument: number-or-marker-p, a
+#+end_src
 
 如果您希望您的程序以不同的方式处理不同的类型，则必须进行显式类型检查。  检查对象类型的最常用方法是调用类型谓词函数。  Emacs 对每种类型都有一个类型谓词，以及一些类型组合的谓词。
 
@@ -903,184 +915,241 @@ Emacs Lisp 解释器本身不会在调用函数时对传递给函数的实际参
 
 这是一个使用谓词 listp 来检查列表和 symbolp 来检查符号的示例。
 
-(defun 附加组件 (x)
- (cond ((符号 x)
-	  ;;  如果 X 是一个符号，把它放在 LIST 上。
-	  (setq list (cons x list)))
-	 (((列表 x)
-	  ;;  如果 X 是一个列表，则将其元素添加到 LIST。
-	  （setq 列表（附加 x 列表）））
-	 （吨
-	  ;;  我们只处理符号和列表。
-	  （错误“附加组件中的无效参数 %s”x））））
+#+begin_src emacs-lisp
+  (defun add-on (x)
+    (cond ((symbolp x)
+	   ;; If X is a symbol, put it on LIST.
+	   (setq list (cons x list)))
+	  ((listp x)
+	   ;; If X is a list, add its elements to LIST.
+	   (setq list (append x list)))
+	  (t
+	   ;; We handle only symbols and lists.
+	   (error "Invalid argument %s in add-on" x))))
+#+end_src
 
 这是一个按字母顺序排列的预定义类型谓词表，其中包含对更多信息的引用。
 
-原子
-
-   见原子。
-数组p
-
-   请参见数组。
-大号
-
-   见浮动。
-布尔向量-p
-
-   参见 bool-vector-p。
-布尔值
-
-   请参阅布尔值。
-缓冲
-
-   见缓冲。
-字节码函数-p
-
-   参见字节码函数-p。
-案例表-p
-
-   见案例表-p。
-字符或字符串-p
-
-   请参阅 char-or-string-p。
-char-table-p
-
-   参见 char-table-p。
-命令
-
-   请参阅命令。
-条件变量-p
-
-   请参阅条件变量-p。
-康普
-
-   见 consp。
-自定义变量-p
-
-   请参阅自定义变量-p。
-修复数
-
-   见浮动。
-浮动
-
-   见浮动。
-字体
-
-   请参阅低级字体表示。
-框架配置-p
-
-   请参阅框架配置-p。
-帧实时-p
-
-   请参阅 frame-live-p。
-框架
-
-   见框架。
-功能
-
-   见函数p。
-哈希表-p
-
-   请参阅哈希表-p。
-整数或标记-p
-
-   请参阅整数或标记-p。
-整数p
-
-   见整数p。
-键盘映射
-
-   请参阅键盘映射。
-关键字p
-
-   请参阅永不改变的变量。
-列表
-
-   见列表。
-标记
-
-   见标记。
-互斥
-
-   见互斥。
-列表
-
-   请参阅 nlistp。
-数字或标记-p
-
-   请参阅数字或标记-p。
-编号
-
-   请参见编号。
-叠加
-
-   见叠加。
-进程
-
-   见工艺。
-记录
-
-   见记录。
-序列
-
-   请参阅序列。
-字符串或空值-p
-
-   请参阅字符串或 null-p。
-字符串
-
-   请参见字符串。
-子程序
-
-   见 subrp。
-符号
-
-   见符号。
-语法表-p
-
-   请参阅语法表-p。
-线程
-
-   见线程。
-向量p
-
-   见向量p。
-全麻
-
-   请参阅 Wholenum。
-窗口配置-p
-
-   请参阅窗口配置-p。
-窗口直播-p
-
-   请参阅 window-live-p。
-窗口
-
-   见窗口。
+#+begin_src emacs-lisp
+  atom
+#+end_src
+   请参阅atom。
+#+begin_src emacs-lisp
+  arrayp
+#+end_src
+   请参阅arrayp。
+#+begin_src emacs-lisp
+  bignump
+#+end_src
+   请参阅floatp。
+#+begin_src emacs-lisp
+  bool-vector-p
+#+end_src
+   请参阅bool-vector-p。
+#+begin_src emacs-lisp
+  booleanp
+#+end_src
+   请参阅booleanp。
+#+begin_src emacs-lisp
+  bufferp
+#+end_src
+   请参阅bufferp。
+#+begin_src emacs-lisp
+  byte-code-function-p
+#+end_src
+   请参阅byte-code-function-p。
+#+begin_src emacs-lisp
+  case-table-p
+#+end_src
+   请参阅case-table-p。
+#+begin_src emacs-lisp
+  char-or-string-p
+#+end_src
+   请参阅char-or-string-p。
+#+begin_src emacs-lisp
+  char-table-p
+#+end_src
+   请参阅char-table-p。
+#+begin_src emacs-lisp
+  commandp
+#+end_src
+   请参阅commandp。
+#+begin_src emacs-lisp
+  condition-variable-p
+#+end_src
+   请参阅condition-variable-p。
+#+begin_src emacs-lisp
+  consp
+#+end_src
+   请参阅consp。
+#+begin_src emacs-lisp
+  custom-variable-p
+#+end_src
+   请参阅custom-variable-p。
+#+begin_src emacs-lisp
+  fixnump
+#+end_src
+   请参阅floatp。
+#+begin_src emacs-lisp
+  floatp
+#+end_src
+   请参阅floatp。
+#+begin_src emacs-lisp
+  fontp
+#+end_src
+   请参阅Low-Level Font Representation。
+#+begin_src emacs-lisp
+  frame-configuration-p
+#+end_src
+   请参阅frame-configuration-p。
+#+begin_src emacs-lisp
+  frame-live-p
+#+end_src
+   请参阅frame-live-p。
+#+begin_src emacs-lisp
+  framep
+#+end_src
+   请参阅framep。
+#+begin_src emacs-lisp
+  functionp
+#+end_src
+   请参阅functionp。
+#+begin_src emacs-lisp
+  hash-table-p
+#+end_src
+   请参阅hash-table-p。
+#+begin_src emacs-lisp
+  integer-or-marker-p
+#+end_src
+   请参阅integer-or-marker-p。
+#+begin_src emacs-lisp
+  integerp
+#+end_src
+   请参阅integerp。
+#+begin_src emacs-lisp
+  keymapp
+#+end_src
+   请参阅keymapp。
+#+begin_src emacs-lisp
+  keywordp
+#+end_src
+   请参阅Variables that Never Change。
+#+begin_src emacs-lisp
+  listp
+#+end_src
+   请参阅listp。
+#+begin_src emacs-lisp
+  markerp
+#+end_src
+   请参阅markerp。
+#+begin_src emacs-lisp
+  mutexp
+#+end_src
+   请参阅mutexp。
+#+begin_src emacs-lisp
+  nlistp
+#+end_src
+   请参阅nlistp。
+#+begin_src emacs-lisp
+  number-or-marker-p
+#+end_src
+   请参阅number-or-marker-p。
+#+begin_src emacs-lisp
+  numberp
+#+end_src
+   请参阅numberp。
+#+begin_src emacs-lisp
+  overlayp
+#+end_src
+   请参阅overlayp。
+#+begin_src emacs-lisp
+  processp
+#+end_src
+   请参阅processp。
+#+begin_src emacs-lisp
+  recordp
+#+end_src
+   请参阅recordp。
+#+begin_src emacs-lisp
+  sequencep
+#+end_src
+   请参阅sequencep。
+#+begin_src emacs-lisp
+  string-or-null-p
+#+end_src
+   请参阅string-or-null-p。
+#+begin_src emacs-lisp
+  stringp
+#+end_src
+   请参阅stringp。
+#+begin_src emacs-lisp
+  subrp
+#+end_src
+   请参阅subrp。
+#+begin_src emacs-lisp
+  symbolp
+#+end_src
+   请参阅symbolp。
+#+begin_src emacs-lisp
+  syntax-table-p
+#+end_src
+   请参阅syntax-table-p。
+#+begin_src emacs-lisp
+  threadp
+#+end_src
+   请参阅threadp。
+#+begin_src emacs-lisp
+  vectorp
+#+end_src
+   请参阅vectorp。
+#+begin_src emacs-lisp
+  wholenump
+#+end_src
+   请参阅wholenump。
+#+begin_src emacs-lisp
+  window-configuration-p
+#+end_src
+   请参阅window-configuration-p。
+#+begin_src emacs-lisp
+  window-live-p
+#+end_src
+   请参阅window-live-p。
+#+begin_src emacs-lisp
+  windowp
+#+end_src
+   请参阅windowp。
 
 检查对象类型的最通用方法是调用函数 type-of。  回想一下，每个对象都属于一种且仅一种原始类型；  type-of 告诉你是哪一个（参见 Lisp 数据类型）。  但是 type-of 对非原始类型一无所知。  在大多数情况下，使用类型谓词比使用 type-of 更方便。
 
-功能：对象类型¶
+#+begin_src emacs-lisp
+  Function: type-of object
+#+end_src
+
 
    此函数返回一个符号，命名对象的原始类型。  该值是以下符号之一： bool-vector、buffer、char-table、compiled-function、condition-variable、cons、finalizer、float、font-entity、font-object、font-spec、frame、hash-table、integer 、标记、互斥体、覆盖、进程、字符串、subr、符号、线程、向量、窗口或窗口配置。  但是，如果 object 是一条记录，则返回其第一个 slot 指定的类型；  记录。
 
-   （类型 1）
-	  ⇒ 整数
+   #+begin_src emacs-lisp
+     (type-of 1)
+	  ⇒ integer
 
-   （类型为 'nil）
-	  ⇒ 符号
-   （类型 '（）） ;  () 为零。
-	  ⇒ 符号
-   （类型'（x））
-	  ⇒ 缺点
-   （类型（记录'foo））
-	  ⇒ 富
+     (type-of 'nil)
+	  ⇒ symbol
+     (type-of '())    ; () is nil.
+	  ⇒ symbol
+     (type-of '(x))
+	  ⇒ cons
+     (type-of (record 'foo))
+	  ⇒ foo
+   #+end_src
 
 ** TODO 2.8 等式谓词
 
 在这里，我们描述了测试两个对象之间是否相等的函数。  其他函数测试特定类型对象（例如字符串）之间的内容是否相等。  对于这些谓词，请参阅描述数据类型的相应章节。
 
-功能：eq object1 object2 ¶
+#+begin_src emacs-lisp
+  Function: eq object1 object2
+#+end_src
+
 
    如果 object1 和 object2 是同一个对象，此函数返回 t，否则返回 nil。
 
@@ -1088,118 +1157,143 @@ char-table-p
 
    如果 object1 和 object2 是具有不同类型或值的数字，则它们不能是同一个对象，并且 eq 返回 nil。  如果它们是具有相同值的 fixnums，那么它们是相同的对象并且 eq 返回 t。  如果它们是分开计算的，但碰巧具有相同的值和相同的非固定数字类型，那么它们可能是也可能不是同一个对象，并且 eq 返回 t 或 nil 取决于 Lisp 解释器是创建一个对象还是两个对象。
 
-   （当量'foo'foo）
-	  ⇒ 吨
+   #+begin_src emacs-lisp
 
 
-   (当量?A?A)
-	  ⇒ 吨
+     (eq 'foo 'foo)
+	  ⇒ t
 
 
-   （当量 3.0 3.0）
-	  ⇒ t 或 nil
-   ;;  相等的浮点数可能是也可能不是同一个对象。
+     (eq ?A ?A)
+	  ⇒ t
 
 
-   (eq (make-string 3 ?A) (make-string 3 ?A))
-	  ⇒ 无
+     (eq 3.0 3.0)
+	  ⇒ t or nil
+     ;; Equal floats may or may not be the same object.
 
 
-   (eq "asdf" "asdf")
-	  ⇒ t 或 nil
-   ;;  相等的字符串常量或可能不是同一个对象。
+     (eq (make-string 3 ?A) (make-string 3 ?A))
+	  ⇒ nil
 
 
-   (eq '(1 (2 (3))) '(1 (2 (3))))
-	  ⇒ 无
+     (eq "asdf" "asdf")
+	  ⇒ t or nil
+     ;; Equal string constants or may not be the same object.
 
 
-   (setq foo '(1 (2 (3))))
+     (eq '(1 (2 (3))) '(1 (2 (3))))
+	  ⇒ nil
+
+
+     (setq foo '(1 (2 (3))))
 	  ⇒ (1 (2 (3)))
-   (eq foo foo)
-	  ⇒ 吨
-   (eq foo '(1 (2 (3))))
-	  ⇒ 无
+     (eq foo foo)
+	  ⇒ t
+     (eq foo '(1 (2 (3))))
+	  ⇒ nil
 
 
-   (当量 [(1 2) 3] [(1 2) 3])
-	  ⇒ 无
+     (eq [(1 2) 3] [(1 2) 3])
+	  ⇒ nil
 
 
-   (eq (point-marker) (point-marker))
-	  ⇒ 无
+     (eq (point-marker) (point-marker))
+	  ⇒ nil
+   #+end_src
 
    make-symbol 函数返回一个 uninterned 符号，与在 Lisp 表达式中写入名称时使用的符号不同。  具有相同名称的不同符号不是 eq。  请参阅创建和嵌入符号。
 
-   (eq (make-symbol "foo") 'foo)
-	  ⇒ 无
+   #+begin_src emacs-lisp
+     (eq (make-symbol "foo") 'foo)
+	  ⇒ nil
+   #+end_src
+
 
    Emacs Lisp 字节编译器可能会将相同的文字对象（例如文字字符串）折叠成对同一对象的引用，其效果是字节编译的代码会将此类对象比较为 eq，而同一代码的解释版本则不会。  因此，您的代码不应该依赖具有相同文字内容的对象，要么是 eq，要么不是 eq，它应该使用比较对象内容的函数，例如 equal，如下所述。  同样，您的代码不应修改文字对象（例如，将文本属性放在文字字符串上），因为这样做可能会影响相同内容的其他文字对象，如果字节编译器折叠它们。
 
-功能：等于 object1 object2 ¶
+#+begin_src emacs-lisp
+  Function: equal object1 object2
+#+end_src
+
 
    如果 object1 和 object2 具有相等的分量，则此函数返回 t，否则返回 nil。  eq 测试它的参数是否是同一个对象，而 equal 则在不同的参数内部查找它们的元素或内容是否相同。  因此，如果两个对象是 eq，它们是相等的，但反过来并不总是正确的。
 
-   （等于'foo'foo）
-	  ⇒ 吨
+   #+begin_src emacs-lisp
 
 
-   （等于 456 456）
-	  ⇒ 吨
+     (equal 'foo 'foo)
+	  ⇒ t
 
 
-   （等于“asdf”“asdf”）
-	  ⇒ 吨
-
-   (eq "asdf" "asdf")
-	  ⇒ 无
+     (equal 456 456)
+	  ⇒ t
 
 
-   （等于'（1（2（3）））'（1（2（3））））
-	  ⇒ 吨
+     (equal "asdf" "asdf")
+	  ⇒ t
 
-   (eq '(1 (2 (3))) '(1 (2 (3))))
-	  ⇒ 无
-
-
-   （等于 [(1 2) 3] [(1 2) 3])
-	  ⇒ 吨
-
-   (当量 [(1 2) 3] [(1 2) 3])
-	  ⇒ 无
+     (eq "asdf" "asdf")
+	  ⇒ nil
 
 
-   (等于 (point-marker) (point-marker))
-	  ⇒ 吨
+     (equal '(1 (2 (3))) '(1 (2 (3))))
+	  ⇒ t
+
+     (eq '(1 (2 (3))) '(1 (2 (3))))
+	  ⇒ nil
 
 
-   (eq (point-marker) (point-marker))
-	  ⇒ 无
+     (equal [(1 2) 3] [(1 2) 3])
+	  ⇒ t
+
+     (eq [(1 2) 3] [(1 2) 3])
+	  ⇒ nil
+
+
+     (equal (point-marker) (point-marker))
+	  ⇒ t
+
+
+     (eq (point-marker) (point-marker))
+	  ⇒ nil
+   #+end_src
+
 
    字符串的比较区分大小写，但不考虑文本属性——它只比较字符串中的字符。  请参阅文本属性。  使用 equal-include-properties 也可以比较文本属性。  出于技术原因，当且仅当单字节字符串和多字节字符串包含相同的字符代码序列并且所有这些代码都在 0 到 127 (ASCII) 范围内时，它们才相等。
 
-   （等于“asdf”“ASDF”）
-	  ⇒ 无
+   #+begin_src emacs-lisp
+     (equal "asdf" "ASDF")
+	  ⇒ nil
+   #+end_src
+
 
    equal 函数递归地比较对象的内容，如果它们是整数、字符串、标记、向量、布尔向量、字节码函数对象、字符表、记录或字体对象。  只有当它们是 eq 时，其他对象才被认为是相等的。  例如，两个不同的缓冲区永远不会被认为是相等的，即使它们的文本内容相同。
 
 对于相等，相等是递归定义的；  例如，给定两个 cons 单元格 x 和 y，(equal xy) 当且仅当以下两个表达式都返回 t 时返回 t：
 
-（等于（汽车 x）（汽车 y））
-(等于 (cdr x) (cdr y))
+#+begin_src emacs-lisp
+  (equal (car x) (car y))
+  (equal (cdr x) (cdr y))
+#+end_src
 
 因此，比较循环列表可能会导致导致错误的深度递归，这可能会导致违反直觉的行为，例如 (equal ab) 返回 t 而 (equal ba) 表示错误。
 
-功能：包含等属性 object1 object2 ¶
+#+begin_src emacs-lisp
+  Function: equal-including-properties object1 object2
+#+end_src
+
 
    此函数在所有情况下都表现得像相等，但还要求两个字符串相等，它们具有相同的文本属性。
 
-   (等于 "asdf" (properize "asdf" 'asdf t))
-	  ⇒ 吨
+#+begin_src emacs-lisp
+  (equal "asdf" (propertize "asdf" 'asdf t))
+       ⇒ t
 
-   （等于包括属性“asdf”
-				 （属性“asdf”'asdf t））
-	  ⇒ 无
+  (equal-including-properties "asdf"
+			      (propertize "asdf" 'asdf t))
+       ⇒ nil
+#+end_src
 
 ** TODO 2.9 可变性
 
@@ -1211,17 +1305,20 @@ char-table-p
 
 如果可变对象是被评估的表达式的一部分，则它不再是可变的。  例如：
 
-(让* ((x (列表 0.5))
-	(y (eval (list 'quote x))))
- (setcar x 1.5);;  程序不应该这样做。
- y)
+ #+begin_src emacs-lisp
+   (let* ((x (list 0.5))
+	  (y (eval (list 'quote x))))
+     (setcar x 1.5) ;; The program should not do this.
+     y)
+ #+end_src
+
 
 尽管列表 (0.5) 在创建时是可变的，但它不应该通过 setcar 进行更改，因为它是给 eval 的。  相反的情况不会发生：不应更改的对象之后永远不会变得可变。
 
 如果程序试图更改不应该更改的对象，则结果行为是不确定的：Lisp 解释器可能会发出错误信号，或者它可能会崩溃或以其他方式出现不可预测的行为。 2
 
 当类似的常量作为程序的一部分出现时，Lisp 解释器可能会通过重用现有常量或其组件来节省时间或空间。  例如， (eq "abc" "abc") 如果解释器只创建字符串文字 "abc" 的一个实例，则返回 t，如果它创建两个实例，则返回 nil。  应该编写 Lisp 程序，以便无论是否使用此优化，它们都能正常工作。
-脚注
-(2)
+
+脚注 (2)
 
 这是为 Common Lisp 和 C 等语言为常量指定的行为，这与 JavaScript 和 Python 等语言不同，在这些语言中，如果程序试图更改不可变对象，则需要解释器发出错误信号。  理想情况下，Emacs Lisp 解释器将朝后一个方向发展。
