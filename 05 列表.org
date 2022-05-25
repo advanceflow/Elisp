@@ -736,7 +736,10 @@ x2--> |   |   |--
 
 用于修改 CDR 的最低级原语是 setcdr：
 
-功能：setcdr cons 对象¶
+#+begin_src emacs-lisp
+  Function: setcdr cons object
+#+end_src
+
 
     此函数将对象存储为 cons 的新 CDR，替换其先前的 CDR。  换句话说，它将 cons 的 CDR slot 更改为引用 object。  它返回值对象。
 
@@ -818,22 +821,21 @@ x1
 
 有关修改 cons 单元格的另一个函数，请参见使用列表作为集合中的 delq。
 
-功能：nconc &rest 列表 ¶
+#+begin_src emacs-lisp
+  Function: nconc &rest lists
+#+end_src
 
     此函数返回一个包含列表所有元素的列表。  与 append 不同（参见 Building Cons Cells and Lists），列表不会被复制。  而是将每个列表的最后一个 CDR 更改为引用以下列表。  最后一个列表没有改变。  例如：
 
-
     #+begin_src emacs-lisp
+      (setq x (list 1 2 3))
+	   ⇒ (1 2 3)
 
+      (nconc x '(4 5))
+	   ⇒ (1 2 3 4 5)
 
-(setq x (list 1 2 3))
-     ⇒ (1 2 3)
-
-(nconc x '(4 5))
-     ⇒ (1 2 3 4 5)
-
-x
-     ⇒ (1 2 3 4 5)
+      x
+	   ⇒ (1 2 3 4 5)
 
     #+end_src
     由于 nconc 的最后一个参数本身没有被修改，因此使用常量列表是合理的，例如 '(4 5)，如上例所示。  出于同样的原因，最后一个参数不必是列表：
@@ -889,7 +891,9 @@ x
 
     Common Lisp 注释：Common Lisp 具有联合函数（避免重复元素）和集合操作的交集。  在 Emacs Lisp 中，这些工具的变体由 cl-lib 库提供。  请参阅 Common Lisp Extensions 中的列表作为集合。
 
-功能：memq 对象列表¶
+#+begin_src emacs-lisp
+  Function: memq object list
+#+end_src
 
     此函数测试对象是否是列表的成员。  如果是，memq 返回一个从第一次出现的对象开始的列表。  否则，它返回零。  memq 中的字母 'q' 表示它使用 eq 将对象与列表的元素进行比较。  例如：
     #+begin_src emacs-lisp
@@ -901,7 +905,10 @@ x
 
     #+end_src
 
-功能：delq 对象列表¶
+#+begin_src emacs-lisp
+  Function: delq object list ¶
+#+end_src
+
 
     此函数破坏性地从列表中删除所有元素 eq 到对象，并返回结果列表。  delq 中的字母 'q' 表示它使用 eq 将 object 与列表的元素进行比较，例如 memq 和 remq。
 
@@ -945,8 +952,8 @@ sample-list
 在以下示例中，delq 尝试匹配的 (list 4) 和 sample-list 中的 (4) 相等但不 eq：
 
 #+begin_src emacs-lisp
-(delq (list 4) sample-list)
-     ⇒ (a c (4))
+  (delq (list 4) sample-list)
+       ⇒ (a c (4))
 #+end_src
 
 如果要删除等于给定值的元素，请使用 delete（见下文）。
@@ -968,7 +975,10 @@ sample-list
 	   ⇒ (a b c a b c)
     #+end_src
 
-功能：memql 对象列表¶
+#+begin_src emacs-lisp
+  Function: memql object list ¶
+#+end_src
+
 
     函数 memql 测试 object 是否是 list 的成员，使用 eql 将成员与 object 进行比较，因此浮点元素按值进行比较。  如果 object 是成员，则 memql 返回一个列表，从它在列表中的第一次出现开始。  否则，它返回零。
 
@@ -988,7 +998,10 @@ sample-list
 
 以下三个函数类似于 memq、delq 和 remq，但使用 equal 而不是 eq 来比较元素。  请参见等式谓词。
 
-功能：成员对象列表¶
+#+begin_src emacs-lisp
+  Function: member object list ¶
+#+end_src
+
 
     函数 member 测试对象是否是 list 的成员，将成员与 object 使用 equal 进行比较。  如果 object 是成员，则 member 返回一个列表，从它在列表中的第一次出现开始。  否则，它返回零。
 
@@ -1005,7 +1018,10 @@ sample-list
 	   ⇒ ("foo" "bar")
     #+end_src
 
-功能：删除对象序列¶
+#+begin_src emacs-lisp
+  Function: delete object sequence ¶
+#+end_src
+
 
 
     此函数从序列中删除所有等于 object 的元素，并返回结果序列。
@@ -1038,7 +1054,10 @@ sample-list
 
 
 
-功能：移除对象序列¶
+#+begin_src emacs-lisp
+  Function: remove object sequence ¶
+#+end_src
+
 
     此功能是删除的非破坏性对应物。  它返回序列、列表、向量或字符串的副本，其中删除了等于对象的元素。  例如：
 
@@ -1053,11 +1072,16 @@ sample-list
 
     Common Lisp 注意：GNU Emacs Lisp 中的成员、删除和删除函数是从 Maclisp 派生的，而不是 Common Lisp。  Common Lisp 版本不使用相等来比较元素。
 
-功能：成员忽略大小写对象列表¶
+#+begin_src emacs-lisp
+  Function: member-ignore-case object list ¶
+#+end_src
+
 
     这个函数和 member 一样，除了 object 应该是一个字符串并且它忽略字母大小写和文本表示的差异：大写和小写字母被视为相等，并且在比较之前将单字节字符串转换为多字节。
 
-功能：删除重复列表¶
+#+begin_src emacs-lisp
+  Function: delete-dups list ¶
+#+end_src
 
     此函数破坏性地从列表中删除所有相等的重复项，将结果存储在列表中并返回。  在列表中多次出现相同的元素时，delete-dups 保留第一个。  请参阅 seq-uniq 以了解非破坏性操作（请参阅序列）。
 
@@ -1098,7 +1122,10 @@ alist 中的值和键都可以是任何 Lisp 对象。  例如，在下面的 al
 
 请注意，属性列表在几个方面类似于关联列表。  属性列表的行为类似于关联列表，其中每个键只能出现一次。  有关属性列表和关联列表的比较，请参见属性列表。
 
-功能: assoc key alist &optional testfn ¶
+#+begin_src emacs-lisp
+  Function: assoc key alist &optional testfn ¶
+#+end_src
+
 
     此函数返回 alist 中 key 的第一个关联，如果 key 是函数，则使用 testfn 将 key 与 alist 元素进行比较，否则相等（请参阅相等谓词）。  如果 testfn 是一个函数，则使用两个参数调用它：来自 alist 的元素的 CAR 和 key。  如果 alist 中没有关联的 CAR 等于 key，则该函数返回 nil，如 testfn 所测试。  例如：
     #+begin_src emacs-lisp
@@ -1130,13 +1157,18 @@ alist 中的值和键都可以是任何 Lisp 对象。  例如，在下面的 al
 
 函数 assoc-string 很像 assoc，只是它忽略了字符串之间的某些差异。  请参阅字符和字符串的比较。
 
-功能：rassoc 值列表¶
+#+begin_src emacs-lisp
+  Function: rassoc value alist ¶
+#+end_src
+
 
     此函数返回与 alist 中值 value 的第一个关联。  如果 alist 中没有关联的 CDR 等于 value，则返回 nil。
 
     rassoc 与 assoc 类似，只是它比较每个 alist 关联的 CDR 而不是 CAR。  您可以将其视为反向关联，查找给定值的键。
 
-功能：assq key alist ¶
+#+begin_src emacs-lisp
+  Function: assq key alist ¶
+#+end_src
 
     这个函数与 assoc 类似，它返回 alist 中 key 的第一个关联，但它使用 eq 进行比较。  如果 alist 中没有关联具有 CAR eq 键，则 assq 返回 nil。  这个函数比 assoc 更常用，因为 eq 比 equal 更快，而且大多数 alists 使用符号作为键。  请参见等式谓词。
 
@@ -1161,13 +1193,19 @@ alist 中的值和键都可以是任何 Lisp 对象。  例如，在下面的 al
     #+end_src
 
 
-功能：alist-get key alist &optional default remove testfn ¶
+#+begin_src emacs-lisp
+  Function: alist-get key alist &optional default remove testfn ¶
+#+end_src
+
 
     这个函数类似于 assq。  它通过将 key 与 alist 元素进行比较来找到第一个关联（key . value），如果找到，则返回该关联的值。  如果未找到关联，则该函数返回默认值。  key 与 alist 元素的比较使用 testfn 指定的函数，默认为 eq。
 
     这是一个广义变量（参见广义变量），可用于使用 setf 更改值。  使用它设置值时，可选参数 remove non-nil 表示如果新值 eql 为默认值，则从 alist 中删除键的关联。
 
-功能：rassq 值列表¶
+#+begin_src emacs-lisp
+  Function: rassq value alist ¶
+#+end_src
+
 
     此函数返回与 alist 中值 value 的第一个关联。  如果 alist 中没有关联具有 CDR eq 值，则返回 nil。
 
@@ -1202,7 +1240,10 @@ alist 中的值和键都可以是任何 Lisp 对象。  例如，在下面的 al
   (lily white) ≡ (lily . (white))
 #+end_src
 
-功能: assoc-default key alist &optional test default ¶
+#+begin_src emacs-lisp
+  Function: assoc-default key alist &optional test default ¶
+#+end_src
+
 
     此函数在 alist 中搜索 key 的匹配项。  对于 alist 的每个元素，它通过使用两个参数调用 test 将元素（如果它是原子）或元素的 CAR（如果它是 cons）与键进行比较：元素或其 CAR 和键。  参数按该顺序传递，以便您可以使用字符串匹配和包含正则表达式的列表获得有用的结果（请参阅正则表达式搜索）。  如果 test 被省略或为零，则使用相等进行比较。
 
@@ -1210,7 +1251,9 @@ alist 中的值和键都可以是任何 Lisp 对象。  例如，在下面的 al
 
     如果没有 alist 元素与 key 匹配，则 assoc-default 返回 nil。
 
-功能：copy-alist alist ¶
+#+begin_src emacs-lisp
+  Function: copy-alist alist ¶
+#+end_src
 
     此函数返回 alist 的两级深层副本：它为每个关联创建一个新副本，以便您可以更改新 alist 的关联而不更改旧 alist。
 
@@ -1258,30 +1301,38 @@ alist 中的值和键都可以是任何 Lisp 对象。  例如，在下面的 al
     #+end_src
 
 
-功能：assq-delete-all key alist ¶
+#+begin_src emacs-lisp
+  Function: assq-delete-all key alist ¶
+#+end_src
 
     此函数从 alist 中删除所有 CAR 为 eq to key 的元素，就像您使用 delq 将每个这样的元素一个一个删除一样。  它返回缩短的 alist，并经常修改 alist 的原始列表结构。  要获得正确的结果，请使用 assq-delete-all 的返回值，而不是查看 alist 的保存值。
 
     #+begin_src emacs-lisp
-(setq alist (list '(foo 1) '(bar 2) '(foo 3) '(lose 4)))
-     ⇒ ((foo 1) (bar 2) (foo 3) (lose 4))
-(assq-delete-all 'foo alist)
-     ⇒ ((bar 2) (lose 4))
-alist
-     ⇒ ((foo 1) (bar 2) (lose 4))
+      (setq alist (list '(foo 1) '(bar 2) '(foo 3) '(lose 4)))
+	   ⇒ ((foo 1) (bar 2) (foo 3) (lose 4))
+      (assq-delete-all 'foo alist)
+	   ⇒ ((bar 2) (lose 4))
+      alist
+	   ⇒ ((foo 1) (bar 2) (lose 4))
     #+end_src
 
 
-功能: assoc-delete-all key alist &optional test ¶
+#+begin_src emacs-lisp
+Function: assoc-delete-all key alist &optional test ¶
+#+end_src
 
     这个函数类似于 assq-delete-all，除了它接受一个可选参数 test，一个用于比较 alist 中键的谓词函数。  如果省略或为零，则测试默认为相等。  如 assq-delete-all，这个函数经常修改 alist 原有的列表结构。
 
-功能：rassq-delete-all value alist ¶
+#+begin_src emacs-lisp
+  Function: rassq-delete-all value alist ¶
+#+end_src
+
 
     此函数从 alist 中删除 CDR 为 eq to value 的所有元素。  它返回缩短的 alist，并经常修改 alist 的原始列表结构。  rassq-delete-all 与 assq-delete-all 类似，只是它比较每个 alist 关联的 CDR 而不是 CAR。
 
-宏：let-alist alist body ¶
-
+#+begin_src emacs-lisp
+  Macro: let-alist alist body ¶
+#+end_src
     为用作关联列表 alist 的键的每个符号创建一个绑定，以点为前缀。  这在访问同一个关联列表中的多个项目时很有用，最好通过一个简单的示例来理解：
 
     #+begin_src emacs-lisp
@@ -1338,23 +1389,25 @@ alist
 
 以下函数可用于操作属性列表。  他们都使用 eq 比较属性名称。
 
-功能：plist-获取 plist 属性 ¶
+#+begin_src emacs-lisp
+  Function: plist-get plist property ¶
+#+end_src
 
     这将返回存储在属性列表 plist 中的属性值。  它接受格式错误的 plist 参数。  如果在 plist 中找不到属性，则返回 nil。  例如，
     #+begin_src emacs-lisp
-(plist-get '(foo 4) 'foo)
-     ⇒ 4
-(plist-get '(foo 4 bad) 'foo)
-     ⇒ 4
-(plist-get '(foo 4 bad) 'bad)
-     ⇒ nil
-(plist-get '(foo 4 bad) 'bar)
-     ⇒ nil
+      (plist-get '(foo 4) 'foo)
+	   ⇒ 4
+      (plist-get '(foo 4 bad) 'foo)
+	   ⇒ 4
+      (plist-get '(foo 4 bad) 'bad)
+	   ⇒ nil
+      (plist-get '(foo 4 bad) 'bar)
+	   ⇒ nil
     #+end_src
 
-
-
-功能：plist-put plist 属性值 ¶
+#+begin_src emacs-lisp
+  Function: plist-put plist property value ¶
+#+end_src
 
     这会将值作为属性属性的值存储在属性列表 plist 中。  它可能会破坏性地修改 plist，或者它可能会构造一个新的列表结构而不改变旧的。  该函数返回修改后的属性列表，因此您可以将其存储回您获得 plist 的位置。  例如，
 
@@ -1368,14 +1421,17 @@ alist
     #+end_src
 
 
-功能：lax-plist-get plist 属性 ¶
-
+#+begin_src emacs-lisp
+  Function: lax-plist-get plist property ¶
+#+end_src
     与 plist-get 类似，只是它使用 equal 而不是 eq 比较属性。
 
-功能：lax-plist-put plist 属性值 ¶
-
+#+begin_src emacs-lisp
+  Function: lax-plist-put plist property value ¶
+#+end_src
     与 plist-put 类似，只是它使用 equal 而不是 eq 比较属性。
 
-功能：plist-member plist 属性 ¶
-
+#+begin_src emacs-lisp
+  Function: plist-member plist property ¶
+#+end_src
     如果 plist 包含给定属性，则返回非零。  与 plist-get 不同，这允许您区分缺失的属性和值为 nil 的属性。  该值实际上是 plist 的尾部，其汽车是财产。
