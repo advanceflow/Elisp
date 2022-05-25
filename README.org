@@ -181,12 +181,11 @@
    | 7.2 向后兼容性 | DONE | DONE |    |
 
 ** 8 哈希表
-   | Content            | S1   | S2 | S3 |
-   | 8.1 创建哈希表     | DONE |    |    |
-   | 8.2 哈希表访问     | DONE |    |    |
-   | 8.3 定义哈希比较   | DONE |    |    |
-   | 8.4 其他哈希表函数 | DONE |    |    |
-
+   | Content            | S1   | S2   | S3 |
+   | 8.1 创建哈希表     | DONE | DONE |    |
+   | 8.2 哈希表访问     | DONE | DONE |    |
+   | 8.3 定义哈希比较   | DONE | DONE |    |
+   | 8.4 其他哈希表函数 | DONE | DONE |    |
 
 ** 9 符号
    | Content            | S1   | S2 | S3 |

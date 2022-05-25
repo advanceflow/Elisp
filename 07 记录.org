@@ -20,9 +20,8 @@
 ** TODO 7.1 记录功能
 
 #+begin_src emacs-lisp
-Function: recordp object
+  Function: recordp object
 #+end_src
-
 
     如果 object 是记录，则此函数返回 t。
 
