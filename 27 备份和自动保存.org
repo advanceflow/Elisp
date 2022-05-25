@@ -36,9 +36,10 @@
     该变量决定是否制作备份文件。  如果它不是 nil，那么 Emacs 会在第一次保存每个文件时创建一个备份——前提是 backup-inhibited 是 nil（见下文）。
 
     以下示例显示了如何仅在 Rmail 缓冲区而不是其他地方更改 make-backup-files 变量。  将它设置为 nil 会阻止 Emacs 备份这些文件，这可能会节省磁盘空间。  （您可以将此代码放在您的初始化文件中。）
-
-    (add-hook 'rmail-mode-hook
-	       (lambda () (setq-local make-backup-files nil)))
+    #+begin_src emacs-lisp
+      (add-hook 'rmail-mode-hook
+		(lambda () (setq-local make-backup-files nil)))
+    #+end_src
 
 变量：备份启用谓词¶
 
@@ -55,9 +56,9 @@
 用户选项：备份目录列表¶
 
     此变量的值是文件名模式和备份目录的列表。  每个元素看起来像
-
-    （正则表达式.目录）
-
+    #+begin_src emacs-lisp
+      (regexp . directory)
+    #+end_src
     名称与正则表达式匹配的文件的备份将在目录中进行。  目录可以是相对的或绝对的。  如果是绝对的，那么所有匹配的文件都备份到同一个目录下，这个目录下的文件名就是备份文件的全名，所有的目录分隔符都改成'!'  以防止冲突。  如果您的文件系统截断生成的名称，这将无法正常工作。
 
     对于所有备份都进入一个目录的常见情况，alist 应包含一个与相应目录配对的单个元素“。”。
@@ -157,18 +158,21 @@ Emacs 可以通过两种方式制作备份文件：
 
     如果 filename 是备份文件的可能名称，则此函数返回非零值。  它只是检查名称，而不是名称为 filename 的文件是否存在。
 
-    （备份文件名-p“foo”）
-	  ⇒ 无
+    #+begin_src emacs-lisp
+      (backup-file-name-p "foo")
+	   ⇒ nil
 
-    (备份文件名-p "foo~")
-	  ⇒ 3
+      (backup-file-name-p "foo~")
+	   ⇒ 3
+    #+end_src
 
     该函数的标准定义如下：
-
-    (defun 备份文件名-p (文件)
-      "如果 FILE 是备份文件，则返回非 nil \
-    名称（数字或非数字）...”
-      （字符串匹配“~\\'”文件））
+    #+begin_src emacs-lisp
+      (defun backup-file-name-p (file)
+	"Return non-nil if FILE is a backup file \
+      name (numeric or not)..."
+	(string-match "~\\'" file))
+    #+end_src
 
     因此，如果文件名以“~”结尾，则该函数返回一个非零值。  （我们使用反斜杠将文档字符串的第一行拆分为文本中的两行，但在字符串本身中只生成一行。）
 
@@ -179,21 +183,25 @@ Emacs 可以通过两种方式制作备份文件：
     此函数返回一个字符串，该字符串是用于文件 filename 的非编号备份文件的名称。  在 Unix 上，这只是附加了波浪号的文件名。
 
     在大多数操作系统上，该函数的标准定义如下：
-
-    (defun make-backup-file-name (文件)
-      “为 FILE 创建非数字备份文件名...”
-      （连接文件“~”））
+    #+begin_src emacs-lisp
+      (defun make-backup-file-name (file)
+	"Create the non-numeric backup file name for FILE..."
+	(concat file "~"))
+    #+end_src
 
     您可以通过重新定义此函数来更改备份文件命名约定。  以下示例重新定义 make-backup-file-name 以添加一个 '.'  除了附加波浪号：
 
-    (defun make-backup-file-name (文件名)
-      （扩展文件名
-	 (concat "." (file-name-nondirectory filename) "~")
-	 （文件名目录文件名）））
+    #+begin_src emacs-lisp
+      (defun make-backup-file-name (filename)
+	(expand-file-name
+	  (concat "." (file-name-nondirectory filename) "~")
+	  (file-name-directory filename)))
 
 
-    （制作备份文件名“backups.texi”）
-	  ⇒ ".backups.texi~"
+      (make-backup-file-name "backups.texi")
+	   ⇒ ".backups.texi~"
+    #+end_src
+
 
     Emacs 的某些部分，包括一些 Dired 命令，假定备份文件名以“~”结尾。  如果您不遵循该约定，它不会导致严重的问题，但这些命令可能会产生不太理想的结果。
 
@@ -205,9 +213,10 @@ Emacs 可以通过两种方式制作备份文件：
 
     在此示例中，该值表示 ~rms/foo.~5~ 是用于新备份文件的名称，而 ~rms/foo.~3~ 是调用者现在应该考虑删除的多余版本。
 
-    （查找备份文件名“~rms/foo”）
-	  ⇒ ("~rms/foo.~5~" "~rms/foo.~3~")
-
+    #+begin_src emacs-lisp
+      (find-backup-file-name "~rms/foo")
+	   ⇒ ("~rms/foo.~5~" "~rms/foo.~3~")
+    #+end_src
 功能：文件备份文件名文件名¶
 
     此函数返回文件名的所有备份文件名的列表，如果没有，则返回 nil。  文件按修改时间降序排列，最新的文件排在第一位。
@@ -227,8 +236,10 @@ Emacs 会定期保存您正在访问的所有文件；  这称为自动保存。
 
     此缓冲区局部变量是用于自动保存当前缓冲区的文件的名称。  如果缓冲区不应自动保存，则为 nil。
 
-    缓冲区自动保存文件名
-	  ⇒ "/xcssun/users/rms/lewis/#backups.texi#"
+    #+begin_src emacs-lisp
+      buffer-auto-save-file-name
+	   ⇒ "/xcssun/users/rms/lewis/#backups.texi#"
+    #+end_src
 
 命令：自动保存模式 arg ¶
 
@@ -253,22 +264,27 @@ Emacs 会定期保存您正在访问的所有文件；  这称为自动保存。
 功能：自动保存文件名-p文件名¶
 
     如果 filename 是一个可能是自动保存文件名称的字符串，则此函数返回一个非 nil 值。  它假定自动保存文件的通常命名约定：以井号 ('#') 开头和结尾的名称是可能的自动保存文件名。  参数文件名不应包含目录部分。
+    #+begin_src emacs-lisp
 
-    (make-auto-save-file-name)
-	  ⇒ "/xcssun/users/rms/lewis/#backups.texi#"
 
-    （自动保存文件名-p“#backups.texi#”）
-	  ⇒ 0
+      (make-auto-save-file-name)
+	   ⇒ "/xcssun/users/rms/lewis/#backups.texi#"
 
-    （自动保存文件名-p“backups.texi”）
-	  ⇒ 无
+      (auto-save-file-name-p "#backups.texi#")
+	   ⇒ 0
+
+      (auto-save-file-name-p "backups.texi")
+	   ⇒ nil
+    #+end_src
 
 功能：make-auto-save-file-name ¶
 
     此函数返回用于自动保存当前缓冲区的文件名。  这只是带有哈希标记 ('#') 的文件名。  此函数不查看变量 auto-save-visited-file-name（如下所述）；  此函数的调用者应首先检查该变量。
 
-    (make-auto-save-file-name)
-	  ⇒ "/xcssun/users/rms/lewis/#backups.texi#"
+    #+begin_src emacs-lisp
+      (make-auto-save-file-name)
+	   ⇒ "/xcssun/users/rms/lewis/#backups.texi#"
+    #+end_src
 
 用户选项：自动保存访问文件名¶
 
@@ -407,9 +423,10 @@ Emacs 可以自动恢复缓冲区。  默认情况下，它对访问文件的缓
     虽然此功能主要用于自动恢复，但它也可以用于其他目的。  例如，如果未启用自动恢复，它可以用来警告用户缓冲区需要恢复。  noconfirm 参数背后的想法是，如果要在不询问用户的情况下恢复缓冲区，则它应该是 t，如果函数只是用于警告用户缓冲区已过期，它应该是 nil。  特别是，对于自动恢复的使用，noconfirm 是 t。  如果该函数仅用于自动恢复，则可以忽略 noconfirm 参数。
 
     如果您只想每隔 auto-revert-interval 秒自动恢复（如缓冲区菜单），请使用：
-
-    (setq-local buffer-stale-function
-	  (lambda (&optional noconfirm) 'fast))
+    #+begin_src emacs-lisp
+      (setq-local buffer-stale-function
+	   (lambda (&optional noconfirm) 'fast))
+    #+end_src
 
     在缓冲区的模式功能中。
 
