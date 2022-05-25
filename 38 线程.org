@@ -123,17 +123,21 @@ Emacs Lisp 互斥体是一种称为递归的类型，这意味着线程可以重
 
 条件变量与互斥体相关联，并且在概念上与某些条件相关联。  为了正确操作，必须获取互斥体，然后必须循环等待线程，测试条件并等待条件变量。  例如：
 
-(with-mutex 互斥锁
-  （虽然（不是全局变量）
-    （条件等待条件变量）））
+#+begin_src emacs-lisp
+(with-mutex mutex
+  (while (not global-variable)
+    (condition-wait cond-var)))
+#+end_src
 
 互斥体确保原子性，循环是为了健壮性——可能存在虚假通知。
 
 同样，在通知条件之前必须持有互斥锁。  典型且最佳的方法是获取互斥锁，进行与此条件相关的更改，然后通知它：
 
-(with-mutex 互斥锁
-  （setq 全局变量（一些计算））
-  （条件通知条件变量））
+#+begin_src emacs-lisp
+  (with-mutex mutex
+    (setq global-variable (some-computation))
+    (condition-notify cond-var))
+#+end_src
 
 功能：make-condition-variable mutex & optional name ¶
 
