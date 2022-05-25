@@ -139,7 +139,9 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
     可选参数 xrm-string（如果不是 nil）是资源名称和值的字符串，其格式与 .Xresources 文件中使用的格式相同。  请参阅 GNU Emacs 手册中的 X 资源。  这些值适用于在此显示上创建的所有 Emacs 框架，覆盖 X 服务器中记录的资源值。  以下是此字符串的示例：
 
-    "*BorderWidth: 3\n*InternalBorder: 2\n"
+    #+begin_src emacs-lisp
+      "*BorderWidth: 3\n*InternalBorder: 2\n"
+    #+end_src
 
     如果 must-succeed 不为零，则无法打开连接会终止 Emacs。  否则，这是一个普通的 Lisp 错误。
 
@@ -177,20 +179,21 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
     当框架的最大区域位于该监视器中时，或者（如果该框架不与任何物理监视器相交）该监视器最接近该框架，则该框架由该物理监视器支配。  图形显示中的每个（非工具提示）帧（无论是否可见）一次仅由一个物理监视器控制，尽管该帧可以跨越多个（或没有）物理监视器。
 
     以下是此函数在 2 监视器显示屏上生成的数据示例：
-
-      （显示监视器属性列表）
+    #+begin_src emacs-lisp
+      (display-monitor-attributes-list)
       ⇒
-      (((geometry 0 0 1920 1080) ;; 左手，主显示器
-	 （工作区 0 0 1920 1050）；；  一个任务栏占据了一些高度
-	 （毫米尺寸 677 381）
-	 （名称。“DISPLAY1”）
-	 (frames #<frame emacs@host *Messages* 0x11578c0>
-		 #<frame emacs@host *scratch* 0x114b838>))
-	((几何 1920 0 1680 1050) ;; 右手显示器
-	 （工作区 1920 0 1680 1050）；；  整屏都可以用
-	 （毫米尺寸 593 370）
-	 （名称。“DISPLAY2”）
-	 （帧）））
+      (((geometry 0 0 1920 1080) ;; Left-hand, primary monitor
+	(workarea 0 0 1920 1050) ;; A taskbar occupies some of the height
+	(mm-size 677 381)
+	(name . "DISPLAY1")
+	(frames #<frame emacs@host *Messages* 0x11578c0>
+		#<frame emacs@host *scratch* 0x114b838>))
+       ((geometry 1920 0 1680 1050) ;; Right-hand monitor
+	(workarea 1920 0 1680 1050) ;; Whole screen can be used
+	(mm-size 593 370)
+	(name . "DISPLAY2")
+	(frames)))
+    #+end_src
 
 功能：frame-monitor-attributes & optional frame ¶
 
@@ -213,26 +216,28 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 可见框架在其终端显示器上占据一个矩形区域。  该区域可能包含许多嵌套的矩形，每个矩形都有不同的用途。  下图描绘了图形终端上框架的布局：
 
 
-	 <------------ 外框宽度------------>
-	 _______________________________________
-     ^(0) ________ 外部/外部边界 _______ |
-     |  |  |_____________ 标题栏 ______________|  |
-     |  |  (1)_____________ 菜单栏 ______________|  |  ^
-     |  |  (2)_____________ 工具栏 ______________|  |  ^
-     |  |  (3)_____________ 标签栏 _______________|  |  ^
-     |  |  |  _________ 内部边界 ________ |  |  ^
-     |  |  |  |  ^ |  |  |  |
-     |  |  |  |  |  |  |  |  |
-外层 |  |  |  内部 |  |  |  本国的
-框架 |  |  |  框架 |  |  |  框架
-身高 |  |  |  身高 |  |  |  高度
-     |  |  |  |  |  |  |  |  |
-     |  |  |  |<--+--- 内框宽度------->|  |  |  |
-     |  |  |  |  |  |  |  |  |
-     |  |  |  |___v______________________________|  |  |  |
-     |  |  |___________ 内部边界 __________|  |  v
-     v |_______ 外部/外部边界 __________|
-	    <-------- 原生帧宽度 -------->
+#+begin_src emacs-lisp
+	  <------------ Outer Frame Width ----------->
+	  ____________________________________________
+       ^(0)  ________ External/Outer Border _______   |
+       | |  |_____________ Title Bar ______________|  |
+       | | (1)_____________ Menu Bar ______________|  | ^
+       | | (2)_____________ Tool Bar ______________|  | ^
+       | | (3)_____________ Tab Bar _______________|  | ^
+       | |  |  _________ Internal Border ________  |  | ^
+       | |  | |   ^                              | |  | |
+       | |  | |   |                              | |  | |
+  Outer  |  | | Inner                            | |  | Native
+  Frame  |  | | Frame                            | |  | Frame
+  Height |  | | Height                           | |  | Height
+       | |  | |   |                              | |  | |
+       | |  | |<--+--- Inner Frame Width ------->| |  | |
+       | |  | |   |                              | |  | |
+       | |  | |___v______________________________| |  | |
+       | |  |___________ Internal Border __________|  | v
+       v |___________ External/Outer Border __________|
+	     <-------- Native Frame Width -------->
+#+end_src
 
 实际上，并非图中所示的所有区域都将或可能存在。  这些区域的含义如下所述。
 
@@ -556,7 +561,10 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
     此变量的值是创建初始帧时使用的参数值列表。  您可以设置此变量来指定初始帧的外观，而无需更改后续帧。  每个元素具有以下形式：
 
-    （参数.值）
+    #+begin_src emacs-lisp
+      (parameter . value)
+    #+end_src
+
 
     Emacs 在读取您的 init 文件之前创建初始帧。  读取该文件后，Emacs 会检查 initial-frame-alist，并将更改后的值中的参数设置应用于已创建的初始帧。
 
@@ -631,8 +639,10 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
     一些窗口管理器会忽略程序指定的位置。  如果您想确保您指定的位置不会被忽略，请为 user-position 参数指定一个非零值，如下例所示：
 
-    （修改帧参数
-      nil '((用户位置 . t) (左 . (+ -4))))
+    #+begin_src emacs-lisp
+      (modify-frame-parameters
+	nil '((user-position . t) (left . (+ -4))))
+    #+end_src
 
     通常，相对于其显示的右边缘或下边缘定位框架并不是一个好主意。  定位初始框架或新框架要么不准确（因为在框架可见之前外部框架的大小尚不完全清楚），要么会导致额外的闪烁（如果框架在变得可见后必须重新定位）。
 
@@ -709,9 +719,11 @@ z组
 
     此参数指定在“fullboth”状态下调用 toggle-frame-fullscreen 命令（参见 GNU Emacs 手册中的帧命令）后所需的帧全屏状态。  通常，当将状态切换为 fullboth 时，该命令会自动安装此参数。  但是，如果您以“fullboth”状态启动 Emacs，则必须在初始文件中指定所需的行为，例如
 
-    (setq 默认帧列表
-	 '（（全屏。全屏）
-	   （全屏恢复。全高）））
+    #+begin_src emacs-lisp
+      (setq default-frame-alist
+	  '((fullscreen . fullboth)
+	    (fullscreen-restore . fullheight)))
+    #+end_src
 
     这将在第一次输入 F11 后给出一个新的框架全高。
 适合帧到缓冲区边距
@@ -1043,10 +1055,11 @@ tty-颜色模式¶
     对于大小参数，值必须是整数。  位置参数名称 left 和 top 并不完全准确，因为某些值指示的是右边缘或下边缘的位置。  位置参数的取值可能是：整数、列表（+ pos）或列表（- pos）；  如前所述（参见位置参数）。
 
     这是一个例子：
-
-    （x-解析几何“35x70+0-0”）
-	  ⇒ ((高度 . 70) (宽度 . 35)
-	      (上 - 0) (左 . 0))
+    #+begin_src emacs-lisp
+      (x-parse-geometry "35x70+0-0")
+	   ⇒ ((height . 70) (width . 35)
+	       (top - 0) (left . 0))
+    #+end_src
 
 ** TODO 30.5 终端参数
 
@@ -1536,7 +1549,9 @@ Lisp 程序可以弹出一个菜单，以便用户可以用鼠标选择一个选
 
     参数位置指定在屏幕上放置菜单左上角的位置。  它可以是鼠标按钮事件（表示将菜单放在用户按下按钮的位置）或以下形式的列表：
 
-    ((xoffset yoffset) 窗口)
+    #+begin_src emacs-lisp
+      ((xoffset yoffset) window)
+    #+end_src
 
     其中 xoffset 和 yoffset 是坐标，以像素为单位，从窗口的左上角开始计数。  window 可以是窗口或框架。
 
@@ -1546,11 +1561,15 @@ Lisp 程序可以弹出一个菜单，以便用户可以用鼠标选择一个选
 
     或者，菜单可以具有以下形式：
 
-    （标题窗格1 窗格2...）
+    #+begin_src emacs-lisp
+      (title pane1 pane2...)
+    #+end_src
 
     其中每个窗格都是表单列表
 
-    （标题 item1 item2...）
+    #+begin_src emacs-lisp
+      (title item1 item2...)
+    #+end_src
 
     每个项目都应该是一个 cons 单元格 (line . value)，其中 line 是一个字符串，而 value 是选择该行时要返回的值。  与菜单键映射不同，nil 值不会使菜单项不可选择。  或者，每个项目都可以是一个字符串而不是一个 cons 单元格；  这使得一个不可选择的菜单项。
 
@@ -1570,7 +1589,9 @@ Lisp 程序可以弹出一个菜单，以便用户可以用鼠标选择一个选
 
     此函数显示一个弹出对话框并返回用户所做选择的指示。  参数内容指定提供的替代方案；  它有这种格式：
 
-    （标题（字符串。值）...）
+    #+begin_src emacs-lisp
+      (title (string . value)…)
+    #+end_src
 
     它看起来像为 x-popup-menu 指定单个窗格的列表。
 
@@ -1709,17 +1730,18 @@ nhdrag
     此函数返回一个值，该值描述了帧上理想的颜色。  如果定义了颜色，则该值是三个整数的列表，它们给出了红色的数量、绿色的数量和蓝色的数量。  每个整数范围原则上从 0 到 65535，但有些显示器可能不会使用全范围。  这个三元素列表称为颜色的 rgb 值。
 
     如果未定义颜色，则值为 nil。
-
-    （颜色值“黑色”）
-	  ⇒ (0 0 0)
-    （颜色值“白色”）
-	  ⇒ (65535 65535 65535)
-    （颜色值“红色”）
-	  ⇒ (65535 0 0)
-    （颜色值“粉红色”）
-	  ⇒ (65535 49344 52171)
-    （颜色值“饥饿”）
-	  ⇒ 无
+    #+begin_src emacs-lisp
+      (color-values "black")
+	   ⇒ (0 0 0)
+      (color-values "white")
+	   ⇒ (65535 65535 65535)
+      (color-values "red")
+	   ⇒ (65535 0 0)
+      (color-values "pink")
+	   ⇒ (65535 49344 52171)
+      (color-values "hungry")
+	   ⇒ nil
+    #+end_src
 
     为框架的显示返回颜色值。  如果 frame 被省略或为零，则返回所选框架显示的信息。  如果框架不能显示颜色，则值为 nil。
 
@@ -1780,18 +1802,20 @@ nhdrag
     此变量指定 x-get-resource 应查找的实例名称。  默认值是调用 Emacs 时使用的名称，或者是使用“-name”或“-rn”开关指定的值。
 
 为了说明上述一些内容，假设您有以下行：
-
-xterm.vt100.background：黄色
+#+begin_src emacs-lisp
+xterm.vt100.background: yellow
+#+end_src
 
 在您的 X 资源文件中（其名称通常为 ~/.Xdefaults 或 ~/.Xresources）。  然后：
+#+begin_src emacs-lisp
+  (let ((x-resource-class "XTerm") (x-resource-name "xterm"))
+    (x-get-resource "vt100.background" "VT100.Background"))
+       ⇒ "yellow"
 
-(let ((x-resource-class "XTerm") (x-resource-name "xterm"))
-  (x-get-resource "vt100.background" "VT100.Background"))
-     ⇒ “黄色”
-
-(let ((x-resource-class "XTerm") (x-resource-name "xterm"))
-  (x-get-resource "背景" "VT100" "vt100" "背景"))
-     ⇒ “黄色”
+  (let ((x-resource-class "XTerm") (x-resource-name "xterm"))
+    (x-get-resource "background" "VT100" "vt100" "Background"))
+       ⇒ "yellow"
+#+end_src
 
 变量：禁止 x 资源¶
 
