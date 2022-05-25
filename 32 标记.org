@@ -22,43 +22,46 @@
 因为对标记位置执行算术运算很常见，所以大多数这些操作（包括 + 和 -）都接受标记作为参数。  在这种情况下，标记代表其当前位置。
 
 以下是创建标记、设置标记和将点移动到标记的示例：
-
-;;  制作一个最初不指向任何地方的新标记：
-(setq m1 (make-marker))
-     ⇒ #<无缓冲区中的标记>
+#+begin_src emacs-lisp
 
 
-;;  设置 m1 指向第 99 和第 100 个字符之间
-;;  在当前缓冲区中：
-（设置标记 m1 100）
-     ⇒ #<markers.texi 中 100 处的标记>
+  ;; Make a new marker that initially does not point anywhere:
+  (setq m1 (make-marker))
+       ⇒ #<marker in no buffer>
 
 
-;;  现在在缓冲区的开头插入一个字符：
-(goto-char (point-min))
-     ⇒ 1
-（插入“Q”）
-     ⇒ 无
+  ;; Set m1 to point between the 99th and 100th characters
+  ;;   in the current buffer:
+  (set-marker m1 100)
+       ⇒ #<marker at 100 in markers.texi>
 
 
-;;  m1 已适当更新。
-米1
-     ⇒ #<marker.texi 中 101 处的标记>
+  ;; Now insert one character at the beginning of the buffer:
+  (goto-char (point-min))
+       ⇒ 1
+  (insert "Q")
+       ⇒ nil
 
 
-;;  指向同一位置的两个标记
-;;  不是eq，但它们是相等的。
-(setq m2 (复制标记 m1))
-     ⇒ #<marker.texi 中 101 处的标记>
-(当量 m1 m2)
-     ⇒ 无
-（等于 m1 m2）
-     ⇒ 吨
+  ;; m1 is updated appropriately.
+  m1
+       ⇒ #<marker at 101 in markers.texi>
 
 
-;;  用完记号笔后，不要让它指向任何地方。
-(set-marker m1 nil)
-     ⇒ #<无缓冲区中的标记>
+  ;; Two markers that point to the same position
+  ;;   are not eq, but they are equal.
+  (setq m2 (copy-marker m1))
+       ⇒ #<marker at 101 in markers.texi>
+  (eq m1 m2)
+       ⇒ nil
+  (equal m1 m2)
+       ⇒ t
+
+
+  ;; When you are finished using a marker, make it point nowhere.
+  (set-marker m1 nil)
+       ⇒ #<marker in no buffer>
+#+end_src
 
 ** TODO 32.2 关于标记的谓词
 
@@ -86,9 +89,10 @@
 功能：制作标记¶
 
     此函数返回一个新创建的不指向任何地方的标记。
-
-    （制造标记）
-	  ⇒ #<无缓冲区中的标记>
+    #+begin_src emacs-lisp
+      (make-marker)
+	   ⇒ #<marker in no buffer>
+    #+end_src
 
 功能：点标记¶
 
@@ -103,54 +107,59 @@
     此函数返回一个新标记，该标记指向缓冲区可访问部分的末尾。  除非收窄生效，否则这将是缓冲区的结尾。  请参阅收窄。
 
     下面是这个函数和 point-min-marker 的示例，显示在包含本章文本源文件版本的缓冲区中。
-
-    （点最小标记）
-	  ⇒ #<marker.texi 中 1 处的标记>
-    （点最大标记）
-	  ⇒ #<marker.texi 中 24080 处的标记>
+    #+begin_src emacs-lisp
 
 
-    （缩小到区域 100 200）
-	  ⇒ 无
+      (point-min-marker)
+	   ⇒ #<marker at 1 in markers.texi>
+      (point-max-marker)
+	   ⇒ #<marker at 24080 in markers.texi>
 
-    （点最小标记）
-	  ⇒ #<markers.texi 中 100 处的标记>
 
-    （点最大标记）
-	  ⇒ #<marker.texi 中 200 处的标记>
+      (narrow-to-region 100 200)
+	   ⇒ nil
+
+      (point-min-marker)
+	   ⇒ #<marker at 100 in markers.texi>
+
+      (point-max-marker)
+	   ⇒ #<marker at 200 in markers.texi>
+    #+end_src
 
 功能：复制标记和可选标记或整数插入类型¶
 
     如果将标记作为其参数传递，则复制标记返回一个新标记，该标记指向与标记或整数相同的位置和相同的缓冲区。  如果传递一个整数作为其参数，则复制标记返回一个新标记，该标记指向当前缓冲区中的位置标记或整数。
 
     新标记的插入类型由参数插入类型指定。  请参阅标记插入类型。
+    #+begin_src emacs-lisp
+      (copy-marker 0)
+	   ⇒ #<marker at 1 in markers.texi>
 
-    （复制标记 0）
-	  ⇒ #<marker.texi 中 1 处的标记>
 
-
-    （复制标记 90000）
-	  ⇒ #<marker.texi 中 24080 处的标记>
+      (copy-marker 90000)
+	   ⇒ #<marker at 24080 in markers.texi>
+    #+end_src
 
     如果标记既不是标记也不是整数，则会发出错误信号。
 
 如果两个不同的标记具有相同的位置和缓冲区，或者它们都没有指向任何地方，则认为它们彼此相等（即使不是 eq）。
 
-(setq p (点标记))
-     ⇒ #<marker.texi 中 2139 处的标记>
+#+begin_src emacs-lisp
+  (setq p (point-marker))
+       ⇒ #<marker at 2139 in markers.texi>
 
 
-(setq q (复制标记 p))
-     ⇒ #<marker.texi 中 2139 处的标记>
+  (setq q (copy-marker p))
+       ⇒ #<marker at 2139 in markers.texi>
 
 
-(当量 pq)
-     ⇒ 无
+  (eq p q)
+       ⇒ nil
 
 
-（等于 pq）
-     ⇒ 吨
-
+  (equal p q)
+       ⇒ t
+#+end_src
 ** TODO 32.4 来自标记的信息
 
 本节介绍用于访问标记对象的组件的函数。
@@ -163,24 +172,28 @@
 
     此函数返回标记指向的缓冲区，如果它不指向任何地方，则返回 nil。
 
-    (setq m (make-marker))
-	  ⇒ #<无缓冲区中的标记>
-
-    （标记位置 m）
-	  ⇒ 无
-
-    （标记缓冲区 m）
-	  ⇒ 无
+    #+begin_src emacs-lisp
 
 
-    (set-marker m 3770 (current-buffer))
-	  ⇒ #<markers.texi 中 3770 处的标记>
+      (setq m (make-marker))
+	   ⇒ #<marker in no buffer>
 
-    （标记缓冲区 m）
-	  ⇒ #<缓冲区标记.texi>
+      (marker-position m)
+	   ⇒ nil
 
-    （标记位置 m）
-	  ⇒ 3770
+      (marker-buffer m)
+	   ⇒ nil
+
+
+      (set-marker m 3770 (current-buffer))
+	   ⇒ #<marker at 3770 in markers.texi>
+
+      (marker-buffer m)
+	   ⇒ #<buffer markers.texi>
+
+      (marker-position m)
+	   ⇒ 3770
+    #+end_src
 
 ** TODO 32.5 标记插入类型
 
@@ -208,18 +221,22 @@
     如果 position 为 nil 或标记不指向任何地方，则标记设置为不指向任何地方。
 
     返回的值是标记。
+    #+begin_src emacs-lisp
 
-    (setq m (点标记))
-	  ⇒ #<marker.texi 中 4714 处的标记>
 
-    （设置标记 m 55）
-	  ⇒ #<marker.texi 中 55 处的标记>
+      (setq m (point-marker))
+	   ⇒ #<marker at 4714 in markers.texi>
 
-    (setq b (get-buffer "foo"))
-	  ⇒ #<buffer foo>
+      (set-marker m 55)
+	   ⇒ #<marker at 55 in markers.texi>
 
-    （设置标记 m 0 b）
-	  ⇒ #<foo 中 1 处的标记>
+      (setq b (get-buffer "foo"))
+	   ⇒ #<buffer foo>
+
+      (set-marker m 0 b)
+	   ⇒ #<marker at 1 in foo>
+    #+end_src
+
 
 功能：移动标记标记位置&可选缓冲区¶
 
@@ -250,15 +267,18 @@
 功能：标记标记¶
 
     此函数返回代表当前缓冲区标记的标记。  它不是副本，它是内部使用的标记。  因此，改变这个标记的位置会直接影响缓冲区的标记。  不要那样做，除非那是你想要的效果。
+    #+begin_src emacs-lisp
 
-    (setq m (mark-marker))
-	  ⇒ #<marker.texi 中 3420 处的标记>
 
-    （设置标记 m 100）
-	  ⇒ #<markers.texi 中 100 处的标记>
+      (setq m (mark-marker))
+	   ⇒ #<marker at 3420 in markers.texi>
 
-    （标记标记）
-	  ⇒ #<markers.texi 中 100 处的标记>
+      (set-marker m 100)
+	   ⇒ #<marker at 100 in markers.texi>
+
+      (mark-marker)
+	   ⇒ #<marker at 100 in markers.texi>
+    #+end_src
 
     像任何标记一样，此标记可以设置为指向您喜欢的任何缓冲区。  如果你让它指向除它作为标记的缓冲区之外的任何缓冲区，它将产生完全一致但相当奇怪的结果。  我们建议您不要这样做！
 
@@ -269,10 +289,11 @@
     请注意：仅当您希望用户看到标记已移动，并且您希望之前的标记位置丢失时，才使用此功能。  通常，当设置新标记时，旧标记应该在标记环上。  出于这个原因，大多数应用程序应该使用 push-mark 和 pop-mark，而不是 set-mark。
 
     新手 Emacs Lisp 程序员经常尝试将标记用于错误的目的。  为了方便用户，该标记保存了一个位置。  除非更改标记是命令的用户级功能的一部分，否则编辑命令不应更改标记。  （并且，在这种情况下，应该记录这种效果。）要记住 Lisp 程序内部使用的位置，请将其存储在 Lisp 变量中。  例如：
-
-    （让（（求（点）））
-      （前线1）
-      （删除区域请求（点）））。
+    #+begin_src emacs-lisp
+      (let ((beg (point)))
+	(forward-line 1)
+	(delete-region beg (point))).
+    #+end_src
 
 功能：push-mark &optional position nomsg activate ¶
 
@@ -304,8 +325,10 @@
 
     要编写修改缓冲区而不导致在命令末尾停用标记的 Lisp 代码，请将 deactivate-mark 绑定到执行修改的代码周围的 nil 。  例如：
 
-    （让（停用标记）
-      （插入 ” ”））
+    #+begin_src emacs-lisp
+      (let (deactivate-mark)
+	(insert " "))
+    #+end_src
 
 功能：deactivate-mark &optional force ¶
 
@@ -330,10 +353,12 @@
 
     这个缓冲区局部变量的值是当前缓冲区保存的以前标记的列表，最近的在前。
 
-    标记环
-    ⇒ (#<marker.texi 中 11050 处的标记>
-	 #<marker.texi 中 10832 处的标记>
-	 …)
+    #+begin_src emacs-lisp
+      mark-ring
+      ⇒ (#<marker at 11050 in markers.texi>
+	  #<marker at 10832 in markers.texi>
+	  …)
+    #+end_src
 
 用户选项：mark-ring-max ¶
 
