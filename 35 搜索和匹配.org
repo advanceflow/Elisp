@@ -20,18 +20,21 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
     此函数从点向前搜索字符串的精确匹配。  如果成功，它会将 point 设置为找到的事件的末尾，并返回 point 的新值。  如果未找到匹配项，则值和副作用取决于 noerror（见下文）。
 
     在以下示例中，点最初位于行首。  然后 (search-forward "fox") 在 'fox' 的最后一个字母之后移动点：
-
-    ---------- 缓冲区： foo ----------
-    ∗ 敏捷的棕色狐狸跳过了懒惰的狗。
-    ---------- 缓冲区： foo ----------
+    #+begin_src emacs-lisp
 
 
-    （向前搜索“狐狸”）
-	  ⇒ 20
+      ---------- Buffer: foo ----------
+      ∗The quick brown fox jumped over the lazy dog.
+      ---------- Buffer: foo ----------
 
-    ---------- 缓冲区： foo ----------
-    敏捷的棕色狐狸* 跳过了懒惰的狗。
-    ---------- 缓冲区： foo ----------
+
+      (search-forward "fox")
+	   ⇒ 20
+
+      ---------- Buffer: foo ----------
+      The quick brown fox∗ jumped over the lazy dog.
+      ---------- Buffer: foo ----------
+    #+end_src
 
     参数限制指定搜索的边界，并且应该是当前缓冲区中的一个位置。  在该位置之后不接受任何匹配。  如果 limit 被省略或为零，则默认为缓冲区可访问部分的末尾。
 
@@ -52,20 +55,23 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
     单词匹配将字符串视为单词序列，而忽略分隔它们的标点符号。  它在缓冲区中搜索相同的单词序列。  每个单词在缓冲区中必须是不同的（搜索单词 'ball' 与单词 'balls' 不匹配），但忽略标点和空格的细节（搜索 'ball boy' 匹配 'ball.boy!' ）。
 
     在本例中，point 最初位于缓冲区的开头；  搜索将其留在“y”和“！”之间。
-
-    ---------- 缓冲区： foo ----------
-    ∗他说“求你了！找
-    球童！”
-    ---------- 缓冲区： foo ----------
+    #+begin_src emacs-lisp
 
 
-    （word-search-forward “请找到球，男孩。”）
-	  ⇒ 39
+      ---------- Buffer: foo ----------
+      ∗He said "Please!  Find
+      the ball boy!"
+      ---------- Buffer: foo ----------
 
-    ---------- 缓冲区： foo ----------
-    他说：“求你了！找到
-    球童*！”
-    ---------- 缓冲区： foo ----------
+
+      (word-search-forward "Please find the ball, boy.")
+	   ⇒ 39
+
+      ---------- Buffer: foo ----------
+      He said "Please!  Find
+      the ball boy∗!"
+      ---------- Buffer: foo ----------
+    #+end_src
 
     如果limit是非零，它必须是当前缓冲区中的一个位置；  它指定搜索的上限。  找到的匹配不得超出该位置。
 
@@ -383,10 +389,12 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 这是一个复杂的正则表达式，以前 Emacs 使用它来识别句子的结尾以及后面的任何空格。  （现在 Emacs 使用类似但更复杂的默认正则表达式，由函数 sentence-end 构造。请参阅编辑中使用的标准正则表达式。）
 
 下面，我们首先将正则表达式显示为 Lisp 语法中的字符串（以区分空格和制表符），然后显示计算结果。  字符串常量以双引号开始和结束。  '\"' 表示双引号作为字符串的一部分，'\\' 表示反斜杠作为字符串的一部分，'\t' 表示制表符，'\n' 表示换行符。
+#+begin_src emacs-lisp
+  "[.?!][]\"')}]*\\($\\| $\\|\t\\|  \\)[ \t\n]*"
+       ⇒ "[.?!][]\"')}]*\\($\\| $\\|  \\|  \\)[
+  ]*"
+#+end_src
 
-"[.?!][]\"')}]*\\($\\| $\\|\t\\| \\)[ \t\n]*"
-     ⇒ "[.?!][]\"')}]*\\($\\| $\\| \\| \\)[
-]*"
 
 在输出中，制表符和换行符显示为它们本身。
 
@@ -407,13 +415,15 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 
 在 rx 表示法中（参见 The rx Structured Regexp Notation），正则表达式可以写成
 
-(rx (any ".?!") ; 标点结束句。
-    (zero-or-more (any "\"')]}")) ; 右引号或括号。
-    （或线端
-	 (seq " " line-end)
-	 "\t"
-	 " ") ;  两个空格。
-    (零个或多个 (任何 "\t\n "))) ;  可选的额外空格。
+#+begin_src emacs-lisp
+  (rx (any ".?!")                    ; Punctuation ending sentence.
+      (zero-or-more (any "\"')]}"))  ; Closing quotes or brackets.
+      (or line-end
+	  (seq " " line-end)
+	  "\t"
+	  "  ")                      ; Two spaces.
+      (zero-or-more (any "\t\n ")))  ; Optional extra whitespace.
+#+end_src
 
 由于 rx 正则表达式只是 S 表达式，因此可以对其进行格式化和注释。
 
@@ -422,25 +432,30 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 作为基于字符串的语法的替代方案，Emacs 提供了基于 Lisp S 表达式的结构化 rx 表示法。  这种表示法通常比正则表达式字符串更易于阅读、编写和维护，并且可以自由缩进和注释。  它需要转换为字符串形式，因为这是正则表达式函数所期望的，但是这种转换通常发生在字节编译期间，而不是在运行使用正则表达式的 Lisp 代码时发生。
 
 这是一个匹配 C 编程语言中的块注释的 rx regexp21：
-
-(rx "/*" ; 初始 /*
-    （零个或多个
-     (or (not (any "*")) ; 要么非*，
-	  (seq "*" ; 或 * 后跟
-	       （没有 ”/”））））） ;  非-/
-    （一个或多个 ”*”） ;  至少一颗星，
-    "/") ;  最后 /
+#+begin_src emacs-lisp
+  (rx "/*"                          ; Initial /*
+      (zero-or-more
+       (or (not (any "*"))          ;  Either non-*,
+	   (seq "*"                 ;  or * followed by
+		(not (any "/")))))  ;  non-/
+      (one-or-more "*")             ; At least one star,
+      "/")                          ; and the final /
+#+end_src
 
 或者，使用更短的同义词并且写得更紧凑，
 
-(rx "/*"
-    (* (| (不是“*”)
-	   （： “*“ （不是 ”/”））））
-    (+ "*") "/")
+#+begin_src emacs-lisp
+  (rx "/*"
+      (* (| (not "*")
+	    (: "*" (not "/"))))
+      (+ "*") "/")
+#+end_src
 
 在传统的字符串语法中，它会写成
 
-"/\\*\\(?:[^*]\\|\\*[^/]\\)*\\*+/"
+#+begin_src emacs-lisp
+  "/\\*\\(?:[^*]\\|\\*[^/]\\)*\\*+/"
+#+end_src
 
 rx 符号主要在 Lisp 代码中有用；  它不能用于请求正则表达式的大多数交互式情况，例如运行 query-replace-regexp 或变量自定义时。
 
@@ -776,15 +791,19 @@ rx 正则表达式中的各种形式如下所述。  简写 rx 表示任何 rx �
 
     将 rx-forms 转换为字符串正则表达式，就好像它们是 (seq ...) 表单的主体一样。  rx 宏扩展为字符串常量，或者，如果使用文字或正则表达式形式，则为计算结果为字符串的 Lisp 表达式。  例子：
 
-    (rx (+ alpha) "=" (+ 数字))
-      ⇒ "[[:alpha:]]+=[[:digit:]]+"
+    #+begin_src emacs-lisp
+      (rx (+ alpha) "=" (+ digit))
+	⇒ "[[:alpha:]]+=[[:digit:]]+"
+    #+end_src
 
 功能：rx-to-string rx-expr &optional no-group ¶
 
     将 rx-expr 转换为返回的字符串正则表达式。  如果 no-group 不存在或为零，则将结果括在非捕获组中，'\(?:...\)'，如有必要，以确保附加到它的后缀运算符将应用于整个表达式。  例子：
 
-    (rx-to-string '(seq (+ alpha) "=" (+ digit)) t)
-      ⇒ "[[:alpha:]]+=[[:digit:]]+"
+    #+begin_src emacs-lisp
+      (rx-to-string '(seq (+ alpha) "=" (+ digit)) t)
+	⇒ "[[:alpha:]]+=[[:digit:]]+"
+    #+end_src
 
     rx-expr 中文字和正则表达式形式的参数必须是字符串文字。
 
@@ -809,32 +828,38 @@ pcase 宏可以直接使用 rx 表达式作为模式；  请参阅 pcase 中的 
 宏：rx-define name [arglist] rx-form ¶
 
     在对 rx 和 rx-to-string 的所有后续调用中全局定义名称。  如果 arglist 不存在，则 name 被定义为要替换为 rx-form 的普通符号。  例子：
+    #+begin_src emacs-lisp
+      (rx-define haskell-comment (seq "--" (zero-or-more nonl)))
+      (rx haskell-comment)
+	   ⇒ "--.*"
+    #+end_src
 
-    (rx-define haskell-comment (seq "--" (零个或多个 nonl)))
-    （rx haskell-评论）
-	  ⇒ “--.*”
 
     如果 arglist 存在，它必须是零个或多个参数名称的列表，然后将 name 定义为参数化形式。  当在 rx 表达式中用作 (name arg...) 时，每个 arg 将替换 rx-form 中相应的参数名称。
 
     arglist 可以以 &rest 和一个最后的参数名称结尾，表示一个 rest 参数。  其余参数将扩展为 arglist 中任何其他参数都不匹配的所有额外实际参数值，并在它出现的地方拼接到 rx-form 中。  例子：
 
-    (rx-define moan (xy &rest r) (seq x (one-or-more y) r "!"))
-    (rx (moan "MOO" "A" "MEE" "OW"))
-	  ⇒ “MOOA+喵喵！”
+    #+begin_src emacs-lisp
+      (rx-define moan (x y &rest r) (seq x (one-or-more y) r "!"))
+      (rx (moan "MOO" "A" "MEE" "OW"))
+	   ⇒ "MOOA+MEEOW!"
+    #+end_src
 
     由于定义是全局的，因此建议为 name 提供包前缀以避免名称与其他地方的定义发生冲突，这在命名非局部变量和函数时很常见。
 
     以这种方式定义的表单仅执行简单的模板替换。  对于任意计算，将它们与 rx 形式 eval、regexp 或 literal 一起使用。  例子：
 
-    (defun n-tuple-rx (n 元素)
-      `（序列“<”
-	     （组-n 1 ，元素）
-	     ,@(mapcar (lambda (i) `(seq ?, (group-n ,i ,element)))
-		       (数字序列 2 n))
-	     ">"))
-    (rx-define n-tuple (n element) (eval (n-tuple-rx n 'element)))
-    (rx (n-tuple 3 (+ (in "0-9"))))
-      ⇒ "<\\(?1:[0-9]+\\),\\(?2:[0-9]+\\),\\(?3:[0-9]+\\) >"
+    #+begin_src emacs-lisp
+      (defun n-tuple-rx (n element)
+	`(seq "<"
+	      (group-n 1 ,element)
+	      ,@(mapcar (lambda (i) `(seq ?, (group-n ,i ,element)))
+			(number-sequence 2 n))
+	      ">"))
+      (rx-define n-tuple (n element) (eval (n-tuple-rx n 'element)))
+      (rx (n-tuple 3 (+ (in "0-9"))))
+	⇒ "<\\(?1:[0-9]+\\),\\(?2:[0-9]+\\),\\(?3:[0-9]+\\)>"
+    #+end_src
 
 宏：rx-let (bindings...) body... ¶
 
@@ -842,20 +867,24 @@ pcase 宏可以直接使用 rx 表达式作为模式；  请参阅 pcase 中的 
 
     bindings 的每个元素都在表单上 (name [arglist] rx-form)，其中各部分的含义与上面的 rx-define 中的相同。  例子：
 
-    (rx-let ((逗号分隔 (item) (seq item (0+ "," item)))
-	      （数字（1+ 位））
-	      （数字（逗号分隔的数字）））
-      (re-search-forward (rx "(" numbers ")")))
+    #+begin_src emacs-lisp
+      (rx-let ((comma-separated (item) (seq item (0+ "," item)))
+	       (number (1+ digit))
+	       (numbers (comma-separated number)))
+	(re-search-forward (rx "(" numbers ")")))
+    #+end_src
+
 
     这些定义仅在主体的宏扩展期间可用，因此在编译代码的执行期间不存在。
 
     rx-let 不仅可以在函数内部使用，还可以在顶层包含需要共享一组通用 rx 形式的全局变量和函数定义。  由于名称在正文中是本地的，因此不需要任何包前缀。  例子：
-
-    (rx-let ((电话号码 (seq (opt ?+) (1+ (any digit ?-)))))
-      (defun 查找下一个电话号码 ()
-	 (re-search-forward (rx phone-number)))
-      (defun 电话号码-p (字符串)
-	 (string-match-p (rx bos phone-number eos) string)))
+    #+begin_src emacs-lisp
+      (rx-let ((phone-number (seq (opt ?+) (1+ (any digit ?-)))))
+	(defun find-next-phone-number ()
+	  (re-search-forward (rx phone-number)))
+	(defun phone-number-p (string)
+	  (string-match-p (rx bos phone-number eos) string)))
+    #+end_src
 
     rx-let 绑定的范围是词法的，这意味着它们在 body 本身之外是不可见的，即使在从 body 调用的函数中也是如此。
 
@@ -864,12 +893,13 @@ pcase 宏可以直接使用 rx 表达式作为模式；  请参阅 pcase 中的 
     像在 rx-let 中一样评估绑定列表的绑定，并使用那些对 rx-to-string 的调用有效的绑定来评估 body。
 
     这个宏类似于 rx-let，除了绑定参数被评估（因此如果它是一个列表文字需要被引用），并且定义在运行时被替换，这是 rx-to-string 所必需的工作。  例子：
-
-    (rx-让-评估
-	 '((ponder (x) (seq "所有的" x "都去哪儿了？")))
-      （看着（rx-to-string
-		    '（思考（或“花”“少女”
-				 “左袜子”）））））
+    #+begin_src emacs-lisp
+      (rx-let-eval
+	  '((ponder (x) (seq "Where have all the " x " gone?")))
+	(looking-at (rx-to-string
+		     '(ponder (or "flowers" "young girls"
+				  "left socks")))))
+    #+end_src
 
     与 rx-let 的另一个区别是绑定是动态范围的，因此也可以在从 body 调用的函数中使用。  但是，它们在 body 中定义的函数内部是不可见的。
 
@@ -883,13 +913,18 @@ pcase 宏可以直接使用 rx 表达式作为模式；  请参阅 pcase 中的 
 
     这允许您在调用需要正则表达式的函数时请求精确的字符串匹配或搜索。
 
-    (regexp-quote "^The cat$")
-	  ⇒ "\\^猫\\$"
+    #+begin_src emacs-lisp
+      (regexp-quote "^The cat$")
+	   ⇒ "\\^The cat\\$"
+    #+end_src
 
     regexp-quote 的一种用途是将精确的字符串匹配与描述为正则表达式的上下文结合起来。  例如，这将搜索作为 string 值的字符串，由空格包围：
 
-    （重新搜索转发
-     (concat "\\s-" (regexp-quote string) "\\s-"))
+    #+begin_src emacs-lisp
+      (re-search-forward
+       (concat "\\s-" (regexp-quote string) "\\s-"))
+    #+end_src
+
 
     如果返回的字符串不包含任何特殊字符，则它可能是字符串本身。
 
@@ -921,17 +956,19 @@ pcase 宏可以直接使用 rx 表达式作为模式；  请参阅 pcase 中的 
 
     在重新排序之前，regexp-opt 的结果正则表达式等效于但通常比简化版本更有效：
 
-    （defun 简化正则表达式选择（字符串和可选括号）
-     （让（（括号
-	     （条件
-	      ((stringp paren) (cons paren "\\)"))
-	      ((eq paren 'words) '("\\<\\(" . "\\)\\>"))
-	      ((eq paren 'symbols) '("\\_<\\(" . "\\)\\_>"))
-	      ((null paren) '("\\(?:" . "\\)"))
-	      (t '("\\(" . "\\)")))))
-	（concat（汽车挡板）
-		(mapconcat 'regexp-quote strings "\\|")
-		（cdr 括号））））
+    #+begin_src emacs-lisp
+      (defun simplified-regexp-opt (strings &optional paren)
+       (let ((parens
+	      (cond
+	       ((stringp paren)       (cons paren "\\)"))
+	       ((eq paren 'words)    '("\\<\\(" . "\\)\\>"))
+	       ((eq paren 'symbols) '("\\_<\\(" . "\\)\\_>"))
+	       ((null paren)          '("\\(?:" . "\\)"))
+	       (t                       '("\\(" . "\\)")))))
+	 (concat (car parens)
+		 (mapconcat 'regexp-quote strings "\\|")
+		 (cdr parens))))
+    #+end_src
 
 功能：正则表达式选择深度正则表达式¶
 
@@ -941,8 +978,10 @@ pcase 宏可以直接使用 rx 表达式作为模式；  请参阅 pcase 中的 
 
     此函数返回与字符列表中的字符匹配的正则表达式。
 
-    (regexp-opt-charset '(?a ?b ?c ?d ?e))
-	  ⇒ “[ae]”
+    #+begin_src emacs-lisp
+      (regexp-opt-charset '(?a ?b ?c ?d ?e))
+	   ⇒ "[a-e]"
+    #+end_src
 
 变量：regexp-unmatchable ¶
 
@@ -999,20 +1038,24 @@ Emacs 正则表达式实现，和许多同类实现一样，通常是健壮的�
     如果count是正数n，则搜索n次；  每个连续的搜索都从前一个匹配的结尾开始。  如果所有这些连续搜索成功，则函数调用成功，移动点并返回其新值。  否则函数调用失败，结果取决于 noerror 的值，如上所述。  如果 count 是负数 -n，则在相反（向后）方向上进行 n 次搜索。
 
     在以下示例中，点最初位于“T”之前。  评估搜索调用将点移动到该行的末尾（在 'hat' 的 't' 和换行符之间）。
-
-    ---------- 缓冲区： foo ----------
-    我读到“∗帽子里的猫
-    回来”两次。
-    ---------- 缓冲区： foo ----------
+    #+begin_src emacs-lisp
 
 
-    (re-search-forward "[az]+" nil t 5)
-	  ⇒ 27
+      ---------- Buffer: foo ----------
+      I read "∗The cat in the hat
+      comes back" twice.
+      ---------- Buffer: foo ----------
 
-    ---------- 缓冲区： foo ----------
-    我读到“戴帽子的猫∗
-    回来”两次。
-    ---------- 缓冲区： foo ----------
+
+      (re-search-forward "[a-z]+" nil t 5)
+	   ⇒ 27
+
+      ---------- Buffer: foo ----------
+      I read "The cat in the hat∗
+      comes back" twice.
+      ---------- Buffer: foo ----------
+    #+end_src
+
 
 命令：re-search-backward regexp &optional limit noerror count ¶
 
@@ -1027,26 +1070,28 @@ Emacs 正则表达式实现，和许多同类实现一样，通常是健壮的�
     此函数返回字符串中正则表达式 regexp 的第一个匹配项的开始索引，如果没有匹配项，则返回 nil。  如果 start 不为零，则搜索从字符串中的该索引开始。
 
     例如，
+    #+begin_src emacs-lisp
+(string-match
+ "quick" "The quick brown fox jumped quickly.")
+     ⇒ 4
 
-    （字符串匹配
-     “快速” “快速的棕色狐狸跳得很快。”）
-	  ⇒ 4
-
-    （字符串匹配
-     “快” “敏捷的棕狐跳得很快。”  8)
-	  ⇒ 27
+(string-match
+ "quick" "The quick brown fox jumped quickly." 8)
+     ⇒ 27
+    #+end_src
 
     字符串第一个字符的索引为 0，第二个字符的索引为 1，以此类推。
 
     如果此函数找到匹配项，则匹配项之外的第一个字符的索引可用作 (match-end 0)。  请参阅匹配数据。
 
-    （字符串匹配
-     “快” “敏捷的棕狐跳得很快。”  8)
-	  ⇒ 27
+    #+begin_src emacs-lisp
+(string-match
+ "quick" "The quick brown fox jumped quickly." 8)
+     ⇒ 27
 
-
-    （比赛结束 0）
-	  ⇒ 32
+(match-end 0)
+     ⇒ 32
+    #+end_src
 
 功能：string-match-p 正则表达式 string &optional start ¶
 
@@ -1059,14 +1104,15 @@ Emacs 正则表达式实现，和许多同类实现一样，通常是健壮的�
     此函数不会移动点，但会更新匹配数据。  请参阅匹配数据。  如果您需要在不修改匹配数据的情况下测试匹配，请使用 looking-at-p，如下所述。
 
     在此示例中，点直接位于“T”之前。  如果它在其他任何地方，结果将为零。
+    #+begin_src emacs-lisp
+      ---------- Buffer: foo ----------
+      I read "∗The cat in the hat
+      comes back" twice.
+      ---------- Buffer: foo ----------
 
-    ---------- 缓冲区： foo ----------
-    我读到“∗帽子里的猫
-    回来”两次。
-    ---------- 缓冲区： foo ----------
-
-    （看《戴帽子的猫$》）
-	  ⇒ 吨
+      (looking-at "The cat in the hat$")
+	   ⇒ t
+    #+end_src
 
 功能：回溯正则表达式限制 &optional greedy ¶
 
@@ -1074,15 +1120,19 @@ Emacs 正则表达式实现，和许多同类实现一样，通常是健壮的�
 
     因为正则表达式匹配只能向前工作，所以这是通过从点向后搜索以点结束的匹配来实现的。  如果它必须搜索很长的距离，那可能会很慢。  您可以通过为limit指定一个非零值来限制所需的时间，这表示在限制之前不要搜索。  在这种情况下，找到的匹配必须在 limit 处或之后开始。  这是一个例子：
 
-    ---------- 缓冲区： foo ----------
-    我读到“∗帽子里的猫
-    回来”两次。
-    ---------- 缓冲区： foo ----------
+    #+begin_src emacs-lisp
 
-    （回首“读\”“3）
-	  ⇒ 吨
-    （回首“读\”“4）
-	  ⇒ 无
+
+      ---------- Buffer: foo ----------
+      I read "∗The cat in the hat
+      comes back" twice.
+      ---------- Buffer: foo ----------
+
+      (looking-back "read \"" 3)
+	   ⇒ t
+      (looking-back "read \"" 4)
+	   ⇒ nil
+    #+end_src
 
     如果 greedy 不为零，则此函数尽可能向后扩展匹配，当单个附加的前一个字符不能成为正则表达式匹配的一部分时停止。  当比赛延长时，允许其起始位置出现在限制之前。
 
@@ -1206,49 +1256,55 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
     此函数类似于 match-beginning，只是它返回匹配结束的位置，而不是开始的位置。
 
 以下是使用匹配数据的示例，并带有显示文本中位置的注释：
-
-(字符串匹配 "\\(qu\\)\\(ick\\)"
-	       “敏捷的狐狸跳得很快。”）
-	       ;0123456789
-     ⇒ 4
+#+begin_src emacs-lisp
 
 
-(match-string 0 "狐狸跳得很快。")
-     ⇒ “快”
-(match-string 1 "狐狸跳得很快。")
-     ⇒ “曲”
-（匹配字符串 2“快速的狐狸跳得很快。”）
-     ⇒ “坏”
+  (string-match "\\(qu\\)\\(ick\\)"
+		"The quick fox jumped quickly.")
+		;0123456789
+       ⇒ 4
 
 
-(比赛开始 1) ;  比赛开始
-     ⇒ 4;  'qu' 在索引 4 处。
+  (match-string 0 "The quick fox jumped quickly.")
+       ⇒ "quick"
+  (match-string 1 "The quick fox jumped quickly.")
+       ⇒ "qu"
+  (match-string 2 "The quick fox jumped quickly.")
+       ⇒ "ick"
 
 
-（比赛开始2）；  比赛开始
-     ⇒ 6;  'ick' 在索引 6 处。
+  (match-beginning 1)       ; The beginning of the match
+       ⇒ 4                 ;   with ‘qu’ is at index 4.
 
 
-(比赛结束 1) ;  比赛结束
-     ⇒ 6;  'qu' 在索引 6 处。
+  (match-beginning 2)       ; The beginning of the match
+       ⇒ 6                 ;   with ‘ick’ is at index 6.
 
-(比赛结束 2) ;  比赛结束
-     ⇒ 9;  'ick' 在索引 9 处。
+
+  (match-end 1)             ; The end of the match
+       ⇒ 6                 ;   with ‘qu’ is at index 6.
+
+  (match-end 2)             ; The end of the match
+       ⇒ 9                 ;   with ‘ick’ is at index 9.
+#+end_src
 
 这是另一个例子。  点最初位于线的开头。  搜索移动指向空格和单词'in'之间。  整个匹配的开始在缓冲区的第 9 个字符 ('T')，第一个子表达式的匹配开始在第 13 个字符 ('c')。
-
-（列表
-  （重新搜索“The \\(cat \\)”）
-  （比赛开始 0）
-  （比赛开始1））
-    ⇒ (17 9 13)
+#+begin_src emacs-lisp
 
 
----------- 缓冲区： foo ----------
-我读了两遍“帽子里的猫*回来了”。
-	 ^ ^
-	 9 13
----------- 缓冲区： foo ----------
+  (list
+    (re-search-forward "The \\(cat \\)")
+    (match-beginning 0)
+    (match-beginning 1))
+      ⇒ (17 9 13)
+
+
+  ---------- Buffer: foo ----------
+  I read "The cat ∗in the hat comes back" twice.
+	  ^   ^
+	  9  13
+  ---------- Buffer: foo ----------
+#+end_src
 
 （在这种情况下，返回的索引是一个缓冲区位置；缓冲区的第一个字符计为 1。）
 
@@ -1269,11 +1325,13 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
 
     与往常一样，在对搜索函数的调用和对旨在访问该搜索的匹配数据的匹配数据的调用之间不得有干预搜索的可能性。
 
-    （匹配数据）
-	  ⇒ (#<在 foo 中 9 处的标记>
-	       #<foo 中 17 处的标记>
-	       #<foo 中 13 处的标记>
-	       #<foo 中 17 处的标记>)
+    #+begin_src emacs-lisp
+      (match-data)
+	   ⇒  (#<marker at 9 in foo>
+		#<marker at 17 in foo>
+		#<marker at 13 in foo>
+		#<marker at 17 in foo>)
+    #+end_src
 
 功能：set-match-data match-list &optional reseat ¶
 
@@ -1289,11 +1347,13 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
 
 当您调用可能搜索的函数时，如果您想保留先前搜索的匹配数据以供以后使用，则可能需要保存和恢复该调用周围的匹配数据。  这是一个示例，显示了如果未能保存匹配数据会出现的问题：
 
-（重新搜索“The \\(cat \\)”）
+#+begin_src emacs-lisp
+(re-search-forward "The \\(cat \\)")
      ⇒ 48
-(foo) ;  foo 进行更多搜索。
-（比赛结束 0）
-     ⇒ 61;  出乎意料的结果——不是 48！
+(foo)                   ; foo does more searching.
+(match-end 0)
+     ⇒ 61              ; Unexpected result—not 48!
+#+end_src
 
 您可以使用 save-match-data 保存和恢复匹配数据：
 
@@ -1303,10 +1363,12 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
 
 您可以使用 set-match-data 和 match-data 来模仿特殊形式 save-match-data 的效果。  方法如下：
 
-（让（（数据（匹配数据）））
-  （放松保护
-      … ;  可以更改原始匹配数据。
-    （设置匹配数据数据）））
+#+begin_src emacs-lisp
+  (let ((data (match-data)))
+    (unwind-protect
+	…   ; Ok to change the original match data.
+      (set-match-data data)))
+#+end_src
 
 Emacs 在运行进程过滤函数（参见进程过滤函数）和进程哨兵（参见哨兵：检测进程状态更改）时会自动保存和恢复匹配数据。
 
@@ -1314,8 +1376,10 @@ Emacs 在运行进程过滤函数（参见进程过滤函数）和进程哨兵�
 
 如果你想在缓冲区的一部分中找到一个正则表达式的所有匹配项并替换它们，最灵活的方法是使用 re-search-forward 和 replace-match 编写一个显式循环，如下所示：
 
-(while (re-search-forward "foo[ \t]+bar" nil t)
-  （替换匹配“foobar”））
+#+begin_src emacs-lisp
+  (while (re-search-forward "foo[ \t]+bar" nil t)
+    (replace-match "foobar"))
+#+end_src
 
 有关替换匹配的说明，请参阅替换匹配的文本。
 
@@ -1325,7 +1389,9 @@ Emacs 在运行进程过滤函数（参见进程过滤函数）和进程哨兵�
 
     此函数将所有出现的正则表达式替换为开始和结束之间的缓冲区文本区域中的替换；  start 默认为点的位置， end 默认为缓冲区的最后一个可访问位置。  regexp 的搜索区分大小写，并且在不改变其字母大小写的情况下插入替换。  替换字符串可以使用与替换匹配相同的以 '\' 开头的特殊元素。  该函数返回被替换的次数，如果没有找到正则表达式，则返回 nil。  该函数保留点的位置。
 
-    (replace-regexp-in-region "foo[ \t]+bar" "foobar")
+    #+begin_src emacs-lisp
+      (replace-regexp-in-region "foo[ \t]+bar" "foobar")
+    #+end_src
 
 功能：replace-string-in-region 字符串替换&可选开始结束 ¶
 
