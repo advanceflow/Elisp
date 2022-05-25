@@ -96,28 +96,27 @@
     当以交互方式调用 debug-on-entry 时，它会提示输入 minibuffer 中的函数名。  如果该函数已设置为在进入时调用调试器，则 d​​ebug-on-entry 什么也不做。  debug-on-entry 总是返回函数名。
 
     下面是一个例子来说明这个函数的使用：
+    #+begin_src emacs-lisp
+(defun fact (n)
+  (if (zerop n) 1
+      (* n (fact (1- n)))))
+     ⇒ fact
 
-    （定义事实（n）
-      (如果 (zerop n) 1
-	   (* n (事实 (1- n)))))
-	  ⇒ 事实
+(debug-on-entry 'fact)
+     ⇒ fact
 
-    (debug-on-entry '事实)
-	  ⇒ 事实
-
-    （事实 3）
-
-
-    ------ 缓冲区：*回溯* ------
-    调试器进入——进入一个函数：
-    * 事实（3）
-      评估（（事实 3））
-      eval-last-sexp-1(nil)
-      eval-last-sexp(nil)
-      交互式调用（eval-last-sexp）
-    ------ 缓冲区：*回溯* ------
+(fact 3)
 
 
+------ Buffer: *Backtrace* ------
+Debugger entered--entering a function:
+* fact(3)
+  eval((fact 3))
+  eval-last-sexp-1(nil)
+  eval-last-sexp(nil)
+  call-interactively(eval-last-sexp)
+------ Buffer: *Backtrace* ------
+    #+end_src
 命令：cancel-debug-on-entry &optional function-name ¶
 
     此函数撤消 debug-on-entry 对函数名的影响。  当以交互方式调用时，它会提示输入 minibuffer 中的函数名。  如果 function-name 被省略或 nil，它将取消所有函数的 break-on-entry。  调用 cancel-debug-on-entry 对当前未设置为在进入时中断的函数没有任何作用。
@@ -302,56 +301,61 @@ l
     在以下示例中，Lisp 表达式显式调用回溯。  这会将回溯打印到流标准输出，在这种情况下，它是缓冲区“回溯输出”。
 
     回溯的每一行代表一个函数调用。  该行显示了函数，然后是函数参数值的列表（如果它们都是已知的）；  如果它们仍在计算中，则该行由一个包含函数及其未评估参数的列表组成。  长列表或深度嵌套的结构可能会被省略。
-
-    （带有输出到临时缓冲区“回溯输出”
-      (让 ((var 1))
-	 （保存游览
-	   (setq var (eval '(progn
-			      (1+ 变量)
-			      （列表'测试（回溯））））））））
-
-	  ⇒ （测试为零）
+    #+begin_src emacs-lisp
 
 
-    ------------ 缓冲区：回溯输出 ------------
-      回溯（）
-      （列表'测试（回溯））
+      (with-output-to-temp-buffer "backtrace-output"
+	(let ((var 1))
+	  (save-excursion
+	    (setq var (eval '(progn
+			       (1+ var)
+			       (list 'testing (backtrace))))))))
 
-      （预测...）
-      eval((progn (1+ var) (list 'testing (backtrace))))
-      (setq ...)
-      （保存游览......）
-      （让 ...）
-      （带有输出到临时缓冲区...）
-      eval((with-output-to-temp-buffer ...))
-      eval-last-sexp-1(nil)
+	   ⇒ (testing nil)
 
-      eval-last-sexp(nil)
-      交互式调用（eval-last-sexp）
-    ------------ 缓冲区：回溯输出 ------------
+
+      ----------- Buffer: backtrace-output ------------
+	backtrace()
+	(list 'testing (backtrace))
+
+	(progn ...)
+	eval((progn (1+ var) (list 'testing (backtrace))))
+	(setq ...)
+	(save-excursion ...)
+	(let ...)
+	(with-output-to-temp-buffer ...)
+	eval((with-output-to-temp-buffer ...))
+	eval-last-sexp-1(nil)
+
+	eval-last-sexp(nil)
+	call-interactively(eval-last-sexp)
+      ----------- Buffer: backtrace-output ------------
+    #+end_src
 
 用户选项：debugger-stack-frame-as-list ¶
 
     如果此变量不为零，则回溯的每个堆栈帧都显示为列表。  这旨在以特殊形式不再与常规函数调用在视觉上有所不同为代价来提高回溯的可读性。
 
     使用 debugger-stack-frame-as-list 非 nil 时，上面的示例如下所示：
+    #+begin_src emacs-lisp
+      ----------- Buffer: backtrace-output ------------
+	(backtrace)
+	(list 'testing (backtrace))
 
-    ------------ 缓冲区：回溯输出 ------------
-      （回溯）
-      （列表'测试（回溯））
+	(progn ...)
+	(eval (progn (1+ var) (list 'testing (backtrace))))
+	(setq ...)
+	(save-excursion ...)
+	(let ...)
+	(with-output-to-temp-buffer ...)
+	(eval (with-output-to-temp-buffer ...))
+	(eval-last-sexp-1 nil)
 
-      （预测...）
-      (eval (progn (1+ var) (list 'testing (backtrace))))
-      (setq ...)
-      （保存游览......）
-      （让 ...）
-      （带有输出到临时缓冲区...）
-      (eval (with-output-to-temp-buffer ...))
-      (eval-last-sexp-1 无)
+	(eval-last-sexp nil)
+	(call-interactively eval-last-sexp)
+      ----------- Buffer: backtrace-output ------------
+    #+end_src
 
-      (eval-last-sexp 无)
-      （交互式调用 eval-last-sexp）
-    ------------ 缓冲区：回溯输出 ------------
 
 变量：下次调用时调试¶
 
@@ -428,24 +432,30 @@ Edebug 是 Emacs Lisp 程序的源代码级调试器，您可以使用它：
 
 如果您检测 fac 的定义（如下所示）然后执行（fac 3），这就是您通常会看到的内容。  点位于 if 之前的左括号处。
 
-(defun fac (n)
-=>*(如果 (< 0 n)
-      (* n (fac (1- n)))
-    1))
+#+begin_src emacs-lisp
+  (defun fac (n)
+  =>∗(if (< 0 n)
+	(* n (fac (1- n)))
+      1))
+#+end_src
 
 函数中 Edebug 可以停止执行的位置称为停止点。  这些出现在每个作为列表的子表达式之前和之后，也出现在每个变量引用之后。  这里我们使用句点来显示函数 fac 中的停止点：
 
-(defun fac (n)
-  .(如果 .(< 0 n.)。
-      .(* n. .(fac .(1- n.).).)。
-    1).)
+#+begin_src emacs-lisp
+  (defun fac (n)
+    .(if .(< 0 n.).
+	.(* n. .(fac .(1- n.).).).
+      1).)
+#+end_src
 
 除了 Emacs Lisp 模式的命令外，源代码缓冲区中还有 Edebug 的特殊命令。  例如，您可以键入 Edebug 命令 SPC 执行直到下一个停止点。  如果您在进入 fac 后键入 SPC 一次，您将看到以下显示：
 
-(defun fac (n)
-=>(如果 *(< 0 n)
-      (* n (fac (1- n)))
-    1))
+#+begin_src emacs-lisp
+  (defun fac (n)
+  =>(if ∗(< 0 n)
+	(* n (fac (1- n)))
+      1))
+#+end_src
 
 当 Edebug 在表达式后停止执行时，它会在回显区域显示表达式的值。
 
@@ -469,7 +479,9 @@ Edebug 知道如何检测所有标准的特殊形式、带有表达式参数的�
 
 如果 Edebug 在检测时检测到语法错误，它将指向错误代码并发出无效读取语法错误信号。  例子：
 
-错误→无效的读取语法：“预期的 lambda 表达式”
+#+begin_src emacs-lisp
+  error→ Invalid read syntax: "Expected lambda expression"
+#+end_src
 
 这种检测失败的一个潜在原因是 Emacs 还不知道某些宏定义。  要解决此问题，请加载定义您将要检测的函数的文件。
 
@@ -655,11 +667,13 @@ Edebug 总是在断点处停止或暂停，除非 Edebug 模式是 Go-nonstop。
 
 每次重新设置定义时，都会忘记定义中的所有断点。  如果你想创建一个不会被遗忘的断点，你可以编写一个源断点，它只是在你的源代码中调用函数 edebug。  当然，您可以将这样的调用设为有条件的。  例如，在 fac 函数中，您可以如下所示插入第一行，以在参数达到零时停止：
 
+#+begin_src emacs-lisp
 (defun fac (n)
-  (如果 (= n 0) (edebug))
-  （如果（< 0 n）
+  (if (= n 0) (edebug))
+  (if (< 0 n)
       (* n (fac (1- n)))
     1))
+#+end_src
 
 当检测 fac 定义并调用函数时，对 edebug 的调用充当断点。  根据执行模式，Edebug 会在那里停止或暂停。
 
@@ -757,25 +771,26 @@ Edebug 的每个条目通过在缓冲区中插入每个表达式，然后是其�
 
 以下是添加了几个表达式后评估列表窗口的外观示例：
 
-（电流缓冲器）
-#<缓冲区*从头开始*>
-;------------------------------------------------ --------------
-（选定窗口）
-#<window 16 on *scratch*>
-;------------------------------------------------ --------------
-（观点）
-196
-;------------------------------------------------ --------------
-坏变种
-“符号作为变量的值是 void：bad-var”
-;------------------------------------------------ --------------
-（递归深度）
-0
-;------------------------------------------------ --------------
-这个命令
-eval-last-sexp
-;------------------------------------------------ --------------
-
+#+begin_src emacs-lisp
+  (current-buffer)
+  #<buffer *scratch*>
+  ;---------------------------------------------------------------
+  (selected-window)
+  #<window 16 on *scratch*>
+  ;---------------------------------------------------------------
+  (point)
+  196
+  ;---------------------------------------------------------------
+  bad-var
+  "Symbol's value as variable is void: bad-var"
+  ;---------------------------------------------------------------
+  (recursion-depth)
+  0
+  ;---------------------------------------------------------------
+  this-command
+  eval-last-sexp
+  ;---------------------------------------------------------------
+#+end_src
 要删除一个组，将点移入其中并键入 Cc Cd，或者简单地删除该组的文本并使用 Cc Cu 更新评估列表。  要将新表达式添加到评估列表，请在合适的位置插入表达式，插入新的注释行，然后键入 Cc Cu。  您无需在注释行中插入破折号——其内容无关紧要。
 
 选择 *edebug* 后，您可以使用 Cc Cw 返回到源代码缓冲区。  *edebug* 缓冲区在您继续执行时被终止，并在下次需要时重新创建。
@@ -799,8 +814,10 @@ eval-last-sexp
 
 下面是一个创建循环结构的代码示例：
 
-(setq a (list 'x'y))
-(setcar aa)
+#+begin_src emacs-lisp
+  (setq a (list 'x 'y))
+  (setcar a a)
+#+end_src
 
 如果 print-circle 不为零，则打印函数（例如，prin1）会将 a 打印为 '#1=(#1# y)'。  '#1=' 符号用标签 '1' 标记紧随其后的结构，而 '#1#' 符号引用先前标记的结构。  此表示法用于列表或向量的任何共享元素。
 
@@ -854,15 +871,17 @@ Edebug 提供基本的覆盖测试和执行频率的显示。
 
 例如，在使用源断点评估 (fac 5) 并将 edebug-test-coverage 设置为 t 后，到达断点时，频率数据如下所示：
 
-(defun fac (n)
-  (如果 (= n 0) (edebug))
-;#6 1 = =5
-  （如果（< 0 n）
-;#5 =
-      (* n (fac (1- n)))
-;# 5 0
-    1))
-;#0
+#+begin_src emacs-lisp
+  (defun fac (n)
+    (if (= n 0) (edebug))
+  ;#6           1      = =5
+    (if (< 0 n)
+  ;#5         =
+	(* n (fac (1- n)))
+  ;#    5               0
+      1))
+  ;#   0
+#+end_src
 
 注释行显示 fac 被调用了 6 次。  第一个 if 语句返回 5 次，每次都返回相同的结果；  第二个 if 的条件也是如此。  fac 的递归调用根本没有返回。
 
@@ -918,11 +937,13 @@ Emacs 只有在暂停时才会重新显示。  通常，当您继续执行时，
 
 因此，您必须为 Edebug 将遇到的每个宏定义一个 Edebug 规范，以解释对该宏的调用格式。  为此，请将调试声明添加到宏定义中。  这是一个简单的示例，显示了示例宏的规范（请参阅重复评估宏参数）。
 
+#+begin_src emacs-lisp
 (defmacro for (var from init to final do &rest body)
-  "执行一个简单的 \"for\" 循环。
-例如，(for i from 1 to 10 do (print i))。”
+  "Execute a simple \"for\" loop.
+For example, (for i from 1 to 10 do (print i))."
   (declare (debug (symbolp "from" form "to" form "do" &rest form)))
   ...)
+#+end_src
 
 Edebug 规范说明了对宏的调用的哪些部分是要评估的表单。  对于简单的宏，规范通常看起来与宏定义的形式参数列表非常相似，但规范比宏参数更通用。  有关声明形式的更多说明，请参见定义宏。
 
@@ -1086,42 +1107,51 @@ lambda 列表¶
 通过研究此处提供的示例，可能更容易理解 Edebug 规范。
 
 考虑一个假设的宏 my-test-generator，它在提供的数据列表上运行测试。  尽管 Edebug 的默认行为是不将参数作为代码进行检测，但由 edebug-eval-macro-args 控制（请参阅检测宏调用），但显式记录参数是数据会很有用：
-
+#+begin_src emacs-lisp
 (def-edebug-spec my-test-generator (&rest sexp))
+#+end_src
+
 
 一个 let 特殊形式有一个绑定序列和一个主体。  每个绑定要么是一个符号，要么是一个带有符号和可选表达式的子列表。  在下面的规范中，请注意子列表内部的门，以防止在找到子列表后回溯。
 
-(def-edebug-spec 让
-  （（＆休息
-    &or symbolp（门符号p &可选形式））
-   身体））
-
+#+begin_src emacs-lisp
+  (def-edebug-spec let
+    ((&rest
+      &or symbolp (gate symbolp &optional form))
+     body))
+#+end_src
 Edebug 对 defun 以及相关的参数列表和交互规范使用以下规范。  有必要专门处理交互式表单，因为表达式参数实际上是在函数体之外评估的。  （defmacro 的规范与 defun 的规范非常相似，但允许声明语句。）
+#+begin_src emacs-lisp
 
-(def-edebug-spec defun
-  (&define name lambda-list
-	    [&可选字符串p] ;  匹配文档字符串（如果存在）。
-	    [&可选（“交互式”交互）]
-	    定义体））
 
-(def-edebug-elem-spec 'lambda-list
-  '(([&rest 参数]
-     [&可选 ["&可选" arg &rest arg]]
-     &optional ["&rest" 参数]
-     )))
+  (def-edebug-spec defun
+    (&define name lambda-list
+	     [&optional stringp]   ; Match the doc string, if present.
+	     [&optional ("interactive" interactive)]
+	     def-body))
 
-(def-edebug-elem-spec '交互式
-  '(&optional &or stringp def-form)) ;  注意：def-form
+  (def-edebug-elem-spec 'lambda-list
+    '(([&rest arg]
+       [&optional ["&optional" arg &rest arg]]
+       &optional ["&rest" arg]
+       )))
+
+  (def-edebug-elem-spec 'interactive
+    '(&optional &or stringp def-form))    ; Notice: def-form
+#+end_src
+
+
 
 下面的反引号规范说明了如何匹配点列表并使用 nil 来终止递归。  它还说明了如何匹配向量的分量。  （由 Edebug 定义的实际规范略有不同，并且不支持点列表，因为这样做会导致非常深的递归，可能会失败。）
+#+begin_src emacs-lisp
+  (def-edebug-spec \` (backquote-form))   ; Alias just for clarity.
 
-(def-edebug-spec \` (backquote-form)) ;  别名只是为了清楚。
-
-(def-edebug-elem-spec '反引号形式
-  '(&or ([&or "," ",@"] &or ("quote" backquote-form) 形式)
-	 （反引号形式。[&或无反引号形式]）
-	 （矢量 &rest 反引号形式）
-	 性别））
+  (def-edebug-elem-spec 'backquote-form
+    '(&or ([&or "," ",@"] &or ("quote" backquote-form) form)
+	  (backquote-form . [&or nil backquote-form])
+	  (vector &rest backquote-form)
+	  sexp))
+#+end_src
 
 *** TODO 19.2.16 调试选项
 
@@ -1199,9 +1229,11 @@ Edebug 对 defun 以及相关的参数列表和交互规范使用以下规范。
 
     如果非零，Edebug 会在显示表达式的结果时尝试删除它自己的任何检测。  这在调试表达式的结果本身是检测表达式的宏时是相关的。  作为一个非常人为的示例，假设示例函数 fac 已被检测，并考虑以下形式的宏：
 
-    (defmacro test() "Edebug 示例。"
-      （如果（符号函数'fac）
-	   …))
+    #+begin_src emacs-lisp
+      (defmacro test () "Edebug example."
+	(if (symbol-function 'fac)
+	    …))
+    #+end_src
 
     如果您对测试宏进行检测并单步执行，则默认情况下，符号函数调用的结果具有大量 edebug-after 和 edebug-before 形式，这可能会导致难以看到实际结果。  如果 edebug-unwrap-results 不为零，Edebug 会尝试从结果中删除这些形式。
 
