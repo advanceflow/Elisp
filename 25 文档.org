@@ -39,15 +39,18 @@ GNU Emacs 具有方便的内置帮助工具，其中大部分从与函数和变�
 
     最后，此函数通过substitute-command-keys 传递字符串以替换键绑定（请参阅文档中的替换键绑定）。  如果 verbatim 不为零，则跳过此步骤。
 
-    (documentation-property '命令行处理
-	'变量文档）
-	  ⇒ “非零一旦命令行已被处理”
+    #+begin_src emacs-lisp
+      (documentation-property 'command-line-processed
+	 'variable-documentation)
+	   ⇒ "Non-nil once command line has been processed"
 
-    (symbol-plist '命令行处理)
-	  ⇒ （变量文档 188902）
+      (symbol-plist 'command-line-processed)
+	   ⇒ (variable-documentation 188902)
 
-    （文档属性'emacs'组文档）
-	  ⇒ “一个真正的编辑器的定制。”
+      (documentation-property 'emacs 'group-documentation)
+	   ⇒ "Customization of the One True Editor."
+
+    #+end_src
 
 功能：文档功能和可选的逐字记录¶
 
@@ -66,95 +69,103 @@ GNU Emacs 具有方便的内置帮助工具，其中大部分从与函数和变�
     该函数将人脸的文档字符串作为人脸返回。
 
 下面是使用文档和文档属性这两个函数的示例，用于在 *Help* 缓冲区中显示多个符号的文档字符串。
+#+begin_src emacs-lisp
+
 
 (defun describe-symbols (pattern)
-  “描述与 PATTERN 匹配的 Emacs Lisp 符号。
-描述了名称中包含 PATTERN 的所有符号
-在 *Help* 缓冲区中。”
-  （交互式“sDescribe 符号匹配：”）
-  （让（（描述函数
-	  (λ (s)
+  "Describe the Emacs Lisp symbols matching PATTERN.
+All symbols that have PATTERN in their name are described
+in the *Help* buffer."
+  (interactive "sDescribe symbols matching: ")
+  (let ((describe-func
+	 (lambda (s)
 
-	    ;;  打印符号的描述。
-	    (if (fboundp s) ; 它是一个函数。
-		（原则
-		 （格式“%s\t%s\n%s\n\n”s
-		   （如果（命令）
-		       (let ((keys (where-is-internal s)))
-			 （如果键
-			     （连接
-			      “钥匙：”
-			      (mapconcat '键描述
-					 键“”））
-			   “键：无”））
-		     “功能”）
+	   ;; Print description of symbol.
+	   (if (fboundp s)             ; It is a function.
+	       (princ
+		(format "%s\t%s\n%s\n\n" s
+		  (if (commandp s)
+		      (let ((keys (where-is-internal s)))
+			(if keys
+			    (concat
+			     "Keys: "
+			     (mapconcat 'key-description
+					keys " "))
+			  "Keys: none"))
+		    "Function")
 
-		   （或（文档）
-		       “未记录”））））
+		  (or (documentation s)
+		      "not documented"))))
 
-	    (if (boundp s) ; 它是一个变量。
+	   (if (boundp s)              ; It is a variable.
 
-		（原则
-		 （格式“%s\t%s\n%s\n\n”s
-		   （如果（自定义变量-ps）
-		       “选项”“变量”）
+	       (princ
+		(format "%s\t%s\n%s\n\n" s
+		  (if (custom-variable-p s)
+		      "Option " "Variable")
 
-		   （或（文档属性
-			 s '变量文档）
-		       “未记录”））））））
-	 符号列表）
-
-
-    ;;  构建与模式匹配的符号列表。
-    (mapatoms (lambda (sym))
-		 （如果（字符串匹配模式（符号名 sym））
-		     (setq sym-list (cons sym sym-list)))))
+		  (or (documentation-property
+			s 'variable-documentation)
+		      "not documented"))))))
+	sym-list)
 
 
-    ;;  显示数据。
+    ;; Build a list of symbols that match pattern.
+    (mapatoms (lambda (sym)
+		(if (string-match pattern (symbol-name sym))
+		    (setq sym-list (cons sym sym-list)))))
+
+
+    ;; Display the data.
     (help-setup-xref (list 'describe-symbols pattern)
-		  （称为-interactively-p'interactive））
-    （带帮助窗口（帮助缓冲区）
+		 (called-interactively-p 'interactive))
+    (with-help-window (help-buffer)
       (mapcar describe-func (sort sym-list 'string<)))))
+
+#+end_src
 
 describe-symbols 函数的工作方式与 apropos 类似，但提供了更多信息。
 
-（描述符号“目标”）
-
----------- 缓冲区：*帮助* ----------
-目标列选项
-垂直运动的半永久性目标列，由…设置
+#+begin_src emacs-lisp
 
 
-minibuffer-temporary-goal-position 变量
-未记录
+  (describe-symbols "goal")
+
+  ---------- Buffer: *Help* ----------
+  goal-column     Option
+  Semipermanent goal column for vertical motion, as set by …
 
 
-设置目标列键：Cx Cn
-将当前水平位置设置为 Cn 和 Cp 的目标。
-
-这些命令将移动到移动到的行中的这个位置
-而不是试图保持相同的水平位置。
-使用非零参数 ARG，清除目标列
-使 Cn 和 Cp 恢复垂直运动。
-目标列存储在变量“目标列”中。
-
-(fn ARG)
+  minibuffer-temporary-goal-position      Variable
+  not documented
 
 
-临时目标列变量
-垂直运动的当前目标列。
-它是当前运行开始时点所在的列
-垂直运动命令。
+  set-goal-column Keys: C-x C-n
+  Set the current horizontal position as a goal for C-n and C-p.
 
-当通过“line-move-visual”功能按视线移动时，这是一个缺点
-单元格 (COL . HSCROLL)，其中 COL 是 x 位置，以像素为单位，
-除以默认列宽，HSCROLL 是
-窗口从左边距滚动的列。
+  Those commands will move to this position in the line moved to
+  rather than trying to keep the same horizontal position.
+  With a non-nil argument ARG, clears out the goal column
+  so that C-n and C-p resume vertical motion.
+  The goal column is stored in the variable ‘goal-column’.
 
-当“track-eol”功能发挥作用时，其值为
-'最积极的-fixnum'。
----------- 缓冲区：*帮助* ----------
+  (fn ARG)
+
+
+  temporary-goal-column   Variable
+  Current goal column for vertical motion.
+  It is the column where point was at the start of the current run
+  of vertical motion commands.
+
+  When moving by visual lines via the function ‘line-move-visual’, it is a cons
+  cell (COL . HSCROLL), where COL is the x-position, in pixels,
+  divided by the default column width, and HSCROLL is the number of
+  columns by which window is scrolled from left margin.
+
+  When the ‘track-eol’ feature is doing its job, the value is
+  ‘most-positive-fixnum’.
+  ---------- Buffer: *Help* ----------
+#+end_src
 
 功能：Snarf-文档文件名 ¶
 
@@ -207,35 +218,40 @@ minibuffer-temporary-goal-position 变量
 
     如果一个命令有多个绑定，这个函数通常使用它找到的第一个。  您可以通过将 :advertised-binding 符号属性分配给命令来指定一个特定的键绑定，如下所示：
 
-    (put 'undo :advertised-binding [?\C-/])
+    #+begin_src emacs-lisp
+      (put 'undo :advertised-binding [?\C-/])
+    #+end_src
 
     :advertised-binding 属性也会影响菜单项中显示的绑定（参见菜单栏）。  如果该属性指定了命令实际上没有的键绑定，则该属性将被忽略。
 
 以下是特殊序列的示例：
-
-（替代命令键
-   “要中止递归编辑，请输入 `\\[abort-recursive-edit]'。”）
-⇒ “要中止递归编辑，请输入‘C-]’。”
+#+begin_src emacs-lisp
 
 
-（替代命令键
-   “这里为 minibuffer 定义的键是：
-  \\{minibuffer-local-must-match-map}")
-⇒ "这里为 minibuffer 定义的键是：
+  (substitute-command-keys
+     "To abort recursive edit, type `\\[abort-recursive-edit]'.")
+  ⇒ "To abort recursive edit, type ‘C-]’."
 
 
-?  迷你缓冲区完成帮助
-SPC minibuffer-complete-word
-TAB minibuffer-完成
-Cj minibuffer-complete-and-exit
-RET minibuffer-完成并退出
-CG中止递归编辑
-"
+  (substitute-command-keys
+     "The keys that are defined for the minibuffer here are:
+    \\{minibuffer-local-must-match-map}")
+  ⇒ "The keys that are defined for the minibuffer here are:
 
-（替代命令键
-   "要从 minibuffer 中止递归编辑，请输入 \
-`\\<minibuffer-local-must-match-map>\\[abort-recursive-edit]'.")
-⇒ “要从 minibuffer 中止递归编辑，请输入 'C-g'。”
+
+  ?               minibuffer-completion-help
+  SPC             minibuffer-complete-word
+  TAB             minibuffer-complete
+  C-j             minibuffer-complete-and-exit
+  RET             minibuffer-complete-and-exit
+  C-g             abort-recursive-edit
+  "
+
+  (substitute-command-keys
+     "To abort a recursive edit from the minibuffer, type \
+  `\\<minibuffer-local-must-match-map>\\[abort-recursive-edit]'.")
+  ⇒ "To abort a recursive edit from the minibuffer, type ‘C-g’."
+#+end_src
 
 文档字符串中的文本还有其他特殊约定——例如，您可以参考本手册的函数、变量和部分。  有关详细信息，请参阅文档字符串提示。
 
@@ -258,12 +274,15 @@ CG中止递归编辑
 功能：键描述序列&可选前缀¶
 
     此函数返回一个字符串，其中包含按顺序输入事件的 Emacs 标准表示法。  如果前缀是非零，它是导致序列的输入事件序列，并包含在返回值中。  两个参数都可以是字符串、向量或列表。  有关有效事件的更多信息，请参阅输入事件。
+    #+begin_src emacs-lisp
 
-    （键描述 [?\M-3 删除]）
-	  ⇒ “M-3 <删除>”
 
-    （键描述 [delete] "\M-3"）
-	  ⇒ “M-3 <删除>”
+      (key-description [?\M-3 delete])
+	   ⇒ "M-3 <delete>"
+
+      (key-description [delete] "\M-3")
+	   ⇒ "M-3 <delete>"
+    #+end_src
 
     另请参阅下面的单键描述示例。
 
@@ -272,31 +291,38 @@ CG中止递归编辑
     此函数以标准 Emacs 表示法返回一个描述事件的字符串，用于键盘输入。  正常的打印字符显示为自身，但控制字符变为以'C-'开头的字符串，元字符变为以'M-'开头的字符串，空格、制表符等显示为'SPC' , 'TAB' 等。功能键符号出现在尖括号 '<...>' 内。  作为列表的事件显示为列表的 CAR 中尖括号内的符号名称。
 
     如果可选参数 no-angles 不为 nil，则省略功能键和事件符号周围的尖括号；  这是为了与不使用括号的旧版本的 Emacs 兼容。
+    #+begin_src emacs-lisp
 
-    （单键描述？\Cx）
-	  ⇒ "Cx"
 
-    （键描述“\Cx \My \n \t \r \f123”）
-	  ⇒ “Cx SPC 我的 SPC Cj SPC TAB SPC RET SPC Cl 1 2 3”
+      (single-key-description ?\C-x)
+	   ⇒ "C-x"
 
-    （单键描述'删除）
-	  ⇒ "<删除>"
+      (key-description "\C-x \M-y \n \t \r \f123")
+	   ⇒ "C-x SPC M-y SPC C-j SPC TAB SPC RET SPC C-l 1 2 3"
 
-    （单键描述'C-mouse-1）
-	  ⇒ "C-<鼠标-1>"
+      (single-key-description 'delete)
+	   ⇒ "<delete>"
 
-    （单键描述'C-mouse-1 t）
-	  ⇒ "C-mouse-1"
+      (single-key-description 'C-mouse-1)
+	   ⇒ "C-<mouse-1>"
+
+      (single-key-description 'C-mouse-1 t)
+	   ⇒ "C-mouse-1"
+    #+end_src
 
 功能：文本字符描述字符¶
 
     这个函数返回一个字符串，以标准 Emacs 表示法描述可以出现在文本中的字符——类似于单键描述，除了参数必须是通过 characterp 测试的有效字符代码（请参阅字符代码）。  该函数生成带有前导插入符号的控制字符的描述（这是 Emacs 通常在缓冲区中显示控制字符的方式）。  带有修饰位的字符将导致该函数发出错误信号（带有 Control 修饰符的 ASCII 字符是一个例外，它们表示为控制字符）。
 
-    （文本字符描述？\抄送）
-	  ⇒ "^C"
+    #+begin_src emacs-lisp
 
-    （文本字符描述？\Mm）
-	  错误→错误的类型参数：characterp，134217837
+
+      (text-char-description ?\C-c)
+	   ⇒ "^C"
+
+      (text-char-description ?\M-m)
+	   error→ Wrong type argument: characterp, 134217837
+    #+end_src
 
 命令：read-kbd-macro 字符串 &optional 需要向量 ¶
 
@@ -312,8 +338,10 @@ Emacs 提供了各种内置的帮助功能，用户可以作为前缀 Ch 的子�
 
     该函数返回一个元素列表，如下所示：
 
-    （符号评分函数-doc变量-doc
-     plist-doc widget-doc face-doc group-doc)
+    #+begin_src emacs-lisp
+      (symbol score function-doc variable-doc
+       plist-doc widget-doc face-doc group-doc)
+    #+end_src
 
     在这里，score 是一个整数度量，用于衡量符号作为匹配项的重要性。  剩下的每个元素都是一个文档字符串，或 nil，用于符号作为函数、变量等。
 
@@ -329,8 +357,10 @@ Emacs 提供了各种内置的帮助功能，用户可以作为前缀 Ch 的子�
 
     这个符号不是函数；  它的函数定义单元包含称为帮助映射的键映射。  它在 help.el 中定义如下：
 
-    (define-key global-map (string help-char) 'help-command)
-    (fset 'help-command 帮助图)
+    #+begin_src emacs-lisp
+      (define-key global-map (string help-char) 'help-command)
+      (fset 'help-command help-map)
+    #+end_src
 
 用户选项：help-char ¶
 
@@ -416,42 +446,50 @@ Emacs 可以根据各种分组列出函数。  例如，string-trim 和 mapconca
 
     将 group 定义为一组函数，并提供使用这些函数的简短摘要。  可选参数函数是一个列表，其元素具有以下形式：
 
-    (func [关键字值]…)
-
+    #+begin_src emacs-lisp
+      (func [keyword val]…)
+    #+end_src
     可识别以下关键字：
 
     :评估
 
 	 该值应该是在评估时没有副作用的形式。  该表单将通过使用 prin1 打印在文档中使用（请参阅输出函数）。  但是，如果表单是字符串，它将按原样插入，然后读取字符串以生成表单。  在任何情况下，都会对表单进行评估，并使用结果。  例如：
 
-	 :eval (连接 "foo" "bar" "zot")
-	 :eval "(make-string 5 ?x)"
-
+	 #+begin_src emacs-lisp
+	   :eval (concat "foo" "bar" "zot")
+	   :eval "(make-string 5 ?x)"
+	 #+end_src
 	 将导致：
+	 #+begin_src emacs-lisp
+	   (concat "foo" "bar" "zot")
+	   ⇒ "foobarzot"
+	   (make-string 5 ?x)
+	   ⇒ "xxxxx"
+	 #+end_src
 
-	 （连接“foo”“bar”“zot”）
-	 ⇒ "foobarzot"
-	 (make-string 5 ?x)
-	 ⇒ “xxxxx”
+
 
 	 （这里允许同时使用 Lisp 表单和字符串的原因是，在少数需要某种形式呈现的情况下，可以控制打印。在示例中，“？x”将被打印为“120”如果它没有包含在字符串中。）
     ：无评估
 
 	 这类似于 :eval，只是不会评估表单。  在这些情况下，应该包含某种类型的 :result 元素（见下文）。
 
-	 :no-eval (file-symlink-p "/tmp/foo")
-	 :eg-结果 t
-
+	 #+begin_src emacs-lisp
+	   :no-eval (file-symlink-p "/tmp/foo")
+	   :eg-result t
+	 #+end_src
     ：无评估*
 
 	 像 :no-eval 一样，但总是插入 '[it depends]' 作为结果。  例如：
 
-	 :no-eval* (缓冲字符串)
-
+	 #+begin_src emacs-lisp
+	   :no-eval* (buffer-string)
+	 #+end_src
 	 将导致：
-
-	 （缓冲字符串）
-	 → [视情况而定]
+	 #+begin_src emacs-lisp
+	   (buffer-string)
+	   → [it depends]
+	 #+end_src
 
     ：没有价值
 
@@ -460,30 +498,35 @@ Emacs 可以根据各种分组列出函数。  例如，string-trim 和 mapconca
 
 	 用于输出非评估示例表单的结果。
 
-	 :no-eval (setcar list 'c)
-	 :结果 c
+	 #+begin_src emacs-lisp
+	   :no-eval (setcar list 'c)
+	   :result c
+	 #+end_src
 
     :eg-结果
 
 	 用于从非评估示例表单输出示例结果。  例如：
 
-	 :no-eval （查看“f [0-9]”）
-	 :eg-结果 t
+	 #+begin_src emacs-lisp
+	   :no-eval (looking-at "f[0-9]")
+	   :eg-result t
+	 #+end_src
 
 	 将导致：
-
-	 （看着“f [0-9]”）
-	 例如。  → t
-
+	 #+begin_src emacs-lisp
+	   (looking-at "f[0-9]")
+	   eg. → t
+	 #+end_src
     :结果字符串
     :eg-result-string
 
 	 这两个分别与 :result 和 :eg-result 相同，但按原样插入。  当结果不可读或应为特定形式时，这很有用：
-
-	 :no-eval（查找文件“/tmp/foo”）
-	 :eg-result-string "#<buffer foo>"
-	 :no-eval (默认文件模式)
-	 :eg-result-string "#o755"
+	 #+begin_src emacs-lisp
+	   :no-eval (find-file "/tmp/foo")
+	   :eg-result-string "#<buffer foo>"
+	   :no-eval (default-file-modes)
+	   :eg-result-string "#o755"
+	 #+end_src
 
     ：无手册
 
@@ -492,18 +535,20 @@ Emacs 可以根据各种分组列出函数。  例如，string-trim 和 mapconca
 
 	 默认情况下，会显示函数的实际参数列表。  如果 :args 存在，则使用它们。
 
-	 :args（正则表达式字符串）
+	 #+begin_src emacs-lisp
+	   :args (regexp string)
+	 #+end_src
 
     这是一个非常简短的示例：
-
-    （定义短文档组字符串
-      “创建字符串”
-      （子串
-	:eval (子串 "foobar" 0 3)
-	:eval (子字符串 "foobar" 3))
-      （连接
-	:eval (concat "foo" "bar" "zot")))
-
+    #+begin_src emacs-lisp
+      (define-short-documentation-group string
+	"Creating Strings"
+	(substring
+	 :eval (substring "foobar" 0 3)
+	 :eval (substring "foobar" 3))
+	(concat
+	 :eval (concat "foo" "bar" "zot")))
+    #+end_src
     第一个参数是要定义的组的名称，然后是任意数量的函数描述。
 
 一个函数可以属于任意数量的文档组。
