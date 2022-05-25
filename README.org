@@ -164,15 +164,15 @@
 
 
 ** 6 序列、数组和向量
-   | Content                  | S1   | S2 | S3 |
-   | 6.1 序列                 | DONE |    |    |
-   | 6.2 数组                 | DONE |    |    |
-   | 6.3 操作数组的函数       | DONE |    |    |
-   | 6.4 向量                 | DONE |    |    |
-   | 6.5 向量函数             | DONE |    |    |
-   | 6.6 字符表               | DONE |    |    |
-   | 6.7 布尔向量             | DONE |    |    |
-   | 6.8 管理固定大小的对象环 | DONE |    |    |
+   | Content                  | S1   | S2   | S3 |
+   | 6.1 序列                 | DONE | DONE |    |
+   | 6.2 数组                 | DONE | DONE |    |
+   | 6.3 操作数组的函数       | DONE | DONE |    |
+   | 6.4 向量                 | DONE | DONE |    |
+   | 6.5 向量函数             | DONE | DONE |    |
+   | 6.6 字符表               | DONE | DONE |    |
+   | 6.7 布尔向量             | DONE | DONE |    |
+   | 6.8 管理固定大小的对象环 | DONE | DONE |    |
 
 
 ** 7 记录
