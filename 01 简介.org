@@ -58,9 +58,6 @@ Emacs Lisp完全不受Scheme的影响；但是GNU项目有一个方案的实现�
 如果 object 是两个规范布尔值之一，则返回非 nil：t 或 nil。
 *** TODO 1.3.3 评估符号
     :LOGBOOK:
-    - State "TODO"       from "TODO"       [2022-05-23 Mon 11:00]
-    - State "TODO"       from "TODO"       [2022-05-23 Mon 10:38]
-    :END:
  您可以计算的 Lisp 表达式称为表单。  计算一个表单总是会产生一个结果，它是一个 Lisp 对象。  在本手册的示例中，这用“⇒”表示：
 
  #+begin_src emacs-lisp
