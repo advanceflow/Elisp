@@ -11,37 +11,46 @@ GNU Emacs 支持两种数字数据类型：整数和浮点数。  整数是整�
 
 Lisp 阅读器将整数读取为具有可选初始符号和可选最后句点的十进制数字的非空序列。
 
- 1;  整数 1。
- 1.;  整数 1。
-+1 ;  也是整数 1。
--1 ;  整数 -1。
- 0;  整数 0。
--0 ;  整数 0。
+#+begin_src emacs-lisp
+   1               ; The integer 1.
+   1.              ; The integer 1.
+  +1               ; Also the integer 1.
+  -1               ; The integer -1.
+   0               ; The integer 0.
+  -0               ; The integer 0.
+#+end_src
 
 以 10 为基数的整数的语法由 '#' 后跟一个基数指示，后跟一个或多个数字组成。  基数指示是“b”表示二进制，“o”表示八进制，“x”表示十六进制，“radixr”表示基数。  因此，'#binteger' 以二进制读取整数，而 '#radixrinteger' 以 radix radix 读取整数。  radix 的允许值从 2 到 36，允许的数字是从 '0'-'9'、'A'-'Z' 中取出的第一个 radix 字符。  字母大小写被忽略，没有初始符号或最后一个句点。  例如：
 
-#b101100 ⇒ 44
-#o54 ⇒ 44
-#x2c ⇒ 44
-#24r1k ⇒ 44
+#+begin_src emacs-lisp
+  #b101100 ⇒ 44
+  #o54 ⇒ 44
+  #x2c ⇒ 44
+  #24r1k ⇒ 44
+#+end_src
 
 要了解各种函数如何处理整数，尤其是位运算符（请参阅整数的位运算），查看二进制形式的数字通常会有所帮助。
 
 在二进制中，十进制整数 5 如下所示：
 
-…000101
-
+#+begin_src emacs-lisp
+  …000101
+#+end_src
 （省略号“...”在概念上代表与前导位匹配的无限数量的位；这里是无限数量的 0 位。后面的示例也使用此“...”表示法。）
 
 整数 -1 如下所示：
 
-…111111
+#+begin_src emacs-lisp
+  …111111
+#+end_src
 
 -1 表示为全1。  （这称为二进制补码表示法。）
 
 从 -1 中减去 4 返回负整数 -5。  在二进制中，十进制整数 4 是 100。因此，-5 看起来像这样：
 
-…111011
+#+begin_src emacs-lisp
+  …111011
+#+end_src
 
 本章中描述的许多函数都接受参数的标记来代替数字。  （请参阅标记。）由于此类函数的实际参数可能是数字或标记，因此我们通常将这些参数命名为数字或标记。  当参数值为标记时，使用其位置值并忽略其缓冲区。
 
@@ -53,16 +62,20 @@ bignums 的值范围受主内存量、机器特性（例如用于表示 bignum �
 
 fixnum 的值范围取决于机器。  最小范围是 -536,870,912 到 536,870,911（30 位；即 -2**29 到 2**29 - 1），但许多机器提供的范围更广。
 
-变量：most-positive-fixnum ¶
-
+#+begin_src emacs-lisp
+  Variable: most-positive-fixnum
+#+end_src
     这个变量的值是 Emacs Lisp 可以处理的最大的“小”整数。  典型值为 32 位平台上的 2**29 - 1 和 64 位平台上的 2**61 - 1。
 
-变量：most-negative-fixnum ¶
 
+#+begin_src emacs-lisp
+  Variable: most-negative-fixnum
+#+end_src
     这个变量的值是 Emacs Lisp 可以处理的数字最小的“小”整数。  它是负面的。  典型值为 32 位平台上的 -2**29 和 64 位平台上的 -2**61。
 
-变量：整数宽度¶
-
+#+begin_src emacs-lisp
+  Variable: integer-width
+#+end_src
     该变量的值是一个非负整数，用于控制 Emacs 在计算大整数时是否发出范围错误信号。  绝对值小于 2**n 的整数（其中 n 是此变量的值）不表示范围错误。  尝试创建更大的整数通常表示范围错误，但如果可以廉价地创建更大的整数，则可能没有信号。  如果计算创建巨大的整数，则将此变量设置为较大的数字可能会很昂贵。
 
 ** TODO 3.2 浮点基础
@@ -83,44 +96,56 @@ IEEE 浮点标准支持正无穷大和负无穷大作为浮点值。  它还提�
 
 以下是这些特殊浮点值的读取语法：
 
-无穷
-
+#+begin_src emacs-lisp
+  infinity
+#+end_src
     “1.0e+INF”和“-1.0e+INF”
-非数字
 
+#+begin_src emacs-lisp
+not-a-number
+#+end_src
     “0.0e+NaN”和“-0.0e+NaN”
 
 以下函数专门用于处理浮点数：
 
-功能：isnan x ¶
+
+#+begin_src emacs-lisp
+  Function: isnan x
+#+end_src
 
     如果它的浮点参数是 NaN，则此谓词返回 t，否则返回 nil。
 
-函数：frex x ¶
+#+begin_src emacs-lisp
+  Function: frexp x
+#+end_src
 
     此函数返回一个 cons 单元格 (s . e)，其中 s 和 e 分别是浮点数 x 的有效数和指数。
 
     如果 x 是有限的，则 s 是介于 0.5（含）和 1.0（不含）之间的浮点数，e 是整数，x = s * 2**e。  如果 x 为零或无穷大，则 s 与 x 相同。  如果 x 是 NaN，则 s 也是 NaN。  如果 x 为零，则 e 为 0。
 
-函数：ldexp se ¶
-
+#+begin_src emacs-lisp
+  Function: ldexp s e
+#+end_src
     给定一个数字有效数 s 和一个整数指数 e，此函数返回浮点数 s * 2**e。
 
-功能：复制签名 x1 x2 ¶
-
+#+begin_src emacs-lisp
+  Function: copysign x1 x2
+#+end_src
     此函数将 x2 的符号复制到 x1 的值，并返回结果。  x1 和 x2 必须是浮点数。
 
-函数：logb x ¶
-
+#+begin_src emacs-lisp
+  Function: logb x
+#+end_src
     此函数返回 x 的二进制指数。  更准确地说，如果 x 是有限且非零的，则该值是 |x| 的以 2 为底的对数，向下舍入为整数。  如果 x 为零或无穷大，则值为无穷大；  如果 x 是 NaN，则值为 NaN。
 
-    （日志 10）
-	  ⇒ 3
-    （日志 10.0e20）
-	  ⇒ 69
-    （日志 0）
-	  ⇒ -1.0e+INF
-
+    #+begin_src emacs-lisp
+      (logb 10)
+	   ⇒ 3
+      (logb 10.0e20)
+	   ⇒ 69
+      (logb 0)
+	   ⇒ -1.0e+INF
+    #+end_src
 ** TODO 3.3 数字的类型谓词
   CLOSED: [2022-05-24 Tue 09:54]
   :LOGBOOK:
@@ -129,37 +154,48 @@ IEEE 浮点标准支持正无穷大和负无穷大作为浮点值。  它还提�
 
 本节中的函数测试数字或特定类型的数字。  函数 integerp 和 floatp 可以将任何类型的 Lisp 对象作为参数（否则它们不会有太大用处），但 zerop 谓词需要一个数字作为参数。  另请参阅标记上的谓词中的 integer-or-marker-p 和 number-or-marker-p。
 
-功能：bignump 对象 ¶
-
+#+begin_src emacs-lisp
+  Function: bignump object
+#+end_src
     该谓词测试其参数是否为大整数，如果是则返回 t，否则返回 nil。  与小整数不同，大整数可以是 = 或 eql，即使它们不是 eq。
 
-功能：fixnump 对象 ¶
-
+#+begin_src emacs-lisp
+  Function: fixnump object
+#+end_src
     此谓词测试其参数是否为小整数，如果是则返回 t，否则返回 nil。  小整数可以与 eq 进行比较。
 
-功能：浮动对象¶
-
+#+begin_src emacs-lisp
+  Function: floatp object
+#+end_src
     该谓词测试其参数是否为浮点数，如果是则返回 t，否则返回 nil。
 
-功能：整数对象 ¶
-
+#+begin_src emacs-lisp
+  Function: integerp object
+#+end_src
     该谓词测试其参数是否为整数，如果是则返回 t，否则返回 nil。
 
-功能：数字对象¶
+#+begin_src emacs-lisp
+  Function: numberp object
+#+end_src
 
     此谓词测试其参数是否为数字（整数或浮点数），如果是则返回 t，否则返回 nil。
 
-功能：natnump 对象¶
+#+begin_src emacs-lisp
+  Function: natnump object
+#+end_src
 
     该谓词（其名称来自短语“自然数”）测试其参数是否为非负整数，如果是则返回 t，否则返回 nil。  0 被认为是非负数。
 
     Wholenump 是 natnump 的同义词。
 
-功能：零序号¶
-
+#+begin_src emacs-lisp
+  Function: zerop number
+#+end_src
     该谓词测试其参数是否为零，如果是则返回 t，否则返回 nil。  参数必须是一个数字。
 
-    (zerop x) 等价于 (= x 0)。
+    #+begin_src emacs-lisp
+      (zerop x) is equivalent to (= x 0)
+    #+end_src
 
 ** TODO 3.4 数字比较
   CLOSED: [2022-05-24 Tue 09:54]
@@ -175,61 +211,82 @@ IEEE 浮点标准支持正无穷大和负无穷大作为浮点值。  它还提�
 
 还有另一个问题：因为浮点运算并不精确，所以检查浮点值是否相等通常是个坏主意。  通常最好测试近似相等。  这是一个执行此操作的函数：
 
-（defvar 模糊因子 1.0e-6）
-(defun 约等于 (xy)
-  （或（= xy）
-      (< (/ (abs (- xy)))
-	     （最大（绝对 x）（绝对 y）））
-	  模糊因子）））
 
-功能：= number-or-markers &rest number-or-markers ¶
+#+begin_src emacs-lisp
+  (defvar fuzz-factor 1.0e-6)
+  (defun approx-equal (x y)
+    (or (= x y)
+	(< (/ (abs (- x y))
+	      (max (abs x) (abs y)))
+	   fuzz-factor)))
+#+end_src
+
+#+begin_src emacs-lisp
+  Function: = number-or-marker &rest number-or-markers
+#+end_src
 
     此函数测试其所有参数在数值上是否相等，如果相等则返回 t，否则返回 nil。
 
-功能：eql value1 value2 ¶
+#+begin_src emacs-lisp
+  Function: eql value1 value2
+#+end_src
 
     此函数的作用类似于 eq，除非两个参数都是数字。  它按类型和数值比较数字，因此 (eql 1.0 1) 返回 nil，但 (eql 1.0 1.0) 和 (eql 1 1) 都返回 t。  这可用于比较大整数和小整数。  具有相同符号、指​​数和分数的浮点值是 eql。  这与数值比较不同：(eql 0.0 -0.0) 返回 nil，(eql 0.0e+NaN 0.0e+NaN) 返回 t，而 = 则相反。
 
-功能：/= number-or-marker1 number-or-marker2 ¶
+#+begin_src emacs-lisp
+  Function: /= number-or-marker1 number-or-marker2
+#+end_src
 
     此函数测试其参数在数值上是否相等，如果不相等则返回 t，如果相等则返回 nil。
 
-功能：< number-or-marker &rest number-or-markers ¶
-
+#+begin_src emacs-lisp
+  Function: < number-or-marker &rest number-or-markers
+#+end_src
     此函数测试每个参数是否严格小于以下参数。  如果是，则返回 t，否则返回 nil。
 
-功能：<= number-or-marker &rest number-or-markers ¶
-
+#+begin_src emacs-lisp
+  Function: <= number-or-marker &rest number-or-markers
+#+end_src
     此函数测试每个参数是否小于或等于以下参数。  如果是，则返回 t，否则返回 nil。
 
-功能： > number-or-marker &rest number-or-markers ¶
-
+#+begin_src emacs-lisp
+  Function: > number-or-marker &rest number-or-markers
+#+end_src
     此函数测试每个参数是否严格大于以下参数。  如果是，则返回 t，否则返回 nil。
 
-功能： >= number-or-markers &rest number-or-markers ¶
-
+#+begin_src emacs-lisp
+  Function: >= number-or-marker &rest number-or-markers
+#+end_src
     此函数测试每个参数是否大于或等于以下参数。  如果是，则返回 t，否则返回 nil。
 
-功能：max number-or-markers &rest numbers-or-markers ¶
+#+begin_src emacs-lisp
+  Function: max number-or-marker &rest numbers-or-markers
+#+end_src
 
     此函数返回其参数中的最大值。
 
-    （最多 20 个）
-	  ⇒ 20
-    （最大 1 2.5）
-	  ⇒ 2.5
-    （最大 1 3 2.5）
-	  ⇒ 3
+    #+begin_src emacs-lisp
+      (max 20)
+	   ⇒ 20
+      (max 1 2.5)
+	   ⇒ 2.5
+      (max 1 3 2.5)
+	   ⇒ 3
+    #+end_src
 
-功能：min number-or-markers &rest numbers-or-markers ¶
-
+#+begin_src emacs-lisp
+  Function: min number-or-marker &rest numbers-or-markers
+#+end_src
     此函数返回其参数中的最小者。
 
-    （最小 -4 1）
-	  ⇒ -4
+    #+begin_src emacs-lisp
+      (min -4 1)
+	   ⇒ -4
+    #+end_src
 
-功能：abs number ¶
-
+#+begin_src emacs-lisp
+  Function: abs number
+#+end_src
     该函数返回数字的绝对值。
 
 ** TODO 3.5 数值转换
@@ -240,67 +297,89 @@ IEEE 浮点标准支持正无穷大和负无穷大作为浮点值。  它还提�
 
 要将整数转换为浮点数，请使用函数 float。
 
-功能：浮点数¶
+#+begin_src emacs-lisp
+Function: float number
+#+end_src
 
     这将返回转换为浮点数的数字。  如果 number 已经是浮点数，则 float 将其原封不动地返回。
 
 有四个函数可以将浮点数转换为整数；  它们的舍入方式不同。  都接受一个参数编号和一个可选的参数除数。  两个参数都可以是整数或浮点数。  除数也可能为零。  如果 divisor 为 nil 或省略，这些函数将数字转换为整数，如果它已经是整数，则将其原样返回。  如果 divisor 不为 nil，则它们将数字除以除数并将结果转换为整数。  如果除数为零（无论是整数还是浮点数），Emacs 都会发出算术错误错误信号。
 
-功能：截断数字&可选除数¶
+#+begin_src emacs-lisp
+Function: truncate number &optional divisor
+#+end_src
 
     这将返回数字，通过向零舍入转换为整数。
 
-    （截断 1.2）
-	  ⇒ 1
-    （截断 1.7）
-	  ⇒ 1
-    （截断-1.2）
-	  ⇒ -1
-    （截断-1.7）
-	  ⇒ -1
+    #+begin_src emacs-lisp
+(truncate 1.2)
+     ⇒ 1
+(truncate 1.7)
+     ⇒ 1
+(truncate -1.2)
+     ⇒ -1
+(truncate -1.7)
+     ⇒ -1
 
-功能：楼层号&可选除数¶
+    #+end_src
+
+
+#+begin_src emacs-lisp
+Function: floor number &optional divisor
+#+end_src
 
     这将返回数字，通过向下舍入（向负无穷大）转换为整数。
 
     如果指定了除数，则使用与 mod 对应的除法运算，向下舍入。
 
-    （1.2楼）
-	  ⇒ 1
-    （1.7楼）
-	  ⇒ 1
-    （地板-1.2）
-	  ⇒ -2
-    （地板-1.7）
-	  ⇒ -2
-    （5.99 3楼）
-	  ⇒ 1
+    #+begin_src emacs-lisp
+(floor 1.2)
+     ⇒ 1
+(floor 1.7)
+     ⇒ 1
+(floor -1.2)
+     ⇒ -2
+(floor -1.7)
+     ⇒ -2
+(floor 5.99 3)
+     ⇒ 1
+    #+end_src
 
-功能：上限数&可选除数¶
 
+#+begin_src emacs-lisp
+  Function: ceiling number &optional divisor
+#+end_src
     这将返回数字，通过向上舍入（向正无穷大）转换为整数。
 
-    （天花板 1.2）
-	  ⇒ 2
-    （天花板 1.7）
-	  ⇒ 2
-    （天花板-1.2）
-	  ⇒ -1
-    （天花板-1.7）
-	  ⇒ -1
+    #+begin_src emacs-lisp
+      (ceiling 1.2)
+	   ⇒ 2
+      (ceiling 1.7)
+	   ⇒ 2
+      (ceiling -1.2)
+	   ⇒ -1
+      (ceiling -1.7)
+	   ⇒ -1
 
-功能：整数&可选除数¶
+    #+end_src
+
+#+begin_src emacs-lisp
+  Function: round number &optional divisor
+#+end_src
+
 
     这将返回数字，通过向最接近的整数舍入转换为整数。  舍入两个整数之间等距的值会返回偶数。
 
-    （第 1.2 轮）
-	  ⇒ 1
-    （第 1.7 轮）
-	  ⇒ 2
-    （回合-1.2）
-	  ⇒ -1
-    （回合-1.7）
-	  ⇒ -2
+    #+begin_src emacs-lisp
+      (round 1.2)
+	   ⇒ 1
+      (round 1.7)
+	   ⇒ 2
+      (round -1.2)
+	   ⇒ -1
+      (round -1.7)
+	   ⇒ -2
+    #+end_src
 
 ** TODO 3.6 算术运算
   CLOSED: [2022-05-24 Tue 09:54]
@@ -310,144 +389,194 @@ IEEE 浮点标准支持正无穷大和负无穷大作为浮点值。  它还提�
 
 Emacs Lisp 提供了传统的四种算术运算（加法、减法、乘法和除法），以及余数和模数函数，以及加减 1 的函数。除了 %，这些函数中的每一个都接受整数和浮点数参数，如果任何参数是浮点数，则返回一个浮点数。
 
-功能：1+数字或标记¶
+#+begin_src emacs-lisp
+  Function: 1+ number-or-marker
+#+end_src
+
 
     此函数返回数字或标记加 1。例如，
 
-    (setq foo 4)
-	  ⇒ 4
-    (1+ 富)
-	  ⇒ 5
+    #+begin_src emacs-lisp
+      (setq foo 4)
+	   ⇒ 4
+      (1+ foo)
+	   ⇒ 5
+    #+end_src
 
     此函数与 C 运算符 ++ 不同——它不会增加变量。  它只是计算一个总和。  因此，如果我们继续，
 
-    富
-	  ⇒ 4
+    #+begin_src emacs-lisp
+foo
+     ⇒ 4
+
+    #+end_src
+
 
     如果要增加变量，则必须使用 setq，如下所示：
 
-    (setq foo (1+ foo))
-	  ⇒ 5
+    #+begin_src emacs-lisp
+(setq foo (1+ foo))
+     ⇒ 5
 
-功能：1-数字或标记¶
+    #+end_src
+
+
+#+begin_src emacs-lisp
+Function: 1- number-or-marker
+#+end_src
 
     此函数返回数字或标记减 1。
 
-功能：+ &rest 数字或标记¶
+#+begin_src emacs-lisp
+Function: + &rest numbers-or-markers
+#+end_src
 
     该函数将其参数相加。  当不给定参数时，+ 返回 0。
 
-    (+)
-	  ⇒ 0
-    (+ 1)
-	  ⇒ 1
-    （+ 1 2 3 4）
-	  ⇒ 10
+    #+begin_src emacs-lisp
+      (+)
+	   ⇒ 0
+      (+ 1)
+	   ⇒ 1
+      (+ 1 2 3 4)
+	   ⇒ 10
+    #+end_src
 
-功能： - &optional number-or-marker &rest more-numbers-or-markers ¶
+
+#+begin_src emacs-lisp
+Function: - &optional number-or-marker &rest more-numbers-or-markers
+#+end_src
 
     - 函数有两个用途：否定和减法。  当 - 有一个参数时，该值是参数的负数。  当有多个参数时， - 从 number-or-marker 中累积减去每个 more-numbers-or-markers。  如果没有参数，则结果为 0。
 
-    (- 10 1 2 3 4)
-	  ⇒ 0
-    (- 10)
-	  ⇒ -10
-    (-)
-	  ⇒ 0
+      #+begin_src emacs-lisp
+(- 10 1 2 3 4)
+     ⇒ 0
+(- 10)
+     ⇒ -10
+(-)
+     ⇒ 0
+      #+end_src
 
-功能：* &rest numbers-or-markers ¶
+
+#+begin_src emacs-lisp
+  Function: * &rest numbers-or-markers
+#+end_src
 
     此函数将其参数相乘，并返回乘积。  如果不给定参数，* 返回 1。
+    #+begin_src emacs-lisp
+      (*)
+	   ⇒ 1
+      (* 1)
+	   ⇒ 1
+      (* 1 2 3 4)
+	   ⇒ 24
+    #+end_src
 
-    (*)
-	  ⇒ 1
-    (* 1)
-	  ⇒ 1
-    (* 1 2 3 4)
-	  ⇒ 24
 
-功能：/数 &rest 除数 ¶
+
+#+begin_src emacs-lisp
+  Function: / number &rest divisors
+#+end_src
 
     对于一个或多个除数，此函数依次将数字除以除数中的每个除数，并返回商。  在没有除数的情况下，此函数返回 1/number，即 number 的乘法倒数。  每个参数可以是一个数字或一个标记。
 
     如果所有参数都是整数，则结果是整数，通过在每次除法后将商向零舍入获得。
 
-    (/ 6 2)
-	  ⇒ 3
+    #+begin_src emacs-lisp
 
-    (/ 5 2)
-	  ⇒ 2
 
-    (/5.0 2)
-	  ⇒ 2.5
+      (/ 6 2)
+	   ⇒ 3
 
-    (/5 2.0)
-	  ⇒ 2.5
+      (/ 5 2)
+	   ⇒ 2
 
-    (/5.0 2.0)
-	  ⇒ 2.5
+      (/ 5.0 2)
+	   ⇒ 2.5
 
-    (/4.0)
-	  ⇒ 0.25
+      (/ 5 2.0)
+	   ⇒ 2.5
 
-    (/ 4)
-	  ⇒ 0
+      (/ 5.0 2.0)
+	   ⇒ 2.5
 
-    (/ 25 3 2)
-	  ⇒ 4
+      (/ 4.0)
+	   ⇒ 0.25
 
-    (/ -17 6)
-	  ⇒ -2
+      (/ 4)
+	   ⇒ 0
+
+      (/ 25 3 2)
+	   ⇒ 4
+
+      (/ -17 6)
+	   ⇒ -2
+
+    #+end_src
 
     如果你将一个整数除以整数 0，Emacs 会发出一个 arith-error 错误信号（请参阅错误）。  非零数除以零的浮点除法产生正无穷或负无穷（请参阅浮点基础）。
 
-功能：% 除数 ¶
+#+begin_src emacs-lisp
+  Function: % dividend divisor
+#+end_src
 
     此函数返回除数除以除数后的整数余数。  参数必须是整数或标记。
 
     对于任何两个整数被除数和除数，
 
-    (+ (% 除数)
-	(* (/ 除数除数) 除数))
+    #+begin_src emacs-lisp
+      (+ (% dividend divisor)
+	 (* (/ dividend divisor) divisor))
+    #+end_src
+
 
     如果除数不为零，则始终等于被除数。
+    #+begin_src emacs-lisp
+      (% 9 4)
+	   ⇒ 1
+      (% -9 4)
+	   ⇒ -1
+      (% 9 -4)
+	   ⇒ 1
+      (% -9 -4)
+	   ⇒ -1
+    #+end_src
 
-    (% 9 4)
-	  ⇒ 1
-    (% -9 4)
-	  ⇒ -1
-    (% 9 -4)
-	  ⇒ 1
-    (% -9 -4)
-	  ⇒ -1
 
-功能：mod 除数 ¶
 
+#+begin_src emacs-lisp
+  Function: mod dividend divisor
+#+end_src
     该函数返回被除数模除数的值；  换句话说，被除数除以除数后的余数，但符号与除数相同。  参数必须是数字或标记。
 
     与 % 不同，mod 允许浮点参数；  它将商向下（朝向负无穷大）四舍五入为整数，并使用该商来计算余数。
 
     如果除数为零，如果两个参数都是整数，则 mod 发出算术错误错误信号，否则返回 NaN。
 
-    （模式 9 4）
-	  ⇒ 1
+    #+begin_src emacs-lisp
+      (mod 9 4)
+	   ⇒ 1
 
-    (mod -9 4)
-	  ⇒ 3
+      (mod -9 4)
+	   ⇒ 3
 
-    （模式 9 -4）
-	  ⇒ -3
+      (mod 9 -4)
+	   ⇒ -3
 
-    （模式 -9 -4）
-	  ⇒ -1
+      (mod -9 -4)
+	   ⇒ -1
 
-    （模式 5.5 2.5）
-	  ⇒ .5
+      (mod 5.5 2.5)
+	   ⇒ .5
+    #+end_src
 
     对于任何两个数字的除数和除数，
 
-    (+ (mod 除数)
-	(* (底除数除数) 除数))
+    #+begin_src emacs-lisp
+      (+ (mod dividend divisor)
+	 (* (floor dividend divisor) divisor))
+    #+end_src
 
     总是等于被除数，如果任一参数是浮点数，则会出现舍入错误；如果被除数是整数且除数为 0，则会出现算术错误。关于下限，请参阅数值转换。
 
