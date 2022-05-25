@@ -186,55 +186,63 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
     这个函数总是返回 nil。  表中该字符的旧语法信息将被丢弃。
 
     例子：
+    #+begin_src emacs-lisp
 
 
-    ;;  将空格字符放在类空格中。
-    （修改语法条目？\s“”）
-	  ⇒ 无
+      Examples:
 
 
-    ;;  使 '$' 成为一个开括号字符，
-    ;;  以 '^' 作为匹配关闭。
-    （修改语法条目？$“（^”）
-	  ⇒ 无
+      ;; Put the space character in class whitespace.
+      (modify-syntax-entry ?\s " ")
+	   ⇒ nil
 
 
-    ;;  使 '^' 成为右括号字符，
-    ;;  以 '$' 作为其匹配打开。
-    （修改语法条目？^“）$”）
-	  ⇒ 无
+      ;; Make ‘$’ an open parenthesis character,
+      ;;   with ‘^’ as its matching close.
+      (modify-syntax-entry ?$ "(^")
+	   ⇒ nil
 
 
-    ;;  使“/”成为标点符号，
-    ;;  start-comment 序列的第一个字符，
-    ;;  和结束注释序列的第二个字符。
-    ;;  这用于 C 模式。
-    （修改语法条目？/“。14”）
-	  ⇒ 无
+      ;; Make ‘^’ a close parenthesis character,
+      ;;   with ‘$’ as its matching open.
+      (modify-syntax-entry ?^ ")$")
+	   ⇒ nil
+
+
+      ;; Make ‘/’ a punctuation character,
+      ;;   the first character of a start-comment sequence,
+      ;;   and the second character of an end-comment sequence.
+      ;;   This is used in C mode.
+      (modify-syntax-entry ?/ ". 14")
+	   ⇒ nil
+    #+end_src
 
 功能：字符语法字符¶
 
     此函数返回字符的语法类，由其指示符表示（参见语法类表）。  这仅返回类，而不是其匹配的字符或语法标志。
 
     以下示例适用于 C 模式。  （我们使用字符串更容易看到 char 语法返回的字符。）
-
-    ;;  空格字符具有空格语法类。
-    （字符串（字符语法？\s））
-	  ⇒ " "
+    #+begin_src emacs-lisp
 
 
-    ;;  正斜杠字符具有标点语法。
-    ;;  请注意，此 char-syntax 调用不会显示
-    ;;  它也是注释开始和结束序列的一部分。
-    （字符串（字符语法？/））
-	  ⇒ “。”
+      ;; Space characters have whitespace syntax class.
+      (string (char-syntax ?\s))
+	   ⇒ " "
 
 
-    ;;  开括号字符具有开括号语法。
-    ;;  请注意，此 char-syntax 调用并未显示
-    ;;  它有一个匹配的字符，')'。
-    （字符串（字符语法？\（））
-	  ⇒ "("
+      ;; Forward slash characters have punctuation syntax.
+      ;; Note that this char-syntax call does not reveal
+      ;; that it is also part of comment-start and -end sequences.
+      (string (char-syntax ?/))
+	   ⇒ "."
+
+
+      ;; Open parenthesis characters have open parenthesis syntax.
+      ;; Note that this char-syntax call does not reveal that
+      ;; it has a matching character, ‘)’.
+      (string (char-syntax ?\())
+	   ⇒ "("
+    #+end_src
 
 功能：设置语法表 ¶
 
@@ -320,7 +328,9 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
 字符的语法控制它如何改变解析器的状态，而不是描述状态本身。  例如，字符串分隔符在字符串内和代码内切换解析器状态，但字符的语法并没有直接说明它们是否在字符串内。  例如（注意 15 是通用字符串分隔符的语法代码），
 
-(put-text-property 1 9 'syntax-table '(15 . nil))
+#+begin_src emacs-lisp
+  (put-text-property 1 9 'syntax-table '(15 . nil))
+#+end_src
 
 不会告诉 Emacs 当前缓冲区的前八个字符是字符串，而是告诉 Emacs 它们都是字符串分隔符。  因此，Emacs 将它们视为四个连续的空字符串常量。
 
@@ -481,8 +491,9 @@ parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请�
 
     如果语法为 nil，则返回值为 nil。  这是这样的表达
 
-    (syntax-class (syntax-after pos))
-
+    #+begin_src emacs-lisp
+      (syntax-class (syntax-after pos))
+    #+end_src
     如果 pos 在缓冲区的可访问部分之外，则计算结果为 nil，而不会引发错误或返回不正确的代码。
 
 ** TODO 36.8 类别
@@ -502,34 +513,39 @@ parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请�
     此函数为类别表定义了一个新类别，名称为 char 和文档文档字符串。
 
     这是为具有强从右到左方向性的字符定义新类别（请参阅双向显示）并在特殊类别表中使用它的示例。  为了获得有关字符方向性的信息，示例代码使用了'bidi-class' Unicode 属性（请参阅bidi-class）。
+    #+begin_src emacs-lisp
 
-    （defvar 特殊类别表换比迪
-      ;;  制作一个空的类别表。
-      (let ((category-table (make-category-table))
-	     ;;  创建一个提供“双向类”Unicode 的字符表
-	     ;;  每个字符的属性。
-	     （单属性表
-	      (unicode-property-table-internal 'bidi-class)))
-	 (define-category ?R "Bidi-class R、AL 或 RLO 的字符"
-			  类别表）
-	 ;;  修改每个角色的类别条目
-	 ;;  'bidi-class' Unicode 属性是 R、AL 或 RLO --
-	 ;;  这些具有从右到左的方向性。
-	 （地图字符表
-	  （λ（键值）
-	    (如果 (memq val '(R AL RLO))
-		（修改类别条目键？R类别表）））
-	  单属性表）
-	 类别表））
+
+      (defvar special-category-table-for-bidi
+	;;     Make an empty category-table.
+	(let ((category-table (make-category-table))
+	      ;; Create a char-table which gives the 'bidi-class' Unicode
+	      ;; property for each character.
+	      (uniprop-table
+	       (unicode-property-table-internal 'bidi-class)))
+	  (define-category ?R "Characters of bidi-class R, AL, or RLO"
+			   category-table)
+	  ;; Modify the category entry of each character whose
+	  ;; 'bidi-class' Unicode property is R, AL, or RLO --
+	  ;; these have a right-to-left directionality.
+	  (map-char-table
+	   (lambda (key val)
+	     (if (memq val '(R AL RLO))
+		 (modify-category-entry key ?R category-table)))
+	   uniprop-table)
+	  category-table))
+    #+end_src
 
 功能：category-docstring类别&可选表¶
 
     该函数返回类别表中类别类别的文档字符串。
+    #+begin_src emacs-lisp
+      (category-docstring ?a)
+	   ⇒ "ASCII"
+      (category-docstring ?l)
+	   ⇒ "Latin"
+    #+end_src
 
-    （类别文档字符串？a）
-	  ⇒ "ASCII"
-    （类别文档字符串？l）
-	  ⇒ “拉丁语”
 
 功能：获取未使用类别&可选表¶
 
@@ -563,22 +579,30 @@ parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请�
 
     该函数返回一个新的类别集——一个布尔向量——其初始内容是字符串类别中列出的类别。  类别的元素应该是类别名称；  新的类别集对于这些类别中的每一个都具有 t，而对于所有其他类别，则为 nil。
 
-    (make-category-set "al")
-	  ⇒ #&128"\0\0\0\0\0\0\0\0\0\0\0\0\2\20\0\0"
+    #+begin_src emacs-lisp
+      (make-category-set "al")
+	   ⇒ #&128"\0\0\0\0\0\0\0\0\0\0\0\0\2\20\0\0"
+    #+end_src
 
 功能：char-category-set char ¶
 
     此函数返回当前缓冲区的类别表中字符 char 的类别集。  这是记录字符 char 所属类别的布尔向量。  函数 char-category-set 不分配存储空间，因为它返回存在于类别表中的相同 bool-vector。
 
-    （字符类别集？a）
-	  ⇒ #&128"\0\0\0\0\0\0\0\0\0\0\0\0\2\20\0\0"
+    #+begin_src emacs-lisp
+      (char-category-set ?a)
+	   ⇒ #&128"\0\0\0\0\0\0\0\0\0\0\0\0\2\20\0\0"
+    #+end_src
+
 
 功能：类别集助记符类别集¶
 
     此函数将类别集 category-set 转换为一个字符串，该字符串包含指定作为该集合成员的类别的字符。
 
-    (category-set-mnemonics (char-category-set ?a))
-	  ⇒ “阿尔”
+    #+begin_src emacs-lisp
+      (category-set-mnemonics (char-category-set ?a))
+	   ⇒ "al"
+    #+end_src
+
 
 功能：修改-category-entry char类别&可选表重置¶
 
