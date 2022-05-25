@@ -9,7 +9,9 @@
 
 您可以使用 symbolp 测试任意 Lisp 对象是否是符号：
 
-功能：符号对象¶
+#+begin_src emacs-lisp
+  Function: symbolp object ¶
+#+end_src
 
     如果 object 是符号，则此函数返回 t，否则返回 nil。
 
@@ -17,16 +19,24 @@
 
 每个符号都有四个组件（或“单元格”），每个组件都引用另一个对象：
 
-打印名称¶
+#+begin_src emacs-lisp
+  Print name ¶
+#+end_src
 
     符号的名称。
-价值 ¶
+#+begin_src emacs-lisp
+  Value ¶
+#+end_src
 
     符号的当前值作为变量。
-功能 ¶
+#+begin_src emacs-lisp
+  Function ¶
+#+end_src
 
     符号的函数定义。  它还可以包含符号、键盘映射或键盘宏。
-属性列表¶
+#+begin_src emacs-lisp
+  Property list ¶
+#+end_src
 
     符号的属性列表。
 
@@ -45,10 +55,10 @@
 因为每个符号都有单独的值和函数单元格，所以变量名称和函数名称不会冲突。  例如，符号 buffer-file-name 有一个值（在当前缓冲区中被访问的文件的名称）以及一个函数定义（一个返回文件名的原始函数）：
 
 #+begin_src emacs-lisp
-buffer-file-name
-     ⇒ "/gnu/elisp/symbols.texi"
-(symbol-function 'buffer-file-name)
-     ⇒ #<subr buffer-file-name>
+  buffer-file-name
+       ⇒ "/gnu/elisp/symbols.texi"
+  (symbol-function 'buffer-file-name)
+       ⇒ #<subr buffer-file-name>
 #+end_src
 
 ** TODO 9.2 定义符号
@@ -94,7 +104,9 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
 下面的大多数函数都使用名称，有时还使用 obarray 作为参数。  如果名称不是字符串，或者 obarray 不是向量，则会发出错误类型参数错误的信号。
 
-功能：符号名称符号¶
+#+begin_src emacs-lisp
+  Function: symbol-name symbol ¶
+#+end_src
 
     此函数返回作为符号名称的字符串。  例如：
 
@@ -108,7 +120,9 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
 在生成 Lisp 代码时创建非驻留符号很有用，因为在您生成的代码中用作变量的非驻留符号不会与其他 Lisp 程序中使用的任何变量发生冲突。
 
-功能：制作符号名称¶
+#+begin_src emacs-lisp
+  Function: make-symbol name ¶
+#+end_src
 
     这个函数返回一个新分配的、名称为 name（必须是字符串）的非内部符号。  它的值和函数定义为 void，其属性列表为 nil。  在下面的示例中，sym 的值不是 eq 到 foo，因为它是一个不同的 uninterned 符号，其名称也是 'foo'。
 
@@ -119,13 +133,17 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 	   ⇒ nil
     #+end_src
 
-功能：gensym &可选前缀¶
+#+begin_src emacs-lisp
+  Function: gensym &optional prefix ¶
+#+end_src
 
     此函数使用 make-symbol 返回一个符号，其名称是通过将 gensym-counter 附加到 prefix 并递增该计数器来生成的，确保没有两次调用此函数将生成具有相同名称的符号。  前缀默认为“g”。
 
 为避免意外嵌入生成代码的打印表示时出现问题（请参阅打印表示和读取语法），建议使用 gensym 而不是 make-symbol。
 
-功能：实习生姓名 &optional obarray ¶
+#+begin_src emacs-lisp
+  Function: intern name &optional obarray ¶
+#+end_src
 
     此函数返回名称为 name 的内部符号。  如果 obarray obarray 中没有这样的符号，intern 创建一个新符号，将其添加到 obarray，然后返回。  如果省略 obarray，则使用全局变量 obarray 的值。
 
@@ -143,7 +161,9 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
     Common Lisp 注意：在 Common Lisp 中，您可以在 obarray 中实习现有的符号。  在 Emacs Lisp 中，您不能这样做，因为 intern 的参数必须是字符串，而不是符号。
 
-功能：intern-soft name &optional obarray ¶
+#+begin_src emacs-lisp
+  Function: intern-soft name &optional obarray ¶
+#+end_src
 
     此函数返回 obarray 中名称为 name 的符号，如果 obarray 没有具有该名称的符号，则返回 nil。  因此，您可以使用 intern-soft 来测试具有给定名称的符号是否已被实习。  如果省略 obarray，则使用全局变量 obarray 的值。
 
@@ -171,11 +191,15 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
     #+end_src
 
 
-变量：obarray ¶
+#+begin_src emacs-lisp
+  Variable: obarray ¶
+#+end_src
 
     此变量是供实习生和读取使用的标准 obarray。
 
-功能：mapatoms 函数&可选 obarray ¶
+#+begin_src emacs-lisp
+  Function: mapatoms function &optional obarray ¶
+#+end_src
 
     此函数对 obarray obarray 中的每个符号调用一次函数。  然后它返回零。  如果省略 obarray，则默认为 obarray 的值，即普通符号的标准 obarray。
 
@@ -193,7 +217,9 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
     有关使用 mapatoms 的另一个示例，请参阅访问文档字符串中的文档。
 
-功能：unintern 符号 obarray ¶
+#+begin_src emacs-lisp
+  Function: unintern symbol obarray ¶
+#+end_src
 
     此函数从 obarray obarray 中删除符号。  如果 symbol 实际上不在 obarray 中， unintern 什么也不做。  如果 obarray 为 nil，则使用当前的 obarray。
 
@@ -211,7 +237,9 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
 以下函数可用于访问符号属性。
 
-功能：获取符号属性¶
+#+begin_src emacs-lisp
+  Function: get symbol property ¶
+#+end_src
 
     此函数返回符号属性列表中名为 property 的属性的值。  如果没有这样的属性，则返回 nil。  因此，nil 值与该属性不存在之间没有区别。
 
@@ -219,7 +247,9 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
     请参阅 put 示例。
 
-功能：放符号属性值¶
+#+begin_src emacs-lisp
+  Function: put symbol property value ¶
+#+end_src
 
     此函数将值放在属性名称属性下的符号属性列表中，替换任何先前的属性值。  put 函数返回值。
     #+begin_src emacs-lisp
@@ -234,11 +264,15 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
     #+end_src
 
 
-功能：symbol-plist 符号¶
+#+begin_src emacs-lisp
+  Function: symbol-plist symbol ¶
+#+end_src
 
     该函数返回符号的属性列表。
 
-功能：setplist 符号 plist ¶
+#+begin_src emacs-lisp
+  Function: setplist symbol plist ¶
+#+end_src
 
     此函数将符号的属性列表设置为 plist。  通常，plist 应该是一个格式良好的属性列表，但这不是强制的。  返回值为 plist。
     #+begin_src emacs-lisp
@@ -259,11 +293,15 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
     #+end_src
 
 
-功能：函数获取符号属性&可选自动加载¶
+#+begin_src emacs-lisp
+  Function: function-get symbol property &optional autoload ¶
+#+end_src
 
     此函数与 get 相同，除了如果 symbol 是函数别名的名称，它会在命名实际函数的符号的属性列表中查找。  请参阅定义函数。  如果可选参数 autoload 不为零，并且符号是自动加载的，则此函数将尝试自动加载它，因为自动加载可能会设置符号的属性。  如果 autoload 是符号宏，仅当 symbol 是自动加载的宏时才尝试自动加载。
 
-功能：function-put 函数属性值 ¶
+#+begin_src emacs-lisp
+  Function: function-put function property value ¶
+#+end_src
 
     此函数将函数的属性设置为值。  函数应该是一个符号。  这个函数比调用 put 来设置函数的属性更受欢迎，因为它会让我们有一天能够实现旧属性到新属性的重新映射。
 
@@ -271,10 +309,14 @@ defmacro 将符号定义为宏。  它创建一个宏对象并将其存储在符
 
 在这里，我们列出了在 Emacs 中用于特殊用途的符号属性。  在下表中，每当我们说“命名函数”时，就是指名称为相关符号的函数；  对于“命名变量”等类似。
 
-:advertised-binding
+#+begin_src emacs-lisp
+  :advertised-binding
+#+end_src
 
     在显示文档时，此属性值指定命名函数的首选键绑定。  请参阅替换文档中的键绑定。
-字符表额外插槽
+#+begin_src emacs-lisp
+  char-table-extra-slots
+#+end_src
 
     该值（如果非零）指定命名字符表类型中的额外槽数。  请参阅字符表。
 #+begin_src emacs-lisp
@@ -383,7 +425,9 @@ variable-documentation
 
 简写使 Emacs Lisp 的命名空间礼仪更易于使用。  由于所有符号都存储在单个 obarray 中（请参阅创建和内部符号），程序员通常在每个符号名称前加上它所在的库的名称。  例如，函数 text-property-search-forward 和 text-property-search-backward 都属于 text-property-search.el 库（请参阅加载）。  通过正确地为符号名称添加前缀，可以有效地防止属于不同库的类似名称符号之间的冲突，从而执行不同的操作。  然而，这种做法通常会产生很长的符号名称，一段时间后输入和阅读不方便。  速记以干净的方式解决了这些问题。
 
-变量：read-symbol-shorthands ¶
+#+begin_src emacs-lisp
+  Variable: read-symbol-shorthands ¶
+#+end_src
 
     这个变量的值是一个alist，其元素的格式为(shorthand-prefix . longhand-prefix)。  每个元素都指示 Lisp 阅读器读取以 shorthand-prefix 开头的每个符号形式，就好像它以 longhand-prefix 开头一样。
 
