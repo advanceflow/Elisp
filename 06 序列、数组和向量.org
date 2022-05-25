@@ -932,45 +932,47 @@ Emacs 定义了四种类型的数组，都是一维的：字符串（参见字�
 
 在本节中，我们将描述接受所有类型数组的函数。
 
-功能：数组对象¶
+#+begin_src emacs-lisp
+  Function: arrayp object ¶
+#+end_src
 
     如果对象是数组（即向量、字符串、布尔向量或字符表），则此函数返回 t。
 
     #+begin_src emacs-lisp
-(arrayp [a])
-     ⇒ t
-(arrayp "asdf")
-     ⇒ t
-(arrayp (syntax-table))    ;; A char-table.
-     ⇒ t
+      (arrayp [a])
+	   ⇒ t
+      (arrayp "asdf")
+	   ⇒ t
+      (arrayp (syntax-table))    ;; A char-table.
+	   ⇒ t
     #+end_src
 
-功能：aref arr 索引¶
+#+begin_src emacs-lisp
+  Function: aref arr index ¶
+#+end_src
 
     此函数返回数组或记录 arr 的索引元素。  第一个元素的索引为零。
 
     #+begin_src emacs-lisp
+      (setq primes [2 3 5 7 11 13])
+	   ⇒ [2 3 5 7 11 13]
+      (aref primes 4)
+	   ⇒ 11
 
-
-(setq primes [2 3 5 7 11 13])
-     ⇒ [2 3 5 7 11 13]
-(aref primes 4)
-     ⇒ 11
-
-(aref "abcdefg" 1)
-     ⇒ 98           ; ‘b’ is ASCII code 98.
+      (aref "abcdefg" 1)
+	   ⇒ 98           ; ‘b’ is ASCII code 98.
     #+end_src
 
 
     另请参见序列中的函数 elt。
 
-功能：资产数组索引对象¶
+#+begin_src emacs-lisp
+  Function: aset array index object ¶
+#+end_src
 
     此函数将数组的第一个元素设置为对象。  它返回对象。
 
     #+begin_src emacs-lisp
-
-
       (setq w (vector 'foo 'bar 'baz))
 	   ⇒ [foo bar baz]
       (aset w 0 'fu)
@@ -988,12 +990,13 @@ Emacs 定义了四种类型的数组，都是一维的：字符串（参见字�
 	   ⇒ "asdZasfd"
     #+end_src
 
-
     数组应该是可变的。  请参阅可变性。
 
     如果数组是字符串而对象不是字符，则会导致错误类型参数错误。  如果需要插入字符，该函数会将单字节字符串转换为多字节。
 
-功能：fillarray 数组对象 ¶
+#+begin_src emacs-lisp
+  Function: fillarray array object ¶
+#+end_src
 
     该函数用对象填充数组数组，使数组的每个元素都是对象。  它返回数组。
 
@@ -1039,7 +1042,9 @@ Emacs 定义了四种类型的数组，都是一维的：字符串（参见字�
 
 以下是一些与向量相关的函数：
 
-功能：vectorp 对象 ¶
+#+begin_src emacs-lisp
+  Function: vectorp object ¶
+#+end_src
 
     如果 object 是向量，则此函数返回 t。
 
@@ -1051,7 +1056,9 @@ Emacs 定义了四种类型的数组，都是一维的：字符串（参见字�
     #+end_src
 
 
-功能：向量 &rest 对象 ¶
+#+begin_src emacs-lisp
+  Function: vector &rest objects ¶
+#+end_src
 
     此函数创建并返回一个向量，其元素是参数、对象。
 
@@ -1063,7 +1070,9 @@ Emacs 定义了四种类型的数组，都是一维的：字符串（参见字�
     #+end_src
 
 
-功能：制作向量长度对象¶
+#+begin_src emacs-lisp
+  Function: make-vector length object ¶
+#+end_src
 
     此函数返回一个由长度元素组成的新向量，每个元素都初始化为对象。
 
@@ -1073,7 +1082,9 @@ Emacs 定义了四种类型的数组，都是一维的：字符串（参见字�
     #+end_src
 
 
-功能：vconcat &rest 序列 ¶
+#+begin_src emacs-lisp
+  Function: vconcat &rest sequences ¶
+#+end_src
 
     此函数返回一个包含序列所有元素的新向量。  参数序列可以是正确的列表、向量、字符串或布尔向量。  如果没有给出序列，则返回空向量。
 
@@ -1119,7 +1130,9 @@ append 函数还提供了一种将向量转换为具有相同元素的列表的�
 
 一个字符表也可以有一个默认值。  如果是这样，那么 (aref char-table c) 会在 char-table 未指定任何其他非 nil 值时返回默认值。
 
-功能：make-char-table 子类型 &optional init ¶
+#+begin_src emacs-lisp
+Function:  make-char-table subtype &optional init ¶
+#+end_src
 
     返回一个新创建的字符表，带有子类型 subtype（一个符号）。  每个元素都初始化为 init，默认为 nil。  创建 char-table 后，您无法更改 char-table 的子类型。
 
@@ -1127,66 +1140,96 @@ append 函数还提供了一种将向量转换为具有相同元素的列表的�
 
     如果 subtype 具有 char-table-extra-slots 符号属性，则指定 char-table 中的额外插槽数。  这应该是 0 到 10 之间的整数；  否则，make-char-table 会引发错误。  如果 subtype 没有 char-table-extra-slots 符号属性（请参阅属性列表），则 char-table 没有额外的插槽。
 
-功能：char-table-p 对象¶
-
+#+begin_src emacs-lisp
+Function: char-table-p object ¶
+#+end_src
     如果 object 是 char 表，则此函数返回 t，否则返回 nil。
 
-功能：char-table-subtype char-table ¶
+#+begin_src emacs-lisp
+Function: char-table-subtype char-table ¶
+#+end_src
 
     该函数返回 char-table 的子类型符号。
 
 没有特殊的函数可以访问字符表中的默认值。  为此，请使用 char-table-range（见下文）。
 
-功能：char-table-parent char-table ¶
+#+begin_src emacs-lisp
+Function: char-table-parent char-table ¶
+#+end_src
 
     此函数返回 char-table 的父级。  父级总是 nil 或另一个字符表。
 
-功能：set-char-table-parent char-table new-parent ¶
+#+begin_src emacs-lisp
+Function: set-char-table-parent char-table new-parent ¶
+#+end_src
 
     此函数将 char-table 的父级设置为 new-parent。
 
-功能：char-table-extra-slot char-table n ¶
+#+begin_src emacs-lisp
+Function: char-table-extra-slot char-table n ¶
+#+end_src
 
     此函数返回字符表的额外槽 n（从零开始）的内容。  字符表中的额外槽数由其子类型决定。
 
-功能：set-char-table-extra-slot char-table n 值¶
+#+begin_src emacs-lisp
+Function: set-char-table-extra-slot char-table n value ¶
+#+end_src
 
     此函数将值存储在字符表的额外槽 n（从零开始）中。
 
 char-table 可以为单个字符代码指定一个元素值；  它还可以为整个字符集指定一个值。
 
-功能：char-table-range char-table range ¶
+#+begin_src emacs-lisp
+Function: char-table-range char-table range ¶
+#+end_src
 
     这将返回在 char-table 中为一系列字符范围指定的值。  以下是范围的可能性：
 
-    零
+    #+begin_src emacs-lisp
+      nil
+    #+end_src
 
 	 指默认值。
-    字符
+    #+begin_src emacs-lisp
+      char
+    #+end_src
 
 	 指字符 char 的元素（假设 char 是有效的字符代码）。
-    （从到）
+    #+begin_src emacs-lisp
+      (from . to)
+    #+end_src
 
 	 cons 单元格引用包含范围“[from..to]”中的所有字符。
 
-功能：设置字符表范围字符表范围值¶
+#+begin_src emacs-lisp
+Function: set-char-table-range char-table range value ¶
+#+end_src
 
     此函数设置字符表中字符范围的值。  以下是范围的可能性：
 
-    零
+    #+begin_src emacs-lisp
+      nil
+    #+end_src
 
 	 指默认值。
-    吨
+    #+begin_src emacs-lisp
+      t
+    #+end_src
 
 	 指整个范围的字符代码。
-    字符
+    #+begin_src emacs-lisp
+      char
+    #+end_src
 
 	 指字符 char 的元素（假设 char 是有效的字符代码）。
-    （从到）
-
+    #+begin_src emacs-lisp
+      (from . to)
+    #+end_src
 	 cons 单元格引用包含范围“[from..to]”中的所有字符。
 
-功能：map-char-table 函数 char-table ¶
+#+begin_src emacs-lisp
+  Function: map-char-table function char-table ¶
+#+end_src
 
     此函数为 char-table 中具有非 nil 值的每个元素调用其参数函数。  函数调用有两个参数，一个键和一个值。  键是 char-table-range 的可能范围参数——有效字符或 cons 单元格（从 . 到），指定共享相同值的字符范围。  该值是 (char-table-range char-table key) 返回的值。
 
@@ -1211,64 +1254,83 @@ char-table 可以为单个字符代码指定一个元素值；  它还可以为�
        ... (65379 (5 . 65378)) (65378 (4 . 65379)) (65377 (1))
        ... (12 (0)) (11 (3)) (10 (12)) (9 (0)) ((0 8) (3)))
     #+end_src
-
 ** TODO 6.7 布尔向量
 
 布尔向量很像向量，只是它只存储值 t 和 nil。  如果您尝试将任何非零值存储到布尔向量的元素中，则效果是将 t 存储在那里。  与所有数组一样，布尔向量索引从 0 开始，一旦创建布尔向量，长度就不能更改。  布尔向量在评估时是常数。
 
 有几个函数专门用于布尔向量；  除此之外，您可以使用与其他类型数组相同的函数来操作它们。
 
-功能：使布尔向量长度初始¶
+#+begin_src emacs-lisp
+  Function: make-bool-vector length initial ¶
+#+end_src
 
     返回一个新的长度元素的布尔向量，每个元素都初始化为初始值。
 
-功能：bool-vector &rest 对象 ¶
+#+begin_src emacs-lisp
+  Function: bool-vector &rest objects ¶
+#+end_src
 
     这个函数创建并返回一个布尔向量，其元素是参数，对象。
 
-功能：bool-vector-p 对象 ¶
+#+begin_src emacs-lisp
+  Function: bool-vector-p object ¶
+#+end_src
 
     如果 object 是布尔向量，则返回 t，否则返回 nil。
 
 还有一些 bool-vector 集合操作函数，描述如下：
 
-功能：bool-vector-exclusive-or ab &optional c ¶
+#+begin_src emacs-lisp
+  Function: bool-vector-exclusive-or a b &optional c ¶
+#+end_src
 
     返回布尔向量 a 和 b 的按位异或。  如果给定可选参数 c，则此操作的结果将存储到 c 中。  所有参数都应该是相同长度的布尔向量。
 
-功能：bool-vector-union ab &optional c ¶
+#+begin_src emacs-lisp
+  Function: bool-vector-union a b &optional c ¶
+#+end_src
 
     返回布尔向量 a 和 b 的按位或。  如果给定可选参数 c，则此操作的结果将存储到 c 中。  所有参数都应该是相同长度的布尔向量。
 
-功能：bool-vector-intersection ab &optional c ¶
+#+begin_src emacs-lisp
+  Function: bool-vector-intersection a b &optional c ¶
+#+end_src
 
     返回布尔向量 a 和 b 的按位与。  如果给定可选参数 c，则此操作的结果将存储到 c 中。  所有参数都应该是相同长度的布尔向量。
 
-功能：bool-vector-set-difference ab &optional c ¶
+#+begin_src emacs-lisp
+  Function: bool-vector-set-difference a b &optional c ¶
+#+end_src
 
     返回 bool 向量 a 和 b 的集合差。  如果给定可选参数 c，则此操作的结果将存储到 c 中。  所有参数都应该是相同长度的布尔向量。
 
-功能：bool-vector-not a &optional b ¶
+#+begin_src emacs-lisp
+  Function: bool-vector-not a &optional b ¶
+#+end_src
 
     返回 bool 向量 a 的补集。  如果给定可选参数 b，则此操作的结果将存储到 b 中。  所有参数都应该是相同长度的布尔向量。
 
-功能：bool-vector-subsetp ab ¶
+#+begin_src emacs-lisp
+  Function: bool-vector-subsetp a b ¶
+#+end_src
 
     如果 a 中的每个 t 值也是 b 中的 t，则返回 t，否则返回 nil。  所有参数都应该是相同长度的布尔向量。
 
-功能：bool-vector-count-consecutive abi ¶
+#+begin_src emacs-lisp
+  Function: bool-vector-count-consecutive a b i ¶
+#+end_src
 
     返回从 i 开始的相等 b 中连续元素的数量。  a 是一个布尔向量，b 是 t 或 nil，而 i 是 a 的索引。
 
-功能：bool-vector-count-population a ¶
+#+begin_src emacs-lisp
+  Function: bool-vector-count-population a ¶
+#+end_src
 
     返回布尔向量 a 中为 t 的元素的数量。
 
 打印出来的表格最多可将 8 个布尔值表示为单个字符：
 
 #+begin_src emacs-lisp
-
-
   (bool-vector t nil t nil)
        ⇒ #&4"^E"
   (bool-vector)
@@ -1285,16 +1347,15 @@ char-table 可以为单个字符代码指定一个元素值；  它还可以为�
 这是另一个创建、检查和更新布尔向量的示例：
 
 #+begin_src emacs-lisp
-(setq bv (make-bool-vector 5 t))
-     ⇒ #&5"^_"
-(aref bv 1)
-     ⇒ t
-(aset bv 3 nil)
-     ⇒ nil
-bv
-     ⇒ #&5"^W"
+  (setq bv (make-bool-vector 5 t))
+       ⇒ #&5"^_"
+  (aref bv 1)
+       ⇒ t
+  (aset bv 3 nil)
+       ⇒ nil
+  bv
+       ⇒ #&5"^W"
 #+end_src
-
 
 这些结果是有意义的，因为 control-_ 和 control-W 的二进制代码分别是 11111 和 10111。
 
@@ -1304,57 +1365,81 @@ bv
 
 请注意，Emacs 中的几个环，例如 kill ring 和 mark ring，实际上是作为简单列表实现的，而不是使用 ring 包；  因此以下功能对它们不起作用。
 
-功能：制作戒指尺寸¶
+#+begin_src emacs-lisp
+  Function: make-ring size ¶
+#+end_src
 
     这将返回一个能够容纳 size 对象的新环。  大小应该是一个整数。
 
-功能：环-p对象¶
+#+begin_src emacs-lisp
+  Function: ring-p object ¶
+#+end_src
 
     如果对象是环，则返回 t，否则返回 nil。
 
-功能：戒指尺寸的戒指¶
+#+begin_src emacs-lisp
+  Function: ring-size ring ¶
+#+end_src
 
     这将返回环的最大容量。
 
-功能：环长环¶
+#+begin_src emacs-lisp
+  Function: ring-length ring ¶
+#+end_src
 
     这将返回 ring 当前包含的对象数。  该值永远不会超过 ring-size 返回的值。
 
-功能：环元素环¶
+#+begin_src emacs-lisp
+  Function: ring-elements ring ¶
+#+end_src
 
     这将按顺序返回环中对象的列表，最新的在前。
 
-功能：环复制环¶
+#+begin_src emacs-lisp
+  Function: ring-copy ring ¶
+#+end_src
 
     这将返回一个新的环，它是环的副本。  新环包含与环相同的 (eq) 对象。
 
-功能：ring-empty-p ring ¶
+#+begin_src emacs-lisp
+  Function: ring-empty-p ring ¶
+#+end_src
 
     如果 ring 为空，则返回 t，否则返回 nil。
 
 环中最新的元素始终具有索引 0。更高的索引对应于较旧的元素。  索引以环长度为模计算。  索引 -1 对应于最旧的元素，-2 对应于下一个最旧的元素，依此类推。
 
-功能：环参考环索引¶
+#+begin_src emacs-lisp
+  Function: ring-ref ring index ¶
+#+end_src
 
     这将返回在索引索引处找到的环中的对象。  index 可能为负数或大于环长度。  如果 ring 为空，则 ring-ref 发出错误信号。
 
-功能：环插入环对象¶
+#+begin_src emacs-lisp
+  Function: ring-insert ring object ¶
+#+end_src
 
     这会将对象插入到环中，使其成为最新元素，并返回对象。
 
     如果环已满，插入会删除最旧的元素，为新元素腾出空间。
 
-功能：除环&可选索引¶
+#+begin_src emacs-lisp
+  Function: ring-remove ring &optional index ¶
+#+end_src
 
     从环中移除一个对象，并返回该对象。  参数 index 指定要删除的项目；  如果为 nil，则表示删除最旧的项目。  如果 ring 为空，则 ring-remove 会发出错误信号。
 
-功能：在开始时插入环对象¶
+#+begin_src emacs-lisp
+  Function: ring-insert-at-beginning ring object ¶
+#+end_src
 
     这会将对象插入到环中，将其视为最旧的元素。  返回值不重要。
 
     如果环已满，此函数将删除最新的元素，为插入的元素腾出空间。
 
-功能：调整戒指尺寸 ¶
+#+begin_src emacs-lisp
+  Function: ring-resize ring size ¶
+#+end_src
 
     将环的大小设置为大小。  如果新大小更小，则丢弃环中最旧的项目。
 
