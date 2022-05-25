@@ -33,8 +33,10 @@
     此命令选择一个访问文件文件名的缓冲区，如果存在则使用现​​有缓冲区，否则创建一个新缓冲区并将文件读入其中。  它还返回该缓冲区。
 
     除了一些技术细节之外，find-file 函数的主体基本上等同于：
+    #+begin_src emacs-lisp
+      (switch-to-buffer (find-file-noselect filename nil nil wildcards))
+    #+end_src
 
-    (switch-to-buffer (find-file-noselect filename nil nil wildcards))
 
     （请参阅在窗口中切换到缓冲区中的切换到缓冲区。）
 
@@ -64,8 +66,10 @@
 
     find-file-noselect 函数通常返回正在访问文件文件名的缓冲区。  但是，如果实际使用并扩展了通配符，它​​会返回访问各种文件的缓冲区列表。
 
-    (查找文件-noselect "/etc/fstab")
-	  ⇒ #<缓冲区 fstab>
+    #+begin_src emacs-lisp
+      (find-file-noselect "/etc/fstab")
+	   ⇒ #<buffer fstab>
+    #+end_src
 
 命令：find-file-other-window 文件名和可选通配符 ¶
 
@@ -108,15 +112,18 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
     该函数为访问文件名创建一个适当命名的缓冲区，并将其返回。  如果该名称是空闲的，它将使用文件名（无目录）作为名称；  否则，它会附加一个字符串，例如 '<2>' 以获取未使用的名称。  另请参阅创建缓冲区。  请注意，uniquify 库会影响此函数的结果。  请参阅 GNU Emacs 手册中的 Uniquify。
 
     请注意：create-file-buffer 不会将新缓冲区与文件关联，也不会选择缓冲区。  它也不使用默认的主要模式。
+    #+begin_src emacs-lisp
 
-    （创建文件缓冲区“foo”）
-	  ⇒ #<buffer foo>
 
-    （创建文件缓冲区“foo”）
-	  ⇒ #<buffer foo<2>>
+      (create-file-buffer "foo")
+	   ⇒ #<buffer foo>
 
-    （创建文件缓冲区“foo”）
-	  ⇒ #<buffer foo<3>>
+      (create-file-buffer "foo")
+	   ⇒ #<buffer foo<2>>
+
+      (create-file-buffer "foo")
+	   ⇒ #<buffer foo<3>>
+    #+end_src
 
     此函数由 find-file-noselect 使用。  它使用 generate-new-buffer（请参阅创建缓冲区）。
 
@@ -174,7 +181,10 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
 
     如果 write-file-functions 中的函数返回非 nil，则它负责制作备份文件（如果合适的话）。  为此，请执行以下代码：
 
-    （或缓冲备份（backup-buffer））
+    #+begin_src emacs-lisp
+      (or buffer-backed-up (backup-buffer))
+    #+end_src
+
 
     您可能希望保存备份缓冲区返回的文件模式值并使用它（如果非零）来设置您写入的文件的模式位。  这是保存缓冲区通常所做的。  请参阅制作备份文件。
 
@@ -230,7 +240,10 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
 
     如果 beg 和 end 不是 nil，它们应该是字节偏移的数字，指定要插入的文件部分。  在这种情况下，访问必须为零。  例如，
 
-    （插入文件内容文件名无 0 500）
+    #+begin_src emacs-lisp
+      (insert-file-contents filename nil 0 500)
+    #+end_src
+
 
     插入由文件的前 500 个字节编码的字符。
 
@@ -258,7 +271,9 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
 
     当从 Lisp 调用时，这个函数完全等价于：
 
-    （写入区域开始结束文件名 t）
+    #+begin_src emacs-lisp
+      (write-region start end filename t)
+    #+end_src
 
 命令：write-region start end filename &optional append access lockname mustbenew ¶
 
@@ -305,9 +320,12 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
 功能：文件锁定 -p 文件名 ¶
 
     如果文件文件名未锁定，则此函数返回 nil。  如果它被这个 Emacs 进程锁定，它返回 t，如果它被其他作业锁定，它返回锁定它的用户的名称。
+    #+begin_src emacs-lisp
 
-    （文件锁定-p“foo”）
-	  ⇒ 无
+
+    (file-locked-p "foo")
+	 ⇒ nil
+    #+end_src
 
 功能：锁缓冲 & 可选文件名 ¶
 
@@ -324,9 +342,10 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
 用户选项：lock-file-name-transforms ¶
 
     默认情况下，Emacs 在与被锁定文件相同的目录中创建锁定文件。  这可以通过自定义此变量来更改。  Is 与 auto-save-file-name-transforms 具有相同的语法（请参阅自动保存）。  例如，要让 Emacs 将所有锁定文件写入 /var/tmp/，你可以这样说：
-
-    (setq lock-file-name-transforms
-	   '(("\\`/.*/\\([^/]+\\)\\'" "/var/tmp/\\1" t)))
+    #+begin_src emacs-lisp
+(setq lock-file-name-transforms
+      '(("\\`/.*/\\([^/]+\\)\\'" "/var/tmp/\\1" t)))
+    #+end_src
 
 功能：询问用户关于锁定文件其他用户¶
 
@@ -338,7 +357,9 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
 
 	 此错误的错误消息如下所示：
 
-	 错误→文件被锁定：文件其他用户
+	 #+begin_src emacs-lisp
+	   error→ File is locked: file other-user
+	 #+end_src
 
 	 其中 file 是文件名， other-user 是锁定文件的用户名。
 
@@ -385,9 +406,10 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
     如果文件 filename 可以由您编写或创建，则此函数返回 t，否则返回 nil。  如果文件存在并且您可以写入，则文件是可写的。  如果它不存在，它是可创建的，但它的父目录确实存在，您可以在该目录中写入。
 
     在下面的示例中， foo 不可写，因为父目录不存在，即使用户可以创建这样的目录。
-
-    (file-writable-p "~/no-such-dir/foo")
-	  ⇒ 无
+    #+begin_src emacs-lisp
+      (file-writable-p "~/no-such-dir/foo")
+	   ⇒ nil
+    #+end_src
 
 功能：文件可访问目录-p 目录名¶
 
@@ -395,8 +417,10 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
 
     例如，从以下我们推断，任何尝试读取 /foo/ 中的文件都会出错：
 
-    (文件可访问目录-p "/foo")
-	  ⇒ 无
+    #+begin_src emacs-lisp
+      (file-accessible-directory-p "/foo")
+	   ⇒ nil
+    #+end_src
 
 宏：with-existing-directory body… ¶
 
@@ -423,20 +447,24 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
     默认情况下，此函数遵循符号链接。  但是，如果可选参数标志是符号nofollow，如果它是符号链接，则此函数不跟随文件名；  这可以帮助防止无意中在其他地方获取文件的模式位，并且与文件属性更一致（请参阅文件属性）。
 
     有关可用于设置这些权限的 set-file-modes 功能，请参阅更改文件名和属性。
-
-    （文件模式“~/junk/diffs”'nofollow）
-	  ⇒ 492;  十进制整数。
-
-    （格式“%o”492）
-	  ⇒ "754" ;  转换为八进制。
+    #+begin_src emacs-lisp
 
 
-    (set-file-modes "~/junk/diffs" #o666 'nofollow)
-	  ⇒ 无
+      (file-modes "~/junk/diffs" 'nofollow)
+	   ⇒ 492               ; Decimal integer.
+
+      (format "%o" 492)
+	   ⇒ "754"             ; Convert to octal.
 
 
-    $ ls -l 差异
-    -rw-rw-rw- 1 lewis lewis 3063 Oct 30 16:00 差异
+      (set-file-modes "~/junk/diffs" #o666 'nofollow)
+	   ⇒ nil
+
+
+      $ ls -l diffs
+      -rw-rw-rw- 1 lewis lewis 3063 Oct 30 16:00 diffs
+    #+end_src
+
 
     MS-DOS 注意：在 MS-DOS 上，没有可执行文件模式位之类的东西。  因此，如果文件名以标准可执行扩展名之一（例如 .com、.bat、.exe 等）结尾，则 file-modes 认为文件是可执行文件。  以 POSIX 标准“#!”开头的文件 签名，例如 shell 和 Perl 脚本，也被认为是可执行的。  为了与 POSIX 兼容，目录也被报告为可执行文件。  文件属性也遵循这些约定（请参阅文件属性）。
 
@@ -453,25 +481,30 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
     如果文件 filename 不是符号链接，或者不存在，或者无法确定它是否是符号链接，则 file-symlink-p 返回 nil。
 
     以下是使用此功能的几个示例：
+    #+begin_src emacs-lisp
 
-    （文件符号链接-p“不是符号链接”）
-	  ⇒ 无
 
-    （文件符号链接-p“符号链接”）
-	  ⇒ “不是符号链接”
+      (file-symlink-p "not-a-symlink")
+	   ⇒ nil
 
-    （文件符号链接-p“符号链接2”）
-	  ⇒ “符号链接”
+      (file-symlink-p "sym-link")
+	   ⇒ "not-a-symlink"
 
-    （文件符号链接-p“/bin”）
-	  ⇒ "/pub/bin"
+      (file-symlink-p "sym-link2")
+	   ⇒ "sym-link"
+
+      (file-symlink-p "/bin")
+	   ⇒ "/pub/bin"
+    #+end_src
 
     请注意，在第三个示例中，该函数返回了符号链接，但没有继续解析它，尽管该文件本身就是一个符号链接。  这是因为此函数不遵循符号链接——遵循符号链接的过程不适用于文件名的最后一个组成部分。
 
     该函数返回的字符串是符号链接中记录的内容；  它可能包含也可能不包含任何主要目录。  此函数不会扩展链接目标以生成完全限定的文件名，特别是如果链接目标不是绝对文件名，则不使用文件名参数的前导目录（如果有）。  这是一个例子：
 
-    （文件符号链接-p“/foo/bar/baz”）
-	  ⇒ “一些文件”
+    #+begin_src emacs-lisp
+      (file-symlink-p "/foo/bar/baz")
+	   ⇒ "some-file"
+    #+end_src
 
     在这里，虽然 /foo/bar/baz 作为完全限定的文件名给出，但结果不是，实际上根本没有任何前导目录。  并且由于 some-file 本身可能是一个符号链接，因此您不能简单地为其添加前导目录，甚至不能天真地使用 expand-file-name（请参阅扩展文件名的函数）来生成其绝对文件名。
 
@@ -480,28 +513,29 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
 功能：文件目录-p文件名¶
 
     如果 filename 是现有目录的名称，则此函数返回 t。  如果 filename 没有命名目录，或者无法确定它是否是目录，则返回 nil。  此函数遵循符号链接。
+    #+begin_src emacs-lisp
 
-    （文件目录-p“~rms”）
-	  ⇒ 吨
 
-    （文件目录-p“~rms/lewis/files.texi”）
-	  ⇒ 无
+      (file-directory-p "~rms")
+	   ⇒ t
 
-    （文件目录-p“~rms/lewis/no-such-file”）
-	  ⇒ 无
+      (file-directory-p "~rms/lewis/files.texi")
+	   ⇒ nil
 
-    (文件-目录-p "$HOME")
-	  ⇒ 无
+      (file-directory-p "~rms/lewis/no-such-file")
+	   ⇒ nil
 
-    （文件目录-p
-     （替换文件名“$HOME”））
-	  ⇒ 吨
+      (file-directory-p "$HOME")
+	   ⇒ nil
+
+      (file-directory-p
+       (substitute-in-file-name "$HOME"))
+	   ⇒ t
+    #+end_src
 
 功能：file-regular-p 文件名 ¶
 
     如果文件 filename 存在并且是常规文件（不是目录、命名管道、终端或其他 I/O 设备），则此函数返回 t。  如果文件名不存在或不是常规文件，或者无法确定它是否是常规文件，则返回 nil。  此函数遵循符号链接。
-
-
 *** TODO 26.6.3 真名
 
 文件的真实名称是您通过在所有级别跟踪符号链接直到没有剩余，然后简化掉“。”获得的名称。  和“..”作为名称组件出现。  这会产生一种文件的规范名称。  文件并不总是具有唯一的真名；  一个文件具有的不同真名的数量等于该文件的硬链接数量。  但是，真实名称很有用，因为它们消除了作为名称变化原因的符号链接。
@@ -524,12 +558,14 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
 
 为了说明 file-chase-links 和 file-truename 之间的区别，假设 /usr/foo 是到目录 /home/foo 的符号链接，而 /home/foo/hello 是一个普通文件（或者至少不是符号链接）或不存在。  然后我们会有：
 
-（文件追逐链接“/usr/foo/hello”）
-     ;;  这不遵循父目录中的链接。
-     ⇒ “/usr/foo/你好”
-（文件真实名称“/usr/foo/hello”）
-     ;;  假设 /home 不是符号链接。
-     ⇒ “/home/foo/你好”
+#+begin_src emacs-lisp
+  (file-chase-links "/usr/foo/hello")
+       ;; This does not follow the links in the parent directories.
+       ⇒ "/usr/foo/hello"
+  (file-truename "/usr/foo/hello")
+       ;; Assuming that /home is not a symbolic link.
+       ⇒ "/home/foo/hello"
+#+end_src
 
 功能：file-equal-p file1 file2 ¶
 
@@ -549,8 +585,9 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
 
     此函数确定给定文件的负责 VC 后端。  例如，如果 emacs.c 是 Git 跟踪的文件，则 (vc-responsible-backend "emacs.c") 返回“Git”。  请注意，如果文件是符号链接，vc-responsible-backend 将不会解析它——报告符号链接文件本身的后端。  要获取文件所引用文件的后端 VC，请使用符号链接解析函数（例如 file-chase-links）包装文件：
 
-    (vc-responsible-backend (file-chase-links "emacs.c"))
-
+    #+begin_src emacs-lisp
+      (vc-responsible-backend (file-chase-links "emacs.c"))
+    #+end_src
 *** TODO 26.6.4 文件属性
 
 本节介绍获取文件详细信息的函数，包括所有者和组号、名称的数量、inode 号、大小以及访问和修改的次数。
@@ -560,19 +597,21 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
     如果文件 filename1 比文件 filename2 新，则此函数返回 t。  如果 filename1 不存在，则返回 nil。  如果 filename1 确实存在，但 filename2 不存在，则返回 t。
 
     在下面的例子中，假设文件 aug-19 写在 19 号，aug-20 写在 20 号，文件 no-file 根本不存在。
+    #+begin_src emacs-lisp
 
-    （文件比文件更新“aug-19”“aug-20”）
-	  ⇒ 无
 
-    （文件比文件更新“aug-20”“aug-19”）
-	  ⇒ 吨
+      (file-newer-than-file-p "aug-19" "aug-20")
+	   ⇒ nil
 
-    （比文件更新的文件-p“8 月 19 日”“无文件”）
-	  ⇒ 吨
+      (file-newer-than-file-p "aug-20" "aug-19")
+	   ⇒ t
 
-    （文件比文件更新“无文件”“8 月 19 日”）
-	  ⇒ 无
+      (file-newer-than-file-p "aug-19" "no-file")
+	   ⇒ t
 
+      (file-newer-than-file-p "no-file" "aug-19")
+	   ⇒ nil
+    #+end_src
 功能：file-attributes filename &optional id-format ¶
 
     此函数返回文件 filename 的属性列表。  如果指定的文件不存在，则返回 nil。  此函数不遵循符号链接。  可选参数 id-format 指定 UID 和 GID 属性的首选格式（见下文）——有效值为 'string 和 'integer。  后者是默认值，但我们计划更改它，因此如果您使用返回的 UID 或 GID，则应为 id-format 指定一个非零值。
@@ -598,14 +637,16 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
 
     例如，以下是 files.texi 的文件属性：
 
-    （文件属性“files.texi”'字符串）
-	  ⇒ (nil 1 "lh" "用户"
-	       (20614 64019 50040 152000)
-	       (20000 23 0 0)
-	       (20614 64555 902289 872000)
-	       122295 "-rw-rw-rw-"
-	       电话 6473924464520138
-	       1014478468)
+    #+begin_src emacs-lisp
+      (file-attributes "files.texi" 'string)
+	   ⇒  (nil 1 "lh" "users"
+		(20614 64019 50040 152000)
+		(20000 23 0 0)
+		(20614 64555 902289 872000)
+		122295 "-rw-rw-rw-"
+		t 6473924464520138
+		1014478468)
+    #+end_src
 
     以下是结果的解释方式：
 
@@ -649,17 +690,20 @@ find-file-noselect 函数使用两个在用户 Lisp 代码中有时很有用的�
 功能：file-nlinks 文件名 ¶
 
     此函数返回文件 filename 具有的名称（即硬链接）的数量。  如果文件不存在，则此函数返回 nil。  请注意，符号链接对此函数没有影响，因为它们不被认为是它们链接到的文件的名称。  此函数不遵循符号链接。
-
-    $ ls -l foo*
-    -rw-rw-rw- 2 rms rms 4 八月 19 01:27 foo
-    -rw-rw-rw- 2 rms rms 4 8 月 19 日 01:27 foo1
+    #+begin_src sh
 
 
-    （文件-nlinks“foo”）
-	  ⇒ 2
+      $ ls -l foo*
+      -rw-rw-rw- 2 rms rms 4 Aug 19 01:27 foo
+      -rw-rw-rw- 2 rms rms 4 Aug 19 01:27 foo1
 
-    （文件-nlinks“不存在”）
-	  ⇒ 无
+
+      (file-nlinks "foo")
+	   ⇒ 2
+
+      (file-nlinks "doesnt-exist")
+	   ⇒ nil
+    #+end_src
 
 *** TODO 26.6.5 扩展文件属性
 
@@ -707,8 +751,10 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 
     此函数通常会跳过目录，因此如果您希望它查找目录，请确保谓词函数为它们返回 dir-ok。  例如：
 
-    (定位文件 "html" '("/var/www" "/srv") 无
-		  (lambda (f) (if (file-directory-p f) 'dir-ok)))
+    #+begin_src emacs-lisp
+      (locate-file "html" '("/var/www" "/srv") nil
+		   (lambda (f) (if (file-directory-p f) 'dir-ok)))
+    #+end_src
 
     为了兼容性，谓词也可以是可执行、可读、可写、存在的符号之一，或这些符号中的一个或多个的列表。
 
@@ -727,10 +773,12 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 在具有参数 newname 的函数中，如果此参数是目录名称，则将其视为附加了源名称的非目录部分。  通常，目录名称是以“/”结尾的目录名称（请参阅目录名称）。  例如，如果旧名称是 a/b/c，则新名称 d/e/f/ 被视为 d/e/f/c。  如果 newname 不是目录名而是将文件命名为目录，则此特殊处理不适用；  例如，即使 d/e/f 恰好是一个目录，新名称 d/e/f 也会保持原样。
 
 在具有参数 newname 的函数中，如果名为 newname 的文件已经存在，则采取的操作取决于参数 ok-if-already-exists 的值：
+#+begin_src sh
+$ ls -li fo*
+81908 -rw-rw-rw- 1 rms rms 29 Aug 18 20:32 foo
+84302 -rw-rw-rw- 1 rms rms 24 Aug 18 20:31 foo3
+#+end_src
 
-    如果 ok-if-already-exists 为 nil，则发出文件已存在错误信号。
-    如果 ok-if-already-exists 是一个数字，则请求确认。
-    如果 ok-if-already-exists 是任何其他值，则在不确认的情况下替换旧文件。
 
 命令：add-name-to-file oldname newname &optional ok-if-already-exists ¶
 
@@ -740,39 +788,54 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 
     在以下示例的第一部分中，我们列出了两个文件 foo 和 foo3。
 
-    $ ls -li fo*
-    81908 -rw-rw-rw- 1 rms rms 18 年 8 月 29 日 20:32 foo
-    84302 -rw-rw-rw- 1 rms rms 18 年 8 月 24 日 20:31 foo3
+    #+begin_src emacs-lisp
+      $ ls -li fo*
+      81908 -rw-rw-rw- 1 rms rms 29 Aug 18 20:32 foo
+      84302 -rw-rw-rw- 1 rms rms 24 Aug 18 20:31 foo3
+    #+end_src
+
+
 
     现在我们通过调用 add-name-to-file 创建一个硬链接，然后再次列出文件。  这显示了一个文件的两个名称，foo 和 foo2。
-
-    （添加名称到文件“foo”“foo2”）
-	  ⇒ 无
+    #+begin_src emacs-lisp
 
 
-    $ ls -li fo*
-    81908 -rw-rw-rw- 2 rms rms 29 Aug 18 20:32 foo
-    81908 -rw-rw-rw- 2 rms rms 18 年 8 月 29 日 20:32 foo2
-    84302 -rw-rw-rw- 1 rms rms 18 年 8 月 24 日 20:31 foo3
-
-    最后，我们评估以下内容：
-
-    （添加名称到文件“foo”“foo3”t）
-
-    并再次列出文件。  现在一个文件有三个名称：foo、foo2 和 foo3。  foo3 的旧内容丢失。
-
-    （添加名称到文件“foo1”“foo3”）
-	  ⇒ 无
+      (add-name-to-file "foo" "foo2")
+	   ⇒ nil
 
 
-    $ ls -li fo*
-    81908 -rw-rw-rw- 3 rms rms 29 Aug 18 20:32 foo
-    81908 -rw-rw-rw- 3 rms rms 18 年 8 月 29 日 20:32 foo2
-    81908 -rw-rw-rw- 3 rms rms 18 年 8 月 29 日 20:32 foo3
+      $ ls -li fo*
+      81908 -rw-rw-rw- 2 rms rms 29 Aug 18 20:32 foo
+      81908 -rw-rw-rw- 2 rms rms 29 Aug 18 20:32 foo2
+      84302 -rw-rw-rw- 1 rms rms 24 Aug 18 20:31 foo3
 
-    此功能在不允许一个文件有多个名称的操作系统上没有意义。  一些系统通过复制文件来实现多个名称。
+    #+end_src
 
-    另请参阅文件属性中的 file-nlinks。
+
+最后，我们评估以下内容：
+
+
+#+begin_src emacs-lisp
+(add-name-to-file "foo" "foo3" t)
+#+end_src
+
+
+并再次列出文件。  现在一个文件有三个名称：foo、foo2 和 foo3。  foo3 的旧内容丢失。
+#+begin_src emacs-lisp
+  (add-name-to-file "foo1" "foo3")
+       ⇒ nil
+
+
+  $ ls -li fo*
+  81908 -rw-rw-rw- 3 rms rms 29 Aug 18 20:32 foo
+  81908 -rw-rw-rw- 3 rms rms 29 Aug 18 20:32 foo2
+  81908 -rw-rw-rw- 3 rms rms 29 Aug 18 20:32 foo3
+#+end_src
+此功能在不允许一个文件有多个名称的操作系统上没有意义。  一些系统通过复制文件来实现多个名称。
+
+另请参阅文件属性中的 file-nlinks。
+
+
 
 命令：rename-file filename newname &optional ok-if-already-exists ¶
 
@@ -827,8 +890,9 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
     默认情况下，此函数遵循符号链接。  但是，如果可选参数标志是符号nofollow，如果它是符号链接，则此函数不跟随文件名；  这有助于防止在其他地方无意中更改文件的模式位。  在不支持更改符号链接上的模式位的平台上，当文件名是符号链接并且标志是 nofollow 时，此函数会发出错误信号。
 
     如果以非交互方式调用，mode 必须是整数。  仅使用整数的最低 12 位；  在大多数系统上，只有最低 9 位是有意义的。  您可以使用八进制数的 Lisp 构造来进入模式。  例如，
-
-    （设置文件模式“myfile”#o644 'nofollow）
+    #+begin_src emacs-lisp
+      (set-file-modes "myfile" #o644 'nofollow)
+    #+end_src
 
     指定文件应该对其所有者可读和可写，对组成员可读，对所有其他用户可读。  有关模式位规范的描述，请参阅 GNU Coreutils 手册中的文件权限。
 
@@ -919,40 +983,49 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
     此函数返回文件名的目录部分，作为目录名（请参阅目录名），如果文件名不包含目录部分，则返回 nil。
 
     在 GNU 和其他类似 POSIX 的系统上，此函数返回的字符串总是以斜杠结尾。  在 MS-DOS 上，它也可以以冒号结尾。
+    #+begin_src emacs-lisp
 
-    （文件名目录“lewis/foo”）；  GNU 示例
-	  ⇒ "刘易斯/"
 
-    （文件名目录“foo”）；  GNU 示例
-	  ⇒ 无
+      (file-name-directory "lewis/foo")  ; GNU example
+	   ⇒ "lewis/"
+
+      (file-name-directory "foo")        ; GNU example
+	   ⇒ nil
+    #+end_src
+
 
 功能：文件名非目录文件名¶
 
     此函数返回文件名的非目录部分。
+    #+begin_src emacs-lisp
+      (file-name-nondirectory "lewis/foo")
+	   ⇒ "foo"
 
-    （文件名非目录“刘易斯/富”）
-	  ⇒ “富”
+      (file-name-nondirectory "foo")
+	   ⇒ "foo"
 
-    （文件名非目录“foo”）
-	  ⇒ “富”
+      (file-name-nondirectory "lewis/")
+	   ⇒ ""
+    #+end_src
 
-    （文件名非目录“刘易斯/”）
-	  ⇒ ""
+
 
 功能：file-name-sans-versions filename &optional keep-backup-version ¶
 
     此函数返回文件名，其中包含任何文件版本号、备份版本号或丢弃的尾随波浪号。
 
     如果 keep-backup-version 不为零，则从返回值中丢弃文件系统所理解的真实文件版本号，但保留备份版本号。
+    #+begin_src emacs-lisp
+      (file-name-sans-versions "~rms/foo.~1~")
+	   ⇒ "~rms/foo"
 
-    （文件名无版本“~rms/foo.~1~”）
-	  ⇒ "~rms/foo"
+      (file-name-sans-versions "~rms/foo~")
+	   ⇒ "~rms/foo"
 
-    （文件名无版本“〜rms / foo〜”）
-	  ⇒ "~rms/foo"
+      (file-name-sans-versions "~rms/foo")
+	   ⇒ "~rms/foo"
+    #+end_src
 
-    （文件名无版本“〜rms / foo”）
-	  ⇒ "~rms/foo"
 
 功能：file-name-extension 文件名&可选句点 ¶
 
@@ -965,13 +1038,14 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 功能：带扩展名的文件名 文件扩展名 ¶
 
     此函数返回扩展名设置为扩展名的文件名。  如果扩展名中有一个前导点，则将被剥离。  例如：
-
-    （带扩展名的文件名“文件”“el”）
-	  ⇒ “文件.el”
-    （带扩展名的文件名“文件”“.el”）
-	  ⇒ “文件.el”
-    （带扩展名的文件名“file.c”“el”）
-	  ⇒ “文件.el”
+    #+begin_src emacs-lisp
+      (file-name-with-extension "file" "el")
+	   ⇒ "file.el"
+      (file-name-with-extension "file" ".el")
+	   ⇒ "file.el"
+      (file-name-with-extension "file.c" "el")
+	   ⇒ "file.el"
+    #+end_src
 
     请注意，如果文件名或扩展名为空，或者文件名的形状像目录（即，如果 directory-name-p 返回非 nil），则此函数将出错。
 
@@ -979,27 +1053,30 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 
     此函数返回文件名减去其扩展名（如果有）。  版本/备份部分（如果存在）仅在文件具有扩展名时才会被删除。  例如，
 
-    （文件名无扩展名“foo.lose.c”）
-	  ⇒ “foo.lose”
-    （文件名无扩展名“big.hack/foo”）
-	  ⇒ “big.hack/foo”
-    （文件名无扩展名“/my/home/.emacs”）
-	  ⇒ “/my/home/.emacs”
-    （文件名无扩展名“/my/home/.emacs.el”）
-	  ⇒ “/my/home/.emacs”
-    （文件名无扩展名“~/foo.el.~3~”）
-	  ⇒ "~/foo"
-    （文件名无扩展名“~/foo.~3~”）
-	  ⇒ "~/foo.~3~"
+    #+begin_src emacs-lisp
+      (file-name-sans-extension "foo.lose.c")
+	   ⇒ "foo.lose"
+      (file-name-sans-extension "big.hack/foo")
+	   ⇒ "big.hack/foo"
+      (file-name-sans-extension "/my/home/.emacs")
+	   ⇒ "/my/home/.emacs"
+      (file-name-sans-extension "/my/home/.emacs.el")
+	   ⇒ "/my/home/.emacs"
+      (file-name-sans-extension "~/foo.el.~3~")
+	   ⇒ "~/foo"
+      (file-name-sans-extension "~/foo.~3~")
+	   ⇒ "~/foo.~3~"
+    #+end_src
 
     请注意，最后两个示例中的 '.~3~' 是备份部分，而不是扩展名。
 
 功能：文件名基础文件名¶
 
     该功能是文件名无扩展名和文件名非目录的组合。  例如，
-
-    （文件名基础“/my/home/foo.c”）
-	 ⇒ “富”
+    #+begin_src emacs-lisp
+      (file-name-base "/my/home/foo.c")
+	  ⇒ "foo"
+    #+end_src
 
 *** TODO 26.9.2 绝对和相对文件名
 
@@ -1009,17 +1086,21 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 
     如果文件 filename 是绝对文件名，此函数返回 t，否则返回 nil。  如果文件名的第一个组件是“~”，则文件名被认为是绝对的，或者是“~user”，其中用户是有效的登录名。  在以下示例中，假设有一个名为“rms”的用户，但没有名为“nosuchuser”的用户。
 
-    (文件名-绝对-p "~rms/foo")
-	  ⇒ 吨
+    #+begin_src emacs-lisp
 
-    (file-name-absolute-p "~nosuchuser/foo")
-	  ⇒ 无
 
-    （文件名-绝对-p“rms/foo”）
-	  ⇒ 无
+      (file-name-absolute-p "~rms/foo")
+	   ⇒ t
 
-    (文件名-绝对-p "/user/rms/foo")
-	  ⇒ 吨
+      (file-name-absolute-p "~nosuchuser/foo")
+	   ⇒ nil
+
+      (file-name-absolute-p "rms/foo")
+	   ⇒ nil
+
+      (file-name-absolute-p "/user/rms/foo")
+	   ⇒ t
+    #+end_src
 
 给定一个可能的相对文件名，您可以扩展任何前导 '~' 并使用 expand-file-name 将结果转换为绝对名称（请参阅扩展文件名的函数）。  此函数将绝对文件名转换为相对名称：
 
@@ -1029,10 +1110,12 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 
     在某些操作系统上，绝对文件名以设备名开头。  在这样的系统上，如果文件名以两个不同的设备名开头，则文件名没有基于目录的相对等价物。  在这种情况下，file-relative-name 以绝对形式返回文件名。
 
-    （文件相对名称“/foo/bar”“/foo/”）
-	  ⇒ “酒吧”
-    （文件相对名称“/foo/bar”“/hack/”）
-	  ⇒ “../foo/bar”
+    #+begin_src emacs-lisp
+      (file-relative-name "/foo/bar" "/foo/")
+	   ⇒ "bar"
+      (file-relative-name "/foo/bar" "/hack/")
+	   ⇒ "../foo/bar"
+    #+end_src
 
 *** TODO 26.9.3 目录名称
 
@@ -1046,8 +1129,10 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 
     此函数以操作系统将解释为目录名称（目录名称）的形式返回表示文件名的字符串。  在大多数系统上，这意味着在字符串上附加一个斜杠（如果它还没有以一个结尾）。
 
-    （文件名作为目录“~rms/lewis”）
-	  ⇒ “~rms/刘易斯/”
+    #+begin_src emacs-lisp
+(file-name-as-directory "~rms/lewis")
+     ⇒ "~rms/lewis/"
+    #+end_src
 
 功能：目录名-p文件名¶
 
@@ -1057,15 +1142,20 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 
     此函数以操作系统将解释为文件名（目录文件名）的形式返回表示 dirname 的字符串。  在大多数系统上，这意味着从字符串中删除最终的目录分隔符，除非字符串完全由目录分隔符组成。
 
-    （目录文件名“~lewis/”）
-	  ⇒ “~刘易斯”
+    #+begin_src emacs-lisp
+    (directory-file-name "~lewis/")
+	 ⇒ "~lewis"
+    #+end_src
 
 功能：file-name-concat 目录 &rest 组件 ¶
 
     将组件连接到目录，如果目录或前面的组件没有以斜杠结尾，则在组件之前插入一个斜杠。
 
-    （文件名连接“/tmp”“foo”）
-	  ⇒ "/tmp/foo"
+    #+begin_src emacs-lisp
+      (file-name-concat "/tmp" "foo")
+	   ⇒ "/tmp/foo"
+    #+end_src
+
 
     nil 或空字符串的目录或组件将被忽略——它们首先被过滤掉，不会以任何方式影响结果。
 
@@ -1086,49 +1176,64 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 功能：扩展文件名文件名&可选目录¶
 
     此函数将文件名转换为绝对文件名。  如果提供了目录，则如果文件名是相对的且不以“~”开头，则它是默认目录。  （directory 的值本身应该是绝对目录名或目录文件名；它可以以'~' 开头。）否则，使用当前缓冲区的 default-directory 值。  例如：
+    #+begin_src emacs-lisp
 
-    （扩展文件名“foo”）
-	  ⇒ "/xcssun/users/rms/lewis/foo"
 
-    （扩展文件名“../foo”）
-	  ⇒ "/xcssun/users/rms/foo"
+      (expand-file-name "foo")
+	   ⇒ "/xcssun/users/rms/lewis/foo"
 
-    （扩展文件名“foo”“/usr/spool/”）
-	  ⇒ "/usr/spool/foo"
+      (expand-file-name "../foo")
+	   ⇒ "/xcssun/users/rms/foo"
 
+      (expand-file-name "foo" "/usr/spool/")
+	   ⇒ "/usr/spool/foo"
+    #+end_src
     如果第一个斜杠之前的文件名部分是'~'，它会扩展为您的主目录，该目录通常由 HOME 环境变量的值指定（参见 GNU Emacs 手册中的通用变量）。  如果第一个斜杠之前的部分是 '~user' 并且如果 user 是一个有效的登录名，它会展开到用户的主目录。  如果您不希望对可能以文字“~”开头的相对文件名进行此扩展，则可以使用 (concat (file-name-as-directory directory) filename) 而不是 (expand-file-name filename directory)。
 
     包含“.”的文件名 或 '..' 被简化为它们的规范形式：
 
-    （扩展文件名“bar/../foo”）
-	  ⇒ "/xcssun/users/rms/lewis/foo"
+    #+begin_src emacs-lisp
+      (expand-file-name "bar/../foo")
+	   ⇒ "/xcssun/users/rms/lewis/foo"
+
+    #+end_src
 
     在某些情况下，前导 '..' 组件可以保留在输出中：
 
-    （扩展文件名“../home”“/”）
-	  ⇒ “/../家”
+    #+begin_src emacs-lisp
+(expand-file-name "../home" "/")
+     ⇒ "/../home"
+    #+end_src
 
     这是为了在根目录 / 之上具有超级根概念的文件系统。  在其他文件系统上，/../ 的解释与 / 完全相同。
 
     扩大。  或空字符串返回默认目录：
 
-    (扩展文件名 "." "/usr/spool/")
-	  ⇒ "/usr/spool"
-    （扩展文件名“”“/usr/spool/”）
-	  ⇒ "/usr/spool"
+    #+begin_src emacs-lisp
+      (expand-file-name "." "/usr/spool/")
+	   ⇒ "/usr/spool"
+      (expand-file-name "" "/usr/spool/")
+	   ⇒ "/usr/spool"
+    #+end_src
+
 
     请注意，expand-file-name 不会扩展环境变量；  只有替换文件名才能做到这一点：
 
-    （扩展文件名“$HOME/foo”）
-	  ⇒ "/xcssun/users/rms/lewis/$HOME/foo"
+    #+begin_src emacs-lisp
+      (expand-file-name "$HOME/foo")
+	   ⇒ "/xcssun/users/rms/lewis/$HOME/foo"
+    #+end_src
+
 
     另请注意，expand-file-name 不遵循任何级别的符号链接。  这导致 file-truename 和 expand-file-name 对待 '..' 的方式不同。  假设 '/tmp/bar' 是指向目录 '/tmp/foo/bar' 的符号链接，我们得到：
 
-    （文件真实名称“/tmp/bar/../myfile”）
-	  ⇒ "/tmp/foo/myfile"
+    #+begin_src emacs-lisp
+      (file-truename "/tmp/bar/../myfile")
+	   ⇒ "/tmp/foo/myfile"
 
-    （扩展文件名“/tmp/bar/../myfile”）
-	  ⇒ “/tmp/我的文件”
+      (expand-file-name "/tmp/bar/../myfile")
+	   ⇒ "/tmp/myfile"
+    #+end_src
 
     如果您可能需要遵循 '..' 之前的符号链接，则应确保调用 file-truename 而不事先直接或间接调用 expand-file-name。  见真名。
 
@@ -1140,8 +1245,10 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 
     该值始终是以斜杠结尾的字符串。
 
-    默认目录
-	  ⇒“/用户/刘易斯/手册/”
+    #+begin_src emacs-lisp
+      default-directory
+	   ⇒ "/user/lewis/manual/"
+    #+end_src
 
 功能：替换文件名文件名¶
 
@@ -1153,33 +1260,39 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 
     这里我们假设保存用户主目录的环境变量 HOME 的值为“/xcssun/users/rms”。
 
-    （替代文件名“$HOME/foo”）
-	  ⇒ "/xcssun/users/rms/foo"
+    #+begin_src emacs-lisp
+      (substitute-in-file-name "$HOME/foo")
+	   ⇒ "/xcssun/users/rms/foo"
+    #+end_src
 
     替换后，如果 '~' 或 '/' 紧跟在另一个 '/' 之后，该函数将丢弃它之前的所有内容（直到紧接在前面的 '/'）。
 
-    （替换文件名“bar/~/foo”）
-	  ⇒ "~/foo"
+    #+begin_src emacs-lisp
+      (substitute-in-file-name "bar/~/foo")
+	   ⇒ "~/foo"
 
-    （替代文件名“/usr/local/$HOME/foo”）
-	  ⇒ "/xcssun/users/rms/foo"
-	  ;;  /usr/local/ 已被丢弃。
+      (substitute-in-file-name "/usr/local/$HOME/foo")
+	   ⇒ "/xcssun/users/rms/foo"
+	   ;; /usr/local/ has been discarded.
+    #+end_src
+
 
 有时，不需要扩展文件名。  在这种情况下，可以引用文件名来抑制扩展，并按字面意思处理文件名。  通过在文件名前加上'/:'来进行引用。
 
 宏：文件名引用名¶
 
     此宏将引号前缀“/:”添加到文件名。  对于本地文件名，它在名称前加上'/:'。  如果 name 是远程文件名，则 name 的本地部分（请参阅使某些文件名“魔术”）被引用。  如果 name 已经是带引号的文件名，则 name 原封不动地返回。
+    #+begin_src emacs-lisp
+      (substitute-in-file-name (file-name-quote "bar/~/foo"))
+	   ⇒ "/:bar/~/foo"
 
-    （替代文件名（文件名引用“bar/~/foo”））
-	  ⇒ "/:bar/~/foo"
 
+      (substitute-in-file-name (file-name-quote "/ssh:host:bar/~/foo"))
+	   ⇒ "/ssh:host:/:bar/~/foo"
+    #+end_src
 
-    （替代文件名（文件名引用“/ssh:host:bar/~/foo”））
-	  ⇒ "/ssh:host:/:bar/~/foo"
 
     该宏不能用于从魔术文件名中抑制文件名处理程序（请参阅使某些文件名“魔术”）。
-
 宏：文件名取消引用名称¶
 
     此宏从文件名中删除引号前缀“/:”（如果有）。  如果 name 是远程文件名，则 name 的本地部分不加引号。
@@ -1192,7 +1305,10 @@ ACL 和 SELinux 的详细说明超出了本手册的范围。  出于我们的�
 
 有些程序需要写入临时文件。  以下是为此类文件构造名称的常用方法：
 
+#+begin_src emacs-lisp
 (make-temp-file name-of-application)
+#+end_src
+
 
 make-temp-file 的工作是防止两个不同的用户或两个不同的工作尝试使用完全相同的文件名。
 
@@ -1200,8 +1316,11 @@ make-temp-file 的工作是防止两个不同的用户或两个不同的工作�
 
     此函数创建一个临时文件并返回其名称。  Emacs 通过在每个 Emacs 作业中添加一些不同的随机字符作为前缀来创建临时文件的名称。  结果保证是一个新创建的文件，如果以字符串形式给出，则包含文本，否则为空。  在 MS-DOS 上，此函数可以截断前缀以适应 8+3 文件名限制。  如果前缀是一个相对文件名，它会针对临时文件目录进行扩展。
 
-    （制作临时文件“foo”）
-	  ⇒ "/tmp/foo232J6v"
+    #+begin_src emacs-lisp
+      (make-temp-file "foo")
+	   ⇒ "/tmp/foo232J6v"
+    #+end_src
+
 
     当 make-temp-file 返回时，文件已创建并且为空。  此时，您应该将预期的内容写入文件。
 
@@ -1229,10 +1348,13 @@ make-temp-file 的工作是防止两个不同的用户或两个不同的工作�
 
     如果你想写一个可能很小的临时文件，你应该像这样计算目录：
 
-    （制作临时文件
-      （扩展文件名前缀
-			 （或小型临时文件目录
-			     临时文件目录）））
+    #+begin_src emacs-lisp
+      (make-temp-file
+	(expand-file-name prefix
+			  (or small-temporary-file-directory
+			      temporary-file-directory)))
+    #+end_src
+
 
 功能：make-temp-name base-name ¶
 
@@ -1246,9 +1368,12 @@ make-temp-file 的工作是防止两个不同的用户或两个不同的工作�
 
     此功能类似于 make-temp-file，但它创建一个尽可能靠近默认目录的临时文件。  如果 prefix 是相对文件名，而 default-directory 是远程文件名或位于已挂载的文件系统上，则在函数 temporary-file-directory 返回的目录中创建临时文件。  否则，使用函数 make-temp-file。  prefix、dir-flag 和 suffix 与 make-temp-file 中的含义相同。
 
-    (让 ((默认目录 "/ssh:remotehost:"))
-      (make-nearby-temp-file "foo"))
-	  ⇒ "/ssh:remotehost:/tmp/foo232J6v"
+    #+begin_src emacs-lisp
+      (let ((default-directory "/ssh:remotehost:"))
+	(make-nearby-temp-file "foo"))
+	   ⇒ "/ssh:remotehost:/tmp/foo232J6v"
+    #+end_src
+
 
 功能：临时文件目录¶
 
@@ -1267,14 +1392,17 @@ make-temp-file 的工作是防止两个不同的用户或两个不同的工作�
     参数 partial-filename 必须是不包含目录部分和斜杠（或在某些系统上为反斜杠）的文件名。  如果目录不是绝对的，则当前缓冲区的默认目录将附加到目录。
 
     在以下示例中，假设 ~rms/lewis 是当前默认目录，并且有五个名称以 'f' 开头的文件：foo、file~、file.c、file.c.~1~ 和 file.c .~2~.
-
-    （文件名所有完成“f”“”）
-	  ⇒ ("foo" "file~" "file.c.~2~"
-		     "file.c.~1~" "file.c")
+    #+begin_src emacs-lisp
 
 
-    （文件名所有完成“fo”“”）
-	  ⇒ ("foo")
+      (file-name-all-completions "f" "")
+	   ⇒ ("foo" "file~" "file.c.~2~"
+		      "file.c.~1~" "file.c")
+
+
+      (file-name-all-completions "fo" "")
+	   ⇒ ("foo")
+    #+end_src
 
 功能：文件名完成文件名目录&可选谓词¶
 
@@ -1283,21 +1411,26 @@ make-temp-file 的工作是防止两个不同的用户或两个不同的工作�
     如果只存在一个匹配并且文件名完全匹配，则函数返回 t。  如果目录目录不包含以文件名开头的名称，则该函数返回 nil。
 
     在以下示例中，假设当前默认目录有五个名称以“f”开头的文件：foo、file~、file.c、file.c.~1~ 和 file.c.~2~。
-
-    （文件名完成“fi”“”）
-	  ⇒ “文件”
+    #+begin_src emacs-lisp
 
 
-    （文件名完成“file.c.~1”“”）
-	  ⇒ "file.c.~1~"
+(file-name-completion "fi" "")
+     ⇒ "file"
 
 
-    （文件名完成“file.c.~1~”“”）
-	  ⇒ 吨
+(file-name-completion "file.c.~1" "")
+     ⇒ "file.c.~1~"
 
 
-    （文件名完成“file.c.~3”“”）
-	  ⇒ 无
+(file-name-completion "file.c.~1~" "")
+     ⇒ t
+
+
+(file-name-completion "file.c.~3" "")
+     ⇒ nil
+
+    #+end_src
+
 
 用户选项：完成忽略扩展¶
 
@@ -1305,8 +1438,10 @@ make-temp-file 的工作是防止两个不同的用户或两个不同的工作�
 
     典型值可能如下所示：
 
-    完成忽略扩展
-	  ⇒ (".o" ".elc" "~" ".dvi")
+    #+begin_src emacs-lisp
+      completion-ignored-extensions
+	   ⇒ (".o" ".elc" "~" ".dvi")
+    #+end_src
 
     如果完成忽略扩展的元素以斜杠“/”结尾，则它表示目录。  不以斜线结尾的元素永远不会匹配目录；  因此，上述值不会过滤掉名为 foo.elc 的目录。
 
@@ -1319,12 +1454,13 @@ make-temp-file 的工作是防止两个不同的用户或两个不同的工作�
     此函数返回 Emacs 特定配置或数据文件的绝对文件名。  参数 base-name 应该是一个相对文件名。  返回值是user-emacs-directory指定的目录中文件的绝对名称；  如果该目录不存在，此函数将创建它。
 
     如果可选参数 old-name 不为 nil，则它指定用户主目录中的一个文件 ~/old-name。  如果存在这样的文件，则返回值是该文件的绝对名称，而不是 base-name 指定的文件。  此参数旨在供 Emacs 包使用以提供向后兼容性。  例如，在引入 user-emacs-directory 之前，缩写文件位于 ~/.abbrev_defs。  以下是 abbrev-file-name 的定义：
-
-    （defcustom 缩写文件名
-      （定位用户 emacs 文件“abbrev_defs”“.abbrev_defs”）
-      “从中读取缩写的文件的默认名称。”
-      …
-      :type '文件)
+    #+begin_src emacs-lisp
+      (defcustom abbrev-file-name
+	(locate-user-emacs-file "abbrev_defs" ".abbrev_defs")
+	"Default name of file from which to read abbrevs."
+	…
+	:type 'file)
+    #+end_src
 
 locate-user-emacs-file 用作子例程的用于标准化文件名的低级函数是 convert-standard-filename。
 
@@ -1354,10 +1490,13 @@ Emacs 可以将目录中文件的名称作为 Lisp 列表列出，或者使用 l
 
     如果 count 不为零，则该函数将返回第一个 count 个文件的名称，或所有文件的名称，以先发生者为准。  count 必须是大于零的整数。
 
-    （目录文件“〜刘易斯”）
-	  ⇒ ("#foo#" "#foo.el#" "." ".."
-	      “dired-mods.el” “files.texi”
-	      “文件.texi.~1~”）
+    #+begin_src emacs-lisp
+      (directory-files "~lewis")
+	   ⇒ ("#foo#" "#foo.el#" "." ".."
+	       "dired-mods.el" "files.texi"
+	       "files.texi.~1~")
+
+    #+end_src
 
     如果目录不是可以读取的目录的名称，则会发出错误信号。
 
@@ -1388,8 +1527,9 @@ Emacs 可以将目录中文件的名称作为 Lisp 列表列出，或者使用 l
 常量：directory-files-no-dot-files-regexp ¶
 
     此正则表达式匹配除 '.' 以外的任何文件名 和 '..'。  更准确地说，它匹配除这两个之外的任何非空字符串的部分。  它作为目录文件和目录文件和属性的 match-regexp 参数很有用：
-
-    (directory-files "/foo" nil directory-files-no-dot-files-regexp)
+    #+begin_src emacs-lisp
+      (directory-files "/foo" nil directory-files-no-dot-files-regexp)
+    #+end_src
 
     如果目录 '/foo' 为空，则返回 nil。
 
@@ -1459,25 +1599,36 @@ Emacs 可以将目录中文件的名称作为 Lisp 列表列出，或者使用 l
 
 变量 file-name-handler-alist 包含一个处理程序列表，以及确定何时应用每个处理程序的正则表达式。  每个元素都有这种形式：
 
-（正则表达式。处理程序）
+#+begin_src emacs-lisp
+(regexp . handler)
+#+end_src
 
 所有用于文件访问和文件名转换的 Emacs 原语都会根据 file-name-handler-alist 检查给定的文件名。  如果文件名与正则表达式匹配，则原语通过调用处理程序来处理该文件。
 
 给 handler 的第一个参数是原语的名称，作为一个符号；  其余参数是传递给该原语的参数。  （这些参数中的第一个通常是文件名本身。）例如，如果您这样做：
 
-（文件存在-p 文件名）
+#+begin_src emacs-lisp
+  (file-exists-p filename)
+#+end_src
+
 
 并且文件名有处理程序处理程序，然后处理程序被这样调用：
-
-(funcall handler 'file-exists-p filename)
+#+begin_src emacs-lisp
+(expand-file-name filename dirname)
+#+end_src
 
 当一个函数接受两个或多个必须是文件名的参数时，它会检查每个名称以查找处理程序。  例如，如果您这样做：
 
-（扩展文件名文件名目录名）
+#+begin_src emacs-lisp
+(funcall handler 'file-exists-p filename)
+#+end_src
+
 
 然后它检查文件名的处理程序，然后检查目录名的处理程序。  在任何一种情况下，处理程序的调用方式如下：
 
+#+begin_src emacs-lisp
 (funcall handler 'expand-file-name filename dirname)
+#+end_src
 
 然后处理程序需要确定是处理文件名还是目录名。
 
@@ -1498,19 +1649,21 @@ Emacs 可以将目录中文件的名称作为 Lisp 列表列出，或者使用 l
 
 处理程序函数必须处理所有上述操作，以及将来可能添加的其他操作。  它不需要自己实现所有这些操作——当它对某个操作没有什么特别的事情时，它可以重新调用原语，以通常的方式处理该操作。  它应该始终为它无法识别的操作重新调用原语。  这是执行此操作的一种方法：
 
-(defun my-file-handler (操作 &rest args)
-  ;;  首先检查具体操作
-  ;;  我们有特殊处理。
-  (cond ((eq operation 'insert-file-contents) ...)
-	 ((eq operation 'write-region) ...)
-	 …
-	 ;;  处理我们不知道的任何操作。
-	 (t (let ((inhibit-file-name-handlers
-		   （缺点'我的文件处理程序
-			 （和（eq 禁止文件名操作操作）
-			      禁止文件名处理程序）））
-		  （禁止文件名操作操作））
-	      （应用操作参数）））））
+#+begin_src emacs-lisp
+  (defun my-file-handler (operation &rest args)
+    ;; First check for the specific operations
+    ;; that we have special handling for.
+    (cond ((eq operation 'insert-file-contents) …)
+	  ((eq operation 'write-region) …)
+	  …
+	  ;; Handle any operation we don’t know about.
+	  (t (let ((inhibit-file-name-handlers
+		    (cons 'my-file-handler
+			  (and (eq inhibit-file-name-operation operation)
+			       inhibit-file-name-handlers)))
+		   (inhibit-file-name-operation operation))
+	       (apply operation args)))))
+#+end_src
 
 当一个处理函数决定为手头的操作调用普通的 Emacs 原语时，它需要防止原语再次调用相同的处理程序，从而导致无限递归。  上面的示例显示了如何使用变量禁止文件名处理程序和禁止文件名操作来执行此操作。  小心使用它们，如上所示；  在多个处理程序的情况下，细节对于正确的行为至关重要，对于具有两个文件名的操作，每个文件名可能都有处理程序。
 
@@ -1560,8 +1713,10 @@ Emacs 可以将目录中文件的名称作为 Lisp 列表列出，或者使用 l
 
     此函数返回文件名的本地部分。  这是文件名中在远程主机上标识它的部分，通常通过从远程文件名中删除指定远程主机和访问它的方法的部分来获得。  例如：
 
-    （文件本地名称“/ssh:user@host:/foo/bar”）
-	  ⇒ "/foo/bar"
+    #+begin_src emacs-lisp
+      (file-local-name "/ssh:user@host:/foo/bar")
+	   ⇒ "/foo/bar"
+    #+end_src
 
     对于远程文件名，此函数返回一个文件名，该文件名可以直接用作远程进程的参数（请参阅创建异步进程和创建同步进程），也可以作为在远程主机上运行的程序。  如果文件名是本地的，则此函数将其原封不动地返回。
 
@@ -1572,14 +1727,15 @@ Emacs 可以将目录中文件的名称作为 Lisp 列表列出，或者使用 l
     当此变量设置为 nil 时，缓存值永不过期。  谨慎使用此设置，仅当您确定除了 Emacs 之外没有任何东西会更改远程文件。  如果设置为 t，则从不使用缓存值。  这是最安全的值，但可能会导致性能下降。
 
     折衷方案是将其设置为正数。  这意味着自缓存值起，缓存值将用于该秒数。  如果定期检查远程文件，最好将此变量绑定到小于连续检查之间的时间段的值。  例如：
-
-    (defun display-time-file-nonempty-p (file)
-      （让（（远程文件名禁止缓存
-	      (- 显示时间间隔 5)))
-	 （和（文件存在-p 文件）
-	      (< 0 (文件属性大小
-		    （文件属性
-		     （文件追逐链接文件）））））））
+    #+begin_src emacs-lisp
+      (defun display-time-file-nonempty-p (file)
+	(let ((remote-file-name-inhibit-cache
+	       (- display-time-interval 5)))
+	  (and (file-exists-p file)
+	       (< 0 (file-attribute-size
+		     (file-attributes
+		      (file-chase-links file)))))))
+    #+end_src
 
 ** TODO 26.13 文件格式转换
 
@@ -1611,7 +1767,10 @@ Emacs 执行几个步骤来将缓冲区中的数据（文本、文本属性和�
 
     此列表包含每个已定义文件格式的格式定义。  每个格式定义都是这种形式的列表：
 
-    (name doc-string regexp from-fn to-fn modify mode-fn preserve)
+    #+begin_src emacs-lisp
+      (name doc-string regexp from-fn to-fn modify mode-fn preserve)
+    #+end_src
+
 
 以下是格式定义中元素的含义：
 
