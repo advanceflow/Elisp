@@ -147,29 +147,43 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     如果 infile 不为零，则新进程的标准输入来自文件 infile，否则来自 null 设备。  参数destination 说明将流程输出放在哪里。  以下是可能性：
 
-    缓冲区
+#+begin_src emacs-lisp
+  a buffer
+#+end_src
 
 	 将输出插入该缓冲区中的点之前。  这包括进程的标准输出流和标准错误流。
-    缓冲区名称（字符串）
+#+begin_src emacs-lisp
+  a buffer name (a string)
+#+end_src
 
 	 在点之前将输出插入到具有该名称的缓冲区中。
-    吨
+#+begin_src emacs-lisp
+  t
+#+end_src
 
 	 将输出插入当前缓冲区中的点之前。
-    零
+#+begin_src emacs-lisp
+  nil
+#+end_src
 
 	 丢弃输出。
-    0
+#+begin_src emacs-lisp
+  0
+#+end_src
 
 	 丢弃输出，并立即返回 nil 而无需等待子进程完成。
 
 	 在这种情况下，进程并不是真正同步的，因为它可以与 Emacs 并行运行；  但是你可以认为它是同步的，因为只要这个函数返回，Emacs 就基本上完成了子进程。
 
 	 MS-DOS 不支持异步子进程，所以这个选项在那里不起作用。
-    (:file 文件名)
+#+begin_src emacs-lisp
+  (:file file-name)
+#+end_src
 
 	 将输出发送到指定的文件名，如果它已经存在则覆盖它。
-    (real-destination error-destination)
+#+begin_src emacs-lisp
+  (real-destination error-destination
+#+end_src
 
 	 将标准输出流与标准错误流分开；  按照real-destination指定的处理普通输出，按照error-destination处理错误输出。  如果error-destination为nil，则表示丢弃错误输出，t表示将其与普通输出混合，字符串指定将错误输出重定向到的文件名。
 
