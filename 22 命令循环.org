@@ -19,11 +19,15 @@
 
 如果命令是键盘宏（即，字符串或向量），Emacs 使用 execute-kbd-macro 执行它（请参阅键盘宏）。
 
-变量： pre-command-hook ¶
+#+begin_src emacs-lisp
+  Variable: pre-command-hook ¶
+#+end_src
 
     这个普通的钩子在执行每个命令之前由编辑器命令循环运行。  此时，this-command 包含即将运行的命令，last-command 描述了上一条命令。  请参阅命令循环中的信息。
 
-变量：命令后挂钩¶
+#+begin_src emacs-lisp
+  Variable: post-command-hook ¶
+#+end_src
 
     这个正常的钩子由编辑器命令循环在执行每个命令后运行（包括由于退出或错误而提前终止的命令）。  此时this-command指的是刚刚运行的命令，last-command指的是之前的命令。
 
@@ -47,7 +51,9 @@
 
 本节介绍如何编写使 Lisp 函数成为交互式可调用命令的交互式表单，以及如何检查命令的交互式表单。
 
-特殊形式：交互式 &optional arg-descriptor &rest 模式¶
+#+begin_src emacs-lisp
+  Special Form: interactive &optional arg-descriptor &rest modes ¶
+#+end_src
 
     这种特殊形式声明一个函数是一个命令，因此可以交互调用它（通过 Mx 或通过输入绑定到它的键序列）。  参数 arg-descriptor 声明了在交互调用命令时如何计算命令的参数。
 
@@ -106,7 +112,9 @@
 
     然而，也有一些例外：可以使用一组有限的表达式，例如 (point)、(mark)、(region-beginning) 和 (region-end)，因为 Emacs 会特别识别它们并将表达式（而不是它的值）到命令历史记录中。  要查看您编写的表达式是否是这些异常之一，请运行命令，然后检查 (car command-history)。
 
-功能：交互式表单功能¶
+#+begin_src emacs-lisp
+  Function: interactive-form function ¶
+#+end_src
 
     该函数返回函数的交互形式。  如果 function 是一个交互式可调用函数（请参阅交互式调用），则该值是命令的交互式形式（交互式规范），它指定如何计算其参数。  否则，该值为 nil。  如果 function 是一个符号，则使用其函数定义。
 
@@ -119,135 +127,209 @@
 
 下面的代码字符描述包含一些关键词，这里定义如下：
 
-完成¶
+#+begin_src emacs-lisp
+  Completion ¶
+#+end_src
 
     提供完成。  TAB、SPC 和 RET 执行名称完成，因为参数是使用完成读取（请参阅完成）读取的。  ?  显示可能完成的列表。
-现存的
+#+begin_src emacs-lisp
+  Existing
+#+end_src
 
     需要现有对象的名称。  不接受无效名称；  如果当前输入无效，则退出 minibuffer 的命令不会退出。
-默认 ¶
+#+begin_src emacs-lisp
+  Default ¶
+#+end_src
 
     如果用户在 minibuffer 中没有输入文本，则使用某种默认值。  默认值取决于代码字符。
-无 I/O
+#+begin_src emacs-lisp
+  No I/O
+#+end_src
 
     此代码字母在不读取任何输入的情况下计算参数。  因此，它不使用提示字符串，并且您提供的任何提示字符串都将被忽略。
 
     即使代码字母不使用提示字符串，如果它不是字符串中的最后一个代码字符，则必须在其后加上换行符。
-迅速的
+#+begin_src emacs-lisp
+  Prompt
+#+end_src
 
     提示符紧跟在代码字符之后。  提示以字符串结尾或换行符结束。
-特别的
+#+begin_src emacs-lisp
+  Special
+#+end_src
 
     此代码字符仅在交互式字符串的开头有意义，它不寻找提示符或换行符。  它是一个单一的、孤立的角色。
 
 以下是用于交互的代码字符描述：
 
-'*'
+#+begin_src emacs-lisp
+  ‘*’
+#+end_src
 
     如果当前缓冲区是只读的，则发出错误信号。  特别的。
-'@'
+#+begin_src emacs-lisp
+  ‘@’
+#+end_src
 
     在调用此命令的按键序列中选择第一个鼠标事件中提到的窗口。  特别的。
-'^'
+#+begin_src emacs-lisp
+  ‘^’
+#+end_src
 
     如果命令是通过 shift-translation 调用的，则在命令运行之前设置标记并临时激活该区域，或者扩展一个已经处于活动状态的区域。  如果在没有移位转换的情况下调用了该命令，并且该区域暂时处于活动状态，请在运行该命令之前停用该区域。  特别的。
-'一种'
+#+begin_src emacs-lisp
+  ‘a’
+#+end_src
 
     函数名（即满足 fboundp 的符号）。  现有，完成，提示。
-'b'
+#+begin_src emacs-lisp
+  ‘b’
+#+end_src
 
     现有缓冲区的名称。  默认情况下，使用当前缓冲区的名称（请参阅缓冲区）。  现有、完成、默认、提示。
-'乙'
+#+begin_src emacs-lisp
+  ‘B’
+#+end_src
 
     缓冲区名称。  缓冲区不需要存在。  默认情况下，使用最近使用的缓冲区的名称，而不是当前缓冲区。  完成，默认，提示。
-'C'
+#+begin_src emacs-lisp
+  ‘c’
+#+end_src
 
     一个人物。  光标不会移动到回波区域。  迅速的。
-'C'
+#+begin_src emacs-lisp
+  ‘C’
+#+end_src
 
     命令名称（即满足 commandp 的符号）。  现有，完成，提示。
-'d' ¶
+#+begin_src emacs-lisp
+  ‘d’ ¶
+#+end_src
 
     点的位置，作为整数（请参阅点）。  没有 I/O。
-'D'
+#+begin_src emacs-lisp
+  ‘D’
+#+end_src
 
     一个目录。  默认值是当前缓冲区的当前默认目录，default-directory（请参阅扩展文件名的函数）。  现有、完成、默认、提示。
-'e'
+#+begin_src emacs-lisp
+  ‘e’
+#+end_src
 
     调用命令的键序列中的第一个或下一个非键盘事件。  更准确地说，'e' 获取列表事件，因此您可以查看列表中的数据。  请参阅输入事件。  没有 I/O。
 
     您将“e”用于鼠标事件和特殊系统事件（请参阅其他系统事件）。  命令接收的事件列表取决于事件。  请参阅输入事件，其中描述了相应小节中每个事件的列表形式。
 
     您可以在单个命令的交互式规范中多次使用“e”。  如果调用命令的键序列有 n 个列表事件，则第 n 个“e”提供第 n 个此类事件。  不是列表的事件，例如功能键和 ASCII 字符，在涉及 'e' 的地方不计算在内。
-'F'
+#+begin_src emacs-lisp
+  ‘f’
+#+end_src
 
     现有文件的文件名（请参阅文件名）。  默认目录是默认目录。  现有、完成、默认、提示。
-'F'
+#+begin_src emacs-lisp
+  ‘F’
+#+end_src
 
     一个文件名。  该文件不必存在。  完成，默认，提示。
-'G'
+#+begin_src emacs-lisp
+  ‘G’
+#+end_src
 
     一个文件名。  该文件不必存在。  如果用户只输入一个目录名，那么该值就是那个目录名，没有添加目录中的文件名。  完成，默认，提示。
-'一世'
+#+begin_src emacs-lisp
+  ‘i’
+#+end_src
 
     一个无关紧要的论点。  此代码始终提供 nil 作为参数的值。  没有 I/O。
-'k'
+#+begin_src emacs-lisp
+  ‘k’
+#+end_src
 
     键序列（请参阅键序列）。  这会一直读取事件，直到在当前键映射中找到命令（或未定义的命令）。  键序列参数表示为字符串或向量。  光标不会移动到回波区域。  迅速的。
 
     如果“k”读取了一个以向下事件结尾的键序列，它也会读取并丢弃随后的向上事件。  您可以使用“U”代码字符访问该向上事件。
 
     这种输入由 describe-key 和 global-set-key 等命令使用。
-'K'
+#+begin_src emacs-lisp
+  ‘K’
+#+end_src
 
     表单上的键序列，可用作定义键等函数的输入。  这类似于“k”，除了它对于键序列中的最后一个输入事件抑制了通常用于（必要时）将未定义键转换为已定义键（请参阅键序列输入）的转换，所以这个form 通常在提示输入要绑定到命令的新键序列时使用。
-'我' ¶
+#+begin_src emacs-lisp
+  ‘m’ ¶
+#+end_src
 
     标记的位置，以整数形式。  没有 I/O。
-'M'
+#+begin_src emacs-lisp
+  ‘M’
+#+end_src
 
     任意文本，使用当前缓冲区的输入方法在 minibuffer 中读取，并以字符串形式返回（参见 GNU Emacs 手册中的输入方法）。  迅速的。
-'n'
+#+begin_src emacs-lisp
+  ‘n’
+#+end_src
 
     一个数字，用 minibuffer 读取。  如果输入不是数字，则用户必须重试。  'n' 从不使用前缀参数。  迅速的。
-'N'
+#+begin_src emacs-lisp
+  ‘N’
+#+end_src
 
     数字前缀参数；  但如果没有前缀参数，则读取与 n 相同的数字。  该值始终是一个数字。  请参阅前缀命令参数。  迅速的。
-'p' ¶
+#+begin_src emacs-lisp
+  ‘p’ ¶
+#+end_src
 
     数字前缀参数。  （请注意，这个“p”是小写的。）无 I/O。
-'P' ¶
+#+begin_src emacs-lisp
+  ‘P’ ¶
+#+end_src
 
     原始前缀参数。  （请注意，这个“P”是大写的。）无 I/O。
-'r' ¶
+#+begin_src emacs-lisp
+  ‘r’ ¶
+#+end_src
 
     点和标记，作为两个数字参数，最小的在前。  这是唯一指定两个连续参数而不是一个的代码字母。  如果在调用命令时当前的缓冲区中没有设置标记，这将发出错误信号。  如果 Transient Mark 模式打开（参见 The Mark）——默认情况下——并且用户选项 mark-even-if-inactive 为 nil，即使设置了标记，Emacs 也会发出错误信号，但处于非活动状态。  没有 I/O。
-'的'
+#+begin_src emacs-lisp
+  ‘s’
+#+end_src
 
     任意文本，在 minibuffer 中读取并作为字符串返回（请参阅Reading Text Strings with the Minibuffer）。  使用 Cj 或 RET 终止输入。  （Cq 可用于在输入中包含这些字符中的任何一个。） 提示。
-'S'
+#+begin_src emacs-lisp
+  ‘S’
+#+end_src
 
     在 minibuffer 中读取其名称的实习符号。  使用 Cj 或 RET 终止输入。  通常终止符号的其他字符（例如，空格、括号和方括号）在此不这样做。  迅速的。
-'你'
+#+begin_src emacs-lisp
+  ‘U’
+#+end_src
 
     一个键序列或零。  可以在“k”或“K”参数之后使用，以获取在“k”或“K”读取向下事件后丢弃的向上事件（如果有）。  如果没有丢弃任何向上事件，则“U”提供 nil 作为参数。  没有 I/O。
-'v'
+#+begin_src emacs-lisp
+  ‘v’
+#+end_src
 
     声明为用户选项的变量（即满足谓词 custom-variable-p）。  这使用 read-variable 读取变量。  请参阅读变量的定义。  现有，完成，提示。
-'X'
+#+begin_src emacs-lisp
+  ‘x’
+#+end_src
 
     一个 Lisp 对象，以其读取语法指定，以 Cj 或 RET 终止。  不评估对象。  请参阅使用 Minibuffer 读取 Lisp 对象。  迅速的。
-'X' ¶
+#+begin_src emacs-lisp
+  ‘X’ ¶
+#+end_src
 
     Lisp 表单的值。  'X' 和 'x' 一样读取，然后计算表单，使其值成为命令的参数。  迅速的。
-'z'
+#+begin_src emacs-lisp
+  ‘z’
+#+end_src
 
     编码系统名称（符号）。  如果用户输入 null 输入，则参数值为 nil。  请参阅编码系统。  完成，现有，提示。
-'Z'
+#+begin_src emacs-lisp
+  ‘Z’
+#+end_src
 
     编码系统名称（符号）——但仅当此命令具有前缀参数时。  没有前缀参数，'Z' 提供 nil 作为参数值。  完成，现有，提示。
-
-
 *** TODO 22.2.3 使用示例 interactive
 以下是一些交互式示例：
 #+begin_src emacs-lisp
@@ -332,7 +414,9 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
 
 宏define-alternatives 可用于定义通用命令。  这些是交互式功能，可以根据用户偏好从几个备选方案中选择其实现。
 
-宏：define-alternatives 命令 &rest 自定义 ¶
+#+begin_src emacs-lisp
+  Macro: define-alternatives command &rest customizations ¶
+#+end_src
 
     定义新的命令命令，一个符号。
 
@@ -348,7 +432,9 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
 
 请注意，在此上下文中，术语“命令”是指可交互调用的函数（或类似函数的对象）或键盘宏。  它不是指用于调用命令的键序列（请参阅键映射）。
 
-功能：commandp object &optional for-call-interactively ¶
+#+begin_src emacs-lisp
+  Function: commandp object &optional for-call-interactively ¶
+#+end_src
 
     如果 object 是命令，则此函数返回 t。  否则，它返回零。
 
@@ -358,7 +444,9 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
 
     有关使用 commandp 的实际示例，请参阅访问文档字符串中的文档。
 
-功能：交互调用命令&可选记录标志键¶
+#+begin_src emacs-lisp
+  Function: call-interactively command &optional record-flag keys ¶
+#+end_src
 
     该函数调用交互式可调用函数命令，根据其交互式调用规范提供参数。  它返回任何命令返回。
 
@@ -383,11 +471,15 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
 
     如果给定了参数键，则应该是一个向量，它指定在命令查询使用哪些事件来调用它时要提供的事件序列。  如果keys被省略或nil，默认是this-command-keys-vector的返回值。  请参阅 this-command-keys-vector 的定义。
 
-功能：funcall-interactively 函数 &rest 参数 ¶
+#+begin_src emacs-lisp
+  Function: funcall-interactively function &rest arguments ¶
+#+end_src
 
     此函数的工作方式类似于 funcall（请参阅调用函数），但它使调用看起来像一个交互式调用：在函数内部调用 called-interactively-p 将返回 t。  如果函数不是命令，则调用它时不会发出错误信号。
 
-功能：command-execute command &optional record-flag keys special ¶
+#+begin_src emacs-lisp
+  Function: command-execute command &optional record-flag keys special ¶
+#+end_src
 
     该函数执行命令。  参数 command 必须满足 commandp 谓词；  即，它必须是可交互调用的函数或键盘宏。
 
@@ -397,7 +489,9 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
 
     如果给出参数 special，则表示忽略前缀参数并且不清除它。  这用于执行特殊事件（请参阅特殊事件）。
 
-命令：执行扩展命令前缀参数¶
+#+begin_src emacs-lisp
+  Command: execute-extended-command prefix-argument ¶
+#+end_src
 
     此函数使用完成读取从迷你缓冲区中读取命令名称（请参阅完成）。  然后它使用命令执行来调用指定的命令。  该命令返回的任何内容都将成为 execute-extended-command 的值。
 
@@ -415,7 +509,9 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
     #+end_src
     此命令注意 read-extended-command-predicate 变量，该变量可以过滤掉不适用于当前主要模式（或启用的次要模式）的命令。  默认情况下，该变量的值为 nil，不会过滤掉任何命令。  但是，自定义它以调用函数 command-completion-default-include-p 将执行与模式相关的过滤。  read-extended-command-predicate 可以是任何谓词函数；  它将使用两个参数调用：命令的符号和当前缓冲区。  如果在该缓冲区中完成时要包含命令，则 if 应返回非零。
 
-命令：execute-extended-command-for-buffer prefix-argument ¶
+#+begin_src emacs-lisp
+  Command: execute-extended-command-for-buffer prefix-argument ¶
+#+end_src
 
     这类似于执行扩展命令，但将提供完成的命令限制为与当前主要模式（和启用的次要模式）特别相关的那些命令。  这包括使用模式标记的命令（请参阅使用交互），以及绑定到本地活动键盘映射的命令。  此命令是 MSx 的正常定义（即“meta shift x”）。
 
@@ -433,7 +529,9 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
 
 带有附加参数的上述方法通常是最好的，因为它允许调用者说“将此调用视为交互式”。  但是您也可以通过测试称为交互式-p 来完成这项工作。
 
-功能：交互式调用-p 类型 ¶
+#+begin_src emacs-lisp
+  Function: called-interactively-p kind ¶
+#+end_src
 
     当使用 call-interactively 调用调用函数时，此函数返回 t。
 
@@ -477,7 +575,9 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
 
 编辑器命令循环设置几个 Lisp 变量来保存它自己和正在运行的命令的状态记录。  除了 this-command 和 last-command 之外，在 Lisp 程序中更改这些变量中的任何一个通常都是一个坏主意。
 
-变量：last-command ¶
+#+begin_src emacs-lisp
+  Variable: last-command ¶
+#+end_src
 
     该变量记录了命令循环执行的上一个命令的名称（当前命令之前的命令）。  通常，该值是具有函数定义的符号，但这不能保证。
 
@@ -485,15 +585,21 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
 
     此变量始终是当前终端的本地变量，不能是缓冲区本地的。  请参阅多个终端。
 
-变量：real-last-command ¶
+#+begin_src emacs-lisp
+  Variable: real-last-command ¶
+#+end_src
 
     这个变量由 Emacs 设置，就像 last-command 一样，但不会被 Lisp 程序改变。
 
-变量：last-repeatable-command ¶
+#+begin_src emacs-lisp
+  Variable: last-repeatable-command ¶
+#+end_src
 
     此变量存储不属于输入事件的最近执行的命令。  这是命令 repeat 将尝试重复，请参阅 GNU Emacs 手册中的重复。
 
-变量：this-command ¶
+#+begin_src emacs-lisp
+  Variable: this-command ¶
+#+end_src
 
     该变量记录了编辑器命令循环正在执行的命令的名称。  与 last-command 一样，它通常是带有函数定义的符号。
 
@@ -513,15 +619,21 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
 #+end_src
 我们没有将 this-command 与 let 绑定，因为这样会在出错的情况下恢复旧值——在这种情况下，let 的一个特性正是我们想要避免的。
 
-变量：this-original-command ¶
+#+begin_src emacs-lisp
+  Variable: this-original-command ¶
+#+end_src
 
     这与 this-command 具有相同的值，除非发生命令重新映射（请参阅重新映射命令）。  在这种情况下，this-command 给出了实际运行的命令（重新映射的结果），而 this-original-command 给出了指定运行但重新映射到另一个命令的命令。
 
-变量：current-minibuffer-command ¶
+#+begin_src emacs-lisp
+  Variable: current-minibuffer-command ¶
+#+end_src
 
     this 与 this-command 具有相同的值，但在进入 minibuffer 时被递归绑定。  此变量可用于 minibuffer 挂钩等，以确定打开当前 minibuffer 会话的命令。
 
-功能：this-command-keys ¶
+#+begin_src emacs-lisp
+  Function: this-command-keys ¶
+#+end_src
 
     此函数返回一个字符串或向量，其中包含调用当前命令的键序列。  该命令使用 read-event 读取的任何没有超时的事件都会被添加到最后。
 
@@ -533,21 +645,29 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
 	   ⇒ "^X^E"
     #+end_src
 
-功能：this-command-keys-vector ¶
+#+begin_src emacs-lisp
+  Function: this-command-keys-vector ¶
+#+end_src
 
     与 this-command-keys 类似，只是它始终以向量形式返回事件，因此您无需处理将输入事件存储在字符串中的复杂性（请参阅将键盘事件放入字符串中）。
 
-功能：clear-this-command-keys &optional keep-record ¶
+#+begin_src emacs-lisp
+  Function: clear-this-command-keys &optional keep-record ¶
+#+end_src
 
     此函数清空事件表，以便 this-command-keys 返回。  除非 keep-record 不为零，否则它还会清空函数最近键（请参阅记录输入）随后将返回的记录。  这在读取密码后很有用，可以防止密码在某些情况下无意中作为下一个命令的一部分回显。
 
-变量：last-nonmenu-event ¶
+#+begin_src emacs-lisp
+  Variable: last-nonmenu-event ¶
+#+end_src
 
     此变量保存作为键序列的一部分读取的最后一个输入事件，不计算鼠标菜单产生的事件。
 
     这个变量的一个用途是告诉 x-popup-menu 在哪里弹出菜单。  它也被 y-or-np 内部使用（参见 Yes-or-No Queries）。
 
-变量：last-command-event ¶
+#+begin_src emacs-lisp
+  Variable: last-command-event ¶
+#+end_src
 
     此变量设置为命令循环作为命令的一部分读取的最后一个输入事件。  这个变量的主要用途是在 self-insert-command 中，它使用它来决定插入哪个字符。
     #+begin_src emacs-lisp
@@ -557,7 +677,9 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
     #+end_src
     该值为 5，因为那是 Ce 的 ASCII 码。
 
-变量：最后一个事件帧¶
+#+begin_src emacs-lisp
+  Variable: last-event-frame ¶
+#+end_src
 
     此变量记录最后一个输入事件被定向到哪个帧。  通常这是在生成事件时选择的帧，但如果该帧已将输入焦点重定向到另一个帧，则该值是事件被重定向到的帧。  请参阅输入焦点。
 
@@ -569,13 +691,17 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
 
 命令可以通过设置变量 disable-point-adjustment 来禁止此功能：
 
-变量：禁用点调整¶
+#+begin_src emacs-lisp
+  Variable: disable-point-adjustment ¶
+#+end_src
 
     如果当命令返回命令循环时此变量非零，则命令循环不会检查这些文本属性，并且不会将点移出具有它们的序列。
 
     命令循环在每个命令之前将此变量设置为 nil，因此如果命令设置它，则效果仅适用于该命令。
 
-变量：全局禁用点调整¶
+#+begin_src emacs-lisp
+  Variable: global-disable-point-adjustment ¶
+#+end_src
 
     如果将此变量设置为非零值，则将点移出这些序列的功能将完全关闭。
 
@@ -583,7 +709,9 @@ Emacs 中的许多命令都是通用的，与任何特定模式无关。  例如
 
 Emacs 命令循环读取代表键盘或鼠标活动的输入事件序列，或发送到 Emacs 的系统事件。  键盘活动的事件是字符或符号；  其他事件始终是列表。  本节详细描述输入事件的表示和含义。
 
-功能：eventp 对象¶
+#+begin_src emacs-lisp
+  Function: eventp object ¶
+#+end_src
 
     如果 object 是输入事件或事件类型，则此函数返回非 nil。
 
@@ -595,31 +723,42 @@ Emacs 命令循环读取代表键盘或鼠标活动的输入事件序列，或�
 
 输入字符事件由 0 到 524287 之间的基本代码以及任何或所有这些修饰符位组成：
 
-元
-
+#+begin_src emacs-lisp
+  meta
+#+end_src
     字符代码中的 2**27 位表示按住元键键入的字符。
-控制
 
+#+begin_src emacs-lisp
+  control
+#+end_src
     字符代码中的 2**26 位表示非 ASCII 控制字符。
 
     ASCII 控制字符（例如 Ca）具有自己的特殊基本代码，因此 Emacs 不需要特殊位来指示它们。  因此，Ca 的代码仅为 1。
 
     但是如果你键入一个不是ASCII的控制组合，比如用控制键的%，你得到的数值就是%加2**26的代码（假设终端支持非ASCII控制字符），即用第27个位设置。
-转移
 
+#+begin_src emacs-lisp
+  shift
+#+end_src
     字符事件代码中的 2**25 位（第 26 位）表示按住 shift 键键入的 ASCII 控制字符。
 
     对于字母，基本代码本身表示大写与小写；  对于数字和标点符号，shift 键选择具有不同基本代码的完全不同的字符。  为了尽可能保持在 ASCII 字符集中，Emacs 避免对这些字符事件使用 2**25 位。
 
     但是，ASCII 没有提供区分 CA 和 Ca 的方法，因此 Emacs 在 CA 中使用 2**25 位而不在 Ca 中。
-超
 
+#+begin_src emacs-lisp
+  hyper
+#+end_src
     字符事件代码中的 2**24 位表示按住超级键键入的字符。
-极好的
 
+#+begin_src emacs-lisp
+  super
+#+end_src
     字符事件代码中的 2**23 位表示按住超级键键入的字符。
-alt
 
+#+begin_src emacs-lisp
+  alt
+#+end_src
     字符事件代码中的 2**22 位表示按住 alt 键键入的字符。  （大多数键盘上标记为 Alt 的键实际上被视为元键，而不是这个。）
 
 最好避免在程序中提及特定的位数。  要测试字符的修饰符位，请使用函数 event-modifiers（请参阅分类事件）。  在进行键绑定时，您可以对带有修饰符位的字符（'\C-'、'\M-' 等）使用读取语法。  要使用 define-key 进行键绑定，您可以使用 (control hyper ?x) 之类的列表来指定字符（请参阅更改键绑定）。  函数 event-convert-list 将此类列表转换为事件类型（请参阅分类事件）。
@@ -632,7 +771,9 @@ alt
 
 以下是功能键符号命名约定中的一些特殊情况：
 
-退格、制表符、换行、返回、删除
+#+begin_src emacs-lisp
+  backspace, tab, newline, return, delete
+#+end_src
 
     这些键对应于在大多数键盘上具有特殊键的常见 ASCII 控制字符。
 
@@ -641,44 +782,67 @@ alt
     大多数情况下，区分这两者是没有用的。  所以通常local-function-key-map（见Keymaps for Translating Sequences of Events）设置为将tab映射到9。因此，字符代码9（字符Ci）的键绑定也适用于tab。  对于该组中的其他符号也是如此。  函数 read-char 同样将这些事件转换为字符。
 
     在 ASCII 中，BS 实际上是 Ch。  但是退格会转换为字符代码 127 (DEL)，而不是代码 8 (BS)。  这是大多数用户喜欢的。
-左上右下
+#+begin_src emacs-lisp
+  left, up, right, down
+#+end_src
 
     光标方向键
-kp-加，kp-十进制，kp-除法，...
+#+begin_src emacs-lisp
+  kp-add, kp-decimal, kp-divide, …
+#+end_src
 
     小键盘键（在常规键盘的右侧）。
-kp-0, kp-1, ...
+#+begin_src emacs-lisp
+  kp-0, kp-1, …
+#+end_src
 
     带数字的键盘键。
-kp-f1、kp-f2、kp-f3、kp-f4
+#+begin_src emacs-lisp
+  kp-f1, kp-f2, kp-f3, kp-f4
+#+end_src
 
     键盘 PF 键。
-kp-home, kp-left, kp-up, kp-right, kp-down
+#+begin_src emacs-lisp
+  kp-home, kp-left, kp-up, kp-right, kp-down
+#+end_src
 
     键盘方向键。  Emacs 通常会将这些转换为相应的非键盘键 home、left、...
-kp-prior, kp-next, kp-end, kp-begin, kp-insert, kp-delete
+#+begin_src emacs-lisp
+  kp-prior, kp-next, kp-end, kp-begin, kp-insert, kp-delete
+#+end_src
 
     通常在其他地方找到的键的附加键盘副本。  Emacs 通常将这些转换为类似名称的非键盘键。
 
 您可以将修饰键 ALT、CTRL、HYPER、META、SHIFT 和 SUPER 与功能键一起使用。  表示它们的方法是在符号名称中使用前缀：
 
-'一种-'
-
+#+begin_src emacs-lisp
+  ‘A-’
+#+end_src
     alt 修饰符。
-'C-'
 
+#+begin_src emacs-lisp
+  ‘C-’
+#+end_src
     控制修饰符。
-'H-'
 
+#+begin_src emacs-lisp
+  ‘H-’
+#+end_src
     超级修饰符。
-'M-'
 
+#+begin_src emacs-lisp
+  ‘M-’
+#+end_src
     元修饰符。
-'S-'
 
+#+begin_src emacs-lisp
+  ‘S-’
+#+end_src
     移位修饰符。
-'s-'
 
+#+begin_src emacs-lisp
+  ‘s-’
+#+end_src
     超级修饰符。
 
 因此，按下 META 的键 F3 的符号是 M-f3。  当您使用多个前缀时，我们建议您按字母顺序书写；  但在键绑定查找和修改函数的参数中，顺序无关紧要。
@@ -700,17 +864,23 @@ Emacs 支持四种鼠标事件：单击事件、拖动事件、按钮按下事�
 #+end_src
 
 
-事件类型
+#+begin_src emacs-lisp
+  event-type
+#+end_src
 
     这是一个符号，表示使用了哪个鼠标按钮。  它是鼠标 1、鼠标 2、... 的符号之一，其中按钮从左到右编号。  对于鼠标滚轮事件，它可以是上滚轮或下滚轮。
 
     您还可以使用前缀“A-”、“C-”、“H-”、“M-”、“S-”和“s-”作为修饰符 alt、control、hyper、meta、shift 和 super，就像你会用功能键。
 
     该符号也用作事件的事件类型。  键绑定按类型描述事件；  因此，如果有 mouse-1 的键绑定，则该绑定将应用于事件类型为 mouse-1 的所有事件。
-位置 ¶
+#+begin_src emacs-lisp
+  position ¶
+#+end_src
 
     这是一个鼠标位置列表，指定鼠标事件发生的位置；  详情见下文。
-点击次数
+#+begin_src emacs-lisp
+  click-count
+#+end_src
 
     这是迄今为止快速重复按下同一鼠标按钮的次数或重复转动滚轮的次数。  请参阅重复事件。
 
@@ -726,21 +896,31 @@ Emacs 支持四种鼠标事件：单击事件、拖动事件、按钮按下事�
 
 这些列表元素的含义如下：
 
-窗户
+#+begin_src emacs-lisp
+  window
+#+end_src
 
     发生鼠标事件的窗口。
-后或区域
+#+begin_src emacs-lisp
+  pos-or-area
+#+end_src
 
     点击字符在文本区域的缓冲位置；  或者，如果事件在文本区域之外，则为它发生的窗口区域。  它是模式行、标题行、制表行、垂直行、左边距、右边距、左边缘或右边缘的符号之一。
 
     在一种特殊情况下，pos-or-area 是一个包含符号（上面列出的符号之一）的列表，而不仅仅是符号。  这发生在 Emacs 注册事件的假想前缀键之后。  请参阅按键序列输入。
-x, y
+#+begin_src emacs-lisp
+  x, y
+#+end_src
 
     事件的相对像素坐标。  对于窗口文本区域中的事件，坐标原点 (0 . 0) 被视为文本区域的左上角。  请参阅窗口大小。  对于模式行、标题行或标签行中的事件，坐标原点是窗口本身的左上角。  对于边缘、边距和垂直边框，x 没有有意义的数据。  对于边缘和边距，y 相对于标题行的底部边缘。  在所有情况下，x 和 y 坐标分别向右和向下增加。
-时间戳
+#+begin_src emacs-lisp
+  timestamp
+#+end_src
 
     事件发生的时间，从与系统相关的初始时间开始的整数毫秒数。
-目的
+#+begin_src emacs-lisp
+  object
+#+end_src
 
     要么是 nil，这意味着事件发生在缓冲区文本上，要么是形式为 (string . string-pos) 的 cons 单元格，如果在事件位置存在来自文本属性或覆盖的字符串。
 
@@ -751,19 +931,29 @@ x, y
 
 	 发生单击的字符串中的位置。
 
-文本位置
+#+begin_src emacs-lisp
+  text-pos
+#+end_src
 
     对于边缘区域或边缘的单击，这是窗口中相应行中第一个可见字符的缓冲区位置。  对于模式行、标题行或制表行的点击，这是 nil。  对于其他事件，它是最接近点击的缓冲区位置。
-列，行
+#+begin_src emacs-lisp
+  col, row
+#+end_src
 
     这些是 x、y 位置下字形的实际列和行坐标数。  如果 x 位于其行上实际文本的最后一列之外，则通过添加具有默认字符宽度的虚构额外列来报告 col。  如果窗口有一个标题行，则将第 0 行作为标题行，如果窗口也有标签行，则将第 1 行作为标题行，否则将作为文本区域的最顶行。  第 0 列被视为文本区域的最左侧列，用于单击窗口文本区域，或最左侧的模式行或标题行列，用于单击那里。  对于边缘或垂直边界的点击，这些没有有意义的数据。  对于边距上的点击，col 是从边距区域的左边缘开始测量的，而 row 是从边距区域的顶部开始测量的。
-图片
+#+begin_src emacs-lisp
+  image
+#+end_src
 
     如果单击位置有图像，则这是 find-image 返回的图像对象（请参阅定义图像）；  否则这是零。
-dx, dy
+#+begin_src emacs-lisp
+  dx, dy
+#+end_src
 
     这些是点击的像素坐标，相对于对象的左上角，即 (0 . 0)。  如果 object 为 nil，代表缓冲区，则坐标相对于单击的字符字形的左上角。
-宽度、高度
+#+begin_src emacs-lisp
+  width, height
+#+end_src
 
     如果单击的是字符，无论是来自缓冲区文本还是来自覆盖或显示字符串，这些都是该字符字形的像素宽度和高度；  否则它们是点击的对象的尺寸。
 
@@ -772,22 +962,34 @@ dx, dy
 #+begin_src emacs-lisp
   (window area (portion . whole) timestamp part)
 #+end_src
-窗户
+#+begin_src emacs-lisp
+  window
+#+end_src
 
     单击其滚动条的窗口。
-区域
+#+begin_src emacs-lisp
+  area
+#+end_src
 
     这是符号垂直滚动条。
-部分
+#+begin_src emacs-lisp
+  portion
+#+end_src
 
     从滚动条顶部到点击位置的像素数。  在某些工具包上，包括 GTK+，Emacs 无法提取此数据，因此该值始终为 0。
-所有的
+#+begin_src emacs-lisp
+  whole
+#+end_src
 
     滚动条的总长度（以像素为单位）。  在某些工具包上，包括 GTK+，Emacs 无法提取此数据，因此该值始终为 0。
-时间戳
+#+begin_src emacs-lisp
+  timestamp
+#+end_src
 
     事件发生的时间，以毫秒为单位。  在某些工具包上，包括 GTK+，Emacs 无法提取此数据，因此该值始终为 0。
-部分
+#+begin_src emacs-lisp
+  part
+#+end_src
 
     发生单击的滚动条部分。  它是句柄（滚动条句柄）、上句柄（句柄上方区域）、下句柄（句柄下方区域）、向上（滚动条一端的向上箭头）、或向下（滚动条一端的向下箭头）。
 
@@ -797,33 +999,45 @@ dx, dy
   (frame part (X . Y) timestamp)
 #+end_src
 
-框架
+#+begin_src emacs-lisp
+  frame
+#+end_src
 
     单击其内部边框或工具栏或选项卡栏的框架。
-部分
+#+begin_src emacs-lisp
+  part
+#+end_src
 
     被点击的框架部分。  这可以是以下之一：
 
-    工具栏
+#+begin_src emacs-lisp
+  tool-bar
+#+end_src
 
 	 框架有一个工具栏，事件在工具栏区域。
-    标签栏
+#+begin_src emacs-lisp
+  tab-bar
+#+end_src
 
 	 框架有一个标签栏，事件在标签栏区域。
-    左边缘
-    顶边
-    右边缘
-    底边
+#+begin_src emacs-lisp
+  left-edge
+  top-edge
+  right-edge
+  bottom-edge
+#+end_src
 
 	 点击是在相应的边界上，距离边界最近的角至少有一个规范字符的偏移量。
-    左上角
-    右上角
-    右下角
-    左下角
-
+	 #+begin_src emacs-lisp
+	   top-left-corner
+	   top-right-corner
+	   bottom-right-corner
+	   bottom-left-corner
+	 #+end_src
 	 单击是在内部边框的相应角上。
-    零
-
+    #+begin_src emacs-lisp
+      nil
+    #+end_src
 	 框架没有内部边框，并且事件不在选项卡栏或工具栏上。  这通常发生在文本模式框架上。  如果框架没有将其 drag-internal-border 参数（请参阅鼠标拖动参数）设置为非零值，则这也可能发生在具有内部边框的 GUI 框架上。
 
 *** TODO 22.7.5 拖动事件
@@ -876,17 +1090,23 @@ Button-down 是阻力的保守对立面。
 
 如果您单击一个按钮三次或更多次，然后再次按下该按钮，则超过第三次的按下事件都是三重事件。  Emacs 没有针对四元组、五元组等事件的单独事件类型。  但是，您可以查看事件列表以准确了解按下按钮的次数。
 
-功能：事件点击计数事件¶
+#+begin_src emacs-lisp
+  Function: event-click-count event ¶
+#+end_src
 
     此函数返回导致事件的连续按下按钮的次数。  如果 event 是双击、双击或双击事件，则值为 2。如果 event 是三重事件，则值为 3 或更大。  如果 event 是普通的鼠标事件（不是重复事件），则值为 1。
 
-用户选项：双击模糊 ¶
+#+begin_src emacs-lisp
+  User Option: double-click-fuzz ¶
+#+end_src
 
     要生成重复事件，连续按下鼠标按钮必须在大致相同的屏幕位置。  double-click-fuzz 的值指定鼠标在两次连续单击之间可以移动（水平或垂直）以进行双击的最大像素数。
 
     该变量也是鼠标移动算作拖动的阈值。
 
-用户选项：双击时间¶
+#+begin_src emacs-lisp
+  User Option: double-click-time ¶
+#+end_src
 
     要生成重复事件，连续按下按钮之间的毫秒数必须小于双击时间的值。  将双击时间设置为 nil 会完全禁用多击检测。  将其设置为 t 会删除时间限制；  然后，Emacs 仅按位置检测多次点击。
 
@@ -902,7 +1122,9 @@ position 是一个鼠标位置列表（请参阅单击事件），指定鼠标�
 
 特殊形式的跟踪鼠标可以在其体内生成运动事件。  在跟踪鼠标形式之外，Emacs 不会仅仅为鼠标的运动生成事件，并且这些事件不会出现。  请参阅鼠标跟踪。
 
-变量：鼠标细粒度跟踪¶
+#+begin_src emacs-lisp
+  Variable: mouse-fine-grained-tracking ¶
+#+end_src
 
     当非零时，即使是非常小的移动也会生成鼠标运动事件。  否则，只要鼠标光标仍然指向文本中的相同字形，就不会生成运动事件。
 
@@ -925,31 +1147,45 @@ position 是一个鼠标位置列表（请参阅单击事件），指定鼠标�
 
 其他一些事件类型代表系统内的事件。
 
-（删除帧（帧））
+#+begin_src emacs-lisp
+  (delete-frame (frame))
+#+end_src
 
     这种事件表明用户给窗口管理器一个命令来删除一个特定的窗口，这个窗口恰好是一个 Emacs 框架。
 
     删除帧事件的标准定义是删除帧。
-（图标化框架（框架））
+#+begin_src emacs-lisp
+  (iconify-frame (frame))
+#+end_src
 
     这种事件表明用户使用窗口管理器图标化了框架。  它的标准定义是忽略；  由于框架已经被图标化，Emacs 没有工作要做。  此事件类型的目的是让您可以根据需要跟踪此类事件。
-（使框架可见（框架））
+#+begin_src emacs-lisp
+  (make-frame-visible (frame))
+#+end_src
 
     这种事件表明用户使用窗口管理器取消了框架。  它的标准定义是忽略；  由于框架已经可见，Emacs 没有工作要做。
-（上轮位置）
-（车轮向下位置）
+#+begin_src emacs-lisp
+  (wheel-up position)
+#+end_src
+#+begin_src emacs-lisp
+  (wheel-down position)
+#+end_src
 
     这些类型的事件是通过移动鼠标滚轮生成的。  position 元素是一个鼠标位置列表（请参阅单击事件），指定事件发生时鼠标光标的位置。
 
     此类事件仅在某些类型的系统上生成。  在某些系统上，改为使用 mouse-4 和 mouse-5。  对于可移植代码，使用 mwheel.el 中定义的变量 mouse-wheel-up-event 和 mouse-wheel-down-event 来确定鼠标滚轮的预期事件类型。
-（拖放位置文件）
+#+begin_src emacs-lisp
+  (drag-n-drop position files)
+#+end_src
 
     当在 Emacs 外部的应用程序中选择一组文件，然后将其拖放到 Emacs 框架上时，会生成此类事件。
 
     元素位置是描述事件位置的列表，格式与鼠标单击事件中使用的格式相同（请参阅单击事件），文件是拖放的文件名列表。  处理此事件的常用方法是访问这些文件。
 
     目前，仅在某些类型的系统上会生成此类事件。
-帮助回声
+#+begin_src emacs-lisp
+  help-echo
+#+end_src
 
     当鼠标指针移动到具有帮助回显文本属性的缓冲区文本部分时，会生成此类事件。  生成的事件具有以下形式：
 
@@ -958,8 +1194,12 @@ position 是一个鼠标位置列表（请参阅单击事件），指定鼠标�
     #+end_src
 
     事件参数的确切含义以及这些参数用于显示帮助回显文本的方式在 Text help-echo 中进行了描述。
-sigusr1
-sigusr2
+#+begin_src emacs-lisp
+  sigusr1
+#+end_src
+#+begin_src emacs-lisp
+  sigusr2
+#+end_src
 
     这些事件是在 Emacs 进程收到信号 SIGUSR1 和 SIGUSR2 时生成的。  它们不包含附加数据，因为信号不携带附加信息。  它们对于调试很有用（请参阅在出现错误时进入调试器）。
 
@@ -977,7 +1217,9 @@ sigusr2
     (signal-process (emacs-pid) 'sigusr1)
     #+end_src
 
-语言变化
+#+begin_src emacs-lisp
+  language-change
+#+end_src
 
     当输入语言改变时，这种事件会在 MS-Windows 上生成。  这通常意味着键盘按键将向 Emacs 发送不同语言的字符。  生成的事件具有以下形式：
 
@@ -1055,7 +1297,9 @@ sigusr2
 
 提供了函数 event-modifiers 和 event-basic-type 来方便地获取这些信息。
 
-功能：事件修饰符事件¶
+#+begin_src emacs-lisp
+  Function: event-modifiers event ¶
+#+end_src
 
     此函数返回事件具有的修饰符列表。  修饰符是符号；  它们包括 shift、control、meta、alt、hyper 和 super。  此外，鼠标事件符号的修饰符列表始终包含单击、拖动和向下之一。  对于双重或三重事件，它还包含双重或三重。
 
@@ -1087,7 +1331,9 @@ sigusr2
 
     单击事件的修饰符列表明确包含单击，但事件符号名称本身不包含“单击”。  类似地，ASCII 控制字符（例如“C-a”）的修饰符列表包含控制，即使通过 read-char 读取此类事件将返回值 1，并且删除了控制修饰符位。
 
-功能：事件基本类型事件¶
+#+begin_src emacs-lisp
+  Function: event-basic-type event ¶
+#+end_src
 
     此函数返回事件描述的键或鼠标按钮，并删除所有修饰符。  事件参数与事件修饰符中的一样。  例如：
 
@@ -1110,11 +1356,15 @@ sigusr2
 	   ⇒ mouse-1
     #+end_src
 
-功能：鼠标移动-p 对象 ¶
+#+begin_src emacs-lisp
+  Function: mouse-movement-p object ¶
+#+end_src
 
     如果对象是鼠标移动事件，此函数返回非零。  请参阅运动事件。
 
-功能：事件转换列表 ¶
+#+begin_src emacs-lisp
+  Function: event-convert-list list ¶
+#+end_src
 
     此函数将修饰符名称列表和基本事件类型转换为指定所有这些的事件类型。  基本事件类型必须是列表的最后一个元素。  例如，
     #+begin_src emacs-lisp
@@ -1131,37 +1381,51 @@ sigusr2
 
 以下两个函数返回鼠标位置列表（请参阅单击事件），指定鼠标事件的位置。
 
-功能：事件开始事件¶
+#+begin_src emacs-lisp
+  Function: event-start event ¶
+#+end_src
 
     这将返回事件的起始位置。
 
     如果 event 是单击或按钮按下事件，则返回事件的位置。  如果 event 是一个拖动事件，则返回拖动的起始位置。
 
-功能：事件结束事件¶
+#+begin_src emacs-lisp
+  Function: event-end event ¶
+#+end_src
 
     这将返回事件的结束位置。
 
     如果 event 是一个拖动事件，则返回用户释放鼠标按钮的位置。  如果 event 是单击或按钮按下事件，则该值实际上是起始位置，这是此类事件的唯一位置。
 
-功能：posnp 对象 ¶
+#+begin_src emacs-lisp
+  Function: posnp object ¶
+#+end_src
 
     如果 object 是鼠标位置列表，则此函数返回非 nil，格式为 Click Events 中记录的格式）；  否则为零。
 
 这些函数将鼠标位置列表作为参数，并返回它的各个部分：
 
-功能：posn窗口位置¶
+#+begin_src emacs-lisp
+  Function: posn-window position ¶
+#+end_src
 
     返回该位置所在的窗口。如果位置表示事件启动的框架之外的位置，则返回该框架。
 
-功能：posn区域位置¶
+#+begin_src emacs-lisp
+  Function: posn-area position ¶
+#+end_src
 
     返回记录在位置上的窗口区域。  当事件发生在窗口的文本区域时，它返回 nil；  否则，它是标识事件发生区域的符号。
 
-功能：posn-point位置¶
+#+begin_src emacs-lisp
+  Function: posn-point position ¶
+#+end_src
 
     返回位置中的缓冲区位置。  当事件发生在窗口的文本区域、边缘区域或边缘时，这是一个指定缓冲区位置的整数。  否则，该值未定义。
 
-功能：posn-xy 位置¶
+#+begin_src emacs-lisp
+  Function: posn-x-y position ¶
+#+end_src
 
     返回位置中基于像素的 x 和 y 坐标，作为 cons 单元格 (x . y)。  这些坐标相对于 posn-window 给出的窗口。
 
@@ -1177,51 +1441,71 @@ sigusr2
 		(+ (cdr x-y) (cadr edges)))))
     #+end_src
 
-功能：posn-col-row 位置¶
+#+begin_src emacs-lisp
+  Function: posn-col-row position ¶
+#+end_src
 
     此函数返回一个 cons 单元格 (col.row)，其中包含与位置描述的缓冲区位置相对应的估计列和行。  返回值以框架的默认字符宽度和默认行高（包括间距）为单位，由对应于位置的 x 和 y 值计算得出。  （因此，如果实际字符具有非默认大小，则实际行和列可能与这些计算值不同。）
 
     请注意，行从文本区域的顶部开始计算。  如果位置给定的窗口具有标题行（请参阅窗口标题行）或制表符行，则它们不包括在行数中。
 
-功能：posn-actual-col-row 位置¶
+#+begin_src emacs-lisp
+  Function: posn-actual-col-row position ¶
+#+end_src
 
     返回实际的行和列的位置，作为一个 cons 单元格（col.row）。  这些值是位置给定的窗口中的实际行号和列号。  有关详细信息，请参阅单击事件。  如果 position 不包含实际位置值，该函数返回 nil；  在这种情况下，可以使用 posn-col-row 来获取近似值。
 
     请注意，此函数不考虑显示字符的视觉宽度，例如制表符或图像占用的视觉列数。  如果您需要规范字符单位的坐标，请改用 posn-col-row。
 
-功能：posn-string 位置 ¶
+#+begin_src emacs-lisp
+  Function: posn-string position ¶
+#+end_src
 
     返回由位置描述的字符串对象，可以是 nil（这意味着位置描述缓冲区文本），或者是一个 cons 单元格（string .string-pos）。
 
-功能：posn-image位置¶
+#+begin_src emacs-lisp
+  Function: posn-image position ¶
+#+end_src
 
     返回位置中的图像对象，可以是 nil（如果该位置没有图像），也可以是图像规范（图像 ...）。
 
-功能：posn-object位置¶
+#+begin_src emacs-lisp
+  Function: posn-object position ¶
+#+end_src
 
     返回由位置描述的图像或字符串对象，可以是 nil（这意味着位置描述缓冲区文本）、图像（图像 ...）或 cons 单元格（字符串 .string-pos）。
 
-功能：posn-object-xy 位置 ¶
+#+begin_src emacs-lisp
+  Function: posn-object-x-y position ¶
+#+end_src
 
     返回相对于位置描述的对象左上角的基于像素的 x 和 y 坐标，作为 cons 单元格 (dx . dy)。  如果该位置描述了缓冲区文本，则返回最接近该位置的缓冲区文本字符的相对坐标。
 
-功能：posn-object-width-height 位置¶
+#+begin_src emacs-lisp
+  Function: posn-object-width-height position ¶
+#+end_src
 
     返回由位置描述的对象的像素宽度和高度，作为一个 cons 单元格（宽度。高度）。  如果该位置描述了一个缓冲区位置，则返回该位置的字符大小。
 
-功能：posn时间戳位置¶
+#+begin_src emacs-lisp
+  Function: posn-timestamp position ¶
+#+end_src
 
     返回位置的时间戳。  这是事件发生的时间，以毫秒为单位。
 
 这些函数计算给定特定缓冲区位置或屏幕位置的位置列表。  您可以使用上述功能访问此职位列表中的数据。
 
-功能: posn-at-point &optional pos window ¶
+#+begin_src emacs-lisp
+  Function: posn-at-point &optional pos window ¶
+#+end_src
 
     此函数返回窗口中位置 pos 的位置列表。  pos 默认指向窗口；  窗口默认为选定的窗口。
 
     如果 pos 在窗口中不可见，则 posn-at-point 返回 nil。
 
-功能：posn-at-xy xy &optional frame-or-window whole ¶
+#+begin_src emacs-lisp
+  Function: posn-at-x-y x y &optional frame-or-window whole ¶
+#+end_src
 
     该函数返回指定的frame或window，frame-or-window中像素坐标x和y对应的位置信息，默认为选中的窗口。  坐标 x 和 y 相对于所选窗口的文本区域。  如果整体不为零，则 x 坐标相对于整个窗口区域，包括滚动条、边距和边缘。
 
@@ -1229,11 +1513,15 @@ sigusr2
 
 这些函数对于解码滚动条事件很有用。
 
-功能：滚动条事件比率事件¶
+#+begin_src emacs-lisp
+  Function: scroll-bar-event-ratio event ¶
+#+end_src
 
     此函数返回滚动条事件在滚动条内的小数垂直位置。  该值是一个 cons 单元格（部分。整体），其中包含两个整数，其比率是小数位置。
 
-功能：滚动条比例总和¶
+#+begin_src emacs-lisp
+  Function: scroll-bar-scale ratio total ¶
+#+end_src
 
     此函数将（实际上）比率乘以总数，将结果四舍五入为整数。  参数 ratio 不是一个数字，而是一对 (num . denom)——通常是由 scroll-bar-event-ratio 返回的值。
 
@@ -1285,7 +1573,9 @@ sigusr2
 
 命令循环通过调用 read-key-sequence 一次读取输入一个键序列。  Lisp 程序也可以调用这个函数；  例如， describe-key 使用它来读取要描述的键。
 
-功能：read-key-sequence prompt &optional continue-echo dont-downcase-last switch-frame-ok command-loop ¶
+#+begin_src emacs-lisp
+  Function: read-key-sequence prompt &optional continue-echo dont-downcase-last switch-frame-ok command-loop ¶
+#+end_src
 
     此函数读取一个键序列并将其作为字符串或向量返回。  它不断读取事件，直到它积累了一个完整的键序列；  也就是说，足以使用当前活动的键盘映射指定非前缀命令。  （请记住，以鼠标事件开始的键序列是使用鼠标所在窗口中缓冲区的键映射读取的，而不是当前缓冲区。）
 
@@ -1314,7 +1604,9 @@ sigusr2
 
     函数 read-key-sequence 抑制退出：使用此函数读取时键入的 Cg 与任何其他字符一样工作，并且不设置退出标志。  请参阅退出。
 
-功能：read-key-sequence-vector prompt &optional continue-echo dont-downcase-last switch-frame-ok command-loop ¶
+#+begin_src emacs-lisp
+  Function: read-key-sequence-vector prompt &optional continue-echo dont-downcase-last switch-frame-ok command-loop ¶
+#+end_src
 
     这与 read-key-sequence 类似，只是它始终将键序列作为向量返回，而不是作为字符串返回。  请参阅将键盘事件放入字符串中。
 
@@ -1336,7 +1628,9 @@ sigusr2
 	     (40 . 63) 5959987))]
 #+end_src
 
-变量：num-input-keys ¶
+#+begin_src emacs-lisp
+  Variable: num-input-keys ¶
+#+end_src
 
     这个变量的值是到目前为止在这个 Emacs 会话中处理的键序列的数量。  这包括从终端读取的键序列和从正在执行的键盘宏中读取的键序列。
 
@@ -1346,7 +1640,9 @@ sigusr2
 
 如果您需要使用 minibuffer 读取字符的函数，请使用 read-char-from-minibuffer（请参阅询问多项选择题）。
 
-功能：读取事件&可选提示继承输入方法秒¶
+#+begin_src emacs-lisp
+  Function: read-event &optional prompt inherit-input-method seconds ¶
+#+end_src
 
     该函数读取并返回命令输入的下一个事件，必要时等待事件可用。
 
@@ -1371,7 +1667,9 @@ sigusr2
 	   ⇒ right
     #+end_src
 
-功能：读取字符&可选提示继承输入方法秒¶
+#+begin_src emacs-lisp
+  Function: read-char &optional prompt inherit-input-method seconds ¶
+#+end_src
 
     该函数读取并返回一个字符输入事件。  如果用户生成一个非字符事件（即鼠标点击或功能键事件），read-char 会发出错误信号。  参数的工作方式与读取事件中的一样。
 
@@ -1393,19 +1691,25 @@ sigusr2
 	   ⇒ nil
     #+end_src
 
-功能：read-char-exclusive & optional提示inherit-input-method seconds ¶
+#+begin_src emacs-lisp
+  Function: read-char-exclusive &optional prompt inherit-input-method seconds ¶
+#+end_src
 
     该函数读取并返回一个字符输入事件。  如果用户生成的事件不是字符事件，read-char-exclusive 将忽略它并读取另一个事件，直到它得到一个字符。  参数的工作方式与读取事件中的一样。  返回值可能包括修饰符位，与 read-char 一样。
 
 上述功能均不抑制退出。
 
-变量：num-nonmacro-input-events ¶
+#+begin_src emacs-lisp
+  Variable: num-nonmacro-input-events ¶
+#+end_src
 
     这个变量保存了到目前为止从终端接收到的输入事件的总数——不包括由键盘宏生成的那些。
 
 我们强调，与 read-key-sequence 不同，函数 read-event、read-char 和 read-char-exclusive 不执行 Keymaps for Translating Sequences of Events 中描述的翻译。  如果您希望读取考虑这些翻译的单个键（例如，读取终端中的功能键或 xterm-mouse-mode 中的鼠标事件），请使用函数 read-key：
 
-功能：read-key &optional prompt disable-fallbacks ¶
+#+begin_src emacs-lisp
+  Function: read-key &optional prompt disable-fallbacks ¶
+#+end_src
 
     此函数读取单个密钥。  它介于 read-key-sequence 和 read-event 之间。  与前者不同，它读取单个键，而不是键序列。  与后者不同的是，它不返回原始事件，而是根据 input-decode-map、local-function-key-map 和 key-translation-map 对用户输入进行解码和翻译（参见 Keymaps for Translating Sequences of Events） .
 
@@ -1413,11 +1717,15 @@ sigusr2
 
     如果参数 disable-fallbacks 不为零，则不应用 read-key-sequence 中未绑定键的常用回退逻辑。  这意味着不会丢弃鼠标按下和多击事件，并且不会应用 local-function-key-map 和 key-translation-map。  如果 nil 或未指定，则唯一禁用的回退是最后一个事件的小写。
 
-功能：read-char-choice prompt chars &optional inhibitor-quit ¶
+#+begin_src emacs-lisp
+  Function: read-char-choice prompt chars &optional inhibit-quit ¶
+#+end_src
 
     此函数使用 read-key 读取并返回单个字符。  它忽略任何不是 chars 成员的输入，即接受的字符列表。  可选地，它在等待有效输入时也会忽略键盘退出事件。  如果在调用 read-char-choice 时将 help-form（参见帮助函数）绑定到非 nil 值，则按 help-char 会导致它评估 help-form 并显示结果。  然后它继续等待有效的输入字符，或键盘退出。
 
-功能：阅读多选提示选项&可选帮助字符串¶
+#+begin_src emacs-lisp
+  Function: read-multiple-choice prompt choices &optional help-string ¶
+#+end_src
 
     向用户询问多项选择题。  prompt 应该是一个将作为提示显示的字符串。
 
@@ -1440,7 +1748,9 @@ sigusr2
 
 Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通过键盘翻译表（如果适用）翻译它，然后从读取事件返回它。
 
-变量：额外的键盘修饰符¶
+#+begin_src emacs-lisp
+  Variable: extra-keyboard-modifiers ¶
+#+end_src
 
     这个变量让 Lisp 程序“按下”键盘上的修饰键。  值是一个字符。  只有角色的修饰符很重要。  每次用户键入键盘键时，它都会改变，就好像这些修饰键被按住一样。  例如，如果将 extra-keyboard-modifiers 绑定到 ?\C-\Ma，那么在绑定范围内键入的所有键盘输入字符都将应用 control 和 meta 修饰符。  字符 ?\C-@，相当于整数 0，在此目的中不算作控制字符，而是作为没有修饰符的字符。  因此，将 extra-keyboard-modifiers 设置为零会取消任何修改。
 
@@ -1448,7 +1758,9 @@ Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通�
 
     请注意，此变量仅适用于真正来自键盘的事件，对鼠标事件或任何其他事件没有影响。
 
-变量：键盘翻译表¶
+#+begin_src emacs-lisp
+  Variable: keyboard-translate-table ¶
+#+end_src
 
     这个终端本地变量是键盘字符的翻译表。  它使您可以在不更改任何命令绑定的情况下重新调整键盘上的键。  它的值通常是一个字符表，否则为零。  （它也可以是字符串或向量，但这被认为是过时的。）
 
@@ -1458,7 +1770,9 @@ Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通�
 
     另请注意，此翻译是在将字符提供给输入法之前完成的（请参阅输入法）。  如果要在输入法操作后翻译字符，请使用 translation-table-for-input（请参阅字符翻译）。
 
-功能：键盘翻译为 ¶
+#+begin_src emacs-lisp
+  Function: keyboard-translate from to ¶
+#+end_src
 
     此函数修改keyboard-translate-table 将字符代码从转换为字符代码。  如有必要，它会创建键盘翻译表。
 
@@ -1481,7 +1795,9 @@ Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通�
 
 事件读取函数调用当前输入法，如果有的话（请参阅输入法）。  如果 input-method-function 的值为非 nil，则应该是一个函数；  当 read-event 读取一个没有修饰位的打印字符（包括 SPC）时，它调用该函数，将字符作为参数传递。
 
-变量：输入方法函数¶
+#+begin_src emacs-lisp
+  Variable: input-method-function ¶
+#+end_src
 
     如果这是非零，它的值指定当前输入法功能。
 
@@ -1497,8 +1813,9 @@ Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通�
 
 您可以使用函数 read-quoted-char 要求用户指定一个字符，并允许用户方便地指定一个控件或元字符，无论是字面还是八进制字符代码。  命令quoted-insert 使用此功能。
 
-功能：read-quoted-char &可选提示 ¶
-
+#+begin_src emacs-lisp
+  Function: read-quoted-char &optional prompt ¶
+#+end_src
     此函数与 read-char 类似，只是如果读取的第一个字符是八进制数字 (0-7)，它会读取任意数量的八进制数字（但如果找到非八进制数字则停止），并返回表示的字符通过那个数字字符代码。  如果终止八进制数字序列的字符是 RET，则将其丢弃。  此函数返回后，任何其他终止字符都将用作输入。
 
     读取第一个字符时会抑制退出，以便用户可以输入 Cg。  请参阅退出。
@@ -1522,7 +1839,9 @@ Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通�
 
 本节介绍如何在不使用它们的情况下提前查看事件、如何检查待处理的输入以及如何丢弃待处理的输入。  另请参阅函数 read-passwd（请参阅读取密码）。
 
-变量：未读命令事件¶
+#+begin_src emacs-lisp
+  Variable: unread-command-events ¶
+#+end_src
 
     此变量保存等待作为命令输入读取的事件列表。  事件按照它们在列表中出现的顺序使用，并在使用时一一删除。
 
@@ -1538,17 +1857,23 @@ Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通�
 
     从此列表中读取的元素通常由记录保存功能记录（请参阅记录输入）并在定义键盘宏时（请参阅键盘宏）。  但是，表单元素 (no-record . event) 会导致事件正常处理而不记录它。
 
-功能：listify-key-sequence key ¶
+#+begin_src emacs-lisp
+  Function: listify-key-sequence key ¶
+#+end_src
 
     此函数将字符串或向量键转换为单个事件的列表，您可以将其放入未读命令事件中。
 
-功能：input-pending-p &可选的检查定时器¶
+#+begin_src emacs-lisp
+  Function: input-pending-p &optional check-timers ¶
+#+end_src
 
     此函数确定当前是否有任何命令输入可供读取。  它立即返回，如果有可用的输入则返回值 t，否则返回 nil。  在极少数情况下，当没有可用输入时，它可能会返回 t。
 
     如果可选参数 check-timers 不为 nil，那么如果没有可用的输入，Emacs 就会运行任何准备好的计时器。  请参阅延迟执行的计时器。
 
-变量：最后输入事件¶
+#+begin_src emacs-lisp
+  Variable: last-input-event ¶
+#+end_src
 
     此变量记录最后读取的终端输入事件，无论是作为命令的一部分还是由 Lisp 程序显式读取。
 
@@ -1563,7 +1888,9 @@ Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通�
 	   ⇒ 49
     #+end_src
 
-宏：while-no-input body... ¶
+#+begin_src emacs-lisp
+  Macro: while-no-input body… ¶
+#+end_src
 
     此构造运行主体表单并返回最后一个表单的值——但前提是没有输入到达。  如果在执行主体表单期间有任何输入到达，它将中止它们（工作很像退出）。  while-no-input 形式如果被真正的退出中止，则返回 nil，如果因其他输入的到来而中止，则返回 t。
 
@@ -1578,11 +1905,15 @@ Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通�
     #+end_src
 
 
-变量：while-no-input-ignore-events ¶
+#+begin_src emacs-lisp
+  Variable: while-no-input-ignore-events ¶
+#+end_src
 
     此变量允许设置在无输入时应忽略哪些特殊事件。  它是一个事件符号列表（参见事件示例）。
 
-功能：丢弃输入¶
+#+begin_src emacs-lisp
+  Function: discard-input ¶
+#+end_src
 
     此函数丢弃终端输入缓冲区的内容并取消可能在定义过程中的任何键盘宏。  它返回零。
 
@@ -1607,7 +1938,9 @@ Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通�
 
 等待功能旨在等待一定的时间过去或直到有输入。  例如，您可能希望在计算过程中暂停，以便用户有时间查看显示。  sat-for 暂停并更新屏幕，如果有输入则立即返回，而 sleep-for 暂停而不更新屏幕。
 
-功能：静坐秒&可选 nodisp ¶
+#+begin_src emacs-lisp
+  Function: sit-for seconds &optional nodisp ¶
+#+end_src
 
     此函数执行重新显示（假设没有来自用户的待处理输入），然后等待几秒钟，或者直到输入可用。  静坐的通常目的是让用户有时间阅读您显示的文本。  如果 sit-for 一直等待而没有输入到达，则该值为 t（请参阅杂项事件输入功能）。  否则，该值为 nil。
 
@@ -1621,7 +1954,9 @@ Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通�
 
     也可以使用三个参数调用 sit-for，如 (sit-for seconds millisec nodisp)，但这被认为已过时。
 
-功能：sleep-for seconds & optional millisec ¶
+#+begin_src emacs-lisp
+  Function: sleep-for seconds &optional millisec ¶
+#+end_src
 
     此功能只是暂停几秒钟而不更新显示。  它不注意可用的输入。  它返回零。
 
@@ -1665,15 +2000,21 @@ Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通�
       code))
 #+end_src
 
-变量：退出标志¶
+#+begin_src emacs-lisp
+  Variable: quit-flag ¶
+#+end_src
 
     如果这个变量不为 nil，那么 Emacs 会立即退出，除非 inhibitor-quit 不为 nil。  键入 Cg 通常会设置退出标志非零，而不管禁止退出。
 
-变量：禁止退出¶
+#+begin_src emacs-lisp
+  Variable: inhibit-quit ¶
+#+end_src
 
     此变量确定当 quit-flag 设置为 nil 以外的值时 Emacs 是否应该退出。  如果 inhibitor-quit 为非 nil，则 quit-flag 没有特殊效果。
 
-宏：with-local-quit body… ¶
+#+begin_src emacs-lisp
+  Macro: with-local-quit body… ¶
+#+end_src
 
     此宏按顺序执行主体形式，但允许在主体内至少局部退出，即使在此构造之外禁止退出非零。  它返回正文中最后一个表单的值，除非通过退出退出，在这种情况下它返回 nil。
 
@@ -1681,7 +2022,9 @@ Emacs 根据额外的键盘修饰符修改它读取的每个事件，然后通�
 
     该宏主要用于可以从计时器、进程过滤器、进程哨兵、命令前挂钩、命令后挂钩和其他通常与 t 绑定的地方调用的函数。
 
-命令：键盘退出¶
+#+begin_src emacs-lisp
+  Command: keyboard-quit ¶
+#+end_src
 
     该函数用 (signal 'quit nil) 表示退出条件。  这和戒烟一样。  （参见错误中的信号。）
 
@@ -1737,33 +2080,47 @@ Emacs 使用两个变量来存储前缀参数：prefix-arg 和 current-prefix-ar
 
 通常，命令在交互式规范中指定用于前缀参数的表示形式，无论是数字还是原始。  （请参阅使用交互。）或者，函数可以直接在变量 current-prefix-arg 中查看前缀参数的值，但这不太干净。
 
-功能：前缀数字值 arg ¶
+#+begin_src emacs-lisp
+  Function: prefix-numeric-value arg ¶
+#+end_src
 
     此函数返回有效的原始前缀参数值 arg 的数值含义。  参数可以是符号、数字或列表。  如果为 nil，则返回值 1；  如果是-，则返回值-1；  如果是数字，则返回该数字；  如果它是一个列表，则返回该列表的 CAR（应该是一个数字）。
 
-变量：当前前缀参数¶
+#+begin_src emacs-lisp
+  Variable: current-prefix-arg ¶
+#+end_src
 
     此变量保存当前命令的原始前缀参数。  命令可以直接检查它，但访问它的常用方法是使用（交互式“P”）。
 
-变量：前缀参数¶
+#+begin_src emacs-lisp
+  Variable: prefix-arg ¶
+#+end_src
 
     此变量的值是下一个编辑命令的原始前缀参数。  为以下命令指定前缀参数的命令（例如通用参数）通过设置此变量来工作。
 
-变量：last-prefix-arg ¶
+#+begin_src emacs-lisp
+  Variable: last-prefix-arg ¶
+#+end_src
 
     上一个命令使用的原始前缀参数值。
 
 存在以下命令来为以下命令设置前缀参数。  不要因为任何其他原因打电话给他们。
 
-命令：通用参数¶
+#+begin_src emacs-lisp
+  Command: universal-argument ¶
+#+end_src
 
     此命令读取输入并为以下命令指定前缀参数。  除非您知道自己在做什么，否则不要自己调用此命令。
 
-命令：数字参数 arg ¶
+#+begin_src emacs-lisp
+  Command: digit-argument arg ¶
+#+end_src
 
     此命令添加到以下命令的前缀参数。  参数 arg 是该命令之前的原始前缀参数；  它用于计算更新的前缀参数。  除非您知道自己在做什么，否则不要自己调用此命令。
 
-命令：否定参数 arg ¶
+#+begin_src emacs-lisp
+  Command: negative-argument arg ¶
+#+end_src
 
     此命令添加到下一个命令的数字参数。  参数 arg 是该命令之前的原始前缀参数；  它的值被否定以形成新的前缀参数。  除非您知道自己在做什么，否则不要自己调用此命令。
 
@@ -1785,7 +2142,9 @@ Minibuffer 输入是一种特殊的递归编辑。  它有一些特殊的皱纹�
 
 当您在 query-replace 中键入 Cr 或使用 Cx q (kbd-macro-query) 时，也会使用递归编辑级别。
 
-命令：递归编辑¶
+#+begin_src emacs-lisp
+  Command: recursive-edit ¶
+#+end_src
 
     此函数调用编辑器命令循环。  它由 Emacs 的初始化自动调用，让用户开始编辑。  当从 Lisp 程序调用时，它进入递归编辑级别。
 
@@ -1804,25 +2163,30 @@ Minibuffer 输入是一种特殊的递归编辑。  它有一些特殊的皱纹�
 	   ⇒ nil
     #+end_src
 
-命令：退出递归编辑¶
+#+begin_src emacs-lisp
+  Command: exit-recursive-edit ¶
+#+end_src
 
     该函数从最里面的递归编辑（包括 minibuffer 输入）中退出。  它的定义是有效的（抛出'exit nil）。
 
-命令：中止递归编辑¶
+#+begin_src emacs-lisp
+  Command: abort-recursive-edit ¶
+#+end_src
 
     此函数通过在退出递归编辑后发出 quit 信号来中止请求最内层递归编辑（包括 minibuffer 输入）的命令。  它的定义是有效的（throw 'exit t）。  请参阅退出。
 
-命令：顶级 ¶
+#+begin_src emacs-lisp
+  Command: top-level ¶
+#+end_src
 
     该函数退出所有递归编辑级别；  它不返回值，因为它完全跳出任何计算直接回到主命令循环。
 
-功能：递归深度¶
+#+begin_src emacs-lisp
+  Function: recursion-depth ¶
+#+end_src
 
     此函数返回递归编辑的当前深度。  当没有递归编辑处于活动状态时，它返回 0。
 
-
-
-** TODO 22.14 禁用命令
 
 禁用命令会将命令标记为需要用户确认才能执行。  禁用用于可能使初学者感到困惑的命令，以防止他们意外使用命令。
 
@@ -1843,15 +2207,21 @@ Minibuffer 输入是一种特殊的递归编辑。  它有一些特殊的皱纹�
 
 有关交互式调用禁用命令时发生的情况的详细信息，请参见 GNU Emacs 手册中的禁用。  禁用命令对从 Lisp 程序中将其作为函数调用没有影响。
 
-命令：启用命令命令¶
+#+begin_src emacs-lisp
+  Command: enable-command command ¶
+#+end_src
 
     从现在开始允许在没有特别确认的情况下执行命令（一个符号），并更改用户的 init 文件（请参阅 The Init File），以便将其应用于未来的会话。
 
-命令：禁用命令命令¶
+#+begin_src emacs-lisp
+  Command: disable-command command ¶
+#+end_src
 
     从现在开始需要特别确认才能执行命令，并更改用户的 init 文件，以便将其应用于未来的会话。
 
-变量：禁用命令函数¶
+#+begin_src emacs-lisp
+  Variable: disabled-command-function ¶
+#+end_src
 
     这个变量的值应该是一个函数。  当用户以交互方式调用禁用命令时，将调用此函数而不是禁用命令。  它可以使用 this-command-keys 来确定用户键入什么来运行命令，从而找到命令本身。
 
@@ -1863,7 +2233,9 @@ Minibuffer 输入是一种特殊的递归编辑。  它有一些特殊的皱纹�
 
 命令循环保留已执行的复杂命令的历史记录，以便于重复这些命令。  复杂命令是交互式参数读取使用迷你缓冲区的命令。  这包括任何 Mx 命令、任何 M-: 命令以及任何其交互规范从 minibuffer 中读取参数的命令。  在命令本身执行期间显式使用迷你缓冲区不会导致命令被认为是复杂的。
 
-变量：命令历史¶
+#+begin_src emacs-lisp
+  Variable: command-history ¶
+#+end_src
 
     该变量的值是最近的复杂命令的列表，每个都表示为要评估的形式。  它在编辑会话期间继续累积所有复杂命令，但是当它达到最大大小时（请参阅 Minibuffer History），随着新元素的添加，最旧的元素将被删除。
 
@@ -1883,7 +2255,9 @@ Minibuffer 输入是一种特殊的递归编辑。  它有一些特殊的皱纹�
 
 键盘宏是输入事件的固定序列，可以将其视为命令并定义键。  键盘宏的 Lisp 表示是包含事件的字符串或向量。  不要将键盘宏与 Lisp 宏混淆（参见宏）。
 
-功能：执行-kbd-macro kbdmacro &optional count loopfunc ¶
+#+begin_src emacs-lisp
+  Function: execute-kbd-macro kbdmacro &optional count loopfunc ¶
+#+end_src
 
     此函数将 kbdmacro 作为一系列事件执行。  如果 kbdmacro 是一个字符串或向量，那么其中的事件将完全按照用户输入的方式执行。  该序列不应是单个键序列；  通常，键盘宏定义由多个连接的键序列组成。
 
@@ -1895,22 +2269,30 @@ Minibuffer 输入是一种特殊的递归编辑。  它有一些特殊的皱纹�
 
     有关使用 execute-kbd-macro 的示例，请参阅阅读一个事件。
 
-变量：执行-kbd-宏 ¶
+#+begin_src emacs-lisp
+  Variable: executing-kbd-macro ¶
+#+end_src
 
     此变量包含定义当前正在执行的键盘宏的字符串或向量。  如果当前没有宏正在执行，则为 nil。  命令可以测试此变量，以便在从执行宏运行时表现不同。  不要自己设置这个变量。
 
-变量：定义-kbd-宏¶
+#+begin_src emacs-lisp
+  Variable: defining-kbd-macro ¶
+#+end_src
 
     当且仅当定义了键盘宏时，此变量才非零。  一个命令可以测试这个变量，以便在定义宏时表现不同。  该值在附加到现有宏的定义时附加。  命令 start-kbd-macro、kmacro-start-macro 和 end-kbd-macro 设置这个变量——不要自己设置。
 
     该变量始终是当前终端的本地变量，并且不能是缓冲区本地的。  请参阅多个终端。
 
-变量：last-kbd-macro ¶
+#+begin_src emacs-lisp
+  Variable: last-kbd-macro ¶
+#+end_src
 
     这个变量是最近定义的键盘宏的定义。  它的值是一个字符串或向量，或 nil。
 
     该变量始终是当前终端的本地变量，并且不能是缓冲区本地的。  请参阅多个终端。
 
-变量：kbd-macro-termination-hook ¶
+#+begin_src emacs-lisp
+  Variable: kbd-macro-termination-hook ¶
+#+end_src
 
     这个正常的钩子在键盘宏终止时运行，不管是什么导致它终止（到达宏结束或过早结束宏的错误）。
