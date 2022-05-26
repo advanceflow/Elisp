@@ -24,49 +24,71 @@ Emacs 缓冲区和字符串支持来自许多不同脚本的大量字符，允�
 
 在缓冲区中，变量 enable-multibyte-characters 的缓冲区本地值指定使用的表示。  字符串的表示是在构造字符串时确定并记录在字符串中的。
 
-变量：启用多字节字符¶
+#+begin_src emacs-lisp
+  Variable: enable-multibyte-characters ¶
+#+end_src
 
     此变量指定当前缓冲区的文本表示。  如果为非零，则缓冲区包含多字节文本；  否则，它包含单字节编码文本或二进制非文本数据。
 
     您不能直接设置此变量；  相反，使用函数 set-buffer-multibyte 来更改缓冲区的表示。
 
-功能：位置字节位置¶
+#+begin_src emacs-lisp
+  Function: position-bytes position ¶
+#+end_src
 
     缓冲区位置以字符为单位测量。  该函数返回当前缓冲区中缓冲区位置位置对应的字节位置。  这是缓冲区开始时的 1，并以字节为单位向上计数。  如果位置超出范围，则值为 nil。
 
-功能：字节到位置字节位置¶
+#+begin_src emacs-lisp
+  Function: byte-to-position byte-position ¶
+#+end_src
 
     返回与当前缓冲区中给定字节位置相对应的缓冲区位置（以字符为单位）。  如果字节位置超出范围，则值为 nil。  在多字节缓冲区中，字节位置的任意值可以不在字符边界，而是在表示单个字符的多字节序列内；  在这种情况下，该函数返回多字节序列中包含字节位置的字符的缓冲区位置。  换句话说，对于属于同一字符的所有字节位置，该值不会改变。
 
 当 Lisp 程序需要将缓冲区位置映射到缓冲区访问的文件中的字节偏移量时，以下两个函数很有用。
 
-功能：bufferpos-to-filepos位置&可选质量编码系统¶
+#+begin_src emacs-lisp
+  Function: bufferpos-to-filepos position &optional quality coding-system ¶
+#+end_src
 
     此函数类似于 position-bytes，但它不是返回当前缓冲区中的字节位置，而是返回与缓冲区中给定字符位置相对应的字节从当前缓冲区文件开头的偏移量。  转换需要知道文本在缓冲区文件中的编码方式；  这就是 coding-system 参数的用途，默认为 buffer-file-coding-system 的值。  可选参数 quality 指定结果应该有多准确；  它应该是以下之一：
 
-    精确的
+#+begin_src emacs-lisp
+  exact
+#+end_src
 
 	 结果必须准确。  该函数可能需要对大部分缓冲区进行编码和解码，这很昂贵并且可能很慢。
-    近似
+#+begin_src emacs-lisp
+  approximate
+#+end_src
 
 	 该值可以是近似值。  该函数可以避免昂贵的处理并返回不精确的结果。
-    零
+#+begin_src emacs-lisp
+  nil
+#+end_src
 
 	 如果确切的结果需要昂贵的处理，该函数将返回 nil 而不是近似值。  如果参数被省略，这是默认值。
 
-功能：filepos-to-bufferpos byte & optional quality coding-system ¶
+#+begin_src emacs-lisp
+  Function: filepos-to-bufferpos byte &optional quality coding-system ¶
+#+end_src
 
     此函数返回与 byte 指定的文件位置相对应的缓冲区位置，该位置是从文件开头的零基字节偏移量。  该函数执行与 bufferpos-to-filepos 所做的相反的转换。  可选参数 quality 和 coding-system 与 bufferpos-to-filepos 具有相同的含义和值。
 
-功能：多字节字符串-p字符串¶
+#+begin_src emacs-lisp
+  Function: multibyte-string-p string ¶
+#+end_src
 
     如果 string 是多字节字符串，则返回 t，否则返回 nil。  如果 string 是字符串以外的某个对象，此函数也返回 nil。
 
-功能：字符串字节字符串¶
+#+begin_src emacs-lisp
+  Function: string-bytes string ¶
+#+end_src
 
     此函数返回字符串中的字节数。  如果 string 是多字节字符串，则可以大于 (length string)。
 
-功能：unibyte-string &rest bytes ¶
+#+begin_src emacs-lisp
+  Function: unibyte-string &rest bytes ¶
+#+end_src
 
     此函数连接其所有参数字节并使结果成为单字节字符串。
 
@@ -101,23 +123,33 @@ Emacs 根据构造字符串的文本选择字符串的表示形式。  一般规
 
 接下来的两个函数要么返回参数字符串，要么返回一个新创建的没有文本属性的字符串。
 
-功能：字符串到多字节字符串 ¶
+#+begin_src emacs-lisp
+  Function: string-to-multibyte string ¶
+#+end_src
 
     此函数返回一个多字节字符串，其中包含与字符串相同的字符序列。  如果 string 是多字节字符串，则原样返回。  该函数假定字符串仅包含 ASCII 字符和原始 8 位字节；  后者被转换为对应于代码点 #x3FFF80 到 #x3FFFFF 的多字节表示，包括（参见代码点）。
 
-功能：字符串到单字节字符串 ¶
+#+begin_src emacs-lisp
+  Function: string-to-unibyte string ¶
+#+end_src
 
     此函数返回一个包含与字符串相同的字符序列的单字节字符串。  如果字符串包含非 ASCII 字符，它会发出错误信号。  如果 string 是单字节字符串，则原样返回。  将此函数用于仅包含 ASCII 和八位字符的字符串参数。
 
-功能：字节到字符串字节¶
+#+begin_src emacs-lisp
+  Function: byte-to-string byte ¶
+#+end_src
 
     此函数返回一个单字节字符串，其中包含单个字节的字符数据字节。  如果 byte 不是 0 到 255 之间的整数，则会发出错误信号。
 
-功能：多字节字符到单字节字符 ¶
+#+begin_src emacs-lisp
+  Function: multibyte-char-to-unibyte char ¶
+#+end_src
 
     这会将多字节字符 char 转换为单字节字符，并返回该字符。  如果 char 既不是 ASCII 也不是八位，则函数返回 -1。
 
-功能：单字节字符到多字节字符 ¶
+#+begin_src emacs-lisp
+  Function: unibyte-char-to-multibyte char ¶
+#+end_src
 
     这会将单字节字符 char 转换为多字节字符，假设 char 是 ASCII 或原始 8 位字节。
 
@@ -125,7 +157,9 @@ Emacs 根据构造字符串的文本选择字符串的表示形式。  一般规
 
 有时，将现有缓冲区或字符串检查为多字节（当它是单字节时）很有用，反之亦然。
 
-功能：set-buffer-multibyte 多字节 ¶
+#+begin_src emacs-lisp
+  Function: set-buffer-multibyte multibyte ¶
+#+end_src
 
     设置当前缓冲区的表示类型。  如果多字节为非零，则缓冲区变为多字节。  如果多字节为 nil，则缓冲区变为单字节。
 
@@ -137,11 +171,15 @@ Emacs 根据构造字符串的文本选择字符串的表示形式。  一般规
 
     如果缓冲区是间接缓冲区，此函数也会发出错误信号。  间接缓冲区始终继承其基本缓冲区的表示。
 
-功能：字符串作为单字节字符串¶
+#+begin_src emacs-lisp
+  Function: string-as-unibyte string ¶
+#+end_src
 
     如果 string 已经是单字节字符串，则此函数返回 string 本身。  否则，它返回一个与字符串具有相同字节的新字符串，但将每个字节视为一个单独的字符（这样该值可能包含比字符串更多的字符）；  作为一个例外，代表原始字节的每个八位字符都被转换为单个字节。  新创建的字符串不包含文本属性。
 
-功能：字符串作为多字节字符串¶
+#+begin_src emacs-lisp
+  Function: string-as-multibyte string ¶
+#+end_src
 
     如果 string 是多字节字符串，则此函数返回 string 本身。  否则，它返回一个与字符串具有相同字节的新字符串，但将每个多字节序列视为一个字符。  这意味着该值的字符数可能少于字符串的字符数。  如果字符串中的字节序列作为单个字符的多字节表示无效，则序列中的每个字节都被视为原始 8 位字节。  新创建的字符串不包含文本属性。
 
@@ -151,7 +189,9 @@ Emacs 根据构造字符串的文本选择字符串的表示形式。  一般规
 
 Emacs 字符代码是 Unicode 标准的超集。  值 0 到 #x10FFFF (1114111) 对应于同一代码点的 Unicode 字符；  值 #x110000 (1114112) 到 #x3FFF7F (4194175) 表示未与 Unicode 统一的字符；  并且值 #x3FFF80 (4194176) 到 #x3FFFFF (4194303) 表示 8 位原始字节。
 
-功能：characterp charcode ¶
+#+begin_src emacs-lisp
+  Function: characterp charcode ¶
+#+end_src
 
 
     如果 charcode 是有效字符，则返回 t，否则返回 nil。
@@ -169,7 +209,9 @@ Emacs 字符代码是 Unicode 标准的超集。  值 0 到 #x10FFFF (1114111) �
     #+end_src
 
 
-功能：最大字符¶
+#+begin_src emacs-lisp
+  Function: max-char ¶
+#+end_src
 
     此函数返回有效字符代码点可以具有的最大值。
 
@@ -184,7 +226,9 @@ Emacs 字符代码是 Unicode 标准的超集。  值 0 到 #x10FFFF (1114111) �
 
     #+end_src
 
-功能：char-from-name string &optional ignore-case ¶
+#+begin_src emacs-lisp
+  Function: char-from-name string &optional ignore-case ¶
+#+end_src
 
     该函数返回 Unicode 名称为字符串的字符。  如果 ignore-case 不为零，则字符串中的大小写将被忽略。  如果字符串没有命名字符，则此函数返回 nil。
 
@@ -194,7 +238,9 @@ Emacs 字符代码是 Unicode 标准的超集。  值 0 到 #x10FFFF (1114111) �
 	   ⇒ t
     #+end_src
 
-功能：获取字节 & 可选的 pos 字符串 ¶
+#+begin_src emacs-lisp
+  Function: get-byte &optional pos string ¶
+#+end_src
 
     此函数返回当前缓冲区中字符位置 pos 处的字节。  如果当前缓冲区是单字节的，那么这就是该位置的字节。  如果缓冲区是多字节的，则 ASCII 字符的字节值与字符代码点相同，而 8 位原始字节将转换为它们的 8 位代码。  如果 pos 处的字符不是 ASCII，则该函数会发出错误信号。
 
@@ -212,68 +258,110 @@ Emacs 字符代码是 Unicode 标准的超集。  值 0 到 #x10FFFF (1114111) �
 
 这是 Emacs 知道的所有字符属性的值类型的完整列表：
 
-姓名
+#+begin_src emacs-lisp
+  name
+#+end_src
 
     对应于 Name Unicode 属性。  该值是一个字符串，由大写拉丁字母 A 到 Z、数字、空格和连字符“-”字符组成。  对于未分配的代码点，该值为 nil。
-一般类别
+#+begin_src emacs-lisp
+  general-category
+#+end_src
 
     对应于 General_Category Unicode 属性。  该值是一个符号，其名称是字符分类的 2 个字母缩写。  对于未分配的代码点，该值为 Cn。
-规范组合类
+#+begin_src emacs-lisp
+  canonical-combining-class
+#+end_src
 
     对应于 Canonical_Combining_Class Unicode 属性。  该值是一个整数。  对于未分配的代码点，该值为零。
-比迪级
+#+begin_src emacs-lisp
+  bidi-class
+#+end_src
 
     对应于 Unicode Bidi_Class 属性。  该值是一个符号，其名称是字符的 Unicode 方向类型。  Emacs 在重新排序双向文本以进行显示时使用此属性（请参阅双向显示）。  对于未分配的代码点，该值取决于代码点所属的代码块：大多数未分配的代码点获得 L（强 L）的值，但有些获得 AL（阿拉伯字母）或 R（强 R）的值。
-分解
+#+begin_src emacs-lisp
+  decomposition
+#+end_src
 
     对应于 Unicode 属性 Decomposition_Type 和 Decomposition_Value。  该值是一个列表，其第一个元素可以是表示兼容性格式标记的符号，例如small20；  其他元素是给出这个字符的兼容性分解序列的字符。  对于没有分解序列的字符和未分配的代码点，该值是具有单个成员的列表，即字符本身。
-十进制数字值
+#+begin_src emacs-lisp
+  decimal-digit-value
+#+end_src
 
     对应于 Numeric_Type 为“十进制”的字符的 Unicode Numeric_Value 属性。  该值是一个整数，如果字符没有十进制数字值，则为 nil。  对于未分配的代码点，该值为 nil，表示 NaN，或“不是数字”。
-数字值
+#+begin_src emacs-lisp
+  digit-value
+#+end_src
 
     对应于 Numeric_Type 为“Digit”的字符的 Unicode Numeric_Value 属性。  该值是一个整数。  此类字符的示例包括兼容性下标和上标数字，其值为对应的数字。  对于没有任何数值的字符和未分配的代码点，该值为 nil，表示 NaN。
-数值
+#+begin_src emacs-lisp
+  numeric-value
+#+end_src
 
     对应于 Numeric_Type 为“Numeric”的字符的 Unicode Numeric_Value 属性。  此属性的值是一个数字。  具有此属性的字符示例包括分数、下标、上标、罗马数字、货币分子和带圆圈的数字。  例如，字符 U+2155 VULGAR FRACTION ONE FIFTH 的此属性的值为 0.2。  对于没有任何数值的字符和未分配的代码点，该值为 nil，表示 NaN。
-镜像
+#+begin_src emacs-lisp
+  mirrored
+#+end_src
 
     对应于 Unicode Bidi_Mirrored 属性。  此属性的值是一个符号，可以是 Y 或 N。对于未分配的代码点，该值为 N。
-镜像
+#+begin_src emacs-lisp
+  mirroring
+#+end_src
 
     对应于 Unicode Bidi_Mirroring_Glyph 属性。  该属性的值是一个字符，其字形表示该字符字形的镜像，如果没有定义镜像字形，则为 nil。  所有镜像属性为 N 的字符都以 nil 作为其镜像属性；  然而，一些镜像属性为 Y 的字符也有 nil 用于镜像，因为镜像字形不存在合适的字符。  Emacs 使用此属性在适当的时候显示字符的镜像（请参阅双向显示）。  对于未分配的代码点，该值为 nil。
-双括号
+#+begin_src emacs-lisp
+  paired-bracket
+#+end_src
 
     对应于 Unicode Bidi_Paired_Bracket 属性。  此属性的值是字符配对括号的代码点，如果字符不是括号字符，则为 nil。  这在被 Unicode 双向算法视为括号对的字符之间建立了映射；  Emacs 在决定如何重新排序显示括号、大括号和其他类似字符时使用此属性（请参阅双向显示）。
-括号型
+#+begin_src emacs-lisp
+  bracket-type
+#+end_src
 
     对应于 Unicode Bidi_Paired_Bracket_Type 属性。  对于双括号属性为非 nil 的字符，此属性的值是一个符号，o（用于左括号字符）或 c（用于右括号字符）。  对于双括号属性为 nil 的字符，其值为符号 n（无）。  与双括号一样，此属性用于双向显示。
-老字号
+#+begin_src emacs-lisp
+  old-name
+#+end_src
 
     对应于 Unicode Unicode_1_Name 属性。  该值是一个字符串。  对于未分配的代码点和对此属性没有值的字符，该值为 nil。
-iso-10646-评论
+#+begin_src emacs-lisp
+  iso-10646-comment
+#+end_src
 
     对应于 Unicode ISO_Comment 属性。  该值是字符串或 nil。  对于未分配的代码点，该值为 nil。
-大写
+#+begin_src emacs-lisp
+  uppercase
+#+end_src
 
     对应于 Unicode Simple_Uppercase_Mapping 属性。  此属性的值是单个字符。  对于未分配的代码点，该值为 nil，表示字符本身。
-小写
+#+begin_src emacs-lisp
+  lowercase
+#+end_src
 
     对应于 Unicode Simple_Lowercase_Mapping 属性。  此属性的值是单个字符。  对于未分配的代码点，该值为 nil，表示字符本身。
-标题大写
+#+begin_src emacs-lisp
+  titlecase
+#+end_src
 
     对应于 Unicode Simple_Titlecase_Mapping 属性。  标题大小写是当单词的第一个字符需要大写时使用的一种特殊形式的字符。  此属性的值是单个字符。  对于未分配的代码点，该值为 nil，表示字符本身。
-特殊大写
+#+begin_src emacs-lisp
+  special-uppercase
+#+end_src
 
     对应于 Unicode 语言和上下文无关的特殊大写规则。  此属性的值是一个字符串（可能为空）。  例如，U+00DF LATIN SMALL LETTER SHARP S 的映射是“SS”。  对于没有特殊映射的字符，该值为 nil，这意味着需要查询大写属性。
-特殊小写
+#+begin_src emacs-lisp
+  special-lowercase
+#+end_src
 
     对应于 Unicode 语言和上下文无关的特殊小写规则。  此属性的值是一个字符串（可能为空）。  例如，U+0130 LATIN CAPITAL LETTER I WITH DOT ABOVE 的映射值为“i\u0307”（即由拉丁小写字母 I 后跟 U+0307 COMBINING DOT ABOVE 组成的 2 个字符的字符串）。  对于没有特殊映射的字符，该值为 nil，这意味着需要查询小写属性。
-特殊标题
+#+begin_src emacs-lisp
+  special-titlecase
+#+end_src
 
     对应于 Unicode 无条件特殊标题大小写规则。  此属性的值是一个字符串（可能为空）。  例如 U+FB01 LATIN SMALL LIGATURE FI 的映射，其值为“Fi”。  对于没有特殊映射的字符，该值为 nil，这意味着需要查询 titlecase 属性。
 
-功能：get-char-code-property char propname ¶
+#+begin_src emacs-lisp
+  Function: get-char-code-property char propname ¶
+#+end_src
 
     此函数返回 char 的 propname 属性的值。
     #+begin_src emacs-lisp
@@ -308,7 +396,9 @@ iso-10646-评论
     #+end_src
 
 
-功能：char-code-property-description 属性值 ¶
+#+begin_src emacs-lisp
+  Function: char-code-property-description prop value ¶
+#+end_src
 
     此函数返回属性 prop 的值的描述字符串，如果 value 没有描述，则返回 nil。
     #+begin_src emacs-lisp
@@ -324,23 +414,33 @@ iso-10646-评论
 	   ⇒ nil
     #+end_src
 
-功能：put-char-code-property char propname value ¶
+#+begin_src emacs-lisp
+  Function: put-char-code-property char propname value ¶
+#+end_src
 
     此函数将 value 存储为字符 char 的属性 propname 的值。
 
-变量：unicode-category-table ¶
+#+begin_src emacs-lisp
+  Variable: unicode-category-table ¶
+#+end_src
 
     此变量的值是一个字符表（请参阅 Char-Tables），它为每个字符指定其 Unicode General_Category 属性作为符号。
 
-变量：字符脚本表¶
+#+begin_src emacs-lisp
+  Variable: char-script-table ¶
+#+end_src
 
     该变量的值是一个字符表，它为每个字符指定一个符号，其名称是该字符所属的脚本，根据 Unicode 标准将 Unicode 代码空间分类为特定于脚本的块。  这个字符表有一个额外的槽，其值是所有脚本符号的列表。  请注意，Emacs 将字符分类为脚本并不是 Unicode 标准的一对一反映，例如，Unicode 中没有“符号”脚本。
 
-变量：字符宽度表¶
+#+begin_src emacs-lisp
+  Variable: char-width-table ¶
+#+end_src
 
     这个变量的值是一个字符表，它指定每个字符在屏幕上占据的列的宽度。
 
-变量：可打印字符¶
+#+begin_src emacs-lisp
+  Variable: printable-chars ¶
+#+end_src
 
     这个变量的值是一个字符表，它为每个字符指定它是否可打印。  也就是说，如果计算 (aref printable-chars char) 结果为 t，则该字符是可打印的，如果结果为 nil，则不是。
 
@@ -355,59 +455,83 @@ Emacs 字符集或 charset 是一组字符，其中每个字符都分配有一�
 
 Emacs 定义了几个特殊字符集。  字符集 unicode 包括 Emacs 代码点在 0..#x10FFFF 范围内的所有字符。  字符集 emacs 包括所有 ASCII 和非 ASCII 字符。  最后，8 位字符集包括 8 位原始字节；  Emacs 使用它来表示文本中遇到的原始字节。
 
-功能：字符集对象¶
+#+begin_src emacs-lisp
+  Function: charsetp object ¶
+#+end_src
 
     如果 object 是命名字符集的符号，则返回 t，否则返回 nil。
 
-变量：字符集列表¶
+#+begin_src emacs-lisp
+  Variable: charset-list ¶
+#+end_src
 
     该值是所有已定义字符集名称的列表。
 
-功能：charset-priority-list &可选的highestp ¶
+#+begin_src emacs-lisp
+  Function: charset-priority-list &optional highestp ¶
+#+end_src
 
     此函数返回按优先级排序的所有已定义字符集的列表。  如果highestp 不为nil，则函数返回最高优先级的单个字符集。
 
-功能：set-charset-priority &rest charsets ¶
+#+begin_src emacs-lisp
+  Function: set-charset-priority &rest charsets ¶
+#+end_src
 
     此函数使字符集成为最高优先级的字符集。
 
-功能：char-charset字符&可选限制¶
+#+begin_src emacs-lisp
+  Function: char-charset character &optional restriction ¶
+#+end_src
 
     该函数返回该字符所属的最高优先级字符集的名称。  ASCII 字符是一个例外：对于它们，此函数始终返回 ascii。
 
     如果限制不为零，则它应该是要搜索的字符集列表。  或者，它可以是编码系统，在这种情况下，返回的字符集必须由该编码系统支持（请参阅编码系统）。
 
-功能：charset-plist 字符集¶
+#+begin_src emacs-lisp
+  Function: charset-plist charset ¶
+#+end_src
 
     该函数返回字符集字符集的属性列表。  虽然 charset 是一个符号，但这与该符号的属性列表不同。  字符集属性包括有关字符集的重要信息，例如其文档字符串、短名称等。
 
-功能：put-charset-property charset propname value ¶
+#+begin_src emacs-lisp
+  Function: put-charset-property charset propname value ¶
+#+end_src
 
     此函数将 charset 的 propname 属性设置为给定值。
 
-功能：get-charset-property charset propname ¶
+#+begin_src emacs-lisp
+  Function: get-charset-property charset propname ¶
+#+end_src
 
     此函数返回 charsets 属性 propname 的值。
 
-命令：list-charset-chars 字符集¶
+#+begin_src emacs-lisp
+  Command: list-charset-chars charset ¶
+#+end_src
 
     此命令显示字符集 charset 中的字符列表。
 
 Emacs 可以在字符的内部表示和特定字符集中的字符代码点之间进行转换。  以下两个函数支持这些转换。
 
-功能：decode-char 字符集代码点¶
+#+begin_src emacs-lisp
+  Function: decode-char charset code-point ¶
+#+end_src
 
     此函数将在 charset 中分配了代码点的字符解码为相应的 Emacs 字符，并返回它。  如果 charset 不包含该代码点的字符，则值为 nil。
 
     为了向后兼容，如果代码点不适合 Lisp fixnum（请参阅 most-positive-fixnum），可以将其指定为 cons 单元格（high . low），其中 low 是值的低 16 位， high 是高 16 位。  这种用法已经过时了。
 
-功能：encode-char char 字符集 ¶
+#+begin_src emacs-lisp
+  Function: encode-char char charset ¶
+#+end_src
 
     此函数返回分配给 charset 中字符 char 的代码点。  如果 charset 没有 char 的代码点，则值为 nil。
 
 以下函数可用于将某个函数应用于 charset 中的全部或部分字符：
 
-功能：map-charset-chars function charset &optional arg from-code to-code ¶
+#+begin_src emacs-lisp
+  Function: map-charset-chars function charset &optional arg from-code to-code ¶
+#+end_src
 
     字符集中字符的调用函数。  使用两个参数调用函数。  第一个是一个 cons 单元格（从 .to），其中 from 和 to 表示 charset 中包含的字符范围。  传递给函数的第二个参数是 arg，如果省略 arg，则为 nil。
 
@@ -418,17 +542,23 @@ Emacs 可以在字符的内部表示和特定字符集中的字符代码点之�
 
 有时找出特定字符属于哪个字符集很有用。  这样做的一个用途是确定哪些编码系统（参见编码系统）能够表示所有相关文本；  另一个是确定显示该文本的字体。
 
-功能：charset-after &optional pos ¶
+#+begin_src emacs-lisp
+  Function: charset-after &optional pos ¶
+#+end_src
 
     此函数返回最高优先级的字符集，其中包含当前缓冲区中位置 pos 处的字符。  如果 pos 被省略或为零，则默认为 point 的当前值。  如果 pos 超出范围，则值为 nil。
 
-功能：find-charset-region beg end &可选翻译 ¶
+#+begin_src emacs-lisp
+  Function: find-charset-region beg end &optional translation ¶
+#+end_src
 
     此函数返回最高优先级的字符集列表，其中包含当前缓冲区中位置 beg 和 end 之间的字符。
 
     可选参数 translation 指定用于扫描文本的转换表（请参阅字符转换）。  如果它不为 nil，则区域中的每个字符都通过此表进行翻译，返回的值描述了翻译后的字符，而不是缓冲区中实际存在的字符。
 
-功能：查找字符集字符串&可选翻译¶
+#+begin_src emacs-lisp
+  Function: find-charset-string string &optional translation ¶
+#+end_src
 
     此函数返回包含字符串中字符的最高优先级字符集列表。  它就像 find-charset-region 一样，只是它适用于字符串的内容而不是当前缓冲区的一部分。
 
@@ -438,7 +568,9 @@ Emacs 可以在字符的内部表示和特定字符集中的字符代码点之�
 
 一个翻译表有两个额外的插槽。  第一个是 nil 或执行反向翻译的翻译表；  第二个是查找翻译字符序列的最大字符数（请参阅下面的 make-translation-table-from-alist 的描述）。
 
-功能：make-translation-table &rest 翻译 ¶
+#+begin_src emacs-lisp
+  Function: make-translation-table &rest translations ¶
+#+end_src
 
     此函数根据参数翻译返回一个翻译表。  翻译的每个元素都应该是表单元素的列表（从.到）；  这表示将字符从转换为到。
 
@@ -448,27 +580,37 @@ Emacs 可以在字符的内部表示和特定字符集中的字符代码点之�
 
 在编码过程中，翻译表的翻译应用于缓冲区中的字符，翻译的结果实际上是编码的。  如果编码系统具有属性 :encode-translation-table，则指定要使用的翻译表，或者要按顺序应用的翻译表列表。  此外，如果变量standard-translation-table-for-encode 不为nil，它指定用于翻译结果的翻译表。
 
-变量：标准翻译表解码¶
+#+begin_src emacs-lisp
+  Variable: standard-translation-table-for-decode ¶
+#+end_src
 
     这是解码的默认转换表。  如果编码系统指定了它自己的转换表，那么作为该变量值的表（如果非零）将应用在它们之后。
 
-变量：标准翻译表编码¶
+#+begin_src emacs-lisp
+  Variable: standard-translation-table-for-encode ¶
+#+end_src
 
     这是编码的默认转换表。  如果编码系统指定了它自己的转换表，那么作为该变量值的表（如果非零）将应用在它们之后。
 
-变量：输入转换表¶
+#+begin_src emacs-lisp
+  Variable: translation-table-for-input ¶
+#+end_src
 
     自插入字符在插入之前通过此翻译表进行翻译。  搜索命令还通过此表转换其输入，因此它们可以更可靠地与缓冲区中的内容进行比较。
 
     此变量在设置时自动变为缓冲区本地。
 
-功能：从向量生成翻译表 vec ¶
+#+begin_src emacs-lisp
+  Function: make-translation-table-from-vector vec ¶
+#+end_src
 
     此函数返回一个由 vec 制成的转换表，它是一个包含 256 个元素的数组，用于将字节（值 0 到 #xFF）映射到字符。  对于未翻译的字节，元素可能为零。  返回的表在第一个额外槽中有一个用于反向映射的转换表，在第二个额外槽中具有值 1。
 
     此函数提供了一种简单的方法来创建将每个字节映射到特定字符的私有编码系统。  您可以使用属性 :decode-translation-table 和 :encode-translation-table 分别在 define-coding-system 的 props 参数中指定返回表和反向转换表。
 
-功能：make-translation-table-from-alist alist ¶
+#+begin_src emacs-lisp
+  Function: make-translation-table-from-alist alist ¶
+#+end_src
 
     此函数类似于 make-translation-table 但返回一个复杂的转换表而不是简单的一对一映射。  alist 的每个元素都采用 (from . to) 形式，其中 from 和 to 是指定字符序列的字符或向量。  如果 from 是一个字符，则该字符被转换为 to（即，转换为一个字符或一个字符序列）。  如果 from 是字符向量，则将该序列转换为 to。  返回的表在第一个额外槽中有一个用于反向映射的转换表，以及第二个额外槽中所有 from 字符序列的最大长度。
 
@@ -500,7 +642,9 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
 编码系统 utf-8-emacs 指定数据以内部 Emacs 编码表示（请参阅文本表示）。  这就像原始文本一样，没有发生代码转换，但不同之处在于结果是多字节数据。  名称 emacs-internal 是 utf-8-emacs-unix 的别名（因此它不强制转换行尾，不像 utf-8-emacs 可以解码所有 3 种行尾约定） .
 
-功能：编码系统获取编码系统属性¶
+#+begin_src emacs-lisp
+  Function: coding-system-get coding-system property ¶
+#+end_src
 
     该函数返回编码系统编码系统的指定属性。  大多数编码系统属性都是出于内部目的而存在的，但您可能会发现一个有用的属性是 :mime-charset。  该属性的值是 MIME 中用于该编码系统可以读写的字符编码的名称。  例子：
     #+begin_src emacs-lisp
@@ -514,7 +658,9 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     :mime-charset 属性的值也被定义为编码系统的别名。
 
-功能：编码系统别名编码系统¶
+#+begin_src emacs-lisp
+  Function: coding-system-aliases coding-system ¶
+#+end_src
 
     该函数返回编码系统的别名列表。
 
@@ -524,19 +670,25 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
 您可以指定要显式使用的编码系统（请参阅为一个操作指定编码系统），或隐式使用默认机制（请参阅默认编码系统）。  但这些方法可能无法完全指定要做什么。  例如，他们可以选择一种编码系统，例如未决定的，这使得字符代码转换由数据来确定。  在这些情况下，I/O 操作完成了选择编码系统的工作。  很多时候你会想知道选择了哪种编码系统。
 
-变量：缓冲区文件编码系统¶
+#+begin_src emacs-lisp
+  Variable: buffer-file-coding-system ¶
+#+end_src
 
     这个缓冲区局部变量记录了用于保存缓冲区和用 write-region 写入部分缓冲区的编码系统。  如果无法使用此变量指定的编码系统对要写入的文本进行安全编码，则这些操作会通过调用函数 select-safe-coding-system 来选择替代编码（请参阅用户选择的编码系统）。  如果选择不同的编码需要要求用户指定编码系统，则将缓冲区文件编码系统更新为新选择的编码系统。
 
     buffer-file-coding-system 不会影响将文本发送到子进程。
 
-变量：保存缓冲区编码系统¶
+#+begin_src emacs-lisp
+  Variable: save-buffer-coding-system ¶
+#+end_src
 
     此变量指定用于保存缓冲区的编码系统（通过覆盖缓冲区文件编码系统）。  请注意，它不用于写入区域。
 
     当保存缓冲区的命令开始使用缓冲区文件编码系统（或保存缓冲区编码系统）时，该编码系统无法处理缓冲区中的实际文本，该命令要求用户选择另一个编码系统（通过调用 select-safe-coding-system）。  之后，该命令还会更新 buffer-file-coding-system 以表示用户指定的编码系统。
 
-变量：last-coding-system-used ¶
+#+begin_src emacs-lisp
+  Variable: last-coding-system-used ¶
+#+end_src
 
     文件和子进程的 I/O 操作将此变量设置为所使用的编码系统名称。  显式编码和解码功能（请参阅显式编码和解码）也设置了它。
 
@@ -544,7 +696,9 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
 变量 selection-coding-system 指定如何对窗口系统的选择进行编码。  请参阅窗口系统选择。
 
-变量：文件名编码系统¶
+#+begin_src emacs-lisp
+  Variable: file-name-coding-system ¶
+#+end_src
 
     变量 file-name-coding-system 指定用于编码文件名的编码系统。  Emacs 使用该编码系统对所有文件操作的文件名进行编码。  如果 file-name-coding-system 为 nil，则 Emacs 使用由所选语言环境确定的默认编码系统。  在默认语言环境下，文件名中的任何非 ASCII 字符都不会进行特殊编码；  它们使用内部 Emacs 表示出现在文件系统中。
 
@@ -556,19 +710,27 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
 以下是使用编码系统的 Lisp 工具：
 
-功能：coding-system-list &optional base-only ¶
+#+begin_src emacs-lisp
+  Function: coding-system-list &optional base-only ¶
+#+end_src
 
     此函数返回所有编码系统名称（符号）的列表。  如果 base-only 不为零，则该值仅包括基本编码系统。  否则，它还包括别名和变体编码系统。
 
-功能：编码系统-p对象¶
+#+begin_src emacs-lisp
+  Function: coding-system-p object ¶
+#+end_src
 
     如果 object 是编码系统名称或 nil，则此函数返回 t。
 
-功能：检查编码系统编码系统¶
+#+begin_src emacs-lisp
+  Function: check-coding-system coding-system ¶
+#+end_src
 
     此功能检查编码系统的有效性。  如果有效，则返回编码系统。  如果 coding-system 为 nil，则函数返回 nil。  对于任何其他值，它表示一个错误，其错误符号是编码系统错误（见信号）。
 
-功能：coding-system-eol-type 编码系统¶
+#+begin_src emacs-lisp
+  Function: coding-system-eol-type coding-system ¶
+#+end_src
 
     此函数返回编码系统使用的行尾（又名 eol）转换类型。  如果coding-system指定了某种eol转换，则返回值为整数0、1、2，分别代表unix、dos、mac。  如果 coding-system 没有明确指定 eol 转换，则返回值是编码系统的向量，每个编码系统都有一种可能的 eol 转换类型，如下所示：
 
@@ -580,37 +742,51 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     如果这个函数返回一个向量，作为文本编码或解码过程的一部分，Ema​​cs 将决定使用什么 eol 转换。  对于解码，自动检测文本的行尾格式，并设置 eol 转换以匹配它（例如，DOS 样式的 CRLF 格式将暗示 dos eol 转换）。  对于编码，eol 转换取自适当的默认编码系统（例如，缓冲区文件编码系统的缓冲区文件编码系统的默认值），或来自适用于底层平台的默认 eol 转换。
 
-功能：coding-system-change-eol-conversion encoding-system-eol-type ¶
+#+begin_src emacs-lisp
+  Function: coding-system-change-eol-conversion coding-system eol-type ¶
+#+end_src
 
     该函数返回一个编码系统，除了它的 eol 转换由 eol-type 指定外，它类似于coding-system。  eol-type 应该是 unix、dos、mac 或 nil。  如果为 nil，则返回的编码系统确定数据的行尾转换。
 
     eol-type 也可以是 0、1 或 2，分别代表 unix、dos 和 mac。
 
-功能：coding-system-change-text-conversion eol-coding text-coding ¶
+#+begin_src emacs-lisp
+  Function: coding-system-change-text-conversion eol-coding text-coding ¶
+#+end_src
 
     该函数返回使用eol-coding 的行尾转换和text-coding 的文本转换的编码系统。  如果 text-coding 为 nil，则根据 eol-coding 返回未决定的或其变体之一。
 
-功能：从到查找编码系统区域¶
+#+begin_src emacs-lisp
+  Function: find-coding-systems-region from to ¶
+#+end_src
 
     此函数返回一个编码系统列表，可用于对 from 和 to 之间的文本进行编码。  列表中的所有编码系统都可以安全地编码该部分文本中的任何多字节字符。
 
     如果文本不包含多字节字符，则函数返回列表（未确定）。
 
-功能：查找编码系统字符串字符串¶
+#+begin_src emacs-lisp
+  Function: find-coding-systems-string string ¶
+#+end_src
 
     此函数返回可用于对字符串文本进行编码的编码系统列表。  列表中的所有编码系统都可以安全地编码字符串中的任何多字节字符。  如果文本不包含多字节字符，则返回列表（未确定）。
 
-功能：查找编码系统换字符集 字符集 ¶
+#+begin_src emacs-lisp
+  Function: find-coding-systems-for-charsets charsets ¶
+#+end_src
 
     此函数返回可用于对列表字符集中的所有字符集进行编码的编码系统列表。
 
-功能：检查编码系统区域开始结束编码系统列表¶
+#+begin_src emacs-lisp
+  Function: check-coding-systems-region start end coding-system-list ¶
+#+end_src
 
     该函数检查列表 coding-system-list 中的编码系统是否可以对 start 和 end 之间区域中的所有字符进行编码。  如果列表中的所有编码系统都可以对指定文本进行编码，则该函数返回 nil。  如果某些编码系统无法对某些字符进行编码，则该值为 alist，其中每个元素的形式为 (coding-system1 pos1 pos2 ...)，这意味着 coding-system1 无法对缓冲区位置 pos1、pos2、..的字符进行编码。 ..
 
     start 可能是一个字符串，在这种情况下 end 被忽略并且返回值引用字符串索引而不是缓冲区位置。
 
-功能：检测编码区域开始结束&可选最高¶
+#+begin_src emacs-lisp
+  Function: detect-coding-region start end &optional highest ¶
+#+end_src
 
     此函数选择一个合理的编码系统来从头到尾对文本进行解码。  该文本应该是一个字节序列，即只有 ASCII 和八位字符的单字节文本或多字节文本（参见显式编码和解码）。
 
@@ -620,19 +796,27 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     如果该区域包含空字节，则该值为无转换，即使该区域包含在某些编码系统中编码的文本。
 
-功能：检测编码字符串字符串&可选最高¶
+#+begin_src emacs-lisp
+  Function: detect-coding-string string &optional highest ¶
+#+end_src
 
     此函数类似于检测编码区域，只是它对字符串的内容而不是缓冲区中的字节进行操作。
 
-变量：禁止空字节检测¶
+#+begin_src emacs-lisp
+  Variable: inhibit-null-byte-detection ¶
+#+end_src
 
     如果此变量具有非零值，则在检测区域或字符串的编码时会忽略空字节。  这允许正确检测包含空字节的文本编码，例如具有索引节点的信息文件。
 
-变量：抑制等逃逸检测¶
+#+begin_src emacs-lisp
+  Variable: inhibit-iso-escape-detection ¶
+#+end_src
 
     如果此变量具有非零值，则在检测区域或字符串的编码时会忽略 ISO-2022 转义序列。  结果是从未检测到任何文本以某种 ISO-2022 编码进行编码，并且所有转义序列在缓冲区中变得可见。  警告：使用此变量时要格外小心，因为 Emacs 发行版中的许多文件都使用 ISO-2022 编码。
 
-功能：编码系统字符集列表编码系统¶
+#+begin_src emacs-lisp
+  Function: coding-system-charset-list coding-system ¶
+#+end_src
 
     此函数返回编码系统支持的字符集列表（请参阅字符集）。  一些支持太多字符集以列出它们的编码系统都会产生特殊值：
 
@@ -645,7 +829,9 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
 *** TODO 34.10.4 用户选择的编码系统
 
-功能：select-safe-coding-system from to &optional default-coding-system accept-default-p file ¶
+#+begin_src emacs-lisp
+  Function: select-safe-coding-system from to &optional default-coding-system accept-default-p file ¶
+#+end_src
 
     这个函数选择一个编码系统来对指定的文本进行编码，如果需要的话要求用户选择。  通常，指定的文本是当前缓冲区中 from 和 to 之间的文本。  如果 from 是一个字符串，则该字符串指定要编码的文本，to 被忽略。
 
@@ -663,17 +849,23 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     作为最后一步，在返回所选编码系统之前，select-safe-coding-system 检查该编码系统是否与从文件中读取区域内容时将选择的编码系统一致。  （如果不是，这可能会导致随后重新访问和编辑的文件中的数据损坏。）通常， select-safe-coding-system 为此目的使用缓冲区文件名作为文件，但如果文件是非零，它使用该文件代替（这可能与写入区域和类似功能相关）。  如果它检测到明显的不一致，则 select-safe-coding-system 在选择编码系统之前会询问用户。
 
-变量：选择安全编码系统功能¶
+#+begin_src emacs-lisp
+  Variable: select-safe-coding-system-function ¶
+#+end_src
 
     当输出操作的默认编码系统无法安全地编码该文本时，此变量命名要调用的函数以请求用户选择适当的编码系统来编码文本。  此变量的默认值为 select-safe-coding-system。  将文本写入文件（例如 write-region）或将文本发送到其他进程（例如 process-send-region）的 Emacs 原语通常调用此变量的值，除非coding-system-for-write 绑定到非-nil 值（请参阅为一项操作指定编码系统）。
 
 这里有两个函数可以用来让用户指定一个编码系统，并完成。  请参阅完成。
 
-功能：读取编码系统提示&可选默认值¶
+#+begin_src emacs-lisp
+  Function: read-coding-system prompt &optional default ¶
+#+end_src
 
     此函数使用 minibuffer 读取编码系统，以字符串提示进行提示，并将编码系统名称作为符号返回。  如果用户输入空输入，默认指定返回哪个编码系统。  它应该是一个符号或字符串。
 
-功能：读取非零编码系统提示¶
+#+begin_src emacs-lisp
+  Function: read-non-nil-coding-system prompt ¶
+#+end_src
 
     此函数使用 minibuffer 读取编码系统，以字符串提示进行提示，并将编码系统名称作为符号返回。  如果用户尝试输入空输入，它会要求用户再试一次。  请参阅编码系统。
 
@@ -683,11 +875,15 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
 这些变量的想法是您将它们一劳永逸地设置为您想要的默认值，然后不再更改它们。  要为 Lisp 程序中的特定操作指定特定的编码系统，请不要更改这些变量；  相反，使用 coding-system-for-read 和 coding-system-for-write 覆盖它们（请参阅为一个操作指定编码系统）。
 
-用户选项：auto-coding-regexp-alist ¶
+#+begin_src emacs-lisp
+  User Option: auto-coding-regexp-alist ¶
+#+end_src
 
     该变量是文本模式和相应编码系统的列表。  每个元素都有形式 (regexp . coding-system);  前几千字节与正则表达式匹配的文件在其内容被读入缓冲区时使用编码系统进行解码。  此 alist 中的设置优先于编码：文件中的标签和 file-coding-system-alist 的内容（见下文）。  设置默认值是为了让 Emacs 自动识别 Babyl 格式的邮件文件并在不进行代码转换的情况下读取它们。
 
-用户选项：文件编码系统列表¶
+#+begin_src emacs-lisp
+  User Option: file-coding-system-alist ¶
+#+end_src
 
     此变量是一个列表，它指定用于读取和写入特定文件的编码系统。  每个元素都有格式（pattern .coding），其中pattern 是匹配特定文件名的正则表达式。  该元素适用于匹配模式的文件名。
 
@@ -697,11 +893,15 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     如果编码（或上述函数返回的内容）未确定，则执行正常的代码检测。
 
-用户选项：自动编码列表¶
+#+begin_src emacs-lisp
+  User Option: auto-coding-alist ¶
+#+end_src
 
     此变量是一个列表，它指定用于读取和写入特定文件的编码系统。  它的形式类似于 file-coding-system-alist，但与后者不同的是，此变量优先于文件中的任何编码：标签。
 
-变量：过程编码系统列表¶
+#+begin_src emacs-lisp
+  Variable: process-coding-system-alist ¶
+#+end_src
 
     此变量是一个列表，指定子进程使用哪些编码系统，具体取决于子进程中运行的程序。  它的工作方式类似于 file-coding-system-alist，除了该模式与用于启动子进程的程序名称相匹配。  此列表中指定的编码系统用于初始化用于子进程 I/O 的编码系统，但您可以稍后使用 set-process-coding-system 指定其他编码系统。
 
@@ -709,17 +909,23 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
 因此，对于异步子进程，如果可能的话，请使用既确定字符代码转换又确定行尾转换的编码系统——即类似于 latin-1-unix 的编码系统，而不是未定或 latin-1。
 
-变量：网络编码系统列表¶
+#+begin_src emacs-lisp
+  Variable: network-coding-system-alist ¶
+#+end_src
 
     此变量是一个列表，指定用于网络流的编码系统。  它的工作原理很像 file-coding-system-alist，不同之处在于元素中的模式可以是端口号或正则表达式。  如果是正则表达式，则匹配用于打开网络流的网络服务名称。
 
-变量：默认进程编码系统¶
+#+begin_src emacs-lisp
+  Variable: default-process-coding-system ¶
+#+end_src
 
     此变量指定用于子进程（和网络流）输入和输出的编码系统，而没有其他指定要做什么。
 
     该值应该是形式的 cons 单元格（输入编码。输出编码）。  这里输入编码适用于子流程的输入，输出编码适用于它的输出。
 
-用户选项：自动编码功能¶
+#+begin_src emacs-lisp
+  User Option: auto-coding-functions ¶
+#+end_src
 
     该变量包含一个函数列表，这些函数试图根据文件的未解码内容确定文件的编码系统。
 
@@ -729,17 +935,23 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     如果一个文件有一个 'coding:' 标记，它优先，所以这些函数不会被调用。
 
-功能：查找自动编码文件名大小¶
+#+begin_src emacs-lisp
+  Function: find-auto-coding filename size ¶
+#+end_src
 
     此函数尝试为文件名确定合适的编码系统。  它检查访问指定文件的缓冲区，按顺序使用上面记录的变量，直到找到这些变量指定的规则之一的匹配项。  然后它返回一个形式为 (coding.source) 的 cons 单元格，其中 coding 是要使用的编码系统， source 是一个符号，是 auto-coding-alist、auto-coding-regexp-alist、:coding 或 auto 之一-coding-functions，指明是哪一个提供了匹配规则。  值 :coding 表示编码系统由文件中的 coding: 标记指定（参见 GNU Emacs 手册中的编码标记）。  查找匹配规则的顺序是先auto-coding-alist，然后是auto-coding-regexp-alist，然后是coding: tag，最后是auto-coding-functions。  如果没有找到匹配的规则，该函数返回 nil。
 
     第二个参数 size 是文本的大小，以字符为单位，如下点。  该函数仅检查点后大小字符内的文本。  正常情况下，调用这个函数时缓冲区应该定位在开头，因为编码的地方之一： tag 是文件的前一两行；  在这种情况下， size 应该是缓冲区的大小。
 
-功能：设置自动编码文件名大小¶
+#+begin_src emacs-lisp
+  Function: set-auto-coding filename size ¶
+#+end_src
 
     此函数为文件文件名返回一个合适的编码系统。  它使用 find-auto-coding 来查找编码系统。  如果无法确定编码系统，则函数返回 nil。  参数大小的含义类似于 find-auto-coding。
 
-功能：查找操作编码系统操作 &rest 参数 ¶
+#+begin_src emacs-lisp
+  Function: find-operation-coding-system operation &rest arguments ¶
+#+end_src
 
     此函数返回编码系统以使用（默认情况下）执行带参数的操作。  该值具有以下形式：
 
@@ -761,7 +973,9 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
 您可以通过绑定变量 coding-system-for-read 和/或 coding-system-for-write 来指定特定操作的编码系统。
 
-变量：coding-system-for-read ¶
+#+begin_src emacs-lisp
+  Variable: coding-system-for-read ¶
+#+end_src
 
     如果此变量不为 nil，则它指定用于读取文件或来自同步子进程的输入的编码系统。
 
@@ -778,31 +992,43 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     当其值为非零时，此变量优先于所有其他指定用于输入的编码系统的方法，包括 file-coding-system-alist、process-coding-system-alist 和 network-coding-system-alist .
 
-变量：coding-system-for-write ¶
+#+begin_src emacs-lisp
+  Variable: coding-system-for-write ¶
+#+end_src
 
     这很像coding-system-for-read，除了它适用于输出而不是输入。  它影响对文件的写入，以及将输出发送到子进程和网络连接。  它也适用于编码 Emacs 调用子进程的命令行参数。
 
     当单个操作同时进行输入和输出时，就像 call-process-region 和 start-process 一样，coding-system-for-read 和 coding-system-for-write 都会影响它。
 
-变量：编码系统要求警告¶
+#+begin_src emacs-lisp
+  Variable: coding-system-require-warning ¶
+#+end_src
 
     将 coding-system-for-write 绑定到非 nil 值可防止输出原语调用 select-safe-coding-system-function 指定的函数（请参阅用户选择的编码系统）。  这是因为 Cx RET c (universal-coding-system-argument) 通过绑定 coding-system-for-write 工作，Emacs 应该服从用户选择。  如果 Lisp 程序将 coding-system-for-write 绑定到对要写入的文本进行编码可能不安全的值，它还可以将 coding-system-require-warning 绑定到非 nil 值，这将强制输出原语以通过调用 select-safe-coding-system-function 的值来检查编码，即使 coding-system-for-write 不为零。  或者，在使用指定的编码之前显式调用 select-safe-coding-system。
 
-用户选项：禁止-eol-转换¶
+#+begin_src emacs-lisp
+  User Option: inhibit-eol-conversion ¶
+#+end_src
 
     当此变量为非零时，无论指定哪种编码系统，都不会进行行尾转换。  这适用于所有 Emacs I/O 和子进程原语，以及显式编码和解码功能（请参阅显式编码和解码）。
 
 有时，您需要为某些操作选择多个编码系统，而不是修复一个。  Emacs 允许您指定使用编码系统的优先顺序。  这种排序会影响由 find-coding-systems-region 等函数返回的编码系统列表的排序（请参阅 Lisp 中的编码系统）。
 
-功能：coding-system-priority-list &optional highp ¶
+#+begin_src emacs-lisp
+  Function: coding-system-priority-list &optional highestp ¶
+#+end_src
 
     此函数按当前优先级的顺序返回编码系统列表。  可选参数highestp，如果非零，表示只返回最高优先级的编码系统。
 
-功能：设置编码系统优先级和休息编码系统¶
+#+begin_src emacs-lisp
+  Function: set-coding-system-priority &rest coding-systems ¶
+#+end_src
 
     此功能将编码系统置于编码系统优先级列表的开头，从而使其优先级高于其他所有系统。
 
-宏：with-coding-priority coding-systems &rest body ¶
+#+begin_src emacs-lisp
+  Macro: with-coding-priority coding-systems &rest body ¶
+#+end_src
 
     这个宏执行主体，就像 progn 一样（参见 progn），编码系统位于编码系统的优先级列表的前面。  encoding-systems 应该是在执行主体期间首选的编码系统列表。
 
@@ -818,7 +1044,9 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
 以下是执行显式编码或解码的函数。  编码函数产生字节序列；  解码功能旨在对字节序列进行操作。  所有这些函数都会丢弃文本属性。  他们还将 last-coding-system-used 设置为他们使用的精确编码系统。
 
-命令：encode-coding-region start end encoding-system &optional destination ¶
+#+begin_src emacs-lisp
+  Command: encode-coding-region start end coding-system &optional destination ¶
+#+end_src
 
     该命令根据编码系统编码系统从头到尾对文本进行编码。  通常，编码文本会替换缓冲区中的原始文本，但可选参数目标可以改变它。  如果destination 是一个缓冲区，则将编码文本插入到该缓冲区中的点之后（点不移动）；  如果是 t，则该命令将编码文本作为单字节字符串返回，而不插入它。
 
@@ -828,11 +1056,15 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     编码文本时不要使用 undecided 作为编码系统，因为这可能会导致意想不到的结果。  相反，如果编码系统没有明显的相关价值，请使用 select-safe-coding-system（请参阅 select-safe-coding-system）建议合适的编码。
 
-功能：encode-coding-string string coding-system &optional nocopy buffer ¶
+#+begin_src emacs-lisp
+  Function: encode-coding-string string coding-system &optional nocopy buffer ¶
+#+end_src
 
     该函数根据编码系统编码系统对字符串中的文本进行编码。  它返回一个包含编码文本的新字符串，除非 nocopy 为非零，在这种情况下，如果编码操作很简单，函数可能会返回字符串本身。  编码的结果是一个单字节字符串。
 
-命令：decode-coding-region start end coding-system &optional destination ¶
+#+begin_src emacs-lisp
+  Command: decode-coding-region start end coding-system &optional destination ¶
+#+end_src
 
     该命令根据编码系统编码系统从头到尾对文本进行解码。  为了使显式解码有用，解码前的文本应该是字节值序列，但多字节和单字节缓冲区都是可接受的（在多字节情况下，原始字节值应表示为八位字符）。  通常，解码后的文本会替换缓冲区中的原始文本，但可选参数目标可以改变这一点。  如果destination是一个缓冲区，则解码后的文本将插入到该缓冲区中的点之后（点不移动）；  如果是 t，则命令将解码后的文本作为多字节字符串返回，而不插入它。
 
@@ -842,7 +1074,9 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     如有必要，此命令会检测文本的编码。  如果 encoding-system 未确定，该命令会根据它在文本中找到的字节序列检测文本的编码，并且还会检测文本使用的行尾约定的类型（参见 eol 类型）。  如果 coding-system 是 undecided-eol-type，其中 eol-type 是 unix、dos 或 mac，则该命令仅检测文本的编码。  任何未指定 eol-type 的编码系统，如 utf-8，都会导致命令检测行尾约定；  完全指定编码，如在 utf-8-unix 中，如果预先知道文本使用的 EOL 约定，以防止任何自动检测。
 
-功能：decode-coding-string string coding-system &optional nocopy buffer ¶
+#+begin_src emacs-lisp
+  Function: decode-coding-string string coding-system &optional nocopy buffer ¶
+#+end_src
 
     该函数根据编码系统对字符串中的文本进行解码。  它返回一个包含解码文本的新字符串，除非 nocopy 为非零，在这种情况下，如果解码操作很简单，函数可能会返回字符串本身。  为了使显式解码有用，字符串的内容应该是具有一系列字节值的单字节字符串，但多字节字符串也是可以接受的（假设它包含多字节形式的 8 位字节）。
 
@@ -856,7 +1090,9 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 	   ⇒ #("Grüss Gott" 0 9 (charset iso-8859-1))
     #+end_src
 
-功能：decode-coding-inserted-region from to filename & optional visit beg end replace ¶
+#+begin_src emacs-lisp
+  Function: decode-coding-inserted-region from to filename &optional visit beg end replace ¶
+#+end_src
 
     此函数将文本从 from 解码到 to ，就好像它是使用 insert-file-contents 使用提供的其余参数从文件文件名中读取的一样。
 
@@ -866,19 +1102,27 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
 Emacs 可以使用编码系统来解码键盘输入和编码终端输出。  这对于使用特定编码（例如 Latin-1）传输或显示文本的终端很有用。  Emacs 在编码或解码终端 I/O 时没有设置 last-coding-system-used。
 
-功能：键盘编码系统&可选终端¶
+#+begin_src emacs-lisp
+  Function: keyboard-coding-system &optional terminal ¶
+#+end_src
 
     此函数返回用于解码终端键盘输入的编码系统。  no-conversion 值表示不进行解码。  如果终端省略或为零，则表示所选帧的终端。  请参阅多个终端。
 
-命令：set-keyboard-coding-system coding-system &optional terminal ¶
+#+begin_src emacs-lisp
+  Command: set-keyboard-coding-system coding-system &optional terminal ¶
+#+end_src
 
     该命令将 coding-system 指定为用于解码来自终端的键盘输入的编码系统。  如果 coding-system 为 nil，则意味着不对键盘输入进行解码。  如果终端是一个框架，则表示该框架的终端；  如果为 nil，则表示当前选择的帧的终端。  请参阅多个终端。  请注意，在现代 MS-Windows 系统上，Emacs 在解码键盘输入时始终使用 Unicode 输入，因此该命令设置的编码对 Windows 没有影响。
 
-功能：终端编码系统&可选终端¶
+#+begin_src emacs-lisp
+  Function: terminal-coding-system &optional terminal ¶
+#+end_src
 
     此函数返回用于对终端的终端输出进行编码的编码系统。  no-conversion 值表示不进行编码。  如果终端是一个框架，则表示该框架的终端；  如果为 nil，则表示当前选择的帧的终端。
 
-命令：set-terminal-coding-system coding-system &optional terminal ¶
+#+begin_src emacs-lisp
+  Command: set-terminal-coding-system coding-system &optional terminal ¶
+#+end_src
 
     此命令将 coding-system 指定为用于对终端输出进行编码的编码系统。  如果 coding-system 为 nil，则意味着不对终端输出进行编码。  如果终端是一个框架，则表示该框架的终端；  如果为 nil，则表示当前选择的帧的终端。
 
@@ -889,25 +1133,35 @@ Emacs 可以使用编码系统来解码键盘输入和编码终端输出。  这
 
 每个输入法都有一个名字，目前是一个字符串；  将来，符号也可以用作输入法名称。
 
-变量：当前输入方法¶
+#+begin_src emacs-lisp
+  Variable: current-input-method ¶
+#+end_src
 
     此变量保存当前缓冲区中现在处于活动状态的输入法的名称。  （当以任何方式设置时，它会在每个缓冲区中自动变为本地。）如果现在缓冲区中没有输入法处于活动状态，则为 nil。
 
-用户选项：默认输入方法¶
+#+begin_src emacs-lisp
+  User Option: default-input-method ¶
+#+end_src
 
     此变量保存选择输入法的命令的默认输入法。  与 current-input-method 不同，此变量通常是全局的。
 
-命令：set-input-method 输入法 ¶
+#+begin_src emacs-lisp
+  Command: set-input-method input-method ¶
+#+end_src
 
     此命令激活当前缓冲区的输入法输入法。  它还将默认输入方法设置为输入方法。  如果 input-method 为 nil，则此命令停用当前缓冲区的任何输入法。
 
-功能：read-input-method-name prompt &optional default inhibitor-null ¶
+#+begin_src emacs-lisp
+  Function: read-input-method-name prompt &optional default inhibit-null ¶
+#+end_src
 
     该函数使用 minibuffer 读取输入法名称，以 prompt 提示。  如果默认为非零，则默认返回，如果用户输入空输入。  但是，如果 inhibitor-null 不为零，则空输入表示错误。
 
     返回值是一个字符串。
 
-变量：输入方法列表¶
+#+begin_src emacs-lisp
+  Variable: input-method-alist ¶
+#+end_src
 
     这个变量定义了所有支持的输入法。  每个元素定义一个输入法，并且应该具有以下形式：
 
@@ -928,32 +1182,48 @@ Emacs 可以使用编码系统来解码键盘输入和编码终端输出。  这
 
 在 POSIX 中，语言环境控制在与语言相关的功能中使用哪种语言。  这些 Emacs 变量控制 Emacs 如何与这些功能交互。
 
-变量：语言环境编码系统¶
+#+begin_src emacs-lisp
+  Variable: locale-coding-system ¶
+#+end_src
 
     此变量指定用于解码系统错误消息和（仅在 X Window 系统上）键盘输入、将批处理输出发送到标准输出和错误流、将格式参数编码为 format-time-string 以及解码格式时间字符串的返回值。
 
-变量：系统消息语言环境¶
+#+begin_src emacs-lisp
+  Variable: system-messages-locale ¶
+#+end_src
 
     此变量指定用于生成系统错误消息的语言环境。  更改区域设置可能会导致消息以不同的语言或不同的拼写形式出现。  如果变量为 nil，则区域设置由环境变量以通常的 POSIX 方式指定。
 
-变量：系统时间语言环境¶
+#+begin_src emacs-lisp
+  Variable: system-time-locale ¶
+#+end_src
 
     此变量指定用于格式化时间值的语言环境。  更改区域设置可能会导致消息根据不同语言的约定显示。  如果变量为 nil，则区域设置由环境变量以通常的 POSIX 方式指定。
 
-功能：语言环境信息项¶
+#+begin_src emacs-lisp
+  Function: locale-info item ¶
+#+end_src
 
     如果可用，此函数返回当前 POSIX 语言环境的语言环境数据项。  item 应该是以下符号之一：
 
-    代码集
+#+begin_src emacs-lisp
+  codeset
+#+end_src
 
 	 将字符集作为字符串返回（语言环境项 CODESET）。
-    天
+#+begin_src emacs-lisp
+  days
+#+end_src
 
 	 返回日期名称的 7 元素向量（区域设置项 DAY_1 到 DAY_7）；
-    月
+#+begin_src emacs-lisp
+  months
+#+end_src
 
 	 返回包含月份名称的 12 元素向量（区域设置项目 MON_1 到 MON_12）。
-    纸
+#+begin_src emacs-lisp
+  paper
+#+end_src
 
 	 返回一个包含 2 个整数的列表（宽度高度），默认纸张尺寸以毫米为单位（语言环境项目 _NL_PAPER_WIDTH 和 _NL_PAPER_HEIGHT）。
 
