@@ -271,32 +271,32 @@
 
 
 ** 13 函数
-   | Content                             | S1   | S2 | S3 |
-   | 13.1 什么是函数？                   | DONE |    |    |
-   | 13.2 Lambda 表达式                  | DONE |    |    |
-   | 13.2.1 Lambda 表达式的组成部分      | DONE |    |    |
-   | 13.2.2 一个简单的 Lambda 表达式示例 | DONE |    |    |
-   | 13.2.3 参数列表的特点               | DONE |    |    |
-   | 13.2.4 函数的文档字符串             | DONE |    |    |
-   | 13.3 命名函数                       | DONE |    |    |
-   | 13.4 定义函数                       | DONE |    |    |
-   | 13.5 调用函数                       | DONE |    |    |
-   | 13.6 映射函数                       | DONE |    |    |
-   | 13.7 匿名函数                       | DONE |    |    |
-   | 13.8 泛型函数                       | DONE |    |    |
-   | 13.9 访问函数单元格内容             | DONE |    |    |
-   | 13.10 闭包                          | DONE |    |    |
-   | 13.11 建议 Emacs Lisp 函数          | DONE |    |    |
-   | 13.11.1 操纵建议的原语              | DONE |    |    |
-   | 13.11.2 建议命名函数                | DONE |    |    |
-   | 13.11.3 编写建议的方法              | DONE |    |    |
-   | 13.11.4 使用旧的 defadvice 适配代码 | DONE |    |    |
-   | 13.12 声明过时的函数                | DONE |    |    |
-   | 13.13 内联函数                      | DONE |    |    |
-   | 13.14 declare形式                   | DONE |    |    |
-   | 13.15 告诉编译器定义了一个函数      | DONE |    |    |
-   | 13.16 判断一个函数是否可以安全调用  | DONE |    |    |
-   | 13.17 其他与函数相关的话题          | DONE |    |    |
+   | Content                             | S1   | S2   | S3 |
+   | 13.1 什么是函数？                   | DONE | DONE |    |
+   | 13.2 Lambda 表达式                  | DONE | DONE |    |
+   | 13.2.1 Lambda 表达式的组成部分      | DONE | DONE |    |
+   | 13.2.2 一个简单的 Lambda 表达式示例 | DONE | DONE |    |
+   | 13.2.3 参数列表的特点               | DONE | DONE |    |
+   | 13.2.4 函数的文档字符串             | DONE | DONE |    |
+   | 13.3 命名函数                       | DONE | DONE |    |
+   | 13.4 定义函数                       | DONE | DONE |    |
+   | 13.5 调用函数                       | DONE | DONE |    |
+   | 13.6 映射函数                       | DONE | DONE |    |
+   | 13.7 匿名函数                       | DONE | DONE |    |
+   | 13.8 泛型函数                       | DONE | DONE |    |
+   | 13.9 访问函数单元格内容             | DONE | DONE |    |
+   | 13.10 闭包                          | DONE | DONE |    |
+   | 13.11 建议 Emacs Lisp 函数          | DONE | DONE |    |
+   | 13.11.1 操纵建议的原语              | DONE | DONE |    |
+   | 13.11.2 建议命名函数                | DONE | DONE |    |
+   | 13.11.3 编写建议的方法              | DONE | DONE |    |
+   | 13.11.4 使用旧的 defadvice 适配代码 | DONE | DONE |    |
+   | 13.12 声明过时的函数                | DONE | DONE |    |
+   | 13.13 内联函数                      | DONE | DONE |    |
+   | 13.14 declare形式                   | DONE | DONE |    |
+   | 13.15 告诉编译器定义了一个函数      | DONE | DONE |    |
+   | 13.16 判断一个函数是否可以安全调用  | DONE | DONE |    |
+   | 13.17 其他与函数相关的话题          | DONE | DONE |    |
 
 
 ** 14 宏

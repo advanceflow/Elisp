@@ -15,44 +15,65 @@ Lisp 程序主要由 Lisp 函数组成。  本章解释什么是函数，它们�
 
 以下是函数和类函数对象的重要术语：
 
-拉姆达表达式
+#+begin_src emacs-lisp
+  lambda expression
+#+end_src
 
     用 Lisp 编写的函数（严格意义上，即函数对象）。  这些将在下一节中描述。  请参阅 Lambda 表达式。
-原语¶
+#+begin_src emacs-lisp
+  primitive ¶
+#+end_src
 
     一个可从 Lisp 调用但实际上是用 C 编写的函数。基元也称为内置函数或 subrs。  示例包括 car 和 append 等函数。  此外，所有特殊形式（见下文）也被视为原语。
 
     通常，函数被实现为原语，因为它是 Lisp 的基本部分（例如，汽车），或者因为它为操作系统服务提供低级接口，或者因为它需要快速运行。  与 Lisp 中定义的函数不同，只能通过更改 C 源代码和重新编译 Emacs 来修改或添加原语。  请参阅编写 Emacs 基元。
-特殊形式
+#+begin_src emacs-lisp
+  special form
+#+end_src
 
     类似于函数但不以通常方式评估其所有参数的原语。  它可能只评估一些参数，或者可能以不寻常的顺序或多次评估它们。  示例包括 if、and 和 while。  见特殊表格。
-宏¶
+#+begin_src emacs-lisp
+  macro
+#+end_src
 
     Lisp 中定义的构造，它与函数的不同之处在于它将 Lisp 表达式转换为另一个要计算的表达式，而不是原始表达式。  宏使 Lisp 程序员可以做特殊形式可以做的事情。  请参阅宏。
-命令 ¶
+#+begin_src emacs-lisp
+  command ¶
+#+end_src
 
     可以通过命令执行原语调用的对象，通常是由于用户键入绑定到该命令的键序列。  请参阅交互式呼叫。  一个命令通常是一个函数；  如果函数是用 Lisp 编写的，则在函数定义中通过交互形式将其制成命令（参见定义命令）。  作为函数的命令也可以从 Lisp 表达式中调用，就像其他函数一样。
 
     键盘宏（字符串和向量）也是命令，即使它们不是函数。  请参阅键盘宏。  如果一个符号的功能单元包含一个命令，我们就说它是一个命令（参见符号组件）；  可以使用 Mx 调用这样的命名命令。
-关闭
+
+#+begin_src emacs-lisp
+  closure
+#+end_src
 
     一个与 lambda 表达式非常相似的函数对象，不同之处在于它还包含了一个词法变量绑定的环境。  请参阅闭包。
-字节码函数
+#+begin_src emacs-lisp
+  byte-code function
+#+end_src
 
     已由字节编译器编译的函数。  请参阅字节码函数类型。
-自动加载对象¶
+#+begin_src emacs-lisp
+  autoload object ¶
+#+end_src
 
     实际功能的占位符。  如果调用了自动加载对象，Emacs 会加载包含真实函数定义的文件，然后调用真实函数。  请参阅自动加载。
 
 您可以使用函数 functionp 来测试一个对象是否是一个函数：
 
-函数：函数对象 ¶
+#+begin_src emacs-lisp
+  Function: functionp object ¶
+#+end_src
 
     如果 object 是任何类型的函数，即可以传递给 funcall，则此函数返回 t。  请注意，对于作为函数名称的符号，functionp 返回 t，对于特殊形式返回 nil。
 
 还可以找出任意函数需要多少个参数：
 
-功能：func-arity 函数¶
+#+begin_src emacs-lisp
+  Function: func-arity function ¶
+#+end_src
 
     此函数提供有关指定函数的参数列表的信息。  返回值是 (min . max) 形式的 cons 单元格，其中 min 是参数的最小数量，max 是参数的最大数量，或者是带有 &rest 参数的函数的符号 many，或者符号 unevalled if函数是一种特殊形式。
 
@@ -64,7 +85,9 @@ Lisp 程序主要由 Lisp 函数组成。  本章解释什么是函数，它们�
 
 与 functionp 不同，接下来的三个函数不将符号视为其函数定义。
 
-功能：subrp 对象 ¶
+#+begin_src emacs-lisp
+  Function: subrp object ¶
+#+end_src
 
     如果 object 是内置函数（即 Lisp 原语），则此函数返回 t。
     #+begin_src emacs-lisp
@@ -75,7 +98,9 @@ Lisp 程序主要由 Lisp 函数组成。  本章解释什么是函数，它们�
 	   ⇒ t
     #+end_src
 
-函数：字节码函数-p 对象¶
+#+begin_src emacs-lisp
+  Function: byte-code-function-p object ¶
+#+end_src
 
     如果 object 是字节码函数，则此函数返回 t。  例如：
     #+begin_src emacs-lisp
@@ -83,7 +108,9 @@ Lisp 程序主要由 Lisp 函数组成。  本章解释什么是函数，它们�
 	   ⇒ t
     #+end_src
 
-功能：subr-arity subr ¶
+#+begin_src emacs-lisp
+  Function: subr-arity subr ¶
+#+end_src
 
     这类似于 func-arity，但仅适用于内置函数并且没有符号间接。  它表示非内置函数的错误。  我们建议改用 func-arity。
 
@@ -243,7 +270,9 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。  
 
 我们通常在首次创建函数时为其命名。  这称为定义函数，我们通常使用 defun 宏来完成。  本节还介绍了定义函数的其他方法。
 
-宏：defun name args [doc] [declare] [interactive] body... ¶
+#+begin_src emacs-lisp
+  Macro: defun name args [doc] [declare] [interactive] body… ¶
+#+end_src
 
     defun 是定义新的 Lisp 函数的常用方法。  它将符号名称定义为具有参数列表 args 的函数（请参阅参数列表的特征）和 body 给出的主体形式。  name 和 args 都不应该被引用。
 
@@ -283,7 +312,9 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。  
 
     注意不要无意中重新定义现有功能。  defun 甚至毫不犹豫地重新定义了汽车等原始功能。  Emacs 不会阻止你这样做，因为重新定义一个函数有时是故意的，没有办法区分故意的重新定义和无意的重新定义。
 
-功能：defalias 名称定义&可选文档¶
+#+begin_src emacs-lisp
+  Function: defalias name definition &optional doc ¶
+#+end_src
 
     该函数将符号名称定义为一个函数，带有定义定义（可以是任何有效的 Lisp 函数）。  它的返回值是未定义的。
 
@@ -309,7 +340,9 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。  
 
 当您在程序中将列表编写为表达式时，您可以在程序的文本中指定要调用的函数以及要为其提供多少参数。  通常这正是你想要的。  有时您需要在运行时计算要调用的函数。  为此，请使用函数 funcall。  当您还需要在运行时确定要传递多少个参数时，请使用 apply。
 
-函数：funccall 函数 &rest 参数 ¶
+#+begin_src emacs-lisp
+  Function: funcall function &rest arguments ¶
+#+end_src
 
     funcall 使用参数调用函数，并返回函数返回的任何内容。
 
@@ -337,7 +370,9 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。  
 
     将这些示例与 apply 的示例进行比较。
 
-函数：应用函数 &rest 参数¶
+#+begin_src emacs-lisp
+  Function: apply function &rest arguments ¶
+#+end_src
 
     apply 使用参数调用函数，就像 funcall 但有一个区别：最后一个参数是对象列表，它们作为单独的参数而不是单个列表传递给函数。  我们说 apply 扩展这个列表，以便每个单独的元素成为一个参数。
 
@@ -345,8 +380,6 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。  
 
     apply 返回调用函数的结果。  与 funcall 一样，函数必须是 Lisp 函数或原始函数；  特殊形式和宏在 apply 中没有意义。
     #+begin_src emacs-lisp
-
-
       (setq f 'list)
 	   ⇒ list
 
@@ -374,7 +407,9 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。  
 
 以下是如何在 Emacs Lisp 中执行部分应用程序：
 
-功能：部分应用 func &rest args ¶
+#+begin_src emacs-lisp
+  Function: apply-partially func &rest args ¶
+#+end_src
 
     此函数返回一个新函数，当调用该函数时，将调用 func 并使用由 args 和调用时指定的附加参数组成的参数列表。  如果 func 接受 n 个参数，那么使用 m <= n 个参数调用 apply-partially 将产生一个具有 n - m 个参数的新函数12。
 
@@ -392,15 +427,21 @@ Lisp 函数通常接受函数作为参数或在数据结构中找到它们（尤
 
 有时，当您调用函数时，提供一个无操作函数作为参数很有用。  这里有两种不同的无操作函数：
 
-功能：身份参数¶
+#+begin_src emacs-lisp
+  Function: identity argument ¶
+#+end_src
 
     此函数返回参数并且没有副作用。
 
-功能：忽略 &rest 参数 ¶
+#+begin_src emacs-lisp
+  Function: ignore &rest arguments ¶
+#+end_src
 
     此函数忽略任何参数并返回 nil。
 
-功能：总是 &rest 参数 ¶
+#+begin_src emacs-lisp
+  Function: always &rest arguments ¶
+#+end_src
 
     此函数忽略任何参数并返回 t。
 
@@ -422,7 +463,9 @@ Lisp 函数通常接受函数作为参数或在数据结构中找到它们（尤
 
 这些映射函数不允许使用字符表，因为字符表是一个稀疏数组，其标称索引范围非常大。  要以适当处理其稀疏性质的方式映射 char-table，请使用函数 map-char-table（请参阅 Char-Tables）。
 
-功能：mapcar功能序列¶
+#+begin_src emacs-lisp
+  Function: mapcar function sequence ¶
+#+end_src
 
     mapcar 依次对序列的每个元素应用函数，并返回结果列表。
 
@@ -459,7 +502,9 @@ Lisp 函数通常接受函数作为参数或在数据结构中找到它们（尤
 	   ⇒ ((a . 1) (b . 2) (c . 3))
     #+end_src
 
-功能：mapcan函数序列¶
+#+begin_src emacs-lisp
+  Function: mapcan function sequence ¶
+#+end_src
 
     此函数将函数应用于序列的每个元素，如 mapcar，但不是将结果收集到列表中，而是通过更改结果（使用 nconc;请参阅重新排列列表的函数）。  与 mapcar 一样，序列可以是除字符表之外的任何类型。
 
@@ -472,11 +517,15 @@ Lisp 函数通常接受函数作为参数或在数据结构中找到它们（尤
 	   ⇒ (a b c d)
     #+end_src
 
-功能：mapc函数序列¶
+#+begin_src emacs-lisp
+  Function: mapc function sequence ¶
+#+end_src
 
     mapc 与 mapcar 类似，只是该函数仅用于副作用——它返回的值被忽略，而不是收集到列表中。  mapc 总是返回序列。
 
-功能：mapconcat函数序列分隔符¶
+#+begin_src emacs-lisp
+  Function: mapconcat function sequence separator ¶
+#+end_src
 
     mapconcat 将函数应用于序列的每个元素；  结果，必须是字符序列（字符串、向量或列表），被连接成单个字符串返回值。  在每对结果序列之间，mapconcat 从分隔符插入字符，分隔符也必须是字符串、向量或字符列表。  请参阅序列、数组和向量。
 
@@ -500,7 +549,9 @@ Lisp 函数通常接受函数作为参数或在数据结构中找到它们（尤
 
 在定义用作匿名函数的 lambda 表达式时，原则上可以使用任何方法来构造列表。  但通常你应该使用 lambda 宏，或者特殊形式的函数，或者 #' 读取语法：
 
-宏：lambda args [doc] [interactive] body… ¶
+#+begin_src emacs-lisp
+  Macro: lambda args [doc] [interactive] body… ¶
+#+end_src
 
     此宏返回一个匿名函数，其中包含参数列表 args、文档字符串 doc（如果有）、交互式规范交互（如果有）和 body 给出的正文形式。
 
@@ -515,7 +566,9 @@ Lisp 函数通常接受函数作为参数或在数据结构中找到它们（尤
 
     lambda 形式还有另一个效果：它通过将函数用作子例程（见下文）告诉 Emacs 求值器和字节编译器它的参数是一个函数。
 
-特殊形式：function function-object ¶
+#+begin_src emacs-lisp
+  Special Form: function function-object ¶
+#+end_src
 
     这种特殊形式返回函数对象而不对其进行评估。  在这方面，它类似于引用（参见引用）。  但与引用不同的是，它还可以作为 Emacs 评估器和字节编译器的注释，说明函数对象旨在用作函数。  假设 function-object 是一个有效的 lambda 表达式，这有两个效果：
 
@@ -570,34 +623,52 @@ Emacs 提供对多态性的支持。  与其他 Lisp 环境一样，尤其是 Co
 
 调用泛型函数时，它通过将调用者传递的实际参数与每个方法的参数专用器进行比较来选择适用的方法。  如果调用的实际参数与方法的专用程序兼容，则该方法适用。  如果有不止一种方法适用，则使用某些规则将它们组合在一起，如下所述，然后组合处理调用。
 
-宏：cl-defgeneric name arguments [documentation] [options-and-methods…] &rest body ¶
+#+begin_src emacs-lisp
+  Macro: cl-defgeneric name arguments [documentation] [options-and-methods…] &rest body ¶
+#+end_src
 
     此宏定义具有指定名称和参数的通用函数。  如果 body 存在，它提供默认实现。  如果存在文档（应该总是存在），它会以 (:documentation docstring) 的形式指定通用函数的文档字符串。  可选的选项和方法可以是以下形式之一：
 
-    （声明声明）
+#+begin_src emacs-lisp
+  (:method [qualifiers…] args &rest body)
+#+end_src
 
 	 声明表格，如声明表格中所述。
-    (:argument-precedence-order &rest args)
+#+begin_src emacs-lisp
+  (:argument-precedence-order &rest args)
+#+end_src
 
 	 这种形式会影响组合适用方法的排序顺序。  通常，在组合过程中比较两个方法时，从左到右检查方法参数，并且参数专门化器更具体的第一个方法将排在另一个之前。  这种形式定义的顺序会覆盖它，并且根据它们在这种形式中的顺序检查参数，而不是从左到右。
-    (:method [qualifiers...] args &rest body)
+#+begin_src emacs-lisp
+  (:method [qualifiers…] args &rest body)
+#+end_src
 
 	 这种形式定义了一个类似 cl-defmethod 的方法。
 
-宏：cl-defmethod name [extra] [qualifier] arguments [&context (expr spec)…] &rest [docstring] body ¶
+#+begin_src emacs-lisp
+  Macro: cl-defmethod name [extra] [qualifier] arguments [&context (expr spec)…] &rest [docstring] body ¶
+#+end_src
 
     该宏定义了名为 name 的通用函数的特定实现。  实现代码由 body 给出。  如果存在，则 docstring 是该方法的文档字符串。  参数列表在实现泛型函数的所有方法中必须相同，并且必须与该函数的参数列表匹配，提供形式为 (arg spec) 的参数专用器，其中 arg 是在 cl 中指定的参数名称-defgeneric 调用，而 spec 是以下特殊形式之一：
 
-    类型
+#+begin_src emacs-lisp
+  type
+#+end_src
 
 	 此专用程序要求参数为给定类型，是下面描述的类型层次结构中的类型之一。
-    (eql 对象)
+#+begin_src emacs-lisp
+  (eql object)
+#+end_src
 
 	 此专门工具要求参数是给定对象的 eql。
-    （头部对象）
+#+begin_src emacs-lisp
+  (head object)
+#+end_src
 
 	 参数必须是一个 cons 单元格，其 car 是 eql 到 object。
-    结构类型
+#+begin_src emacs-lisp
+  struct-type
+#+end_src
 
 	 参数必须是使用 cl-defstruct 定义的名为 struct-type 的类的实例（请参阅 GNU Emacs Lisp 的 Common Lisp Extensions 中的结构）或其子类之一。
 
@@ -605,63 +676,119 @@ Emacs 提供对多态性的支持。  与其他 Lisp 环境一样，尤其是 Co
 
     类型专用器 (arg type) 可以指定以下列表中的系统类型之一。  当指定父类型时，类型是其更具体的子类型中的任何一个的参数，以及孙子、孙子孙等也将是兼容的。
 
-    整数
+#+begin_src emacs-lisp
+  integer
+#+end_src
 
 	 父类型：数字。
-    数字
-    空值
+#+begin_src emacs-lisp
+  number
+#+end_src
+#+begin_src emacs-lisp
+  null
+#+end_src
 
 	 父类型：符号
-    象征
-    细绳
+#+begin_src emacs-lisp
+  symbol
+#+end_src
+#+begin_src emacs-lisp
+  string
+#+end_src
 
 	 父类型：数组。
-    大批
+#+begin_src emacs-lisp
+  array
+#+end_src
 
 	 父类型：序列。
-    缺点
+#+begin_src emacs-lisp
+  cons
+#+end_src
 
 	 父类型：列表。
-    列表
+#+begin_src emacs-lisp
+  list
+#+end_src
 
 	 父类型：序列。
-    标记
-    覆盖
-    漂浮
+#+begin_src emacs-lisp
+  marker
+#+end_src
+#+begin_src emacs-lisp
+  overlay
+#+end_src
+#+begin_src emacs-lisp
+  float
+#+end_src
 
 	 父类型：数字。
-    窗口配置
-    过程
-    窗户
-    子
-    编译函数
-    缓冲
-    图表
+#+begin_src emacs-lisp
+  window-configuration
+#+end_src
+#+begin_src emacs-lisp
+  process
+#+end_src
+#+begin_src emacs-lisp
+  window
+#+end_src
+#+begin_src emacs-lisp
+  subr
+#+end_src
+#+begin_src emacs-lisp
+  compiled-function
+#+end_src
+#+begin_src emacs-lisp
+  buffer
+#+end_src
+#+begin_src emacs-lisp
+  char-table
+#+end_src
 
 	 父类型：数组。
-    布尔向量
+#+begin_src emacs-lisp
+  bool-vector
+#+end_src
 
 	 父类型：数组。
-    向量
+#+begin_src emacs-lisp
+  vector
+#+end_src
 
 	 父类型：数组。
-    框架
-    哈希表
-    字体规范
-    字体实体
-    字体对象
+#+begin_src emacs-lisp
+  frame
+#+end_src
+#+begin_src emacs-lisp
+  hash-table
+#+end_src
+#+begin_src emacs-lisp
+  font-spec
+#+end_src
+#+begin_src emacs-lisp
+  font-entity
+#+end_src
+#+begin_src emacs-lisp
+  font-object
+#+end_src
 
     可选的额外元素，表示为 ':extra string'，允许您为相同的专用符和限定符添加更多方法，以字符串区分。
 
     可选限定符允许组合几种适用的方法。  如果不存在，则定义的方法是主要方法，负责为专用参数提供泛型函数的主要实现。  您还可以使用以下值之一作为限定符来定义辅助方法：
 
-    ：前
+#+begin_src emacs-lisp
+  :before
+#+end_src
 
 	 此辅助方法将在主要方法之前运行。  更准确地说，所有 :before 方法都将在主要方法之前以最具体的优先顺序运行。
-    ：后
+#+begin_src emacs-lisp
+  :after
+#+end_src
 
 	 此辅助方法将在主要方法之后运行。  更准确地说，所有这些方法都将在主要方法之后以最具体的最后顺序运行。
-    ：大约
+#+begin_src emacs-lisp
+  :around
+#+end_src
 
 	 此辅助方法将代替主要方法运行。  最具体的此类方法将在任何其他方法之前运行。  此类方法通常使用 cl-call-next-method（如下所述）来调用其他辅助或主要方法。
 
@@ -671,11 +798,15 @@ Emacs 提供对多态性的支持。  与其他 Lisp 环境一样，尤其是 Co
 
 适用的方法按它们组合的顺序排序。  最左边的参数专门化器是最具体的方法将按顺序排在第一位。  （指定 :argument-precedence-order 作为 cl-defmethod 的一部分会覆盖它，如上所述。）如果方法主体调用 cl-call-next-method，则将运行下一个最具体的方法。  如果有适用的 :around 方法，它们中最具体的将首先运行；  它应该调用 cl-call-next-method 来运行任何不太具体的 :around 方法。  接下来，:before 方法按照它们的特殊性顺序运行，然后是主要方法，最后是 :after 方法，按照它们特殊性的相反顺序运行。
 
-功能：cl-call-next-method &rest args ¶
+#+begin_src emacs-lisp
+  Function: cl-call-next-method &rest args ¶
+#+end_src
 
     当从主方法或 :around 辅助方法的词法体中调用时，为同一个泛型函数调用下一个适用的方法。  通常，它被调用时不带参数，这意味着使用与调用方法相同的参数来调用下一个适用的方法。  否则，将使用指定的参数。
 
-功能：cl-next-method-p ¶
+#+begin_src emacs-lisp
+  Function: cl-next-method-p ¶
+#+end_src
 
     当从主方法或 :around 辅助方法的词法体中调用此函数时，如果有下一个方法要调用，则返回非 nil。
 
@@ -685,7 +816,9 @@ Emacs 提供对多态性的支持。  与其他 Lisp 环境一样，尤其是 Co
 
 另见函数间接函数。  请参见间接函数的定义。
 
-功能：符号-功能符号¶
+#+begin_src emacs-lisp
+  Function: symbol-function symbol ¶
+#+end_src
 
     这将返回符号函数单元格中的对象。  它不检查返回的对象是否是合法函数。
 
@@ -710,11 +843,15 @@ Emacs 提供对多态性的支持。  与其他 Lisp 环境一样，尤其是 Co
 
 您可以使用 fboundp 测试符号函数定义的无效性。  给符号定义函数后，可以使用 fmakunbound 再次使其无效。
 
-功能：fboundp 符号¶
+#+begin_src emacs-lisp
+  Function: fboundp symbol ¶
+#+end_src
 
     如果符号在其函数单元格中有对象，则此函数返回 t，否则返回 nil。  它不检查对象是否是合法函数。
 
-功能：fmakunbound 符号¶
+#+begin_src emacs-lisp
+  Function: fmakunbound symbol ¶
+#+end_src
 
     此函数使符号的函数单元格无效，因此随后尝试访问此单元格将导致无效函数错误。  它返回符号。  （另见 makunbound，在当变量为空时。）
     #+begin_src emacs-lisp
@@ -729,7 +866,9 @@ Emacs 提供对多态性的支持。  与其他 Lisp 环境一样，尤其是 Co
       error→ Symbol's function definition is void: foo
     #+end_src
 
-功能：fset 符号定义 ¶
+#+begin_src emacs-lisp
+  Function: fset symbol definition ¶
+#+end_src
 
     该函数将定义存储在符号的函数单元中。  结果是定义。  通常定义应该是一个函数或一个函数的名称，但这不被检查。  参数符号是一个普通的评估参数。
 
@@ -822,7 +961,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
 *** TODO 13.11.1 操纵建议的原语
 
-宏：add-function where place function & optional props ¶
+#+begin_src emacs-lisp
+  Macro: add-function where place function &optional props ¶
+#+end_src
 
     这个宏是将通知函数添加到存储在适当位置的函数的便捷方法（请参阅通用变量）。
 
@@ -832,10 +973,14 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
     每个使用 add-function 添加的函数都可以附带一个属性 props 的关联列表。  目前只有两个属性具有特殊含义：
 
-    姓名
+#+begin_src emacs-lisp
+  name
+#+end_src
 
 	 这为建议提供了一个名称，remove-function 可以使用该名称来识别要删除的函数。  通常在函数是匿名函数时使用。
-    深度
+#+begin_src emacs-lisp
+  depth
+#+end_src
 
 	 如果存在多条建议，这指定了如何对建议进行排序。  默认情况下，深度为 0。深度 100 表示这条建议应该尽可能保持深度，而深度 -100 表示它应该保持在最外层。  当两条建议指定相同的深度时，最近添加的一条将位于最外层。
 
@@ -845,21 +990,29 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
     注意：函数的交互规范将适用于组合函数，因此应遵守组合函数的调用约定，而不是函数的调用约定。  在许多情况下，因为它们是相同的，所以没有区别，但对于 :around、:filter-args 和 :filter-return 来说确实很重要，其中函数接收的参数与存储在适当位置的原始函数不同。
 
-宏：remove-function 放置函数 ¶
+#+begin_src emacs-lisp
+  Macro: remove-function place function ¶
+#+end_src
 
     此宏从存储在适当位置的函数中删除函数。  这仅在使用 add-function 将函数添加到位置时才有效。
 
     函数与使用等于添加到位置的函数进行比较，以尝试使其也适用于 lambda 表达式。  它还与添加到 place 的函数的 name 属性进行比较，这比使用 equal 比较 lambda 表达式更可靠。
 
-功能：advice-function-member-p 建议函数-def ¶
+#+begin_src emacs-lisp
+  Function: advice-function-member-p advice function-def ¶
+#+end_src
 
     如果通知已经在函数定义中，则返回非零。  就像上面的 remove-function 一样，advice 不是实际的函数，它也可以是一条通知的名称。
 
-功能：advice-function-mapc f function-def ¶
+#+begin_src emacs-lisp
+  Function: advice-function-mapc f function-def ¶
+#+end_src
 
     为添加到 function-def 的每条建议调用函数 f。  f 使用两个参数调用：advice 函数及其属性。
 
-功能：advice-eval-interactive-spec 规范¶
+#+begin_src emacs-lisp
+  Function: advice-eval-interactive-spec spec ¶
+#+end_src
 
     评估交互式规范，就像对具有此类规范的函数的交互式调用一样，然后返回已构建的相应参数列表。  例如，(advice-eval-interactive-spec "r\nP") 将返回一个包含三个元素的列表，其中包含区域的边界和当前的前缀参数。
 
@@ -905,23 +1058,33 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
 可以建议一个原语（请参阅什么是函数？），但通常不应该这样做，原因有两个。  首先，通知机制使用了一些原语，通知它们可能会导致无限递归。  其次，许多原语是直接从 C 中调用的，这样的调用会忽略通知；  因此，最终会陷入一种令人困惑的情况，其中一些调用（来自 Lisp 代码）遵循建议，而其他调用（来自 C 代码）则不遵循。
 
-宏：define-advice 符号（其中 lambda-list &optional name depth）&rest body ¶
+#+begin_src emacs-lisp
+  Macro: define-advice symbol (where lambda-list &optional name depth) &rest body ¶
+#+end_src
 
     该宏定义了一条建议并将其添加到名为 symbol 的函数中。  如果 name 为 nil 或名为 symbol@name 的函数，则建议是匿名函数。  有关其他参数的解释，请参阅advice-add。
 
-功能：建议添加符号 where function &optional props ¶
+#+begin_src emacs-lisp
+  Function: advice-add symbol where function &optional props ¶
+#+end_src
 
     将通知函数添加到命名函数符号。  where 和 props 与 add-function 的含义相同（请参阅 Primitives 以操作建议）。
 
-功能：建议删除符号功能¶
+#+begin_src emacs-lisp
+  Function: advice-remove symbol function ¶
+#+end_src
 
     从命名函数符号中删除通知函数。  function 也可以是一条建议的名称。
 
-功能：advice-member-p 函数符号 ¶
+#+begin_src emacs-lisp
+  Function: advice-member-p function symbol ¶
+#+end_src
 
     如果通知函数已经在命名函数符号中，则返回非零。  function 也可以是一条建议的名称。
 
-功能：advice-mapc 函数符号 ¶
+#+begin_src emacs-lisp
+  Function: advice-mapc function symbol ¶
+#+end_src
 
     为添加到命名函数符号的每条建议调用函数。  使用两个参数调用函数：建议函数及其属性。
 
@@ -929,7 +1092,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
 以下是 add-function 和advice-add 的where 参数的不同可能值，指定了advice 函数和原始函数的组合方式。
 
-：前
+#+begin_src emacs-lisp
+  :before
+#+end_src
 
     在旧函数之前调用函数。  两个函数接收相同的参数，组合的返回值是旧函数的返回值。  更具体地说，这两个函数的组合行为如下：
 
@@ -939,7 +1104,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
 
     (add-function :before funvar function) 与普通钩子的 (add-hook 'hookvar function) 相当。
-：后
+#+begin_src emacs-lisp
+  :after
+#+end_src
 
     在旧函数之后调用函数。  两个函数接收相同的参数，组合的返回值是旧函数的返回值。  更具体地说，这两个函数的组合行为如下：
 
@@ -949,10 +1116,14 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
 
     (add-function :after funvar function) 对于单功能挂钩与 (add-hook 'hookvar function 'append) 对于普通挂钩相当。
-:覆盖
+#+begin_src emacs-lisp
+  :override
+#+end_src
 
     这完全用新功能替换了旧功能。  如果您稍后调用 remove-function，旧功能当然可以恢复。
-：大约
+#+begin_src emacs-lisp
+  :around
+#+end_src
 
     调用函数而不是旧函数，但提供旧函数作为函数的额外参数。  这是最灵活的组合。  例如，它允许您使用不同的参数调用旧函数，或者多次调用，或者在 let-binding 中调用，或者您有时可以将工作委托给旧函数，有时完全覆盖它。  更具体地说，这两个函数的组合行为如下：
 
@@ -960,7 +1131,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
       (lambda (&rest r) (apply function oldfun r))
     #+end_src
 
-:之前
+#+begin_src emacs-lisp
+  :before-while
+#+end_src
 
     在旧函数之前调用函数，如果函数返回 nil，则不要调用旧函数。  两个函数接收相同的参数，组合的返回值是旧函数的返回值。  更具体地说，这两个函数的组合行为如下：
 
@@ -969,7 +1142,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
     #+end_src
 
     (add-function :before-while funvar function) 当 hookvar 通过 run-hook-with-args-until-failure 运行时，单函数钩子与 (add-hook 'hookvar function) 相当。
-：之前，直到
+#+begin_src emacs-lisp
+  :before-until
+#+end_src
 
     在旧函数之前调用函数，并且仅在函数返回 nil 时才调用旧函数。  更具体地说，这两个函数的组合行为如下：
 
@@ -977,7 +1152,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
       (lambda (&rest r) (or (apply function r) (apply oldfun r)))
     #+end_src
     (add-function :before-until funvar function) 当 hookvar 通过 run-hook-with-args-until-success 运行时，单函数钩子与 (add-hook 'hookvar function) 相当。
-：过了一阵子
+#+begin_src emacs-lisp
+  :after-while
+#+end_src
 
     在旧函数之后调用函数，并且仅当旧函数返回非零时。  两个函数接收相同的参数，组合的返回值是函数的返回值。  更具体地说，这两个函数的组合行为如下：
 
@@ -985,7 +1162,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
       (lambda (&rest r) (and (apply oldfun r) (apply function r)))
     #+end_src
     (add-function :after-while funvar function) 当 hookvar 通过 run-hook-with-args-until-failure 运行时，单函数钩子与 (add-hook 'hookvar function 'append) 相当。
-: 之后直到
+#+begin_src emacs-lisp
+  :after-until
+#+end_src
 
     在旧函数之后调用函数，并且仅当旧函数返回 nil 时。  更具体地说，这两个函数的组合行为如下：
 
@@ -995,7 +1174,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
 
     (add-function :after-until funvar function) 当 hookvar 通过 run-hook-with-args-until-success 运行时，单函数钩子与 (add-hook 'hookvar function 'append) 相当。
-:filter-args
+#+begin_src emacs-lisp
+  :filter-args
+#+end_src
 
     首先调用函数并将结果（应该是一个列表）作为新参数传递给旧函数。  更具体地说，这两个函数的组合行为如下：
 
@@ -1004,7 +1185,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
     #+end_src
 
 
-:filter-return
+#+begin_src emacs-lisp
+  :filter-return
+#+end_src
 
     首先调用旧函数并将结果传递给函数。  更具体地说，这两个函数的组合行为如下：
 
@@ -1081,7 +1264,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
 宏（参见宏）也可以用 make-obsolete 标记为过时的；  这与函数具有相同的效果。  函数或宏的别名也可以标记为过时；  这使得别名本身已经过时，而不是它解析为的函数或宏。
 
-功能：make-obsolete obsolete-name current-name when ¶
+#+begin_src emacs-lisp
+  Function: make-obsolete obsolete-name current-name when ¶
+#+end_src
 
     此函数将过时的名称标记为过时。  obsolete-name 应该是命名函数或宏的符号，或者是函数或宏的别名。
 
@@ -1089,7 +1274,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
     参数 when 应该是一个字符串，指示函数第一次被废弃的时间——例如，日期或版本号。
 
-宏：define-obsolete-function-alias obsolete-name current-name when &optional doc ¶
+#+begin_src emacs-lisp
+  Macro: define-obsolete-function-alias obsolete-name current-name when &optional doc ¶
+#+end_src
 
     此便利宏将函数 obsolete-name 标记为已过时，并将其定义为函数 current-name 的别名。  它等价于以下内容：
 
@@ -1100,7 +1287,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
 此外，您可以将函数的特定调用约定标记为过时：
 
-功能：set-advertised-calling-convention function signature when ¶
+#+begin_src emacs-lisp
+  Function: set-advertised-calling-convention function signature when ¶
+#+end_src
 
     此函数将参数列表签名指定为调用函数的正确方式。  这会导致 Emacs 字节编译器在遇到以任何其他方式调用函数的 Emacs Lisp 程序时发出警告（但是，它仍然允许对代码进行字节编译）。  when 应该是一个字符串，指示变量第一次被废弃的时间（通常是版本号字符串）。
 
@@ -1116,14 +1305,14 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
       (set-advertised-calling-convention
 	'sit-for '(seconds &optional nodisp) "22.1")
     #+end_src
-
-
 ** TODO 13.13 内联函数
 内联函数是一个像普通函数一样工作的函数，除了一件事：当您对函数的调用进行字节编译时（请参阅字节编译），函数的定义会扩展到调用者。
 
 定义内联函数的简单方法是编写 defsubst 而不是 defun。  定义的其余部分看起来一样，但使用 defsubst 表示使其内联以进行字节编译。
 
-宏：defsubst name args [doc] [declare] [interactive] body... ¶
+#+begin_src emacs-lisp
+  Macro: defsubst name args [doc] [declare] [interactive] body… ¶
+#+end_src
 
     这个宏定义了一个内联函数。  它的语法与 defun 完全相同（参见定义函数）。
 
@@ -1139,7 +1328,9 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
 或者，您可以通过提供将其内联为编译器宏的代码来定义函数。  以下宏使这成为可能。
 
-宏：define-inline name args [doc] [declare] body... ¶
+#+begin_src emacs-lisp
+  Macro: define-inline name args [doc] [declare] body… ¶
+#+end_src
 
     通过提供执行其内联的代码（作为编译器宏）来定义函数名称。  该函数将接受参数列表 args 并具有指定的主体。
 
@@ -1156,11 +1347,15 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
 以下宏应该用在由define-inline 定义的函数体中。
 
-宏：内联引用表达式 ¶
+#+begin_src emacs-lisp
+  Macro: inline-quote expression ¶
+#+end_src
 
     内联定义的引用表达式。  这类似于反引号（参见反引号），但引用代码并且只接受 , 不接受 ,@。
 
-宏：inline-letevals (bindings...) body... ¶
+#+begin_src emacs-lisp
+  Macro: inline-letevals (bindings…) body… ¶
+#+end_src
 
     这提供了一种方便的方法来确保内联函数的参数只被评估一次，以及创建局部变量。
 
@@ -1170,15 +1365,21 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
     绑定的尾部可以是 nil 或应该包含参数列表的符号，在这种情况下，每个参数都被评估，并且符号被绑定到结果列表。
 
-宏：inline-const-p 表达式 ¶
+#+begin_src emacs-lisp
+  Macro: inline-const-p expression ¶
+#+end_src
 
     如果表达式的值已知，则返回非零。
 
-宏：inline-const-val 表达式 ¶
+#+begin_src emacs-lisp
+  Macro: inline-const-val expression ¶
+#+end_src
 
     返回表达式的值。
 
-宏：内联错误格式 &rest args ¶
+#+begin_src emacs-lisp
+  Macro: inline-error format &rest args ¶
+#+end_src
 
     发出错误信号，根据格式格式化参数。
 
@@ -1202,46 +1403,69 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
 declare 是一个特殊的宏，可用于向函数或宏添加元属性：例如，将其标记为过时，或在 Emacs Lisp 模式下为其形式提供特殊的 TAB 缩进约定。
 
-宏：声明规格…… ¶
+#+begin_src emacs-lisp
+  Macro: declare specs… ¶
+#+end_src
 
     这个宏忽略它的参数并计算为 nil；  它没有运行时影响。  但是，当 defun 或 defsubst 函数定义（请参阅定义函数）或 defmacro 宏定义（请参阅定义宏）的 declare 参数中出现声明形式时，它会将 specs 指定的属性附加到函数或宏。  这项工作由 defun、defsubst 和 defmacro 专门执行。
 
     specs 中的每个元素都应具有 (property args...) 形式，不应被引用。  它们具有以下效果：
 
-    （advertised-calling-convention 签名时）
+#+begin_src emacs-lisp
+  (advertised-calling-convention signature when)
+#+end_src
 
 	 这就像对 set-advertised-calling-convention 的调用（请参阅声明过时的函数）；  签名指定调用函数或宏的正确参数列表，以及何时应该是一个字符串，指示旧参数列表何时首次过时。
-    （调试 edebug-form-spec）
+#+begin_src emacs-lisp
+  (debug edebug-form-spec)
+#+end_src
 
 	 这仅对宏有效。  使用 Edebug 单步执行宏时，请使用 edebug-form-spec。  请参阅检测宏调用。
-    （文档字符串 n）
+#+begin_src emacs-lisp
+  (doc-string n)
+#+end_src
 
 	 这在定义一个函数或宏时使用，该函数或宏本身将用于定义函数、宏或变量等实体。  它表示第 n 个参数（如果有）应被视为文档字符串。
-    （缩进缩进规范）
+#+begin_src emacs-lisp
+  (indent indent-spec)
+#+end_src
 
 	 根据 indent-spec 缩进对此函数或宏的调用。  这通常用于宏，尽管它也适用于函数。  请参阅缩进宏。
-    （仅交互值）
+#+begin_src emacs-lisp
+  (interactive-only value)
+#+end_src
 
 	 将函数的仅交互属性设置为 value。  请参阅仅交互属性。
-    （过时的当前名称时）
+#+begin_src emacs-lisp
+  (obsolete current-name when)
+#+end_src
 
 	 将函数或宏标记为过时，类似于调用 make-obsolete（请参阅声明函数过时）。  current-name 应该是一个符号（在这种情况下，警告消息说要使用它）、一个字符串（指定警告消息）或 nil（在这种情况下，警告消息没有提供额外的细节）。  when 应该是一个字符串，指示函数或宏何时首次过时。
-    （编译器宏扩展器）
+#+begin_src emacs-lisp
+  (compiler-macro expander)
+#+end_src
 
 	 这只能用于函数，并告诉编译器使用扩展器作为优化函数。  当遇到对函数的调用时，形式为 (function args...)，宏扩展器将使用该形式以及 args... 调用扩展器，并且扩展器可以返回一个新表达式以代替函数调用，或者它可以只返回未更改的形式，以指示函数调用应该不理会。  扩展器可以是一个符号，也可以是一个形式（lambda (arg) body），在这种情况下，arg 将保存原始函数调用表达式，并且可以使用函数的形式参数访问函数的（未计算的）参数。
-    (gv-expander 扩展器)
+#+begin_src emacs-lisp
+  (gv-expander expander)
+#+end_src
 
 	 将扩展器声明为将宏（或函数）调用处理为广义变量的函数，类似于 gv-define-expander。  扩展器可以是一个符号，也可以是 (lambda (arg) body) 形式，在这种情况下，该函数还可以访问宏（或函数）的参数。
-    （gv-setter 设置器）
+#+begin_src emacs-lisp
+  (gv-setter setter)
+#+end_src
 
 	 将 setter 声明为将宏（或函数）调用处理为广义变量的函数。  setter 可以是一个符号，在这种情况下它将被传递给 gv-define-simple-setter，或者它可以是 (lambda (arg) body) 的形式，在这种情况下，该函数将另外可以访问宏（或函数) 的参数，它将被传递给 gv-define-setter。
-    （完成完成谓词）
+#+begin_src emacs-lisp
+  (completion completion-predicate)
+#+end_src
 
 	 将完成谓词声明为函数，以确定在 Mx 中请求完成时是否将符号包含在函数列表中。  使用两个参数调用完成谓词：第一个参数是符号，第二个参数是当前缓冲区。
-    （模式模式）
+#+begin_src emacs-lisp
+  (modes modes)
+#+end_src
 
 	 指定此命令仅适用于模式。
-
 ** TODO 13.15 告诉编译器定义了一个函数
 
 字节编译文件通常会产生有关编译器不知道的函数的警告（请参阅编译器错误）。  有时这表明一个真正的问题，但通常有问题的函数是在其他文件中定义的，如果该代码运行，这些文件将被加载。  例如，字节编译 simple.el 用于警告：
@@ -1262,7 +1486,9 @@ simple.el:8727:1:Warning: the function ‘shell-mode’ is not known to be
 
 可选的第三个参数指定 shell-mode 的参数列表。  在这种情况下，它不接受任何参数（nil 与不指定值不同）。  在其他情况下，这可能类似于（文件和可选覆盖）。  您不必指定参数列表，但如果您这样做，字节编译器可以检查调用是否与声明匹配。
 
-宏：declare-function function file &optional arglist fileonly ¶
+#+begin_src emacs-lisp
+  Macro: declare-function function file &optional arglist fileonly ¶
+#+end_src
 
 告诉字节编译器假设函数是在文件文件中定义的。  可选的第三个参数 arglist 要么是 t，即未指定参数列表，要么是与 defun 样式相同的形式参数列表。  省略的 arglist 默认为 t，而不是 nil；  这是省略参数的非典型行为，这意味着要提供第四个但不提供第三个参数，必须为第三个参数占位符指定 t 而不是通常的 nil。  可选的第四个参数 fileonly non-nil 表示只检查该文件是否存在，而不是它实际上定义了函数。
 
@@ -1280,7 +1506,9 @@ simple.el:8727:1:Warning: the function ‘shell-mode’ is not known to be
 
 一些主要模式，例如 SES，调用存储在用户文件中的函数。  （有关 SES 的更多信息，请参阅 (ses)Simple Emacs 电子表格。）用户文件的谱系有时很差——您可以从刚认识的人那里获得电子表格，也可以通过从未见过的人的电子邮件获得电子表格.  因此，在您确定它是安全的之前，调用其源代码存储在用户文件中的函数是有风险的。
 
-功能：unsafep 形式 &optional unsafep-vars ¶
+#+begin_src emacs-lisp
+  Function: unsafep form &optional unsafep-vars ¶
+#+end_src
 
     如果 form 是一个安全的 Lisp 表达式，则返回 nil，或者返回一个描述它可能不安全的原因的列表。  参数 unsafep-vars 是一个已知在此时具有临时绑定的符号列表；  它主要用于内部递归调用。  当前缓冲区是一个隐式参数，它提供了缓冲区本地绑定的列表。
 
@@ -1290,57 +1518,93 @@ simple.el:8727:1:Warning: the function ‘shell-mode’ is not known to be
 
 下面是几个函数的表格，这些函数执行与函数调用和函数定义相关的事情。  它们记录在其他地方，但我们在此处提供交叉引用。
 
- 申请
+#+begin_src emacs-lisp
+  apply
+#+end_src
 
      请参阅调用函数。
- 自动加载
+#+begin_src emacs-lisp
+  autoload
+#+end_src
 
      请参阅自动加载。
- 交互调用
+#+begin_src emacs-lisp
+  call-interactively
+#+end_src
 
      请参阅交互式呼叫。
- 交互式调用-p
+#+begin_src emacs-lisp
+  called-interactively-p
+#+end_src
 
      请参阅区分交互式呼叫。
- 命令
+#+begin_src emacs-lisp
+  commandp
+#+end_src
 
      请参阅交互式呼叫。
- 文件
+#+begin_src emacs-lisp
+  documentation
+#+end_src
 
      请参阅访问文档字符串。
- 评估
+#+begin_src emacs-lisp
+  eval
+#+end_src
 
      见评估。
- 函数调用
+#+begin_src emacs-lisp
+  funcall
+#+end_src
 
      请参阅调用函数。
- 功能
+#+begin_src emacs-lisp
+  function
+#+end_src
 
      请参阅匿名函数。
- 忽视
+#+begin_src emacs-lisp
+  ignore
+#+end_src
 
      请参阅调用函数。
- 间接函数
+#+begin_src emacs-lisp
+  indirect-function
+#+end_src
 
      请参阅符号函数间接。
- 交互的
+#+begin_src emacs-lisp
+  interactive
+#+end_src
 
      请参阅使用交互式。
- 交互式-p
+#+begin_src emacs-lisp
+  interactive-p
+#+end_src
 
      请参阅区分交互式呼叫。
- 地图原子
+#+begin_src emacs-lisp
+  mapatoms
+#+end_src
 
      请参阅创建和嵌入符号。
- 地图车
+#+begin_src emacs-lisp
+  mapcar
+#+end_src
 
      请参阅映射函数。
- 地图字符表
+#+begin_src emacs-lisp
+  map-char-table
+#+end_src
 
      请参阅字符表。
- 地图连接
+#+begin_src emacs-lisp
+  mapconcat
+#+end_src
 
      请参阅映射函数。
- 不明确的
+#+begin_src emacs-lisp
+  undefined
+#+end_src
 
      请参阅键查找函数。
