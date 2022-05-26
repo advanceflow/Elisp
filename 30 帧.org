@@ -15,31 +15,47 @@
 
 在 GNU 和 Unix 系统上，无论 Emacs 是在文本终端还是图形终端上启动，您都可以在单个 Emacs 会话中在任何可用终端上创建额外的框架。  Emacs 可以同时显示在图形和文本终端上。  例如，当您从多个远程位置连接到同一个会话时，这会派上用场。  请参阅多个终端。
 
-功能：框架对象¶
+#+begin_src emacs-lisp
+  Function: framep object ¶
+#+end_src
 
     如果 object 是一个框架，则此谓词返回一个非 nil 值，否则返回 nil。  对于一个框架，该值指示该框架使用哪种显示方式：
 
-    吨
+#+begin_src emacs-lisp
+  t
+#+end_src
 
 	 框架显示在文本终端上。
-    X
+#+begin_src emacs-lisp
+  x
+#+end_src
 
 	 框架显示在 X 图形终端上。
-    w32
+#+begin_src emacs-lisp
+  w32
+#+end_src
 
 	 框架显示在 MS-Windows 图形终端上。
+#+begin_src emacs-lisp
     ns
+#+end_src
 
 	 框架显示在 GNUstep 或 Macintosh Cocoa 图形终端上。
-    个人电脑
+#+begin_src emacs-lisp
+  pc
+#+end_src
 
 	 该框架显示在 MS-DOS 终端上。
 
-功能：框架终端&可选框架¶
+#+begin_src emacs-lisp
+  Function: frame-terminal &optional frame ¶
+#+end_src
 
     该函数返回显示框架的终端对象。  如果 frame 为 nil 或未指定，则默认为选定的帧。
 
-功能：终端-live-p 对象 ¶
+#+begin_src emacs-lisp
+  Function: terminal-live-p object ¶
+#+end_src
 
     如果 object 是活动的终端（即未删除），则此谓词返回非 nil 值，否则返回 nil。  对于直播终端，返回值表示在该终端上显示什么样的帧；  可能值的列表与上面的 framep 相同。
 
@@ -50,7 +66,9 @@
 
 要创建一个新框架，请调用函数 make-frame。
 
-命令：make-frame &可选参数¶
+#+begin_src emacs-lisp
+  Command: make-frame &optional parameters ¶
+#+end_src
 
     此函数创建并返回一个新帧，显示当前缓冲区。
 
@@ -62,21 +80,29 @@
 
     此函数本身不会使新帧成为选定帧。  请参阅输入焦点。  先前选择的帧保持选中状态。  然而，在图形终端上，窗口系统可能会出于自己的原因选择新框架。
 
-变量：before-make-frame-hook ¶
+#+begin_src emacs-lisp
+  Variable: before-make-frame-hook ¶
+#+end_src
 
     在创建框架之前由 make-frame 运行的普通钩子。
 
-变量：后生成帧函数¶
+#+begin_src emacs-lisp
+  Variable: after-make-frame-functions ¶
+#+end_src
 
     make-frame 创建框架后运行的异常挂钩。  after-make-frame-functions 中的每个函数都接收一个参数，即刚刚创建的帧。
 
 请注意，由初始文件添加到这些挂钩的任何函数通常不会针对初始帧运行，因为 Emacs 仅在创建该帧后才会读取初始文件。  但是，如果初始帧被指定为使用单独的 minibuffer 帧（请参阅 Minibuffers 和 Frames），则函数将为无 minibuffer-less 和 minibuffer 帧运行。
 
-变量：框架继承参数¶
+#+begin_src emacs-lisp
+  Variable: frame-inherited-parameters ¶
+#+end_src
 
     此变量指定新创建的框架从当前选定的框架继承的框架参数列表。  对于作为此列表中的元素且在处理构建帧时之前未分配的每个参数（符号），该函数将创建的帧中该参数的值设置为其在选定帧中的值。
 
-用户选项：server-after-make-frame-hook ¶
+#+begin_src emacs-lisp
+  User Option: server-after-make-frame-hook ¶
+#+end_src
 
     当 Emacs 服务器创建一个客户端框架时，一个正常的钩子运行。  当这个钩子被调用时，创建的框架是被选中的。  请参阅 GNU Emacs 手册中的 Emacs 服务器。
 
@@ -91,19 +117,27 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 没有用于创建终端对象的原语。  Emacs 根据需要创建它们，例如当您调用 make-frame-on-display 时（如下所述）。
 
-功能：终端名称&可选终端¶
+#+begin_src emacs-lisp
+  Function: terminal-name &optional terminal ¶
+#+end_src
 
     该函数返回终端使用的设备的文件名。  如果终端被省略或为零，则默认为所选框架的终端。  终端也可以是一个框架，表示该框架的终端。
 
-功能：终端列表¶
+#+begin_src emacs-lisp
+  Function: terminal-list ¶
+#+end_src
 
     此函数返回所有活动终端对象的列表。
 
-功能：获取设备终端设备¶
+#+begin_src emacs-lisp
+  Function: get-device-terminal device ¶
+#+end_src
 
     此函数返回一个终端，其设备名称由 device 给出。  如果 device 是字符串，它可以是终端设备的文件名，也可以是“host:server.screen”形式的 X 显示器的名称。  如果设备是一个框架，这个函数返回那个框架的终端；  nil 表示选中的帧。  最后，如果 device 是一个表示活动终端的终端对象，则返回该终端。  如果函数的参数不是上述任何一个，则该函数会发出错误信号。
 
-功能：删除终端&可选终端力¶
+#+begin_src emacs-lisp
+  Function: delete-terminal &optional terminal force ¶
+#+end_src
 
     此函数删除终端上的所有帧并释放它使用的资源。  它运行异常钩子 delete-terminal-functions，将终端作为参数传递给每个函数。
 
@@ -111,7 +145,9 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
     通常，如果您尝试删除唯一的活动终端，此函数会发出错误信号，但如果 force 不为零，则允许您这样做。  当终端上的最后一帧被删除时，Emacs 会自动调用这个函数（参见删除帧）。
 
-变量：删除终端功能¶
+#+begin_src emacs-lisp
+  Variable: delete-terminal-functions ¶
+#+end_src
 
     删除终端运行的异常挂钩。  每个函数接收一个参数，即传递给 delete-terminal 的终端参数。  由于技术细节，这些函数可以在终端被删除之前或之后被调用。
 
@@ -123,17 +159,23 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 不使用 X 窗口系统的系统，例如 MS-Windows，不支持 X 显示器的概念，并且每台主机上只有一个显示器。  这些系统上的显示名称不遵循上述 3 部分格式；  例如，MS-Windows 系统上的显示名称是一个常量字符串 'w32'，并且为了兼容性而存在，因此您可以将它传递给需要显示名称的函数。
 
-命令：make-frame-on-display display &可选参数¶
+#+begin_src emacs-lisp
+  Command: make-frame-on-display display &optional parameters ¶
+#+end_src
 
     此函数在显示时创建并返回一个新帧，并从 alist 参数中获取其他帧参数。  display 应该是 X 显示的名称（字符串）。
 
     在创建框架之前，该函数确保 Emacs 设置为显示图形。  例如，如果 Emacs 没有处理 X 资源（例如，如果它是在文本终端上启动的），那么此时它会处理。  在所有其他方面，此函数的行为类似于 make-frame（请参阅创建框架）。
 
-功能：x-display-list ¶
+#+begin_src emacs-lisp
+  Function: x-display-list ¶
+#+end_src
 
     此函数返回一个列表，指示 Emacs 连接到的 X 显示器。  列表的元素是字符串，每一个都是一个显示名称。
 
-功能：x-open-connection显示&可选xrm-string必须成功¶
+#+begin_src emacs-lisp
+  Function: x-open-connection display &optional xrm-string must-succeed ¶
+#+end_src
 
     此函数打开到 X 显示显示的连接，而不在该显示上创建框架。  通常，Emacs Lisp 程序不需要调用这个函数，因为 make-frame-on-display 会自动调用它。  调用它的唯一原因是检查是否可以与给定的 X 显示器建立通信。
 
@@ -145,32 +187,48 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
     如果 must-succeed 不为零，则无法打开连接会终止 Emacs。  否则，这是一个普通的 Lisp 错误。
 
-功能：x-close-connection显示¶
+#+begin_src emacs-lisp
+  Function: x-close-connection display ¶
+#+end_src
 
     此函数关闭连接以显示显示。  在执行此操作之前，您必须先删除在该显示器上打开的所有帧（请参阅删除帧）。
 
 在某些多显示器设置中，单个 X 显示器输出到多个物理显示器。  您可以使用函数 display-monitor-attributes-list 和 frame-monitor-attributes 来获取有关此类设置的信息。
 
-功能：display-monitor-attributes-list &可选显示¶
+#+begin_src emacs-lisp
+  Function: display-monitor-attributes-list &optional display ¶
+#+end_src
 
     该函数返回显示的物理监视器属性列表，可以是显示名称（字符串）、终端或框架；  如果省略或为零，则默认为所选框架的显示。  列表的每个元素都是一个关联列表，表示物理监视器的属性。  第一个元素对应于主监视器。  属性键和值是：
 
-    '几何学'
+#+begin_src emacs-lisp
+  ‘geometry’
+#+end_src
 
 	 显示器屏幕左上角的位置及其大小（以像素为单位），如“（xy 宽度高度）”。  请注意，如果监视器不是主监视器，则某些坐标可能为负数。
-    '工作区域'
+#+begin_src emacs-lisp
+  ‘workarea’
+#+end_src
 
 	 左上角的位置和工作区域（可用空间）的大小（以像素为单位）为“（xy 宽度高度）”。  这可能与“几何”不同，因为各种窗口管理器功能（停靠栏、任务栏等）占用的空间可能会被排除在工作区之外。  这些功能是否实际上从工作区域中减去取决于平台和环境。  同样，如果监视器不是主监视器，则某些坐标可能是负数。
-    '毫米尺寸'
+#+begin_src emacs-lisp
+  ‘mm-size’
+#+end_src
 
 	 以毫米为单位的宽度和高度为“（宽度高度）”
-    '框架'
+#+begin_src emacs-lisp
+  ‘frames’
+#+end_src
 
 	 此物理监视器控制的帧列表（见下文）。
-    '姓名'
+#+begin_src emacs-lisp
+  ‘name’
+#+end_src
 
 	 物理监视器的名称为字符串。
-    '来源'
+#+begin_src emacs-lisp
+  ‘source’
+#+end_src
 
 	 多显示器信息的来源为字符串；  例如，“XRandr”或“Xinerama”。
 
@@ -195,13 +253,17 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 	(frames)))
     #+end_src
 
-功能：frame-monitor-attributes & optional frame ¶
+#+begin_src emacs-lisp
+  Function: frame-monitor-attributes &optional frame ¶
+#+end_src
 
     此函数返回物理监视器支配（见上文）帧的属性，默认为选定的帧。
 
 在多显示器显示器上，可以使用命令 make-frame-on-monitor 在指定的显示器上制作帧。
 
-命令：make-frame-on-monitor monitor &可选显示参数¶
+#+begin_src emacs-lisp
+  Command: make-frame-on-monitor monitor &optional display parameters ¶
+#+end_src
 
     此函数在显示器上的监视器上创建并返回一个新帧，并从 alist 参数中获取其他帧参数。  monitor 应该是物理监视器的名称，与属性名称中函数 display-monitor-attributes-list 返回的字符串相同。  display 应该是 X 显示的名称（字符串）。
 
@@ -317,47 +379,73 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 对于图形终端上的框架，以下函数返回上述区域的大小：
 
-功能：框架几何&可选框架¶
+#+begin_src emacs-lisp
+  Function: frame-geometry &optional frame ¶
+#+end_src
 
     该函数返回框架的几何属性。  返回值是下面列出的属性的关联列表。  所有坐标、高度和宽度值都是整数，计数像素。  请注意，如果尚未映射帧，（请参阅帧的可见性）某些返回值可能仅表示实际值的近似值 - 那些在帧映射后可以看到的值。
 
-    外位
+#+begin_src emacs-lisp
+  outer-position
+#+end_src
 
 	 一个 cons 表示外部框架的绝对位置，相对于框架显示位置 (0, 0) 的原点。
-    外尺寸
+#+begin_src emacs-lisp
+  outer-size
+#+end_src
 
 	 框架的外部宽度和高度的缺点。
-    外部边框大小
+#+begin_src emacs-lisp
+  external-border-size
+#+end_src
 
 	 窗口管理器提供的框架外部边框的水平和垂直宽度的缺点。  如果窗口管理器不提供这些值，Emacs 将尝试从外框和内框的坐标中猜测它们。
-    外边框宽度
+#+begin_src emacs-lisp
+  outer-border-width
+#+end_src
 
 	 框架外边框的宽度。  该值仅对非 GTK+ X 构建有意义。
-    标题栏大小
+#+begin_src emacs-lisp
+  title-bar-size
+#+end_src
 
 	 窗口管理器或操作系统提供的框架标题栏的宽度和高度的缺点。  如果它们都为零，则框架没有标题栏。  如果仅宽度为零，则 Emacs 无法检索宽度信息。
-    菜单栏外部
+#+begin_src emacs-lisp
+  menu-bar-external
+#+end_src
 
 	 如果非零，这意味着菜单栏是外部的（不是框架的本机框架的一部分）。
-    菜单栏大小
+#+begin_src emacs-lisp
+  menu-bar-size
+#+end_src
 
 	 框架菜单栏的宽度和高度的缺点。
-    工具栏-外部
+#+begin_src emacs-lisp
+  tool-bar-external
+#+end_src
 
 	 如果非零，这意味着工具栏是外部的（不是框架的本机框架的一部分）。
-    工具栏位置
+#+begin_src emacs-lisp
+  tool-bar-position
+#+end_src
 
 	 这告诉框架上的工具栏在哪一侧，并且可以是左侧、顶部、右侧或底部之一。  目前唯一支持除 top 之外的值的工具包是 GTK+。
-    工具栏大小
+#+begin_src emacs-lisp
+  tool-bar-size
+#+end_src
 
 	 框架工具栏的宽度和高度的一个缺点。
-    内部边框宽度
+#+begin_src emacs-lisp
+  internal-border-width
+#+end_src
 
 	 框架内部边框的宽度。
 
 以下函数可用于检索外框、原生框和内框的边缘。
 
-功能：框架边缘&可选框架类型¶
+#+begin_src emacs-lisp
+  Function: frame-edges &optional frame type ¶
+#+end_src
 
     此函数返回框架的外部、原生或内部框架的绝对边缘。  frame 必须是实时帧，默认为选定的帧。  返回的列表具有形式（左上右下），其中所有值都以相对于帧显示原点的像素为单位。  对于终端框架，left 和 top 返回的值始终为零。
 
@@ -371,14 +459,20 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 有时使用术语行高和规范字符高度来代替“默认字符高度”。  同样，使用术语列宽和规范字符宽度代替“默认字符宽度”。
 
-功能：frame-char-height &可选frame ¶
-功能：frame-char-width &可选框架¶
+#+begin_src emacs-lisp
+  Function: frame-char-height &optional frame ¶
+#+end_src
+#+begin_src emacs-lisp
+  Function: frame-char-width &optional frame ¶
+#+end_src
 
     这些函数返回帧中字符的默认高度和宽度，以像素为单位。  这些值一起确定了框架上默认字体的大小。  这些值取决于框架字体的选择，请参阅字体和颜色参数。
 
 也可以直接使用以下函数设置默认字体：
 
-命令：set-frame-font font &optional keep-size frames ¶
+#+begin_src emacs-lisp
+  Command: set-frame-font font &optional keep-size frames ¶
+#+end_src
 
     这会将默认字体设置为字体。  当以交互方式调用时，它会提示输入字体的名称，并在所选框架上使用该字体。  从 Lisp 调用时，字体应该是字体名称（字符串）、字体对象、字体实体或字体规范。
 
@@ -390,30 +484,35 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 在图形系统上，普通顶层框架的位置被指定为其外框架的绝对位置（参见框架几何）。  子帧的位置（参见子帧）是通过其外边缘相对于其父帧的原始位置的像素偏移量来指定的。
 
-您可以使用左侧和顶部的框架参数访问或更改框架的位置（请参阅位置参数）。  这是用于处理现有可见框架位置的两个附加功能。  对于这两个函数，参数帧必须表示一个实时帧，并且默认为选定的帧。
+ 您可以使用左侧和顶部的框架参数访问或更改框架的位置（请参阅位置参数）。  这是用于处理现有可见框架位置的两个附加功能。  对于这两个函数，参数帧必须表示一个实时帧，并且默认为选定的帧。
 
-功能：框架位置&可选框架¶
+#+begin_src emacs-lisp
+  Function: frame-position &optional frame ¶
+#+end_src
 
-    对于普通的非子帧，此函数返回其外部位置（请参阅帧布局）相对于其显示原点 (0, 0) 的像素坐标的 cons。  对于子框架（请参阅子框架），此函数返回其外部位置相对于框架父级原始位置的原点 (0, 0) 的像素坐标。
+     对于普通的非子帧，此函数返回其外部位置（请参阅帧布局）相对于其显示原点 (0, 0) 的像素坐标的 cons。  对于子框架（请参阅子框架），此函数返回其外部位置相对于框架父级原始位置的原点 (0, 0) 的像素坐标。
 
-    负值从不表示从框架的显示或父框架的右边缘或下边缘偏移。  相反，它们意味着框架的外部位置在其显示的原点或其父框架的本机位置的左侧和/或上方。  这通常意味着框架仅部分可见（或完全不可见）。  但是，在显示器的原点与其左上角不一致的系统上，该框架可能在辅助监视器上可见。
+     负值从不表示从框架的显示或父框架的右边缘或下边缘偏移。  相反，它们意味着框架的外部位置在其显示的原点或其父框架的本机位置的左侧和/或上方。  这通常意味着框架仅部分可见（或完全不可见）。  但是，在显示器的原点与其左上角不一致的系统上，该框架可能在辅助监视器上可见。
 
-    在文本终端框架上，两个值都为零。
+     在文本终端框架上，两个值都为零。
 
-功能：设置框架位置框架 xy ¶
+#+begin_src emacs-lisp
+  Function: set-frame-position frame x y ¶
+#+end_src
 
-    该函数将frame的外框位置设置为(x, y)。  后面的参数指定像素，通常从帧显示位置 (0, 0) 的原点开始计数。  对于子框架，它们从框架的父框架的本机位置开始计数。
+     该函数将frame的外框位置设置为(x, y)。  后面的参数指定像素，通常从帧显示位置 (0, 0) 的原点开始计数。  对于子框架，它们从框架的父框架的本机位置开始计数。
 
-    负参数值将外框的右边缘从屏幕的右边缘（或父框架的原生矩形）向左定位 -x 像素，将底部边缘从屏幕的底部边缘向上定位 -y 像素（或父框架的原生矩形）。
+     负参数值将外框的右边缘从屏幕的右边缘（或父框架的原生矩形）向左定位 -x 像素，将底部边缘从屏幕的底部边缘向上定位 -y 像素（或父框架的原生矩形）。
 
-    请注意，负值不允许将框架的右边缘或下边缘精确对齐其显示或父框架的右边缘或下边缘。  它们也不允许指定不在显示或父框架边缘内的位置。  帧参数 left 和 top（请参阅 Position Parameters）允许这样做，但仍可能无法为初始帧或新帧提供良好的结果。
+     请注意，负值不允许将框架的右边缘或下边缘精确对齐其显示或父框架的右边缘或下边缘。  它们也不允许指定不在显示或父框架边缘内的位置。  帧参数 left 和 top（请参阅 Position Parameters）允许这样做，但仍可能无法为初始帧或新帧提供良好的结果。
 
-    此功能对文本终端框架没有影响。
+     此功能对文本终端框架没有影响。
 
-变量：移动框架函数¶
+#+begin_src emacs-lisp
+  Variable: move-frame-functions ¶
+#+end_src
 
-    这个钩子指定了当 Emacs 框架被窗口系统或窗口管理器移动（分配一个新位置）时运行的函数。  这些函数使用一个参数运行，即移动的帧。  对于子框架（请参阅子框架），仅当框架的位置相对于其父框架的位置发生变化时，函数才会运行。
-
+     这个钩子指定了当 Emacs 框架被窗口系统或窗口管理器移动（分配一个新位置）时运行的函数。  这些函数使用一个参数运行，即移动的帧。  对于子框架（请参阅子框架），仅当框架的位置相对于其父框架的位置发生变化时，函数才会运行。
 *** TODO 30.3.4 帧大小
 
 在 Emacs 中指定框架大小的规范方法是指定其文本大小——框架文本区域的宽度和高度的元组（请参阅框架布局）。  它可以以像素为单位或根据帧的规范字符大小来衡量（请参阅帧字体）。
@@ -422,8 +521,12 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 任何框架的文本大小都可以在框架高度和宽度参数的帮助下设置和检索（请参阅大小参数）。  初始帧的文本大小也可以在 X 样式几何规范的帮助下设置。  请参阅 GNU Emacs 手册中的 Emacs 调用的命令行参数。  下面我们列出了一些函数来访问和设置现有可见框架的大小，默认情况下是选定的。
 
-功能：框架高度&可选框架¶
-功能：框架宽度&可选框架¶
+#+begin_src emacs-lisp
+  Function: frame-height &optional frame ¶
+#+end_src
+#+begin_src emacs-lisp
+  Function: frame-width &optional frame ¶
+#+end_src
 
     这些函数返回框架文本区域的高度和宽度，以框架的默认字体高度和宽度为单位（请参阅框架字体）。  这些函数是编写 (frame-parameter frame 'height) 和 (frame-parameter frame 'width) 的简写。
 
@@ -431,29 +534,47 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 接下来的函数返回给定框架的本机、外部和内部框架以及文本区域（请参阅框架布局）的像素宽度和高度。  对于文本终端，结果是字符而不是像素。
 
-功能：frame-outer-width &可选frame ¶
-功能：框架外高&可选框架¶
+#+begin_src emacs-lisp
+  Function: frame-outer-width &optional frame ¶
+#+end_src
+#+begin_src emacs-lisp
+  Function: frame-outer-height &optional frame ¶
+#+end_src
 
     这些函数以像素为单位返回帧的外部宽度和高度。
 
-功能：frame-native-height &可选框架¶
-功能：frame-native-width &可选框架¶
+#+begin_src emacs-lisp
+  Function: frame-native-height &optional frame ¶
+#+end_src
+#+begin_src emacs-lisp
+  Function: frame-native-width &optional frame ¶
+#+end_src
 
     这些函数返回帧的原始宽度和高度（以像素为单位）。
 
-功能：frame-inner-width &可选框架¶
-功能：框架内高&可选框架¶
+#+begin_src emacs-lisp
+  Function: frame-inner-width &optional frame ¶
+#+end_src
+#+begin_src emacs-lisp
+  Function: frame-inner-height &optional frame ¶
+#+end_src
 
     这些函数以像素为单位返回帧的内部宽度和高度。
 
-功能：框架文本宽度&可选框架¶
-功能：框架文本高度&可选框架¶
+#+begin_src emacs-lisp
+  Function: frame-text-width &optional frame ¶
+#+end_src
+#+begin_src emacs-lisp
+  Function: frame-text-height &optional frame ¶
+#+end_src
 
     这些函数以像素为单位返回框架文本区域的宽度和高度。
 
 在支持它的窗口系统上，Emacs 默认尝试使以像素为单位测量的框架的文本大小为框架字符大小的倍数。  然而，这通常意味着当拖动其外部边框时，只能以字符大小增量来调整框架的大小。  它还可能会破坏真正最大化框架或使其“全高”或“全宽”（请参阅​​尺寸参数）的尝试，从而在框架下方和/或右侧留下一些空白空间。  在这种情况下，以下选项可能会有所帮助。
 
-用户选项：逐帧调整大小¶
+#+begin_src emacs-lisp
+  User Option: frame-resize-pixelwise ¶
+#+end_src
 
     如果此选项为 nil（默认值），则每当调整框架大小时，通常会将框架的文本像素大小四舍五入为该框架的 frame-char-height 和 frame-char-width 的当前值的倍数。  如果这是非零，则不会发生舍入，因此帧大小可以增加/减少一个像素。
 
@@ -463,13 +584,17 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
     对于某些窗口管理器，您可能必须将其设置为非零，以使框架真正最大化或全屏显示。
 
-功能：set-frame-size frame width height &optional pixelwise ¶
+#+begin_src emacs-lisp
+  Function: set-frame-size frame width height &optional pixelwise ¶
+#+end_src
 
     此函数设置框架文本区域的大小，以框架上字符的规范高度和宽度来衡量（请参阅框架字体）。
 
     可选参数 pixelwise non-nil 表示以像素为单位测量新的宽度和高度。  请注意，如果 frame-resize-pixelwise 为 nil，如果它不将帧大小增加/减小到其字符大小的倍数，某些工具包可能会拒绝真正履行请求。
 
-功能：set-frame-height 帧高 &optional 假装 pixelwise ¶
+#+begin_src emacs-lisp
+  Function: set-frame-height frame height &optional pretend pixelwise ¶
+#+end_src
 
     此函数将框架的文本区域调整为高度线的高度。  框架中现有窗口的大小会按比例更改以适合。
 
@@ -479,7 +604,9 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
     当交互使用时，此命令将询问用户设置当前所选框架高度的行数。  您还可以为该值提供数字前缀。
 
-功能：set-frame-width 帧宽度 &optional 假装 pixelwise ¶
+#+begin_src emacs-lisp
+  Function: set-frame-width frame width &optional pretend pixelwise ¶
+#+end_src
 
     此函数设置框架文本区域的宽度，以字符为单位。  参数假装与 set-frame-height 中的含义相同。
 
@@ -491,7 +618,9 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 异常挂钩窗口大小更改函数（请参阅窗口滚动和更改挂钩）跟踪框架内部大小的所有更改，包括由窗口系统或窗口管理器的请求引起的更改。  要排除在仅更改框架窗口的大小而不实际更改内部框架的大小时可能发生的误报，请使用以下函数。
 
-功能：frame-size-changed-p &optional frame ¶
+#+begin_src emacs-lisp
+  Function: frame-size-changed-p &optional frame ¶
+#+end_src
 
     自上次为 frame 运行 window-size-change-functions 以来，当 frame 的内部宽度或高度发生变化时，此函数返回非 nil。  它总是在为 frame 运行 window-size-change-functions 后立即返回 nil。
 
@@ -501,7 +630,10 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 有时，这种隐含的帧调整大小可能是不需要的，例如，当一个帧被最大化或全屏时（默认情况下它被关闭）。  通常，用户可以使用以下选项禁用隐式调整大小：
 
-用户选项：frame-inhibit-implied-resize ¶
+#+begin_src emacs-lisp
+User Option: frame-inhibit-implied-resize ¶
+#+end_src
+
 
     如果此选项为零，则更改框架的字体、菜单栏、工具栏、内部边框、边缘或滚动条可能会调整其外部框架的大小，以保持其文本区域的列数或行数不变。  如果此选项为 t，则不会进行此类调整大小。
 
@@ -527,15 +659,21 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 这些函数使您可以读取和更改帧的参数值。
 
-功能：框架参数框架参数¶
+#+begin_src emacs-lisp
+  Function: frame-parameter frame parameter ¶
+#+end_src
 
     该函数返回frame的参数parameter（一个符号）的值。  如果 frame 为 nil，则返回所选帧的参数。  如果 frame 没有设置参数，则此函数返回 nil。
 
-功能：框架参数&可选框架¶
+#+begin_src emacs-lisp
+  Function: frame-parameters &optional frame ¶
+#+end_src
 
     函数 frame-parameters 返回一个列表，列出 frame 的所有参数及其值。  如果 frame 为 nil 或省略，则返回所选帧的参数
 
-功能：修改框架参数框架列表¶
+#+begin_src emacs-lisp
+  Function: modify-frame-parameters frame alist ¶
+#+end_src
 
     此函数根据 alist 的元素更改框架框架。  alist 的每个元素都具有 (parm . value) 形式，其中 parm 是命名参数的符号。  如果 alist 中没有提及参数，则其值不会改变。  如果 frame 为 nil，则默认为选定的帧。
 
@@ -545,11 +683,15 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
     有时，将 frame-inhibit-implied-resize（请参阅 Implied Frame Resizing）绑定到调用此函数的非零值可能会解决此处描述的问题。  然而，有时，正是这样的绑定可能会受到问题的影响。
 
-功能：设置帧参数帧参数值¶
+#+begin_src emacs-lisp
+  Function: set-frame-parameter frame parm value ¶
+#+end_src
 
     此函数将帧参数 parm 设置为指定值。  如果 frame 为 nil，则默认为选定的帧。
 
-功能：修改所有帧参数列表¶
+#+begin_src emacs-lisp
+  Function: modify-all-frames-parameters alist ¶
+#+end_src
 
     此函数根据 alist 更改所有现有框架的框架参数，然后修改 default-frame-alist（以及，如果需要，initial-frame-alist）以将相同的参数值应用于以后创建的框架。
 
@@ -557,7 +699,9 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 您可以通过在初始化文件中设置 initial-frame-alist 来指定初始启动帧的参数（请参阅初始化文件）。
 
-用户选项：初始帧列表¶
+#+begin_src emacs-lisp
+  User Option: initial-frame-alist ¶
+#+end_src
 
     此变量的值是创建初始帧时使用的参数值列表。  您可以设置此变量来指定初始帧的外观，而无需更改后续帧。  每个元素具有以下形式：
 
@@ -574,11 +718,15 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 如果这些参数包括 (minibuffer . nil)，则表明初始帧应该没有 minibuffer。  在这种情况下，Emacs 也会创建一个单独的 minibuffer-only 帧。
 
-用户选项： minibuffer-frame-alist ¶
+#+begin_src emacs-lisp
+  User Option: minibuffer-frame-alist ¶
+#+end_src
 
     这个变量的值是一个参数值列表，当创建一个初始的 minibuffer-only 帧（即，如果 initial-frame-alist 指定一个没有 minibuffer 的帧，Emacs 创建的 minibuffer-only 帧）时使用的参数值列表。
 
-用户选项：default-frame-alist ¶
+#+begin_src emacs-lisp
+  User Option: default-frame-alist ¶
+#+end_src
 
     这是一个列表，指定所有 Emacs 帧的帧参数的默认值——第一帧和后续帧。  在使用 X Window System 时，在很多情况下可以通过 X 资源获得相同的结果。
 
@@ -594,21 +742,31 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 这些帧参数给出了关于帧的最基本信息。  title 和 name 在所有终端上都有意义。
 
-展示
+#+begin_src emacs-lisp
+  display
+#+end_src
 
     在其上打开此框架的显示器。  它应该是“host:dpy.screen”形式的字符串，就像 DISPLAY 环境变量一样。  有关显示名称的更多详细信息，请参阅多个终端。
-显示类型
+#+begin_src emacs-lisp
+  display-type
+#+end_src
 
     这个参数描述了可以在这个框架中使用的可能颜色的范围。  它的值是彩色、灰度或单色。
-标题
+#+begin_src emacs-lisp
+  title
+#+end_src
 
     如果一个框架有一个非零标题，它会出现在框架顶部的窗口系统的标题栏中，如果 mode-line-frame-identification 使用 '%F' （请参阅模式行中的 %-Constructs）。  当 Emacs 不使用窗口系统并且一次只能显示一帧时，通常会出现这种情况。  请参阅帧标题。
-姓名
+#+begin_src emacs-lisp
+  name
+#+end_src
 
     框架的名称。  如果标题参数未指定或为零，则框架名称用作框架标题的默认值。  如果您不指定名称，Emacs 会自动设置框架名称（请参阅框架标题）。
 
     如果您在创建框架时明确指定框架名称，则在查找框架的 X 资源时也会使用该名称（而不是 Emacs 可执行文件的名称）。
-显式名称
+#+begin_src emacs-lisp
+  explicit-name
+#+end_src
 
     如果在创建框架时明确指定了框架名称，则此参数将是该名称。  如果框架没有明确命名，则此参数将为 nil。
 
@@ -616,20 +774,30 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 描述帧的 X 和 Y 偏移的参数始终以像素为单位。  对于正常的非子框架，它们指定框架相对于其显示原点的外部位置（请参阅框架几何）。  对于子框架（请参阅子框架），它们指定框架相对于框架父框架的本地位置的外部位置。  （请注意，这些参数在 TTY 帧上都没有意义。）
 
-剩下
+#+begin_src emacs-lisp
+  left
+#+end_src
 
     框架的左外边缘相对于框架的显示或父框架的左边缘的位置（以像素为单位）。  可以通过以下方式之一指定。
 
-    一个整数
+#+begin_src emacs-lisp
+  an integer
+#+end_src
 
 	 正整数始终将框架的左边缘与其显示或父框架的左边缘相关联。  负整数将右框架边缘与显示或父框架的右边缘相关联。
-    (+ 位置)
+#+begin_src emacs-lisp
+  (+ pos)
+#+end_src
 
 	 这指定了左框架边缘相对于其显示或父框架的左边缘的位置。  整数 pos 可以是正数或负数；  负值指定屏幕或父框架之外的位置，或在主显示器以外的显示器上（用于多显示器显示器）。
-    （-位置）
+#+begin_src emacs-lisp
+  (- pos)
+#+end_src
 
 	 这指定了右框架边缘相对于显示或父框架的右边缘的位置。  整数 pos 可以是正数或负数；  负值指定屏幕或父框架之外的位置，或在主显示器以外的显示器上（用于多显示器显示器）。
-    浮点值
+#+begin_src emacs-lisp
+  a floating-point value
+#+end_src
 
 	 0.0 到 1.0 范围内的浮点值通过框架的左位置比率指定左边缘的偏移量 - 其外框架的左边缘与框架工作区（请参阅多个终端）或其父工作区宽度的比率原生框架（参见子框架）减去外框架的宽度。  因此，左侧位置比率 0.0 将帧刷新到左侧，比率 0.5 将其居中，比率 1.0 将帧刷新到其显示或父帧的右侧。  类似地，框架的顶部位置比率是框架的顶部位置与其工作区或父框架的高度之比减去框架的高度。
 
@@ -647,23 +815,33 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
     通常，相对于其显示的右边缘或下边缘定位框架并不是一个好主意。  定位初始框架或新框架要么不准确（因为在框架可见之前外部框架的大小尚不完全清楚），要么会导致额外的闪烁（如果框架在变得可见后必须重新定位）。
 
     另请注意，相对于显示、工作区或父框架的右/下边缘指定的位置以及浮点偏移量在内部存储为相对于显示、工作区或父框架边缘的左/上边缘的整数偏移量.  它们也由帧参数等函数返回，并由桌面保存例程恢复。
-最佳
+#+begin_src emacs-lisp
+  top
+#+end_src
 
     顶部（或底部）边缘的屏幕位置，以像素为单位，相对于显示或父框架的顶部（或底部）边缘。  它的工作方式与左一样，除了垂直而不是水平。
-左图标
+#+begin_src emacs-lisp
+  icon-left
+#+end_src
 
     框架图标左边缘的屏幕位置，以像素为单位，从屏幕左边缘开始计数。  如果窗口管理器支持此功能，则在框架图标化时生效。  如果您为此参数指定一个值，那么您还必须为 icon-top 指定一个值，反之亦然。
-图标顶部
+#+begin_src emacs-lisp
+  icon-top
+#+end_src
 
     框架图标顶部边缘的屏幕位置，以像素为单位，从屏幕顶部边缘开始计数。  如果窗口管理器支持此功能，则在框架图标化时生效。
-用户位置
+#+begin_src emacs-lisp
+  user-position
+#+end_src
 
     当您创建框架并使用 left 和 top 参数指定其屏幕位置时，使用此参数来说明指定位置是用户指定的（由人类用户以某种方式明确请求）还是仅仅是程序指定的（由程序）。  非零值表示该位置是用户指定的。
 
     窗口管理器通常注意用户指定的位置，有些也注意程序指定的位置。  但是许多人忽略了程序指定的位置，以默认方式放置窗口或让用户用鼠标放置它。  一些窗口管理器，包括 twm，让用户指定是服从程序指定的位置还是忽略它们。
 
     调用 make-frame 时，如果 left 和 top 参数的值代表用户声明的偏好，则应该为此参数指定一个非 nil 值；  否则，使用 nil。
-z组
+#+begin_src emacs-lisp
+  z-group
+#+end_src
 
     此参数指定框架的窗口系统窗口在框架显示的堆叠 (Z-) 顺序中的相对位置。
 
@@ -675,17 +853,25 @@ z组
 
 帧参数通常以字符为单位指定帧大小。  在图形显示上，默认面决定了这些字符单元的实际像素大小（请参阅面属性）。
 
-宽度
+#+begin_src emacs-lisp
+  width
+#+end_src
 
     此参数指定框架的宽度。  可以通过以下方式指定：
 
-    一个整数
+#+begin_src emacs-lisp
+  an integer
+#+end_src
 
 	 一个正整数指定框架文本区域的宽度（请参阅框架几何），以字符为单位。
-    缺点细胞
+#+begin_src emacs-lisp
+  a cons cell
+#+end_src
 
 	 如果这是一个在其 CAR 中带有符号 text-pixels 的 cons 单元格，则该单元格的 CDR 指定框架文本区域的宽度（以像素为单位）。
-    浮点值
+#+begin_src emacs-lisp
+  a floating-point value
+#+end_src
 
 	 一个介于 0.0 和 1.0 之间的浮点数可用于通过其宽度比来指定框架的宽度——其外部宽度（请参阅框架几何）与框架工作区（请参阅多个终端）或其父级宽度的比率框架的（参见子框架）本机框架。  因此，值为 0.5 使框架占据其工作区或父框架宽度的一半，值为 1.0 则为整个宽度。  类似地，框架的高度比是其外部高度与其工作区或其父框架的高度之比。
 
@@ -694,19 +880,29 @@ z组
 	 由于在使框架可见之前通常无法获得框架的外部大小，因此在创建装饰框架时通常不建议使用浮点值。  浮点值更适合确保子框架始终适合其父框架的区域，例如，当通过 display-buffer-in 自定义 display-buffer-alist（请参阅选择用于显示缓冲区的窗口）时-子框架。
 
     无论如何指定此参数，报告此参数值的函数（如 frame-parameters）总是将框架文本区域的宽度（以字符为单位）报告为整数，如有必要，四舍五入为框架默认字符宽度的倍数。  桌面保存例程也使用该值。
-高度
+#+begin_src emacs-lisp
+  height
+#+end_src
 
     此参数指定框架的高度。  它就像宽度一样工作，除了垂直而不是水平。
-用户规模
+#+begin_src emacs-lisp
+  user-size
+#+end_src
 
     这对尺寸参数 height 和 width 的作用与用户位置参数（参见用户位置）对位置参数 top 和 left 的作用相同。
-最小宽度
+#+begin_src emacs-lisp
+  min-width
+#+end_src
 
     此参数指定帧的最小原始宽度（请参阅帧几何），以字符为单位。  通常，建立框架初始宽度或水平调整框架大小的函数确保可以显示框架的所有窗口、垂直滚动条、边缘、边距和垂直分隔线。  这个参数，如果非零允许使框架比那个更窄，结果是任何不适合的组件都将被窗口管理器剪裁。
-最小高度
+#+begin_src emacs-lisp
+  min-height
+#+end_src
 
     此参数指定帧的最小原始高度（请参阅帧几何），以字符为单位。  通常，建立框架的初始大小或调整框架大小的功能确保可以显示所有框架的窗口、水平滚动条和分隔线、模式和标题行、回显区域以及内部菜单和工具栏。  这个参数，如果非零允许使框架小于那个，结果是任何不适合的组件都将被窗口管理器剪裁。
-全屏
+#+begin_src emacs-lisp
+  fullscreen
+#+end_src
 
     此参数指定是否最大化框架的宽度、高度或两者。  它的值可以是 fullwidth、fullheight、fullboth 或最大化。  全宽框架尽可能宽，全高框架尽可能高，全宽框架尽可能宽和高。  最大化的框架类似于“fullboth”框架，不同之处在于它通常保留其标题栏以及用于调整框架大小和关闭框架的按钮。  此外，最大化的框架通常会避免隐藏桌面上显示的任何任务栏或面板。  另一方面，“fullboth”框架通常会省略标题栏并占据整个可用屏幕空间。
 
@@ -715,7 +911,9 @@ z组
     对于某些窗口管理器，您可能必须自定义变量 frame-resize-pixelwise（请参阅 Frame Size），以使框架真正显示为最大化或全屏。  此外，一些窗口管理器可能不支持各种全屏或最大化状态之间的平滑过渡。  自定义变量 x-frame-normalize-before-maximize 可以帮助克服这个问题。
 
     macOS 上的全屏隐藏工具栏和菜单栏，但是如果将鼠标指针移动到屏幕顶部，两者都会显示。
-全屏恢复
+#+begin_src emacs-lisp
+  fullscreen-restore
+#+end_src
 
     此参数指定在“fullboth”状态下调用 toggle-frame-fullscreen 命令（参见 GNU Emacs 手册中的帧命令）后所需的帧全屏状态。  通常，当将状态切换为 fullboth 时，该命令会自动安装此参数。  但是，如果您以“fullboth”状态启动 Emacs，则必须在初始文件中指定所需的行为，例如
 
@@ -726,10 +924,14 @@ z组
     #+end_src
 
     这将在第一次输入 F11 后给出一个新的框架全高。
-适合帧到缓冲区边距
+#+begin_src emacs-lisp
+  fit-frame-to-buffer-margins
+#+end_src
 
     当使用 fit-frame-to-buffer 将此帧拟合到其根窗口的缓冲区时，此参数允许覆盖选项 fit-frame-to-buffer-margins 的值（请参阅调整窗口大小）。
-适合帧到缓冲区大小
+#+begin_src emacs-lisp
+  fit-frame-to-buffer-sizes
+#+end_src
 
     当使用 fit-frame-to-buffer 将此帧拟合到其根窗口的缓冲区时，此参数允许覆盖选项 fit-frame-to-buffer-sizes 的值（请参阅调整窗口大小）。
 
@@ -737,55 +939,89 @@ z组
 
 这些框架参数启用或禁用框架的各个部分，或控制它们的大小。
 
-边框宽度
+#+begin_src emacs-lisp
+  border-width
+#+end_src
 
     框架外边框的宽度（以像素为单位）（请参阅框架几何）。
-内部边框宽度
+#+begin_src emacs-lisp
+  internal-border-width
+#+end_src
 
     框架内部边框的宽度（以像素为单位）（请参阅框架几何）。
-子框架边框宽度
+#+begin_src emacs-lisp
+  child-frame-border-width
+#+end_src
 
     如果给定的帧是子帧（请参阅子帧），则以像素为单位的帧内部边框的宽度（请参阅帧几何）。  如果为 nil，则使用由 internal-border-width 参数指定的值。
-垂直滚动条
+#+begin_src emacs-lisp
+  vertical-scroll-bars
+#+end_src
 
     框架是否有用于垂直滚动的滚动条（请参阅滚动条），以及它们应该位于框架的哪一侧。  对于无滚动条，可能的值是 left、right 和 nil。
-水平滚动条
+#+begin_src emacs-lisp
+  horizontal-scroll-bars
+#+end_src
 
     框架是否有用于水平滚动的滚动条（t 和底部表示是，nil 表示否）。
-滚动条宽度
+#+begin_src emacs-lisp
+  scroll-bar-width
+#+end_src
 
     垂直滚动条的宽度，以像素为单位，或 nil 表示使用默认宽度。
-滚动条高度
+#+begin_src emacs-lisp
+  scroll-bar-height
+#+end_src
 
     水平滚动条的高度，以像素为单位，或 nil 表示使用默认高度。
-左派
-右边缘
+#+begin_src emacs-lisp
+  left-fringe
+#+end_src
+#+begin_src emacs-lisp
+  right-fringe
+#+end_src
 
     此框架中窗口左右边缘的默认宽度（请参阅边缘）。  如果其中任何一个为零，则有效地去除了相应的边缘。
 
     当您使用 frame-parameter 查询这两个 frame 参数中的任何一个的值时，返回值始终是一个整数。  使用 set-frame-parameter 时，传递一个 nil 值会强制使用 8 个像素的实际默认值。
-右分隔符宽度
+#+begin_src emacs-lisp
+  right-divider-width
+#+end_src
 
     为框架上任何窗口的右分隔线（请参阅窗口分隔线）保留的宽度（厚度），以像素为单位。  零值表示不绘制右分隔线。
-底部分隔线宽度
+#+begin_src emacs-lisp
+  bottom-divider-width
+#+end_src
 
     为框架上任何窗口的底部分隔线（请参阅窗口分隔线）保留的宽度（厚度），以像素为单位。  零值表示不绘制底部分隔线。
-菜单栏线
+#+begin_src emacs-lisp
+  menu-bar-lines
+#+end_src
 
     在框架顶部为菜单栏分配的行数（请参阅菜单栏）。  如果启用了菜单栏模式，则默认值为 1，否则为 0。  请参阅 GNU Emacs 手册中的菜单栏。  对于外部菜单栏（请参阅框架布局），即使菜单栏换行为两行或多行，此值也保持不变。  在这种情况下，由 frame-geometry（参见 Frame Geometry）返回的 menu-bar-size 值允许推导出菜单栏是否实际占用一行或多行。
-工具栏线
+#+begin_src emacs-lisp
+  tool-bar-lines
+#+end_src
 
     用于工具栏的行数（请参阅工具栏）。  如果启用了工具栏模式，则默认值为 1，否则为 0。  请参阅 GNU Emacs 手册中的工具栏。  每当工具栏换行时，此值可能会更改（请参阅框架布局）。
-工具栏位置
+#+begin_src emacs-lisp
+  tool-bar-position
+#+end_src
 
     使用 GTK+ 构建 Emacs 时工具栏的位置。  它的值可以是上、左下、右之一。  默认为顶部。
-标签栏线
+#+begin_src emacs-lisp
+  tab-bar-lines
+#+end_src
 
     用于标签栏的行数（参见 GNU Emacs 手册中的标签栏）。  如果启用 Tab Bar 模式，则默认值为 1，否则为 0。  每当标签栏换行时，此值可能会更改（请参阅框架布局）。
-行间距
+#+begin_src emacs-lisp
+  line-spacing
+#+end_src
 
     在每个文本行下方留下的额外空间，以像素为单位（正整数）。  有关详细信息，请参阅行高。
-无特殊字形
+#+begin_src emacs-lisp
+  no-special-glyphs
+#+end_src
 
     如果这是非零，它会禁止显示此帧显示的所有缓冲区的任何截断和继续字形（请参阅截断）。  当通过 fit-frame-to-buffer 将帧拟合到其缓冲区时，这对于消除此类字形很有用（请参阅调整窗口大小）。
 
@@ -793,20 +1029,28 @@ z组
 
 这些对各种终端都有意义的帧参数处理哪些缓冲区已经或应该显示在帧中。
 
-小缓冲区
+#+begin_src emacs-lisp
+  minibuffer
+#+end_src
 
     此帧是否有自己的 minibuffer。  值 t 表示是，nil 表示否，仅表示此帧只是一个 minibuffer。  如果该值是一个 minibuffer 窗口（在某个其他帧中），则该帧使用该 minibuffer。
 
     该参数在创建框架时生效。  如果指定为 nil，Emacs 将尝试将其设置为 default-minibuffer-frame 的 minibuffer 窗口（参见 Minibuffers and Frames）。  对于现有帧，此参数可专门用于指定另一个 minibuffer 窗口。  不允许将其从 minibuffer 窗口更改为 t，反之亦然，或从 t 更改为 nil。  如果参数已经指定了一个 minibuffer 窗口，则将其设置为 nil 无效。
 
     特殊值 child-frame 意味着创建一个只有 minibuffer 的子帧（参见子帧），其父帧成为创建的帧。  如同指定为 nil 一样，Emacs 会将此参数设置为子框架的 minibuffer 窗口，但不会在子框架创建后选择子框架。
-缓冲谓词
+#+begin_src emacs-lisp
+  buffer-predicate
+#+end_src
 
     此帧的缓冲区谓词函数。  如果谓词不为零，则函数 other-buffer 使用此谓词（来自所选帧）来决定应该考虑哪些缓冲区。  它使用一个参数调用谓词，一个缓冲区，每个缓冲区一次；  如果谓词返回一个非零值，它会考虑该缓冲区。
-缓冲区列表
+#+begin_src emacs-lisp
+  buffer-list
+#+end_src
 
     已在此帧中选择的缓冲区列表，按最近选择的顺序排列。
-不可分割
+#+begin_src emacs-lisp
+  unsplittable
+#+end_src
 
     如果非零，则此框架的窗口永远不会自动拆分。
 
@@ -814,25 +1058,39 @@ z组
 
 这些参数提供了不同帧之间的交互形式。
 
-父框架
+#+begin_src emacs-lisp
+  parent-frame
+#+end_src
 
     如果非零，这意味着这个框架是一个子框架（见子框架），这个参数指定它的父框架。  如果为零，这意味着这个框架是一个普通的顶级框架。
-删除之前
+#+begin_src emacs-lisp
+  delete-before
+#+end_src
 
     如果非零，则该参数指定另一个框架，其删除将自动触发该框架的删除。  请参阅删除框架。
-鼠标滚轮架
+#+begin_src emacs-lisp
+  mouse-wheel-frame
+#+end_src
 
     如果非零，则此参数指定每当鼠标滚轮滚动且鼠标指针悬停在此框架上时，该框架的窗口将滚动，请参阅 GNU Emacs 手册中的鼠标命令。
-没有其他框架
+#+begin_src emacs-lisp
+  no-other-frame
+#+end_src
 
     如果这是非零，则此帧不适合作为函数 next-frame、previous-frame（请参阅查找所有帧）和其他帧的候选者，请参阅 GNU Emacs 手册中的帧命令。
-自动隐藏功能
+#+begin_src emacs-lisp
+  auto-hide-function
+#+end_src
 
     当此参数指定一个函数时，当退出框架的唯一窗口（请参阅退出窗口）并且还有其他框架时，将调用该函数而不是变量 frame-auto-hide-function 指定的函数。
-小缓冲区出口
+#+begin_src emacs-lisp
+  minibuffer-exit
+#+end_src
 
     当这个参数不为 nil 时，Emacs 默认会在 minibuffer（见 Minibuffers）退出时使这个帧不可见。  或者，它可以指定函数 iconify-frame 和 delete-frame。  该参数对于在退出 minibuffer 时使子框架自动消失（类似于 Emacs 处理窗口的方式）很有用。
-保持率
+#+begin_src emacs-lisp
+  keep-ratio
+#+end_src
 
     此参数目前仅对子框架（请参阅子框架）有意义。  如果它不是 nil，那么 Emacs 将尝试保持框架的大小（宽度和高度）比率（请参阅大小参数）以及其左右位置比率（请参阅位置参数）在其父框架调整大小时保持不变。
 
@@ -846,25 +1104,39 @@ z组
 
 这些参数对于没有窗口管理器装饰的子框架（参见子框架）非常有用。  如有必要，它们也可用于未装饰的顶级框架。
 
-拖动内部边框
+#+begin_src emacs-lisp
+  drag-internal-border
+#+end_src
 
     如果非零，则可以通过使用鼠标拖动其内部边框（如果存在）来调整框架的大小。
-带标题行的拖动
+#+begin_src emacs-lisp
+  drag-with-header-line
+#+end_src
 
     如果非零，则可以通过拖动其最顶部窗口的标题行来使用鼠标移动框架。
-用标签线拖动
+#+begin_src emacs-lisp
+  drag-with-tab-line
+#+end_src
 
     如果非零，则可以通过拖动其最顶部窗口的制表符行来使用鼠标移动框架。
-拖动模式线
+#+begin_src emacs-lisp
+  drag-with-mode-line
+#+end_src
 
     如果非零，则可以通过拖动其最底部窗口的模式线来使用鼠标移动框架。  请注意，这样的帧不允许有自己的 minibuffer 窗口。
-对齐宽度
+#+begin_src emacs-lisp
+  snap-width
+#+end_src
 
     用鼠标移动的框架将“捕捉”在显示器的边框或其父框架上，只要它被拖动到接近此参数指定的像素数的边缘。
-顶部可见
+#+begin_src emacs-lisp
+  top-visible
+#+end_src
 
     如果此参数是一个数字，则框架的上边缘永远不会出现在其显示或父框架的上边缘之上。  此外，当框架移动到其显示或父框架的任何剩余边缘时，该数字指定的尽可能多的框架像素将保持可见。  设置此参数对于防止将具有非 nil drag-with-header-line 参数的子框架完全拖出其父框架区域很有用。
-底部可见
+#+begin_src emacs-lisp
+  bottom-visible
+#+end_src
 
     如果此参数是一个数字，则框架的底边永远不会出现在其显示或父框架的底边之下。  此外，当框架移动到其显示或父框架的任何剩余边缘时，该数字指定的尽可能多的框架像素将保持可见。  设置此参数有助于防止将具有非零拖动模式线参数的子框架完全拖出其父框架的区域。
 
@@ -872,59 +1144,93 @@ z组
 
 以下框架参数控制框架与窗口管理器或窗口系统交互的各个方面。  它们对文本终端没有影响。
 
-能见度
+#+begin_src emacs-lisp
+  visibility
+#+end_src
 
     框架的可见性状态。  有三种可能：nil 表示不可见，t 表示可见，icon 表示图标化。  请参阅框架的可见性。
-自动加注
+#+begin_src emacs-lisp
+  auto-raise
+#+end_src
 
     如果非 nil，Emacs 会在选择框架时自动提升框架。  一些窗口管理器不允许这样做。
-自动降低
+#+begin_src emacs-lisp
+  auto-lower
+#+end_src
 
     如果非零，Emacs 会在取消选择时自动降低框架。  一些窗口管理器不允许这样做。
-图标类型
+#+begin_src emacs-lisp
+  icon-type
+#+end_src
 
     用于此框架的图标类型。  如果值是字符串，则指定包含要使用的位图的文件；  nil 不指定图标（在这种情况下，窗口管理器决定显示什么）；  任何其他非 nil 值指定默认的 Emacs 图标。
-图标名称
+#+begin_src emacs-lisp
+  icon-name
+#+end_src
 
     在此框架的图标中使用的名称，何时以及是否出现图标。  如果为 nil，则使用框架的标题。
-窗口编号
+#+begin_src emacs-lisp
+  window-id
+#+end_src
 
     图形显示用于此帧的 ID 号。  Emacs 在创建框架时分配这个参数；  更改参数对实际 ID 号没有影响。
-外窗ID
+#+begin_src emacs-lisp
+  outer-window-id
+#+end_src
 
     框架所在的最外层窗口系统窗口的 ID 号。  与 window-id 一样，更改此参数没有实际效果。
-等待wm
+#+begin_src emacs-lisp
+  wait-for-wm
+#+end_src
 
     如果非零，告诉 Xt 等待窗口管理器确认几何变化。  某些窗口管理器，包括 Fvwm2 和 KDE 的版本，无法确认，因此 Xt 挂起。  将此设置为 nil 以防止与那些窗口管理器挂起。
-黏
+#+begin_src emacs-lisp
+  sticky
+#+end_src
 
     如果非零，则该框架在具有虚拟桌面的系统上的所有虚拟桌面上可见。
-禁止双缓冲
+#+begin_src emacs-lisp
+  inhibit-double-buffering
+#+end_src
 
     如果非零，则将帧绘制到屏幕上而不进行双重缓冲。  Emacs 通常会尝试在可用的情况下使用双缓冲来减少闪烁。  如果您遇到显示错误或因那种复古、闪烁的感觉而感到松懈，请设置此属性。
-跳过任务栏
+#+begin_src emacs-lisp
+  skip-taskbar
+#+end_src
 
     如果非零，这将告诉窗口管理器从与框架的显示关联的任务栏中删除框架的图标，并禁止通过组合 Alt-TAB 切换到框架的窗口。  在 MS-Windows 上，图标化这样的框架将在桌面底部“滚动”其窗口系统窗口。  某些窗口管理器可能不支持此参数。
-不关注地图
+#+begin_src emacs-lisp
+  no-focus-on-map
+#+end_src
 
     如果非零，这意味着框架在映射时不希望接收输入焦点（请参阅框架的可见性）。  某些窗口管理器可能不支持此参数。
-不接受焦点
+#+begin_src emacs-lisp
+  no-accept-focus
+#+end_src
 
     如果非零，这意味着框架不希望通过显式鼠标单击或通过焦点跟随鼠标（请参阅输入焦点）或鼠标自动选择窗口（请参阅鼠标窗口）将鼠标移入其中时接收输入焦点自动选择）。  这可能会产生不希望的副作用，即用户无法使用鼠标滚动未选择的帧。  某些窗口管理器可能不支持此参数。
-未装饰
+#+begin_src emacs-lisp
+  undecorated
+#+end_src
 
     如果非零，则该框架的窗口系统窗口不带任何装饰，如标题、最小化/最大化框和外部边框。  这通常意味着不能用鼠标拖动、调整大小、图标化、最大化或删除窗口。  如果为 nil，则通常使用上面列出的所有元素绘制框架的窗口，除非它们的显示已通过窗口管理器设置暂停。
 
     在 X 下，Emacs 使用 Motif 窗口管理器提示来关闭装饰。  一些窗口管理器可能不遵守这些提示。
 
     NS 构建将工具栏视为装饰，因此将其隐藏在未装饰的框架上。
-覆盖重定向¶
+#+begin_src emacs-lisp
+  override-redirect ¶
+#+end_src
 
     如果非零，这意味着这是一个覆盖重定向框架——在 X 下不被窗口管理器处理的框架。覆盖重定向框架没有窗口管理器装饰，只能通过 Emacs 的定位和调整大小函数来定位和调整大小，并且通常是绘制在所有其他框架之上。  设置此参数对 MS-Windows 没有影响。
-ns-外观
+#+begin_src emacs-lisp
+  ns-appearance
+#+end_src
 
     仅在 macOS 上可用，如果设置为深色，则使用“充满活力的深色”主题绘制此框架的窗口系统窗口，如果设置为浅色，则使用“水色”主题，否则使用系统默认值。  当使用带有深色背景的 Emacs 主题时，“充满活力的深色”主题可用于将工具栏和滚动条设置为深色外观。
-ns-透明-标题栏
+#+begin_src emacs-lisp
+  ns-transparent-titlebar
+#+end_src
 
     仅在 macOS 上可用，如果非零，则将标题栏和工具栏设置为透明。  这有效地设置了两者的背景颜色以匹配 Emacs 背景颜色。
 
@@ -932,52 +1238,78 @@ ns-透明-标题栏
 
 此框架参数控制光标的外观。
 
-游标类型
+#+begin_src emacs-lisp
+  cursor-type
+#+end_src
 
     如何显示光标。  合法值是：
 
-    盒子
+#+begin_src emacs-lisp
+  box
+#+end_src
 
 	 显示一个填充框。  （这是默认设置。）
-    （盒子。尺寸）
+#+begin_src emacs-lisp
+  (box . size)
+#+end_src
 
 	 显示一个填充框。  但是，如果点在蒙版图像下大于任一维度中的 size 像素，则将其显示为空心框。
-    空洞的
+#+begin_src emacs-lisp
+  hollow
+#+end_src
 
 	 显示一个空心盒子。
-    零
+#+begin_src emacs-lisp
+  nil
+#+end_src
 
 	 不显示光标。
-    酒吧
+#+begin_src emacs-lisp
+  bar
+#+end_src
 
 	 在字符之间显示竖线。
-    （条。宽度）
+#+begin_src emacs-lisp
+  (bar . width)
+#+end_src
 
 	 在字符之间显示一个垂直条宽度像素宽。
-    酒吧
+#+begin_src emacs-lisp
+  hbar
+#+end_src
 
 	 显示一个水平条。
-    (hbar . 高度)
+#+begin_src emacs-lisp
+  (hbar . height)
+#+end_src
 
 	 显示一个水平条高度像素高。
 
 cursor-type 框架参数可以被变量 cursor-type 和 cursor-in-non-selected-windows 覆盖：
 
-用户选项：光标类型¶
+#+begin_src emacs-lisp
+  User Option: cursor-type ¶
+#+end_src
 
     此缓冲区局部变量控制光标在显示缓冲区的选定窗口中的外观。  如果其值为 t，则表示使用 cursor-type frame 参数指定的光标。  否则，该值应该是上面列出的游标类型之一，它会覆盖游标类型框架参数。
 
-用户选项：光标在非选定窗口中¶
+#+begin_src emacs-lisp
+  User Option: cursor-in-non-selected-windows ¶
+#+end_src
 
     此缓冲区局部变量控制光标在未选定窗口中的外观。  它支持与光标类型框架参数相同的值；  此外，nil 表示不在未选择的窗口中显示光标，而 t（默认值）表示使用通常光标类型的标准修改（实心框变为空心框，条形变为较窄的条形）。
 
-用户选项：x-stretch-cursor ¶
+#+begin_src emacs-lisp
+  User Option: x-stretch-cursor ¶
+#+end_src
 
     此变量控制显示在超宽字形上的块光标的宽度，例如制表符或一段空白区域。  默认情况下，块光标仅与字体的默认字符一样宽，如果字形超宽，则不会覆盖其下字形的所有宽度。  此变量的非 nil 值意味着将块光标绘制为与其下方的字形一样宽。  默认值为无。
 
     这个变量对文本模式框架没有影响，因为文本模式光标是由终端绘制的，不受 Emacs 的控制。
 
-用户选项：blink-cursor-alist ¶
+#+begin_src emacs-lisp
+  User Option: blink-cursor-alist ¶
+#+end_src
 
     此变量指定如何使光标闪烁。  每个元素都有形式（on-state . off-state）。  只要光标类型等于 on-state（使用 equal 进行比较），相应的 off-state 就会指定光标闪烁时的样子。  开启状态和关闭状态都应该是光标类型框架参数的合适值。
 
@@ -987,25 +1319,35 @@ cursor-type 框架参数可以被变量 cursor-type 和 cursor-in-non-selected-w
 
 这些框架参数控制字体和颜色的使用。
 
-字体后端
+#+begin_src emacs-lisp
+  font-backend
+#+end_src
 
     符号列表，按优先级指定用于在框架上绘制字符的字体后端。  在没有在 X 上绘制 Cairo 的 Emacs 中，目前有三种可能可用的字体后端：x（X 核心字体驱动程序）、xft（Xft 字体驱动程序）和 xfthb（具有 HarfBuzz 文本整形的 Xft 字体驱动程序）。  如果使用 Cairo 绘图构建，那么 X 上还有三个潜在可用的字体后端：x、ftcr（Cairo 上的 FreeType 字体驱动程序）和 ftcrhb（Cairo 上具有 HarfBuzz 文本整形的 FreeType 字体驱动程序）。  使用 HarfBuzz 构建 Emacs 时，默认字体驱动程序是 ftcrhb，虽然使用 ftcr 驱动程序仍然是可能的，但不推荐。  在 MS-Windows 上，目前有三种可用的字体后端：gdi（核心 MS-Windows 字体驱动程序）、uniscribe（用于 OTF 和 TTF 字体的字体驱动程序，由 Uniscribe 引擎进行文本整形）和 harfbuzz（用于 OTF 和带有 HarfBuzz 文本整形的 TTF 字体）（参见 GNU Emacs 手册中的 Windows 字体）。  同样推荐使用 harfbuzz 驱动程序。  在其他系统上，只有一个可用的字体后端，所以修改这个框架参数没有意义。
-背景模式
+#+begin_src emacs-lisp
+  background-mode
+#+end_src
 
     根据背景颜色是浅色还是深色，此参数是深色还是浅色。
-tty-颜色模式¶
+#+begin_src emacs-lisp
+  tty-color-mode ¶
+#+end_src
 
     此参数覆盖系统终端功能数据库给出的终端颜色支持，因为此参数的值指定在文本终端上使用的颜色模式。  该值可以是符号或数字。  一个数字指定要使用的颜色数量（以及间接地指定发出什么命令来产生每种颜色）。  例如，(tty-color-mode . 8) 指定 ANSI 转义序列用于 8 种标准文本颜色。  值 -1 关闭颜色支持。
 
     如果参数的值为符号，则通过 tty-color-mode-alist 的值指定一个数字，并使用关联的数字代替。
-屏幕伽玛¶
+#+begin_src emacs-lisp
+  screen-gamma ¶
+#+end_src
 
     如果这是一个数字，Emacs 会执行 gamma 校正来调整所有颜色的亮度。  该值应该是显示器的屏幕伽玛。
 
     通常的 PC 显示器的屏幕 gamma 为 2.2，因此 Emacs 和 X 窗口中的颜色值经过校准，可以在具有该 gamma 值的显示器上正确显示。  如果您为 screen-gamma 指定 2.2，这意味着不需要校正。  其他值需要校正，旨在使校正后的颜色在屏幕上显示为未经校正而在伽马值为 2.2 的普通显示器上出现的方式。
 
     如果您的显示器显示颜色太浅，您应该指定一个小于 2.2 的屏幕伽马值。  这要求进行使颜色变深的校正。  屏幕伽马值 1.5 可能会为 LCD 彩色显示器提供良好的效果。
-α ¶
+#+begin_src emacs-lisp
+  alpha ¶
+#+end_src
 
     此参数在支持可变不透明度的图形显示上指定框架的不透明度。  它应该是 0 到 100 之间的整数，其中 0 表示完全透明，100 表示完全不透明。  它也可以有一个 nil 值，它告诉 Emacs 不要设置框架的不透明度（把它留给窗口管理器）。
 
@@ -1017,28 +1359,44 @@ tty-颜色模式¶
 
 以下帧参数是半过时的，因为它们自动等效于特定面的特定面属性（请参阅 Emacs 手册中的标准面）：
 
-字体
+#+begin_src emacs-lisp
+  font
+#+end_src
 
     用于在框架中显示文本的字体名称。  这是一个字符串，可以是系统的有效字体名称，也可以是 Emacs 字体集的名称（请参阅字体集）。  相当于默认面的字体属性。
-前景色
+#+begin_src emacs-lisp
+  foreground-color
+#+end_src
 
     用于字符的颜色。  它相当于默认面的 :foreground 属性。
-背景颜色
+#+begin_src emacs-lisp
+  background-color
+#+end_src
 
     用于字符背景的颜色。  它相当于默认面的 :background 属性。
-鼠标颜色
+#+begin_src emacs-lisp
+  mouse-color
+#+end_src
 
     鼠标指针的颜色。  相当于鼠标脸的 :background 属性。
-光标颜色
+#+begin_src emacs-lisp
+  cursor-color
+#+end_src
 
     显示点的光标颜色。  它相当于光标面的 :background 属性。
-边框颜色
+#+begin_src emacs-lisp
+  border-color
+#+end_src
 
     框架边框的颜色。  它相当于边框的 :background 属性。
-滚动条前景
+#+begin_src emacs-lisp
+  scroll-bar-foreground
+#+end_src
 
     如果非零，滚动条前景的颜色。  它相当于滚动条面的 :foreground 属性。
-滚动条背景
+#+begin_src emacs-lisp
+  scroll-bar-background
+#+end_src
 
     如果非零，滚动条背景的颜色。  它相当于滚动条面的 :background 属性。
 
@@ -1046,7 +1404,10 @@ tty-颜色模式¶
 
 以下是如何检查 X 样式窗口几何规范中的数据：
 
-功能：x-parse-geometry geom ¶
+#+begin_src emacs-lisp
+Function: x-parse-geometry geom ¶
+#+end_src
+
 
     函数 x-parse-geometry 将标准 X 窗口几何字符串转换为 alist，您可以将其用作 make-frame 参数的一部分。
 
@@ -1067,33 +1428,49 @@ tty-颜色模式¶
 
 本节介绍读取和更改终端参数值的功能。  他们都接受终端或框架作为他们的论据；  后者意味着使用该框架的终端。  nil 参数表示所选帧的终端。
 
-功能：终端参数&可选终端¶
+#+begin_src emacs-lisp
+  Function: terminal-parameters &optional terminal ¶
+#+end_src
 
     此函数返回一个列表，列出终端的所有参数及其值。
 
-功能：终端参数终端参数¶
+#+begin_src emacs-lisp
+  Function: terminal-parameter terminal parameter ¶
+#+end_src
 
     该函数返回终端参数参数（一个符号）的值。  如果终端没有参数设置，这个函数返回nil。
 
-功能：set-terminal-parameter 终端参数值 ¶
+#+begin_src emacs-lisp
+  Function: set-terminal-parameter terminal parameter value ¶
+#+end_src
 
     该函数将终端的参数参数设置为指定值，并返回该参数的先前值。
 
 下面列出了一些具有特殊含义的终端参数：
 
-背景模式
+#+begin_src emacs-lisp
+  background-mode
+#+end_src
 
     终端背景颜色的分类，浅色或深色。
-正常擦除是退格
+#+begin_src emacs-lisp
+  normal-erase-is-backspace
+#+end_src
 
     值是 1 或 0，具体取决于此终端上的 normal-erase-is-backspace-mode 是打开还是关闭。  请参阅 Emacs 手册中的 DEL 不删除。
-终端启动
+#+begin_src emacs-lisp
+  terminal-initted
+#+end_src
 
     终端初始化后，设置为终端特定的初始化函数。
-tty 模式设置字符串
+#+begin_src emacs-lisp
+  tty-mode-set-strings
+#+end_src
 
     当存在时，包含 Emacs 将在配置 tty 以进行渲染时输出的转义序列的字符串列表。  Emacs 仅在配置终端时发出这些字符串：如果您想在已经处于活动状态的终端上启用模式（例如，在 tty-setup-hook 中），请使用 send-string-to- 显式输出必要的转义序列终端除了将序列添加到 tty-mode-set-strings 之外。
-tty 模式重置字符串
+#+begin_src emacs-lisp
+  tty-mode-reset-strings
+#+end_src
 
     如果存在，则取消 tty-mode-set-strings 中字符串效果的字符串列表。  Emacs 在退出、删除终端或挂起自身时会发出这些字符串。
 
@@ -1103,15 +1480,21 @@ tty 模式重置字符串
 
 通常你不明确指定名称，Emacs 会根据存储在变量 frame-title-format 中的模板自动计算框架名称。  每次重新显示框架时，Emacs 都会重新计算名称。
 
-变量：框架标题格式¶
+#+begin_src emacs-lisp
+  Variable: frame-title-format ¶
+#+end_src
 
     当您没有明确指定一个框架时，此变量指定如何计算框架的名称。  变量的值实际上是一个模式行结构，就像模式行格式一样，只是忽略了“%c”、“%C”和“%l”结构。  请参阅模式行的数据结构。
 
-变量：图标标题格式¶
+#+begin_src emacs-lisp
+  Variable: icon-title-format ¶
+#+end_src
 
     当您没有明确指定框架标题时，此变量指定如何计算图标化框架的名称。  此标题出现在图标本身中。
 
-变量：多帧 ¶
+#+begin_src emacs-lisp
+  Variable: multiple-frames ¶
+#+end_src
 
     这个变量是由 Emacs 自动设置的。  当有两个或更多帧（不包括 minibuffer-only 帧或不可见帧）时，其值为 t。  frame-title-format 的默认值使用multiple-frames，以便只有在超过一帧时才将缓冲区名称放在帧标题中。
 
@@ -1121,7 +1504,9 @@ tty 模式重置字符串
 
 实时帧是尚未删除的帧。  当一个框架被删除时，它会从它的终端显示中移除，尽管它可能会继续作为一个 Lisp 对象存在，直到不再有对它的引用。
 
-命令：delete-frame &optional frame force ¶
+#+begin_src emacs-lisp
+  Command: delete-frame &optional frame force ¶
+#+end_src
 
     此功能删除框架框架。  参数框架必须指定一个实时框架（见下文）并默认为选定的框架。
 
@@ -1129,13 +1514,17 @@ tty 模式重置字符串
 
     请注意，只要它的 minibuffer 充当另一个帧的代理 minibuffer，就不能删除一个帧（请参阅 Minibuffers 和 Frames）。  通常，如果所有其他框架都不可见，则无法删除框架，但如果 force 不为零，则允许您这样做。
 
-功能：frame-live-p 帧¶
+#+begin_src emacs-lisp
+  Function: frame-live-p frame ¶
+#+end_src
 
     如果帧帧没有被删除，此函数返回非零。  可能的非零返回值类似于 framep。  请参阅框架。
 
 一些窗口管理器提供删除窗口的命令。  它们通过向操作窗口的程序发送特殊消息来工作。  当 Emacs 获得这些命令之一时，它会生成一个 delete-frame 事件，其正常定义是调用函数 delete-frame 的命令。  请参阅其他系统事件。
 
-命令：delete-other-frames &optional frame iconify ¶
+#+begin_src emacs-lisp
+  Command: delete-other-frames &optional frame iconify ¶
+#+end_src
 
     此命令删除框架终端上的所有框架，框架除外。  如果 frame 使用另一个 frame 的 minibuffer，则该 minibuffer 帧保持不变。  参数框架必须指定一个实时框架并默认为选定的框架。  在内部，此命令通过调用 delete-frame 和 force nil 来处理所有应删除的帧。
 
@@ -1145,15 +1534,21 @@ tty 模式重置字符串
 
 ** TODO 30.8 查找所有帧
 
-功能：帧列表¶
+#+begin_src emacs-lisp
+  Function: frame-list ¶
+#+end_src
 
     该函数返回所有活动帧的列表，即那些未被删除的帧。  它类似于缓冲区的缓冲区列表，并包括所有终端上的帧。  您获得的列表是新创建的，因此修改列表不会对 Emacs 的内部产生任何影响。
 
-功能：可见帧列表¶
+#+begin_src emacs-lisp
+  Function: visible-frame-list ¶
+#+end_src
 
     此函数返回仅包含当前可见帧的列表。  请参阅框架的可见性。  文本终端上的框架始终被视为可见，即使实际上只显示了选定的框架。
 
-功能：frame-list-z-order &可选显示¶
+#+begin_src emacs-lisp
+  Function: frame-list-z-order &optional display ¶
+#+end_src
 
     此函数以 Z（堆叠）顺序返回 Emacs 的帧列表（请参阅提升、降低和重新堆叠帧）。  可选参数 display 指定轮询哪个显示器。  display 应该是一个框架或一个显示名称（一个字符串）。  如果省略或为零，则表示所选帧的显示。  如果 display 不包含 Emacs 框架，则返回 nil。
 
@@ -1161,29 +1556,43 @@ tty 模式重置字符串
 
     此功能在文本终端上没有意义。
 
-功能：next-frame &optional frame minibuf ¶
+#+begin_src emacs-lisp
+  Function: next-frame &optional frame minibuf ¶
+#+end_src
 
     此功能可让您从任意起点方便地循环浏览特定终端上的所有帧。  它在帧的终端上返回所有活动帧列表中的下一帧。  参数框架必须指定一个实时框架并默认为选定的框架。  它永远不会返回 no-other-frame 参数（请参阅帧交互参数）为非零的帧。
 
     第二个参数 minibuf 表示在决定下一帧应该是什么时要考虑哪些帧：
 
-    零
+#+begin_src emacs-lisp
+  nil
+#+end_src
 
 	 考虑除 minibuffer-only 帧之外的所有帧。
-    可见的
+#+begin_src emacs-lisp
+  visible
+#+end_src
 
 	 只考虑可见帧。
-    0
+#+begin_src emacs-lisp
+  0
+#+end_src
 
 	 只考虑可见或图标化的框架。
-    一个窗口
+#+begin_src emacs-lisp
+  a window
+#+end_src
 
 	 仅考虑使用该特定窗口作为其迷你缓冲区窗口的帧。
-    还要别的吗
+#+begin_src emacs-lisp
+  anything else
+#+end_src
 
 	 考虑所有帧。
 
-功能：前一帧 & 可选帧 minibuf ¶
+#+begin_src emacs-lisp
+  Function: previous-frame &optional frame minibuf ¶
+#+end_src
 
     与下一帧类似，但以相反方向循环遍历所有帧。
 
@@ -1199,7 +1608,10 @@ Normally, each frame has its own minibuffer window at the bottom, which is used 
 
 如果您使用一个仅包含 minibuffer 的帧，您可能希望在进入 minibuffer 时提升该帧。  如果是这样，请将变量 minibuffer-auto-raise 设置为 t。  请参阅提升、降低和重新堆叠框架。
 
-变量：default-minibuffer-frame ¶
+#+begin_src emacs-lisp
+Variable: default-minibuffer-frame ¶
+#+end_src
+
 
     默认情况下，此变量指定用于 minibuffer 窗口的帧。  它不会影响现有框架。  它始终是当前终端本地的，不能是缓冲区本地的。  请参阅多个终端。
 
@@ -1209,7 +1621,9 @@ Normally, each frame has its own minibuffer window at the bottom, which is used 
 
 当 Emacs 在多个终端上显示其框架时（请参阅多个终端），每个终端都有自己的选定框架。  但其中只有一个是选定的帧：它是属于最近输入的终端的帧。  也就是说，当 Emacs 运行来自某个终端的命令时，选定的帧就是那个终端的帧。  由于 Emacs 在任何给定时间只运行一个命令，它一次只需要考虑一个选定的帧；  这个框架就是我们在本手册中所说的选择框架。  显示所选帧的显示器是所选帧的显示器。
 
-功能：选择帧¶
+#+begin_src emacs-lisp
+  Function: selected-frame ¶
+#+end_src
 
     此函数返回选定的帧。
 
@@ -1221,13 +1635,17 @@ Lisp 程序可以通过调用函数 select-frame 来临时切换帧。  这不�
 
 使用文本终端时，终端上一次只能显示一帧，因此调用 select-frame 后，下一次重新显示实际上显示新选择的帧。  此帧保持选中状态，直到随后调用 select-frame。  文本终端上的每一帧都有一个数字，它出现在模式行中缓冲区名称之前（请参阅模式行中使用的变量）。
 
-功能：select-frame-set-input-focus frame &可选norecord ¶
+#+begin_src emacs-lisp
+  Function: select-frame-set-input-focus frame &optional norecord ¶
+#+end_src
 
     这个函数选择框架，提升它（如果它碰巧被其他框架遮住）并尝试给它窗口系统的焦点。  在文本终端上，下一次重新显示会在整个终端屏幕上显示新框架。  可选参数 norecord 与 select-frame 具有相同的含义（见下文）。  这个函数的返回值并不重要。
 
 理想情况下，接下来描述的功能应该聚焦一个帧，而不会将其提升到其他帧之上。  不幸的是，许多窗口系统或窗口管理器可能拒绝遵守。
 
-功能：x-focus-frame frame &optional noactivate ¶
+#+begin_src emacs-lisp
+  Function: x-focus-frame frame &optional noactivate ¶
+#+end_src
 
     这个函数让 frame 成为 X 服务器的焦点，而不必提升它。  frame nil 表示使用选定的帧。  在 X 下，可选参数 noactivate，如果非零，则意味着避免使框架的窗口系统窗口成为“活动”窗口，这应该更多地坚持避免将框架提升到其他框架之上。
 
@@ -1235,7 +1653,9 @@ Lisp 程序可以通过调用函数 select-frame 来临时切换帧。  这不�
 
     如果没有窗口系统支持，这个函数什么也不做。
 
-命令：select-frame frame &optional norecord ¶
+#+begin_src emacs-lisp
+  Command: select-frame frame &optional norecord ¶
+#+end_src
 
     此函数选择帧帧，暂时忽略 X 服务器的焦点（如果有）。  帧的选择一直持续到用户下一次选择不同的帧，或者直到下一次调用这个函数。  （如果您使用的是窗口系统，返回命令循环后可能会将之前选择的帧恢复为选择的帧，因为它仍然可能具有窗口系统的输入焦点。）
 
@@ -1247,15 +1667,21 @@ Lisp 程序可以通过调用函数 select-frame 来临时切换帧。  这不�
 
 Emacs 通过安排选择框架作为服务器和窗口管理器的请求来与窗口系统协作。  当窗口系统通知 Emacs 它的一个框架已被选中时，Emacs 会在内部生成一个焦点事件。  当 Emacs 框架显示在文本终端模拟器上时，例如 xterm，它支持报告焦点更改通知，即使对于文本模式框架，焦点输入和焦点输出事件也可用。  焦点事件通常由 handle-focus-in 处理。
 
-命令：handle-focus-in 事件¶
+#+begin_src emacs-lisp
+  Command: handle-focus-in event ¶
+#+end_src
 
     此函数处理来自支持显式焦点通知的窗口系统和终端的焦点事件。  它更新帧焦点状态查询的每帧焦点标志，并调用 after-focus-change-function。  此外，它会生成一个 switch-frame 事件，以便将所选帧的 Emacs 概念切换到最近聚焦在某个终端中的帧。  需要注意的是，这种将 Emacs 选定帧切换到最近聚焦的帧并不意味着其他帧不会继续在其各自的终端中获得焦点。  不要自己调用此函数：而是将逻辑附加到 after-focus-change-function。
 
-命令：handle-switch-frame frame ¶
+#+begin_src emacs-lisp
+  Command: handle-switch-frame frame ¶
+#+end_src
 
     这个函数处理一个切换帧事件，Emacs 在焦点通知时或在涉及输入事件到达与上一个事件不同的帧的各种其他情况下为自己生成该事件。  不要自己调用此函数。
 
-功能：redirect-frame-focus frame &可选的focus-frame ¶
+#+begin_src emacs-lisp
+  Function: redirect-frame-focus frame &optional focus-frame ¶
+#+end_src
 
     此功能将焦点从框架重定向到焦点框架。  这意味着焦点框架将接收后续的击键和用于框架的事件。  在这样的事件之后，last-event-frame 的值将是 focus-frame。  此外，指定 frame 的 switch-frame 事件将改为选择 focus-frame。
 
@@ -1269,13 +1695,17 @@ Emacs 通过安排选择框架作为服务器和窗口管理器的请求来与�
 
     重定向一直持续到调用 redirect-frame-focus 来改变它。
 
-功能：帧焦点状态帧¶
+#+begin_src emacs-lisp
+  Function: frame-focus-state frame ¶
+#+end_src
 
     此函数检索帧的最后一个已知焦点状态。
 
     如果已知帧没有被聚焦，则返回 nil，如果已知帧被聚焦，则返回 t，如果 Emacs 不知道帧的焦点状态，则返回 unknown。  （您可能会在不支持显式焦点通知的终端上运行的 TTY 帧中看到最后一个状态。）
 
-变量：焦点变化后函数¶
+#+begin_src emacs-lisp
+  Variable: after-focus-change-function ¶
+#+end_src
 
     此函数是代码可用于接收焦点已更改通知的扩展点。
 
@@ -1285,17 +1715,25 @@ Emacs 通过安排选择框架作为服务器和窗口管理器的请求来与�
 
     此函数可以在任意上下文中调用，包括从内部读取事件中调用，因此请像编写进程过滤器时一样小心。
 
-用户选项：焦点跟随鼠标¶
+#+begin_src emacs-lisp
+  User Option: focus-follows-mouse ¶
+#+end_src
 
     当您将鼠标指针移动到框架中时，此选项会通知 Emacs 窗口管理器是否以及如何转移焦点。  它可以具有三个有意义的值：
 
-    零
+#+begin_src emacs-lisp
+  nil
+#+end_src
 
 	 当您的窗口管理器遵循“单击聚焦”策略时，应使用默认值 nil，您必须在框架内单击鼠标才能使该框架获得焦点。
-    吨
+#+begin_src emacs-lisp
+  t
+#+end_src
 
 	 当您的窗口管理器的焦点自动跟随鼠标指针的位置但获得焦点的框架不会自动提升并且甚至可能被其他窗口系统窗口遮挡时，应该使用值 t。
-    自动加注
+#+begin_src emacs-lisp
+  auto-raise
+#+end_src
 
 	 当窗口管理器的焦点自动跟随鼠标指针的位置并且获得焦点的框架自动升起时，应该使用值 auto-raise。
 
@@ -1315,23 +1753,31 @@ Emacs 通过安排选择框架作为服务器和窗口管理器的请求来与�
 
 可见性在文本终端上是没有意义的，因为在任何情况下实际上只显示选定的帧。
 
-功能：frame-visible-p frame ¶
+#+begin_src emacs-lisp
+  Function: frame-visible-p frame ¶
+#+end_src
 
     此函数返回框架框架的可见性状态。  如果 frame 可见，则值为 t，如果不可见，则值为 nil，如果已图标化，则值为 icon。
 
     在文本终端上，出于此功能的目的，所有帧都被视为可见，即使只显示一个帧。  请参阅提升、降低和重新堆叠框架。
 
-命令：iconify-frame &optional frame ¶
+#+begin_src emacs-lisp
+  Command: iconify-frame &optional frame ¶
+#+end_src
 
     此功能图标化框架框架。  如果您省略框架，它将图标化选定的框架。  这通常会使框架的所有子框架（及其后代）不可见（请参阅子框架）。
 
-命令：make-frame-visible &optional frame ¶
+#+begin_src emacs-lisp
+  Command: make-frame-visible &optional frame ¶
+#+end_src
 
     此功能使框架框架可见。  如果您省略框架，它会使选定的框架可见。  这不会提升框架，但如果您愿意，您可以使用提升框架来做到这一点（请参阅提升、降低和重新堆叠框架）。
 
     使框架可见通常使其所有子框架（及其后代）也可见（请参阅子框架）。
 
-命令：make-frame-invisible &optional frame force ¶
+#+begin_src emacs-lisp
+  Command: make-frame-invisible &optional frame force ¶
+#+end_src
 
     此功能使框架框架不可见。  如果您省略框架，它会使选定的框架不可见。  通常，这会使框架的所有子框架（及其后代）也变得不可见（请参阅子框架）。
 
@@ -1339,7 +1785,9 @@ Emacs 通过安排选择框架作为服务器和窗口管理器的请求来与�
 
 框架的可见性状态也可用作框架参数。  您可以这样阅读或更改它。  请参阅窗口管理参数。  用户还可以使用窗口管理器对框架进行图标化和去图标化。  这发生在 Emacs 可以施加任何控制的级别之下，但 Emacs 确实提供了可用于跟踪此类更改的事件。  请参阅其他系统事件。
 
-功能：x-double-buffered-p &可选帧¶
+#+begin_src emacs-lisp
+  Function: x-double-buffered-p &optional frame ¶
+#+end_src
 
     如果当前正在使用双缓冲渲染帧，则此函数返回非 nil。  框架默认为选定的框架。
 
@@ -1351,15 +1799,21 @@ Emacs 通过安排选择框架作为服务器和窗口管理器的请求来与�
 
 请注意，下面描述的所有功能都将尊重框架（和所有其他窗口系统窗口）对其各自 z 组的遵守（请参阅位置参数）。  例如，通常不能将框架降低到桌面窗口的下方，并且不能将 z-group 参数为 nil 的框架升高到窗口系统的任务栏或工具提示窗口上方。
 
-命令：raise-frame &optional frame ¶
+#+begin_src emacs-lisp
+  Command: raise-frame &optional frame ¶
+#+end_src
 
     此功能将框架框架（默认为选定框架）提升到属于与框架相同或较低 z 组的所有其他框架之上。  如果框架不可见或图标化，则使其可见。  如果 frame 是子框架（参见子框架），这会将框架提升到其父框架的所有其他子框架之上。
 
-命令：lower-frame &optional frame ¶
+#+begin_src emacs-lisp
+  Command: lower-frame &optional frame ¶
+#+end_src
 
     此功能将框架框架（默认为选定框架）降低到属于与框架相同或更高 z 组的所有其他框架之下。  如果框架是子框架（请参阅子框架），这会将框架降低到其父框架的所有其他子框架之下。
 
-功能：frame-restack frame1 frame2 & optional above ¶
+#+begin_src emacs-lisp
+  Function: frame-restack frame1 frame2 &optional above ¶
+#+end_src
 
     此函数将 frame1 重新堆叠到 frame2 之下。  这意味着如果两个框架都是可见的并且它们的显示区域重叠，那么框架 2 将（部分）遮盖框架 1。  如果上面可选的第三个参数不为 nil，则此函数将 frame1 重新堆叠在 frame2 之上。  这意味着如果两个框架都是可见的并且它们的显示区域重叠，那么框架 1 将（部分）遮盖框架 2。
 
@@ -1369,7 +1823,9 @@ Emacs 通过安排选择框架作为服务器和窗口管理器的请求来与�
 
 请注意，仅当所涉及的框架都没有被图标化或不可见时，重新堆叠的效果才会生效。  您可以使用 z-group（请参阅位置参数）框架参数将框架添加到永久显示在其他框架上方或下方的一组框架中。  只要一个框架属于这些组之一，重新堆叠它只会影响其在该组中的相对堆叠位置。  重新堆叠属于不同 z 组的帧的效果是不确定的。  您可以使用函数 frame-list-z-order 按当前堆叠顺序列出帧（请参阅查找所有帧）。
 
-用户选项：minibuffer-auto-raise ¶
+#+begin_src emacs-lisp
+  User Option: minibuffer-auto-raise ¶
+#+end_src
 
     如果这是非零，则激活 minibuffer 会提升 minibuffer 窗口所在的帧。
 
@@ -1377,7 +1833,9 @@ Emacs 通过安排选择框架作为服务器和窗口管理器的请求来与�
 
 升高和降低框架的概念也适用于文本终端框架。  在每个文本终端上，任何时候都只显示顶部框架。
 
-功能：tty-top-frame &可选终端¶
+#+begin_src emacs-lisp
+  Function: tty-top-frame &optional terminal ¶
+#+end_src
 
     此函数返回终端上的顶部框架。  terminal 应该是一个终端对象、一个框架（表示该框架的终端）或 nil（表示所选框架的终端）。  如果它不引用文本终端，则返回值为 nil。
 
@@ -1385,11 +1843,15 @@ Emacs 通过安排选择框架作为服务器和窗口管理器的请求来与�
 
 框架配置记录了框架的当前排列、它们的所有属性以及每个框架的窗口配置。  （请参阅窗口配置。）
 
-功能：当前帧配置¶
+#+begin_src emacs-lisp
+  Function: current-frame-configuration ¶
+#+end_src
 
     此函数返回一个框架配置列表，该列表描述了框架的当前排列及其内容。
 
-功能：set-frame-configuration配置&可选nodelete ¶
+#+begin_src emacs-lisp
+  Function: set-frame-configuration configuration &optional nodelete ¶
+#+end_src
 
     此函数恢复配置中描述的帧的状态。  但是，此功能不会恢复已删除的帧。
 
@@ -1450,13 +1912,17 @@ NS 构建不会在父框架的边缘剪裁子框架，从而允许它们被定�
 
 在处理子框架和父框架时，以下两个函数很有用：
 
-功能：框架父级&可选框架¶
+#+begin_src emacs-lisp
+  Function: frame-parent &optional frame ¶
+#+end_src
 
     该函数返回frame的父frame。  frame 的父框架是 Emacs 框架，其窗口系统窗口是框架的窗口系统窗口的父窗口。  如果存在这样的框架，则认为框架是该框架的子框架。
 
     如果框架没有父框架，此函数返回 nil。
 
-功能：frame-ancestor-p 祖先后代 ¶
+#+begin_src emacs-lisp
+  Function: frame-ancestor-p ancestor descendant ¶
+#+end_src
 
     如果祖先是后代的祖先，则此函数返回非零。  当它是后代的父框架或者它是后代的父框架的祖先时，祖先是后代的祖先。  祖先和后代都必须指定实时帧。
 
@@ -1464,7 +1930,9 @@ NS 构建不会在父框架的边缘剪裁子框架，从而允许它们被定�
 
 自定义以下选项对于调整子框架的 iconify-frame 行为很有用。
 
-用户选项：iconify-child-frame ¶
+#+begin_src emacs-lisp
+  User Option: iconify-child-frame ¶
+#+end_src
 
     此选项告诉 Emacs 在要求图标化子框架时如何继续。  如果它是 nil，iconify-frame 在子框架上调用时什么也不做。  如果它是 iconify-top-level，Emacs 将尝试图标化作为此子框架祖先的顶级框架。  如果它是不可见的，Emacs 将尝试使这个子框架不可见而不是图标化它。
 
@@ -1476,7 +1944,10 @@ NS 构建不会在父框架的边缘剪裁子框架，从而允许它们被定�
 
 跟踪鼠标的便捷方法是请求事件来表示鼠标运动。  然后，您可以通过等待事件来等待动作。  此外，您可以轻松处理可能发生的任何其他类型的事件。  这很有用，因为通常您不希望永远跟踪鼠标——只在其他一些事件之前，例如释放按钮。
 
-宏：跟踪鼠标体... ¶
+#+begin_src emacs-lisp
+Macro: track-mouse body… ¶
+#+end_src
+
 
     此宏执行主体，并启用鼠标运动事件的生成。  通常，body 会使用 read-event 来读取运动事件并相应地修改显示。  有关鼠标运动事件的格式，请参阅运动事件。
 
@@ -1492,31 +1963,43 @@ NS 构建不会在父框架的边缘剪裁子框架，从而允许它们被定�
 
 函数 mouse-position 和 set-mouse-position 可以访问鼠标的当前位置。
 
-功能：鼠标位置¶
+#+begin_src emacs-lisp
+  Function: mouse-position ¶
+#+end_src
 
     此函数返回鼠标位置的描述。  该值看起来像 (frame x . y)，其中 x 和 y 是整数，给出相对于 frame 的原始位置（参见 Frame Geometry）的框架默认字符大小的倍数（可能是四舍五入的）位置（参见 Frame Font） .
 
-变量：鼠标位置函数¶
+#+begin_src emacs-lisp
+  Variable: mouse-position-function ¶
+#+end_src
 
     如果非零，则此变量的值是鼠标位置调用的函数。  mouse-position 在返回之前调用这个函数，它的正常返回值作为唯一的参数，它返回这个函数返回给它的任何东西。
 
     这个异常钩子的存在是为了像 xt-mouse.el 这样需要在 Lisp 级别进行鼠标处理的包。
 
-变量：tty-menu-calls-mouse-position-function ¶
+#+begin_src emacs-lisp
+  Variable: tty-menu-calls-mouse-position-function ¶
+#+end_src
 
     如果非零，TTY 菜单将调用鼠标位置函数，如上所述。  这存在于 TTY 菜单调用 mouse-position-function 不安全的情况下，例如它是否可以触发重新显示。
 
-功能：设置鼠标位置坐标系 xy ¶
+#+begin_src emacs-lisp
+  Function: set-mouse-position frame x y ¶
+#+end_src
 
     此函数将鼠标扭曲到帧中的 x、y 位置。  参数 x 和 y 是整数，以帧的默认字符大小（请参阅帧字体）相对于帧的原始位置（请参阅帧几何）的倍数给出位置。
 
     生成的鼠标位置被限制在 frame 的原生框架内。  如果框架不可见，则此函数不执行任何操作。  返回值不重要。
 
-功能：鼠标像素位置¶
+#+begin_src emacs-lisp
+  Function: mouse-pixel-position ¶
+#+end_src
 
     此函数类似于 mouse-position，不同之处在于它以像素为单位返回坐标，而不是以字符为单位。
 
-功能：设置鼠标像素位置坐标系 xy ¶
+#+begin_src emacs-lisp
+  Function: set-mouse-pixel-position frame x y ¶
+#+end_src
 
     这个函数像 set-mouse-position 一样扭曲鼠标，除了 x 和 y 是像素单位而不是字符单位。
 
@@ -1524,17 +2007,23 @@ NS 构建不会在父框架的边缘剪裁子框架，从而允许它们被定�
 
 在图形终端上，以下两个函数允许检索和设置鼠标光标的绝对位置。
 
-功能：鼠标绝对像素位置¶
+#+begin_src emacs-lisp
+  Function: mouse-absolute-pixel-position ¶
+#+end_src
 
     此函数返回鼠标光标位置坐标的 cons 单元格 (x . y)，以像素为单位，相对于所选帧显示的位置 (0, 0)。
 
-功能：设置鼠标绝对像素位置 xy ¶
+#+begin_src emacs-lisp
+  Function: set-mouse-absolute-pixel-position x y ¶
+#+end_src
 
     此函数将鼠标光标移动到位置 (x, y)。  坐标 x 和 y 以相对于所选帧显示的位置 (0, 0) 的像素为单位进行解释。
 
 以下函数可以判断鼠标光标当前是否在框架上可见：
 
-功能：frame-pointer-visible-p &optional frame ¶
+#+begin_src emacs-lisp
+  Function: frame-pointer-visible-p &optional frame ¶
+#+end_src
 
     如果显示在帧上的鼠标指针可见，则此谓词函数返回非零；  否则返回零。  frame 省略或 nil 表示选择的帧。  这在 make-pointer-invisible 设置为 t 时很有用：它允许您知道指针是否已被隐藏。  请参阅 Emacs 手册中的鼠标避免。
 
@@ -1543,7 +2032,10 @@ NS 构建不会在父框架的边缘剪裁子框架，从而允许它们被定�
 
 Lisp 程序可以弹出一个菜单，以便用户可以用鼠标选择一个选项。  在文本终端上，如果鼠标不可用，用户可以使用键盘移动键（Cn、Cp 或上下箭头键）选择替代方案。
 
-功能：x-popup-menu 位置菜单¶
+#+begin_src emacs-lisp
+Function: x-popup-menu position menu ¶
+#+end_src
+
 
     此函数显示一个弹出菜单并返回用户所做选择的指示。
 
@@ -1585,7 +2077,10 @@ Lisp 程序可以弹出一个菜单，以便用户可以用鼠标选择一个选
 
 对话框是弹出菜单的一种变体——它看起来有点不同，它总是出现在框架的中心，并且只有一个级别和一个或多个按钮。  对话框的主要用途是提出问题，用户可以用“是”、“否”和其他一些选择来回答。  通过一个按钮，他们还可以强制用户确认重要信息。  y-or-np 和 yes-or-no-p 函数在通过鼠标点击调用的命令调用时使用对话框而不是键盘。
 
-功能：x-popup-dialog 位置内容&可选标题 ¶
+#+begin_src emacs-lisp
+Function: x-popup-dialog position contents &optional header ¶
+#+end_src
+
 
     此函数显示一个弹出对话框并返回用户所做选择的指示。  参数内容指定提供的替代方案；  它有这种格式：
 
@@ -1613,41 +2108,65 @@ Lisp 程序可以弹出一个菜单，以便用户可以用鼠标选择一个选
 
 您可以使用指针文本属性为特定文本或图像指定鼠标指针样式，并为具有 :pointer 和 :map 图像属性的图像指定鼠标指针样式。  您可以在这些属性中使用的值如下表所示。  实际形状可能因系统而异；  描述是示例。
 
-文本
-零
+#+begin_src emacs-lisp
+  text
+#+end_src
+#+begin_src emacs-lisp
+  nil
+#+end_src
 
     在文本上使用的常用鼠标指针样式（类似“I”的形状）。
-箭
-拖动
-模式线
+#+begin_src emacs-lisp
+  arrow
+#+end_src
+#+begin_src emacs-lisp
+  vdrag
+#+end_src
+#+begin_src emacs-lisp
+  modeline
+#+end_src
 
     指向西北的箭头。
-手
+#+begin_src emacs-lisp
+  hand
+#+end_src
 
     一只指向上方的手。
-hdrag
+#+begin_src emacs-lisp
+  hdrag
+#+end_src
 
     一个左右箭头。
-nhdrag
+#+begin_src emacs-lisp
+  nhdrag
+#+end_src
 
     一个上下箭头。
-滴漏
+#+begin_src emacs-lisp
+  hourglass
+#+end_src
 
     一个旋转的环。
 
 在窗口的空白部分（与任何缓冲区内容不对应的部分）上，鼠标指针通常使用箭头样式，但您可以通过设置 void-text-area- 来指定不同的样式（上述样式之一）指针。
 
-用户选项： void-text-area-pointer ¶
+#+begin_src emacs-lisp
+  User Option: void-text-area-pointer ¶
+#+end_src
 
     此变量指定空白文本区域的鼠标指针样式。  这些包括缓冲区中一行结束之后或最后一行之下的区域。  默认是使用箭头（非文本）指针样式。
 
 使用 X 时，您可以通过设置变量 x-pointer-shape 来指定文本指针样式的真实外观。
 
-变量：x-pointer-shape ¶
+#+begin_src emacs-lisp
+  Variable: x-pointer-shape ¶
+#+end_src
 
     此变量指定通常在 Emacs 框架中使用的指针形状，用于文本指针样式。
 
-变量：x-sensitive-text-pointer-shape ¶
+#+begin_src emacs-lisp
+  Variable: x-sensitive-text-pointer-shape ¶
+#+end_src
 
     此变量指定当鼠标悬停在鼠标敏感文本上时要使用的指针形状。
 
@@ -1659,7 +2178,9 @@ nhdrag
 
 在诸如 X 之类的窗口系统中，可以通过选择在不同应用程序之间传输数据。  X 定义了任意数量的选择类型，每个选择类型都可以存储自己的数据；  但是，只有三个常用：剪贴板、主要选择和次要选择。  其他窗口系统仅支持剪贴板。  有关使用这些选择的 Emacs 命令，请参阅 GNU Emacs 手册中的剪切和粘贴。  本节记录了用于读取和设置窗口系统选择的低级函数。
 
-命令：gui-set-selection 类型数据¶
+#+begin_src emacs-lisp
+  Command: gui-set-selection type data ¶
+#+end_src
 
     此函数设置窗口系统选择。  它有两个参数：一个选择类型类型，以及分配给它的值，数据。
 
@@ -1669,13 +2190,17 @@ nhdrag
 
     该函数返回数据。
 
-功能：gui-get-selection & optional type data-type ¶
+#+begin_src emacs-lisp
+  Function: gui-get-selection &optional type data-type ¶
+#+end_src
 
     此功能访问由 Emacs 或其他程序设置的选择。  它有两个可选参数，类型和数据类型。  类型（选择类型）的默认值是 PRIMARY。
 
     data-type 参数指定要使用的数据转换形式，将从另一个程序获得的原始数据转换为 Lisp 数据。  有意义的值包括 TEXT、STRING、UTF8_STRING、TARGETS、LENGTH、DELETE、FILE_NAME、CHARACTER_POSITION、NAME、LINE_NUMBER、COLUMN_NUMBER、OWNER_OS、HOST_NAME、USER、CLASS、ATOM 和 INTEGER。  （这些是与 X 约定一致的大写名称的符号。）数据类型的默认值是 STRING。  除了 STRING 之外，X 以外的窗口系统通常只支持这些类型的一小部分。
 
-用户选项：选择编码系统¶
+#+begin_src emacs-lisp
+  User Option: selection-coding-system ¶
+#+end_src
 
     此变量指定在读取和写入选择或剪贴板时要使用的编码系统。  请参阅编码系统。  默认值为复合文本与扩展，它转换为 X11 通常使用的文本表示。
 
@@ -1699,7 +2224,9 @@ nhdrag
 
 要完整读取用户输入的颜色名称，请使用 read-color（请参阅 read-color）。
 
-功能：color-defined-p color &optional frame ¶
+#+begin_src emacs-lisp
+  Function: color-defined-p color &optional frame ¶
+#+end_src
 
     此函数报告颜色名称是否有意义。  如果是，则返回 t；  否则，无。  参数框架说明要询问哪个框架的显示；  如果 frame 被省略或为零，则使用选定的框架。
 
@@ -1707,13 +2234,17 @@ nhdrag
 
     该函数以前称为 x-color-defined-p，并且该名称仍被支持作为别名。
 
-功能：定义颜色和可选框架¶
+#+begin_src emacs-lisp
+  Function: defined-colors &optional frame ¶
+#+end_src
 
     此函数返回在框架框架（默认为选定框架）上定义和支持的颜色名称列表。  如果 frame 不支持颜色，则值为 nil。
 
     该函数以前称为 x-defined-colors，并且该名称仍被支持作为别名。
 
-功能：color-supported-p color &optional frame background-p ¶
+#+begin_src emacs-lisp
+  Function: color-supported-p color &optional frame background-p ¶
+#+end_src
 
     如果 frame 真的可以显示颜色颜色（或至少接近它的颜色），则返回 t。  如果框架被省略或为零，则问题适用于所选框架。
 
@@ -1721,11 +2252,15 @@ nhdrag
 
     参数颜色必须是有效的颜色名称。
 
-功能：color-gray-p color &可选边框¶
+#+begin_src emacs-lisp
+  Function: color-gray-p color &optional frame ¶
+#+end_src
 
     如果颜色是灰色阴影，则返回 t，如帧的显示所定义。  如果框架被省略或为零，则问题适用于所选框架。  如果 color 不是有效的颜色名称，则此函数返回 nil。
 
-功能：颜色值颜色和可选框架¶
+#+begin_src emacs-lisp
+  Function: color-values color &optional frame ¶
+#+end_src
 
     此函数返回一个值，该值描述了帧上理想的颜色。  如果定义了颜色，则该值是三个整数的列表，它们给出了红色的数量、绿色的数量和蓝色的数量。  每个整数范围原则上从 0 到 65535，但有些显示器可能不会使用全范围。  这个三元素列表称为颜色的 rgb 值。
 
@@ -1757,27 +2292,37 @@ nhdrag
 
 这些函数接受显示（框架或终端名称）作为可选参数。  我们希望将来让 Emacs 在不同的文本终端上支持不同的颜色；  然后此参数将指定要在哪个终端上进行操作（默认为所选框架的终端；请参阅输入焦点）。  但目前，框架参数无效。
 
-功能：tty-color-define name number & optional rgb frame ¶
+#+begin_src emacs-lisp
+  Function: tty-color-define name number &optional rgb frame ¶
+#+end_src
 
     该函数将颜色名称名称与终端上的颜色编号相关联。
 
     可选参数 rgb（如果指定）是一个 rgb 值，一个由三个数字组成的列表，用于指定颜色的实际外观。  如果不指定 rgb，那么这个颜色不能被 tty-color-approximate 用来逼近其他颜色，因为 Emacs 不会知道它长什么样。
 
-功能：tty-color-clear &optional frame ¶
+#+begin_src emacs-lisp
+  Function: tty-color-clear &optional frame ¶
+#+end_src
 
     此函数清除文本终端的已定义颜色表。
 
-功能：tty-color-alist &可选框架¶
+#+begin_src emacs-lisp
+  Function: tty-color-alist &optional frame ¶
+#+end_src
 
     此函数返回一个记录文本终端支持的已知颜色的列表。
 
     每个元素的格式为 (name number .rgb) 或 (name number)。  这里，name 是颜色名称，number 是用来指定给终端的数字。  如果存在，则 rgb 是三个颜色值（红色、绿色和蓝色）的列表，表示颜色的实际外观。
 
-功能：tty-color-approximate rgb &optional frame ¶
+#+begin_src emacs-lisp
+  Function: tty-color-approximate rgb &optional frame ¶
+#+end_src
 
     此函数在支持显示的已知颜色中查找与 rgb 值 rgb（颜色值列表）所描述的颜色最接近的颜色。  返回值是 tty-color-alist 的一个元素。
 
-功能：tty-color-translate color & optional frame ¶
+#+begin_src emacs-lisp
+  Function: tty-color-translate color &optional frame ¶
+#+end_src
 
     此函数在支持显示的已知颜色中找到最接近颜色的颜色，并返回其索引（整数）。  如果名称颜色未定义，则值为 nil。
 
@@ -1785,7 +2330,9 @@ nhdrag
 
 本节介绍一些用于查询和使用 X 资源的函数和变量，或者它们在您的操作系统上的等价物。  有关 X 资源的更多信息，请参阅 GNU Emacs 手册中的 X 资源。
 
-功能：x-get-resource 属性类&可选组件子类¶
+#+begin_src emacs-lisp
+  Function: x-get-resource attribute class &optional component subclass ¶
+#+end_src
 
     函数 x-get-resource 从 X Window 默认数据库中检索资源值。
 
@@ -1793,11 +2340,15 @@ nhdrag
 
     可选参数组件和子类分别添加到键和类。  您必须同时指定它们或都不指定。  如果你指定它们，键是'instance.component.attribute'，类是'Emacs.class.subclass'。
 
-变量：x-resource-class ¶
+#+begin_src emacs-lisp
+  Variable: x-resource-class ¶
+#+end_src
 
     此变量指定 x-get-resource 应查找的应用程序名称。  默认值为“Emacs”。  您可以通过将此变量绑定到某个其他字符串（围绕对 x-get-resource 的调用）来检查其他应用程序名称的 X 资源。
 
-变量：x-resource-name ¶
+#+begin_src emacs-lisp
+  Variable: x-resource-name ¶
+#+end_src
 
     此变量指定 x-get-resource 应查找的实例名称。  默认值是调用 Emacs 时使用的名称，或者是使用“-name”或“-rn”开关指定的值。
 
@@ -1817,7 +2368,9 @@ xterm.vt100.background: yellow
        ⇒ "yellow"
 #+end_src
 
-变量：禁止 x 资源¶
+#+begin_src emacs-lisp
+  Variable: inhibit-x-resources ¶
+#+end_src
 
     如果这个变量不为nil，Emacs 不会查找X 资源，X 资源在创建新帧时没有任何作用。
 
@@ -1830,27 +2383,39 @@ xterm.vt100.background: yellow
 
 有关获取有关显示信息的其他功能，请参阅颜色名称、文本终端颜色。
 
-功能：display-popup-menus-p &可选显示¶
+#+begin_src emacs-lisp
+  Function: display-popup-menus-p &optional display ¶
+#+end_src
 
     如果显示支持弹出菜单，则此函数返回 t，否则返回 nil。  对弹出菜单的支持需要鼠标可用，因为在 Emacs 显示的某些部分上单击鼠标会弹出菜单。
 
-功能：display-graphic-p &可选显示¶
+#+begin_src emacs-lisp
+  Function: display-graphic-p &optional display ¶
+#+end_src
 
     如果 display 是能够同时显示多个帧和几种不同字体的图形显示，则此函数返回 t。  对于使用诸如 X 之类的窗口系统的显示器来说是这样，对于文本终端来说是假的。
 
-功能：display-mouse-p &可选显示¶
+#+begin_src emacs-lisp
+  Function: display-mouse-p &optional display ¶
+#+end_src
 
     如果显示器有鼠标可用，此函数返回 t，否则返回 nil。
 
-功能：display-color-p &可选显示¶
+#+begin_src emacs-lisp
+  Function: display-color-p &optional display ¶
+#+end_src
 
     如果屏幕是彩色屏幕，此函数返回 t。  它曾经被称为 x-display-color-p，并且仍然支持该名称作为别名。
 
-功能：显示-灰度-p &可选显示¶
+#+begin_src emacs-lisp
+  Function: display-grayscale-p &optional display ¶
+#+end_src
 
     如果屏幕可以显示灰色阴影，则此函数返回 t。  （所有彩色显示器都可以做到这一点。）
 
-功能：display-supports-face-attributes-p 属性&可选显示¶
+#+begin_src emacs-lisp
+  Function: display-supports-face-attributes-p attributes &optional display ¶
+#+end_src
 
     如果支持属性中的所有面部属性，则此函数返回非零（请参阅面部属性）。
 
@@ -1861,75 +2426,105 @@ xterm.vt100.background: yellow
 
     点 (2) 意味着任何可以显示粗体的显示都将满足 :weight black 属性，只要可以显示一些淡黄色， :foreground "yellow" 也会满足，但是 tty 不会满足 :slant italic显示代码自动将暗面替换为斜体。
 
-功能：显示-选择-p &可选显示¶
+#+begin_src emacs-lisp
+  Function: display-selections-p &optional display ¶
+#+end_src
 
     如果显示支持选择，则此函数返回 t。  窗口显示通常支持选择，但在某些其他情况下也可能支持它们。
 
-功能：display-images-p &可选显示¶
+#+begin_src emacs-lisp
+  Function: display-images-p &optional display ¶
+#+end_src
 
     如果 display 可以显示图像，此函数返回 t。  窗口化显示器原则上应该处理图像，但有些系统缺乏对此的支持。  在不支持图像的显示器上，Emacs 无法显示工具栏。
 
-功能：显示屏&可选显示¶
+#+begin_src emacs-lisp
+  Function: display-screens &optional display ¶
+#+end_src
 
     此函数返回与显示器关联的屏幕数。
 
-功能：显示像素高度&可选显示¶
+#+begin_src emacs-lisp
+  Function: display-pixel-height &optional display ¶
+#+end_src
 
     此函数以像素为单位返回屏幕的高度。  在字符终端上，它以字符为单位给出高度。
 
     对于图形终端，请注意，在多显示器设置中，这是指与显示器相关的所有物理显示器的像素高度。  请参阅多个终端。
 
-功能：显示像素宽度&可选显示¶
+#+begin_src emacs-lisp
+  Function: display-pixel-width &optional display ¶
+#+end_src
 
     此函数以像素为单位返回屏幕的宽度。  在字符终端上，它以字符为单位给出宽度。
 
     对于图形终端，请注意，在多显示器设置中，这是指与显示器相关的所有物理显示器的像素宽度。  请参阅多个终端。
 
-功能：显示-毫米-高度&可选显示¶
+#+begin_src emacs-lisp
+  Function: display-mm-height &optional display ¶
+#+end_src
 
     此函数以毫米为单位返回屏幕高度，如果 Emacs 无法获取该信息，则返回 nil。
 
     对于图形终端，请注意，在多显示器设置中，这是指与显示器相关的所有物理显示器的高度。  请参阅多个终端。
 
-功能：display-mm-width &可选显示¶
+#+begin_src emacs-lisp
+  Function: display-mm-width &optional display ¶
+#+end_src
 
     此函数以毫米为单位返回屏幕宽度，如果 Emacs 无法获取该信息，则返回 nil。
 
     对于图形终端，请注意，在多显示器设置中，这是指与显示器相关的所有物理显示器的宽度。  请参阅多个终端。
 
-用户选项： display-mm-dimensions-alist ¶
+#+begin_src emacs-lisp
+  User Option: display-mm-dimensions-alist ¶
+#+end_src
 
     此变量允许用户指定 display-mm-height 和 display-mm-width 返回的图形显示的尺寸，以防系统提供不正确的值。
 
-功能：显示-后备存储&可选显示¶
+#+begin_src emacs-lisp
+  Function: display-backing-store &optional display ¶
+#+end_src
 
     此函数返回显示器的后备存储功能。  后备存储是指记录未曝光的窗口（和部分窗口）的像素，以便在曝光时可以非常快速地显示出来。
 
     值可以是始终、映射时或无用的符号。  当问题不适用于某种显示时，该函数也可以返回 nil。
 
-功能：显示-保存-下&可选显示¶
+#+begin_src emacs-lisp
+  Function: display-save-under &optional display ¶
+#+end_src
 
     如果显示器支持 SaveUnder 功能，则此函数返回非 nil。  弹出窗口使用该功能来保存它们模糊的像素，以便它们可以快速弹出。
 
-功能：显示平面&可选显示¶
+#+begin_src emacs-lisp
+  Function: display-planes &optional display ¶
+#+end_src
 
     此函数返回显示器支持的平面数。  这通常是每个像素的位数。  对于 tty 显示，它以支持的颜色数中的两个为基数。
 
-功能：display-visual-class &可选显示¶
+#+begin_src emacs-lisp
+  Function: display-visual-class &optional display ¶
+#+end_src
 
     此函数返回屏幕的视觉类。  该值是以下符号之一：static-gray（有限的、不可改变的灰度）、gray-scale（全范围的灰度）、static-color（有限的、不可改变的颜色）、pseudo-color（有限的颜色）、真彩色（全系列颜色）和直接彩色（全系列颜色）。
 
-功能：显示颜色单元格&可选显示¶
+#+begin_src emacs-lisp
+  Function: display-color-cells &optional display ¶
+#+end_src
 
     此函数返回屏幕支持的颜色单元数。
 
 这些函数获取有关 Emacs 显示指定显示的正在使用的窗口系统的附加信息。  （出于历史原因，它们的名称以 x- 开头。）
 
-功能：x-server-version &可选显示¶
+#+begin_src emacs-lisp
+  Function: x-server-version &optional display ¶
+#+end_src
 
     该函数返回在显示器上运行的 GUI 窗口系统的版本号列表，例如 GNU 和 Unix 系统上的 X 服务器。  该值是一个由三个整数组成的列表：协议的主要版本号和次要版本号，以及窗口系统软件本身的特定于发行商的版本号。  在 GNU 和 Unix 系统上，这些通常是 X 协议的版本和 X 服务器软件的发行商特定的版本号。  在 MS-Windows 上，这是 Windows 操作系统的版本。
 
-功能：x-server-vendor &可选显示¶
+#+begin_src emacs-lisp
+  Function: x-server-vendor &optional display ¶
+#+end_src
 
     此函数返回提供窗口系统软件的供应商（作为字符串）。  在 GNU 和 Unix 系统上，这实际上意味着分发 X 服务器的人。  在 MS-Windows 上，这是 Windows 操作系统 (Microsoft) 的供应商 ID 字符串。
 
