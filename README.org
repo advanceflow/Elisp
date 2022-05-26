@@ -9,7 +9,6 @@
 | Records                            | 记录                 |
 | Hash Tables                        | 哈希表               |
 | Symbols                            | 符号                 |
-| Evaluation                         | 评价                 |
 | Control Structures                 | 控制结构             |
 | Variables                          | 变量                 |
 | Functions                          | 函数                 |
