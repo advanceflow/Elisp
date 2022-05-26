@@ -420,30 +420,30 @@
 
 
 ** 21 小缓冲区
-   | Content                           | S1   | S2 | S3 |
-   | 21.1 Minibuffers 简介             | DONE |    |    |
-   | 21.2 用 Minibuffer 读取文本字符串 | DONE |    |    |
-   | 21.3 用 Minibuffer 读取 Lisp 对象 | DONE |    |    |
-   | 21.4 小缓冲区历史                 | DONE |    |    |
-   | 21.5 初始输入                     | DONE |    |    |
-   | 21.6 完成                         | DONE |    |    |
-   | 21.6.1 基本完成函数               | DONE |    |    |
-   | 21.6.2 完成和小缓冲区             | DONE |    |    |
-   | 21.6.3 完成完成的 Minibuffer 命令 | DONE |    |    |
-   | 21.6.4 高级完成函数               | DONE |    |    |
-   | 21.6.5 读取文件名                 | DONE |    |    |
-   | 21.6.6 完成变量                   | DONE |    |    |
-   | 21.6.7 编程完成                   | DONE |    |    |
-   | 21.6.8 在普通缓冲区中完成         | DONE |    |    |
-   | 21.7 是或否查询                   | DONE |    |    |
-   | 21.8 提出多项选择题               | DONE |    |    |
-   | 21.9 读取密码                     | DONE |    |    |
-   | 21.10 小缓冲区命令                | DONE |    |    |
-   | 21.11 小缓冲窗口                  | DONE |    |    |
-   | 21.12 小缓冲区内容                | DONE |    |    |
-   | 21.13 递归小缓冲区                | DONE |    |    |
-   | 21.14 抑制交互                    | DONE |    |    |
-   | 21.15 小缓冲区杂记                | DONE |    |    |
+   | Content                           | S1   | S2   | S3 |
+   | 21.1 Minibuffers 简介             | DONE | DONE |    |
+   | 21.2 用 Minibuffer 读取文本字符串 | DONE | DONE |    |
+   | 21.3 用 Minibuffer 读取 Lisp 对象 | DONE | DONE |    |
+   | 21.4 小缓冲区历史                 | DONE | DONE |    |
+   | 21.5 初始输入                     | DONE | DONE |    |
+   | 21.6 完成                         | DONE | DONE |    |
+   | 21.6.1 基本完成函数               | DONE | DONE |    |
+   | 21.6.2 完成和小缓冲区             | DONE | DONE |    |
+   | 21.6.3 完成完成的 Minibuffer 命令 | DONE | DONE |    |
+   | 21.6.4 高级完成函数               | DONE | DONE |    |
+   | 21.6.5 读取文件名                 | DONE | DONE |    |
+   | 21.6.6 完成变量                   | DONE | DONE |    |
+   | 21.6.7 编程完成                   | DONE | DONE |    |
+   | 21.6.8 在普通缓冲区中完成         | DONE | DONE |    |
+   | 21.7 是或否查询                   | DONE | DONE |    |
+   | 21.8 提出多项选择题               | DONE | DONE |    |
+   | 21.9 读取密码                     | DONE | DONE |    |
+   | 21.10 小缓冲区命令                | DONE | DONE |    |
+   | 21.11 小缓冲窗口                  | DONE | DONE |    |
+   | 21.12 小缓冲区内容                | DONE | DONE |    |
+   | 21.13 递归小缓冲区                | DONE | DONE |    |
+   | 21.14 抑制交互                    | DONE | DONE |    |
+   | 21.15 小缓冲区杂记                | DONE | DONE |    |
 
 
 ** 22 命令循环
