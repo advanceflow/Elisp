@@ -17,7 +17,9 @@
 
 在以下四个函数中，缓冲区的“开始”或“结束”指的是可访问部分的开始或结束。
 
-功能：字符后&可选位置¶
+#+begin_src emacs-lisp
+  Function: char-after &optional position ¶
+#+end_src
 
     此函数返回当前缓冲区中位于（即紧随其后）位置的字符。  如果 position 超出范围，无论是在缓冲区的开头之前，还是在缓冲区的末尾或之后，则该值为 nil。  位置的默认值是点。
 
@@ -28,11 +30,15 @@
 	   ⇒ "@"
     #+end_src
 
-功能：char-before &可选位置¶
+#+begin_src emacs-lisp
+  Function: char-before &optional position ¶
+#+end_src
 
     此函数返回当前缓冲区中紧挨位置位置之前的字符。  如果 position 超出范围，无论是在缓冲区的开头或之前，还是在缓冲区的末尾，则该值为 nil。  位置的默认值是点。
 
-功能：跟随字符¶
+#+begin_src emacs-lisp
+  Function: following-char ¶
+#+end_src
 
     此函数返回当前缓冲区中跟随点的字符。  这类似于 (char-after (point))。  但是，如果 point 位于缓冲区的末尾，则 following-char 返回 0。
 
@@ -54,23 +60,33 @@
 	   ⇒ "c"
     #+end_src
 
-功能：前置字符¶
+#+begin_src emacs-lisp
+  Function: preceding-char ¶
+#+end_src
 
     此函数返回当前缓冲区中的前一个字符。  例如，请参见上面的 following-char 下的示例。  如果 point 位于缓冲区的开头，则preceding-char 返回 0。
 
-功能：bobp ¶
+#+begin_src emacs-lisp
+  Function: bobp ¶
+#+end_src
 
     如果 point 位于缓冲区的开头，则此函数返回 t。  如果缩小生效，这意味着文本的可访问部分的开头。  另请参见 Point 中的 point-min。
 
-功能：eobp ¶
+#+begin_src emacs-lisp
+  Function: eobp ¶
+#+end_src
 
     如果 point 位于缓冲区的末尾，则此函数返回 t。  如果缩小生效，这意味着文本可访问部分的结尾。  另请参阅 See Point 中的 point-max。
 
-功能：bolp ¶
+#+begin_src emacs-lisp
+  Function: bolp ¶
+#+end_src
 
     如果 point 位于行首，则此函数返回 t。  请参阅按文本行移动。  缓冲区的开头（或其可访问部分）始终算作一行的开头。
 
-功能：eolp ¶
+#+begin_src emacs-lisp
+  Function: eolp ¶
+#+end_src
 
     如果点位于行尾，则此函数返回 t。  缓冲区的结尾（或其可访问部分）始终被视为行的结尾。
 
@@ -78,7 +94,9 @@
 
 本节介绍允许 Lisp 程序将缓冲区中的任何文本部分转换为字符串的函数。
 
-功能：缓冲区子串开始结束¶
+#+begin_src emacs-lisp
+  Function: buffer-substring start end ¶
+#+end_src
 
     此函数返回一个字符串，其中包含由当前缓冲区中的位置 start 和 end 定义的区域文本的副本。  如果参数不是缓冲区可访问部分中的位置，则缓冲区子字符串会发出 args-out-of-range 错误信号。
 
@@ -108,17 +126,23 @@
 	   ⇒ #("This is t" 0 1 (fontified t) 1 9 (fontified t))
     #+end_src
 
-功能：缓冲区子字符串无属性开始结束¶
+#+begin_src emacs-lisp
+  Function: buffer-substring-no-properties start end ¶
+#+end_src
 
     这就像缓冲区子字符串，只是它不复制文本属性，只是复制字符本身。  请参阅文本属性。
 
-功能：缓冲区字符串¶
+#+begin_src emacs-lisp
+  Function: buffer-string ¶
+#+end_src
 
     此函数以字符串形式返回当前缓冲区的整个可访问部分的内容。  如果被复制的文本具有任何文本属性，则这些属性将连同它们所属的字符一起被复制到字符串中。
 
 如果您需要确保生成的字符串在复制到其他位置时不会由于双向文本的重新排序而改变其视觉外观，请使用 buffer-substring-with-bidi-context 函数（请参阅 buffer-substring-with-双向上下文）。
 
-功能：filter-buffer-substring start end &optional delete ¶
+#+begin_src emacs-lisp
+  Function: filter-buffer-substring start end &optional delete ¶
+#+end_src
 
     此函数使用由变量 filter-buffer-substring-function 指定的函数过滤 start 和 end 之间的缓冲区文本，并返回结果。
 
@@ -128,23 +152,31 @@
 
     当复制到用户可访问的数据结构（如 kill-ring、X 剪贴板和寄存器）时，Lisp 代码应使用此函数而不是缓冲区子字符串、缓冲区子字符串无属性或删除和提取区域。  主要和次要模式可以修改 filter-buffer-substring-function 以更改从缓冲区复制出来的文本。
 
-变量：filter-buffer-substring-function ¶
+#+begin_src emacs-lisp
+  Variable: filter-buffer-substring-function ¶
+#+end_src
 
     此变量的值是 filter-buffer-substring 将调用以执行实际工作的函数。  该函数接收三个参数，与 filter-buffer-substring 的参数相同，应按照该函数的文档处理。  它应该返回过滤后的文本（并且可以选择删除源文本）。
 
 以下两个变量已被 filter-buffer-substring-function 淘汰，但仍支持向后兼容。
 
-变量：filter-buffer-substring-functions ¶
+#+begin_src emacs-lisp
+  Variable: filter-buffer-substring-functions ¶
+#+end_src
 
     这个过时的变量是一个包装钩子，它的成员应该是接受四个参数的函数：fun、start、end 和 delete。  fun 是一个接受三个参数（开始、结束和删除）并返回一个字符串的函数。  在这两种情况下，start、end 和 delete 参数与 filter-buffer-substring 的参数相同。
 
     第一个钩子函数传递了一个相当于filter-buffer-substring的默认操作的fun，即它返回start和end之间的buffer-substring（由任何buffer-substring-filters处理）并可选地删除原始文本从缓冲区。  大多数情况下，hook 函数会调用一次 fun，然后对结果进行自己的处理。  下一个钩子函数接收一个与此等效的乐趣，依此类推。  实际返回值是所有钩子函数依次作用的结果。
 
-变量：缓冲区子串过滤器¶
+#+begin_src emacs-lisp
+  Variable: buffer-substring-filters ¶
+#+end_src
 
     这个过时变量的值应该是一个接受单个字符串参数并返回另一个字符串的函数列表。  默认的 filter-buffer-substring 函数将缓冲区子字符串传递给此列表中的第一个函数，并将每个函数的返回值传递给下一个函数。  最后一个函数的返回值被传递给 filter-buffer-substring-functions。
 
-功能：current-word &optional strict real-word ¶
+#+begin_src emacs-lisp
+  Function: current-word &optional strict really-word ¶
+#+end_src
 
     此函数以字符串形式返回点或点附近的符号（或单词）。  返回值不包括文本属性。
 
@@ -152,7 +184,9 @@
 
     如果可选参数 strict 不为 nil，则 point 必须在符号或单词中或旁边——如果不存在符号或单词，则函数返回 nil。  否则，同一行上的附近符号或单词是可以接受的。
 
-功能：点的东西&可选的无属性¶
+#+begin_src emacs-lisp
+  Function: thing-at-point thing &optional no-properties ¶
+#+end_src
 
     将点周围或旁边的东西作为字符串返回。
 
@@ -174,7 +208,9 @@
 	   ⇒ nil
     #+end_src
 
-    变量：thing-at-point-provider-alist ¶
+#+begin_src emacs-lisp
+  Variable: thing-at-point-provider-alist ¶
+#+end_src
 
 	 这个变量允许用户和模式调整事物的工作方式。  它是事物和函数的关联列表（以零参数调用）以返回该事物。  将依次评估事物的条目，直到返回非零结果。
 
@@ -189,7 +225,10 @@
 
 此函数允许您比较缓冲区中的部分文本，而无需先将它们复制到字符串中。
 
-功能：比较缓冲区子字符串 buffer1 start1 end1 buffer2 start2 end2 ¶
+#+begin_src emacs-lisp
+Function: compare-buffer-substrings buffer1 start1 end1 buffer2 start2 end2 ¶
+#+end_src
+
 
     此函数允许您比较同一缓冲区或两个不同缓冲区的两个子字符串。  前三个参数指定一个子字符串，给出一个缓冲区（或缓冲区名称）和缓冲区内的两个位置。  最后三个参数以相同的方式指定另一个子字符串。  您可以使用 nil 表示 buffer1、buffer2 或两者都表示当前缓冲区。
 
@@ -215,17 +254,23 @@
 
 插入函数将文本从单字节转换为多字节，以便插入多字节缓冲区，反之亦然——如果文本来自字符串或缓冲区。  但是，它们不会将单字节字符代码 128 到 255 转换为多字节字符，即使当前缓冲区是多字节缓冲区也是如此。  请参阅转换文本表示。
 
-功能：插入 &rest args ¶
+#+begin_src emacs-lisp
+  Function: insert &rest args ¶
+#+end_src
 
     此函数将字符串和/或字符 args 插入当前缓冲区，点，向前移动点。  换句话说，它在点之前插入文本。  除非所有参数都是字符串或字符，否则会发出错误信号。  该值为零。
 
-功能：在标记前插入 &rest args ¶
+#+begin_src emacs-lisp
+  Function: insert-before-markers &rest args ¶
+#+end_src
 
     此函数将字符串和/或字符 args 插入当前缓冲区，点，向前移动点。  除非所有参数都是字符串或字符，否则会发出错误信号。  该值为零。
 
     此函数与其他插入函数的不同之处在于它将最初指向插入点的标记重新定位到插入文本之后。  如果覆盖从插入点开始，则插入的文本位于覆盖之外；  如果非空覆盖在插入点处结束，则插入的文本将落在该覆盖内。
 
-命令：insert-char 字符和可选计数继承¶
+#+begin_src emacs-lisp
+  Command: insert-char character &optional count inherit ¶
+#+end_src
 
     此命令将 count 个字符实例插入到当前缓冲区中的点之前。  参数 count 必须是整数，并且 character 必须是字符。
 
@@ -235,7 +280,9 @@
 
     如果 inherit 不为零，则插入的字符会从插入点前后的两个字符继承粘性文本属性。  请参阅文本属性的粘性。
 
-功能：插入缓冲区子字符串 from-buffer-or-name &optional start end ¶
+#+begin_src emacs-lisp
+  Function: insert-buffer-substring from-buffer-or-name &optional start end ¶
+#+end_src
 
     此函数将缓冲区 from-buffer-or-name 的一部分插入到当前缓冲区中之前的点。  插入的文本是开始（包括）和结束（不包括）之间的区域。  （这些参数默认为该缓冲区可访问部分的开头和结尾。）此函数返回 nil。
 
@@ -256,11 +303,15 @@
       ---------- Buffer: bar ----------
     #+end_src
 
-功能: insert-buffer-substring-no-properties from-buffer-or-name &optional start end ¶
+#+begin_src emacs-lisp
+  Function: insert-buffer-substring-no-properties from-buffer-or-name &optional start end ¶
+#+end_src
 
     这类似于插入缓冲区子字符串，只是它不复制任何文本属性。
 
-功能：insert-into-buffer to-buffer &optional start end ¶
+#+begin_src emacs-lisp
+  Function: insert-into-buffer to-buffer &optional start end ¶
+#+end_src
 
     这类似于插入缓冲区子字符串，但方向相反：文本从当前缓冲区复制到目标缓冲区。  文本块被复制到缓冲区中的当前点，并且点（在该缓冲区中）被推进到复制文本结束之后。  如果开始/结束为 nil，则复制当前缓冲区中的整个文本。
 
@@ -270,11 +321,15 @@
 
 本节介绍用于插入文本的高级命令，这些命令主要针对用户，但在 Lisp 程序中也很有用。
 
-命令：插入缓冲区 from-buffer-or-name ¶
+#+begin_src emacs-lisp
+  Command: insert-buffer from-buffer-or-name ¶
+#+end_src
 
     此命令将 from-buffer-or-name 的全部可访问内容（必须存在）插入到当前缓冲区的点之后。  它在插入的文本之后留下标记。  该值为零。
 
-命令：self-insert-command count &optional char ¶
+#+begin_src emacs-lisp
+  Command: self-insert-command count &optional char ¶
+#+end_src
 
     此命令插入字符 char（最后输入的字符）；  它会在点之前计算次数，然后返回 nil。  大多数打印字符都绑定到此命令。  在日常使用中，self-insert-command 是 Emacs 中调用频率最高的函数，但程序很少使用它，除非将其安装在键盘映射上。
 
@@ -290,7 +345,9 @@
 
     不要尝试用您自己的 self-insert-command 定义代替标准定义。  编辑器命令循环专门处理此功能。
 
-命令：换行符和可选的换行符交互 ¶
+#+begin_src emacs-lisp
+  Command: newline &optional number-of-newlines interactive ¶
+#+end_src
 
     此命令在点之前将换行符插入到当前缓冲区中。  如果提供了 number-of-newlines，则插入那么多换行符。  在交互式调用中，换行数是数字前缀参数。
 
@@ -302,7 +359,9 @@
 
     返回的值为 nil。
 
-变量：覆盖模式¶
+#+begin_src emacs-lisp
+  Variable: overwrite-mode ¶
+#+end_src
 
     此变量控制覆盖模式是否有效。  该值应为 overwrite-mode-textual、overwrite-mode-binary 或 nil。  overwrite-mode-textual 指定文本覆盖模式（特别处理换行符和制表符），而 overwrite-mode-binary 指定二进制覆盖模式（将换行符和制表符视为任何其他字符）。
 
@@ -312,23 +371,31 @@
 
 所有删除函数都对当前缓冲区进行操作。
 
-命令：擦除缓冲区¶
+#+begin_src emacs-lisp
+  Command: erase-buffer ¶
+#+end_src
 
     此函数删除当前缓冲区的整个文本（不仅仅是可访问部分），使其为空。  如果缓冲区是只读的，则表示缓冲区只读错误；  如果其中的某些文本是只读的，则表示文本只读错误。  否则，它会删除文本而不要求任何确认。  它返回零。
 
     通常，从缓冲区中删除大量文本会阻止该缓冲区的进一步自动保存，因为它已经缩小了。  然而，erase-buffer 并没有这样做，其想法是未来的文本与之前的文本并没有真正的关系，它的大小不应该与之前的文本进行比较。
 
-命令：delete-region start end ¶
+#+begin_src emacs-lisp
+  Command: delete-region start end ¶
+#+end_src
 
     此命令删除当前缓冲区中 start 和 end 之间的文本，并返回 nil。  如果点在被删除的区域内，则其后的值为 start。  否则，点与周围的文本一起重新定位，就像标记一样。
 
-功能：删除和提取区域开始结束¶
+#+begin_src emacs-lisp
+  Function: delete-and-extract-region start end ¶
+#+end_src
 
     此函数删除当前缓冲区中 start 和 end 之间的文本，并返回一个包含刚刚删除的文本的字符串。
 
     如果点在被删除的区域内，则其后的值为 start。  否则，点与周围的文本一起重新定位，就像标记一样。
 
-命令：delete-char count &optional killp ¶
+#+begin_src emacs-lisp
+  Command: delete-char count &optional killp ¶
+#+end_src
 
     此命令直接删除点之后的计数字符，如果计数为负数，则删除点之前的字符。  如果 killp 不为零，则它将删除的字符保存在 kill ring 中。
 
@@ -336,7 +403,9 @@
 
     返回的值始终为零。
 
-命令：delete-backward-char count &optional killp ¶
+#+begin_src emacs-lisp
+  Command: delete-backward-char count &optional killp ¶
+#+end_src
 
     此命令直接删除点之前的 count 个字符，如果 count 为负数，则删除点之后的字符。  如果 killp 不为零，则它将删除的字符保存在 kill ring 中。
 
@@ -344,7 +413,9 @@
 
     返回的值始终为零。
 
-命令：backward-delete-char-untabify count &optional killp ¶
+#+begin_src emacs-lisp
+  Command: backward-delete-char-untabify count &optional killp ¶
+#+end_src
 
     此命令向后删除 count 个字符，将制表符更改为空格。  当下一个要删除的字符是制表符时，首先将其替换为适当数量的空格以保持对齐，然后删除其中一个空格而不是制表符。  如果 killp 不为零，则该命令将删除的字符保存在 kill ring 中。
 
@@ -354,7 +425,9 @@
 
     返回的值始终为零。
 
-用户选项：backward-delete-char-untabify-method ¶
+#+begin_src emacs-lisp
+  User Option: backward-delete-char-untabify-method ¶
+#+end_src
 
     此选项指定后向删除字符 untabify 应如何处理空格。  可能的值包括 untabify，默认值，意味着将一个制表符转换为多个空格并删除一个；  饿了，意思是用一个命令删除点之前的所有制表符和空格；  all 表示删除 point 之前的所有制表符、空格和换行符，nil 表示对空白字符不做任何特殊处理。
 
@@ -362,7 +435,9 @@
 
 本节描述用于删除文本的高级命令，这些命令主要针对用户，但在 Lisp 程序中也很有用。
 
-命令：delete-horizo​​ntal-space &optional back-only ¶
+#+begin_src emacs-lisp
+  Command: delete-horizontal-space &optional backward-only ¶
+#+end_src
 
     此函数删除点周围的所有空格和制表符。  它返回零。
 
@@ -391,7 +466,9 @@
       ---------- Buffer: foo ----------
     #+end_src
 
-命令：delete-indentation &optional join-following-p beg end ¶
+#+begin_src emacs-lisp
+  Command: delete-indentation &optional join-following-p beg end ¶
+#+end_src
 
     此函数将行点连接到上一行，删除连接处的任何空格，在某些情况下用一个空格替换它。  如果 join-following-p 不为 nil，则 delete-indentation 将此行连接到下一行。  否则，如果 beg 和 end 不为零，则此函数连接它们定义的区域中的所有行。
 
@@ -418,7 +495,9 @@
     #+end_src
     线连接后，函数 fixup-whitespace 负责决定是否在连接处留出空格。
 
-命令：fixup-whitespace ¶
+#+begin_src emacs-lisp
+  Command: fixup-whitespace ¶
+#+end_src
 
     此函数根据上下文将所有水平空格周围的点替换为一个空格或没有空格。  它返回零。
 
@@ -446,11 +525,15 @@
       ---------- Buffer: foo ----------
     #+end_src
 
-命令：just-one-space &optional n ¶
+#+begin_src emacs-lisp
+  Command: just-one-space &optional n ¶
+#+end_src
 
     此命令将点周围的任何空格和制表符替换为单个空格，如果指定了 n，则替换为 n 个空格。  它返回零。
 
-命令：删除空白行¶
+#+begin_src emacs-lisp
+  Command: delete-blank-lines ¶
+#+end_src
 
     此功能删除点周围的空白行。  如果点在一个空行上，并且在它之前或之后有一个或多个空行，则除其中一个之外的所有空行都将被删除。  如果点位于孤立的空白行上，则将其删除。  如果 point 在非空行上，则该命令会删除紧随其后的所有空行。
 
@@ -458,7 +541,9 @@
 
     删除空白行返回 nil。
 
-命令：delete-trailing-whitespace &optional start end ¶
+#+begin_src emacs-lisp
+  Command: delete-trailing-whitespace &optional start end ¶
+#+end_src
 
     删除由 start 和 end 定义的区域中的尾随空格。
 
@@ -496,7 +581,9 @@ kill-region 是杀死文本的常用子程序。  任何调用此函数的命令
 
 下面描述的命令可以在将被杀死的文本保存在杀伤环中之前对其进行过滤。  他们调用 filter-buffer-substring（参见检查缓冲区内容）来执行过滤。  默认情况下，没有过滤，但主要和次要模式和钩子函数可以设置过滤，使保存在 kill ring 中的文本与缓冲区中的文本不同。
 
-命令：kill-region start end &optional region ¶
+#+begin_src emacs-lisp
+  Command: kill-region start end &optional region ¶
+#+end_src
 
     此功能会消除开始和结束之间的文本段；  但是如果可选参数 region 不是 nil，它会忽略 start 和 end，而是杀死当前区域中的文本。  文本被删除，但连同其文本属性一起保存在杀伤环中。  该值始终为零。
 
@@ -504,11 +591,15 @@ kill-region 是杀死文本的常用子程序。  任何调用此函数的命令
 
     如果缓冲区或文本是只读的，kill-region 会修改同样的终止环，然后发出错误信号而不修改缓冲区。  这很方便，因为它允许用户使用一系列 kill 命令将文本从只读缓冲区复制到 kill ring。
 
-用户选项：kill-read-only-ok ¶
+#+begin_src emacs-lisp
+  User Option: kill-read-only-ok ¶
+#+end_src
 
     如果此选项不为零，则如果缓冲区或文本是只读的，则 kill-region 不会发出错误信号。  相反，它只是简单地返回，更新 kill ring 但不更改缓冲区。
 
-命令：copy-region-as-kill start end &optional region ¶
+#+begin_src emacs-lisp
+  Command: copy-region-as-kill start end &optional region ¶
+#+end_src
 
     此函数保存终止环上开始和结束之间的一段文本（包括文本属性），但不会从缓冲区中删除文本。  但是，如果可选参数 region 不为 nil，则该函数将忽略 start 和 end，而是保存当前区域。  它总是返回零。
 
@@ -520,11 +611,15 @@ kill-region 是杀死文本的常用子程序。  任何调用此函数的命令
 
 Yanking 是指从 kill ring 中插入文本，但不会盲目插入文本。  yank 命令和相关命令使用 insert-for-yank 在插入之前对文本执行特殊处理。
 
-功能：插入换取字符串¶
+#+begin_src emacs-lisp
+  Function: insert-for-yank string ¶
+#+end_src
 
     此函数的工作方式类似于插入，除了它根据 yank-handler 文本属性以及变量 yank-handled-properties 和 yank-excluded-properties（见下文）处理字符串中的文本，然后将结果插入到当前缓冲区。
 
-功能：insert-buffer-substring-as-yank buf &optional start end ¶
+#+begin_src emacs-lisp
+  Function: insert-buffer-substring-as-yank buf &optional start end ¶
+#+end_src
 
     此函数类似于 insert-buffer-substring，不同之处在于它根据 yank-handled-properties 和 yank-excluded-properties 处理文本。  （它不处理 yank-handler 属性，该属性通常不会出现在缓冲区文本中。）
 
@@ -536,26 +631,39 @@ Yanking 是指从 kill ring 中插入文本，但不会盲目插入文本。  ya
 
 以下是元素的作用：
 
-功能
+#+begin_src emacs-lisp
+function
+#+end_src
+
 
     当 function 不为 nil 时，调用它而不是 insert 来插入字符串，并带有一个参数——要插入的字符串。
-参数
+#+begin_src emacs-lisp
+  param
+#+end_src
 
     如果 param 存在且非 nil，它将替换字符串（或正在处理的字符串的子字符串）作为传递给函数（或插入）的对象。  例如，如果函数是 yank-rectangle，则参数应该是要插入为矩形的字符串列表。
-不排除
+#+begin_src emacs-lisp
+  noexclude
+#+end_src
 
     如果 noexclude 存在且非 nil，则禁用 yank-handled-properties 和 yank-excluded-properties 对插入字符串的正常操作。
-撤消
+#+begin_src emacs-lisp
+  undo
+#+end_src
 
     如果 undo 存在且非 nil，它是一个函数，将由 yank-pop 调用以撤消当前对象的插入。  它使用两个参数调用，即当前区域的开始和结束。  function 可以设置 yank-undo-function 来覆盖 undo 值。
 
-用户选项：yank-handled-properties ¶
+#+begin_src emacs-lisp
+  User Option: yank-handled-properties ¶
+#+end_src
 
     此变量为抽出的文本指定特殊的文本属性处理条件。  它在插入文本后（通常，或通过 yank-handler 属性）生效，并且在 yank-excluded-properties 生效之前生效。
 
     该值应该是一个元素列表（prop . fun）。  每个 alist 元素都按顺序处理。  扫描插入的文本以查找具有文本属性 eq 到 prop 的文本段；  对于每个这样的拉伸，fun 会使用三个参数调用：属性的值，以及文本的开始和结束位置。
 
-用户选项：yank-excluded-properties ¶
+#+begin_src emacs-lisp
+  User Option: yank-excluded-properties ¶
+#+end_src
 
     此变量的值是要从插入的文本中删除的属性列表。  它的默认值包含可能导致令人讨厌的结果的属性，例如使文本响应鼠标或指定键绑定。  它在 yank-handled-properties 之后生效。
 
@@ -563,7 +671,9 @@ Yanking 是指从 kill ring 中插入文本，但不会盲目插入文本。  ya
 
 本节介绍用于 yanking 的高级命令，这些命令主要针对用户，但在 Lisp 程序中也很有用。  yank 和 yank-pop 都支持 yank-excluded-properties 变量和 yank-handler 文本属性（请参阅 Yanking）。
 
-命令： yank &optional arg ¶
+#+begin_src emacs-lisp
+  Command: yank &optional arg ¶
+#+end_src
 
     此命令在终止环前面的点之前插入文本。  它使用 push-mark（参见 The Mark）在文本的开头设置标记，并将 point 放在末尾。
 
@@ -575,7 +685,9 @@ Yanking 是指从 kill ring 中插入文本，但不会盲目插入文本。  ya
 
     yank 返回零。
 
-命令：yank-pop &optional arg ¶
+#+begin_src emacs-lisp
+  Command: yank-pop &optional arg ¶
+#+end_src
 
     当在 yank 或另一个 yank-pop 之后立即调用时，此命令会将刚刚从 kill ring 中提取的条目替换为来自 kill ring 的不同条目。  当像这样调用此命令时，该区域包含刚刚由另一个 yank 命令插入的文本。  yank-pop 删除该文本并在其位置插入另一段已删除的文本。  它不会将删除的文本添加到杀伤环，因为它已经在某个杀伤环中。  但是，它确实会旋转杀伤环以将新拉出的绳子放在前面。
 
@@ -587,7 +699,9 @@ Yanking 是指从 kill ring 中插入文本，但不会盲目插入文本。  ya
 
     返回值始终为零。
 
-变量：yank-undo-function ¶
+#+begin_src emacs-lisp
+  Variable: yank-undo-function ¶
+#+end_src
 
     如果此变量不为 nil，则函数 yank-pop 使用其值而不是 delete-region 来删除由前一个 yank 或 yank-pop 命令插入的文本。  该值必须是两个参数的函数，即当前区域的开始和结束。
 
@@ -597,7 +711,9 @@ Yanking 是指从 kill ring 中插入文本，但不会盲目插入文本。  ya
 
 这些函数和变量在较低级别提供了对 kill ring 的访问，但仍然便于在 Lisp 程序中使用，因为它们负责与窗口系统选择的交互（请参阅窗口系统选择）。
 
-功能：current-kill n &optional do-not-move ¶
+#+begin_src emacs-lisp
+  Function: current-kill n &optional do-not-move ¶
+#+end_src
 
     函数 current-kill 将指定 kill ring 前端的 yanking 指针旋转 n 个位置（从较新的 kill 到较旧的 kill），并返回 ring 中该位置的文本。
 
@@ -605,17 +721,23 @@ Yanking 是指从 kill ring 中插入文本，但不会盲目插入文本。  ya
 
     如果 n 为零，表示请求最新的 kill，current-kill 在查询 kill ring 之前调用 interprogram-paste-function 的值（如下所述）。  如果该值是一个函数并且调用它返回一个字符串或几个字符串的列表，则 current-kill 将字符串推送到 kill ring 上并返回第一个字符串。  它还将 yanking 指针设置为指向 interprogram-paste-function 返回的第一个字符串的 kill-ring 条目，而不管 do-not-move 的值如何。  否则，current-kill 不会特别处理 n 的零值：它返回由 yanking 指针指向的条目并且不移动 yanking 指针。
 
-功能：kill-new 字符串 & 可选替换 ¶
+#+begin_src emacs-lisp
+  Function: kill-new string &optional replace ¶
+#+end_src
 
     此函数将文本字符串推送到 kill ring 上，并使 yanking 指针指向它。  如果合适，它会丢弃最旧的条目。  它还调用 interprogram-paste-function 的值（取决于用户选项 save-interprogram-paste-before-kill）和 interprogram-cut-function（见下文）。
 
     如果 replace 不为零，则 kill-new 用字符串替换终止环的第一个元素，而不是将字符串推到终止环上。
 
-功能：在-p 之前杀死附加字符串¶
+#+begin_src emacs-lisp
+  Function: kill-append string before-p ¶
+#+end_src
 
     此函数将文本字符串附加到 kill ring 中的第一个条目，并使 yanking 指针指向组合条目。  通常 string 位于条目的末尾，但如果 before-p 不为零，则它位于开头。  该函数将 kill-new 作为子例程调用，从而导致 interprogram-cut-function 和可能的 interprogram-paste-function（见下文）的值被扩展调用。
 
-变量：程序间粘贴函数¶
+#+begin_src emacs-lisp
+  Variable: interprogram-paste-function ¶
+#+end_src
 
     当您使用窗口系统时，此变量提供了一种从其他程序传输终止文本的方法。  它的值应该是 nil 或没有参数的函数。
 
@@ -625,7 +747,9 @@ Yanking 是指从 kill ring 中插入文本，但不会盲目插入文本。  ya
 
     这个函数的正常使用是获取窗口系统的剪贴板作为最近的kill，即使选择属于另一个应用程序。  请参阅窗口系统选择。  但是，如果剪贴板内容来自当前 Emacs 会话，则此函数应返回 nil。
 
-变量：interprogram-cut-function ¶
+#+begin_src emacs-lisp
+  Variable: interprogram-cut-function ¶
+#+end_src
 
     当您使用窗口系统时，此变量提供了一种将终止文本与其他程序通信的方法。  它的值应该是 nil 或一个必需参数的函数。
 
@@ -663,15 +787,21 @@ kill-ring-yank-pointer 的值始终等于 kill ring 列表中的链接之一。 
 #+end_src
 这种情况可能发生在 Cy (yank) 紧接着 My (yank-pop) 之后。
 
-变量：杀死环¶
+#+begin_src emacs-lisp
+  Variable: kill-ring ¶
+#+end_src
 
     此变量保存已终止文本序列的列表，最近先终止。
 
-变量：kill-ring-yank-pointer ¶
+#+begin_src emacs-lisp
+  Variable: kill-ring-yank-pointer ¶
+#+end_src
 
     此变量的值指示杀伤环的哪个元素位于环的前面以进行拉拽。  更准确地说，该值是 kill-ring 值的尾部，其 CAR 是 Cy 应该拉出的 kill 字符串。
 
-用户选项：kill-ring-max ¶
+#+begin_src emacs-lisp
+  User Option: kill-ring-max ¶
+#+end_src
 
     这个变量的值是在元素最终被丢弃之前，杀伤环可以增长到的最大长度。  kill-ring-max 的默认值为 60。
 
@@ -679,25 +809,37 @@ kill-ring-yank-pointer 的值始终等于 kill ring 列表中的链接之一。 
 
 大多数缓冲区都有一个撤消列表，它记录对缓冲区文本所做的所有更改，以便可以撤消它们。  （没有缓冲区的缓冲区通常是特殊用途的缓冲区，Emacs 认为撤消对它们没有用处。特别是，任何名称以空格开头的缓冲区都默认关闭其撤消记录；请参阅缓冲区名称。）修改缓冲区中文本的原语会自动将元素添加到撤消列表的前面，该列表位于变量 buffer-undo-list 中。
 
-变量：缓冲区撤消列表¶
+#+begin_src emacs-lisp
+  Variable: buffer-undo-list ¶
+#+end_src
 
     这个缓冲区局部变量的值是当前缓冲区的撤消列表。  t 值禁用撤销信息的记录。
 
 以下是撤消列表可以具有的元素种类：
 
-位置
+#+begin_src emacs-lisp
+  position
+#+end_src
 
     这种元素记录了点的前一个值；  撤消此元素将点移动到位置。  普通光标移动不会进行任何类型的撤消记录，但删除操作使用这些条目来记录点在命令之前的位置。
-（求。结束）
+#+begin_src emacs-lisp
+  (beg . end)
+#+end_src
 
     这种元素指示如何删除插入的文本。  插入时，文本占据了缓冲区的起始范围。
-（文字。位置）
+#+begin_src emacs-lisp
+  (text . position)
+#+end_src
 
     这种元素指示如何重新插入已删除的文本。  删除的文本本身就是字符串文本。  重新插入的位置是（绝对位置）。  如果 position 为正，则 point 位于删除文本的开头，否则位于末尾。  零个或多个（标记.调整）元素紧跟在该元素之后。
-(t . time-flag)
+#+begin_src emacs-lisp
+  (t . time-flag)
+#+end_src
 
     这种元素表示未修改的缓冲区已被修改。  一个非整数 Lisp 时间戳的时间标志表示访问文件的修改时间，使用与当前时间相同的格式；  见时间。  时间标志为 0 表示缓冲区不对应任何文件；  -1 表示之前访问过的文件不存在。  原始撤消使用这些值来确定是否再次将缓冲区标记为未修改；  仅当文件的状态与时间标志的状态匹配时才会这样做。
-（零属性值乞求。结束）
+#+begin_src emacs-lisp
+  (nil property value beg . end)
+#+end_src
 
     这种元素记录了文本属性的变化。  以下是撤消更改的方法：
 
@@ -705,23 +847,33 @@ kill-ring-yank-pointer 的值始终等于 kill ring 列表中的链接之一。 
 (put-text-property beg end property value)
 #+end_src
 
-（标记。调整）
+#+begin_src emacs-lisp
+  (marker . adjustment)
+#+end_src
 
     这种元素记录了由于删除周围文本而重新定位了标记标记的事实，并且它移动了调整字符位置。  如果标记的位置与撤消列表中它之前的 (text . position) 元素一致，则撤消此元素会移动标记 - 调整字符。
-（应用 funname .args）
+#+begin_src emacs-lisp
+  (apply funname . args)
+#+end_src
 
     这是一个可扩展的撤消项，可通过使用参数 args 调用 funname 来撤消。
-（应用 delta beg end funname .args）
+#+begin_src emacs-lisp
+  (apply delta beg end funname . args)
+#+end_src
 
 
     这是一个可扩展的撤消项，它记录了限制在 beg to end 范围内的更改，这将缓冲区的大小增加了 delta 字符。  通过使用参数 args 调用 funname 来撤消它。
 
     这种元素可以使撤销限制到一个区域，以确定该元素是否属于该区域。
-零
+#+begin_src emacs-lisp
+  nil
+#+end_src
 
     这个元素是一个边界。  两个边界之间的元素称为变更组；  通常，每个更改组对应一个键盘命令，而撤消命令通常将整个组作为一个单元撤消。
 
-功能：取消边界¶
+#+begin_src emacs-lisp
+  Function: undo-boundary ¶
+#+end_src
 
     这个函数在撤销列表中放置一个边界元素。  undo 命令在这样的边界处停止，随后的 undo 命令撤消到更早和更早的边界。  此函数返回零。
 
@@ -729,7 +881,9 @@ kill-ring-yank-pointer 的值始终等于 kill ring 列表中的链接之一。 
 
     但是，大多数情况下，此函数会在适当的时间自动调用。
 
-功能：撤销自动合并¶
+#+begin_src emacs-lisp
+  Function: undo-auto-amalgamate ¶
+#+end_src
 
     编辑器命令循环在执行每个键序列之前自动调用 undo-boundary，因此每个撤消通常都会撤消一个命令的效果。  一些异常命令正在合并：这些命令通常会对缓冲区造成小的更改，因此这些命令仅每 20 个命令插入一个边界，允许作为一个组撤消更改。  默认情况下，产生自插入输入字符的命令 self-insert-command（请参阅用户级插入命令）和删除字符（请参阅删除文本）的 delete-char 命令是合并的。  当一个命令影响多个缓冲区的内容时，例如，当 post-command-hook 上的函数影响当前缓冲区以外的缓冲区时，将在每个受影响的缓冲区中调用 undo-boundary .
 
@@ -739,15 +893,21 @@ kill-ring-yank-pointer 的值始终等于 kill ring 列表中的链接之一。 
 
 Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合并到单个更改组中（请参阅原子更改组）。  请注意，amalgamating-undo-limit 对该函数生成的组没有影响。
 
-变量：undo-auto-current-boundary-timer ¶
+#+begin_src emacs-lisp
+  Variable: undo-auto-current-boundary-timer ¶
+#+end_src
 
     即使没有命令正在执行，某些缓冲区（例如进程缓冲区）也会发生变化。  在这些情况下，此变量中的计时器通常会定期调用 undo-boundary。  将此变量设置为非零可防止此行为。
 
-变量：撤消进行中¶
+#+begin_src emacs-lisp
+  Variable: undo-in-progress ¶
+#+end_src
 
     此变量通常为 nil，但撤消命令将其绑定到 t。  这样一来，各种更改钩子就可以知道何时为了撤消而调用它们。
 
-功能：原始撤消计数列表¶
+#+begin_src emacs-lisp
+  Function: primitive-undo count list ¶
+#+end_src
 
     这是撤消撤消列表元素的基本功能。  它撤消列表的第一个计数元素，返回列表的其余部分。
 
@@ -763,13 +923,17 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 在新创建的缓冲区中记录撤消信息通常可以开始；  但如果缓冲区名称以空格开头，则撤销记录最初是禁用的。  您可以使用以下两个函数显式启用或禁用撤消记录，或者自己设置 buffer-undo-list。
 
-命令：buffer-enable-undo &optional buffer-or-name ¶
+#+begin_src emacs-lisp
+  Command: buffer-enable-undo &optional buffer-or-name ¶
+#+end_src
 
     该命令允许记录缓冲区缓冲区或名称的撤消信息，以便可以撤消后续更改。  如果没有提供参数，则使用当前缓冲区。  如果缓冲区中已启用撤消记录，则此函数不执行任何操作。  它返回零。
 
     在交互式调用中，buffer-or-name 是当前缓冲区。  您不能指定任何其他缓冲区。
 
-命令：buffer-disable-undo &optional buffer-or-name ¶
+#+begin_src emacs-lisp
+  Command: buffer-disable-undo &optional buffer-or-name ¶
+#+end_src
 
     该函数丢弃缓冲区或名称的撤消列表，并禁止进一步记录撤消信息。  因此，不再可能撤消先前的更改或任何后续更改。  如果 buffer-or-name 的 undo 列表已经被禁用，则此功能无效。
 
@@ -777,19 +941,27 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 随着编辑的继续，撤消列表变得越来越长。  为了防止它们用完所有可用的内存空间，垃圾收集会将它们修剪回您可以设置的大小限制。  （为此，撤消列表的大小衡量构成列表的 cons 单元格以及已删除文本的字符串。）三个变量控制可接受的大小范围：undo-limit、undo-strong-limit 和 undo-外限。  在这些变量中，大小被计算为占用的字节数，包括保存的文本和其他数据。
 
-用户选项：撤消限制¶
+#+begin_src emacs-lisp
+  User Option: undo-limit ¶
+#+end_src
 
     这是撤消列表可接受大小的软限制。  超出此大小的更改组是最后保留的更改组。
 
-用户选项：撤消强限制¶
+#+begin_src emacs-lisp
+  User Option: undo-strong-limit ¶
+#+end_src
 
     这是撤消列表可接受大小的上限。  超出此大小的更改组本身（连同所有较旧的更改组）将被丢弃。  有一个例外：最新的更改组仅在超过 undo-outer-limit 时才会被丢弃。
 
-用户选项：撤消外部限制¶
+#+begin_src emacs-lisp
+  User Option: undo-outer-limit ¶
+#+end_src
 
     如果在垃圾收集时，当前命令的撤消信息超过了这个限制，Emacs 会丢弃该信息并显示警告。  这是防止内存溢出的最后一道防线。
 
-用户选项：撤消询问前丢弃¶
+#+begin_src emacs-lisp
+  User Option: undo-ask-before-discard ¶
+#+end_src
 
     如果这个变量不为nil，当undo info 超过undo-outer-limit 时，Emacs 会在echo 区域询问是否丢弃该信息。  默认值为 nil，表示自动丢弃。
 
@@ -807,13 +979,17 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 当您以交互方式调用填充函数时，使用前缀参数意味着 justify 的值 full。
 
-命令：fill-paragraph &optional justify region ¶
+#+begin_src emacs-lisp
+  Command: fill-paragraph &optional justify region ¶
+#+end_src
 
     此命令在点或点之后填充段落。  如果 justify 不为零，则每行也都是合理的。  它使用普通的段落运动命令来查找段落边界。  请参阅 GNU Emacs 手册中的段落。
 
     当 region 为非 nil 时，如果启用了 Transient Mark 模式并且标记处于活动状态，则此命令调用 fill-region 来填充区域中的所有段落，而不是仅填充当前段落。  交互调用此命令时，region 为 t。
 
-命令：fill-region start end &optional justify nosqueeze to-eop ¶
+#+begin_src emacs-lisp
+  Command: fill-region start end &optional justify nosqueeze to-eop ¶
+#+end_src
 
     此命令从头到尾填充区域中的每个段落。  如果 justify 不为零，它也可以证明。
 
@@ -821,7 +997,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     变量paragraph-separate 控制如何区分段落。  请参阅编辑中使用的标准正则表达式。
 
-命令：fill-individual-paragraphs start end &optional justify citation-regexp ¶
+#+begin_src emacs-lisp
+  Command: fill-individual-paragraphs start end &optional justify citation-regexp ¶
+#+end_src
 
     此命令根据其单独的填充前缀填充区域中的每个段落。  因此，如果段落的行用空格缩进，则填充的段落将以相同的方式保持缩进。
 
@@ -829,11 +1007,15 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     通常，fill-individual-paragraphs 将缩进的每次更改视为开始一个新段落。  如果 fill-individual-variing-indent 不为零，则只有分隔线分隔段落。  该模式可以处理缩进的段落，并在第一行增加缩进。
 
-用户选项：fill-individual-variing-indent ¶
+#+begin_src emacs-lisp
+  User Option: fill-individual-varying-indent ¶
+#+end_src
 
     如上所述，此变量会更改 fill-individual-paragraphs 的操作。
 
-命令：fill-region-as-paragraph start end &optional justify nosqueeze compression-after ¶
+#+begin_src emacs-lisp
+  Command: fill-region-as-paragraph start end &optional justify nosqueeze squeeze-after ¶
+#+end_src
 
     此命令将文本区域视为单个段落并填充它。  如果该区域由许多段落组成，则段落之间的空白行将被删除。  当 justify 为非 nil 时，此函数会进行对齐和填充。
 
@@ -841,7 +1023,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     在 Adaptive Fill 模式下，该命令默认调用 fill-context-prefix 来选择填充前缀。  请参阅自适应填充模式。
 
-命令： justify-current-line &optional 如何 eop nosqueeze ¶
+#+begin_src emacs-lisp
+  Command: justify-current-line &optional how eop nosqueeze ¶
+#+end_src
 
     此命令在当前行的单词之间插入空格，以便该行恰好在 fill-column 处结束。  它返回零。
 
@@ -851,33 +1035,47 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     如果 nosqueeze 不为零，则表示不更改内部空格。
 
-用户选项：默认对齐¶
+#+begin_src emacs-lisp
+  User Option: default-justification ¶
+#+end_src
 
     此变量的值指定用于未指定具有 text 属性的样式的文本的对齐样式。  可能的值是 left、right、full、center 或 none。  保留默认值。
 
-功能：当前调整¶
+#+begin_src emacs-lisp
+  Function: current-justification ¶
+#+end_src
 
     此函数返回正确的对齐样式以用于填充点周围的文本。
 
     这将返回 justification 文本属性的值，如果没有这样的文本属性，则返回变量 default-justification。  然而，它返回 nil 而不是 none 表示“不证明”。
 
-用户选项：sentence-end-double-space ¶
+#+begin_src emacs-lisp
+  User Option: sentence-end-double-space ¶
+#+end_src
 
     如果这个变量是非零，一个句点后跟一个空格不算作句末，填充函数避免在这样的地方断行。
 
-用户选项：句尾无句点¶
+#+begin_src emacs-lisp
+  User Option: sentence-end-without-period ¶
+#+end_src
 
     如果这个变量是非零，一个句子可以没有句点结束。  这用于像泰语这样的语言，其中句子以双空格结尾但没有句点。
 
-用户选项：没有空格的句子结尾¶
+#+begin_src emacs-lisp
+  User Option: sentence-end-without-space ¶
+#+end_src
 
     如果这个变量是非零，它应该是一个可以结束一个句子而没有空格的字符串。
 
-用户选项：fill-separate-heterogeneous-words-with-space ¶
+#+begin_src emacs-lisp
+  User Option: fill-separate-heterogeneous-words-with-space ¶
+#+end_src
 
     如果此变量不为 nil，则在连接一个位于行尾的单词和另一个位于下一行开头的单词时，将用空格分隔两个不同类型的单词（例如，英语和 CJK）填充。
 
-变量：填充段落函数¶
+#+begin_src emacs-lisp
+  Variable: fill-paragraph-function ¶
+#+end_src
 
     此变量提供了一种覆盖段落填充的方法。  如果它的值是非零，fill-paragraph 调用这个函数来完成工作。  如果函数返回一个非零值，fill-paragraph 假定工作已经完成，并立即返回该值。
 
@@ -888,23 +1086,31 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 	(fill-paragraph arg))
     #+end_src
 
-变量：fill-forward-paragraph-function ¶
+#+begin_src emacs-lisp
+  Variable: fill-forward-paragraph-function ¶
+#+end_src
 
     此变量提供了一种方法来覆盖填充函数（例如填充区域和填充段落）如何向前移动到下一个段落。  它的值应该是一个函数，使用单个参数 n 调用，即要移动的段落数，并且应该返回 n 与实际移动的段落数之间的差。  此变量的默认值为 forward-paragraph。  请参阅 GNU Emacs 手册中的段落。
 
-变量：使用硬换行¶
+#+begin_src emacs-lisp
+  Variable: use-hard-newlines ¶
+#+end_src
 
     如果此变量不为 nil，则填充函数不会删除具有硬文本属性的换行符。  这些硬换行符充当段落分隔符。  请参阅 GNU Emacs 手册中的硬换行和软换行。
 
 ** TODO 33.12 填充边距
 
-用户选项：填充前缀¶
+#+begin_src emacs-lisp
+  User Option: fill-prefix ¶
+#+end_src
 
     此缓冲区局部变量，如果非零，则指定出现在普通文本行开头的文本字符串，填充它们时应忽略。  任何没有以填充前缀开头的行都被认为是段落的开头；  任何以填充前缀开头后跟额外空格的行也是如此。  以填充前缀开头但没有额外空格的行是可以一起填充的普通文本行。  生成的填充线也以填充前缀开头。
 
     填充前缀跟随左边距空白（如果有）。
 
-用户选项：填充列¶
+#+begin_src emacs-lisp
+  User Option: fill-column ¶
+#+end_src
 
     此缓冲区局部变量指定填充线的最大宽度。  它的值应该是一个整数，即列数。  所有填充、对齐和居中命令都受此变量影响，包括自动填充模式（请参阅自动填充）。
 
@@ -915,41 +1121,59 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
       (add-hook 'foo-mode-hook (lambda () (auto-fill-mode -1))
     #+end_src
 
-命令：set-left-margin from to margin ¶
+#+begin_src emacs-lisp
+  Command: set-left-margin from to margin ¶
+#+end_src
 
     这会将文本上的 left-margin 属性从 from 到 to 设置为值边距。  如果启用了自动填充模式，此命令还会重新填充区域以适合新边距。
 
-命令：set-right-margin from to margin ¶
+#+begin_src emacs-lisp
+  Command: set-right-margin from to margin ¶
+#+end_src
 
     这会将文本上的 right-margin 属性从 from 到 to 设置为值边距。  如果启用了自动填充模式，此命令还会重新填充区域以适合新边距。
 
-功能：当前左边距 ¶
+#+begin_src emacs-lisp
+  Function: current-left-margin ¶
+#+end_src
 
     此函数返回正确的左边距值以用于填充点周围的文本。  该值是当前行开头的字符的 left-margin 属性（如果没有，则为零）与变量 left-margin 的值之和。
 
-功能：当前填充列¶
+#+begin_src emacs-lisp
+  Function: current-fill-column ¶
+#+end_src
 
     此函数返回正确的填充列值以用于填充点周围的文本。  该值是 fill-column 变量的值，减去点后字符的 right-margin 属性的值。
 
-命令：移动到左边距 &optional n force ¶
+#+begin_src emacs-lisp
+  Command: move-to-left-margin &optional n force ¶
+#+end_src
 
     该函数将点移动到当前行的左边距。  移动到的列是通过调用函数 current-left-margin 来确定的。  如果参数 n 不是 nil，则 move-to-left-margin 首先向前移动 n-1 行。
 
     如果 force 不为零，则表示如果该行的缩进与左边距值不匹配，则修复该行的缩进。
 
-功能：删除到左边距 &optional from to ¶
+#+begin_src emacs-lisp
+  Function: delete-to-left-margin &optional from to ¶
+#+end_src
 
     此函数从 from 和 to 之间的文本中删除左边距缩进。  要删除的缩进量是通过调用 current-left-margin 来确定的。  在任何情况下，此函数都不会删除非空白。  如果 from 和 to 被省略，它们默认为整个缓冲区。
 
-功能：缩进到左边距¶
+#+begin_src emacs-lisp
+  Function: indent-to-left-margin ¶
+#+end_src
 
     此函数将当前行开头的缩进调整为由变量 left-margin 指定的值。  （这可能涉及插入或删除空格。）此函数是段落缩进文本模式下缩进行函数的值。
 
-用户选项：左边距 ¶
+#+begin_src emacs-lisp
+  User Option: left-margin ¶
+#+end_src
 
     此变量指定基本左边距列。  在基本模式下，RET 缩进此列。  当以任何方式设置时，此变量会自动变为缓冲区本地。
 
-用户选项：fill-nobreak-predicate ¶
+#+begin_src emacs-lisp
+  User Option: fill-nobreak-predicate ¶
+#+end_src
 
     这个变量为主要模式提供了一种方法来指定不在某些地方换行。  它的值应该是一个函数列表。  每当填充考虑在缓冲区中的某个位置换行时，它都会调用这些函数中的每一个，不带参数，并且点位于该位置。  如果任何函数返回非零，那么该行将不会在那里中断。
 
@@ -957,11 +1181,15 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 当启用自适应填充模式时，Emacs 会根据每个段落中的文本自动确定填充前缀，而不是使用预先确定的值。  在填充期间，此填充前缀将插入到段落的第二行和后续行的开头，如填充和自动填充中所述。
 
-用户选项：自适应填充模式¶
+#+begin_src emacs-lisp
+  User Option: adaptive-fill-mode ¶
+#+end_src
 
     当此变量为非零时，启用自适应填充模式。  默认为 t。
 
-功能：填充上下文前缀从到 ¶
+#+begin_src emacs-lisp
+  Function: fill-context-prefix from to ¶
+#+end_src
 
     该函数实现了自适应填充模式的核心；  它根据 from 和 to 之间的文本选择填充前缀，通常是段落的开头和结尾。  它通过查看段落的前两行来做到这一点，基于下面描述的变量。
 
@@ -974,19 +1202,25 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 	 当段落已经有两行时，函数 next 在第二行查找候选前缀，其方式与第一行相同。  如果没有找到，则返回 nil。
 	 该函数现在启发式地比较两个候选前缀：如果第 2 行候选中的非空白字符在第 1 行候选中以相同的顺序出现，则该函数返回第 2 行候选。  否则，它返回两个候选者共有的最大初始子字符串（可能是空字符串）。
 
-用户选项：自适应填充正则表达式¶
+#+begin_src emacs-lisp
+  User Option: adaptive-fill-regexp ¶
+#+end_src
 
     自适应填充模式将此正则表达式与一行上左边距空白（如果有）之后开始的文本进行匹配；  它匹配的字符是该行的填充前缀候选。
 
     默认值与混合了某些标点符号的空格匹配。
 
-用户选项：adaptive-fill-first-line-regexp ¶
+#+begin_src emacs-lisp
+  User Option: adaptive-fill-first-line-regexp ¶
+#+end_src
 
     仅在单行段落中使用，此正则表达式充当对一个可用候选填充前缀有效性的附加检查：候选必须匹配此正则表达式，或匹配 comment-start-skip。  如果不是，则 fill-context-prefix 将候选者替换为与它相同宽度的空格字符串。
 
     这个变量的默认值是“\\`[ \t]*\\'”，它只匹配一个空格字符串。  此默认值的效果是强制在单行段落中找到的填充前缀始终为纯空格。
 
-用户选项：自适应填充功能¶
+#+begin_src emacs-lisp
+  User Option: adaptive-fill-function ¶
+#+end_src
 
     通过将此变量设置为函数，您可以指定更复杂的方式来自动选择填充前缀。  该函数在一行的左边距（如果有）之后用点调用，并且它必须保留点。  它应该返回该行的填充前缀或 nil，这意味着它无法确定前缀。
 
@@ -996,21 +1230,29 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 自动填充模式还启用了更改边距和对齐样式以重新填充部分文本的功能。  请参阅填充边距。
 
-变量：自动填充功能¶
+#+begin_src emacs-lisp
+  Variable: auto-fill-function ¶
+#+end_src
 
     这个缓冲区局部变量的值应该是一个函数（无参数），在自插入表 auto-fill-chars 中的一个字符后调用，见下文。  它可能是 nil，在这种情况下没有什么特别的。
 
     当启用自动填充模式时，auto-fill-function 的值为 do-auto-fill。  这是一个函数，其唯一目的是实现断线的常用策略。
 
-变量：正常自动填充功能¶
+#+begin_src emacs-lisp
+  Variable: normal-auto-fill-function ¶
+#+end_src
 
     此变量指定用于自动填充功能的函数，如果和何时打开自动填充。  主要模式可以为此变量设置缓冲区本地值，以改变自动填充的工作方式。
 
-变量：自动填充字符¶
+#+begin_src emacs-lisp
+  Variable: auto-fill-chars ¶
+#+end_src
 
     自插入时调用自动填充功能的字符表 - 大多数语言环境中的空格和换行符。  他们在表中有一个条目 t。
 
-用户选项：comment-auto-fill-only-comments ¶
+#+begin_src emacs-lisp
+  User Option: comment-auto-fill-only-comments ¶
+#+end_src
 
     这个变量，如果非零，意味着只在注释中自动填充行。  更准确地说，这意味着如果为当前缓冲区定义了注释语法，那么在注释之外自插入字符将不会调用自动填充函数。
 
@@ -1018,7 +1260,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 本节中描述的排序函数都在缓冲区中重新排列文本。  这与重新排列列表元素顺序的函数排序相反（请参阅重新排列列表的函数）。  这些函数返回的值没有意义。
 
-功能：sort-subr reverse nextrecfun endrecfun &optional startkeyfun endkeyfun predicate ¶
+#+begin_src emacs-lisp
+  Function: sort-subr reverse nextrecfun endrecfun &optional startkeyfun endkeyfun predicate ¶
+#+end_src
 
     此函数是通用的文本排序例程，它将缓冲区细分为记录，然后对它们进行排序。  本节中的大多数命令都使用此功能。
 
@@ -1077,11 +1321,15 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
     #+end_src
     在 sort-subr 返回后，指向任何排序记录的标记都没有有用的位置。
 
-用户选项： sort-fold-case ¶
+#+begin_src emacs-lisp
+  User Option: sort-fold-case ¶
+#+end_src
 
     如果此变量不为 nil，则 sort-subr 和其他缓冲区排序函数在比较字符串时会忽略大小写。
 
-命令：sort-regexp-fields reverse record-regexp key-regexp start end ¶
+#+begin_src emacs-lisp
+  Command: sort-regexp-fields reverse record-regexp key-regexp start end ¶
+#+end_src
 
     此命令按照 record-regexp 和 key-regexp 指定的字母顺序对 start 和 end 之间的区域进行排序。  如果 reverse 是负整数，则排序是相反的。
 
@@ -1095,13 +1343,19 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     如果键正则表达式是：
 
-    '\数字'
+#+begin_src emacs-lisp
+  ‘\digit’
+#+end_src
 
 	 那么记录正则表达式中由数字'\（...\）'括号分组匹配的文本是排序键。
-    '\&'
+#+begin_src emacs-lisp
+  ‘\&’
+#+end_src
 
 	 那么整个记录就是排序键。
-    正则表达式
+#+begin_src emacs-lisp
+  a regular expression
+#+end_src
 
 	 然后 sort-regexp-fields 在记录中搜索正则表达式的匹配项。  如果找到这样的匹配，它就是排序键。  如果记录中的 key-regexp 不匹配，则忽略该记录，这意味着它在缓冲区中的位置不会改变。  （其他记录可能会在它周围移动。）
 
@@ -1114,33 +1368,47 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
     #+end_src
     如果您以交互方式调用 sort-regexp-fields，它会在 minibuffer 中提示输入记录正则表达式和键正则表达式。
 
-命令：sort-lines reverse start end ¶
+#+begin_src emacs-lisp
+  Command: sort-lines reverse start end ¶
+#+end_src
 
     此命令按字母顺序对开始和结束之间的区域中的行进行排序。  如果 reverse 不为零，则排序是相反的。
 
-命令：sort-paragraphs reverse start end ¶
+#+begin_src emacs-lisp
+  Command: sort-paragraphs reverse start end ¶
+#+end_src
 
     此命令按字母顺序对开始和结束之间区域中的段落进行排序。  如果 reverse 不为零，则排序是相反的。
 
-命令：sort-pages reverse start end ¶
+#+begin_src emacs-lisp
+  Command: sort-pages reverse start end ¶
+#+end_src
 
     此命令按字母顺序对开始和结束之间区域中的页面进行排序。  如果 reverse 不为零，则排序是相反的。
 
-命令：sort-fields field start end ¶
+#+begin_src emacs-lisp
+  Command: sort-fields field start end ¶
+#+end_src
 
     此命令对 start 和 end 之间的区域中的行进行排序，并按每行的字段字段按字母顺序进行比较。  字段由空格分隔并从 1 开始编号。如果字段为负数，则从行尾的第 -fieldth 字段排序。  此命令对排序表很有用。
 
-命令：sort-numeric-fields field start end ¶
+#+begin_src emacs-lisp
+  Command: sort-numeric-fields field start end ¶
+#+end_src
 
     此命令对开始和结束之间的区域中的行进行排序，并通过每行的字段字段对它们进行数字比较。  字段由空格分隔并从 1 开始编号。指定的字段必须在区域的每一行中包含一个数字。  以 0 开头的数字被视为八进制，以“0x”开头的数字被视为十六进制。
 
     如果 field 为负数，则从行尾的第 -fieldth 字段排序。  此命令对排序表很有用。
 
-用户选项： sort-numeric-base ¶
+#+begin_src emacs-lisp
+  User Option: sort-numeric-base ¶
+#+end_src
 
     此变量指定 sort-numeric-fields 解析数字的默认基数。
 
-命令：sort-columns reverse &optional beg end ¶
+#+begin_src emacs-lisp
+  Command: sort-columns reverse &optional beg end ¶
+#+end_src
 
     此命令对 beg 和 end 之间的区域中的行进行排序，并按一定范围的列按字母顺序比较它们。  beg 和 end 的列位置限制了要排序的列范围。
 
@@ -1160,11 +1428,15 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 列数计算忽略窗口的宽度和水平滚动量。  因此，列值可以任意高。  第一列（或最左边的）编号为 0。除了不可见性之外，它们还忽略叠加层和文本属性。
 
-功能：当前列¶
+#+begin_src emacs-lisp
+  Function: current-column ¶
+#+end_src
 
     此函数返回点的水平位置，以列为单位，从左边距的 0 开始计数。  列位置是当前行的开头和点之间所有显示的字符表示的宽度之和。
 
-命令：移动到列&可选力¶
+#+begin_src emacs-lisp
+  Command: move-to-column column &optional force ¶
+#+end_src
 
     此函数将点移动到当前行中的列。  列的计算考虑了行首和点之间字符的显示表示的宽度。
 
@@ -1185,17 +1457,23 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 本节介绍用于计算和插入缩进的基本函数。  以下部分中的函数使用这些原语。  有关相关功能，请参见显示文本的大小。
 
-功能：当前缩进 ¶
+#+begin_src emacs-lisp
+  Function: current-indentation ¶
+#+end_src
 
     该函数返回当前行的缩进，即第一个非空白字符的水平位置。  如果内容完全空白，则这是行尾的水平位置。
 
-命令：缩进列&可选最小值¶
+#+begin_src emacs-lisp
+  Command: indent-to column &optional minimum ¶
+#+end_src
 
     此函数使用制表符和空格从点缩进，直到到达列。  如果指定了 minimum 且非 nil，则至少插入那么多空格，即使这需要超出列。  否则，如果点已经超出列，则该函数不执行任何操作。  该值是插入缩进结束的列。
 
     插入的空白字符从周围的文本（通常仅从前面的文本）继承文本属性。  请参阅文本属性的粘性。
 
-用户选项：indent-tabs-mode ¶
+#+begin_src emacs-lisp
+  User Option: indent-tabs-mode ¶
+#+end_src
 
     如果此变量不为零，则缩进函数可以插入制表符和空格。  否则，它们只插入空格。  自动设置此变量使其在当前缓冲区中成为局部缓冲区。
 
@@ -1203,7 +1481,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 每个主要模式的一个重要功能是自定义 TAB 键以正确缩进正在编辑的语言。  本节介绍 TAB 键的机制以及如何控制它。  本节中的函数返回不可预测的值。
 
-命令：indent-for-tab-command &optional 刚性 ¶
+#+begin_src emacs-lisp
+  Command: indent-for-tab-command &optional rigid ¶
+#+end_src
 
     这是大多数编辑模式下绑定到 TAB 的命令。  它通常的动作是缩进当前行，但它也可以插入一个制表符或缩进一个区域。
 
@@ -1215,40 +1495,60 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     如果rigid 是非nil（交互式，带有前缀参数），那么在该命令缩进一行或插入一个制表符后，它也会刚性缩进从当前行开头开始的整个平衡表达式，以反映新的缩进。  如果命令缩进区域，则忽略此参数。
 
-变量：缩进线函数¶
+#+begin_src emacs-lisp
+  Variable: indent-line-function ¶
+#+end_src
 
     这个变量的值是 indent-for-tab-command 和其他各种缩进命令用来缩进当前行的函数。  通常由主模式分配；  例如，Lisp 模式将其设置为 lisp-indent-line，C 模式将其设置为 c-indent-line，等等。  默认值是相对缩进。  请参阅代码的自动缩进。
 
-命令：indent-according-to-mode ¶
+#+begin_src emacs-lisp
+  Command: indent-according-to-mode ¶
+#+end_src
 
     该命令调用 indent-line-function 中的函数以适合当前主要模式的方式缩进当前行。
 
-命令：换行和缩进 ¶
+#+begin_src emacs-lisp
+  Command: newline-and-indent ¶
+#+end_src
 
     此函数插入​​换行符，然后根据主要模式缩进新行（刚插入的换行符之后的行）。  它通过调用 indent-according-to-mode 来进行缩进。
 
-命令：reindent-then-newline-and-indent ¶
+#+begin_src emacs-lisp
+  Command: reindent-then-newline-and-indent ¶
+#+end_src
 
     此命令重新缩进当前行，在点处插入换行符，然后缩进新行（刚刚插入的换行符之后的行）。  它通过调用 indent-according-to-mode 在两行上进行缩进。
 
-用户选项：tab-always-indent ¶
+#+begin_src emacs-lisp
+  User Option: tab-always-indent ¶
+#+end_src
 
     此变量可用于自定义 TAB（indent-for-tab-command）命令的行为。  如果值为 t（默认值），该命令通常只缩进当前行。  如果值为 nil，则仅当 point 位于左边距或行的缩进中时，命令才会缩进当前行；  否则，它会插入一个制表符。  如果该值是完整的，该命令首先尝试缩进当前行，如果该行已经缩进，它调用completion-at-point 来完成该点的文本（参见普通缓冲区中的完成）。
 
-用户选项：tab-first-completion ¶
+#+begin_src emacs-lisp
+  User Option: tab-first-completion ¶
+#+end_src
 
     如果 tab-always-indent 是完整的，是否展开或缩进可以通过 tab-first-completion 变量进一步自定义。  可以使用以下值：
 
-    eol
+#+begin_src emacs-lisp
+  eol
+#+end_src
 
 	 仅当点位于行尾时才完成。
-    单词
+#+begin_src emacs-lisp
+  word
+#+end_src
 
 	 除非下一个字符具有单词语法，否则完成。
-    单词或括号
+#+begin_src emacs-lisp
+  word-or-paren
+#+end_src
 
 	 完成，除非下一个字符具有单词语法或括号。
-    词或父或点
+#+begin_src emacs-lisp
+  word-or-paren-or-punct
+#+end_src
 
 	 完整，除非下一个字符具有单词语法，或者是括号，或者是标点符号。
 
@@ -1256,20 +1556,28 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 一些主要模式需要支持其语法属于不同主要模式的嵌入文本区域。  示例包括结合文档和源代码片段的文学编程源文件，包含 Python 或 JS 代码片段的 Yacc/Bison 程序等。为了正确缩进嵌入的块，主要模式需要将缩进委托给另一个模式的缩进引擎（例如，为 JS 代码调用 js-indent-line 或为 Python 调用 python-indent-line），同时为其提供一些上下文来指导缩进。  就主要模式而言，应避免在其缩进代码中调用 widen 并遵守 prog-first-column。
 
-变量：prog-indentation-context ¶
+#+begin_src emacs-lisp
+  Variable: prog-indentation-context ¶
+#+end_src
 
     这个变量，当非零时，保存由高级主模式提供的子模式的缩进引擎的缩进上下文。  该值应为 (first-column.rest) 形式的列表。列表的成员具有以下含义：
 
-    第一列
+#+begin_src emacs-lisp
+  first-column
+#+end_src
 
 	 用于顶级构造的列。  这将替换子模式使用的顶级列的默认值，通常为零。
-    休息
+#+begin_src emacs-lisp
+  rest
+#+end_src
 
 	 该值当前未使用。
 
 主要模式的缩进引擎应使用以下便利功能，以支持作为另一个主要模式的子模式的调用。
 
-功能: prog-first-column ¶
+#+begin_src emacs-lisp
+  Function: prog-first-column ¶
+#+end_src
 
     调用此函数而不是使用列号的文字值（通常为零）来缩进顶级程序结构。  该函数的值是用于顶级构造的列号。  当没有高级模式生效时，此函数返回零。
 
@@ -1277,7 +1585,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 本节介绍缩进区域中所有行的命令。  它们返回不可预测的值。
 
-命令：indent-region start end &optional to-column ¶
+#+begin_src emacs-lisp
+  Command: indent-region start end &optional to-column ¶
+#+end_src
 
     此命令从 start（包括）和 end（不包括）之间开始缩进每个非空行。  如果 to-column 为 nil，则 indent-region 通过调用当前模式的缩进函数，即 indent-line-function 的值来缩进每个非空行。
 
@@ -1285,7 +1595,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     如果有填充前缀，则 indent-region 通过使其以填充前缀开头来缩进每一行。
 
-变量：缩进区域函数¶
+#+begin_src emacs-lisp
+  Variable: indent-region-function ¶
+#+end_src
 
     这个变量的值是一个函数，可以被 indent-region 用作快捷方式。  它应该有两个参数，区域的开始和结束。  您应该设计该函数，使其产生与逐条缩进该区域的行相同的结果，但可能更快。
 
@@ -1295,7 +1607,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     indent-region 带有非 nil 参数 to-column 具有不同的含义，并且不使用此变量。
 
-命令：indent-rigidly start end count ¶
+#+begin_src emacs-lisp
+  Command: indent-rigidly start end count ¶
+#+end_src
 
     此函数按计数列横向缩进开始（包括）和结束（不包括）之间的所有行。  这保留了受影响区域的形状，将其作为一个刚性单元移动。
 
@@ -1303,7 +1617,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     如果不带前缀参数以交互方式调用，此命令将调用瞬态模式来严格调整缩进。  请参阅 GNU Emacs 手册中的缩进命令。
 
-命令: indent-code-rigidly start end columns &optional nochange-regexp ¶
+#+begin_src emacs-lisp
+  Command: indent-code-rigidly start end columns &optional nochange-regexp ¶
+#+end_src
 
     这就像 indent-rigidly 一样，只是它不会改变以字符串或注释开头的行。
 
@@ -1313,7 +1629,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 本节描述了两个基于前几行内容缩进当前行的命令。
 
-命令：indent-relative &optional first-only unindented-ok ¶
+#+begin_src emacs-lisp
+  Command: indent-relative &optional first-only unindented-ok ¶
+#+end_src
 
     此命令在点处插入空格，延伸到与前一个非空行的下一个缩进点相同的列。  缩进点是空格后面的非空格字符。  下一个缩进点是大于当前点列的列处的第一个缩进点。  例如，如果点位于一行文本的第一个非空白字符的下方和左侧，它会通过插入空格移动到该列。
 
@@ -1351,7 +1669,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
       The quick brown fox jum  ∗ped.
     #+end_src
 
-命令：indent-relative-first-indent-point ¶
+#+begin_src emacs-lisp
+  Command: indent-relative-first-indent-point ¶
+#+end_src
 
     此命令通过调用 indent-relative 并将 t 作为第一个唯一参数来缩进当前行，就像之前的非空白行一样。  返回值是不可预测的。
 
@@ -1361,11 +1681,15 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 本节说明用户指定制表位的机制以及使用和设置它们的机制。  之所以使用“制表位”这个名称，是因为该功能类似于打字机上的制表位。  该功能通过插入适当数量的空格和制表符来到达下一个制表位列；  它不会影响缓冲区中制表符的显示（请参阅通常的显示约定）。  请注意，作为输入的 TAB 字符仅在少数主要模式（例如文本模式）中使用此制表位功能。  请参阅 GNU Emacs 手册中的制表位。
 
-命令：tab-to-tab-stop ¶
+#+begin_src emacs-lisp
+  Command: tab-to-tab-stop ¶
+#+end_src
 
     此命令在点之前插入空格或制表符，直到制表符列表定义的下一个制表位列。
 
-用户选项：tab-stop-list ¶
+#+begin_src emacs-lisp
+  User Option: tab-stop-list ¶
+#+end_src
 
     此变量定义制表符到制表符使用的制表位列。  它应该是 nil，或者是一个递增整数的列表，它们不需要均匀分布。  通过重复最后一个元素和倒数第二个元素之间的间隔（如果列表的元素少于两个，则为制表符宽度），列表隐式扩展到无穷大。  nil 值表示每个制表符宽度列都有一个制表位。
 
@@ -1375,15 +1699,21 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 这些主要用于交互使用的命令基于文本中的缩进执行。
 
-命令：返回缩进 ¶
+#+begin_src emacs-lisp
+  Command: back-to-indentation ¶
+#+end_src
 
     此命令将点移动到当前行（即点所在的行）中的第一个非空白字符。  它返回零。
 
-命令：向后缩进 &optional arg ¶
+#+begin_src emacs-lisp
+  Command: backward-to-indentation &optional arg ¶
+#+end_src
 
     此命令将点向后移动 arg 行，然后移动到该行上的第一个非空白字符。  它返回零。  如果 arg 被省略或为零，则默认为 1。
 
-命令：向前缩进 &optional arg ¶
+#+begin_src emacs-lisp
+  Command: forward-to-indentation &optional arg ¶
+#+end_src
 
     此命令将点向前移动 arg 行，然后移动到该行上的第一个非空白字符。  它返回零。  如果 arg 被省略或为零，则默认为 1。
 
@@ -1391,7 +1721,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 此处描述的大小写更改命令适用于当前缓冲区中的文本。  有关适用于字符串和字符的大小写转换函数，请参见 Lisp 中的大小写转换。  请参阅大小写表，了解如何自定义哪些字符是大写或小写以及如何转换它们。
 
-命令：大写区域开始结束¶
+#+begin_src emacs-lisp
+  Command: capitalize-region start end ¶
+#+end_src
 
     此函数将由 start 和 end 定义的区域中的所有单词大写。  大写意味着将每个单词的第一个字符转换为大写，并将每个单词的其余部分转换为小写。  该函数返回零。
 
@@ -1414,19 +1746,25 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
       ---------- Buffer: foo ----------
     #+end_src
 
-命令：downcase-region start end ¶
+#+begin_src emacs-lisp
+  Command: downcase-region start end ¶
+#+end_src
 
     此函数将由 start 和 end 定义的区域中的所有字母转换为小写。  该函数返回零。
 
     交互调用downcase-region时，start和end分别是point和mark，最小的在前。
 
-命令：upcase-region start end ¶
+#+begin_src emacs-lisp
+  Command: upcase-region start end ¶
+#+end_src
 
     此函数将由 start 和 end 定义的区域中的所有字母转换为大写。  该函数返回零。
 
     交互调用upcase-region时，start和end分别是point和mark，最小的在前。
 
-命令：大写字数 ¶
+#+begin_src emacs-lisp
+  Command: capitalize-word count ¶
+#+end_src
 
     此函数将 count 单词后的点大写，并像它一样移动点。  大写意味着将每个单词的第一个字符转换为大写，并将每个单词的其余部分转换为小写。  如果 count 为负数，该函数将 -count 前面的单词大写，但不移动点。  该值为零。
 
@@ -1434,13 +1772,17 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     当以交互方式调用 capitalize-word 时，count 设置为数字前缀参数。
 
-命令：小写字数 ¶
+#+begin_src emacs-lisp
+  Command: downcase-word count ¶
+#+end_src
 
     此函数将 point 之后的 count 个单词转换为全部小写，同时将 point 移过来。  如果 count 是负数，它会转换 -count 之前的单词但不移动点。  该值为零。
 
     当以交互方式调用 downcase-word 时，count 设置为数字前缀参数。
 
-命令：大写字数 ¶
+#+begin_src emacs-lisp
+  Command: upcase-word count ¶
+#+end_src
 
     此函数将 point 之后的 count 个单词转换为全部大写，同时将 point 移过来。  如果 count 是负数，它会转换 -count 之前的单词但不移动点。  该值为零。
 
@@ -1462,23 +1804,31 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 这些函数处理字符串和缓冲区。  请记住，字符串中的位置从 0 开始，而缓冲区中的位置从 1 开始。传递当前缓冲区以外的缓冲区可能会很慢。
 
-功能：get-text-property pos prop &optional object ¶
+#+begin_src emacs-lisp
+  Function: get-text-property pos prop &optional object ¶
+#+end_src
 
     此函数返回对象（缓冲区或字符串）中位置 pos 之后的字符的 prop 属性值。  参数对象是可选的，默认为当前缓冲区。
 
     如果严格来说没有 prop 属性，但字符有一个属于符号的属性类别，则 get-text-property 返回该符号的 prop 属性。
 
-功能：get-char-property position prop & optional object ¶
+#+begin_src emacs-lisp
+  Function: get-char-property position prop &optional object ¶
+#+end_src
 
     此函数类似于 get-text-property，只是它先检查叠加层，然后检查文本属性。  请参见叠加。
 
     参数对象可以是字符串、缓冲区或窗口。  如果它是一个窗口，则显示在该窗口中的缓冲区用于文本属性和覆盖，但只考虑该窗口的活动覆盖。  如果 object 是缓冲区，则首先考虑该缓冲区中的覆盖，按优先级递减的顺序，然后是文本属性。  如果 object 是字符串，则只考虑文本属性，因为字符串永远不会有覆盖。
 
-功能：get-pos-property position prop & optional object ¶
+#+begin_src emacs-lisp
+  Function: get-pos-property position prop &optional object ¶
+#+end_src
 
     这个函数和get-char-property类似，只是它关注的是属性的粘性和叠加层的前进设置，而不是角色在（即之后）位置的属性。
 
-功能：get-char-property-and-overlay position prop & optional object ¶
+#+begin_src emacs-lisp
+  Function: get-char-property-and-overlay position prop &optional object ¶
+#+end_src
 
     这类似于 get-char-property，但提供了有关属性值来自的叠加层的额外信息。
 
@@ -1486,15 +1836,21 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     如果位置在对象的末尾，则该值的 CAR 和 CDR 均为 nil。
 
-变量：char-property-alias-alist ¶
+#+begin_src emacs-lisp
+  Variable: char-property-alias-alist ¶
+#+end_src
 
     此变量包含一个将属性名称映射到替代属性名称列表的 alist。  如果字符没有为属性指定直接值，则按顺序查询替代属性名称；  使用第一个非零值。  此变量优先于 default-text-properties，类别属性优先于此变量。
 
-功能：text-properties-at position & optional object ¶
+#+begin_src emacs-lisp
+  Function: text-properties-at position &optional object ¶
+#+end_src
 
     此函数返回字符串或缓冲区对象中位置处字符的整个属性列表。  如果 object 为 nil，则默认为当前缓冲区。
 
-变量：默认文本属性¶
+#+begin_src emacs-lisp
+  Variable: default-text-properties ¶
+#+end_src
 
     此变量包含一个属性列表，为文本属性提供默认值。  每当一个字符没有直接、通过类别符号或通过 char-property-alias-alist 指定属性的值时，都会使用存储在此列表中的值。  这是一个例子：
 
@@ -1508,7 +1864,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 	   ⇒ 69
     #+end_src
 
-功能：对象间隔 OBJECT ¶
+#+begin_src emacs-lisp
+  Function: object-intervals OBJECT ¶
+#+end_src
 
     此函数将对象中的间隔（即文本属性）的副本作为间隔列表返回。  对象必须是字符串或缓冲区。  更改此列表的结构不会更改对象中的间隔。
 
@@ -1525,11 +1883,15 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 由于文本属性被认为是缓冲区（或字符串）内容的一部分，并且会影响缓冲区在屏幕上的外观，因此缓冲区文本属性的任何更改都将缓冲区标记为已修改。  缓冲区文本属性更改也是可撤消的（请参阅撤消）。  字符串中的位置从 0 开始，而缓冲区中的位置从 1 开始。
 
-功能：put-text-property start end prop value & optional object ¶
+#+begin_src emacs-lisp
+  Function: put-text-property start end prop value &optional object ¶
+#+end_src
 
     此函数将 prop 属性设置为字符串或缓冲区对象中 start 和 end 之间的文本的值。  如果 object 为 nil，则默认为当前缓冲区。
 
-功能：add-text-properties start end props &optional object ¶
+#+begin_src emacs-lisp
+  Function: add-text-properties start end props &optional object ¶
+#+end_src
 
     此函数为字符串或缓冲区对象中开始和结束之间的文本添加或覆盖文本属性。  如果 object 为 nil，则默认为当前缓冲区。
 
@@ -1543,25 +1905,31 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 			   '(comment t face highlight))
 
     #+end_src
-功能：remove-text-properties start end props &optional object ¶
+#+begin_src emacs-lisp
+  Function: remove-text-properties start end props &optional object ¶
+#+end_src
 
     此函数从字符串或缓冲区对象中开始和结束之间的文本中删除指定的文本属性。  如果 object 为 nil，则默认为当前缓冲区。
 
     参数 props 指定要删除的属性。  它应该具有属性列表的形式（请参阅属性列表）：其元素是与相应值交替的属性名称的列表。  但只有名称很重要——伴随它们的价值被忽略了。  例如，这里是删除 face 属性的方法。
 
     #+begin_src emacs-lisp
-(remove-text-properties start end '(face nil))
+      (remove-text-properties start end '(face nil))
     #+end_src
 
     如果函数实际上改变了某个属性的值，则返回值为 t；  否则为 nil（如果 props 为 nil 或指定文本中没有字符具有任何这些属性）。
 
     要从特定文本中删除所有文本属性，请使用 set-text-properties 并为新属性列表指定 nil。
 
-功能：remove-list-of-text-properties start end list-of-properties & optional object ¶
+#+begin_src emacs-lisp
+  Function: remove-list-of-text-properties start end list-of-properties &optional object ¶
+#+end_src
 
     与 remove-text-properties 类似，除了 list-of-properties 只是属性名称列表，而不是属性名称和值的交替列表。
 
-功能：set-text-properties start end props &optional object ¶
+#+begin_src emacs-lisp
+  Function: set-text-properties start end props &optional object ¶
+#+end_src
 
     此函数完全替换字符串或缓冲区对象中开始和结束之间的文本的文本属性列表。  如果 object 为 nil，则默认为当前缓冲区。
 
@@ -1577,7 +1945,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     不要依赖这个函数的返回值。
 
-功能：add-face-text-property start end face &optional appendp object ¶
+#+begin_src emacs-lisp
+  Function: add-face-text-property start end face &optional appendp object ¶
+#+end_src
 
     此函数作用于 start 和 end 之间的文本，将 face face 添加到 face 文本属性中。  face 应该是 face 属性的有效值（请参阅具有特殊含义的属性），例如面部名称或匿名面部（请参阅 Faces）。
 
@@ -1594,7 +1964,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 使用文本属性创建字符串的最简单方法是使用propertize：
 
-功能：属性化字符串 &rest 属性 ¶
+#+begin_src emacs-lisp
+  Function: propertize string &rest properties ¶
+#+end_src
 
     此函数返回添加了文本属性属性的字符串副本。  这些属性适用于返回的字符串中的所有字符。  下面是一个使用 face 属性和 mouse-face 属性构造字符串的示例：
 
@@ -1633,7 +2005,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 这些功能不移动点；  相反，它们返回一个位置（或零）。  请记住，位置始终位于两个字符之间；  这些函数返回的位置在具有不同属性的两个字符之间。
 
-功能：next-property-change pos &optional object limit ¶
+#+begin_src emacs-lisp
+  Function: next-property-change pos &optional object limit ¶
+#+end_src
 
     该函数从字符串或缓冲区对象中的位置 pos 向前扫描文本，直到它发现某个文本属性发生变化，然后返回变化的位置。  换句话说，它返回 pos 之后的第一个字符的位置，其属性与 pos 之后的字符的属性不同。
 
@@ -1653,11 +2027,15 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
     #+end_src
 
 
-功能：previous-property-change pos &optional object limit ¶
+#+begin_src emacs-lisp
+  Function: previous-property-change pos &optional object limit ¶
+#+end_src
 
     这类似于 next-property-change，但从 pos 向后扫描而不是向前扫描。  如果值为非nil，则为小于等于pos的位置；  仅当limit 等于pos 时它才等于pos。
 
-功能：next-single-property-change pos prop &optional object limit ¶
+#+begin_src emacs-lisp
+  Function: next-single-property-change pos prop &optional object limit ¶
+#+end_src
 
     该函数扫描文本以查找 prop 属性中的更改，然后返回更改的位置。  扫描从字符串或缓冲区对象中的位置 pos 开始。  换句话说，此函数返回 pos 之后的第一个字符的位置，其 prop 属性与 pos 之后的字符不同。
 
@@ -1665,39 +2043,55 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     如果属性一直保持不变直到对象的末尾并且限制为 nil，则该值为 nil。  如果值为非nil，则为大于等于pos的位置；  仅当limit 等于pos 时它才等于pos。
 
-功能：previous-single-property-change pos prop & optional object limit ¶
+#+begin_src emacs-lisp
+  Function: previous-single-property-change pos prop &optional object limit ¶
+#+end_src
 
     这类似于 next-single-property-change，但从 pos 向后扫描而不是向前扫描。  如果值为非nil，则为小于等于pos的位置；  仅当limit 等于pos 时它才等于pos。
 
-功能：next-char-property-change pos &optional limit ¶
+#+begin_src emacs-lisp
+  Function: next-char-property-change pos &optional limit ¶
+#+end_src
 
     这与 next-property-change 类似，只是它考虑了覆盖属性和文本属性，如果在缓冲区结束之前没有发现任何变化，则返回最大缓冲区位置而不是 nil（在这个意义上，它类似于对应的覆盖函数 next-overlay-change，而不是 next-property-change）。  没有对象操作数，因为此函数仅对当前缓冲区进行操作。  它返回任何一种属性发生变化的下一个地址。
 
-功能：previous-char-property-change pos &optional limit ¶
+#+begin_src emacs-lisp
+  Function: previous-char-property-change pos &optional limit ¶
+#+end_src
 
     这类似于 next-char-property-change，但从 pos 向后扫描而不是向前扫描，如果没有找到更改，则返回最小缓冲区位置。
 
-功能：next-single-char-property-change pos prop &optional object limit ¶
+#+begin_src emacs-lisp
+  Function: next-single-char-property-change pos prop &optional object limit ¶
+#+end_src
 
     这与 next-single-property-change 类似，只是它考虑了覆盖属性和文本属性，如果在对象结束之前没有发现任何更改，则返回对象中的最大有效位置而不是 nil。  与 next-char-property-change 不同，此函数确实有一个对象操作数；  如果 object 不是缓冲区，则仅考虑文本属性。
 
-功能：previous-single-char-property-change pos prop & optional object limit ¶
+#+begin_src emacs-lisp
+  Function: previous-single-char-property-change pos prop &optional object limit ¶
+#+end_src
 
     这类似于 next-single-char-property-change，但从 pos 向后扫描而不是向前扫描，如果未找到更改，则返回 object 中的最小有效位置。
 
-功能：text-property-any start end prop value & optional object ¶
+#+begin_src emacs-lisp
+  Function: text-property-any start end prop value &optional object ¶
+#+end_src
 
     如果 start 和 end 之间的至少一个字符具有值为 value 的属性 prop，则此函数返回非 nil。  更准确地说，它返回第一个这样的字符的位置。  否则，它返回零。
 
     可选的第五个参数 object 指定要扫描的字符串或缓冲区。  位置是相对于对象的。  object 的默认值是当前缓冲区。
 
-功能：text-property-not-all start end prop value &optional object ¶
+#+begin_src emacs-lisp
+  Function: text-property-not-all start end prop value &optional object ¶
+#+end_src
 
     如果 start 和 end 之间的至少一个字符不具有值为 value 的属性 prop，则此函数返回非 nil。  更准确地说，它返回第一个这样的字符的位置。  否则，它返回零。
 
     可选的第五个参数 object 指定要扫描的字符串或缓冲区。  位置是相对于对象的。  object 的默认值是当前缓冲区。
 
-功能：text-property-search-forward prop & optional value predicate not-current ¶
+#+begin_src emacs-lisp
+  Function: text-property-search-forward prop &optional value predicate not-current ¶
+#+end_src
 
     根据谓词搜索下一个将 text 属性 prop 设置为 value 的区域。
 
@@ -1758,7 +2152,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     这将为您提供所有这些 URL 的列表。
 
-功能：text-property-search-backward prop & optional value predicate not-current ¶
+#+begin_src emacs-lisp
+  Function: text-property-search-backward prop &optional value predicate not-current ¶
+#+end_src
 
     这就像 text-property-search-backward 一样，只是向后搜索。  但是，点被放置在匹配区域的开头而不是结尾。
 
@@ -1768,10 +2164,14 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 注意：在每个 Emacs 命令之后，属性组合、显示、不可见和无形也可以导致点移动到可接受的位置。  请参阅命令后调整点。
 
-类别
+#+begin_src emacs-lisp
+  category
+#+end_src
 
     如果一个角色有一个类别属性，我们称它为角色的属性类别。  它应该是一个符号。  此符号的属性用作字符属性的默认值。
-脸 ¶
+#+begin_src emacs-lisp
+  face ¶
+#+end_src
 
     face 属性控制角色的外观（请参阅 Faces）。  该属性的值可以如下：
 
@@ -1784,21 +2184,31 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
     字体锁定模式（请参阅字体锁定模式）通过根据上下文动态更新字符的 face 属性在大多数缓冲区中工作。
 
     add-face-text-property 函数提供了一种方便的方法来设置此文本属性。  请参阅更改文本属性。
-字体锁定面¶
+#+begin_src emacs-lisp
+  font-lock-face ¶
+#+end_src
 
     此属性指定字体锁定模式应应用于基础文本的 face 属性的值。  它是 Font Lock 模式使用的字体化方法之一，对于实现自己突出显示的特殊模式很有用。  请参阅预先计算的字体。  禁用字体锁定模式时，font-lock-face 无效。
-鼠标面¶
+#+begin_src emacs-lisp
+  mouse-face ¶
+#+end_src
 
     当鼠标在角色上或角色附近时，使用此属性代替 face。  为此，“near”表示字符和鼠标所在位置之间的所有文本都具有相同的 mouse-face 属性值。
 
     Emacs 会忽略 mouse-face 属性中所有改变文本大小的 face 属性（例如，:height、:weight 和 :slant）。  这些属性始终与未突出显示的文本相同。
-字体化¶
+#+begin_src emacs-lisp
+  fontified ¶
+#+end_src
 
     此属性表示文本是否已准备好显示。  如果为 nil，Emacs 的重新显示例程会调用 fontification-functions 中的函数（请参阅 Automatic Face Assignment），以便在显示之前准备这部分缓冲区。  它由即时字体锁定代码在内部使用。
-展示
+#+begin_src emacs-lisp
+  display
+#+end_src
 
     该属性激活了改变文本显示方式的各种功能。  例如，它可以使文本看起来更高或更短、更高或更低、更宽或更窄，或者被图像替换。  请参阅显示属性。
-帮助回声¶
+#+begin_src emacs-lisp
+  help-echo ¶
+#+end_src
 
     如果文本有一个字符串作为它的 help-echo 属性，那么当您将鼠标移到该文本上时，Emacs 在通过替换命令键传递它之后，在回显区域或工具提示窗口中显示该字符串（请参阅工具提示） .
 
@@ -1813,34 +2223,50 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
     您可以通过设置变量 show-help-function 来更改帮助文本的显示方式（请参阅帮助显示）。
 
     此功能用于模式行和其他活动文本。
-帮助回声抑制替代¶
+#+begin_src emacs-lisp
+  help-echo-inhibit-substitution ¶
+#+end_src
 
     如果 help-echo 字符串的第一个字符具有非 nil 的 help-echo-inhibit-substitution 属性，那么它会由 show-help-function 按原样显示，而不通过substitute-command-keys 传递。
-键盘映射¶
+#+begin_src emacs-lisp
+  keymap ¶
+#+end_src
 
     keymap 属性为命令指定一个附加的键盘映射。  当此键映射适用时，它用于在次要模式键映射之前和缓冲区的本地映射之前进行键查找。  请参阅活动键盘映射。  如果属性值是符号，则将符号的函数定义用作键映射。
 
     如果 point 之前的字符为非 nil 且后粘，则该字符的属性值适用，如果 point 之后的字符为非 nil 且前粘，则该字符的属性值适用。  （对于鼠标点击，使用点击的位置而不是点的位置。）
-本地地图¶
+#+begin_src emacs-lisp
+  local-map ¶
+#+end_src
 
     此属性的工作方式与 keymap 类似，只是它指定了要使用的 keymap，而不是缓冲区的本地映射。  对于大多数目的（也许是所有目的），最好使用 keymap 属性。
-语法表
+#+begin_src emacs-lisp
+  syntax-table
+#+end_src
 
     syntax-table 属性覆盖了语法表中关于这个特定字符的内容。  请参阅语法属性。
-只读 ¶
+#+begin_src emacs-lisp
+  read-only ¶
+#+end_src
 
     如果字符具有只读属性，则不允许修改该字符。  任何这样做的命令都会出错，文本只读。  如果属性值是字符串，则该字符串用作错误消息。
 
     如果在此处插入普通文本会由于粘性而继承只读属性，则在只读字符旁边插入是错误的。  因此，您可以通过控制粘性来控制在只读文本旁边插入的权限。  请参阅文本属性的粘性。
 
     由于更改属性算作修改缓冲区，因此除非您知道特殊技巧，否则无法删除只读属性：将禁止只读绑定到非 nil 值，然后删除该属性。  请参阅只读缓冲区。
-禁止只读 ¶
+#+begin_src emacs-lisp
+  inhibit-read-only ¶
+#+end_src
 
     即使在只读缓冲区中，也可以编辑具有禁止只读属性的字符。  请参阅只读缓冲区。
-无形的 ¶
+#+begin_src emacs-lisp
+  invisible ¶
+#+end_src
 
     非 nil 不可见属性可以使角色在屏幕上不可见。  有关详细信息，请参阅不可见文本。
-无形的¶
+#+begin_src emacs-lisp
+  intangible ¶
+#+end_src
 
     如果一组连续字符具有相等且非零的无形属性，则不能在它们之间放置点。  如果您尝试将点向前移动到组中，点实际上会移动到组的末尾。  如果您尝试将点向后移动到组中，点实际上会移动到组的开头。
 
@@ -1849,15 +2275,21 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
     当变量 inhibitor-point-motion-hooks 不为 nil 时（默认情况下），无形属性将被忽略。
 
     注意：此属性在非常低的级别上运行，并以意想不到的方式影响大量代码。  所以使用它时要格外小心。  一个常见的误用是在不可见文本上设置无形属性，这实际上是不必要的，因为命令循环无论如何都会在每个命令结束时将点移到不可见文本之外。  请参阅命令后调整点。  由于这些原因，此属性已过时；  请改用 cursor-intangible 属性。
-无形光标¶
+#+begin_src emacs-lisp
+  cursor-intangible ¶
+#+end_src
 
     当打开次要模式 cursor-intangible-mode 时，点会从任何具有非 nil cursor-intangible 属性的位置移开，就在重新显示发生之前。
 
     当变量 cursor-sensor-inhibit 为非 nil 时，cursor-intangible 属性和 cursor-sensor-functions 属性（如下所述）将被忽略。
-场地 ¶
+#+begin_src emacs-lisp
+  field ¶
+#+end_src
 
     具有相同字段属性的连续字符构成一个字段。  包括前向字和行首在内的一些运动功能在字段边界处停止移动。  请参阅定义和使用字段。
-光标¶
+#+begin_src emacs-lisp
+  cursor ¶
+#+end_src
 
     通常，光标显示在当前缓冲区位置的任何覆盖和文本属性字符串的开头或结尾。  您可以改为告诉 Emacs 将光标放在这些字符串的任何所需字符上，方法是给该字符一个非零光标文本属性。  此外，如果 cursor 属性的值是一个整数，它指定缓冲区的字符位置数，从 overlay 或 display 属性开始的位置开始，光标应显示在该字符上。  具体来说，如果字符的 cursor 属性的值为数字 n，则光标将显示在该字符上，用于范围 [ovpos..ovpos+n) 中的任何缓冲区位置，其中 ovpos 是由下式给出的叠加层的起始位置覆盖开始（请参阅管理覆盖），或显示文本属性在缓冲区中开始的位置。
 
@@ -1866,42 +2298,62 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
     此属性的一个微妙之处在于，将此属性放在作为显示或覆盖字符串一部分的换行符上不起作用。  这是因为换行符在屏幕上没有图形表示，以便 Emacs 在查找具有该光标属性的显示字符时查找。
 
     当缓冲区有许多覆盖字符串（例如，请参阅 before-string）隐藏一些缓冲区文本或显示字符串属性时，最好使用这些字符串上的 cursor 属性来提示 Emacs 显示的位置遍历这些字符串时将光标放在哪里。  当点位于显示或覆盖字符串“覆盖”的某个缓冲区位置时，这直接与显示引擎通信 Lisp 程序想要放置光标的位置，或者用户期望光标的位置。
-指针¶
+#+begin_src emacs-lisp
+  pointer ¶
+#+end_src
 
     当鼠标指针悬停在此文本或图像上时，这指定了特定的指针形状。  有关可能的指针形状，请参阅指针形状。
-行间距 ¶
+#+begin_src emacs-lisp
+  line-spacing ¶
+#+end_src
 
     换行符可以具有行间距文本或覆盖属性，用于控制以该换行符结尾的显示行的高度。  该属性值会覆盖默认帧行距和缓冲区本地行距变量。  请参见行高。
-线高 ¶
+#+begin_src emacs-lisp
+  line-height ¶
+#+end_src
 
     换行符可以具有行高文本或覆盖属性，用于控制以该换行符结尾的显示行的总高度。  请参见行高。
-换行前缀
+#+begin_src emacs-lisp
+  wrap-prefix
+#+end_src
 
     如果文本具有 wrap-prefix 属性，则它定义的前缀将在显示时添加到由于文本换行的每个续行的开头（因此，如果行被截断，则永远不会使用 wrap-prefix）。  它可以是字符串或图像（请参阅其他显示规范），或者是由 :width 或 :align-to 显示属性指定的一段空白（请参阅指定空格）。
 
     也可以使用 wrap-prefix 缓冲区局部变量为整个缓冲区指定 wrap-prefix（但是，wrap-prefix text-property 优先于 wrap-prefix 变量的值）。  请参阅截断。
-行前缀
+#+begin_src emacs-lisp
+  line-prefix
+#+end_src
 
     如果 text 具有 line-prefix 属性，则它定义的前缀将在显示时添加到每个非连续行的开头。  它可以是字符串或图像（请参阅其他显示规范），或者是由 :width 或 :align-to 显示属性指定的一段空白（请参阅指定空格）。
 
     也可以使用行前缀缓冲区局部变量为整个缓冲区指定行前缀（但是，行前缀文本属性优先于行前缀变量的值）。  请参阅截断。
-修改钩子¶
+#+begin_src emacs-lisp
+  modification-hooks ¶
+#+end_src
 
     如果一个字符有属性 modify-hooks，那么它的值应该是一个函数列表；  修改该字符会在实际修改之前调用所有这些函数。  每个函数接收两个参数：被修改的缓冲区部分的开始和结束。  请注意，如果特定的修改钩子函数出现在被单个原语修改的多个字符上，您无法预测该函数将被调用多少次。  此外，插入不会修改任何现有字符，因此只有在删除某些字符、用其他字符替换它们或更改它们的文本属性时才会运行此挂钩。
 
     与其他类似的钩子不同，当 Emacs 调用这些函数时，禁止修改钩子不会绑定到非零。  如果函数修改缓冲区，您应该考虑将此变量绑定到非 nil 以防止任何缓冲区更改运行更改挂钩。  否则，您必须为递归调用做好准备。  请参阅更改挂钩。
 
     Overlays 也支持 modify-hooks 属性，但细节有些不同（请参阅 Overlay 属性）。
-插入前钩¶
-插入后挂钩
+#+begin_src emacs-lisp
+  insert-in-front-hooks ¶
+#+end_src
+#+begin_src emacs-lisp
+  insert-behind-hooks
+#+end_src
 
     在缓冲区中插入文本的操作还会调用后面字符的 insert-in-front-hooks 属性和前面字符的 insert-behind-hooks 属性中列出的函数。  这些函数接收两个参数，即插入文本的开头和结尾。  在实际插入发生后调用这些函数。
 
     当这些函数被调用时，禁止修改钩子被绑定到非零。  如果函数修改了缓冲区，您可能希望将 inhibitor-modification-hooks 绑定到 nil，以便为这些修改运行更改挂钩。  但是，这样做可能会递归调用您自己的更改挂钩，因此请务必为此做好准备。
 
     另请参阅更改挂钩，了解在更改缓冲区中的文本时调用的其他挂钩。
-点输入¶
-左点
+#+begin_src emacs-lisp
+  point-entered ¶
+#+end_src
+#+begin_src emacs-lisp
+  point-left
+#+end_src
 
     特殊属性 point-entered 和 point-left 记录了报告点运动的挂钩函数。  每移动一个时间点，Emacs 都会比较这两个属性值：
 
@@ -1917,27 +2369,39 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
     默认情况下，变量 inhibitor-point-motion-hooks 禁止运行 point-left 和 point-entered hooks，请参阅 Inhibit point motion hooks。
 
     这些属性已过时；  请改用光标传感器功能。
-光标传感器功能¶
+#+begin_src emacs-lisp
+  cursor-sensor-functions ¶
+#+end_src
 
     这个特殊属性记录了对光标移动做出反应的函数列表。  列表中的每个函数都在重新显示之前被调用，带有 3 个参数：受影响的窗口、光标的先前已知位置以及输入或离开的符号之一，具体取决于光标是否正在输入具有此属性的文本或离开它。  只有在打开次要模式 cursor-sensor-mode 时才会调用这些函数。
 
     当变量 cursor-sensor-inhibit 为非 nil 时，cursor-sensor-functions 属性将被忽略。
-作品 ¶
+#+begin_src emacs-lisp
+  composition ¶
+#+end_src
 
     此文本属性用于将字符序列显示为由组件组成的单个字形。  但是属性本身的值完全是 Emacs 内部的，不应该被直接操作，例如 put-text-property。
-小缓冲区消息¶
+#+begin_src emacs-lisp
+  minibuffer-message ¶
+#+end_src
 
     此文本属性告诉在活动小缓冲区中的何处显示临时消息。  具体来说，具有此属性的 minibuffer 文本的第一个字符将在其前面显示临时消息。  默认是在 minibuffer 文本的末尾显示临时消息。  此文本属性由作为 set-message-function 的默认值的函数使用（请参阅在回显区域中显示消息）。
 
-变量：抑制点运动挂钩¶
+#+begin_src emacs-lisp
+  Variable: inhibit-point-motion-hooks ¶
+#+end_src
 
     当这个过时变量为非 nil 时，point-left 和 point-entered 钩子不会运行，并且无形属性没有效果。  不要全局设置这个变量；  用 let 绑定它。  由于受影响的属性已过时，因此该变量的默认值为 t，以有效禁用它们。
 
-变量：show-help-function ¶
+#+begin_src emacs-lisp
+  Variable: show-help-function ¶
+#+end_src
 
     如果此变量不为 nil，则它指定一个调用来显示帮助字符串的函数。  这些可能是帮助回显属性、菜单帮助字符串（请参阅简单菜单项，请参阅扩展菜单项）或工具栏帮助字符串（请参阅工具栏）。  使用一个参数调用指定的函数，即要显示的帮助字符串，该参数在提供给函数之前通过替换命令键传递，除非帮助字符串在其上具有非零 help-echo-inhibit-substitution 属性第一个字符；  请参阅替换文档中的键绑定。  有关使用 show-help-function 的模式示例，请参见 Tooltip 模式的代码（参见 The GNU Emacs Manual 中的 Tooltips）。
 
-变量：face-filters-always-match ¶
+#+begin_src emacs-lisp
+  Variable: face-filters-always-match ¶
+#+end_src
 
     如果此变量不为零，则指定仅在满足某些条件时应用的属性的面部过滤器将被视为始终匹配。
 
@@ -1945,16 +2409,24 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 这些文本属性会影响填充命令的行为。  它们用于表示格式化文本。  请参阅填充和填充边距。
 
-难的
+#+begin_src emacs-lisp
+  hard
+#+end_src
 
     如果换行符具有此属性，则它是“硬”换行符。  填充命令不会改变硬换行符，也不会在它们之间移动单词。  但是，此属性仅在启用 use-hard-newlines 次要模式时才生效。  请参阅 GNU Emacs 手册中的硬换行和软换行。
-右边距
+#+begin_src emacs-lisp
+  right-margin
+#+end_src
 
     此属性指定用于填充这部分文本的额外右边距。
-左边距
+#+begin_src emacs-lisp
+  left-margin
+#+end_src
 
     此属性指定用于填充这部分文本的额外左边距。
-理由
+#+begin_src emacs-lisp
+  justification
+#+end_src
 
     此属性指定填充这部分文本的对齐方式。
 
@@ -1974,7 +2446,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 后非粘性属性的工作方式相反。  大多数属性默认是后置粘性的，因此后非粘性属性说明哪些属性不是后置粘性的。  如果一个角色的后方非粘性属性是 t，那么它的所有属性都不是后方粘性的。  如果后非粘性属性是一个列表，则属性是后粘性的，除非它们的名称在列表中。
 
-变量： text-property-default-nonsticky ¶
+#+begin_src emacs-lisp
+  Variable: text-property-default-nonsticky ¶
+#+end_src
 
     此变量包含一个 alist，它定义了各种文本属性的默认后置粘性。  每个元素都有形式 (property . nonstickiness)，它定义了特定文本属性 property 的粘性。
 
@@ -1984,11 +2458,15 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 以下是插入具有属性继承的文本的函数：
 
-功能：插入和继承 &rest 字符串 ¶
+#+begin_src emacs-lisp
+  Function: insert-and-inherit &rest strings ¶
+#+end_src
 
     插入字符串字符串，就像函数插入一样，但从相邻文本继承任何粘性属性。
 
-功能：在标记之前插入并继承 &rest 字符串 ¶
+#+begin_src emacs-lisp
+  Function: insert-before-markers-and-inherit &rest strings ¶
+#+end_src
 
     插入字符串字符串，就像函数 insert-before-markers 一样，但从相邻文本继承任何粘性属性。
 
@@ -2000,7 +2478,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 从缓冲区中提取文本及其属性的原语是缓冲区子字符串。  在检查属性之前，该函数运行异常的钩子buffer-access-fontify-functions。
 
-变量：缓冲区访问字体化函数¶
+#+begin_src emacs-lisp
+  Variable: buffer-access-fontify-functions ¶
+#+end_src
 
     此变量包含用于计算文本属性的函数列表。  在 buffer-substring 复制缓冲区的一部分的 text 和 text 属性之前，它会调用此列表中的所有函数。  每个函数都接收两个参数，它们指定正在访问的缓冲区的范围。  （缓冲区本身始终是当前缓冲区。）
 
@@ -2008,7 +2488,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 为了防止对缓冲区的同一部分多次调用挂钩函数，可以使用变量 buffer-access-fontified-property。
 
-变量：缓冲区访问字体化属性¶
+#+begin_src emacs-lisp
+  Variable: buffer-access-fontified-property ¶
+#+end_src
 
     如果此变量的值为非零，则它是一个用作文本属性名称的符号。  该文本属性的非零值意味着该字符的其他文本属性已经被计算。
 
@@ -2080,7 +2562,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 要设置链接使其服从 mouse-1-click-follows-link，您必须 (1) 将后续链接文本或覆盖属性应用于链接文本，或 (2) 将后续链接事件绑定到一个键映射（可以是主模式键映射或通过键映射文本属性指定的本地键映射）。  follow-link 属性的值或follow-link 事件的绑定充当链接操作的条件。  这个条件告诉 Emacs 两件事：在什么情况下鼠标 1 单击应该被视为发生在链接内部，以及如何计算一个动作代码，该代码说明将鼠标 1 单击翻译成什么。  链接操作条件可以是以下之一：
 
-鼠标脸
+#+begin_src emacs-lisp
+  mouse-face
+#+end_src
 
     如果条件是符号 mouse-face，则如果该位置存在非零鼠标面属性，则该位置位于链接内。  动作代码总是 t。
 
@@ -2091,7 +2575,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
     #+end_src
 
 
-一个函数
+#+begin_src emacs-lisp
+  a function
+#+end_src
 
     如果条件是函数 func，则如果 (func pos) 计算结果为非零，则位置 pos 位于链接内。  func 返回的值用作操作代码。
 
@@ -2102,16 +2588,22 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 	  (eq (get-char-property pos 'face) 'cvs-filename-face)))
     #+end_src
 
-还要别的吗
+#+begin_src emacs-lisp
+  anything else
+#+end_src
 
     如果条件值是其他值，则位置在链接内，条件本身就是操作代码。  显然，您应该仅在通过链接文本上的文本或覆盖属性应用条件时指定这种条件（以便它不适用于整个缓冲区）。
 
 操作代码告诉 mouse-1 如何跟随链接：
 
-字符串或向量
+#+begin_src emacs-lisp
+  a string or vector
+#+end_src
 
     如果动作代码是字符串或向量，则将 mouse-1 事件转换为字符串或向量的第一个元素；  即，鼠标 1 单击的动作是该字符或符号的本地或全局绑定。  因此，如果操作代码是“foo”，则 mouse-1 会转换为 f。  如果是 [foo]，则 mouse-1 会转换为 foo。
-还要别的吗
+#+begin_src emacs-lisp
+  anything else
+#+end_src
 
     对于任何其他非零操作代码，mouse-1 事件在相同位置被转换为 mouse-2 事件。
 
@@ -2136,7 +2628,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
     :format "%[%t%]")
 #+end_src
 
-功能：鼠标在链接上-p pos ¶
+#+begin_src emacs-lisp
+  Function: mouse-on-link-p pos ¶
+#+end_src
 
     如果当前缓冲区中的位置 pos 在链接上，则此函数返回非 nil。  pos 也可以是鼠标事件位置，由 event-start 返回（请参阅访问鼠标事件）。
 
@@ -2152,7 +2646,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 在所有这些函数中，如果 pos 被省略或为 nil，则默认使用 point 的值。  如果变窄有效，则 pos 应落在可访问部分内。  请参阅收窄。
 
-功能：字段开始 &optional pos escape-from-edge limit ¶
+#+begin_src emacs-lisp
+  Function: field-beginning &optional pos escape-from-edge limit ¶
+#+end_src
 
     此函数返回由 pos 指定的字段的开头。
 
@@ -2160,7 +2656,9 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     如果limit是非零，它是一个缓冲位置；  如果字段的开头在限制之前，则将返回限制。
 
-功能：field-end &optional pos escape-from-edge limit ¶
+#+begin_src emacs-lisp
+  Function: field-end &optional pos escape-from-edge limit ¶
+#+end_src
 
     此函数返回由 pos 指定的字段的结尾。
 
@@ -2168,19 +2666,27 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     如果limit是非零，它是一个缓冲位置；  如果字段的结尾在限制之后，则将返回限制。
 
-功能：字段字符串&可选 pos ¶
+#+begin_src emacs-lisp
+  Function: field-string &optional pos ¶
+#+end_src
 
     此函数以字符串形式返回由 pos 指定的字段的内容。
 
-功能：字段字符串无属性&可选 pos ¶
+#+begin_src emacs-lisp
+  Function: field-string-no-properties &optional pos ¶
+#+end_src
 
     此函数将 pos 指定的字段的内容作为字符串返回，丢弃文本属性。
 
-功能：delete-field &optional pos ¶
+#+begin_src emacs-lisp
+  Function: delete-field &optional pos ¶
+#+end_src
 
     此函数删除由 pos 指定的字段的文本。
 
-功能：约束到字段 new-pos old-pos &optional escape-from-edge only-in-in-line inhibitor-capture-property ¶
+#+begin_src emacs-lisp
+  Function: constrain-to-field new-pos old-pos &optional escape-from-edge only-in-line inhibit-capture-property ¶
+#+end_src
 
     此函数将 new-pos 约束到 old-pos 所属的字段——换句话说，它返回与 old-pos 位于同一字段中的最接近 new-pos 的位置。
 
@@ -2218,7 +2724,9 @@ Emacs 还提供显式间隔作为表示功能；  见叠加。
 
 以下函数根据字符代码替换指定区域内的字符。
 
-功能：subst-char-in-region start end old-char new-char &optional noundo ¶
+#+begin_src emacs-lisp
+  Function: subst-char-in-region start end old-char new-char &optional noundo ¶
+#+end_src
 
     此函数用由 start 和 end 定义的当前缓冲区区域中的字符 new-char 替换所有出现的字符 old-char。  两个字符的多字节形式的长度必须相同。
 
@@ -2241,11 +2749,15 @@ Emacs 还提供显式间隔作为表示功能；  见叠加。
       ---------- Buffer: foo ----------
     #+end_src
 
-功能：subst-char-in-string fromchar tochar string &optional inplace ¶
+#+begin_src emacs-lisp
+  Function: subst-char-in-string fromchar tochar string &optional inplace ¶
+#+end_src
 
     此函数将字符串中出现的所有字符 fromchar 替换为 tochar。  默认情况下，替换发生在字符串的副本中，但如果可选参数 inplace 不为 nil，则函数会修改字符串本身。  在任何情况下，该函数都会返回结果字符串。
 
-命令：translate-region start end table ¶
+#+begin_src emacs-lisp
+  Command: translate-region start end table ¶
+#+end_src
 
     此函数将转换表应用于缓冲区中位置 start 和 end 之间的字符。
 
@@ -2257,7 +2769,9 @@ Emacs 还提供显式间隔作为表示功能；  见叠加。
 
 寄存器是 Emacs 编辑中使用的一种变量，可以保存各种不同类型的值。  每个寄存器都由一个字符命名。  所有 ASCII 字符及其元变体（但 Cg 除外）都可用于命名寄存器。  因此，有 255 个可能的寄存器。  在 Emacs Lisp 中，寄存器由其名称字符指定。
 
-变量：寄存器列表¶
+#+begin_src emacs-lisp
+  Variable: register-alist ¶
+#+end_src
 
     此变量是表单元素的列表（名称.内容）。  通常，每个已使用的 Emacs 寄存器都有一个元素。
 
@@ -2265,46 +2779,70 @@ Emacs 还提供显式间隔作为表示功能；  见叠加。
 
 寄存器的内容可以有几种可能的类型：
 
-一个号码
+#+begin_src emacs-lisp
+  a number
+#+end_src
 
     一个数字代表它自己。  如果 insert-register 在寄存器中找到一个数字，它会将这个数字转换为十进制。
-一个标记
+#+begin_src emacs-lisp
+  a marker
+#+end_src
 
     标记表示要跳转到的缓冲区位置。
-一个字符串
+#+begin_src emacs-lisp
+  a string
+#+end_src
 
     字符串是保存在寄存器中的文本。
-一个矩形¶
+#+begin_src emacs-lisp
+  a rectangle ¶
+#+end_src
 
     矩形由字符串列表表示。
-（窗口配置位置）
+#+begin_src emacs-lisp
+  (window-configuration position)
+#+end_src
 
     这表示要在一帧中恢复的窗口配置，以及要在当前缓冲区中跳转到的位置。
-（框架配置位置）
+#+begin_src emacs-lisp
+  (frame-configuration position)
+#+end_src
 
     这表示要恢复的帧配置，以及当前缓冲区中要跳转到的位置。
-（文件文件名）
+#+begin_src emacs-lisp
+  (file filename)
+#+end_src
 
     这表示要访问的文件；  跳转到这个值访问文件文件名。
-（文件查询文件名位置）
+#+begin_src emacs-lisp
+  (file-query filename position)
+#+end_src
 
     这表示要访问的文件和其中的位置；  跳转到该值访问文件文件名并转到缓冲区位置位置。  恢复这种类型的位置首先要求用户确认。
 
 除非另有说明，否则本节中的函数会返回不可预测的值。
 
-功能：获取注册 reg ¶
+#+begin_src emacs-lisp
+  Function: get-register reg ¶
+#+end_src
 
     此函数返回寄存器 reg 的内容，如果没有内容，则返回 nil。
 
-功能：设置寄存器 reg 值 ¶
+#+begin_src emacs-lisp
+  Function: set-register reg value ¶
+#+end_src
 
     此函数将寄存器 reg 的内容设置为值。  寄存器可以设置为任何值，但其他寄存器函数只需要某些数据类型。  返回值是值。
 
-命令：查看注册 reg ¶
+#+begin_src emacs-lisp
+  Command: view-register reg ¶
+#+end_src
 
     此命令显示寄存器 reg 中包含的内容。
 
-命令：insert-register reg &optional beforep ¶
+#+begin_src emacs-lisp
+  Command: insert-register reg &optional beforep ¶
+#+end_src
 
     此命令将寄存器 reg 的内容插入当前缓冲区。
 
@@ -2316,7 +2854,9 @@ Emacs 还提供显式间隔作为表示功能；  见叠加。
 
     如果寄存器包含的不是保存的文本（字符串）或矩形（列表），那么当前无用的事情就会发生。  这在未来可能会改变。
 
-功能：注册-读取-预览提示¶
+#+begin_src emacs-lisp
+  Function: register-read-with-preview prompt ¶
+#+end_src
 
     此函数读取并返回一个寄存器名称，提示并可能显示现有寄存器及其内容的预览。  预览显示在一个临时窗口中，在用户选项 register-preview-delay 指定的延迟之后，如果它的值和 register-alist 都是非零。  如果用户请求帮助（例如，通过键入帮助字符），也会显示预览。  我们建议所有读取寄存器名称的交互式命令都使用此函数。
 
@@ -2324,7 +2864,10 @@ Emacs 还提供显式间隔作为表示功能；  见叠加。
 
 此函数可用于转置文本片段：
 
-功能：转置区域 start1 end1 start2 end2 &optional leave-markers ¶
+#+begin_src emacs-lisp
+  Function: transpose-regions start1 end1 start2 end2 &optional leave-markers ¶
+#+end_src
+
 
     此函数交换缓冲区的两个不重叠部分（如果它们重叠，则该函数会发出错误信号）。  参数 start1 和 end1 指定一个部分的边界，参数 start2 和 end2 指定另一部分的边界。
 
@@ -2334,7 +2877,9 @@ Emacs 还提供显式间隔作为表示功能；  见叠加。
 
 您可以使用以下函数将一个缓冲区的文本替换为另一个缓冲区的文本：
 
-命令：replace-buffer-contents source &optional max-secs max-costs ¶
+#+begin_src emacs-lisp
+  Command: replace-buffer-contents source &optional max-secs max-costs ¶
+#+end_src
 
     此函数将当前缓冲区的可访问部分替换为缓冲区源的可访问部分。  source 可以是缓冲区对象或缓冲区的名称。  当 replace-buffer-contents 成功时，当前缓冲区的可访问部分的文本将等于源缓冲区的可访问部分的文本。
 
@@ -2348,7 +2893,9 @@ Emacs 还提供显式间隔作为表示功能；  见叠加。
 
     如果可以执行非破坏性替换，replace-buffer-contents 返回 t。  否则，即如果超过 max-secs，则返回 nil。
 
-功能：replace-region-contents beg end replace-fn &optional max-secs max-costs ¶
+#+begin_src emacs-lisp
+  Function: replace-region-contents beg end replace-fn &optional max-secs max-costs ¶
+#+end_src
 
     此函数使用给定的 replace-fn 替换 beg 和 end 之间的区域。  函数 replace-fn 在缩小到指定区域的当前缓冲区中运行，它应该返回一个字符串或一个替换该区​​域的缓冲区。
 
@@ -2363,11 +2910,15 @@ Emacs 还提供显式间隔作为表示功能；  见叠加。
 
 上述功能通过调用外部可执行文件（例如 gzip）来工作。  Emacs 也可以编译支持使用 zlib 库的内置解压缩，这比调用外部程序更快。
 
-功能：zlib-available-p ¶
+#+begin_src emacs-lisp
+  Command: replace-buffer-contents source &optional max-secs max-costs ¶
+#+end_src
 
     如果内置 zlib 解压缩可用，此函数返回非 nil。
 
-功能：zlib-decompress-region start end &optional allow-partial ¶
+#+begin_src emacs-lisp
+  Function: replace-region-contents beg end replace-fn &optional max-secs max-costs ¶
+#+end_src
 
     此函数使用内置的 zlib 解压缩来解压缩 start 和 end 之间的区域。  该区域应包含使用 gzip 或 zlib 压缩的数据。  成功时，该函数将区域的内容替换为解压缩的数据。  如果 allow-partial 为 nil 或省略，则在失败时，该函数保持区域不变并返回 nil。  否则，它返回未解压缩的字节数，并用任何成功解压缩的数据替换区域文本。  此函数只能在单字节缓冲区中调用。
 
@@ -2375,31 +2926,41 @@ Emacs 还提供显式间隔作为表示功能；  见叠加。
 
 Base 64 代码在电子邮件中用于将 8 位字节序列编码为更长的 ASCII 图形字符序列。  它在 Internet RFC182045 和 RFC 4648 中定义。本节描述了与此代码相互转换的功能。
 
-命令：base64-encode-region beg end &optional no-line-break ¶
+#+begin_src emacs-lisp
+  Command: base64-encode-region beg end &optional no-line-break ¶
+#+end_src
 
     此函数将区域从 beg 转换为 end 为 base 64 代码。  它返回编码文本的长度。  如果区域中的字符是多字节的，则会发出错误信号，即在多字节缓冲区中，区域必须只包含来自字符集 ascii、八位控制和八位图形的字符。
 
     通常，此函数会在编码文本中插入换行符，以避免行过长。  但是，如果可选参数 no-line-break 不为零，则不会添加这些换行符，因此输出只是一个长行。
 
-命令：base64url-encode-region beg end &optional no-pad ¶
+#+begin_src emacs-lisp
+  Command: base64url-encode-region beg end &optional no-pad ¶
+#+end_src
 
     此函数类似于 base64-encode-region，但它根据 RFC 4648 实现了 base 64 编码的 URL 变体，并且它不会在编码文本中插入换行符，因此输出只是一个长行。
 
     如果可选参数 no-pad 不为零，则此函数不会生成填充 (=)。
 
-功能：base64-encode-string string &optional no-line-break ¶
+#+begin_src emacs-lisp
+  Function: base64-encode-string string &optional no-line-break ¶
+#+end_src
 
     此函数将字符串 string 转换为 base 64 代码。  它返回一个包含编码文本的字符串。  对于 base64-encode-region，如果字符串中的字符是多字节的，则会发出错误信号。
 
     通常，此函数会在编码文本中插入换行符，以避免行过长。  但是，如果可选参数 no-line-break 不为 nil，则不会添加这些换行符，因此结果字符串只是一个长行。
 
-功能：base64url-encode-string string &optional no-pad ¶
+#+begin_src emacs-lisp
+  Function: base64url-encode-string string &optional no-pad ¶
+#+end_src
 
     与 base64-encode-string 类似，但生成 base 64 的 URL 变体，并且不会在编码文本中插入换行符，因此结果只是一长行。
 
     如果可选参数 no-pad 不为零，则此函数不会生成填充。
 
-命令：base64-decode-region beg end &optional base64url ¶
+#+begin_src emacs-lisp
+  Command: base64-decode-region beg end &optional base64url ¶
+#+end_src
 
     此函数将区域从 beg 到 end 从 base 64 代码转换为相应的解码文本。  它返回解码文本的长度。
 
@@ -2407,7 +2968,9 @@ Base 64 代码在电子邮件中用于将 8 位字节序列编码为更长的 AS
 
     如果可选参数 base64url 不为零，则填充是可选的，并且使用 base 64 编码的 URL 变体。
 
-功能：base64-decode-string string &optional base64url ¶
+#+begin_src emacs-lisp
+  Function: base64-decode-string string &optional base64url ¶
+#+end_src
 
     此函数将字符串 string 从 base 64 代码转换为相应的解码文本。  它返回一个包含解码文本的单字节字符串。
 
@@ -2427,11 +2990,15 @@ Emacs 内置了对计算加密哈希的支持。  加密哈希或校验和是一
 
 Emacs 支持几种常见的加密哈希算法：MD5、SHA-1、SHA-2、SHA-224、SHA-256、SHA-384 和 SHA-512。  MD5 是这些算法中最古老的一种，通常用于消息摘要中以检查通过网络传输的消息的完整性。  MD5 和 SHA-1 不是抗冲突的（即，可以故意设计具有相同 MD5 或 SHA-1 哈希的不同数据片段），因此您不应该将它们用于任何与安全相关的事情。  对于与安全相关的应用程序，您应该使用其他散列类型，例如 SHA-2（例如 sha256 或 sha512）。
 
-功能：安全哈希算法¶
+#+begin_src emacs-lisp
+  Function: secure-hash-algorithms ¶
+#+end_src
 
     此函数返回代表安全哈希可以使用的算法的符号列表。
 
-功能：secure-hash算法对象&可选的开始结束二进制¶
+#+begin_src emacs-lisp
+  Function: secure-hash algorithm object &optional start end binary ¶
+#+end_src
 
     此函数返回对象的哈希值。  参数算法是一个符号，说明要计算哪个哈希：md5、sha1、sha224、sha256、sha384 或 sha512 之一。  参数对象应该是缓冲区或字符串。
 
@@ -2441,7 +3008,9 @@ Emacs 支持几种常见的加密哈希算法：MD5、SHA-1、SHA-2、SHA-224、
 
     此函数不直接从对象文本的内部表示计算散列（请参阅文本表示）。  相反，它使用编码系统（请参阅编码系统）对文本进行编码，并根据该编码文本计算散列。  如果 object 是缓冲区，则使用的编码系统是默认选择用于将文本写入文件的编码系统。  如果 object 是字符串，则使用用户首选的编码系统（请参阅 GNU Emacs 手册中的识别编码）。
 
-功能：md5 object &optional start end coding-system noerror ¶
+#+begin_src emacs-lisp
+  Function: md5 object &optional start end coding-system noerror ¶
+#+end_src
 
     此函数返回一个 MD5 哈希。  它是半过时的，因为在大多数情况下，它等同于使用 md5 作为算法参数调用安全哈希。  对象、开始和结束参数与安全哈希中的含义相同。
 
@@ -2449,7 +3018,9 @@ Emacs 支持几种常见的加密哈希算法：MD5、SHA-1、SHA-2、SHA-224、
 
     通常，如果无法使用指定或选择的编码系统对文本进行编码，则 md5 会发出错误信号。  但是，如果 noerror 不为零，它会默默地使用原始文本编码。
 
-功能：缓冲区哈希&可选缓冲区或名称¶
+#+begin_src emacs-lisp
+  Function: buffer-hash &optional buffer-or-name ¶
+#+end_src
 
     返回缓冲区或名称的哈希。  如果为零，则默认为当前缓冲区。  与安全散列相反，此函数根据缓冲区的内部表示计算散列，而不考虑任何编码系统。  因此，它仅在比较在相同 Emacs 中运行的两个缓冲区时才有用，并且不能保证在不同 Emacs 版本之间返回相同的哈希值。  它在更大的缓冲区上应该比安全哈希更有效，并且不应该分配更多的内存。
 
@@ -2465,26 +3036,36 @@ GnuTLS 加密函数的输入可以通过多种方式指定，既可以作为原�
 
 列表形式目前类似于 md5 和 secure-hash 的操作方式。
 
-缓冲
+#+begin_src emacs-lisp
+  buffer
+#+end_src
 
     简单地将缓冲区作为输入传递意味着应该使用整个缓冲区。
-细绳
+#+begin_src emacs-lisp
+  string
+#+end_src
 
     将直接使用字符串作为输入。  它可以由函数修改（与大多数其他 Emacs Lisp 函数不同）以减少在函数完成工作后暴露敏感数据的机会。
-（缓冲区或字符串开始结束编码系统无错误）
+#+begin_src emacs-lisp
+  (buffer-or-string start end coding-system noerror)
+#+end_src
 
     如上所述，这指定了缓冲区或字符串，但可以使用 start 和 end 指定可选范围。
 
     此外，如果需要，可以指定可选的编码系统。
 
     最后一个可选项 noerror 在无法使用指定或选择的编码系统对文本进行编码时覆盖正常错误。  当 noerror 为非 nil 时，此函数会静默地使用原始文本编码。
-(iv-自动长度)
+#+begin_src emacs-lisp
+  (iv-auto length)
+#+end_src
 
     这会生成指定长度的随机 IV（初始化向量）并将其传递给函数。  这确保了 IV 是不可预测的，并且不太可能在同一会话中重用。
 
 *** TODO 33.27.2 GnuTLS 加密函数
 
-功能：gnutls-digests ¶
+#+begin_src emacs-lisp
+  Function: gnutls-digests ¶
+#+end_src
 
     此函数返回 GnuTLS 摘要算法的列表。
 
@@ -2492,7 +3073,9 @@ GnuTLS 加密函数的输入可以通过多种方式指定，既可以作为原�
 
     GnuTLS MAC 和摘要算法之间有一个平行的名称，但它们在内部是独立的，不应混用。
 
-功能：gnutls-hash-digest 摘要方法输入¶
+#+begin_src emacs-lisp
+  Function: gnutls-hash-digest digest-method input ¶
+#+end_src
 
     摘要方法可以是来自 gnutls-digests 的整个 plist，或者只是符号键，或者是具有该符号名称的字符串。
 
@@ -2500,7 +3083,9 @@ GnuTLS 加密函数的输入可以通过多种方式指定，既可以作为原�
 
     此函数在错误时返回 nil，如果摘要方法或输入无效，则发出 Lisp 错误信号。  成功时，它返回一个二进制字符串列表（输出）和使用的 IV。
 
-功能：gnutls-macs ¶
+#+begin_src emacs-lisp
+  Function: gnutls-macs ¶
+#+end_src
 
     此函数返回 GnuTLS MAC 算法的列表。
 
@@ -2510,7 +3095,9 @@ GnuTLS 加密函数的输入可以通过多种方式指定，既可以作为原�
 
     GnuTLS MAC 和摘要算法之间有一个平行的名称，但它们在内部是独立的，不应混用。
 
-功能：gnutls-hash-mac hash-method key input ¶
+#+begin_src emacs-lisp
+  Function: gnutls-hash-mac hash-method key input ¶
+#+end_src
 
     hash-method 可以是来自 gnutls-macs 的整个 plist，或者只是符号键，或者是具有该符号名称的字符串。
 
@@ -2522,13 +3109,17 @@ GnuTLS 加密函数的输入可以通过多种方式指定，既可以作为原�
 
     成功时，它返回一个二进制字符串列表（输出）和使用的 IV。
 
-功能：gnutls-ciphers ¶
+#+begin_src emacs-lisp
+  Function: gnutls-ciphers ¶
+#+end_src
 
     此函数返回 GnuTLS 密码的列表。
 
     每个条目都有一个代表密码的密钥，后跟一个包含算法内部详细信息的 plist。  plist 将具有 :type gnutls-symmetric-cipher 并且还将密钥 :cipher-aead-capable 设置为 nil 或 t 以指示 AEAD 功能；  和 :cipher-tagsize :cipher-blocksize :cipher-keysize :cipher-ivsize 分别表示标签的大小、结果数据的块大小、密钥和 IV。
 
-功能：gnutls-symmetric-encrypt 密码密钥 iv 输入和可选的 aead_auth ¶
+#+begin_src emacs-lisp
+  Function: gnutls-symmetric-encrypt cipher key iv input &optional aead_auth ¶
+#+end_src
 
     密码可以是 gnutls-ciphers 中的整个 plist，或者只是符号密钥，或者是具有该符号名称的字符串。
 
@@ -2542,7 +3133,9 @@ GnuTLS 加密函数的输入可以通过多种方式指定，既可以作为原�
 
     成功时，它返回一个二进制字符串列表（输出）和使用的 IV。
 
-功能：gnutls-symmetric-decrypt cipher key iv input & optional aead_auth ¶
+#+begin_src emacs-lisp
+  Function: gnutls-symmetric-decrypt cipher key iv input &optional aead_auth ¶
+#+end_src
 
     密码可以是 gnutls-ciphers 中的整个 plist，或者只是符号密钥，或者是具有该符号名称的字符串。
 
@@ -2560,13 +3153,17 @@ GnuTLS 加密函数的输入可以通过多种方式指定，既可以作为原�
 
 Emacs 可以使用内置的 libxml2 支持进行编译。
 
-功能：libxml-available-p ¶
+#+begin_src emacs-lisp
+  Function: libxml-available-p ¶
+#+end_src
 
     如果此 Emacs 会话中提供了内置的 libxml2 支持，则此函数返回非 nil。
 
 当 libxml2 支持可用时，可以使用以下函数将 HTML 或 XML 文本解析为 Lisp 对象树。
 
-功能：libxml-parse-html-region start end &optional base-url discard-comments ¶
+#+begin_src emacs-lisp
+  Function: libxml-parse-html-region start end &optional base-url discard-comments ¶
+#+end_src
 
     此函数将开始和结束之间的文本解析为 HTML，并返回一个表示 HTML 解析树的列表。  它试图通过稳健地处理语法错误来处理现实世界的 HTML。
 
@@ -2593,11 +3190,15 @@ Emacs 可以使用内置的 libxml2 支持进行编译。
     #+end_src
 
 
-功能：shr-insert-document dom ¶
+#+begin_src emacs-lisp
+  Function: shr-insert-document dom ¶
+#+end_src
 
     该函数将解析后的 dom 中的 HTML 渲染到当前缓冲区中。  参数 dom 应该是由 libxml-parse-html-region 生成的列表。  例如，EWW 在 The Emacs Web Wowser Manual 中使用了这个函数。
 
-功能：libxml-parse-xml-region start end &optional base-url discard-comments ¶
+#+begin_src emacs-lisp
+  Function: libxml-parse-xml-region start end &optional base-url discard-comments ¶
+#+end_src
 
     此函数与 libxml-parse-html-region 相同，只是它将文本解析为 XML 而不是 HTML（因此对语法更严格）。
 
@@ -2605,101 +3206,159 @@ Emacs 可以使用内置的 libxml2 支持进行编译。
 
 libxml-parse-html-region（和其他 XML 解析函数）返回的 DOM 是一个树形结构，其中每个节点都有一个节点名称（称为标签），以及可选的键/值属性列表，然后是一个子节点列表节点。  子节点是字符串或 DOM 对象。
 
-（主体（（宽度。“101”））
- （div（（类。“东西”））
-  “福”
-  （除无
-   “是的”）））
+#+begin_src emacs-lisp
+  (body ((width . "101"))
+   (div ((class . "thing"))
+    "Foo"
+    (div nil
+     "Yes")))
+#+end_src
 
-功能：dom-node标签&可选属性&rest children ¶
+#+begin_src emacs-lisp
+  Function: dom-node tag &optional attributes &rest children ¶
+#+end_src
 
     该函数创建一个类型为 tag 的 DOM 节点。  如果给定，属性应该是键/值对列表。  如果给定，子节点应该是 DOM 节点。
 
 以下函数可用于处理此结构。  每个函数都接受一个 DOM 节点或节点列表。  在后一种情况下，仅使用列表中的第一个节点。
 
-简单的访问器：
+#+begin_src emacs-lisp
+  Simple accessors:
+#+end_src
 
-dom标签节点
+#+begin_src emacs-lisp
+  dom-tag node
+#+end_src
 
     返回节点的标签（也称为“节点名称”）。
-dom-attr 节点属性
+#+begin_src emacs-lisp
+  dom-attr node attribute
+#+end_src
 
     返回节点中属性的值。  一个常见的用法是：
 
-    (dom-attr img 'href)
-    => "https://fsf.org/logo.png"
+    #+begin_src emacs-lisp
+      (dom-attr img 'href)
+      => "https://fsf.org/logo.png"
+    #+end_src
 
-dom子节点
+
+#+begin_src emacs-lisp
+  dom-children node
+#+end_src
 
     返回节点的所有子节点。
-dom-non-text-children 节点
+#+begin_src emacs-lisp
+  dom-non-text-children node
+#+end_src
 
     返回节点的所有非字符串子节点。
-dom属性节点
+#+begin_src emacs-lisp
+  dom-attributes node
+#+end_src
 
     返回节点属性的键/值对列表。
-域文本节点
+#+begin_src emacs-lisp
+  dom-text node
+#+end_src
 
     将节点的所有文本元素作为连接字符串返回。
-dom-texts 节点
+#+begin_src emacs-lisp
+  dom-texts node
+#+end_src
 
     递归地返回节点的所有文本元素，以及节点的所有子节点的文本元素，作为连接字符串。  此函数还需要在文本元素之间插入一个可选的分隔符。
-dom-parent dom节点
-
+#+begin_src emacs-lisp
+  dom-parent dom node
+#+end_src
     返回 dom 中节点的父节点。
-dom-删除dom节点
+
+
+#+begin_src emacs-lisp
+  dom-remove dom node
+#+end_src
 
     从 dom 中删除节点。
 
 以下是用于更改 DOM 的函数。
 
-dom-set-attribute 节点属性值
+#+begin_src emacs-lisp
+  dom-set-attribute node attribute value
+#+end_src
 
     将节点的属性设置为 value。
-dom-remove-attribute 节点属性
+#+begin_src emacs-lisp
+  dom-remove-attribute node attribute
+#+end_src
 
     从节点中删除属性。
-dom-append-child 节点子节点
+#+begin_src emacs-lisp
+  dom-append-child node child
+#+end_src
 
     追加子节点作为节点的最后一个子节点。
-dom-add-child-before 节点子之前
+#+begin_src emacs-lisp
+  dom-add-child-before node child before
+#+end_src
 
     在前节点之前将子节点添加到节点的子列表中。  如果 before 为 nil，则让 child 成为第一个孩子。
-dom-set-attributes 节点属性
+#+begin_src emacs-lisp
+  dom-set-attributes node attributes
+#+end_src
 
     用新的键/值列表替换节点的所有属性。
 
 以下是用于在 DOM 中搜索元素的函数。  它们都返回匹配节点的列表。
 
-逐个标签 dom 标签
+#+begin_src emacs-lisp
+  dom-by-tag dom tag
+#+end_src
 
     返回 dom 中所有类型为 tag 的节点。  一个典型的用途是：
+    #+begin_src emacs-lisp
+      `(dom-by-tag dom 'td)
+      => '((td ...) (td ...) (td ...))
+    #+end_src
 
-    (dom-by-tag dom 'td)
-    => '((td ...) (td ...) (td ...))
 
-dom-by-class dom匹配
+#+begin_src emacs-lisp
+  dom-by-class dom match
+#+end_src
 
     返回 dom 中类名匹配 match 的所有节点，这是一个正则表达式。
-dom-by-style dom风格
+#+begin_src emacs-lisp
+  dom-by-style dom style
+#+end_src
 
     返回 dom 中所有样式匹配 match 的节点，这是一个正则表达式。
-dom-by-id dom 样式
+#+begin_src emacs-lisp
+  dom-by-id dom style
+#+end_src
 
     返回 dom 中所有 ID 与 match 匹配的节点，这是一个正则表达式。
-dom-搜索 dom 谓词
+#+begin_src emacs-lisp
+  dom-search dom predicate
+#+end_src
 
     返回 dom 中 predicate 返回非 nil 值的所有节点。  以要测试的节点作为参数调用谓词。
-dom 字符串 dom
+#+begin_src emacs-lisp
+  dom-strings dom
+#+end_src
 
     返回 dom 中的所有字符串。
 
-实用功能：
+#+begin_src emacs-lisp
+  Utility functions:
+#+end_src
 
-dom-pp dom &optional remove-empty
+#+begin_src emacs-lisp
+  dom-pp dom &optional remove-empty
+#+end_src
 
     漂亮的 dom 在点。  如果 remove-empty，则不要打印仅包含空格的文本节点。
-dom-print dom &optional 漂亮的 xml
+#+begin_src emacs-lisp
+  dom-print dom &optional pretty xml
+#+end_src
 
     在点处打印 dom。  如果 xml 不为零，则打印为 XML；  否则，打印为 HTML。  如果 pretty 不为零，则按逻辑缩进 HTML/XML。
 
@@ -2715,62 +3374,92 @@ dom-print dom &optional 漂亮的 xml
 
 请注意，nil 既是有效的 alist 又是有效的 plist，表示 {}，即空 JSON 对象；  not null、false 或空数组，它们都是不同的 JSON 值。
 
-功能：json-available-p ¶
+#+begin_src emacs-lisp
+  Function: json-available-p ¶
+#+end_src
 
     如果 Emacs 已使用 JSON 支持构建，并且该库在当前系统上可用，则此谓词返回非 nil。
 
 如果某些 Lisp 对象不能用 JSON 表示，序列化函数将发出错误类型参数类型的错误信号。  解析函数还可以发出以下错误信号：
 
-json-不可用
+#+begin_src emacs-lisp
+  json-unavailable
+#+end_src
 
     当解析库不可用时发出信号。
-json 文件结尾
+#+begin_src emacs-lisp
+  json-end-of-file
+#+end_src
 
     遇到输入文本过早结束时发出信号。
-json尾随内容
+#+begin_src emacs-lisp
+  json-trailing-content
+#+end_src
 
     在解析第一个 JSON 对象后遇到意外输入时发出信号。
-json解析错误
+#+begin_src emacs-lisp
+  json-parse-error
+#+end_src
 
     遇到无效的 JSON 语法时发出信号。
 
 顶级值和这些顶级值中的子对象可以序列化为 JSON。  同样，解析函数将返回上述任何可能的类型。
 
-功能：json序列化对象 &rest args ¶
+#+begin_src emacs-lisp
+  Function: json-serialize object &rest args ¶
+#+end_src
 
     此函数返回一个新的 Lisp 字符串，其中包含对象的 JSON 表示。  参数 args 是关键字/参数对的列表。  接受以下关键字：
 
-    ：空对象
+#+begin_src emacs-lisp
+  :null-object
+#+end_src
 
 	 该值决定使用哪个 Lisp 对象来表示 JSON 关键字 null。  它默认为符号：null。
-    :假对象
+#+begin_src emacs-lisp
+  :false-object
+#+end_src
 
 	 该值决定使用哪个 Lisp 对象来表示 JSON 关键字 false。  它默认为符号：false。
 
-功能：json-insert 对象 &rest args ¶
+#+begin_src emacs-lisp
+  Function: json-insert object &rest args ¶
+#+end_src
 
     此函数将对象的 JSON 表示形式插入到当前缓冲区之前的点。  参数 args 被解释为 json-parse-string。
 
-功能：json-parse-string 字符串 &rest args ¶
+#+begin_src emacs-lisp
+  Function: json-parse-string string &rest args ¶
+#+end_src
 
     此函数解析字符串中的 JSON 值，该值必须是 Lisp 字符串。  如果 string 不包含有效的 JSON 对象，则此函数会发出 json-parse-error 错误信号。
 
     参数 args 是关键字/参数对的列表。  接受以下关键字：
 
-    :对象类型
+#+begin_src emacs-lisp
+  :object-type
+#+end_src
 
 	 该值决定了使用哪个 Lisp 对象来表示 JSON 对象的键值映射。  它可以是默认的哈希表，以字符串作为键的哈希表；  alist 使用带有符号的 alists 作为键；  或 plist 使用带有关键字符号的 plist 作为键。
-    :数组类型
+#+begin_src emacs-lisp
+  :array-type
+#+end_src
 
 	 该值决定了使用哪个 Lisp 对象来表示 JSON 数组。  它可以是任意一个数组，默认使用 Lisp 数组；  或列表以使用列表。
-    ：空对象
+#+begin_src emacs-lisp
+  :null-object
+#+end_src
 
 	 该值决定使用哪个 Lisp 对象来表示 JSON 关键字 null。  它默认为符号：null。
-    :假对象
+#+begin_src emacs-lisp
+  :false-object
+#+end_src
 
 	 该值决定使用哪个 Lisp 对象来表示 JSON 关键字 false。  它默认为符号：false。
 
-功能：json-parse-buffer &rest args ¶
+#+begin_src emacs-lisp
+  Function: json-parse-buffer &rest args ¶
+#+end_src
 
     此函数从当前缓冲区读取下一个 JSON 值，从点开始。  如果包含一个有效的 JSON 对象，它会立即将点移动到值之后的位置；  否则它会发出 json-parse-error 错误信号并且不会移动点。  参数 args 被解释为 json-parse-string。
 
@@ -2811,10 +3500,14 @@ jsonrpc 库实现了 JSONRPC 规范 2.0 版，如 https://www.jsonrpc.org/ 中�
 
 除了强制性的 :request-dispatcher 和 :notification-dispatcher initargs 之外，jsonrpc-process-connection 类的用户应该将以下 initargs 作为关键字-值对传递给 make-instance：
 
-：过程
+#+begin_src emacs-lisp
+  :on-shutdown
+#+end_src
 
     值必须是一个活动的过程对象或一个没有参数的函数，产生一个这样的对象。  如果传递了一个进程对象，该对象应该包含一个预先建立的连接；  否则，在创建对象后立即调用该函数。
-：关闭时
+#+begin_src emacs-lisp
+  :process
+#+end_src
 
     值必须是单个参数的函数，即 jsonrpc-process-connection 对象。  该函数在底层进程对象被删除后调用（要么是 jsonrpc-shutdown 故意的，要么是由于某些外部原因而意外）。
 
@@ -2858,29 +3551,39 @@ jsonrpc-request 和 jsonrpc-async-request 的 :deferred 关键字参数旨在让
 
 如果你需要更复杂的东西，比如让各种缓冲区中的更改构成一个原子组，你必须直接调用 atomic-change-group 使用的较低级别的函数。
 
-功能：prepare-change-group &optional buffer ¶
+#+begin_src emacs-lisp
+  Function: prepare-change-group &optional buffer ¶
+#+end_src
 
     该函数为缓冲区缓冲区设置一个更改组，默认为当前缓冲区。  它返回一个代表更改组的句柄。  您必须使用此句柄来激活更改组并随后完成它。
 
 要使用更改组，您必须激活它。  您必须在对缓冲区文本进行任何更改之前执行此操作。
 
-功能：激活更改组句柄¶
+#+begin_src emacs-lisp
+  Function: activate-change-group handle ¶
+#+end_src
 
     此功能激活处理指定的更改组。
 
 激活更改组后，您在该缓冲区中所做的任何更改都将成为其中的一部分。  在缓冲区中完成所有所需的更改后，您必须完成更改组。  有两种方法可以做到这一点：您可以接受（并最终确定）所有更改，也可以全部取消。
 
-功能：accept-change-group 句柄 ¶
+#+begin_src emacs-lisp
+  Function: accept-change-group handle ¶
+#+end_src
 
     该函数接受由句柄指定的更改组中的所有更改，使它们成为最终的。
 
-功能：取消更改​​组句柄¶
+#+begin_src emacs-lisp
+  Function: cancel-change-group handle ¶
+#+end_src
 
     该函数取消和撤消由句柄指定的更改组中的所有更改。
 
 您可以使用 undo-amalgamate-change-group 将更改组中的部分或全部更改视为单个单元，以用于撤消命令（请参阅撤消）。
 
-功能：撤消合并更改组¶
+#+begin_src emacs-lisp
+  Function: undo-amalgamate-change-group ¶
+#+end_src
 
     合并自句柄标识的状态以来在更改组中所做的所有更改。  此函数删除自句柄描述的状态以来更改的撤消记录之间的所有撤消边界。  通常，handle 是 prepare-change-group 返回的句柄，在这种情况下，自 change-group 开始以来的所有更改都合并到一个单独的撤消单元中。
 
@@ -2889,8 +3592,8 @@ jsonrpc-request 和 jsonrpc-async-request 的 :deferred 关键字参数旨在让
 要创建多缓冲区更改组，请为要覆盖的每个缓冲区调用一次 prepare-change-group，然后使用 nconc 组合返回值，如下所示：
 
 #+begin_src emacs-lisp
-(nconc (prepare-change-group buffer-1)
-       (prepare-change-group buffer-2))
+  (nconc (prepare-change-group buffer-1)
+	 (prepare-change-group buffer-2))
 #+end_src
 
 然后，您可以通过一次调用 activate-change-group 来激活多缓冲区更改组，并通过一次调用 accept-change-group 或 cancel-change-group 来完成它。
@@ -2903,11 +3606,15 @@ jsonrpc-request 和 jsonrpc-async-request 的 :deferred 关键字参数旨在让
 
 您在这些钩子中使用的函数应该保存和恢复匹配数据，如果它们执行任何使用正则表达式的操作；  否则，它们将以奇怪的方式干扰调用它们的编辑操作。
 
-变量：更改前函数¶
+#+begin_src emacs-lisp
+  Variable: before-change-functions ¶
+#+end_src
 
     当 Emacs 即将修改缓冲区时，此变量保存要调用的函数列表。  每个函数都有两个参数，即将改变的区域的开始和结束，用整数表示。  即将更改的缓冲区始终是调用函数时的当前缓冲区。
 
-变量：更改后函数¶
+#+begin_src emacs-lisp
+  Variable: after-change-functions ¶
+#+end_src
 
     该变量保存了在 Emacs 修改缓冲区后要调用的函数列表。  每个函数接收三个参数：刚刚更改的区域的开始和结束，以及更改之前存在的文本的长度。  所有三个参数都是整数。  调用函数时，已更改的缓冲区始终是当前缓冲区。
 
@@ -2917,7 +3624,9 @@ jsonrpc-request 和 jsonrpc-async-request 的 :deferred 关键字参数旨在让
 
 绝大多数缓冲区更改原语将以平衡的对调用更改前函数和更改后函数，每次更改一次，其中这些钩子的参数准确地界定了所做的更改。  然而，钩子函数不应该总是依赖于这种情况，因为一些复杂的原语在进行更改之前调用一次更改前函数，然后调用更改后函数零次或多次，具体取决于原语有多少单独的更改正在做。  发生这种情况时，更改前函数的参数将包含一个进行单个更改的区域，但不一定是最小的此类区域，然后更改后函数的每个连续调用的参数将准确界定正在更改的文本部分。  一般来说，我们建议使用 before- 或 after-change 钩子，但不要同时使用。
 
-宏：combine-after-change-calls body… ¶
+#+begin_src emacs-lisp
+  Macro: combine-after-change-calls body… ¶
+#+end_src
 
     宏正常执行主体，但安排为一系列更改只调用一次更改后函数——如果这看起来安全的话。
 
@@ -2927,7 +3636,9 @@ jsonrpc-request 和 jsonrpc-async-request 的 :deferred 关键字参数旨在让
 
     警告：如果您合并的更改发生在缓冲区广泛分散的部分，这仍然有效，但不建议这样做，因为它可能导致某些更改挂钩函数的行为效率低下。
 
-宏：combine-change-calls 请求结束体… ¶
+#+begin_src emacs-lisp
+  Macro: combine-change-calls beg end body… ¶
+#+end_src
 
     这将正常执行主体，除了它所做的任何缓冲区更改都不会触发对更改前函数和更改后函数的调用。  相反，对于由 beg 和 end 包围的区域，这些钩子中的每一个都有一个单独的调用，提供给 after-change-functions 的参数反映了主体对区域大小所做的更改。
 
@@ -2939,11 +3650,15 @@ jsonrpc-request 和 jsonrpc-async-request 的 :deferred 关键字参数旨在让
 
     警告：您不得在 beg 和 end 指定的区域之外进行任何缓冲区更改。
 
-变量：first-change-hook ¶
+#+begin_src emacs-lisp
+  Variable: first-change-hook ¶
+#+end_src
 
     这个变量是一个正常的钩子，每当一个以前处于未修改状态的缓冲区被改变时，它就会运行。
 
-变量：禁止修改钩子¶
+#+begin_src emacs-lisp
+  Variable: inhibit-modification-hooks ¶
+#+end_src
 
     如果此变量不为 nil，则禁用所有更改挂钩；  他们都没有运行。  这会影响本节上面描述的所有挂钩变量，以及附加到某些特殊文本属性（请参阅具有特殊含义的属性）和覆盖属性（请参阅覆盖属性）的挂钩。
 
