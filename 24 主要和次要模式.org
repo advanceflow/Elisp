@@ -25,7 +25,9 @@ Emacs 中的大部分钩子都是普通的钩子。  这些变量包含要调用
 
 在本节中，我们记录了 run-hooks 函数，它用于运行普通的钩子。  我们还记录了运行各种异常钩子的函数。
 
-功能：run-hooks &rest hookvars ¶
+#+begin_src emacs-lisp
+  Function: run-hooks &rest hookvars ¶
+#+end_src
 
     该函数将一个或多个普通钩子变量名作为参数，并依次运行每个钩子。  每个参数都应该是一个符号，它是一个普通的钩子变量。  这些参数按指定的顺序处理。
 
@@ -35,15 +37,21 @@ Emacs 中的大部分钩子都是普通的钩子。  这些变量包含要调用
 
     如果挂钩变量是缓冲区局部变量，则将使用缓冲区局部变量而不是全局变量。  但是，如果缓冲区局部变量包含元素 t，则全局挂钩变量也将运行。
 
-功能：run-hook-with-args hook &rest args ¶
+#+begin_src emacs-lisp
+  Function: run-hook-with-args hook &rest args ¶
+#+end_src
 
     该函数通过调用钩子中的所有钩子函数来运行异常钩子，并为每个函数传递参数 args。
 
-功能：run-hook-with-args-until-failure hook &rest args ¶
+#+begin_src emacs-lisp
+  Function: run-hook-with-args-until-failure hook &rest args ¶
+#+end_src
 
     该函数通过依次调用每个钩子函数来运行异常钩子，如果其中一个函数失败并返回 nil 则停止。  每个钩子函数都传递参数 args。  如果此函数由于其中一个钩子函数失败而停止，则返回 nil；  否则它返回一个非零值。
 
-功能：run-hook-with-args-until-success hook &rest args ¶
+#+begin_src emacs-lisp
+  Function: run-hook-with-args-until-success hook &rest args ¶
+#+end_src
 
     这个函数通过调用每个钩子函数来运行一个异常钩子，如果其中一个函数成功返回一个非零值，则停止。  每个钩子函数都传递参数 args。  如果这个函数因为一个钩子函数返回一个非零值而停止，它返回那个值；  否则返回零。
 
@@ -60,7 +68,9 @@ Emacs 中的大部分钩子都是普通的钩子。  这些变量包含要调用
 
 将 lambda 表达式函数放在钩子上是可行的，但我们建议避免这样做，因为它会导致混淆。  如果您再次添加相同的 lambda 表达式，但编写方式略有不同，您将获得两个等效但不同的函数。  如果您随后删除其中一个，另一个将仍然存在。
 
-功能：添加-hook钩子函数&可选深度局部¶
+#+begin_src emacs-lisp
+  Function: add-hook hook function &optional depth local ¶
+#+end_src
 
     此函数是将函数函数添加到钩子变量钩子的便捷方法。  您可以将它用于异常钩子以及正常钩子。  function 可以是任何可以接受适当数量的钩子参数的 Lisp 函数。  例如，
 
@@ -83,7 +93,9 @@ Emacs 中的大部分钩子都是普通的钩子。  这些变量包含要调用
 
     如果 local 不为零，则表示将函数添加到缓冲区本地挂钩列表而不是全局挂钩列表。  这使钩子成为缓冲区本地并将 t 添加到缓冲区本地值。  后者充当标志以在默认值和本地值中运行钩子函数。
 
-功能：remove-hook 钩子函数 &optional local ¶
+#+begin_src emacs-lisp
+  Function: remove-hook hook function &optional local ¶
+#+end_src
 
     此函数从钩子变量钩子中删除函数。  它使用 equal 将函数与钩子的元素进行比较，因此它适用于符号和 lambda 表达式。
 
@@ -95,15 +107,21 @@ Emacs 中的大部分钩子都是普通的钩子。  这些变量包含要调用
 
 最不专业的主要模式称为基本模式，它没有特定于模式的定义或变量设置。
 
-命令：基本模式¶
+#+begin_src emacs-lisp
+  Command: fundamental-mode ¶
+#+end_src
 
     这是基本模式的主要模式命令。  与其他模式命令不同，它不运行任何模式挂钩（请参阅主要模式约定），因为您不应该自定义此模式。
 
-功能：主要模式暂停¶
+#+begin_src emacs-lisp
+  Function: major-mode-suspend ¶
+#+end_src
 
     这个函数像基本模式一样工作，因为它会杀死所有缓冲区局部变量，但它也会记录有效的主模式，以便随后可以恢复它。  当您需要将缓冲区置于 Emacs 自动为其选择的模式之外的某个特定模式下时（请参阅 Emacs 如何选择主模式），此功能和主模式恢复（接下来将描述）很有用，但也想成为以后可以切换回原来的模式。
 
-功能：主要模式恢复和可选的避免模式¶
+#+begin_src emacs-lisp
+  Function: major-mode-restore &optional avoided-modes ¶
+#+end_src
 
     该函数恢复major-mode-suspend记录的主模式。  如果没有记录主要模式，则此函数调用正常模式（请参阅正常模式），但如果该参数为非零，则尝试强制它不在避免模式中选择任何模式。
 
@@ -111,7 +129,9 @@ Emacs 中的大部分钩子都是普通的钩子。  这些变量包含要调用
 
 标准的 GNU Emacs Lisp 目录树包含几个主要模式的代码，在 text-mode.el、texinfo.el、lisp-mode.el 和 rmail.el 等文件中。  您可以研究这些库以了解模式是如何编写的。
 
-用户选项：主要模式¶
+#+begin_src emacs-lisp
+  User Option: major-mode ¶
+#+end_src
 
     此变量的缓冲区本地值保存当前主要模式的符号。  它的默认值保存新缓冲区的默认主模式。  标准默认值是基本模式。
 
@@ -128,44 +148,38 @@ Emacs 中的大部分钩子都是普通的钩子。  这些变量包含要调用
     定义一个名称以“-mode”结尾的主要模式命令。  当不带参数调用时，此命令应通过在现有缓冲区中设置键映射、语法表和缓冲区局部变量来切换到当前缓冲区中的新模式。  它不应该改变缓冲区的内容。
     为此命令编写一个文档字符串，描述此模式下可用的特殊命令。  请参阅获取有关主要模式的帮助。
 
-    文档字符串可能包括特殊的文档子字符串“\[command]”、“\{keymap}”和“\<keymap>”，它们允许帮助显示自动适应用户自己的键绑定。  请参阅替换文档中的键绑定。
-    主要模式命令应该从调用 kill-all-local-variables 开始。  这将运行正常的钩子 change-major-mode-hook，然后摆脱以前有效的主要模式的缓冲区局部变量。  请参阅创建和删除缓冲区本地绑定。
-    主模式命令应该将变量主模式设置为主模式命令符号。  这就是 describe-mode 发现要打印的文档的方式。
-    主模式命令应该将变量 mode-name 设置为模式的“漂亮”名称，通常是一个字符串（但请参阅模式行的数据结构，以了解其他可能的形式）。  模式的名称出现在模式行中。
-    直接连续调用两次主模式命令不应失败，并且应该与仅调用一次命令执行相同的操作。  换句话说，主模式命令应该是幂等的。
-    由于所有全局名称都在同一个名称空间中，因此作为模式一部分的所有全局变量、常量和函数的名称都应该以主模式名称开头（或者如果名称很长，则使用它的缩写）。  请参阅 Emacs Lisp 编码约定。
-    在诸如编程语言之类的用于编辑某种结构化文本的主要模式中，根据结构对文本进行缩进可能很有用。  所以模式应该将 indent-line-function 设置为合适的函数，并且可能自定义其他变量进行缩进。  请参阅代码的自动缩进。
-    主模式通常应该有自己的键映射，在该模式的所有缓冲区中用作本地键映射。  主模式命令应该调用 use-local-map 来安装这个本地地图。  有关详细信息，请参阅活动键盘映射。
-
-    此键映射应永久存储在名为 modename-mode-map 的全局变量中。  通常定义模式的库会设置这个变量。
-
-    有关如何编写代码来设置模式的键映射变量的建议，请参见稳健定义变量的技巧。
-    主模式键映射中绑定的键序列通常应以 Cc 开头，后跟控制字符、数字或 {、}、<、>、: 或 ;。  其他标点符号为次要模式保留，普通字母为用户保留。
-
-    主要模式也可以重新绑定键 Mn、Mp 和 Ms。Mn 和 Mp 的绑定通常应该是某种向前和向后移动，但这并不一定意味着光标移动。
-
-    如果主模式提供的命令以更适合该模式所用文本的方式执行相同的工作，则主模式重新绑定标准键序列是合法的。  例如，用于编辑编程语言的主要模式可能会重新定义 CMa，以便以更适合该语言的方式移动到函数的开头。  根据主要模式的需要定制 CMa 的推荐方法是设置开始定义函数（请参阅移动平衡表达式）以调用特定于模式的函数。
-
-    主模式重新绑定标准键序列也是合法的，其标准含义在该模式中很少有用。  例如，minibuffer 模式重新绑定 Mr，其标准含义在 minibuffer 中很少使用。  Dired 或 Rmail 等不允许自插入文本的主要模式可以合理地将字母和其他打印字符重新定义为特殊命令。
-    编辑文本的主要模式不应将 RET 定义为除了插入换行符之外的任何操作。  但是，对于用户不直接编辑的文本的特殊模式（例如 Dired 和 Info 模式）重新定义 RET 以执行完全不同的操作是可以的。
-    主要模式不应更改主要取决于用户偏好的选项，例如是否启用自动填充模式。  让每个用户来决定。  但是，主要模式应该自定义其他变量，以便在用户决定使用自动填充模式时有用。
-    该模式可以有自己的语法表，也可以与其他相关模式共享一个语法表。  如果它有自己的语法表，它应该将其存储在名为 modename-mode-syntax-table 的变量中。  请参阅语法表。
-    如果该模式处理具有注释语法的语言，它应该设置定义注释语法的变量。  请参阅 GNU Emacs 手册中的选项控制注释。
-    模式可能有自己的缩写表，也可能与其他相关模式共享一个缩写表。  如果它有自己的缩写表，它应该将其存储在名为 modename-mode-abbrev-table 的变量中。  如果主模式命令本身定义了任何缩写，它应该将系统标志参数的 t 传递给 define-abbrev。  请参阅定义缩写。
-    该模式应通过为变量 font-lock-defaults 设置缓冲区本地值来指定如何为字体锁定模式进行突出显示（请参阅字体锁定模式）。
-    如果可能，模式定义的每个面都应该从现有的 Emacs 面继承。  请参见基本面和字体锁定面。
-    考虑将特定于模式的菜单添加到菜单栏。  这最好包括最重要的菜单特定设置和命令，使用户能够快速有效地发现主要功能。
-    考虑为模式添加特定于模式的上下文菜单，以便在用户激活上下文菜单模式时使用（请参阅 Emacs 手册中的菜单鼠标单击）。  为此，定义一个特定于模式的函数，该函数根据鼠标在缓冲区中单击 3 的位置构建一个或多个菜单，然后将该函数添加到 context-menu-functions 的缓冲区本地值。
-    模式应指定 Imenu 应如何查找缓冲区的定义或部分，方法是为变量 imenu-generic-expression 设置缓冲区局部值，为两个变量 imenu-prev-index-position-function 和 imenu-extract -index-name-function，或用于变量 imenu-create-index-function（参见 Imenu）。
-    该模式可以告诉 ElDoc 模式如何通过向特殊钩子 eldoc-documentation-functions 添加一个或多个缓冲区本地条目来检索不同类型的文档。
-    该模式可以通过将一个或多个缓冲区本地条目添加到特殊的钩子完成点函数来指定如何完成各种关键字。  请参阅普通缓冲区中的完成。
-    要为 Emacs 自定义变量创建缓冲区本地绑定，请在主要模式命令中使用 make-local-variable，而不是 make-variable-buffer-local。  后一个函数将使变量对随后设置的每个缓冲区都是局部的，这将影响不使用此模式的缓冲区。  模式具有这样的全局效应是不可取的。  请参阅缓冲区局部变量。
-
-    除了极少数例外，在 Lisp 包中使用 make-variable-buffer-local 的唯一合理方法是用于仅在该包中使用的变量。  在其他包使用的变量上使用它会干扰它们。
-    每个主要模式都应该有一个名为 modename-mode-hook 的普通模式挂钩。  主模式命令应该做的最后一件事是调用 run-mode-hooks。  这将运行正常的钩子 change-major-mode-after-body-hook、模式钩子、函数 hack-local-variables（当缓冲区访问文件时），然后运行正常的钩子 after-change-major-mode -钩。  请参阅模式挂钩。
-    主模式命令可以通过调用其他一些主模式命令（称为父模式）开始，然后更改它的一些设置。  执行此操作的模式称为派生模式。  定义一个的推荐方法是使用 define-derived-mode 宏，但这不是必需的。  这种模式应该在延迟模式挂钩表单中调用父模式命令。  （使用 define-derived-mode 会自动执行此操作。）请参阅定义派生模式和模式挂钩。
-    如果用户将缓冲区从该模式切换到任何其他主要模式时需要做一些特殊的事情，则该模式可以为 change-major-mode-hook 设置一个缓冲区本地值（请参阅创建和删除缓冲区本地绑定）。
-    如果此模式仅适用于由模式本身（而不是用户在键盘上键入或通过外部文件）生成的特别准备的文本，则主模式命令符号应具有名为 mode-class 的属性，其值为 special ，穿上如下：
+    1. 文档字符串可能包括特殊的文档子字符串“\[command]”、“\{keymap}”和“\<keymap>”，它们允许帮助显示自动适应用户自己的键绑定。  请参阅替换文档中的键绑定。
+    2. 主要模式命令应该从调用 kill-all-local-variables 开始。  这将运行正常的钩子 change-major-mode-hook，然后摆脱以前有效的主要模式的缓冲区局部变量。  请参阅创建和删除缓冲区本地绑定。
+    3. 主模式命令应该将变量主模式设置为主模式命令符号。  这就是 describe-mode 发现要打印的文档的方式。
+    4. 主模式命令应该将变量 mode-name 设置为模式的“漂亮”名称，通常是一个字符串（但请参阅模式行的数据结构，以了解其他可能的形式）。  模式的名称出现在模式行中。
+    5. 直接连续调用两次主模式命令不应失败，并且应该与仅调用一次命令执行相同的操作。  换句话说，主模式命令应该是幂等的。
+    6. 由于所有全局名称都在同一个名称空间中，因此作为模式一部分的所有全局变量、常量和函数的名称都应该以主模式名称开头（或者如果名称很长，则使用它的缩写）。  请参阅 Emacs Lisp 编码约定。
+    7. 在诸如编程语言之类的用于编辑某种结构化文本的主要模式中，根据结构对文本进行缩进可能很有用。  所以模式应该将 indent-line-function 设置为合适的函数，并且可能自定义其他变量进行缩进。  请参阅代码的自动缩进。
+    8. 主模式通常应该有自己的键映射，在该模式的所有缓冲区中用作本地键映射。  主模式命令应该调用 use-local-map 来安装这个本地地图。  有关详细信息，请参阅活动键盘映射。
+    9. 此键映射应永久存储在名为 modename-mode-map 的全局变量中。  通常定义模式的库会设置这个变量。
+    10. 有关如何编写代码来设置模式的键映射变量的建议，请参见稳健定义变量的技巧。
+    11. 主模式键映射中绑定的键序列通常应以 Cc 开头，后跟控制字符、数字或 {、}、<、>、: 或 ;。  其他标点符号为次要模式保留，普通字母为用户保留。
+    12. 主要模式也可以重新绑定键 Mn、Mp 和 Ms。Mn 和 Mp 的绑定通常应该是某种向前和向后移动，但这并不一定意味着光标移动。
+    13. 如果主模式提供的命令以更适合该模式所用文本的方式执行相同的工作，则主模式重新绑定标准键序列是合法的。  例如，用于编辑编程语言的主要模式可能会重新定义 CMa，以便以更适合该语言的方式移动到函数的开头。  根据主要模式的需要定制 CMa 的推荐方法是设置开始定义函数（请参阅移动平衡表达式）以调用特定于模式的函数。
+    14. 主模式重新绑定标准键序列也是合法的，其标准含义在该模式中很少有用。  例如，minibuffer 模式重新绑定 Mr，其标准含义在 minibuffer 中很少使用。  Dired 或 Rmail 等不允许自插入文本的主要模式可以合理地将字母和其他打印字符重新定义为特殊命令。
+    15. 编辑文本的主要模式不应将 RET 定义为除了插入换行符之外的任何操作。  但是，对于用户不直接编辑的文本的特殊模式（例如 Dired 和 Info 模式）重新定义 RET 以执行完全不同的操作是可以的。
+    16. 主要模式不应更改主要取决于用户偏好的选项，例如是否启用自动填充模式。  让每个用户来决定。  但是，主要模式应该自定义其他变量，以便在用户决定使用自动填充模式时有用。
+    17. 该模式可以有自己的语法表，也可以与其他相关模式共享一个语法表。  如果它有自己的语法表，它应该将其存储在名为 modename-mode-syntax-table 的变量中。  请参阅语法表。
+    18. 如果该模式处理具有注释语法的语言，它应该设置定义注释语法的变量。  请参阅 GNU Emacs 手册中的选项控制注释。
+    19. 模式可能有自己的缩写表，也可能与其他相关模式共享一个缩写表。  如果它有自己的缩写表，它应该将其存储在名为 modename-mode-abbrev-table 的变量中。  如果主模式命令本身定义了任何缩写，它应该将系统标志参数的 t 传递给 define-abbrev。  请参阅定义缩写。
+    20. 该模式应通过为变量 font-lock-defaults 设置缓冲区本地值来指定如何为字体锁定模式进行突出显示（请参阅字体锁定模式）。
+    21. 如果可能，模式定义的每个面都应该从现有的 Emacs 面继承。  请参见基本面和字体锁定面。
+    22. 考虑将特定于模式的菜单添加到菜单栏。  这最好包括最重要的菜单特定设置和命令，使用户能够快速有效地发现主要功能。
+    23. 考虑为模式添加特定于模式的上下文菜单，以便在用户激活上下文菜单模式时使用（请参阅 Emacs 手册中的菜单鼠标单击）。  为此，定义一个特定于模式的函数，该函数根据鼠标在缓冲区中单击 3 的位置构建一个或多个菜单，然后将该函数添加到 context-menu-functions 的缓冲区本地值。
+    24. 模式应指定 Imenu 应如何查找缓冲区的定义或部分，方法是为变量 imenu-generic-expression 设置缓冲区局部值，为两个变量 imenu-prev-index-position-function 和 imenu-extract -index-name-function，或用于变量 imenu-create-index-function（参见 Imenu）。
+    25. 该模式可以告诉 ElDoc 模式如何通过向特殊钩子 eldoc-documentation-functions 添加一个或多个缓冲区本地条目来检索不同类型的文档。
+    26. 该模式可以通过将一个或多个缓冲区本地条目添加到特殊的钩子完成点函数来指定如何完成各种关键字。  请参阅普通缓冲区中的完成。
+    27. 要为 Emacs 自定义变量创建缓冲区本地绑定，请在主要模式命令中使用 make-local-variable，而不是 make-variable-buffer-local。  后一个函数将使变量对随后设置的每个缓冲区都是局部的，这将影响不使用此模式的缓冲区。  模式具有这样的全局效应是不可取的。  请参阅缓冲区局部变量。
+    28. 除了极少数例外，在 Lisp 包中使用 make-variable-buffer-local 的唯一合理方法是用于仅在该包中使用的变量。  在其他包使用的变量上使用它会干扰它们。
+    29. 每个主要模式都应该有一个名为 modename-mode-hook 的普通模式挂钩。  主模式命令应该做的最后一件事是调用 run-mode-hooks。  这将运行正常的钩子 change-major-mode-after-body-hook、模式钩子、函数 hack-local-variables（当缓冲区访问文件时），然后运行正常的钩子 after-change-major-mode -钩。  请参阅模式挂钩。
+    30. 主模式命令可以通过调用其他一些主模式命令（称为父模式）开始，然后更改它的一些设置。  执行此操作的模式称为派生模式。  定义一个的推荐方法是使用 define-derived-mode 宏，但这不是必需的。  这种模式应该在延迟模式挂钩表单中调用父模式命令。  （使用 define-derived-mode 会自动执行此操作。）请参阅定义派生模式和模式挂钩。
+    31. 如果用户将缓冲区从该模式切换到任何其他主要模式时需要做一些特殊的事情，则该模式可以为 change-major-mode-hook 设置一个缓冲区本地值（请参阅创建和删除缓冲区本地绑定）。
+    32. 如果此模式仅适用于由模式本身（而不是用户在键盘上键入或通过外部文件）生成的特别准备的文本，则主模式命令符号应具有名为 mode-class 的属性，其值为 special ，穿上如下：
 
     #+begin_src emacs-lisp
       (put 'funny-mode 'mode-class 'special)
@@ -183,7 +197,9 @@ Emacs 中的大部分钩子都是普通的钩子。  这些变量包含要调用
 
 当 Emacs 访问一个文件时，它会根据文件名或文件本身的信息自动为缓冲区选择一个主要模式。  它还处理文件文本中指定的局部变量。
 
-命令：正常模式&可选的查找文件¶
+#+begin_src emacs-lisp
+  Command: normal-mode &optional find-file ¶
+#+end_src
 
     此函数为当前缓冲区建立正确的主模式和缓冲区局部变量绑定。  它调用 set-auto-mode（见下文）。  从 Emacs 26.1 开始，它不再运行 hack-local-variables，这现在在主要模式初始化时在 run-mode-hooks 中完成（请参阅 Mode Hooks）。
 
@@ -195,7 +211,9 @@ Emacs 中的大部分钩子都是普通的钩子。  这些变量包含要调用
 
     normal-mode 在对主要模式命令的调用周围使用条件大小写，因此错误被捕获并报告为“文件模式规范错误”，然后是原始错误消息。
 
-功能：set-auto-mode &optional keep-mode-if-same ¶
+#+begin_src emacs-lisp
+  Function: set-auto-mode &optional keep-mode-if-same ¶
+#+end_src
 
     该函数选择和设置适合当前缓冲区的主要模式。  它基于“-*-”行、文件末尾附近的任何“模式：”局部变量、“#！”做出决定（按优先顺序）  行（使用interpreter-mode-alist），缓冲区开头的文本（使用magic-mode-alist），最后是访问的文件名（使用auto-mode-alist）。  请参阅 GNU Emacs 手册中的如何选择主要模式。  如果 enable-local-variables 为 nil，set-auto-mode 不会检查 '-*-' 行或文件末尾附近的任何模式标记。
 
@@ -203,29 +221,41 @@ Emacs 中的大部分钩子都是普通的钩子。  这些变量包含要调用
 
     如果 keep-mode-if-same 不为零，如果缓冲区已经处于正确的主模式，则此函数不会调用模式命令。  例如， set-visited-file-name 将其设置为 t 以避免杀死用户可能已设置的缓冲区局部变量。
 
-功能：设置缓冲区主要模式缓冲区¶
+#+begin_src emacs-lisp
+  Function: set-buffer-major-mode buffer ¶
+#+end_src
 
     该函数将缓冲区的主模式设置为默认值major-mode；  如果为 nil，则使用当前缓冲区的主要模式（如果合适的话）。  作为一个例外，如果缓冲区的名称是 *scratch*，它会将模式设置为 initial-major-mode。
 
     用于创建缓冲区的低级原语不使用此函数，但中级命令（例如 switch-to-buffer 和 find-file-noselect）在创建缓冲区时使用它。
 
-用户选项：初始主要模式¶
+#+begin_src emacs-lisp
+  User Option: initial-major-mode ¶
+#+end_src
 
     该变量的值决定了初始 *scratch* 缓冲区的主要模式。  该值应该是一个主要模式命令的符号。  默认值为 lisp-interaction-mode。
 
-变量：解释器模式列表¶
+#+begin_src emacs-lisp
+  Variable: interpreter-mode-alist ¶
+#+end_src
 
     此变量指定用于在“#！”中指定命令解释器的脚本的主要模式 线。  它的值是一个具有表单元素的列表（regexp .mode）；  如果文件指定了与 \\`regexp\\' 匹配的解释器，则表示使用模式模式。  例如，默认元素之一是 ("python[0-9.]*" .python-mode)。
 
-变量：magic-mode-alist ¶
+#+begin_src emacs-lisp
+  Variable: magic-mode-alist ¶
+#+end_src
 
     该变量的值是一个具有 (regexp . function) 形式元素的列表，其中 regexp 是正则表达式，而 function 是函数或 nil。  访问文件后，如果缓冲区开头的文本与正则表达式匹配且函数非零，则 set-auto-mode 调用函数；  如果 function 为 nil，则 auto-mode-alist 将决定模式。
 
-变量：magic-fallback-mode-alist ¶
+#+begin_src emacs-lisp
+  Variable: magic-fallback-mode-alist ¶
+#+end_src
 
     这与magic-mode-alist 类似，但仅在auto-mode-alist 未指定此文件的模式时才处理。
 
-变量：自动模式列表¶
+#+begin_src emacs-lisp
+  Variable: auto-mode-alist ¶
+#+end_src
 
     此变量包含文件名模式（正则表达式）和相应的主要模式命令的关联列表。  通常，文件名模式会测试后缀，例如“.el”和“.c”，但不必如此。  alist 的一个普通元素看起来像 (regexp . mode-function)。
 
@@ -264,7 +294,9 @@ Emacs 中的大部分钩子都是普通的钩子。  这些变量包含要调用
 
 describe-mode 函数提供有关主要模式的信息。  它通常绑定到 Ch m。  它使用变量major-mode 的值（参见Major Modes），这就是为什么每个主要模式命令都需要设置该变量的原因。
 
-命令：描述模式&可选缓冲区¶
+#+begin_src emacs-lisp
+  Command: describe-mode &optional buffer ¶
+#+end_src
 
     此命令显示当前缓冲区的主要模式和次要模式的文档。  它使用文档功能来检索主要和次要模式命令的文档字符串（请参阅访问文档字符串）。
 
@@ -274,7 +306,9 @@ describe-mode 函数提供有关主要模式的信息。  它通常绑定到 Ch 
 
 定义新的主要模式的推荐方法是使用 define-derived-mode 从现有的主要模式派生它。  如果没有密切相关的模式，您应该从 text-mode、special-mode 或 prog-mode 继承。  请参阅基本主要模式。  如果这些都不合适，您可以从基本模式继承（请参阅主要模式）。
 
-宏：define-derived-mode 变体父名 docstring keyword-args... body... ¶
+#+begin_src emacs-lisp
+  Macro: define-derived-mode variant parent name docstring keyword-args… body… ¶
+#+end_src
 
     该宏将variant 定义为主要模式命令，使用name 作为模式名称的字符串形式。  variant 和 parent 应该是不带引号的符号。
 
@@ -295,19 +329,29 @@ describe-mode 函数提供有关主要模式的信息。  它通常绑定到 Ch 
 
     关键字参数是关键字和值对。  评估除 :after-hook 之外的值。  当前支持以下关键字：
 
-    ：语法表
+#+begin_src emacs-lisp
+  :syntax-table
+#+end_src
 
 	 您可以使用它来显式指定新模式的语法表。  如果指定 nil 值，则新模式使用与 parent 相同的语法表，如果 parent 为 nil，则使用标准语法表。  （请注意，这不遵循用于非关键字参数的约定，即 nil 值等同于不指定参数。）
-    ：缩写表
+#+begin_src emacs-lisp
+  :abbrev-table
+#+end_src
 
 	 您可以使用它来明确指定新模式的缩写表。  如果指定 nil 值，则新模式使用与父级相同的缩写表，如果父级为 nil，则使用基本模式缩写表。  （同样，一个 nil 值不等同于不指定这个关键字。）
-    ：交互的
+#+begin_src emacs-lisp
+  :interactive
+#+end_src
 
 	 默认情况下，模式是交互式命令。  如果您指定 nil 值，则此处定义的模式将不是交互式的。  这对于那些从不打算由用户手动激活但只应该在某些特殊格式的缓冲区中使用的模式很有用。
-    ：团体
+#+begin_src emacs-lisp
+  :group
+#+end_src
 
 	 如果指定了此项，则该值应该是此模式的自定义组。  （并非所有主要模式都有一个。）customize-mode 命令使用它。  define-derived-mode 不会自动定义指定的定制组。
-    : 挂机后
+#+begin_src emacs-lisp
+  :after-hook
+#+end_src
 
 	 这个可选的关键字指定了一个 Lisp 表单，在模式钩子运行之后，作为模式函数的最终动作进行评估。  它不应该被引用。  由于可能在模式函数终止后评估表单，因此它不应访问模式函数本地状态的任何元素。  :after-hook 形式对于设置依赖于用户设置的模式方面很有用，而这些设置又可能在模式挂钩中被更改。
 
@@ -327,7 +371,9 @@ describe-mode 函数提供有关主要模式的信息。  它通常绑定到 Ch 
 
     不要在定义中编写交互式规范；  定义派生模式会自动执行此操作。
 
-功能：派生模式-p &rest模式¶
+#+begin_src emacs-lisp
+  Function: derived-mode-p &rest modes ¶
+#+end_src
 
     如果当前主模式派生自符号模式给出的任何主模式，则此函数返回非零。
 
@@ -337,19 +383,25 @@ describe-mode 函数提供有关主要模式的信息。  它通常绑定到 Ch 
 
 应尽可能直接或间接地从这三种模式中的一种派生出新的主要模式。  一个原因是这允许用户为整个系列的相关模式（例如，所有编程语言模式）定制单个模式挂钩（例如，prog-mode-hook）。
 
-命令：文本模式¶
+#+begin_src emacs-lisp
+  Command: text-mode ¶
+#+end_src
 
     文本模式是编辑人类语言的主要模式。  它将 '"' 和 '\' 字符定义为具有标点语法（参见语法类表），并将 M-TAB 绑定到 ispell-complete-word（参见 GNU Emacs 手册中的拼写）。
 
     从文本模式派生的主要模式的一个示例是 HTML 模式。  请参阅 GNU Emacs 手册中的 SGML 和 HTML 模式。
 
-命令：编程模式¶
+#+begin_src emacs-lisp
+  Command: prog-mode ¶
+#+end_src
 
     Prog 模式是包含编程语言源代码的缓冲区的基本主要模式。  Emacs 中内置的大部分编程语言主要模式都是从它衍生而来的。
 
     Prog 模式将 parse-sexp-ignore-comments 绑定到 t（参见基于解析的运动命令）和从左到右的双向段落方向（参见双向显示）。
 
-命令：特殊模式¶
+#+begin_src emacs-lisp
+  Command: special-mode ¶
+#+end_src
 
     特殊模式是包含由 Emacs 专门生成的文本的缓冲区的基本主要模式，而不是直接从文件中生成。  从特殊模式派生的主要模式被赋予特殊的模式类属性（请参阅主要模式约定）。
 
@@ -367,23 +419,31 @@ Emacs 22 之前的 Emacs 版本没有延迟模式挂钩。  24 之前的版本�
 
 当您使用 define-derived-mode 定义主要模式时，它会自动确保遵循这些约定。  如果您“手动”定义主模式，而不是使用定义派生模式，请使用以下函数自动处理这些约定。
 
-功能：run-mode-hooks &rest hookvars ¶
+#+begin_src emacs-lisp
+  Function: run-mode-hooks &rest hookvars ¶
+#+end_src
 
     主要模式应使用此函数运行其模式挂钩。  它类似于 run-hooks（参见 Hooks），但它也运行 change-major-mode-after-body-hook、hack-local-variables（当缓冲区访问文件时）（参见文件局部变量）和更改后主要模式挂钩。  它所做的最后一件事是评估父模式声明的任何 :after-hook 形式（请参阅定义派生模式）。
 
     在执行延迟模式挂钩表单期间调用此函数时，它不会运行挂钩或破解本地变量或立即评估表单。  相反，它会安排下一次调用 run-mode-hooks 来运行它们。
 
-宏：delay-mode-hooks body… ¶
+#+begin_src emacs-lisp
+  Macro: delay-mode-hooks body… ¶
+#+end_src
 
     当一个主模式命令调用另一个主模式命令时，它应该在延迟模式挂钩内执行此操作。
 
     该宏执行 body，但在 body 执行期间告诉所有 run-mode-hooks 调用延迟运行它们的钩子。  在 delay-mode-hooks 构造结束后，挂钩将在下一次调用 run-mode-hooks 期间实际运行。
 
-变量：更改主要模式后主体挂钩¶
+#+begin_src emacs-lisp
+  Variable: change-major-mode-after-body-hook ¶
+#+end_src
 
     这是一个由 run-mode-hooks 运行的普通钩子。  它在模式挂钩之前运行。
 
-变量：after-change-major-mode-hook ¶
+#+begin_src emacs-lisp
+  Variable: after-change-major-mode-hook ¶
+#+end_src
 
     这是一个由 run-mode-hooks 运行的普通钩子。  它在每个正确编写的主要模式命令的最后运行。
 
@@ -397,25 +457,35 @@ Emacs 22 之前的 Emacs 版本没有延迟模式挂钩。  24 之前的版本�
 
 派生模式还应该定义一个列表命令。  这不是模式命令，是用户调用的（例如，Mx list-processes）。  列表命令应该创建或切换到缓冲区，打开派生模式，指定列表数据，最后调用 tabulated-list-print 填充缓冲区。
 
-用户选项：tabulated-list-gui-sort-indicator-asc ¶
+#+begin_src emacs-lisp
+  User Option: tabulated-list-gui-sort-indicator-asc ¶
+#+end_src
 
     此变量指定要在 GUI 框架上使用的字符，以指示该列按升序排序。
 
     每当您更改列表缓冲区中的排序方向时，该指示器都会在升序（“asc”）和降序（“desc”）之间切换。
 
-用户选项：tabulated-list-gui-sort-indicator-desc ¶
+#+begin_src emacs-lisp
+  User Option: tabulated-list-gui-sort-indicator-desc ¶
+#+end_src
 
     与 tabulated-list-gui-sort-indicator-asc 类似，但在列按降序排序时使用。
 
-用户选项：tabulated-list-tty-sort-indicator-asc ¶
+#+begin_src emacs-lisp
+  User Option: tabulated-list-tty-sort-indicator-asc ¶
+#+end_src
 
     与 tabulated-list-gui-sort-indicator-asc 类似，但用于文本模式框架。
 
-用户选项：tabulated-list-tty-sort-indicator-desc ¶
+#+begin_src emacs-lisp
+  User Option: tabulated-list-tty-sort-indicator-desc ¶
+#+end_src
 
     与 tabulated-list-tty-sort-indicator-asc 类似，但在列按降序排序时使用。
 
-变量：表格列表格式¶
+#+begin_src emacs-lisp
+  Variable: tabulated-list-format ¶
+#+end_src
 
     此缓冲区局部变量指定列表数据的格式。  它的值应该是一个向量。  向量的每个元素代表一个数据列，并且应该是一个列表（名称宽度排序），其中
 
@@ -423,7 +493,9 @@ Emacs 22 之前的 Emacs 版本没有延迟模式挂钩。  24 之前的版本�
 	 width 是为列保留的宽度（整数）。  这对于运行到每行末尾的最后一列是没有意义的。
 	 sort 指定如何按列对条目进行排序。  如果为 nil，则该列不能用于排序。  如果为 t，则通过比较字符串值对列进行排序。  否则，这应该是排序的谓词函数（请参阅重新排列列表的函数），它接受与表格列表条目的元素形式相同的两个参数（见下文）。
 
-变量：表格列表条目¶
+#+begin_src emacs-lisp
+  Variable: tabulated-list-entries ¶
+#+end_src
 
     此缓冲区局部变量指定列表缓冲区中显示的条目。  它的值应该是一个列表或一个函数。
 
@@ -436,25 +508,35 @@ Emacs 22 之前的 Emacs 版本没有延迟模式挂钩。  24 之前的版本�
 
     否则，该值应该是一个函数，该函数在不带参数调用时返回上述形式的列表。
 
-变量：tabulated-list-revert-hook ¶
+#+begin_src emacs-lisp
+  Variable: tabulated-list-revert-hook ¶
+#+end_src
 
     这个正常的钩子在恢复列表缓冲区之前运行。  派生模式可以向此挂钩添加一个函数以重新计算表格列表条目。
 
-变量：表格列表打印机¶
+#+begin_src emacs-lisp
+  Variable: tabulated-list-printer ¶
+#+end_src
 
     这个变量的值是被调用来插入一个条目的函数，包括它的终止换行符。  该函数应接受两个参数，id 和 contents，其含义与 tabulated-list-entries 中的含义相同。  默认值是一个以直接方式插入条目的函数；  以更复杂的方式使用列表模式的模式可以指定另一个功能。
 
-变量：表格列表排序键¶
+#+begin_src emacs-lisp
+  Variable: tabulated-list-sort-key ¶
+#+end_src
 
     此变量的值指定列表缓冲区的当前排序键。  如果为 nil，则不进行排序。  否则，它应该具有 (name .flip) 形式，其中 name 是与 tabulated-list-format 中的列名之一匹配的字符串，并且如果非 nil，则翻转表示反转排序顺序。
 
-功能：列表列表初始化头 ¶
+#+begin_src emacs-lisp
+  Function: tabulated-list-init-header ¶
+#+end_src
 
     此函数计算并设置列表缓冲区的标题行格式（请参阅窗口标题行），并为标题行分配一个键盘映射，以允许通过单击列标题对条目进行排序。
 
     来自 Tabulated List 模式的模式应该在设置上述变量后调用它（特别是，仅在设置 tabulated-list-format 之后）。
 
-功能：tabulated-list-print &optional remember-pos update ¶
+#+begin_src emacs-lisp
+  Function: tabulated-list-print &optional remember-pos update ¶
+#+end_src
 
     此函数使用条目填充当前缓冲区。  它应该由列表命令调用。  它擦除缓冲区，根据 tabulated-list-sort-key 对 tabulated-list-entries 指定的条目进行排序，然后调用 tabulated-list-printer 指定的函数插入每个条目。
 
@@ -462,7 +544,9 @@ Emacs 22 之前的 Emacs 版本没有延迟模式挂钩。  24 之前的版本�
 
     如果可选参数 update 不为零，则此函数将仅删除或添加自上次打印以来已更改的条目。  如果自上次调用此函数以来大多数条目没有更改，则速度会快几倍。  结果的唯一区别是通过 tabulated-list-put-tag 放置的标签不会从未更改的条目中删除（通常所有标签都被删除）。
 
-功能：表格列表删除条目¶
+#+begin_src emacs-lisp
+  Function: tabulated-list-delete-entry ¶
+#+end_src
 
     此函数删除点处的条目。
 
@@ -470,27 +554,39 @@ Emacs 22 之前的 Emacs 版本没有延迟模式挂钩。  24 之前的版本�
 
     请注意，此函数仅更改缓冲区内容；  它不会改变表格列表条目。
 
-功能：tabulated-list-get-id &optional pos ¶
+#+begin_src emacs-lisp
+  Function: tabulated-list-get-id &optional pos ¶
+#+end_src
 
     这个 defsubst 从 tabulated-list-entries（如果它是一个列表）或从 tabulated-list-entries 返回的列表（如果它是一个函数）返回 ID 对象。  如果省略或为零，则 pos 默认为点。
 
-功能：tabulated-list-get-entry &optional pos ¶
+#+begin_src emacs-lisp
+  Function: tabulated-list-get-entry &optional pos ¶
+#+end_src
 
     这个 defsubst 从 tabulated-list-entries （如果它是一个列表）或从 tabulated-list-entries 返回的列表（如果它是一个函数）返回条目对象。  这将是 pos 处 ID 的向量。  如果 pos 处没有条目，则函数返回 nil。
 
-功能：tabulated-list-header-overlay-p &optional POS ¶
+#+begin_src emacs-lisp
+  Function: tabulated-list-header-overlay-p &optional POS ¶
+#+end_src
 
     如果 pos 处有假头，则此 defsubst 返回非 nil。  如果 tabulated-list-use-header-line 为 nil，则使用假标题将列名放在缓冲区的开头。  如果省略或为零，则 pos 默认为 point-min。
 
-功能：tabulated-list-put-tag 标签&可选的提前 ¶
+#+begin_src emacs-lisp
+  Function: tabulated-list-put-tag tag &optional advance ¶
+#+end_src
 
     该函数将标签放在当前行的填充区域。  填充区域可以是行首的空白区域，其宽度由 tabulated-list-padding 控制。  tag 应该是一个字符串，长度小于或等于 tabulated-list-padding。  如果Advance 不为零，则此函数逐行前进。
 
-功能：表格列表清除所有标签¶
+#+begin_src emacs-lisp
+  Function: tabulated-list-clear-all-tags ¶
+#+end_src
 
     此函数清除当前缓冲区中填充区域的所有标签。
 
-功能：tabulated-list-set-col col desc &optional change-entry-data ¶
+#+begin_src emacs-lisp
+  Function: tabulated-list-set-col col desc &optional change-entry-data ¶
+#+end_src
 
     此函数在点更改列表条目，将 col 设置为 desc。  col 是要更改的列号，或要更改的列的名称。  desc 是新的列描述符，它是通过 tabulated-list-print-col 插入的。
 
@@ -500,7 +596,10 @@ Emacs 22 之前的 Emacs 版本没有延迟模式挂钩。  24 之前的版本�
 
 通用模式是简单的主要模式，基本支持注释语法和字体锁定模式。  要定义通用模式，请使用宏 define-generic-mode。  有关使用 define-generic-mode 的一些示例，请参见文件 generic-x.el。
 
-宏：define-generic-mode mode comment-list keyword-list font-lock-list auto-mode-list function-list &optional docstring ¶
+#+begin_src emacs-lisp
+  Macro: define-generic-mode mode comment-list keyword-list font-lock-list auto-mode-list function-list &optional docstring ¶
+#+end_src
+
 
     该宏定义了一个名为 mode 的通用模式命令（一个符号，不带引号）。  可选参数 docstring 是 mode 命令的文档。  如果您不提供它，define-generic-mode 默认会生成一个。
 
@@ -616,15 +715,21 @@ Lisp 的三种模式共享它们的大部分代码。  例如，Lisp 模式和 E
 
 理想情况下，无论其他有效的次要模式如何，次要模式都应该具有其所需的效果。  应该可以以任何顺序激活和停用次要模式。
 
-变量：本地次要模式¶
+#+begin_src emacs-lisp
+  Variable: local-minor-modes ¶
+#+end_src
 
     此缓冲区局部变量列出了当前缓冲区中当前启用的次要模式，并且是符号列表。
 
-变量：全局次要模式¶
+#+begin_src emacs-lisp
+  Variable: global-minor-modes ¶
+#+end_src
 
     此变量列出当前启用的全局次要模式，并且是符号列表。
 
-变量：次要模式列表¶
+#+begin_src emacs-lisp
+  Variable: minor-mode-list ¶
+#+end_src
 
     此变量的值是所有次要模式命令的列表。
 
@@ -712,7 +817,9 @@ Lisp 的三种模式共享它们的大部分代码。  例如，Lisp 模式和 E
 
 宏 define-minor-mode 提供了一种在一个自包含定义中实现模式的便捷方式。
 
-宏：define-minor-mode mode doc keyword-args... body... ¶
+#+begin_src emacs-lisp
+  Macro: define-minor-mode mode doc keyword-args… body… ¶
+#+end_src
 
     这个宏定义了一个新的次要模式，它的名字是模式（一个符号）。  它定义了一个名为 mode 的命令来切换次要模式，其中 doc 作为其文档字符串。
 
@@ -722,18 +829,26 @@ Lisp 的三种模式共享它们的大部分代码。  例如，Lisp 模式和 E
 
     关键字参数由关键字和相应的值组成。  一些关键字具有特殊含义：
 
-    ：全球全球
+#+begin_src emacs-lisp
+  :global global
+#+end_src
 
 	 如果非零，这指定次要模式应该是全局的而不是缓冲区本地的。  它默认为零。
 
 	 使次要模式全局化的效果之一是模式变量成为自定义变量。  通过自定义界面切换它可以打开和关闭模式，并且可以保存它的值以供将来的 Emacs 会话使用（请参阅 GNU Emacs 手册中的保存自定义。要使保存的变量起作用，您应该确保次要模式功能可用每次 Emacs 启动时；通常这是通过将 define-minor-mode 表单标记为自动加载来完成的。
-    :init-value 初始值
+#+begin_src emacs-lisp
+  :init-value init-value
+#+end_src
 
 	 这是模式变量初始化的值。  除非在不寻常的情况下（见下文），此值必须为零。
-    :打火机
+#+begin_src emacs-lisp
+  :lighter lighter
+#+end_src
 
 	 字符串打火机表示启用模式时在模式行中显示的内容；  如果为 nil，则模式不显示在模式行中。
-    :keymap 键盘映射
+#+begin_src emacs-lisp
+  :keymap keymap
+#+end_src
 
 	 可选参数 keymap 指定次要模式的键盘映射。  如果非零，它应该是一个变量名（它的值是一个keymap），一个keymap，或者一个形式的alist
 
@@ -742,13 +857,19 @@ Lisp 的三种模式共享它们的大部分代码。  例如，Lisp 模式和 E
 	 #+end_src
 
 	 其中每个键序列和定义都是适合传递给定义键的参数（请参阅更改键绑定）。  如果 keymap 是 keymap 或 alist，这也定义了变量 mode-map。
-    : 可变的地方
+#+begin_src emacs-lisp
+  :variable place
+#+end_src
 
 	 这替换了默认变量模式，用于存储模式的状态。  如果您指定它，则未定义模式变量，并且未使用任何初始值参数。  place 可以是不同的命名变量（您必须自己定义），也可以是任何可以与 setf 函数一起使用的变量（请参阅通用变量）。  place 也可以是一个 cons (get . set)，其中 get 是一个返回当前状态的表达式，set 是一个应分配给 place 的参数（一个状态）的函数。
-    :after-hook after-hook
+#+begin_src emacs-lisp
+  :after-hook after-hook
+#+end_src
 
 	 这定义了一个单一的 Lisp 表单，它在模式挂钩运行后进行评估。  它不应该被引用。
-    :交互价值
+#+begin_src emacs-lisp
+  :interactive value
+#+end_src
 
 	 默认情况下，次要模式是交互式命令。  如果值为 nil，则禁止此操作。  如果 value 是符号列表，则用于说明该次要模式在哪些主要模式中有用。
 
@@ -763,22 +884,22 @@ Lisp 的三种模式共享它们的大部分代码。  例如，Lisp 模式和 E
 以下是使用 define-minor-mode 的示例：
 
 #+begin_src emacs-lisp
-(define-minor-mode hungry-mode
-  "Toggle Hungry mode.
-Interactively with no argument, this command toggles the mode.
-A positive prefix argument enables the mode, any other prefix
-argument disables it.  From Lisp, argument omitted or nil enables
-the mode, `toggle' toggles the state.
+  (define-minor-mode hungry-mode
+    "Toggle Hungry mode.
+  Interactively with no argument, this command toggles the mode.
+  A positive prefix argument enables the mode, any other prefix
+  argument disables it.  From Lisp, argument omitted or nil enables
+  the mode, `toggle' toggles the state.
 
-When Hungry mode is enabled, the control delete key
-gobbles all preceding whitespace except the last.
-See the command \\[hungry-electric-delete]."
- ;; The initial value.
- nil
- ;; The indicator for the mode line.
- " Hungry"
- ;; The minor mode bindings.
- '(([C-backspace] . hungry-electric-delete)))
+  When Hungry mode is enabled, the control delete key
+  gobbles all preceding whitespace except the last.
+  See the command \\[hungry-electric-delete]."
+   ;; The initial value.
+   nil
+   ;; The indicator for the mode line.
+   " Hungry"
+   ;; The minor mode bindings.
+   '(([C-backspace] . hungry-electric-delete)))
 #+end_src
 
 这定义了一个名为“饥饿模式”的次要模式，一个名为饥饿模式的命令来切换它，一个名为饥饿模式的变量指示该模式是否启用，以及一个名为饥饿模式地图的变量，它保存的是键盘映射启用该模式时激活。  它使用 C-DEL 的键绑定初始化键映射。  没有身体形式——许多次要模式不需要任何形式。
@@ -802,7 +923,9 @@ See the command \\[hungry-electric-delete]."
 #+end_src
 
 
-宏：define-globalized-minor-mode 全局模式模式开启keyword-args…body… ¶
+#+begin_src emacs-lisp
+  Macro: define-globalized-minor-mode global-mode mode turn-on keyword-args… body… ¶
+#+end_src
 
     这定义了一个名为 global-mode 的全局切换，其含义是在所有（或一些；见下文）缓冲区中启用或禁用缓冲区本地次要模式模式。  它还执行身体形式。  要打开缓冲区中的次要模式，它使用函数打开；  要关闭次要模式，它会以 -1 作为参数调用模式。
 
@@ -846,7 +969,10 @@ See the command \\[hungry-electric-delete]."
 
 为了效率，Emacs 不会不断地重新计算每个窗口的模式行和标题行。  当环境需要它时，它会这样做——例如，如果您更改窗口配置、切换缓冲区、缩小或扩大缓冲区、滚动或修改缓冲区。  如果您更改了由 mode-line-format 或 header-line-format 引用的任何变量（请参阅在模式行中使用的变量），或任何其他影响文本显示方式的数据结构（请参阅 Emacs 显示），您应该使用函数 force-mode-line-update 更新显示。
 
-功能：force-mode-line-update &optional all ¶
+#+begin_src emacs-lisp
+  Function: force-mode-line-update &optional all ¶
+#+end_src
+
 
     该函数强制 Emacs 在下一个重新显示周期期间根据所有相关变量的最新值更新当前缓冲区的模式行和标题行。  如果可选参数 all 不为零，则强制更新所有模式行和标题行。
 
@@ -864,33 +990,48 @@ See the command \\[hungry-electric-delete]."
 
 以下是作为模式线结构的各种数据类型的含义：
 
-细绳
+#+begin_src emacs-lisp
+  string
+#+end_src
 
     作为模式行构造的字符串逐字显示，但其中的 %-constructs 除外。  这些代表其他数据的替代；  请参阅模式行中的 %-Constructs。
 
     如果字符串的某些部分具有面属性，则它们控制文本的显示，就像它们控制缓冲区中的文本一样。  默认情况下，任何没有面属性的字符都显示在面模式行或模式行非活动中（参见 GNU Emacs 手册中的标准面）。  string 中的 help-echo 和 keymap 属性有特殊含义。  请参阅模式行中的属性。
-象征
+#+begin_src emacs-lisp
+  symbol
+#+end_src
 
     作为模式线结构的符号代表它的值。  symbol 的值用作模式线构造，代替 symbol。  但是，符号 t 和 nil 被忽略，任何值为 void 的符号也是如此。
 
     有一个例外：如果 symbol 的值是一个字符串，它会逐字显示：%-constructs 无法识别。
 
     除非符号被标记为有风险的（即，它具有非零风险局部变量属性），否则符号值中指定的所有文本属性都将被忽略。  这包括符号值中字符串的文本属性，以及其中的所有 :eval 和 :properize 形式。  （这样做的原因是安全性：可以从文件变量中自动设置非风险变量，而无需提示用户。）
-（弦休……）
-（列出休息……）
+#+begin_src emacs-lisp
+  (string rest…)
+#+end_src
+#+begin_src emacs-lisp
+  (list rest…)
+#+end_src
 
     第一个元素是字符串或列表的列表意味着递归处理所有元素并将结果连接起来。  这是最常见的模式线构造形式。  （请注意，在模式行中显示字符串时，会专门处理文本属性（出于效率原因）：仅考虑字符串第一个字符上的文本属性，然后将它们用于整个字符串。如果您需要具有不同文本属性的字符串，您必须使用特殊的 :properize 模式行构造。）
-(:eval 形式)
+#+begin_src emacs-lisp
+  (:eval form)
+#+end_src
 
     一个列表，其第一个元素是符号 :eval 表示评估表单，并将结果用作要显示的字符串。  确保此评估无法加载任何文件，因为这样做可能会导致无限递归。
-(:properize elt props...)
+#+begin_src emacs-lisp
+  (:propertize elt props…)
+#+end_src
 
     第一个元素是符号 :properize 的列表表示递归处理模式行构造 elt，然后将 props 指定的文本属性添加到结果中。  参数 props 应该包含零个或多个文本属性值对。  如果 elt 是或产生一个具有文本属性的字符串，则该字符串的所有字符都应该具有相同的属性，否则其中一些可能会被 :properize 删除。
-（符号然后其他）
+#+begin_src emacs-lisp
+  (symbol then else)
+#+end_src
 
     第一个元素是不是关键字的符号的列表指定条件。  它的含义取决于符号的值。  如果 symbol 具有非 nil 值，则第二个元素将作为模式行构造递归处理。  否则，递归处理第三个元素else。  你可以省略其他；  那么如果 symbol 的值为 nil 或 void，则模式行构造不显示任何内容。
-（宽度休息……）
-
+#+begin_src emacs-lisp
+  (width rest…)
+#+end_src
     第一个元素是整数的列表指定剩余结果的截断或填充。  其余元素 rest 作为模式线构造递归处理并连接在一起。  当宽度为正时，如果其宽度小于宽度，则结果是在右侧填充空间。  当宽度为负时，如果其宽度超过 -width，则结果在右侧被截断到 -width 列。
 
     例如，显示窗口顶部上方缓冲区百分比的常用方法是使用如下列表：(-3 "%p")。
@@ -899,7 +1040,9 @@ See the command \\[hungry-electric-delete]."
 
 模式线整体控制的变量是模式线格式。
 
-用户选项：模式行格式¶
+#+begin_src emacs-lisp
+  User Option: mode-line-format ¶
+#+end_src
 
     此变量的值是控制模式行内容的模式行结构。  它在所有缓冲区中始终是缓冲区本地的。
 
@@ -912,8 +1055,6 @@ mode-line-format 的默认值旨在使用其他变量的值，例如 mode-line-p
 下面是一个可能对 Shell 模式有用的 mode-line-format 的假设示例（实际上，Shell 模式不设置 mode-line-format）：
 
 #+begin_src emacs-lisp
-
-
   (setq mode-line-format
     (list "-"
      'mode-line-mule-info
@@ -948,83 +1089,121 @@ mode-line-format 的默认值旨在使用其他变量的值，例如 mode-line-p
 
 本节描述由 mode-line-format 的标准值合并到模式行文本中的变量。  这些变量本身并没有什么特别之处。  如果将 mode-line-format 的值更改为使用它们，则任何其他变量都可能对模式行产生相同的影响。  然而，Emacs 的各个部分设置这些变量的理解是它们将控制部分模式行；  因此，实际上，模式线必须使用它们。  另请参阅 GNU Emacs 手册中的可选模式行。
 
-变量：mode-line-mule-info ¶
+#+begin_src emacs-lisp
+  Variable: mode-line-mule-info ¶
+#+end_src
 
     此变量保存模式行构造的值，该构造显示有关语言环境、缓冲区编码系统和当前输入法的信息。  请参阅非 ASCII 字符。
 
-变量：mode-line-modified ¶
+#+begin_src emacs-lisp
+  Variable: mode-line-modified ¶
+#+end_src
 
     此变量保存显示当前缓冲区是否被修改的模式行构造的值。  如果缓冲区被修改，它的默认值显示'**'，如果缓冲区未修改，则显示'--'，如果缓冲区是只读的，则显示'%%'，如果缓冲区是只读和修改的，则显示'%*'。
 
     更改此变量不会强制更新模式行。
 
-变量：mode-line-frame-identification ¶
+#+begin_src emacs-lisp
+  Variable: mode-line-frame-identification ¶
+#+end_src
 
     此变量标识当前帧。  如果您使用的是可以显示多帧的窗口系统，则其默认值显示“”，或者在一次仅显示一帧的普通终端上显示“-%F”。
 
-变量：mode-line-buffer-identification ¶
+#+begin_src emacs-lisp
+  Variable: mode-line-buffer-identification ¶
+#+end_src
 
     此变量标识窗口中显示的缓冲区。  它的默认值显示缓冲区名称，用空格填充至少 12 列。
 
-变量：模式行位置¶
+#+begin_src emacs-lisp
+  Variable: mode-line-position ¶
+#+end_src
 
     此变量指示缓冲区中的位置。  它的默认值显示缓冲区百分比，以及可选的缓冲区大小、行号和列号。
 
-用户选项：mode-line-percent-position ¶
+#+begin_src emacs-lisp
+  User Option: mode-line-percent-position ¶
+#+end_src
 
     此选项用于模式行位置。  它的值指定要显示的缓冲区百分比（nil、“%o”、“%p”、“%P”或“%q”之一，请参阅模式行中的 %-Constructs）和空间填充的宽度或截断为。  建议您使用自定义变量工具设置此选项。
 
-变量：vc-mode ¶
+#+begin_src emacs-lisp
+  Variable: vc-mode ¶
+#+end_src
 
     每个缓冲区中的变量vc-mode，buffer-local，记录缓冲区访问的文件是否使用版本控制维护，如果是，是哪种。  它的值是出现在模式行中的字符串，或者 nil 表示没有版本控制。
 
-变量：mode-line-modes ¶
+#+begin_src emacs-lisp
+  Variable: mode-line-modes ¶
+#+end_src
 
     此变量显示缓冲区的主要和次要模式。  其默认值还显示递归编辑级别、进程状态信息以及缩小是否生效。
 
-变量：mode-line-remote ¶
+#+begin_src emacs-lisp
+  Variable: mode-line-remote ¶
+#+end_src
 
     此变量用于显示当前缓冲区的默认目录是否是远程的。
 
-变量：mode-line-client ¶
+#+begin_src emacs-lisp
+  Variable: mode-line-client ¶
+#+end_src
 
     此变量用于标识 emacsclient 帧。
 
 在 mode-line-modes 中使用了以下三个变量：
 
-变量：模式名称¶
+#+begin_src emacs-lisp
+  Variable: mode-name ¶
+#+end_src
 
     这个缓冲区局部变量保存了当前缓冲区主要模式的“漂亮”名称。  每个主要模式都应设置此变量，以便模式名称将出现在模式行中。  该值不必是字符串，但可以使用模式行构造中有效的任何数据类型（请参阅模式行的数据结构）。  要计算将在模式行中标识模式名称的字符串，请使用 format-mode-line（请参阅模拟模式行格式）。
 
-变量：mode-line-process ¶
+#+begin_src emacs-lisp
+  Variable: mode-line-process ¶
+#+end_src
 
     此缓冲区局部变量包含有关用于与子进程通信的模式中的进程状态的模式行信息。  它紧跟主要模式名称显示，中间没有空格。  例如，它在 *shell* 缓冲区中的值为 (":%s")，它允许 shell 将其状态与主要模式一起显示为：'(Shell:run)'。  通常这个变量是零。
 
-变量：mode-line-front-space ¶
+#+begin_src emacs-lisp
+  Variable: mode-line-front-space ¶
+#+end_src
 
     此变量显示在模式行的前面。  默认情况下，此结构显示在模式行的开头，除非有内存已满消息，否则首先显示。
 
-变量：mode-line-end-spaces ¶
+#+begin_src emacs-lisp
+  Variable: mode-line-end-spaces ¶
+#+end_src
 
     此变量显示在模式行的末尾。
 
-变量：mode-line-misc-info ¶
+#+begin_src emacs-lisp
+  Variable: mode-line-misc-info ¶
+#+end_src
 
     用于杂项信息的模式线构造。  默认情况下，这显示由 global-mode-string 指定的信息。
 
-变量：模式行位置行格式¶
+#+begin_src emacs-lisp
+  Variable: mode-line-position-line-format ¶
+#+end_src
 
     当 line-number-mode（参见 GNU Emacs 手册中的 Optional Mode Line）打开时用于显示行号的格式。  格式中的 '%l' 将被替换为行号。
 
-变量：模式行位置列格式¶
+#+begin_src emacs-lisp
+  Variable: mode-line-position-column-format ¶
+#+end_src
 
     当 column-number-mode（参见 GNU Emacs 手册中的 Optional Mode Line）打开时用于显示列号的格式。  格式中的“%c”将被替换为从零开始的列号，“%C”将被替换为从一开始的列号。
 
-变量：模式行位置列行格式¶
+#+begin_src emacs-lisp
+  Variable: mode-line-position-column-line-format ¶
+#+end_src
 
     当 line-number-mode 和 column-number-mode 都打开时用于显示列号的格式。  有关“%l”、“%c”和“%C”格式规范的含义，请参见前两个变量。
 
-变量：minor-mode-alist ¶
+#+begin_src emacs-lisp
+  Variable: minor-mode-alist ¶
+#+end_src
 
     此变量保存一个关联列表，其元素指定模式行应如何指示次要模式处于活动状态。  minor-mode-alist 的每个元素都应该是一个包含两个元素的列表：
 
@@ -1036,7 +1215,9 @@ mode-line-format 的默认值旨在使用其他变量的值，例如 mode-line-p
 
     次要模式列表本身不是缓冲区本地的。  如果可以在每个缓冲区中单独启用其次要模式，则 alist 中提到的每个变量都应该是缓冲区本地的。
 
-变量：全局模式字符串¶
+#+begin_src emacs-lisp
+  Variable: global-mode-string ¶
+#+end_src
 
     这个变量包含一个模式行结构，默认情况下，如果设置，它会出现在模式行中，紧跟在 which-function-mode 次要模式之后，否则在模式行模式之后。  添加到此构造的元素通常应以空格结尾（以确保连续的全局模式字符串元素正确显示）。  例如，命令 display-time 将 global-mode-string 设置为引用变量 display-time-string，该变量包含一个包含时间和负载信息的字符串。
 
@@ -1045,8 +1226,6 @@ mode-line-format 的默认值旨在使用其他变量的值，例如 mode-line-p
 这是 mode-line-format 的默认值的简化版本。  真正的默认值还指定添加文本属性。
 
 #+begin_src emacs-lisp
-
-
   ("-"
    mode-line-mule-info
    mode-line-modified
@@ -1069,89 +1248,141 @@ mode-line-format 的默认值旨在使用其他变量的值，例如 mode-line-p
 
 在除 '%%' 之外的任何构造中，您可以在 '%' 之后添加一个十进制整数来指定最小字段宽度。  如果宽度更小，则将该字段填充到该宽度。  纯数字结构（'c'、'i'、'I' 和 'l'）通过在左侧插入空格来填充，而其他结构通过在右侧插入空格来填充。
 
-%b
+#+begin_src emacs-lisp
+  %b
+#+end_src
 
     当前缓冲区名称，通过 buffer-name 函数获得。  请参阅缓冲区名称。
-％C
+#+begin_src emacs-lisp
+  %c
+#+end_src
 
     点的当前列数，从窗口的左边距开始从零开始计数。
-％C
+#+begin_src emacs-lisp
+  %C
+#+end_src
 
     点的当前列数，从窗口的左边距开始计数。
-%e
+#+begin_src emacs-lisp
+  %e
+#+end_src
 
     当 Emacs 几乎没有 Lisp 对象的内存时，一条简短的消息说明了这一点。  否则，这是空的。
-％F
+#+begin_src emacs-lisp
+  %f
+#+end_src
 
     被访问的文件名，通过 buffer-file-name 函数获得。  请参阅缓冲区文件名。
-％F
+#+begin_src emacs-lisp
+  %F
+#+end_src
 
     标题（仅在窗口系统上）或所选框架的名称。  请参阅基本参数。
-％一世
+#+begin_src emacs-lisp
+  %i
+#+end_src
 
     当前缓冲区的可访问部分的大小；  基本上 (- (point-max) (point-min))。
-％一世
+#+begin_src emacs-lisp
+  %I
+#+end_src
 
     与 '%i' 类似，但使用 'k' 表示 10^3、'M' 表示 10^6、'G' 表示 10^9 等以更易读的方式打印大小。
-%l
+#+begin_src emacs-lisp
+  %l
+#+end_src
 
     点的当前行数，在缓冲区的可访问部分内计数。
-%n
+#+begin_src emacs-lisp
+  %n
+#+end_src
 
     收窄生效时为“收窄”；  没有别的（参见 Narrowing 中的narrow-to-region）。
-%o
+#+begin_src emacs-lisp
+  %o
+#+end_src
 
     窗口通过缓冲区（的可见部分）的移动程度，即窗口顶部上方的文本大小，表示为窗口外所有文本的百分比，或“顶部”、“底部”或'全部'。
-%p
+#+begin_src emacs-lisp
+  %p
+#+end_src
 
     窗口顶部上方的缓冲区文本的百分比，或“顶部”、“底部”或“全部”。  请注意，默认模式行构造会将其截断为三个字符。
-%P
+#+begin_src emacs-lisp
+  %P
+#+end_src
 
     窗口底部上方的缓冲区文本的百分比（包括窗口中可见的文本以及顶部上方的文本），如果缓冲区顶部在屏幕上可见，则加上“顶部”；  或“底部”或“全部”。
-%q
+#+begin_src emacs-lisp
+  %q
+#+end_src
 
     窗口顶部和底部上方的文本百分比，以“-”或“全部”分隔。
-%s
+#+begin_src emacs-lisp
+  %s
+#+end_src
 
     属于当前缓冲区的子进程的状态，通过 process-status 获得。  请参阅过程信息。
-%z
+#+begin_src emacs-lisp
+  %z
+#+end_src
 
     键盘、终端和缓冲区编码系统的助记符。
-%Z
+#+begin_src emacs-lisp
+  %Z
+#+end_src
 
     与 '%z' 类似，但包括行尾格式。
-%*
+#+begin_src emacs-lisp
+  %*
+#+end_src
 
     '%' 如果缓冲区是只读的（请参阅缓冲区只读）；
     '*' 如果缓冲区被修改（参见 buffer-modified-p）；
     '-' 除此以外。  请参阅缓冲区修改。
-%+
+#+begin_src emacs-lisp
+  %+
+#+end_src
 
     '*' 如果缓冲区被修改（参见 buffer-modified-p）；
     '%' 如果缓冲区是只读的（请参阅缓冲区只读）；
     '-' 除此以外。  这与 '%*' 的不同之处仅在于修改后的只读缓冲区。  请参阅缓冲区修改。
-%&
+#+begin_src emacs-lisp
+  %&
+#+end_src
 
     如果缓冲区被修改，则为“*”，否则为“-”。
-%@
+#+begin_src emacs-lisp
+  %@
+#+end_src
 
     如果缓冲区的默认目录（请参阅扩展文件名的函数）在远程计算机上，则为“@”，否则为“-”。
-%[
+#+begin_src emacs-lisp
+  %[
+#+end_src
 
     递归编辑级别深度的指示（不包括小缓冲区级别）：每个编辑级别一个“[”。  请参阅递归编辑。
-%]
+#+begin_src emacs-lisp
+  %]
+#+end_src
 
     每个递归编辑级别都有一个“]”（不包括迷你缓冲区级别）。
-%-
+#+begin_src emacs-lisp
+  %-
+#+end_src
 
     短划线足以填充模式线的其余部分。
-%%
+#+begin_src emacs-lisp
+  %%
+#+end_src
 
     字符 '%' - 这是如何在允许 %-constructs 的字符串中包含文字 '%'。
 
 以下 %-construct 仍受支持，但已过时，因为您可以使用变量 mode-name 获得相同的结果。
 
-%m
+#+begin_src emacs-lisp
+  %m
+#+end_src
 
     模式名称的值。
 
@@ -1174,11 +1405,15 @@ mode-line-format 的默认值旨在使用其他变量的值，例如 mode-line-p
 
 一个窗口可以在顶部有一个标题行，就像它可以在底部有一个模式行一样。  标题行功能就像模式行功能一样，除了它由标题行格式控制：
 
-变量：标题行格式¶
+#+begin_src emacs-lisp
+  Variable: header-line-format ¶
+#+end_src
 
     这个变量，在每个缓冲区中都是本地的，指定如何显示标题行，用于显示缓冲区的窗口。  该值的格式与模式行格式相同（请参阅模式行的数据结构）。  它通常为 nil，因此普通缓冲区没有标题行。
 
-功能：window-header-line-height &可选窗口¶
+#+begin_src emacs-lisp
+  Function: window-header-line-height &optional window ¶
+#+end_src
 
     此函数返回窗口标题行的高度（以像素为单位）。  window 必须是活动窗口，并且默认为选定的窗口。
 
@@ -1189,7 +1424,9 @@ mode-line-format 的默认值旨在使用其他变量的值，例如 mode-line-p
 
 您可以使用函数 format-mode-line 来计算将出现在基于特定模式行结构的模式行或标题行中的文本。
 
-功能：format-mode-line format &可选的面窗口缓冲区¶
+#+begin_src emacs-lisp
+  Function: format-mode-line format &optional face window buffer ¶
+#+end_src
 
     此函数根据格式格式化一行文本，就好像它正在为窗口生成模式行一样，但它也将文本作为字符串返回。  参数窗口默认为选定的窗口。  如果 buffer 为非 nil，则使用的所有信息都取自 buffer；  默认情况下，它来自窗口的缓冲区。
 
@@ -1205,7 +1442,9 @@ mode-line-format 的默认值旨在使用其他变量的值，例如 mode-line-p
 
 Imenu 是一项功能，它允许用户从列出所有定义或部分的菜单中选择缓冲区中的定义或部分，以直接转到缓冲区中的该位置。  Imenu 通过构造一个缓冲区索引来工作，该索引列出了定义的名称和缓冲区位置，或缓冲区的其他命名部分；  然后用户可以选择其中一个并将点移动到它。  主要模式可以使用 imenu-add-to-menubar 添加菜单栏项以使用 Imenu。
 
-命令：imenu-add-to-menubar name ¶
+#+begin_src emacs-lisp
+  Command: imenu-add-to-menubar name ¶
+#+end_src
 
     该函数定义了一个名为 name 的本地菜单栏项来运行 Imenu。
 
@@ -1213,7 +1452,9 @@ Emacs 手册中描述了使用 Imenu 的用户级命令（请参阅 Emacs 手册
 
 通常和最简单的方法是设置变量 imenu-generic-expression：
 
-变量：imenu-generic-expression ¶
+#+begin_src emacs-lisp
+  Variable: imenu-generic-expression ¶
+#+end_src
 
     此变量，如果非零，是一个列表，指定用于查找 Imenu 定义的正则表达式。  imenu-generic-expression 的简单元素如下所示：
 
@@ -1256,13 +1497,17 @@ Emacs 手册中描述了使用 Imenu 的用户级命令（请参阅 Emacs 手册
 
     设置此变量使其在当前缓冲区中成为局部缓冲区。
 
-变量：imenu-case-fold-search ¶
+#+begin_src emacs-lisp
+  Variable: imenu-case-fold-search ¶
+#+end_src
 
     此变量控制匹配 imenu-generic-expression 值中的正则表达式是否区分大小写：t，默认值，表示匹配应忽略大小写。
 
     设置此变量使其在当前缓冲区中成为局部缓冲区。
 
-变量：imenu-syntax-alist ¶
+#+begin_src emacs-lisp
+  Variable: imenu-syntax-alist ¶
+#+end_src
 
     此变量是处理 imenu-generic-expression 时使用的语法表修饰符列表，用于覆盖当前缓冲区的语法表。  每个元素都应具有以下形式：
 
@@ -1284,13 +1529,17 @@ Emacs 手册中描述了使用 Imenu 的用户级命令（请参阅 Emacs 手册
 
 为主要模式自定义 Imenu 的另一种方法是设置变量 imenu-prev-index-position-function 和 imenu-extract-index-name-function：
 
-变量：imenu-prev-index-position-function ¶
+#+begin_src emacs-lisp
+  Variable: imenu-prev-index-position-function ¶
+#+end_src
 
     如果这个变量不是 nil，它的值应该是一个函数，它找到下一个定义放入缓冲区索引，从点向后扫描缓冲区。  如果在 point 之前没有找到另一个定义，它应该返回 nil。  否则它应该在找到定义的地方留下点并返回任何非零值。
 
     设置此变量使其在当前缓冲区中成为局部缓冲区。
 
-变量：imenu-extract-index-name-function ¶
+#+begin_src emacs-lisp
+  Variable: imenu-extract-index-name-function ¶
+#+end_src
 
     如果这个变量不是零，它的值应该是一个返回定义名称的函数，假设点在那个定义中，因为 imenu-prev-index-position-function 函数会离开它。
 
@@ -1298,7 +1547,9 @@ Emacs 手册中描述了使用 Imenu 的用户级命令（请参阅 Emacs 手册
 
 为主要模式自定义 Imenu 的最后一种方法是设置变量 imenu-create-index-function：
 
-变量：imenu-create-index-function ¶
+#+begin_src emacs-lisp
+  Variable: imenu-create-index-function ¶
+#+end_src
 
     此变量指定用于创建缓冲区索引的函数。  该函数不应接受任何参数，并返回当前缓冲区的索引列表。  它在 save-excursion 中被调用，所以它离开点的位置没有区别。
 
@@ -1344,31 +1595,47 @@ Emacs 手册中描述了使用 Imenu 的用户级命令（请参阅 Emacs 手册
 
 字体锁定功能基于几个基本功能。  这些中的每一个都调用由相应变量指定的函数。  这种间接允许主要和次要模式修改字体化在该模式的缓冲区中的工作方式，甚至对与字体化无关的功能使用字体锁定机制。  （这就是为什么下面的描述在描述函数做什么时说“应该”：模式可以自定义相应变量的值来做完全不同的事情。）下面提到的变量在其他字体锁定变量中描述。
 
-字体锁定字体缓冲区 ¶
+#+begin_src emacs-lisp
+  font-lock-fontify-buffer ¶
+#+end_src
 
     这个函数应该通过调用由 font-lock-fontify-buffer-function 指定的函数来字体化当前缓冲区的可访问部分。
-font-lock-unfontify-buffer ¶
+#+begin_src emacs-lisp
+  font-lock-unfontify-buffer ¶
+#+end_src
 
     在关闭字体锁定以删除字体化时使用。  调用由 font-lock-unfontify-buffer-function 指定的函数。
-font-lock-fontify-region 大声请求结束 &optional ¶
+#+begin_src emacs-lisp
+  font-lock-fontify-region beg end &optional loudly ¶
+#+end_src
 
     应该字体化 beg 和 end 之间的区域。  如果loudly 不为零，则应在字体化时显示状态消息。  调用由 font-lock-fontify-region-function 指定的函数。
-font-lock-unfontify-region 请求结束 ¶
+#+begin_src emacs-lisp
+  font-lock-unfontify-region beg end ¶
+#+end_src
 
     应该从 beg 和 end 之间的区域移除字体。  调用由 font-lock-unfontify-region-function 指定的函数。
-font-lock-flush &optional beg end ¶
+#+begin_src emacs-lisp
+  font-lock-flush &optional beg end ¶
+#+end_src
 
     此函数应将 beg 和 end 之间区域的字体标记为过期。  如果未指定或 nil，beg 和 end 默认为缓冲区可访问部分的开头和结尾。  调用由 font-lock-flush-function 指定的函数。
-font-lock-ensure &optional beg end ¶
+#+begin_src emacs-lisp
+  font-lock-ensure &optional beg end ¶
+#+end_src
 
     此函数应确保 beg 和 end 之间的区域已被字体化。  可选参数 beg 和 end 默认为缓冲区可访问部分的开头和结尾。  调用由 font-lock-ensure-function 指定的函数。
-字体锁定调试字体¶
+#+begin_src emacs-lisp
+  font-lock-debug-fontify ¶
+#+end_src
 
     这是一个方便的命令，旨在为模式开发字体锁定时使用，不应从 Lisp 代码中调用。  它重新计算所有相关变量，然后在整个缓冲区上调用 font-lock-fontify-region。
 
 有几个变量可以控制字体锁定模式如何突出显示文本。  但是主要模式不应该直接设置任何这些变量。  相反，他们应该将 font-lock-defaults 设置为缓冲区局部变量。  如果启用字体锁定模式，则使用分配给此变量的值来设置所有其他变量。
 
-变量：font-lock-defaults ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-defaults ¶
+#+end_src
 
     此变量由模式设置以指定如何在该模式下字体化文本。  设置后它会自动变为缓冲区本地。  如果其值为 nil，则字体锁定模式不会突出显示，您可以使用“面”菜单（在“编辑”下，然后在菜单栏中的“文本属性”下）将面显式分配给缓冲区中的文本。
 
@@ -1394,7 +1661,9 @@ font-lock-ensure &optional beg end ¶
 
 直接控制基于搜索的字体化的变量是 font-lock-keywords，通常通过 font-lock-defaults 中的关键字元素指定。
 
-变量：font-lock-keywords ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-keywords ¶
+#+end_src
 
     此变量的值是要突出显示的关键字列表。  Lisp 程序不应该直接设置这个变量。  通常，该值由字体锁定模式自动设置，使用 font-lock-defaults 中的关键字元素。  也可以使用函数 font-lock-add-keywords 和 font-lock-remove-keywords 更改该值（请参阅自定义基于搜索的字体）。
 
@@ -1402,7 +1671,9 @@ font-lock-keywords 的每个元素都指定如何查找某些文本案例，以�
 
 font-lock-keywords 的每个元素都应具有以下形式之一：
 
-正则表达式
+#+begin_src emacs-lisp
+  regexp
+#+end_src
 
     使用 font-lock-keyword-face 突出显示正则表达式的所有匹配项。  例如，
 
@@ -1413,14 +1684,18 @@ font-lock-keywords 的每个元素都应具有以下形式之一：
     #+end_src
 
     编写这些正则表达式时要小心；  写得不好的模式会大大减慢速度！  函数 regexp-opt（请参阅正则表达式函数）对于计算最佳正则表达式以匹配多个关键字很有用。
-功能
+#+begin_src emacs-lisp
+  function
+#+end_src
 
     通过调用函数查找文本，并使用 font-lock-keyword-face 突出显示它找到的匹配项。
 
     调用函数时，它接收一个参数，即搜索的限制；  它应该从点开始搜索，而不是搜索超出限制。  如果成功，它应该返回非零，并设置匹配数据来描述找到的匹配。  返回 nil 表示搜索失败。
 
     Fontification 会以相同的限制重复调用函数，并使用前一次调用离开它的点，直到函数失败。  发生故障时，功能无需以任何特定方式重置点。
-（匹配器 .subexp）
+#+begin_src emacs-lisp
+  (matcher . subexp)
+#+end_src
 
     在这种元素中，matcher 或者是一个正则表达式或者一个函数，如上所述。  CDR，subexp，指定应该突出显示匹配器的哪个子表达式（而不是匹配器匹配的整个文本）。
     #+begin_src emacs-lisp
@@ -1429,7 +1704,9 @@ font-lock-keywords 的每个元素都应具有以下形式之一：
       ("fu\\(bar\\)" . 1)
     #+end_src
 
-(matcher.facespec)
+#+begin_src emacs-lisp
+  (matcher . facespec)
+#+end_src
 
     在这种元素中，facespec 是一个表达式，其值指定用于突出显示的面部。  在最简单的情况下，facespec 是一个 Lisp 变量（一个符号），它的值是一个面名。
 
@@ -1448,7 +1725,9 @@ font-lock-keywords 的每个元素都应具有以下形式之一：
 
 
     指定面部和各种附加文本属性以放置在匹配的文本上。  如果您这样做，请务必将您以这种方式设置的其他文本属性名称添加到 font-lock-extra-managed-props 的值中，以便当这些属性不再适用时也会被清除。  或者，您可以将变量 font-lock-unfontify-region-function 设置为清除这些属性的函数。  请参阅其他字体锁定变量。
-(matcher . subexp-highlighter)
+#+begin_src emacs-lisp
+  (matcher . subexp-highlighter)
+#+end_src
 
     在这种元素中，subexp-highlighter 是一个列表，它指定如何突出显示匹配器找到的匹配项。  它具有以下形式：
 
@@ -1466,18 +1745,20 @@ font-lock-keywords 的每个元素都应具有以下形式之一：
     以下是此类元素的一些示例，以及它们的作用：
 
     #+begin_src emacs-lisp
-;; Highlight occurrences of either ‘foo’ or ‘bar’, using
-;; foo-bar-face, even if they have already been highlighted.
-;; foo-bar-face should be a variable whose value is a face.
-("foo\\|bar" 0 foo-bar-face t)
+      ;; Highlight occurrences of either ‘foo’ or ‘bar’, using
+      ;; foo-bar-face, even if they have already been highlighted.
+      ;; foo-bar-face should be a variable whose value is a face.
+      ("foo\\|bar" 0 foo-bar-face t)
 
-;; Highlight the first subexpression within each occurrence
-;; that the function fubar-match finds,
-;; using the face which is the value of fubar-face.
-(fubar-match 1 fubar-face)
+      ;; Highlight the first subexpression within each occurrence
+      ;; that the function fubar-match finds,
+      ;; using the face which is the value of fubar-face.
+      (fubar-match 1 fubar-face)
     #+end_src
 
-（匹配器。锚定的荧光笔）
+#+begin_src emacs-lisp
+  (matcher . anchored-highlighter)
+#+end_src
 
     在这种元素中，anchored-highlighter 指定如何突出显示匹配器找到的匹配项之后的文本。  因此，matcher 找到的匹配项充当了由 anchored-highlighter 指定的进一步搜索的锚点。  anchored-highlighter 是以下形式的列表：
 
@@ -1503,7 +1784,9 @@ font-lock-keywords 的每个元素都应具有以下形式之一：
 
 
     在这里，pre-form 和 post-form 都是零。  因此，搜索“item”在“anchor”匹配结束时开始，搜索“anchor”的后续实例从搜索“item”结束处开始。
-（匹配器荧光笔……）
+#+begin_src emacs-lisp
+  (matcher highlighters…)
+#+end_src
 
     这种元素为单个匹配器指定了几个荧光笔列表。  荧光笔列表可以是 subexp-highlighter 或anchored-highlighter 类型，如上所述。
 
@@ -1517,7 +1800,9 @@ font-lock-keywords 的每个元素都应具有以下形式之一：
     #+end_src
 
 
-（评估。形式）
+#+begin_src emacs-lisp
+  (eval . form)
+#+end_src
 
     这里的 form 是第一次在缓冲区中使用这个 font-lock-keywords 值时要评估的表达式。  其值应具有此表中描述的形式之一。
 
@@ -1525,7 +1810,10 @@ font-lock-keywords 的每个元素都应具有以下形式之一：
 
 您可以在 font-lock-defaults 中使用 case-fold 来指定 font-lock-keywords-case-fold-search 的值，它表示基于搜索的字体化是否应该不区分大小写。
 
-变量：font-lock-keywords-case-fold-search ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-keywords-case-fold-search ¶
+#+end_src
+
 
     非零意味着为了字体锁定关键字的正则表达式匹配应该不区分大小写。
 
@@ -1533,7 +1821,9 @@ font-lock-keywords 的每个元素都应具有以下形式之一：
 
 您可以使用 font-lock-add-keywords 将其他基于搜索的字体化规则添加到主要模式，并使用 font-lock-remove-keywords 删除规则。
 
-功能：font-lock-add-keywords 模式关键字&可选方式 ¶
+#+begin_src emacs-lisp
+  Function: font-lock-add-keywords mode keywords &optional how ¶
+#+end_src
 
     此函数为当前缓冲区或主要模式模式添加突出显示关键字。  参数关键字应该是一个与变量 font-lock-keywords 格式相同的列表。
 
@@ -1547,7 +1837,9 @@ font-lock-keywords 的每个元素都应具有以下形式之一：
 
     警告：主要模式命令在任何情况下都不得直接或间接调用 font-lock-add-keywords，除非通过它们的模式挂钩。  （这样做会导致某些次要模式的错误行为。）他们应该通过设置 font-lock-keywords 来设置基于搜索的字体化规则。
 
-功能：font-lock-remove-keywords 模式关键字 ¶
+#+begin_src emacs-lisp
+  Function: font-lock-remove-keywords mode keywords ¶
+#+end_src
 
     此函数从 font-lock-keywords 中删除当前缓冲区或主要模式模式的关键字。  与 font-lock-add-keywords 一样，mode 应该是主要模式命令名称或 nil。  font-lock-add-keywords 的所有注意事项和要求也适用于此处。  参数关键字必须与相应的 font-lock-add-keywords 使用的关键字完全匹配。
 
@@ -1574,41 +1866,59 @@ font-lock-keywords 的每个元素都应具有以下形式之一：
 
 本节介绍主要模式可以通过 font-lock-defaults 中的 other-vars 设置的其他变量（请参阅字体锁定基础知识）。
 
-变量：font-lock-mark-block-function ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-mark-block-function ¶
+#+end_src
 
     如果这个变量是非零，它应该是一个不带参数调用的函数，为命令 Mx font-lock-fontify-block 选择一个封闭的文本范围进行重新字体化。
 
     该函数应通过在其周围放置区域来报告其选择。  一个好的选择是足够大的文本范围以提供适当的结果，但不要太大，以免重新字体变慢。  典型值是用于编程模式的 mark-defun 或用于文本模式的 mark-paragraph。
 
-变量： font-lock-extra-managed-props ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-extra-managed-props ¶
+#+end_src
 
     此变量指定由字体锁定模式管理的其他属性（font-lock-face 除外）。  它由 font-lock-default-unfontify-region 使用，它通常只管理 font-lock-face 属性。  如果您还希望 Font Lock 管理其他属性，则必须在 font-lock-keywords 的 facespec 中指定它们并将它们添加到此列表中。  请参阅基于搜索的字体。
 
-变量：font-lock-fontify-buffer-function ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-fontify-buffer-function ¶
+#+end_src
 
     用于字体化缓冲区的函数。  默认值为 font-lock-default-fontify-buffer。
 
-变量：font-lock-unfontify-buffer-function ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-unfontify-buffer-function ¶
+#+end_src
 
     用于取消字体化缓冲区的函数。  这在关闭字体锁定模式时使用。  默认值为 font-lock-default-unfontify-buffer。
 
-变量：font-lock-fontify-region-function ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-fontify-region-function ¶
+#+end_src
 
     用于字体化区域的函数。  它应该有两个参数，区域的开始和结束，以及可选的第三个参数详细。  如果详细信息不为零，则该函数应打印状态消息。  默认值为 font-lock-default-fontify-region。
 
-变量：font-lock-unfontify-region-function ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-unfontify-region-function ¶
+#+end_src
 
     用于取消字体化区域的函数。  它应该有两个参数，区域的开始和结束。  默认值为 font-lock-default-unfontify-region。
 
-变量：font-lock-flush-function ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-flush-function ¶
+#+end_src
 
     用于声明区域字体已过期的函数。  它需要两个参数，区域的开始和结束。  此变量的默认值为 font-lock-after-change-function。
 
-变量：font-lock-ensure-function ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-ensure-function ¶
+#+end_src
 
     用于确保当前缓冲区的区域已被字体化的函数。  它用两个参数调用，区域的开始和结束。  该变量的默认值是一个函数，如果缓冲区没有字体化，则调用 font-lock-default-fontify-buffer；  效果是确保缓冲区的整个可访问部分被字体化。
 
-功能：jit-lock-register 函数&可选上下文 ¶
+#+begin_src emacs-lisp
+  Function: jit-lock-register function &optional contextual ¶
+#+end_src
 
     这个函数告诉字体锁定模式在任何时候必须对当前缓冲区的一部分进行字体化或重新字体化时运行 Lisp 函数。  它在调用默认字体化函数之前调用函数，并给它两个参数，开始和结束，指定要字体化或重新字体化的区域。  如果函数进行字体化，它可以返回一个表单列表（jit-lock-bounds beg .end），以指示它实际字体化的区域的边界；  JIT font-lock 将使用此信息来优化随后的重新显示周期和缓冲区文本区域，它将传递给未来的函数调用。
 
@@ -1616,7 +1926,9 @@ font-lock-keywords 的每个元素都应具有以下形式之一：
 
     当在缓冲区中激活字体锁定时，如果 font-lock-keywords-only 的值（请参阅语法字体锁定）为 nil，它会使用上下文的非 nil 值调用此函数。
 
-功能：jit-lock-unregister 函数¶
+#+begin_src emacs-lisp
+  Function: jit-lock-unregister function ¶
+#+end_src
 
     如果函数之前使用 jit-lock-register 注册为字体化函数，则此函数将取消注册它。
 
@@ -1646,46 +1958,74 @@ Font Lock 模式可以使用任何面来突出显示，但 Emacs 定义了几个
 
 列出了这些面孔及其典型用法的描述，并按照突出程度从高到低排列。  如果一个模式的句法类别与使用描述不太吻合，则可以使用排序作为指导来分配面孔。
 
-字体锁定警告面¶
+#+begin_src emacs-lisp
+  font-lock-warning-face ¶
+#+end_src
 
     对于一个特殊的构造（例如，在 Emacs Lisp 符号中未转义的易混淆引号，如 ''foo'），或者极大地改变了其他文本的含义，如 Emacs Lisp 中的 ';;;###autoload' 和 ' C中的#error'。
-字体锁定功能名称面¶
+#+begin_src emacs-lisp
+  font-lock-function-name-face ¶
+#+end_src
 
     用于定义或声明的函数的名称。
-字体锁定变量名称面¶
+#+begin_src emacs-lisp
+  font-lock-variable-name-face ¶
+#+end_src
 
     用于定义或声明的变量的名称。
-字体锁定关键字面¶
+#+begin_src emacs-lisp
+  font-lock-keyword-face ¶
+#+end_src
 
     用于具有特殊语法意义的关键字，例如 C 中的“for”和“if”。
-字体锁定评论面¶
+#+begin_src emacs-lisp
+  font-lock-comment-face ¶
+#+end_src
 
     征求意见。
-字体锁定注释分隔符面¶
+#+begin_src emacs-lisp
+  font-lock-comment-delimiter-face ¶
+#+end_src
 
     对于注释分隔符，例如 C 中的 '/*' 和 '*/'。在大多数终端上，它继承自 font-lock-comment-face。
-字体锁定字体¶
+#+begin_src emacs-lisp
+  font-lock-type-face ¶
+#+end_src
 
     用于用户定义数据类型的名称。
-字体锁常量面¶
+#+begin_src emacs-lisp
+  font-lock-constant-face ¶
+#+end_src
 
     对于常量的名称，例如 C 中的 'NULL'。
-font-lock-builtin-face ¶
+#+begin_src emacs-lisp
+  font-lock-builtin-face ¶
+#+end_src
 
     用于内置函数的名称。
-字体锁预处理器面¶
+#+begin_src emacs-lisp
+  font-lock-preprocessor-face ¶
+#+end_src
 
     用于预处理器命令。  默认情况下，它继承自 font-lock-builtin-face。
-字体锁字符串面¶
+#+begin_src emacs-lisp
+  font-lock-string-face ¶
+#+end_src
 
     对于字符串常量。
-字体锁定文档面¶
+#+begin_src emacs-lisp
+  font-lock-doc-face ¶
+#+end_src
 
     用于嵌入在特殊格式的注释或字符串中的程序代码中的文档。  默认情况下，此面继承自 font-lock-string-face。
-字体锁定文档标记面¶
+#+begin_src emacs-lisp
+  font-lock-doc-markup-face ¶
+#+end_src
 
     使用 font-lock-doc-face 标记文本中的元素。  它通常用于嵌入在程序代码中的文档中的标记结构，遵循诸如 Haddock、Javadoc 或 Doxygen 之类的约定。  默认情况下，此面继承自 font-lock-constant-face。
-字体锁定否定字符面¶
+#+begin_src emacs-lisp
+  font-lock-negation-char-face ¶
+#+end_src
 
     用于容易被忽视的否定字符。
 
@@ -1695,15 +2035,21 @@ font-lock-builtin-face ¶
 
 每当 Font Lock 模式对一段文本进行语法字体化时，它首先调用 syntax-properize-function 指定的函数。  主要模式可以使用它来应用语法表文本属性以在特殊情况下覆盖缓冲区的语法表。  请参阅语法属性。
 
-变量：font-lock-keywords-only ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-keywords-only ¶
+#+end_src
 
     如果这个变量的值是非零，Font Lock 不做语法字体化，只根据 font-lock-keywords 进行基于搜索的字体化。  它通常由字体锁定模式基于 font-lock-defaults 中的关键字元素设置。  如果值为 nil，字体锁定将调用 jit-lock-register（请参阅其他字体锁定变量）来设置缓冲区文本在修改后的自动重新字体化，以反映由于更改而产生的新语法上下文。
 
-变量：font-lock-syntax-table ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-syntax-table ¶
+#+end_src
 
     此变量保存用于注释和字符串字体化的语法表。  它通常由字体锁定模式基于 font-lock-defaults 中的 syntax-alist 元素设置。  如果此值为 nil，则语法字体化使用缓冲区的语法表（由函数 syntax-table 返回的值；请参阅语法表函数）。
 
-变量：font-lock-syntactic-face-function ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-syntactic-face-function ¶
+#+end_src
 
     如果这个变量是非零，它应该是一个函数来确定给定句法元素（字符串或注释）使用哪个面。
 
@@ -1746,7 +2092,9 @@ font-lock-builtin-face ¶
 
 警告：不要在大范围的文本上使用 font-lock-multiline 属性，因为这会使重新突出显示变慢。
 
-变量：font-lock-multiline ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-multiline ¶
+#+end_src
 
     如果 font-lock-multiline 变量设置为 t，Font Lock 将尝试在多行结构上自动添加 font-lock-multiline 属性。  然而，这不是一个通用的解决方案，因为它会稍微减慢字体锁定的速度。  它可能会遗漏一些多行构造，或者使属性大于或小于必要的值。
 
@@ -1762,7 +2110,9 @@ font-lock-multiline 属性旨在确保正确的重新字体化；  它不会自�
 
 您可以通过设置以下变量来放大（甚至缩小）要重新字体化的区域：
 
-变量：font-lock-extend-after-change-region-function ¶
+#+begin_src emacs-lisp
+  Variable: font-lock-extend-after-change-region-function ¶
+#+end_src
 
     这个缓冲区局部变量要么是 nil，要么是 Font Lock 模式调用以确定要扫描和字体化的区域的函数。
 
@@ -1796,7 +2146,9 @@ SMIE 是一个提供通用导航和缩进引擎的包。  基于使用运算符�
 
 SMIE 旨在成为结构导航和各种其他功能的一站式商店，这些功能依赖于代码的句法结构，特别是自动缩进。  主要入口点是 smie-setup，这是一个通常在设置主模式时调用的函数。
 
-功能：smie-setup 语法规则-function &rest 关键字 ¶
+#+begin_src emacs-lisp
+  Function: smie-setup grammar rules-function &rest keywords ¶
+#+end_src
 
     设置 SMIE 导航和缩进。  语法是smie-prec2->grammar生成的语法表。  rules-function 是一组用于 smie-rules-function 的缩进规则。  关键字是附加参数，可以包括以下关键字：
 
@@ -1807,11 +2159,15 @@ SMIE 旨在成为结构导航和各种其他功能的一站式商店，这些功
 
 调用 smie-setup 也足以使 TAB 缩进以预期的方式工作，扩展 blink-matching-paren 以应用于像 begin...end 这样的元素，并提供一些可以在主模式键盘映射中绑定的命令。
 
-命令：smie-close-block ¶
+#+begin_src emacs-lisp
+  Command: smie-close-block ¶
+#+end_src
 
     此命令关闭最近打开（但尚未关闭）的块。
 
-命令：smie-down-list &optional arg ¶
+#+begin_src emacs-lisp
+  Command: smie-down-list &optional arg ¶
+#+end_src
 
     此命令类似于 down-list，但它也注意括号以外的标记的嵌套，例如 begin...end。
 
@@ -1820,19 +2176,27 @@ SMIE 旨在成为结构导航和各种其他功能的一站式商店，这些功
 
 SMIE 的优先语法只是给每个标记一对优先级：左优先和右优先。  如果令牌 T1 的右优先级小于令牌 T2 的左优先级，我们说 T1 < T2。  阅读此 < 的一种好方法是作为一种括号：如果我们找到 ... T1 某物 T2 ... 那么应该将其解析为 ... T1 (某物 T2 ... 而不是 ... T1 某物) T2 .... 如果我们有 T1 > T2，则后一种解释将是这种情况。  如果我们有 T1 = T2，这意味着令牌 T2 在相同的句法结构中跟随令牌 T1，所以通常我们有“开始”=“结束”。  这样的优先级对足以表达中缀运算符的左结合性或右结合性、括号等标记的嵌套以及许多其他情况。
 
-功能：smie-prec2->语法表¶
+#+begin_src emacs-lisp
+  Function: smie-prec2->grammar table ¶
+#+end_src
 
     此函数采用 prec2 语法表并返回适合在 smie-setup 中使用的 alist。  prec2 表本身就是由以下函数之一构建的。
 
-功能：smie-merge-prec2s &rest 表¶
+#+begin_src emacs-lisp
+  Function: smie-merge-prec2s &rest tables ¶
+#+end_src
 
     这个函数需要几个 prec2 表并将它们合并到一个新的 prec2 表中。
 
-功能：smie-precs->prec2 precs ¶
+#+begin_src emacs-lisp
+  Function: smie-precs->prec2 precs ¶
+#+end_src
 
     此函数从优先级 precs 表构建 prec2 表。  precs 应该是一个列表，按优先级排序（例如“+”将在“*”之前），形式为 (assoc op ...) 的元素，其中每个 op 是充当运算符的标记；  assoc 是它们的关联性，可以是左、右、关联或非关联。  给定元素中的所有运算符共享相同的优先级和关联性。
 
-功能：smie-bnf->prec2 bnf &rest 解析器¶
+#+begin_src emacs-lisp
+  Function: smie-bnf->prec2 bnf &rest resolvers ¶
+#+end_src
 
     此函数允许您使用 BNF 表示法指定语法。  它接受语法的 bnf 描述以及一组冲突解决规则解析器，并返回一个 prec2 表。
 
@@ -1999,35 +2363,51 @@ SMIE 缩进规则是使用带有两个参数 method 和 arg 的函数指定的�
 
 SMIE 提供了各种专门设计用于缩进规则功能的功能（如果在其他上下文中使用，其中一些功能会中断）。  这些函数都以前缀 smie-rule- 开头。
 
-功能：smie-rule-bolp ¶
+#+begin_src emacs-lisp
+  Function: smie-rule-bolp ¶
+#+end_src
 
     如果当前令牌是行中的第一个，则返回非零。
 
-功能：smie-rule-hanging-p ¶
+#+begin_src emacs-lisp
+  Function: smie-rule-hanging-p ¶
+#+end_src
 
     如果当前令牌挂起，则返回非零。  如果一个令牌是行上的最后一个令牌并且它前面有其他令牌，则该令牌正在挂起：一行上的一个单独的令牌没有挂起。
 
-功能：smie-rule-next-p &rest 令牌 ¶
+#+begin_src emacs-lisp
+  Function: smie-rule-next-p &rest tokens ¶
+#+end_src
 
     如果下一个标记在标记中，则返回非零。
 
-功能：smie-rule-prev-p &rest tokens ¶
+#+begin_src emacs-lisp
+  Function: smie-rule-prev-p &rest tokens ¶
+#+end_src
 
     如果前一个令牌在令牌中，则返回非零。
 
-功能：smie-rule-parent-p &rest parents ¶
+#+begin_src emacs-lisp
+  Function: smie-rule-parent-p &rest parents ¶
+#+end_src
 
     如果当前令牌的父级在父级之间，则返回非零。
 
-功能：smie-rule-sibling-p ¶
+#+begin_src emacs-lisp
+  Function: smie-rule-sibling-p ¶
+#+end_src
 
     如果当前令牌的父级实际上是兄弟级，则返回非零。  例如，当“，”的父级只是前一个“，”时就是这种情况。
 
-功能：smie-rule-parent &可选偏移量¶
+#+begin_src emacs-lisp
+  Function: smie-rule-parent &optional offset ¶
+#+end_src
 
     返回正确的偏移量以将当前标记与父标记对齐。  如果非零，偏移量应该是一个整数，给出一个额外的偏移量来应用。
 
-功能：smie-rule-separator 方法¶
+#+begin_src emacs-lisp
+  Function: smie-rule-separator method ¶
+#+end_src
 
     缩进当前标记作为分隔符。
 
@@ -2097,27 +2477,39 @@ SMIE 提供了各种专门设计用于缩进规则功能的功能（如果在其
 
 如果您使用的是由 SMIE 提供缩进的模式，您可以自定义缩进以满足您的喜好。  您可以基于每个模式（使用选项 smie-config）或每个文件（使用文件局部变量规范中的函数 smie-config-local）来执行此操作。
 
-用户选项：smie-config ¶
+#+begin_src emacs-lisp
+  User Option: smie-config ¶
+#+end_src
 
     此选项允许您基于每个模式自定义缩进。  它是一个具有表单元素的列表（模式.规则）。  有关规则的精确形式，请参阅变量的文档；  但您可能会发现使用命令 smie-config-guess 更容易。
 
-命令：smie-config-guess ¶
+#+begin_src emacs-lisp
+  Command: smie-config-guess ¶
+#+end_src
 
     此命令尝试制定适当的设置以产生您喜欢的缩进样式。  只需在访问以您的样式缩进的文件时调用该命令。
 
-命令：smie-config-save ¶
+#+begin_src emacs-lisp
+  Command: smie-config-save ¶
+#+end_src
 
     使用 smie-config-guess 后调用此命令，以保存您的设置以供将来的会话使用。
 
-命令：smie-config-show-indent &optional move ¶
+#+begin_src emacs-lisp
+  Command: smie-config-show-indent &optional move ¶
+#+end_src
 
     此命令显示用于缩进当前行的规则。
 
-命令：smie-config-set-indent ¶
+#+begin_src emacs-lisp
+  Command: smie-config-set-indent ¶
+#+end_src
 
     此命令添加一个本地规则来调整当前行的缩进。
 
-功能：smie-config-local 规则 ¶
+#+begin_src emacs-lisp
+  Function: smie-config-local rules ¶
+#+end_src
 
     此函数将规则添加为当前缓冲区的缩进规则。  这些添加到由 smie-config 选项定义的任何特定于模式的规则。  要为特定文件指定自定义缩进规则，请在文件的局部变量中添加一个条目，格式为：eval: (smie-config-local '(rules))。
 
@@ -2127,7 +2519,9 @@ SMIE 提供了各种专门设计用于缩进规则功能的功能（如果在其
 
 对于不访问文件以保存其状态的缓冲区，主要模式必须将缓冲区局部变量 desktop-save-buffer 绑定到非零值。
 
-变量：桌面保存缓冲区¶
+#+begin_src emacs-lisp
+  Variable: desktop-save-buffer ¶
+#+end_src
 
     如果此缓冲区局部变量不为零，则缓冲区将在桌面保存时将其状态保存在桌面文件中。  如果该值是一个函数，则在桌面保存时使用参数 desktop-dirname 调用它，并且它的值与调用它的缓冲区的状态一起保存在桌面文件中。  当文件名作为辅助信息的一部分返回时，它们应该使用调用格式化
 
@@ -2138,7 +2532,9 @@ SMIE 提供了各种专门设计用于缩进规则功能的功能（如果在其
 
 对于不访问要恢复的文件的缓冲区，主要模式必须定义一个函数来完成这项工作，并且该函数必须列在 alist desktop-buffer-mode-handlers 中。
 
-变量：桌面缓冲区模式处理程序¶
+#+begin_src emacs-lisp
+  Variable: desktop-buffer-mode-handlers ¶
+#+end_src
 
     Alist 与元素
     #+begin_src emacs-lisp
