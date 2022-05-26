@@ -333,21 +333,31 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
 语法表文本属性的有效值为：
 
-语法表
+#+begin_src emacs-lisp
+  syntax-table
+#+end_src
 
     如果属性值是语法表，则使用该表而不是当前缓冲区的语法表来确定基础文本字符的语法。
-（语法代码。匹配字符）
+#+begin_src emacs-lisp
+  (syntax-code . matching-char)
+#+end_src
 
     这种格式的 cons 单元格是一个原始语法描述符（请参阅语法表内部），它直接指定底层文本字符的语法类。
-零
+#+begin_src emacs-lisp
+  nil
+#+end_src
 
     如果该属性为 nil，则字符的语法以通常的方式从当前语法表中确定。
 
-变量：parse-sexp-lookup-properties ¶
+#+begin_src emacs-lisp
+  Variable: parse-sexp-lookup-properties ¶
+#+end_src
 
     如果这是非零，语法扫描函数，如 forward-sexp，注意语法表文本属性。  否则他们只使用当前的语法表。
 
-变量：语法属性函数¶
+#+begin_src emacs-lisp
+  Variable: syntax-propertize-function ¶
+#+end_src
 
     这个变量，如果非零，应该存储一个用于将语法表属性应用到指定文本段的函数。  它旨在由主要模式用于安装以某种模式适当的方式应用语法表属性的功能。
 
@@ -355,7 +365,9 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
     注意：当这个变量不为 nil 时，Emacs 会任意删除语法表文本属性，并依赖 syntax-properize-function 重新应用它们。  因此，如果完全使用此工具，该函数必须应用主要模式使用的所有语法表文本属性。  特别是，从 CC 模式模式派生的模式不得使用此变量，因为 CC 模式使用其他方式来应用和删除这些文本属性。
 
-变量：syntax-properize-extend-region-functions ¶
+#+begin_src emacs-lisp
+  Variable: syntax-propertize-extend-region-functions ¶
+#+end_src
 
     这个异常钩子是在调用 syntax-properize-function 之前由语法解析代码运行的。  它的作用是帮助定位安全的开始和结束缓冲区位置，以便传递给 syntax-properize-function。  例如，一个主要模式可以在这个钩子中添加一个函数来识别多行句法结构，并确保边界不会落在一个中间。
 
@@ -365,7 +377,9 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
 本节介绍用于在具有特定语法类别的字符之间移动的函数。
 
-功能：skip-syntax-forward 语法&可选限制¶
+#+begin_src emacs-lisp
+  Function: skip-syntax-forward syntaxes &optional limit ¶
+#+end_src
 
     此函数在具有语法中提到的语法类别的字符（语法类别字符的字符串）之间向前移动。  它在遇到缓冲区末尾、位置限制（如果指定）或不应该跳过的字符时停止。
 
@@ -373,7 +387,9 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
     返回值是行进的距离，是一个非负整数。
 
-功能：skip-syntax-backward 语法&可选限制¶
+#+begin_src emacs-lisp
+  Function: skip-syntax-backward syntaxes &optional limit ¶
+#+end_src
 
     此函数在语法中提到语法类别的字符之间向后移动点。  当遇到缓冲区的开头、位置限制（如果指定）或不应该跳过的字符时，它会停止。
 
@@ -381,7 +397,9 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
     返回值表示行进的距离。  它是一个小于或等于 0 的整数。
 
-功能：后向前缀字符¶
+#+begin_src emacs-lisp
+  Function: backward-prefix-chars ¶
+#+end_src
 
     此函数使用表达式前缀语法将点向后移动任意数量的字符。  这包括表达式前缀语法类中的字符和带有“p”标志的字符。
 
@@ -403,7 +421,9 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
 本节介绍基于解析表达式操作的简单点运动函数。
 
-功能：从计数深度扫描列表¶
+#+begin_src emacs-lisp
+  Function: scan-lists from count depth ¶
+#+end_src
 
     此函数从位置开始扫描前向计数平衡括号分组。  它返回扫描停止的位置。  如果计数为负，则扫描向后移动。
 
@@ -413,7 +433,9 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
     如果扫描到达缓冲区可访问部分的开头或结尾，则在扫描过 count 个括号分组之前，如果该点的深度为零，则返回值为零；  如果深度不为零，则发出扫描错误错误信号。
 
-功能：scan-sexps from count ¶
+#+begin_src emacs-lisp
+  Function: scan-sexps from count ¶
+#+end_src
 
     这个函数从位置扫描前向计数sexp。  它返回扫描停止的位置。  如果计数为负，则扫描向后移动。
 
@@ -421,7 +443,9 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
     如果扫描在括号分组的中间到达缓冲区（可访问部分）的开头或结尾，则会发出错误信号。  如果它到达分组之间的开始或结束但在 count 用完之前，则返回 nil。
 
-功能：转发评论计数¶
+#+begin_src emacs-lisp
+  Function: forward-comment count ¶
+#+end_src
 
     此函数在计数完整注释（即包括起始定界符和终止定界符，如果有）以及途中遇到的任何空白处向前移动点。  如果 count 为负，则向后移动。  如果它遇到评论或空格以外的任何内容，它就会停止，并在它停止的地方留下点。  这包括（例如）在前进时找到评论的结尾并期待评论的开头。  该功能也会在移过指定数量的完整评论后立即停止。  如果按预期找到计数注释，它们之间除了空格之外什么都没有，它返回 t；  否则返回零。
 
@@ -433,7 +457,9 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
 对于句法分析，例如缩进，通常有用的是计算对应于给定缓冲区位置的句法状态。  这个功能很方便。
 
-功能：syntax-ppss &optional pos ¶
+#+begin_src emacs-lisp
+  Function: syntax-ppss &optional pos ¶
+#+end_src
 
     此函数返回解析器将从缓冲区可见部分的开头开始在位置 pos 处到达的解析器状态。  有关解析器状态的描述，请参见解析器状态。
 
@@ -441,7 +467,9 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
     这个函数有一个副作用：它为语法-ppss-flush-cache（见下文）添加了一个缓冲区本地条目到 before-change-functions（见 Change Hooks）。  当缓冲区被修改时，此条目保持高速缓存一致。  但是，如果在 before-change-functions 临时让绑定时调用了 syntax-ppss，或者如果在没有运行钩子的情况下修改了缓冲区，例如在使用禁止修改钩子时，缓存可能不会更新。  在这些情况下，有必要显式调用 syntax-ppss-flush-cache。
 
-功能：syntax-ppss-flush-cache beg &rest被忽略-args ¶
+#+begin_src emacs-lisp
+  Function: syntax-ppss-flush-cache beg &rest ignored-args ¶
+#+end_src
 
     此函数从位置 beg 开始刷新 syntax-ppss 使用的缓存。  其余的参数，被忽略的参数，被忽略；  此函数接受它们，以便可以直接在诸如 before-change-functions 之类的钩子上使用（请参阅更改钩子）。
 
@@ -467,13 +495,17 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
 使用这些函数可以从解析器状态获得一些额外的有用信息：
 
-功能：syntax-ppss-toplevel-pos state ¶
+#+begin_src emacs-lisp
+  Function: syntax-ppss-toplevel-pos state ¶
+#+end_src
 
     该函数从解析器状态状态中提取在语法结构中处于顶层的解析中最后扫描的位置。  “在顶层”是指在任何括号、注释或字符串之外。
 
     如果 state 表示已到达顶层位置的解析，则该值为 nil。
 
-功能：语法-ppss-上下文状态¶
+#+begin_src emacs-lisp
+  Function: syntax-ppss-context state ¶
+#+end_src
 
     如果扫描返回状态的结束位置在字符串中，则返回字符串，如果在注释中，则为注释。  否则返回零。
 
@@ -482,7 +514,10 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
 使用表达式解析器最基本的方法是告诉它以特定状态从给定位置开始，并解析到指定的结束位置。
 
-功能：parse-partial-sexp start limit &optional target-depth stop-before state stop-comment ¶
+#+begin_src emacs-lisp
+Function: parse-partial-sexp start limit &optional target-depth stop-before state stop-comment ¶
+#+end_src
+
 
     此函数从 start 开始解析当前缓冲区中的 sexp，而不是扫描过去的限制。  它在位置限制或满足以下描述的某些条件时停止，并设置指向解析停止的位置。  它返回一个解析器状态，描述解析在它停止的点的状态。
 
@@ -494,17 +529,23 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
 *** TODO 36.6.5 控制解析的参数
 
-变量：多字节语法作为符号¶
+#+begin_src emacs-lisp
+  Variable: multibyte-syntax-as-symbol ¶
+#+end_src
 
     如果此变量不为零，则 scan-sexps 将所有非 ASCII 字符视为符号成分，而不管语法表对它们的说明如何。  （但是，语法表文本属性仍然可以覆盖语法。）
 
-用户选项：parse-sexp-ignore-comments ¶
+#+begin_src emacs-lisp
+  User Option: parse-sexp-ignore-comments ¶
+#+end_src
 
     如果该值为非 nil，则注释被本节中的函数以及 forward-sexp、scan-lists 和 scan-sexps 视为空白。
 
 parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请参阅语法属性）。
 
-变量：comment-end-can-be-escaped ¶
+#+begin_src emacs-lisp
+  Variable: comment-end-can-be-escaped ¶
+#+end_src
 
     如果此缓冲区局部变量为非零，则通常终止注释的单个字符在转义该字符时不会这样做。  这用于 C 和 C++ 模式，其中以 '//' 开头的行注释可以通过使用 '\' 转义换行符来继续到下一行。
 
@@ -519,38 +560,50 @@ parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请�
 使用 aref（参见对数组进行操作的函数）获取字符的原始语法描述符，例如 (aref (syntax-table) ch)。
 
 以下是各种语法类对应的语法代码：
-代码类 代码类
-0 空格 8 成对分隔符
-1 标点符号 9 转义
-2字10字报价
-3 符号 11 评论开始
-4 开括号 12 注释结束
-5 右括号 13 继承
-6 表达式前缀 14 通用注释
-7 字符串引用 15 通用字符串
+#+begin_src emacs-lisp
+  Code	Class	Code	Class
+  0	whitespace	8	paired delimiter
+  1	punctuation	9	escape
+  2	word	10	character quote
+  3	symbol	11	comment-start
+  4	open parenthesis	12	comment-end
+  5	close parenthesis	13	inherit
+  6	expression prefix	14	generic comment
+  7	string quote	15	generic string
+#+end_src
 
 例如，在标准语法表中，'(' 的条目是 (4 . 41)。41 是 ')' 的字符代码。
 
 语法标志以高位编码，从最低有效位开始 16 位。  该表给出了对应于每个语法标志的二的幂。
-前缀标志 前缀标志
-“1”（灰分 1 16）“p”（灰分 1 20）
-“2”（灰分 1 17）“b”（灰分 1 21）
-“3”（灰分 1 18）“n”（灰分 1 22）
-“4”（灰分 1 19）“c”（灰分 1 23）
+#+begin_src emacs-lisp
+  Prefix	Flag	Prefix	Flag
+  ‘1’	(ash 1 16)	‘p’	(ash 1 20)
+  ‘2’	(ash 1 17)	‘b’	(ash 1 21)
+  ‘3’	(ash 1 18)	‘n’	(ash 1 22)
+  ‘4’	(ash 1 19)	‘c’	(ash 1 23)
+#+end_src
 
-功能：字符串到语法 desc ¶
+#+begin_src emacs-lisp
+  Function: string-to-syntax desc ¶
+#+end_src
 
     给定一个语法描述符 desc（一个字符串），这个函数返回相应的原始语法描述符。
 
-功能：syntax-class-to-char 语法¶
+#+begin_src emacs-lisp
+  Function: syntax-class-to-char syntax ¶
+#+end_src
 
     给定一个原始语法描述符语法（一个整数），此函数返回相应的语法描述符（一个字符）。
 
-功能：语法后 pos ¶
+#+begin_src emacs-lisp
+  Function: syntax-after pos ¶
+#+end_src
 
     此函数返回缓冲区中位置 pos 之后的字符的原始语法描述符，同时考虑语法属性和语法表。  如果 pos 在缓冲区的可访问部分之外（参见可访问部分），则返回值为 nil。
 
-功能：语法类语法¶
+#+begin_src emacs-lisp
+  Function: syntax-class syntax ¶
+#+end_src
 
     此函数返回原始语法描述符语法的语法代码。  更准确地说，它采用原始语法描述符的语法代码组件，屏蔽记录语法标志的高 16 位，并返回结果整数。
 
@@ -573,7 +626,9 @@ parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请�
 
 对于接下来的三个函数，可选参数表默认为当前缓冲区的类别表。
 
-功能：define-category char docstring &optional table ¶
+#+begin_src emacs-lisp
+  Function: define-category char docstring &optional table ¶
+#+end_src
 
     此函数为类别表定义了一个新类别，名称为 char 和文档文档字符串。
 
@@ -601,7 +656,9 @@ parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请�
 	  category-table))
     #+end_src
 
-功能：category-docstring类别&可选表¶
+#+begin_src emacs-lisp
+  Function: category-docstring category &optional table ¶
+#+end_src
 
     该函数返回类别表中类别类别的文档字符串。
     #+begin_src emacs-lisp
@@ -612,35 +669,51 @@ parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请�
     #+end_src
 
 
-功能：获取未使用类别&可选表¶
+#+begin_src emacs-lisp
+  Function: get-unused-category &optional table ¶
+#+end_src
 
     此函数返回当前未在表中定义的类别名称（字符）。  如果所有可能的类别都在表中使用，则返回 nil。
 
-功能：类别表¶
+#+begin_src emacs-lisp
+  Function: category-table ¶
+#+end_src
 
     该函数返回当前缓冲区的类别表。
 
-功能：category-table-p 对象¶
+#+begin_src emacs-lisp
+  Function: category-table-p object ¶
+#+end_src
 
     如果 object 是类别表，则此函数返回 t，否则返回 nil。
 
-功能：标准类别表¶
+#+begin_src emacs-lisp
+  Function: standard-category-table ¶
+#+end_src
 
     此函数返回标准类别表。
 
-功能：复制类别表&可选表¶
+#+begin_src emacs-lisp
+  Function: copy-category-table &optional table ¶
+#+end_src
 
     此函数构造表的副本并将其返回。  如果 table 未提供（或为 nil），则返回标准类别表的副本。  否则，如果 table 不是类别表，则会发出错误信号。
 
-功能：设置类别表 ¶
+#+begin_src emacs-lisp
+  Function: set-category-table table ¶
+#+end_src
 
     此函数使 table 成为当前缓冲区的类别表。  它返回表。
 
-功能：制作类别表¶
+#+begin_src emacs-lisp
+  Function: make-category-table ¶
+#+end_src
 
     这将创建并返回一个空的类别表。  在一个空的类别表中，没有分配任何类别，也没有任何字符属于任何类别。
 
-功能：make-category-set categories ¶
+#+begin_src emacs-lisp
+  Function: make-category-set categories ¶
+#+end_src
 
     该函数返回一个新的类别集——一个布尔向量——其初始内容是字符串类别中列出的类别。  类别的元素应该是类别名称；  新的类别集对于这些类别中的每一个都具有 t，而对于所有其他类别，则为 nil。
 
@@ -649,7 +722,9 @@ parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请�
 	   ⇒ #&128"\0\0\0\0\0\0\0\0\0\0\0\0\2\20\0\0"
     #+end_src
 
-功能：char-category-set char ¶
+#+begin_src emacs-lisp
+  Function: char-category-set char ¶
+#+end_src
 
     此函数返回当前缓冲区的类别表中字符 char 的类别集。  这是记录字符 char 所属类别的布尔向量。  函数 char-category-set 不分配存储空间，因为它返回存在于类别表中的相同 bool-vector。
 
@@ -659,7 +734,9 @@ parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请�
     #+end_src
 
 
-功能：类别集助记符类别集¶
+#+begin_src emacs-lisp
+  Function: category-set-mnemonics category-set ¶
+#+end_src
 
     此函数将类别集 category-set 转换为一个字符串，该字符串包含指定作为该集合成员的类别的字符。
 
@@ -669,12 +746,16 @@ parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请�
     #+end_src
 
 
-功能：修改-category-entry char类别&可选表重置¶
+#+begin_src emacs-lisp
+  Function: modify-category-entry char category &optional table reset ¶
+#+end_src
 
     该函数修改category table table中char的category set（默认为当前buffer的category table）。  char 可以是字符，也可以是 (min . max) 形式的 cons 单元格；  在后一种情况下，该函数修改 min 和 max 之间（包括）范围内的所有字符的类别集。
 
     通常，它通过向其添加类别来修改类别集。  但是如果 reset 不是 nil，那么它会删除类别。
 
-命令：describe-categories &optional buffer-or-name ¶
+#+begin_src emacs-lisp
+  Command: describe-categories &optional buffer-or-name ¶
+#+end_src
 
     该函数描述当前类别表中的类别规格。  它将描述插入缓冲区，然后显示该缓冲区。  如果 buffer-or-name 不为 nil，则改为描述该缓冲区的类别表。
