@@ -19,7 +19,9 @@ Emacs 还可以加载已编译的动态模块：共享库，提供用于 Emacs L
 
 Emacs Lisp 有几个用于加载的接口。  例如，自动加载为文件中定义的函数创建一个占位符对象；  尝试调用自动加载函数会加载文件以获取函数的真实定义（请参阅自动加载）。  如果尚未加载，则 require 加载文件（请参阅功能）。  最终，所有这些设施都会调用 load 函数来完成工作。
 
-功能：加载文件名 &optional missing-ok nomessage nosuffix must-suffix ¶
+#+begin_src emacs-lisp
+  Function: load filename &optional missing-ok nomessage nosuffix must-suffix ¶
+#+end_src
 
     此函数查找并打开一个 Lisp 代码文件，计算其中的所有表单，然后关闭该文件。
 
@@ -53,23 +55,33 @@ Emacs Lisp 有几个用于加载的接口。  例如，自动加载为文件中�
 
     如果文件加载成功，则 load 返回 t。
 
-命令：加载文件文件名¶
+#+begin_src emacs-lisp
+  Command: load-file filename ¶
+#+end_src
 
     此命令加载文件文件名。  如果 filename 是相对文件名，则假定为当前默认目录。  此命令不使用加载路径，也不附加后缀。  但是，它会查找压缩版本（如果启用了自动压缩模式）。  如果您希望精确指定要加载的文件名，请使用此命令。
 
-命令：加载库 ¶
+#+begin_src emacs-lisp
+  Command: load-library library ¶
+#+end_src
 
     此命令加载名为 library 的库。  它等价于加载，除了它以交互方式读取其参数的方式。  请参阅 GNU Emacs 手册中的 Lisp 库。
 
-变量：正在加载 ¶
+#+begin_src emacs-lisp
+  Variable: load-in-progress ¶
+#+end_src
 
     如果 Emacs 正在加载文件，则此变量为非 nil，否则为 nil。
 
-变量：加载文件名¶
+#+begin_src emacs-lisp
+  Variable: load-file-name ¶
+#+end_src
 
     当 Emacs 正在加载一个文件时，这个变量的值就是那个文件的名字，正如 Emacs 在本节前面描述的搜索中找到的那样。
 
-变量：加载读取函数¶
+#+begin_src emacs-lisp
+  Variable: load-read-function ¶
+#+end_src
 
     此变量为 load 和 eval-region 指定替代表达式读取函数，以代替读取。  该函数应该接受一个参数，就像 read 一样。
 
@@ -83,32 +95,40 @@ Emacs Lisp 有几个用于加载的接口。  例如，自动加载为文件中�
 
 我们现在描述一些关于加载尝试的确切后缀的技术细节。
 
-变量：加载后缀¶
+#+begin_src emacs-lisp
+  Variable: load-suffixes ¶
+#+end_src
 
     这是一个后缀列表，表示（编译的或源代码的）Emacs Lisp 文件。  它不应包含空字符串。  load 在将 Lisp 后缀附加到指定文件名时按顺序使用这些后缀。  标准值是 (".elc" ".el")，它产生上一节中描述的行为。
 
-变量：load-file-rep-suffixes ¶
+#+begin_src emacs-lisp
+  Variable: load-file-rep-suffixes ¶
+#+end_src
 
     这是表示同一文件的表示的后缀列表。  此列表通常应以空字符串开头。  当 load 搜索文件时，它会在此列表中按顺序将后缀附加到文件名，然后再搜索另一个文件。
 
     启用自动压缩模式会将 jka-compr-load-suffixes 中的后缀附加到此列表中，禁用自动压缩模式会再次删除它们。  如果禁用自动压缩模式，则 load-file-rep-suffixes 的标准值为 ("")。  鉴于 jka-compr-load-suffixes 的标准值为 (".gz")，如果启用 Auto Compression 模式，则 load-file-rep-suffixes 的标准值为 ("" ".gz")。
 
-功能：获取加载后缀¶
+#+begin_src emacs-lisp
+  Function: get-load-suffixes ¶
+#+end_src
 
     当它的 must-suffix 参数为非 nil 时，此函数按顺序返回加载应尝试的所有后缀的列表。  这同时考虑了加载后缀和加载文件代表后缀。  如果 load-suffixes、jka-compr-load-suffixes 和 load-file-rep-suffixes 都有其标准值，则此函数返回 (".elc" ".elc.gz" ".el" ".el.gz" ) 如果启用自动压缩模式，如果禁用自动压缩模式 (".elc" ".el")。
 
 总而言之，加载通常首先尝试 (get-load-suffixes) 值中的后缀，然后是 load-file-rep-suffixes 中的后缀。  如果 nosuffix 为非 nil，则跳过前一组，如果 must-suffix 为非 nil，则跳过后一组。
 
-用户选项：load-prefer-newer ¶
+#+begin_src emacs-lisp
+  User Option: load-prefer-newer ¶
+#+end_src
 
     如果此选项不为 nil，则不要在存在的第一个后缀处停止，而是对它们进行全部负载测试，并使用最新的文件。
-
-
 ** TODO 16.3 库搜索
 
 当 Emacs 加载 Lisp 库时，它会在由变量 load-path 指定的目录列表中搜索该库。
 
-变量：加载路径¶
+#+begin_src emacs-lisp
+  Variable: load-path ¶
+#+end_src
 
     此变量的值是加载文件时要搜索的目录列表。  每个元素都是一个字符串（必须是目录）或 nil（代表当前工作目录）。
 
@@ -159,7 +179,9 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
 转储 Emacs 使用 load-path 的特殊值。  如果您使用 site-load.el 或 site-init.el 文件来自定义转储的 Emacs（请参阅构建 Emacs），这些文件对加载路径所做的任何更改都将在转储后丢失。
 
-命令：locate-library library &optional nosuffix path interactive-call ¶
+#+begin_src emacs-lisp
+  Command: locate-library library &optional nosuffix path interactive-call ¶
+#+end_src
 
     此命令查找库库的精确文件名。  它以与 load 相同的方式搜索库，并且参数 nosuffix 与 load 中的含义相同：不要将后缀“.elc”或“.el”添加到指定的名称库中。
 
@@ -167,7 +189,9 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
     当从程序调用 locate-library 时，它将文件名作为字符串返回。  当用户以交互方式运行 locate-library 时，参数 interactive-call 为 t，这告诉 locate-library 在回显区域显示文件名。
 
-命令：list-load-path-shadows &optional stringp ¶
+#+begin_src emacs-lisp
+  Command: list-load-path-shadows &optional stringp ¶
+#+end_src
 
     这个命令显示了一个隐藏的 Emacs Lisp 文件的列表。  阴影文件是一个通常不会被加载的文件，尽管它位于加载路径上的目录中，因为在加载路径上较早的目录中存在另一个类似名称的文件。
 
@@ -183,7 +207,9 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
 如果 Emacs 是在支持原生编译的情况下编译的（参见 Lisp 到原生代码的编译），那么当通过搜索 load-path 找到“.elc”字节编译文件时，Emacs 将尝试寻找相应的“.eln”保存相应的本机编译代码的文件。  在 native-comp-eln-load-path 列出的目录中查找本机编译的文件。
 
-变量：native-comp-eln-load-path ¶
+#+begin_src emacs-lisp
+  Variable: native-comp-eln-load-path ¶
+#+end_src
 
     这个变量包含一个目录列表，Emacs 在其中查找本地编译的 '.eln' 文件。  列表中非绝对的文件名被解释为相对于调用目录（请参阅操作系统环境）。  列表中的最后一个目录是系统目录，即 Emacs 构建和安装过程安装的带有“.eln”文件的目录。  在列表中的每个目录中，Emacs 在子目录中查找“.eln”文件，其名称由 Emacs 版本和取决于当前本地编译 ABI 的 8 字符散列构成；  此子目录的名称存储在变量 comp-native-version-dir 中。
 ** TODO 16.4 加载非 ASCII 字符
@@ -197,7 +223,9 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
 有两种方法可以设置自动加载函数：调用 autoload，以及在真正定义之前在源代码中编写“魔术”注释。  autoload 是自动加载的低级原语；  任何 Lisp 程序都可以随时调用 autoload。  对于与 Emacs 一起安装的包，魔术注释是使函数自动加载的最方便的方法。  这些注释本身没有任何作用，但它们充当命令 update-file-autoloads 的指南，该命令构造对 autoload 的调用并安排在构建 Emacs 时执行它们。
 
-功能：自动加载函数文件名和可选的文档字符串交互类型¶
+#+begin_src emacs-lisp
+  Function: autoload function filename &optional docstring interactive type ¶
+#+end_src
 
     该函数定义函数（或宏）命名函数，以便从文件名自动加载。  字符串文件名指定要加载的文件以获取函数的真实定义。
 
@@ -228,7 +256,9 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
     在这种情况下，“prolog”是要加载的文件的名称，169681 是指 emacs/etc/DOC 文件中的文档字符串（参见文档基础），t 表示函数是交互式的，nil 表示它不是宏或键盘映射。
 
-功能：自动加载对象¶
+#+begin_src emacs-lisp
+  Function: autoloadp object ¶
+#+end_src
 
     如果 object 是自动加载对象，则此函数返回非 nil。  例如，要检查 run-prolog 是否定义为自动加载函数，请评估
 
@@ -287,17 +317,23 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
 
 您可以使用非默认字符串作为自动加载 cookie，并将相应的自动加载调用写入名称与默认 loaddefs.el 不同的文件中。  Emacs 提供了两个变量来控制它：
 
-变量：generate-autoload-cookie ¶
+#+begin_src emacs-lisp
+  Variable: generate-autoload-cookie ¶
+#+end_src
 
     这个变量的值应该是一个字符串，它的语法是一个 Lisp 注释。  Mx update-file-autoloads 将跟随 cookie 的 Lisp 表单复制到它生成的自动加载文件中。  此变量的默认值为“;;;###autoload”。
 
-变量：生成的自动加载文件¶
+#+begin_src emacs-lisp
+  Variable: generated-autoload-file ¶
+#+end_src
 
     这个变量的值命名了一个 Emacs Lisp 文件，自动加载调用应该去的地方。  默认值为 loaddefs.el，但您可以覆盖它，例如，在 .el 文件的局部变量部分（请参阅文件局部变量）。  假定自动加载文件包含以换页符开头的预告片。
 
 以下函数可用于显式加载由自动加载对象指定的库：
 
-功能: autoload-do-load autoload &optional name 宏 ¶
+#+begin_src emacs-lisp
+  Function: autoload-do-load autoload &optional name macro-only ¶
+#+end_src
 
     该函数执行 autoload 指定的加载，应该是一个 autoload 对象。  可选参数名称，如果非零，应该是一个函数值为自动加载的符号；  在这种情况下，此函数的返回值是符号的新函数值。  如果可选参数 macro-only 的值为宏，则此函数避免加载函数，仅加载宏。
 
@@ -341,7 +377,7 @@ EMACSLOADPATH 的语法与用于 PATH 的语法相同；  目录由':'（或';'�
     execute-first-time-only
     (setq foo-was-loaded t))
 #+end_src
-** TODO 16.7 特点
+** TODO 16.7 特征
 调用一个特定的函数，但是当另一个程序第一次通过名称请求它时加载一个特性。
 
 功能名称是代表函数、变量等集合的符号。定义它们的文件应提供该功能。  另一个使用它们的程序可以确保它们是通过要求该特性来定义的。  如果尚未加载定义文件，则会加载它。
@@ -381,7 +417,9 @@ comint.el 文件包含以下顶级表达式：
 
 编译器忽略提供，然后通过加载相关文件来处理需求。  加载文件确实会执行 provide 调用，因此在加载文件时后续的 require 调用不会执行任何操作。
 
-功能：提供功能和可选的子功能¶
+#+begin_src emacs-lisp
+  Function: provide feature &optional subfeatures ¶
+#+end_src
 
     此函数宣布该功能现在已加载或正在加载到当前 Emacs 会话中。  这意味着与功能相关的设施已经或将可用于其他 Lisp 程序。
 
@@ -401,7 +439,9 @@ comint.el 文件包含以下顶级表达式：
 
     当一个文件被加载以满足自动加载，并且由于对其内容的评估错误而停止时，加载期间发生的任何函数定义或提供调用都将被撤消。  请参阅自动加载。
 
-功能：需要功能和可选文件名 noerror ¶
+#+begin_src emacs-lisp
+  Function: require feature &optional filename noerror ¶
+#+end_src
 
     该函数检查当前 Emacs 会话中是否存在特性（使用 (featurep feature)；见下文）。  参数特征必须是符号。
 
@@ -411,17 +451,23 @@ comint.el 文件包含以下顶级表达式：
 
     如果加载文件成功但未提供功能，则 require 会发出有关缺少功能的错误信号。
 
-功能：featurep 功能 & 可选子功能 ¶
+#+begin_src emacs-lisp
+  Function: featurep feature &optional subfeature ¶
+#+end_src
 
     如果在当前 Emacs 会话中提供了 feature（即，如果 feature 是 features 的成员），则此函数返回 t。如果 subfeature 不是 nil，则仅当也提供了该 subfeature 时，该函数才返回 t（即，如果subfeature 是特征符号的 subfeature 属性的成员。）
 
-变量：特性¶
+#+begin_src emacs-lisp
+  Variable: features ¶
+#+end_src
 
     此变量的值是符号列表，这些符号是当前 Emacs 会话中加载的功能。  每个符号都被放入此列表中，并调用提供。  特征列表中元素的顺序并不重要。
 
 ** TODO 16.8 哪个文件定义了某个符号
 
-功能：符号文件符号&可选类型¶
+#+begin_src emacs-lisp
+  Function: symbol-file symbol &optional type ¶
+#+end_src
 
     此函数返回定义符号的文件的名称。  如果 type 为 nil，那么任何类型的定义都是可以接受的。  如果 type 是 defun、defvar 或 defface，则仅指定函数定义、变量定义或面定义。
 
@@ -429,37 +475,57 @@ comint.el 文件包含以下顶级表达式：
 
 符号文件的基础是变量加载历史中的数据。
 
-变量：加载历史 ¶
+#+begin_src emacs-lisp
+  Variable: load-history ¶
+#+end_src
 
     这个变量的值是一个列表，它将加载的库文件的名称与它们定义的函数和变量的名称以及它们提供或需要的特性相关联。
 
     此列表中的每个元素都描述了一个已加载的库（包括在启动时预加载的库）。  它是一个列表，其 CAR 是库的绝对文件名（字符串）。  其余列表元素具有以下形式：
 
-    变量
+#+begin_src emacs-lisp
+  var
+#+end_src
 
 	 符号 var 被定义为一个变量。
-    (defun . 有趣)
+#+begin_src emacs-lisp
+  (defun . fun)
+#+end_src
 
 	 定义了函数 fun。
-    （吨。乐趣）
+#+begin_src emacs-lisp
+  (t . fun)
+#+end_src
 
 	 在此库将其重新定义为函数之前，函数 fun 以前是自动加载的。  以下元素总是 (defun . fun)，表示将 fun 定义为函数。
-    （自动加载。有趣）
+#+begin_src emacs-lisp
+  (autoload . fun)
+#+end_src
 
 	 函数 fun 被定义为自动加载。
-    （打脸。脸）
+#+begin_src emacs-lisp
+  (defface . face)
+#+end_src
 
 	 人脸面被定义。
-    （需要 . 特征）
+#+begin_src emacs-lisp
+  (require . feature)
+#+end_src
 
 	 该功能特性是必需的。
-    （提供 . 特征）
+#+begin_src emacs-lisp
+  (provide . feature)
+#+end_src
 
 	 提供了功能特性。
-    （cl-defmethod 方法专家）
+#+begin_src emacs-lisp
+  (cl-defmethod method specializers)
+#+end_src
 
 	 命名方法是通过使用 cl-defmethod 定义的，并以 specialters 作为它的specialters。
-    （定义类型。类型）
+#+begin_src emacs-lisp
+  (define-type . type)
+#+end_src
 
 	 类型类型已定义。
 
@@ -472,7 +538,9 @@ comint.el 文件包含以下顶级表达式：
 
 您可以丢弃库加载的函数和变量，为其他 Lisp 对象回收内存。  为此，请使用函数 unload-feature：
 
-命令：卸载功能特性和可选力¶
+#+begin_src emacs-lisp
+  Command: unload-feature feature &optional force ¶
+#+end_src
 
     此命令卸载提供功能特性的库。  它使用 defun、defalias、defsubst、defmacro、defconst、defvar 和 defcustom 取消定义该库中定义的所有函数、宏和变量。  然后它会恢复以前与这些符号关联的任何自动加载。  （加载会将这些保存在符号的自动加载属性中。）
 
@@ -486,21 +554,27 @@ comint.el 文件包含以下顶级表达式：
 
 unload-feature 函数是用 Lisp 编写的；  它的动作基于可变负载历史。
 
-变量：unload-feature-special-hooks ¶
+#+begin_src emacs-lisp
+  Variable: unload-feature-special-hooks ¶
+#+end_src
 
     此变量保存在卸载库之前要扫描的挂钩列表，以删除库中定义的函数。
 
-** TODO 16.10 装载挂钩
+** TODO 16.10 装载钩子
 
 您可以通过使用变量 after-load-functions 来请求每次 Emacs 加载库时执行代码：
 
-变量：加载后函数¶
+#+begin_src emacs-lisp
+  Variable: after-load-functions ¶
+#+end_src
 
     加载文件后运行此异常挂钩。  挂钩中的每个函数都使用一个参数调用，即刚刚加载的文件的绝对文件名。
 
 如果您希望在加载特定库时执行代码，请使用 with-eval-after-load 宏：
 
-宏：with-eval-after-load 库体... ¶
+#+begin_src emacs-lisp
+  Macro: with-eval-after-load library body… ¶
+#+end_src
 
     该宏安排在加载文件库结束时评估正文，每次加载库时。  如果库已经加载，它会立即评估 body。
 
@@ -527,7 +601,9 @@ unload-feature 函数是用 Lisp 编写的；  它的动作基于可变负载历
 
 加载 Emacs Lisp 包的函数也可以加载动态模块。  他们通过查看文件扩展名来识别动态模块，也就是“后缀”。  这个后缀是平台相关的。
 
-变量：模块文件后缀¶
+#+begin_src emacs-lisp
+  Variable: module-file-suffix ¶
+#+end_src
 
     此变量保存模块文件的文件扩展名的系统相关值。  它的值在 POSIX 主机上是 .so，在 macOS 上是 .dylib，在 MS-Windows 上是 .dll。
 
@@ -539,11 +615,15 @@ unload-feature 函数是用 Lisp 编写的；  它的动作基于可变负载历
 
 模块可以创建 user-ptr Lisp 对象，这些对象嵌入指向模块定义的 C 结构的指针。  这对于保留由模块创建的复杂数据结构非常有用，以便传递回模块的函数。  User-ptr 对象也可以有关联的终结器——当对象被 GC 时运行的函数；  这对于释放为底层数据结构分配的任何资源很有用，例如内存、打开的文件描述符等。请参阅 Lisp 和模块值之间的转换。
 
-功能：用户ptrp对象¶
+#+begin_src emacs-lisp
+  Function: user-ptrp object ¶
+#+end_src
 
     如果它的参数是一个 user-ptr 对象，这个函数返回 t。
 
-功能：模块加载文件¶
+#+begin_src emacs-lisp
+  Function: module-load file ¶
+#+end_src
 
     Emacs 调用这个低级原语从指定文件加载模块并执行模块的必要初始化。  这是确保模块导出 plugin_is_GPL_compatible 符号、调用模块的 emacs_module_init 函数并在该函数返回错误指示或用户在初始化期间键入 Cg 时发出错误信号的原语。  如果初始化成功，module-load 返回 t。  请注意，文件必须已经具有正确的文件扩展名，因为此函数不会尝试查找具有已知扩展名的文件，这与加载不同。
 

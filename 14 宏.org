@@ -21,7 +21,9 @@
 
 当使用 (inc x) 调用 this 时，参数 var 是符号 x——而不是 x 的值，就像在函数中那样。  宏的主体使用它来构造展开式，即 (setq x (1+ x))。  一旦宏定义返回这个展开式，Lisp 就会继续计算它，从而增加 x。
 
-功能：宏对象 ¶
+#+begin_src emacs-lisp
+  Function: macrop object ¶
+#+end_src
 
     该谓词测试其参数是否为宏，如果是则返回 t，否则返回 nil。
 
@@ -41,7 +43,9 @@
 
  您可以通过调用 macroexpand 查看给定宏调用的扩展。
 
- 功能：宏展开形式&可选环境¶
+#+begin_src emacs-lisp
+  Function: macroexpand form &optional environment ¶
+#+end_src
 
      如果它是宏调用，则此函数扩展形式。  如果结果是另一个宏调用，则依次展开，直到结果不是宏调用。  那是宏扩展返回的值。  如果 form 开始时不是宏调用，则按给定返回。
 
@@ -72,7 +76,9 @@
      #+end_src
 
 
- 功能：macroexpand-all form & optional environment ¶
+#+begin_src emacs-lisp
+  Function: macroexpand-all form &optional environment ¶
+#+end_src
 
      macroexpand-all 扩展类似macroexpand 的宏，但会查找并扩展所有形式的宏，而不仅仅是在顶层。  如果没有扩展宏，则返回值为 eq 以形成。
 
@@ -83,7 +89,9 @@
 	    ⇒ (progn (setq r (1+ r)) (setq s (1+ s)))
      #+end_src
 
- 功能：macroexpand-1 形式&可选环境¶
+#+begin_src emacs-lisp
+  Function: macroexpand-1 form &optional environment ¶
+#+end_src
 
      这个函数像macroexpand一样扩展宏，但它只执行一个扩展步骤：如果结果是另一个宏调用，macroexpand-1不会扩展它。
 ** 14.3 宏和字节编译
@@ -102,7 +110,9 @@ Lisp 宏对象是一个列表，其 CAR 为宏，其 CDR 为函数。  宏的扩
 
 可以像使用匿名函数一样使用匿名 Lisp 宏，但这永远不会这样做，因为将匿名宏传递给诸如 mapcar 之类的函数是没有意义的。  在实践中，所有的 Lisp 宏都有名字，而且它们几乎总是用 defmacro 宏定义的。
 
-宏：defmacro name args [doc] [declare] body... ¶
+#+begin_src emacs-lisp
+  Macro: defmacro name args [doc] [declare] body… ¶
+#+end_src
 
     defmacro 将符号名称（不应被引用）定义为如下所示的宏：
     #+begin_src emacs-lisp
@@ -290,7 +300,7 @@ for 主体内对 max 的引用，应该是指用户对 max 的绑定，实际上
 
 为避免这些问题，在计算宏展开时不要计算参数表达式。  相反，将表达式替换为宏扩展，以便其值将作为执行扩展的一部分进行计算。  这就是本章中其他示例的工作方式。
 
-*** 14.5.5 宏扩展了多少倍？
+*** 14.5.5 宏扩展了多少次？
 
 有时会出现问题，因为宏调用每次在解释函数中求值时都会扩展，但对于编译函数仅扩展一次（在编译期间）。  如果宏定义有副作用，它们的工作方式会有所不同，具体取决于宏扩展的次数。
 
@@ -329,23 +339,35 @@ for 主体内对 max 的引用，应该是指用户对 max 的绑定，实际上
 
 以下是缩进规范的可能性：
 
-零
+#+begin_src emacs-lisp
+  nil
+#+end_src
 
     这与无属性相同——使用标准缩进模式。
-德芬
+#+begin_src emacs-lisp
+  defun
+#+end_src
 
     像处理“def”结构一样处理这个函数：将第二行视为正文的开始。
-一个整数，数字
+#+begin_src emacs-lisp
+  an integer, number
+#+end_src
 
     函数的第一个参数是区分参数；  其余的被认为是表达式的主体。  表达式中的一行根据其上的第一个参数是否被区分而缩进。  如果参数是正文的一部分，则该行缩进 lisp-body-indent 列比开始包含表达式的左括号多。  如果参数被区分并且是第一个或第二个参数，则缩进两倍的额外列。  如果参数被区分而不是第一个或第二个参数，则该行使用标准模式。
-一个符号，象征
+#+begin_src emacs-lisp
+  a symbol, symbol
+#+end_src
 
     symbol 应该是函数名；  调用该函数来计算此表达式中行的缩进。  该函数接收两个参数：
 
-    位置
+#+begin_src emacs-lisp
+  pos
+#+end_src
 
 	 缩进行开始的位置。
-    状态
+#+begin_src emacs-lisp
+  state
+#+end_src
 
 	 parse-partial-sexp（一种用于缩进和嵌套计算的 Lisp 原语）在解析到此行开头时返回的值。
 

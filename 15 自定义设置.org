@@ -15,68 +15,102 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 除了 :tag 之外，所有这些关键字都可以在给定项目中多次使用。  关键字的每次使用都有独立的效果。  关键字 :tag 是一个例外，因为任何给定的项目只能显示一个名称。
 
-:tag 标签¶
+#+begin_src emacs-lisp
+  :tag label ¶
+#+end_src
 
     使用字符串标签而不是项目名称来标记自定义菜单和缓冲区中的项目。  请勿使用与商品真实姓名有本质区别的标签；  这会引起混乱。
-:group 组
+#+begin_src emacs-lisp
+  :group group
+#+end_src
 
     将此自定义项放在组组中。  如果自定义项中缺少此关键字，它将被放置在上次定义的同一组中（在当前文件中）。
 
     当您在 defgroup 中使用 :group 时，它会使新组成为组的子组。
 
     如果您多次使用此关键字，则可以将单个项目放入多个组中。  显示这些组中的任何一个都将显示此项目。  请不要过度这样做，因为结果会很烦人。
-:link 链接数据 ¶
+#+begin_src emacs-lisp
+  :link link-data ¶
+#+end_src
 
     在此项目的文档字符串后包含一个外部链接。  这是一个包含引用其他文档的按钮的句子。
 
     有几种替代方案可以用于链接数据：
 
-    （自定义手册信息节点）
+#+begin_src emacs-lisp
+  (custom-manual info-node)
+#+end_src
 
 	 链接到信息节点；  info-node 是一个字符串，它指定节点名称，如“(emacs)Top”。  该链接在自定义缓冲区中显示为“[Manual]”，并进入 info-node 上的内置信息阅读器。
-    （信息链接信息节点）
+#+begin_src emacs-lisp
+  (info-link info-node)
+#+end_src
 
 	 与 custom-manual 类似，只是链接出现在自定义缓冲区中并带有 Info 节点名称。
-    （网址链接网址）
+#+begin_src emacs-lisp
+  (url-link url)
+#+end_src
 
 	 链接到网页；  url 是指定 URL 的字符串。  该链接作为 url 出现在自定义缓冲区中，并调用由 browse-url-browser-function 指定的 WWW 浏览器。
-    （emacs-commentary-link 库）
+#+begin_src emacs-lisp
+  (emacs-commentary-link library)
+#+end_src
 
 	 链接到图书馆的评论部分；  library 是一个指定库名称的字符串。  请参阅 Emacs 库的常规标头。
-    (emacs-library-link 库)
+#+begin_src emacs-lisp
+  (emacs-library-link library)
+#+end_src
 
 	 链接到 Emacs Lisp 库文件；  library 是一个指定库名称的字符串。
-    （文件链接文件）
+#+begin_src emacs-lisp
+  (file-link file)
+#+end_src
 
 	 链接到文件；  file 是一个字符串，它指定当用户调用此链接时要使用 find-file 访问的文件的名称。
-    （功能链接功能）
+#+begin_src emacs-lisp
+  (function-link function)
+#+end_src
 
 	 链接到函数的文档；  function 是一个字符串，它指定当用户调用此链接时要使用 describe-function 描述的函数名称。
-    （变量链接变量）
+#+begin_src emacs-lisp
+  (variable-link variable)
+#+end_src
 
 	 链接到变量的文档；  variable 是一个字符串，它指定当用户调用此链接时要使用 describe-variable 进行描述的变量名称。
-    （脸-链接脸）
+#+begin_src emacs-lisp
+  (face-link face)
+#+end_src
 
 	 链接到人脸的文档；  face 是一个字符串，它指定当用户调用此链接时要使用 describe-face 描述的人脸名称。
-    （自定义组链接组）
+#+begin_src emacs-lisp
+  (custom-group-link group)
+#+end_src
 
 	 链接到另一个自定义组。  调用它会为组创建一个新的自定义缓冲区。
 
     您可以通过在链接数据的第一个元素后添加 :tag name 来指定要在自定义缓冲区中使用的文本；  例如， (info-link :tag "foo" "(emacs)Top") 创建一个指向 Emacs 手册的链接，该手册在缓冲区中显示为 'foo'。
 
     您可以多次使用此关键字来添加多个链接。
-:加载文件¶
+#+begin_src emacs-lisp
+  :load file ¶
+#+end_src
 
     在显示此自定义项之前加载文件文件（字符串）（请参阅加载）。  加载是通过加载完成的，并且仅当文件尚未加载时。
-：要求功能¶
+#+begin_src emacs-lisp
+  :require feature ¶
+#+end_src
 
     当您保存的自定义设置此项目的值时执行（需要'功能）。  特征应该是一个符号。
 
     使用 :require 的最常见原因是当变量启用诸如次要模式之类的功能时，除非加载了实现该模式的代码，否则仅设置变量不会产生任何影响。
-:version 版本¶
+#+begin_src emacs-lisp
+  :version version ¶
+#+end_src
 
     此关键字指定该项目是在 Emacs 版本中首次引入的，或者在该版本中更改了它的默认值。  值版本必须是字符串。
-:package-version '(package.version) ¶
+#+begin_src emacs-lisp
+  :package-version '(package . version) ¶
+#+end_src
 
     此关键字指定该项目是在包版本版本中首次引入的，或者它的含义或默认值在该版本中已更改。  此关键字优先于 :version。
 
@@ -84,7 +118,9 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 作为 Emacs 的一部分分发的使用 :package-version 关键字的包也必须更新 customize-package-emacs-version-alist 变量。
 
-变量：custom-package-emacs-version-alist ¶
+#+begin_src emacs-lisp
+  Variable: customize-package-emacs-version-alist ¶
+#+end_src
 
     这个列表提供了与 :package-version 关键字中列出的包的版本相关联的 Emacs 版本的映射。  它的元素是：
 
@@ -111,7 +147,9 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 声明新自定义组的方法是使用 defgroup。
 
-宏：defgroup group members doc [keyword value]… ¶
+#+begin_src emacs-lisp
+  Macro: defgroup group members doc [keyword value]… ¶
+#+end_src
 
     将组声明为包含成员的自定义组。  不要引用符号组。  参数 doc 指定组的文档字符串。
 
@@ -123,13 +161,17 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
     除了常见的关键字（见 Common Item Keywords），你还可以在 defgroup 中使用这个关键字：
 
-    :prefix 前缀¶
+#+begin_src emacs-lisp
+  :prefix prefix ¶
+#+end_src
 
 	 如果组中的项目名称以前缀开头，并且可自定义变量 custom-unlispify-remove-prefixes 不为零，则项目的标签将省略前缀。  一个组可以有任意数量的前缀。
 
     组的变量和子组存储在组符号的自定义组属性中。  请参阅访问符号属性。  该属性的值是一个对的列表，其中 car 是变量或子组符号，而 cdr 是自定义变量或自定义组。
 
-用户选项：custom-unlispify-remove-prefixes ¶
+#+begin_src emacs-lisp
+  User Option: custom-unlispify-remove-prefixes ¶
+#+end_src
 
     如果此变量不为 nil，则无论何时用户自定义组，组的 :prefix 关键字指定的前缀都会从标记名称中省略。
 
@@ -139,7 +181,9 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 可自定义变量，也称为用户选项，是全局 Lisp 变量，其值可以通过自定义界面设置。  与其他使用 defvar 定义的全局变量不同（请参阅定义全局变量），可自定义变量是使用 defcustom 宏定义的。  除了作为子例程调用 defvar 之外，defcustom 还说明了变量应该如何在自定义界面中显示，允许取的值等。
 
-宏：defcustom option standard doc [keyword value]… ¶
+#+begin_src emacs-lisp
+  Macro: defcustom option standard doc [keyword value]… ¶
+#+end_src
 
     该宏将选项声明为用户选项（即，可自定义的变量）。  你不应该引用选项。
 
@@ -159,56 +203,84 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 除了通用项关键字中列出的关键字之外，此宏还接受以下关键字：
 
-:type 类型
+#+begin_src emacs-lisp
+  :type type
+#+end_src
 
     使用 type 作为该选项的数据类型。  它指定哪些值是合法的，以及如何显示该值（请参阅自定义类型）。  每个 defcustom 都应该为此关键字指定一个值。
-:options 值列表¶
+#+begin_src emacs-lisp
+  :options value-list ¶
+#+end_src
 
     指定在此选项中使用的合理值列表。  用户不限于仅使用这些值，而是将它们作为方便的替代方案提供。
 
     这仅对某些类型有意义，目前包括 hook、plist 和 alist。  有关如何使用 :options 的说明，请参见各个类型的定义。
 
     使用不同的 :options 值重新评估 defcustom 表单不会清除先前评估添加的值，或通过调用 custom-add-frequent-value 添加的值（见下文）。
-:set 设置函数 ¶
+#+begin_src emacs-lisp
+  :set setfunction ¶
+#+end_src
 
     使用自定义界面时，将 setfunction 指定为更改此选项值的方式。  函数 setfunction 应该有两个参数，一个符号（选项名称）和新值，并且应该做任何必要的事情来正确更新这个选项的值（这可能并不意味着简单地将选项设置为 Lisp 变量）；  不过，最好不要破坏性地修改其 value 参数。  setfunction 的默认值是 set-default。
 
     如果你指定这个关键字，变量的文档字符串应该描述如何在手写的 Lisp 代码中做同样的工作。
-:get 函数¶
+#+begin_src emacs-lisp
+  :get getfunction ¶
+#+end_src
 
     指定 getfunction 作为提取此选项值的方法。  函数 getfunction 应该接受一个参数，一个符号，并且应该返回任何自定义应该用作该符号的当前值（不必是符号的 Lisp 值）。  默认值为默认值。
 
     您必须真正了解 Custom 的工作原理才能正确使用 :get。  它适用于在 Custom 中被视为变量但实际上并未存储在 Lisp 变量中的值。  为真正存储在 Lisp 变量中的值指定 getfunction 几乎肯定是错误的。
-:初始化函数¶
+#+begin_src emacs-lisp
+  :initialize function ¶
+#+end_src
 
     function 应该是在评估 defcustom 时用于初始化变量的函数。  它应该有两个参数，选项名称（一个符号）和值。  以下是一些旨在以这种方式使用的预定义函数：
 
-    自定义初始化集
+#+begin_src emacs-lisp
+  custom-initialize-set
+#+end_src
 
 	 使用变量的 :set 函数来初始化变量，但如果它已经是非 void，则不要重新初始化它。
-    自定义初始化默认
+#+begin_src emacs-lisp
+  custom-initialize-default
+#+end_src
 
 	 与 custom-initialize-set 类似，但使用函数 set-default 来设置变量，而不是变量的 :set 函数。  这是 :set 函数启用或禁用次要模式的变量的通常选择；  使用这种选择，定义变量将不会调用次要模式函数，但自定义变量会这样做。
-    自定义初始化重置
+#+begin_src emacs-lisp
+  custom-initialize-reset
+#+end_src
 
 	 始终使用 :set 函数来初始化变量。  如果变量已经是非 void，则通过使用当前值（由 :get 方法返回）调用 :set 函数来重置它。  这是默认的 :initialize 函数。
-    自定义初始化更改
+#+begin_src emacs-lisp
+  custom-initialize-changed
+#+end_src
 
 	 使用 :set 函数初始化变量，如果它已设置或已自定义；  否则，只需使用 set-default。
-    自定义初始化延迟
+#+begin_src emacs-lisp
+  custom-initialize-delay
+#+end_src
 
 	 此函数的行为类似于 custom-initialize-set，但它会将实际初始化延迟到下一次 Emacs 启动。  这应该在预加载的文件（或自动加载的变量）中使用，以便在运行时上下文而不是构建时上下文中完成初始化。  这也具有使用 :set 函数执行（延迟）初始化的副作用。  请参阅构建 Emacs。
 
-：本地价值¶
+#+begin_src emacs-lisp
+  :local value ¶
+#+end_src
 
     如果值为 t，则将选项标记为自动缓冲区本地；  如果值是永久的，也将选项永久本地属性设置为 t。  请参阅创建和删除缓冲区本地绑定。
-:风险价值 ¶
+#+begin_src emacs-lisp
+  :risky value ¶
+#+end_src
 
     将变量的 risky-local-variable 属性设置为 value（请参阅文件局部变量）。
-:安全功能¶
+#+begin_src emacs-lisp
+  :safe function ¶
+#+end_src
 
     将变量的安全局部变量属性设置为函数（请参阅文件局部变量）。
-:set-after 变量 ¶
+#+begin_src emacs-lisp
+  :set-after variables ¶
+#+end_src
 
     根据保存的自定义设置变量时，请确保在此之前设置变量变量；  即，延迟设置此变量，直到处理完其他变量。  使用 :set-after 如果设置此变量将无法正常工作，除非那些其他变量已经具有它们的预期值。
 
@@ -229,7 +301,9 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
      'my-lisp-mode-initialization)
 #+end_src
 
-功能：自定义加频符号值¶
+#+begin_src emacs-lisp
+  Function: custom-add-frequent-value symbol value ¶
+#+end_src
 
     对于自定义选项符号，将值添加到合理值列表中。
 
@@ -239,13 +313,17 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 在内部，defcustom 使用符号属性 standard-value 来记录标准值的表达式，saved-value 来记录用户在自定义缓冲区中保存的值，customized-value 来记录用户设置的值和自定义值缓冲区，但未保存。  请参阅符号属性。  另外还有themed-value，用来记录一个主题设置的值（见自定义主题）。  这些属性是列表，其中的 car 是一个计算值的表达式。
 
-功能：自定义重新评估设置符号¶
+#+begin_src emacs-lisp
+  Function: custom-reevaluate-setting symbol ¶
+#+end_src
 
     此函数重新评估符号的标准值，它应该是通过 defcustom 声明的用户选项。  如果变量是自定义的，则此函数会重新评估保存的值。  然后它将用户选项设置为该值（如果已定义，则使用选项的 :set 属性）。
 
     这对于在正确计算其值之前定义的可自定义选项很有用。  例如，在启动期间，Emacs 为一些在预加载的 Emacs Lisp 文件中定义的用户选项调用此函数，但其​​初始值取决于仅在运行时可用的信息。
 
-功能：自定义变量参数 ¶
+#+begin_src emacs-lisp
+  Function: custom-variable-p arg ¶
+#+end_src
 
     如果 arg 是可自定义的变量，则此函数返回非 nil。  可自定义变量是具有标准值或自定义自动加载属性的变量（通常意味着它是使用 defcustom 声明的），或者是另一个可自定义变量的别名。
 
@@ -273,65 +351,104 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 本节介绍所有简单的自定义类型。  对于这些自定义类型中的一些，自定义小部件通过 CMi 或 M-TAB 提供内联完成。
 
-性
+#+begin_src emacs-lisp
+  sexp
+#+end_src
 
     该值可以是任何可以打印和回读的 Lisp 对象。  如果您不想花时间制定更具体的类型来使用，您可以使用 sexp 作为任何选项的后备。
-整数
+#+begin_src emacs-lisp
+  integer
+#+end_src
 
     该值必须是整数。
-纳姆
+#+begin_src emacs-lisp
+  natnum
+#+end_src
 
     该值必须是非负整数。
-数字
+#+begin_src emacs-lisp
+  number
+#+end_src
 
     该值必须是数字（浮点数或整数）。
-漂浮
+#+begin_src emacs-lisp
+  float
+#+end_src
 
     该值必须是浮点数。
-细绳
+#+begin_src emacs-lisp
+  string
+#+end_src
 
     该值必须是字符串。  自定义缓冲区显示字符串，不使用分隔 '"' 字符或 '\' 引号。
-正则表达式
+#+begin_src emacs-lisp
+  regexp
+#+end_src
 
     与字符串类似，只是字符串必须是有效的正则表达式。
-特点
+#+begin_src emacs-lisp
+  character
+#+end_src
 
     该值必须是字符代码。  字符代码实际上是一个整数，但是这种类型通过在缓冲区中插入字符来显示值，而不是通过显示数字。
-文件
+#+begin_src emacs-lisp
+  file
+#+end_src
 
     该值必须是文件名。  小部件提供完成。
-（文件：必须匹配t）
+#+begin_src emacs-lisp
+  (file :must-match t)
+#+end_src
 
     该值必须是现有文件的文件名。  小部件提供完成。
-目录
+#+begin_src emacs-lisp
+  directory
+#+end_src
 
     该值必须是目录。  小部件提供完成。
-钩
+#+begin_src emacs-lisp
+  hook
+#+end_src
 
     该值必须是函数列表。  此自定义类型用于挂钩变量。  您可以在挂钩变量的 defcustom 中使用 :options 关键字来指定推荐在挂钩中使用的函数列表；  请参阅定义自定义变量。
-象征
+#+begin_src emacs-lisp
+  symbol
+#+end_src
 
     该值必须是符号。  它作为符号名称出现在自定义缓冲区中。  小部件提供完成。
-功能
+#+begin_src emacs-lisp
+  function
+#+end_src
 
     该值必须是 lambda 表达式或函数名。  该小部件提供函数名称的补全。
-多变的
+#+begin_src emacs-lisp
+  variable
+#+end_src
 
     该值必须是变量名。  小部件提供完成。
-脸
+#+begin_src emacs-lisp
+  face
+#+end_src
 
     该值必须是一个符号，即人脸名称。  小部件提供完成。
-布尔值
+#+begin_src emacs-lisp
+  boolean
+#+end_src
 
     该值是布尔值——nil 或 t。  请注意，通过将choice 和const 一起使用（请参阅下一节），您可以指定该值必须为nil 或t，还可以指定文本以适合替代项的特定含义的方式描述每个值。
-键序列
+#+begin_src emacs-lisp
+  key-sequence
+#+end_src
 
     该值是一个键序列。  自定义缓冲区使用与 kbd 函数相同的语法显示键序列。  请参阅键序列。
-编码系统
+#+begin_src emacs-lisp
+  coding-system
+#+end_src
 
     该值必须是编码系统名称，您可以使用 M-TAB 完成。
-颜色
-
+#+begin_src emacs-lisp
+  color
+#+end_src
     该值必须是有效的颜色名称。  该小部件提供颜色名称的补全，以及用于从 *Colors* 缓冲区中显示的颜色名称列表中选择颜色名称的示例和按钮。
 
 *** 15.4.2 复合类型
@@ -351,25 +468,35 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 下面是一个构造函数表以及如何使用它们来编写复合类型：
 
-(cons car-type cdr-type)
+#+begin_src emacs-lisp
+  (cons car-type cdr-type)
+#+end_src
 
     该值必须是一个 cons 单元格，它的 CAR 必须适合 car-type，它的 CDR 必须适合 cdr-type。  例如，(cons string symbol) 是一种自定义类型，它匹配诸如 ("foo" . foo) 之类的值。
 
     在自定义缓冲区中，CAR 和 CDR 分别根据其指定的类型显示和编辑。
-（列出元素类型……）
+#+begin_src emacs-lisp
+  (list element-types…)
+#+end_src
 
     该值必须是一个列表，其元素数量与给定的元素类型完全相同；  并且每个元素必须适合相应的元素类型。
 
     例如，（list integer string function）描述了一个包含三个元素的列表；  第一个元素必须是整数，第二个元素必须是字符串，第三个元素必须是函数。
 
     在自定义缓冲区中，每个元素都根据为其指定的类型单独显示和编辑。
-（组元素类型...）
+#+begin_src emacs-lisp
+  (group element-types…)
+#+end_src
 
     除了自定义缓冲区中的文本格式外，这类似于列表。  list 用标签标记每个元素值；  组没有。
-（向量元素类型……）
+#+begin_src emacs-lisp
+  (vector element-types…)
+#+end_src
 
     与列表类似，只是值必须是向量而不是列表。  元素的工作方式与列表中的相同。
-（alist :key-type key-type :value-type value-type）
+#+begin_src emacs-lisp
+  (alist :key-type key-type :value-type value-type)
+#+end_src
 
     该值必须是一个 cons-cells 列表，每个单元格的 CAR 表示自定义类型 key-type 的键，同一单元格的 CDR 表示自定义类型 value-type 的值。  用户可以添加和删除键/值对，并编辑每对的键和值。
 
@@ -438,10 +565,14 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 	:type '(alist :value-type (group integer boolean)))
     #+end_src
 
-（plist：键类型键类型：值类型值类型）
+#+begin_src emacs-lisp
+  (plist :key-type key-type :value-type value-type)
+#+end_src
 
     此自定义类型类似于 alist（见上文），不同之处在于 (i) 信息存储为属性列表（见属性列表），以及 (ii) 键类型，如果省略，则默认为符号而不是 sexp。
-（选择替代类型……）
+#+begin_src emacs-lisp
+  (choice alternative-types…)
+#+end_src
 
     该值必须适合其中一种替代类型。  例如， (choice integer string) 允许使用整数或字符串。
 
@@ -466,10 +597,14 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
     #+end_src
 
     这样，特殊值 nil 就不会像其他符号一样被对待，符号也不会像其他 Lisp 表达式那样被对待。
-（无线电元件类型……）
+#+begin_src emacs-lisp
+  (radio element-types…)
+#+end_src
 
     这类似于选择，不同之处在于使用单选按钮而不是菜单显示选择。  这具有在适用时为选项显示文档的优点，因此通常是在常量函数（函数项自定义类型）之间进行选择的好选择。
-（常量值）
+#+begin_src emacs-lisp
+  (const value)
+#+end_src
 
     值必须是值——不允许有其他值。
 
@@ -485,7 +620,9 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 
     描述一个变量，其中 t 表示是，nil 表示否，foo 表示“询问”。
-（其他值）
+#+begin_src emacs-lisp
+  (other value)
+#+end_src
 
     此替代项可以匹配任何 Lisp 值，但如果用户选择此替代项，则选择值值。
 
@@ -498,13 +635,19 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
     #+end_src
 
     描述一个变量，其中 t 表示是，nil 表示否，任何其他都表示“询问”。  如果用户从备选菜单中选择“询问”，则指定值 foo；  但任何其他值（不是 t、nil 或 foo）都显示为“Ask”，就像 foo。
-（功能项功能）
+#+begin_src emacs-lisp
+  (function-item function)
+#+end_src
 
     与 const 类似，但用于作为函数的值。  这将显示文档字符串以及函数名称。  文档字符串可以是您使用 :doc 指定的字符串，也可以是函数自己的文档字符串。
-（变量项变量）
+#+begin_src emacs-lisp
+  (variable-item variable)
+#+end_src
 
     与 const 类似，但用于作为变量名的值。  这将显示文档字符串以及变量名称。  文档字符串可以是您使用 :doc 指定的字符串，也可以是变量自己的文档字符串。
-（设置类型...）
+#+begin_src emacs-lisp
+  (set types…)
+#+end_src
 
     该值必须是一个列表，并且列表的每个元素都必须与指定的类型之一匹配。
 
@@ -524,10 +667,14 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
     #+end_src
 
     这让用户可以选择指定一个高度值和一个可选择的宽度值。
-（重复元素类型）
+#+begin_src emacs-lisp
+  (repeat element-type)
+#+end_src
 
     该值必须是一个列表，并且列表的每个元素都必须适合类型 element-type。  这在自定义缓冲区中显示为元素列表，带有用于添加更多元素或删除元素的“[INS]”和“[DEL]”按钮。
-(restricted-sexp :match-alternatives 标准)
+#+begin_src emacs-lisp
+  (restricted-sexp :match-alternatives criteria)
+#+end_src
 
 
     这是最通用的复合类型构造。  该值可以是满足条件之一的任何 Lisp 对象。  标准应该是一个列表，每个元素应该是以下可能性之一：
@@ -547,13 +694,19 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 以下是您可以在复合类型的关键字-值对中使用的关键字表：
 
-:tag 标签
+#+begin_src emacs-lisp
+  :tag tag
+#+end_src
 
     使用标签作为此替代的名称，用于用户交流。  这对于出现在选项中的类型很有用。
-:match-alternatives 标准¶
+#+begin_src emacs-lisp
+  :match-alternatives criteria ¶
+#+end_src
 
     使用标准来匹配可能的值。  这仅用于受限制的性别。
-:args 参数列表 ¶
+#+begin_src emacs-lisp
+  :args argument-list ¶
+#+end_src
 
     使用argument-list 的元素作为类型构造的参数。  例如，(const :args (foo)) 等价于 (const foo)。  您很少需要显式编写 :args ，因为通常参数会自动识别为最后一个关键字-值对之后的任何内容。
 
@@ -588,7 +741,9 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 
 您可以在自定义类型中的类型名称符号之后指定关键字-参数对。  以下是您可以使用的关键字及其含义：
 
-:value 默认值
+#+begin_src emacs-lisp
+  :value default
+#+end_src
 
     提供一个默认值。
 
@@ -597,76 +752,120 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
     如果您将其用于在选择中作为替代出现的类型；  它首先指定在用户使用自定义缓冲区中的菜单选择此选项时使用的默认值。
 
     当然，如果选项的实际值适合这个替代方案，它将显示实际值，而不是默认值。
-:format 格式字符串 ¶
+#+begin_src emacs-lisp
+  :format format-string ¶
+#+end_src
 
     这个字符串将被插入到缓冲区中，以表示该类型对应的值。  以下 '%' 转义可用于格式字符串：
 
-    '％[按钮％]'
+#+begin_src emacs-lisp
+  ‘%[button%]’
+#+end_src
 
 	 显示标记为按钮的文本按钮。  :action 属性指定按钮在用户调用时会做什么；  它的值是一个带有两个参数的函数——按钮出现的小部件和事件。
 
 	 无法指定具有不同操作的两个不同按钮。
-    '％{样本％}'
+#+begin_src emacs-lisp
+  ‘%{sample%}’
+#+end_src
 
 	 在 :sample-face 指定的特殊面中显示样本。
-    '%v'
+#+begin_src emacs-lisp
+  ‘%v’
+#+end_src
 
 	 替换项目的值。  值的表示方式取决于项目的类型，以及（对于变量）自定义类型。
-    “%d”
+#+begin_src emacs-lisp
+  ‘%d’
+#+end_src
 
 	 替换项目的文档字符串。
-    '％H'
+#+begin_src emacs-lisp
+  ‘%h’
+#+end_src
 
 	 与 '%d' 类似，但如果文档字符串多于一行，则添加一个按钮来控制是显示全部还是仅显示第一行。
-    “%t”
+#+begin_src emacs-lisp
+  ‘%t’
+#+end_src
 
 	 在这里替换标签。  您使用 :tag 关键字指定标签。
-    '%%'
+#+begin_src emacs-lisp
+  ‘%%’
+#+end_src
 
 	 显示文字 '%'。
 
-:action 动作¶
+#+begin_src emacs-lisp
+  :action action ¶
+#+end_src
 
     如果用户单击按钮，则执行操作。
-:纽扣脸 ¶
+#+begin_src emacs-lisp
+  :button-face face ¶
+#+end_src
 
     使用人脸（人脸名称或人脸名称列表）作为显示为“%[…%]”的按钮文本。
-:button-prefix 前缀¶
-:button-suffix 后缀
+#+begin_src emacs-lisp
+  :button-prefix prefix ¶
+#+end_src
+#+begin_src emacs-lisp
+  :button-suffix suffix
+#+end_src
 
     这些指定要在按钮前后显示的文本。  每个可以是：
 
-    零
+#+begin_src emacs-lisp
+  nil
+#+end_src
 
 	 没有插入文本。
-    一个字符串
+#+begin_src emacs-lisp
+  a string
+#+end_src
 
 	 字符串按字面意思插入。
-    一个符号
+#+begin_src emacs-lisp
+  a symbol
+#+end_src
 
 	 使用符号的值。
 
-:tag 标签
+#+begin_src emacs-lisp
+  :tag tag
+#+end_src
 
     使用标签（字符串）作为与此类型对应的值（或值的一部分）的标签。
-:doc 文档¶
+#+begin_src emacs-lisp
+  :doc doc ¶
+#+end_src
 
     使用 doc 作为与此类型对应的此值（或值的一部分）的文档字符串。  为了使它起作用，您必须为 :format 指定一个值，并在该值中使用 '%d' 或 '%h'。
 
     为类型指定文档字符串的通常原因是提供有关选择类型或某些其他复合类型的部分中的替代项含义的更多信息。
-:help-echo 运动文档 ¶
+#+begin_src emacs-lisp
+  :help-echo motion-doc ¶
+#+end_src
 
     当您使用widget-forward或widget-backward移动到该项目时，它将在回显区域显示字符串motion-doc。  此外，motion-doc 被用作鼠标帮助回显字符串，实际上可能是一个函数或表单，被评估以产生一个帮助字符串。  如果它是一个函数，则使用一个参数调用它，即小部件。
-:匹配函数¶
+#+begin_src emacs-lisp
+  :match function ¶
+#+end_src
 
     指定如何确定值是否与类型匹配。  对应的值，函数，应该是一个接受两个参数的函数，一个小部件和一个值；  如果该值是可接受的，它应该返回非零。
-:match-inline 函数 ¶
+#+begin_src emacs-lisp
+  :match-inline function ¶
+#+end_src
 
     指定如何确定内联值是否与类型匹配。  对应的值，函数，应该是一个接受两个参数的函数，一个小部件和一个内联值；  如果该值是可接受的，它应该返回非零。  有关内联值的更多信息，请参阅拼接到列表中。
-:验证函数
+#+begin_src emacs-lisp
+  :validate function
+#+end_src
 
     为输入指定验证函数。  函数将小部件作为参数，如果小部件的当前值对小部件有效，则应返回 nil。  否则，它应该返回包含无效数据的小部件，并将该小部件的 :error 属性设置为解释错误的字符串。
-:type-error 字符串 ¶
+#+begin_src emacs-lisp
+  :type-error string ¶
+#+end_src
 
     string 应该是一个字符串，它描述了值与类型不匹配的原因，由 :match 函数确定。  当 :match 函数返回 nil 时，小部件的 :error 属性将设置为字符串。
 
@@ -704,7 +903,9 @@ defcustom 显示了如何将新的小部件用作普通的自定义类型。
 
 以下函数分别负责安装用户对变量和面的自定义设置。  当用户在 Customize 界面中调用“Save for future sessions”时，通过将 custom-set-variables 和/或 custom-set-faces 表单写入自定义文件来生效，以便在 Emacs 下次启动时进行评估。
 
-功能：自定义设置变量 &rest args ¶
+#+begin_src emacs-lisp
+  Function: custom-set-variables &rest args ¶
+#+end_src
 
     此函数安装由 args 指定的变量自定义。  args 中的每个参数都应具有以下形式
 
@@ -719,7 +920,9 @@ defcustom 显示了如何将新的小部件用作普通的自定义类型。
 
     now、request 和 comment 条目仅供内部使用，可以省略。  现在，如果非零，则意味着现在设置变量的值，即使尚未评估变量的 defcustom 形式。  request 是要立即加载的功能列表（请参阅功能）。  注释是描述自定义的字符串。
 
-功能：自定义设置面 &rest args ¶
+#+begin_src emacs-lisp
+  Function: custom-set-faces &rest args ¶
+#+end_src
 
     此函数安装由 args 指定的面部自定义。  args 中的每个参数都应具有以下形式
 
@@ -736,19 +939,25 @@ defcustom 显示了如何将新的小部件用作普通的自定义类型。
 
 自定义主题文件应命名为 foo-theme.el，其中 foo 是主题名称。  文件中的第一个 Lisp 表单应该是对 deftheme 的调用，最后一个表单应该是对提供主题的调用。
 
-宏：deftheme 主题和可选文档¶
+#+begin_src emacs-lisp
+  Macro: deftheme theme &optional doc ¶
+#+end_src
 
     此宏将主题（一个符号）声明为自定义主题的名称。  可选参数 doc 应该是描述主题的字符串；  这是用户调用 describe-theme 命令或类型时显示的描述？  在“*自定义主题*”缓冲区中。
 
     不允许使用两个特殊的主题名称（使用它们会导致错误）：user 是存储用户直接自定义设置的虚拟主题，changed 是存储在自定义系统之外所做的更改的虚拟主题。
 
-宏：提供主题主题¶
+#+begin_src emacs-lisp
+  Macro: provide-theme theme ¶
+#+end_src
 
     此宏声明已完全指定名为 theme 的主题。
 
 在 deftheme 和 provide-theme 之间是指定主题设置的 Lisp 表单：通常是调用 custom-theme-set-variables 和/或调用 custom-theme-set-faces。
 
-功能：自定义主题集变量主题 &rest args ¶
+#+begin_src emacs-lisp
+  Function: custom-theme-set-variables theme &rest args ¶
+#+end_src
 
     此函数指定自定义主题主题的变量设置。  主题应该是一个符号。  args 中的每个参数都应该是形式的列表
 
@@ -757,7 +966,9 @@ defcustom 显示了如何将新的小部件用作普通的自定义类型。
     #+end_src
     其中列表条目的含义与自定义设置变量中的含义相同。  请参阅应用自定义。
 
-功能：custom-theme-set-faces 主题 &rest args ¶
+#+begin_src emacs-lisp
+  Function: custom-theme-set-faces theme &rest args ¶
+#+end_src
 
     此函数指定自定义主题主题的面部设置。  主题应该是一个符号。  args 中的每个参数都应该是形式的列表
 
@@ -770,19 +981,27 @@ defcustom 显示了如何将新的小部件用作普通的自定义类型。
 
 以下函数对于以编程方式启用和禁用主题很有用：
 
-功能：自定义主题-p主题¶
+#+begin_src emacs-lisp
+  Function: custom-theme-p theme ¶
+#+end_src
 
     如果主题（一个符号）是自定义主题的名称（即，已加载到 Emacs 中的自定义主题，无论主题是否启用），此函数返回一个非零值。  否则，它返回零。
 
-变量：自定义已知主题¶
+#+begin_src emacs-lisp
+  Variable: custom-known-themes ¶
+#+end_src
 
     此变量的值是加载到 Emacs 中的主题列表。  每个主题都由一个 Lisp 符号（主题名称）表示。  此变量的默认值是一个包含两个虚拟主题的列表：（用户已更改）。  在应用任何自定义主题之前所做的更改的主题存储设置（例如，在自定义之外设置的变量）。  用户主题存储用户自定义和保存的设置。  使用 deftheme 宏声明的任何其他主题都将添加到此列表的前面。
 
-命令：加载主题主题 &optional no-confirm no-enable ¶
+#+begin_src emacs-lisp
+  Command: load-theme theme &optional no-confirm no-enable ¶
+#+end_src
 
     此函数从其源文件加载名为 theme 的自定义主题，在变量 custom-theme-load-path 指定的目录中查找源文件。  请参阅 GNU Emacs 手册中的自定义主题。  它还启用主题（除非可选参数 no-enable 为非 nil），使其变量和面设置生效。  它会在加载主题之前提示用户确认，除非可选参数 no-confirm 为非零。
 
-功能：require-theme 功能 &optional noerror ¶
+#+begin_src emacs-lisp
+  Function: require-theme feature &optional noerror ¶
+#+end_src
 
     此函数在 custom-theme-load-path 中搜索提供功能的文件，然后加载它。  这类似于函数 require（请参阅功能），除了它搜索 custom-theme-load-path 而不是 load-path（请参阅库搜索）。  这在需要加载支持 Lisp 文件时需要不适合的自定义主题中很有用。
 
@@ -790,10 +1009,14 @@ defcustom 显示了如何将新的小部件用作普通的自定义类型。
 
     如果成功找到并加载了提供功能的文件，则 require-theme 返回功能。  可选参数 noerror 确定如果搜索或加载失败会发生什么。  如果为 nil，则该函数发出错误信号；  否则，它返回 nil。  如果文件加载成功但不提供功能，则 require-theme 会发出错误信号；  这是无法压制的。
 
-命令：启用主题主题¶
+#+begin_src emacs-lisp
+  Command: enable-theme theme ¶
+#+end_src
 
     此功能启用名为主题的自定义主题。  如果没有加载此类主题，则会发出错误信号。
 
-命令：禁用主题主题¶
+#+begin_src emacs-lisp
+  Command: disable-theme theme ¶
+#+end_src
 
     此功能禁用名为主题的自定义主题。  主题保持加载状态，以便后续调用 enable-theme 将重新启用它。

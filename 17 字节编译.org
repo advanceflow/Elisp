@@ -53,7 +53,9 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
 内联（defsubst）函数不那么麻烦；  如果您在知道其定义之前编译对此类函数的调用，则该调用仍然可以正常工作，只是运行速度较慢。
 
-功能：字节编译符号¶
+#+begin_src emacs-lisp
+  Function: byte-compile symbol ¶
+#+end_src
 
     该函数对符号的函数定义进行字节编译，将之前的定义替换为编译后的定义。  symbol的函数定义必须是函数的实际代码；  字节编译不处理函数间接。  返回值是字节码函数对象，它是符号的编译定义（参见字节码函数对象）。
 
@@ -79,13 +81,17 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
     byte-compile 的参数也可以是 lambda 表达式。  在这种情况下，该函数会返回相应的编译代码，但不会将其存储在任何地方。
 
-命令：compile-defun &optional arg ¶
+#+begin_src emacs-lisp
+  Command: compile-defun &optional arg ¶
+#+end_src
 
     此命令读取包含点的 defun，对其进行编译并评估结果。  如果在实际上是函数定义的 defun 上使用它，效果是安装该函数的编译版本。
 
     compile-defun 通常在 echo 区域显示计算结果，但如果 arg 不为零，它会将结果插入到它编译的表单之后的当前缓冲区中。
 
-命令：字节编译文件文件名¶
+#+begin_src emacs-lisp
+  Command: byte-compile-file filename ¶
+#+end_src
 
     该函数将名为 filename 的 Lisp 代码文件编译成字节码文件。  输出文件的名称是通过将“.el”后缀更改为“.elc”来获得的；  如果文件名不以“.el”结尾，则将“.elc”添加到文件名的末尾。
 
@@ -106,7 +112,9 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
       -rw-rw-rw- 1 lewis lewis 638 Oct  8 20:25 push.elc
     #+end_src
 
-命令： byte-recompile-directory 目录 &optional flag force follow-symlinks ¶
+#+begin_src emacs-lisp
+  Command: byte-recompile-directory directory &optional flag force follow-symlinks ¶
+#+end_src
 
     此命令重新编译目录（或其子目录）中需要重新编译的每个“.el”文件。  如果“.elc”文件存在但比“.el”文件旧，则需要重新编译文件。
 
@@ -120,7 +128,9 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
     返回的值是不可预测的。
 
-功能：batch-byte-compile &optional noforce ¶
+#+begin_src emacs-lisp
+  Function: batch-byte-compile &optional noforce ¶
+#+end_src
 
     此函数在命令行上指定的文件上运行 byte-compile-file。  该函数只能在 Emacs 的批处理执行中使用，因为它会在完成时杀死 Emacs。  一个文件中的错误不会阻止后续文件的处理，但不会为其生成输出文件，并且 Emacs 进程将以非零状态码终止。
 
@@ -136,7 +146,9 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
 对于每个字节编译文件，在编译时确定从字节编译文件动态加载文档字符串。  可以通过选项 byte-compile-dynamic-docstrings 禁用它。
 
-用户选项：字节编译动态文档字符串¶
+#+begin_src emacs-lisp
+  User Option: byte-compile-dynamic-docstrings ¶
+#+end_src
 
     如果这是非零，字节编译器生成为动态加载文档字符串而设置的编译文件。
 
@@ -171,11 +183,15 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
   -*-byte-compile-dynamic: t;-*-
 #+end_src
 
-变量：字节编译动态¶
+#+begin_src emacs-lisp
+  Variable: byte-compile-dynamic ¶
+#+end_src
 
     如果这是非零，字节编译器生成为动态函数加载设置的编译文件。
 
-功能：获取字节码函数¶
+#+begin_src emacs-lisp
+  Function: fetch-bytecode function ¶
+#+end_src
 
     如果 function 是一个字节码函数对象，如果它还没有完全加载，这将立即完成从其字节编译文件中加载函数的字节码。  否则，它什么也不做。  它总是返回函数。
 
@@ -183,7 +199,9 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
 这些功能允许您编写在程序编译期间进行评估的代码。
 
-宏：eval-and-compile body… ¶
+#+begin_src emacs-lisp
+  Macro: eval-and-compile body… ¶
+#+end_src
 
     当您编译包含代码和运行它时（无论是否编译），此表单都标记要评估的主体。
 
@@ -197,7 +215,9 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
     如果函数是通过程序定义的（比如 fset），那么 eval-and-compile 可用于在编译时和运行时完成，因此检查对这些函数的调用（以及有关“未知被定义”抑制）。
 
-宏：eval-when-compile body… ¶
+#+begin_src emacs-lisp
+  Macro: eval-when-compile body… ¶
+#+end_src
 
     此表单标记要在编译时评估的主体，而不是在加载已编译的程序时。  编译器的评估结果成为一个常量，出现在编译的程序中。  如果您加载源文件，而不是编译它，则正常评估正文。
 
@@ -257,7 +277,9 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
 您还可以使用 with-suppressed-warnings 宏在某个表达式中抑制编译器警告：
 
-特殊形式：with-suppressed-warnings 警告体... ¶
+#+begin_src emacs-lisp
+  Special Form: with-suppressed-warnings warnings body… ¶
+#+end_src
 
     在执行中，这等价于 (progn body...)，但编译器不会针对 body 中的指定条件发出警告。  warnings 是它们适用的警告符号和函数/变量符号的关联列表。  例如，如果您想调用一个名为 foo 的过时函数，但又想禁止编译警告，请说：
 
@@ -268,7 +290,9 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
 要更粗粒度地抑制编译器警告，您可以使用 with-no-warnings 构造：
 
-特殊形式：没有警告的身体…… ¶
+#+begin_src emacs-lisp
+  Special Form: with-no-warnings body… ¶
+#+end_src
 
     在执行中，这等价于 (progn body...)，但编译器不会对 body 内部发生的任何事情发出警告。
 
@@ -284,24 +308,36 @@ Emacs Lisp 有一个编译器，它将用 Lisp 编写的函数翻译成一种称
 
 在内部，字节码函数对象很像一个向量。  可以使用 aref 访问其元素。  它的打印表示类似于矢量，在开头的“[”之前有一个附加的“#”。  它必须至少有四个元素；  没有最大数量，但只有前六个元素可以正常使用。  他们是：
 
-argdesc
+#+begin_src emacs-lisp
+  argdesc
+#+end_src
 
     参数的描述符。  这可以是参数列表，如参数列表的特性中所述，也可以是编码所需参数数量的整数。  在后一种情况下，描述符的值指定第 0 到 6 位中的最小参数数量，以及第 8 到 14 位中的最大参数数量。如果参数列表使用 &rest，则设置第 7 位；  否则它被清除。
 
     如果 argdesc 是一个列表，则参数将在执行字节码之前动态绑定。  如果 argdesc 是整数，则在执行代码之前，参数将被推送到字节码解释器的堆栈中。
-字节码
+#+begin_src emacs-lisp
+  byte-code
+#+end_src
 
     包含字节码指令的字符串。
-常数
+#+begin_src emacs-lisp
+  constants
+#+end_src
 
     字节码引用的 Lisp 对象的向量。  这些包括用作函数名和变量名的符号。
-堆栈大小
+#+begin_src emacs-lisp
+  stacksize
+#+end_src
 
     此函数所需的最大堆栈大小。
-文档字符串
+#+begin_src emacs-lisp
+  docstring
+#+end_src
 
     文档字符串（如果有）；  否则，无。  如果文档字符串存储在文件中，则该值可以是数字或列表。  使用函数文档获取真正的文档字符串（请参阅访问文档字符串）。
-交互的
+#+begin_src emacs-lisp
+  interactive
+#+end_src
 
     交互式规范（如果有）。  这可以是字符串或 Lisp 表达式。  对于非交互式功能，它是 nil。
 
@@ -318,21 +354,24 @@ argdesc
 
 创建字节码对象的原始方法是使用 make-byte-code：
 
-功能：生成字节码 &rest 元素 ¶
+#+begin_src emacs-lisp
+  Function: make-byte-code &rest elements ¶
+#+end_src
 
     该函数构造并返回一个以元素为元素的字节码函数对象。
 
 您不应该尝试自己提出字节码函数的元素，因为如果它们不一致，Emacs 可能会在您调用该函数时崩溃。  始终将其留给字节编译器来创建这些对象；  它使元素保持一致（我们希望）。
 
 ** TODO 17.8 反汇编字节码
-
 人们不写字节码；  该工作留给字节编译器。  但是我们提供了一个反汇编程序来满足猫一样的好奇心。  反汇编器将字节编译的代码转换为人类可读的形式。
 
 字节码解释器被实现为一个简单的堆栈机器。  它将值推送到自己的堆栈中，然后将它们弹出以在计算中使用它们，其结果本身被推回堆栈中。  当字节码函数返回时，它会从堆栈中弹出一个值并将其作为函数的值返回。
 
 除了堆栈之外，字节码函数可以通过在变量和堆栈之间传输值来使用、绑定和设置普通的 Lisp 变量。
 
-命令：反汇编对象 &optional buffer-or-name ¶
+#+begin_src emacs-lisp
+  Command: disassemble object &optional buffer-or-name ¶
+#+end_src
 
     此命令显示对象的反汇编代码。  在交互式使用中，或者如果 buffer-or-name 为 nil 或省略，则输出进入名为 *Disassemble* 的缓冲区。  如果 buffer-or-name 不为 nil，则它必须是缓冲区或现有缓冲区的名称。  然后输出到那里，点，点在输出之前。
 
@@ -340,55 +379,51 @@ argdesc
 
 这里有两个使用反汇编函数的例子。  我们添加了解释性注释来帮助您将字节码与 Lisp 源代码相关联；  这些不会出现在 disassemble 的输出中。
 #+begin_src emacs-lisp
+  (defun factorial (integer)
+    "Compute factorial of an integer."
+    (if (= 1 integer) 1
+      (* integer (factorial (1- integer)))))
+       ⇒ factorial
 
 
-(defun factorial (integer)
-  "Compute factorial of an integer."
-  (if (= 1 integer) 1
-    (* integer (factorial (1- integer)))))
-     ⇒ factorial
+  (factorial 4)
+       ⇒ 24
 
 
-(factorial 4)
-     ⇒ 24
+  (disassemble 'factorial)
+       -| byte-code for factorial:
+   doc: Compute factorial of an integer.
+   args: (integer)
 
 
-(disassemble 'factorial)
-     -| byte-code for factorial:
- doc: Compute factorial of an integer.
- args: (integer)
+  0   varref   integer      ; Get the value of integer and
+			    ;   push it onto the stack.
+  1   constant 1            ; Push 1 onto stack.
 
+  2   eqlsign               ; Pop top two values off stack, compare
+			    ;   them, and push result onto stack.
 
-0   varref   integer      ; Get the value of integer and
-			  ;   push it onto the stack.
-1   constant 1            ; Push 1 onto stack.
+  3   goto-if-nil 1         ; Pop and test top of stack;
+			    ;   if nil, go to 1, else continue.
+  6   constant 1            ; Push 1 onto top of stack.
+  7   return                ; Return the top element of the stack.
 
-2   eqlsign               ; Pop top two values off stack, compare
-			  ;   them, and push result onto stack.
+  8:1 varref   integer      ; Push value of integer onto stack.
+  9   constant factorial    ; Push factorial onto stack.
+  10  varref   integer      ; Push value of integer onto stack.
+  11  sub1                  ; Pop integer, decrement value,
+			    ;   push new value onto stack.
+  12  call     1            ; Call function factorial using first
+			    ;   (i.e., top) stack element as argument;
+			    ;   push returned value onto stack.
 
-3   goto-if-nil 1         ; Pop and test top of stack;
-			  ;   if nil, go to 1, else continue.
-6   constant 1            ; Push 1 onto top of stack.
-7   return                ; Return the top element of the stack.
-
-8:1 varref   integer      ; Push value of integer onto stack.
-9   constant factorial    ; Push factorial onto stack.
-10  varref   integer      ; Push value of integer onto stack.
-11  sub1                  ; Pop integer, decrement value,
-			  ;   push new value onto stack.
-12  call     1            ; Call function factorial using first
-			  ;   (i.e., top) stack element as argument;
-			  ;   push returned value onto stack.
-
-13 mult                   ; Pop top two values off stack, multiply
-			  ;   them, and push result onto stack.
-14 return                 ; Return the top element of the stack.
+  13 mult                   ; Pop top two values off stack, multiply
+			    ;   them, and push result onto stack.
+  14 return                 ; Return the top element of the stack.
 #+end_src
 
 silly-loop 函数稍微复杂一些：
 #+begin_src emacs-lisp
-
-
   (defun silly-loop (n)
     "Return time before and after N iterations of a loop."
     (let ((t1 (current-time-string)))
