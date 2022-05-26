@@ -19,7 +19,9 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 
 有关访问缓冲区中文件的相关函数和变量，请参阅访问文件和保存缓冲区。  有关在窗口中显示缓冲区的相关函数和变量，请参阅缓冲区和窗口。
 
-功能：缓冲对象 ¶
+#+begin_src emacs-lisp
+  Function: bufferp object ¶
+#+end_src
 
     如果 object 是缓冲区，则此函数返回 t，否则返回 nil。
 
@@ -29,7 +31,9 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 
 通常，所选窗口中显示的缓冲区（请参阅选择窗口）是当前缓冲区，但并非总是如此：Lisp 程序可以临时将任何缓冲区指定为当前缓冲区，以便对其内容进行操作，而不会更改显示的内容屏幕。  指定当前缓冲区的最基本功能是设置缓冲区。
 
-功能：当前缓冲区¶
+#+begin_src emacs-lisp
+  Function: current-buffer ¶
+#+end_src
 
     此函数返回当前缓冲区。
 
@@ -38,7 +42,9 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 	   ⇒ #<buffer buffers.texi>
     #+end_src
 
-功能：设置缓冲区缓冲区或名称¶
+#+begin_src emacs-lisp
+  Function: set-buffer buffer-or-name ¶
+#+end_src
 
     此函数使 buffer-or-name 成为当前缓冲区。  buffer-or-name 必须是现有缓冲区或现有缓冲区的名称。  返回值是当前缓冲区。
 
@@ -89,19 +95,25 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 
 正如我们所做的那样，使用 save-current-buffer 或 with-current-buffer 可以正确处理退出、错误和抛出以及普通评估。
 
-特殊形式：save-current-buffer body… ¶
+#+begin_src emacs-lisp
+  Special Form: save-current-buffer body… ¶
+#+end_src
 
     save-current-buffer 特殊形式保存当前缓冲区的标识，评估正文形式，最后将该缓冲区恢复为当前缓冲区。  返回值是正文中最后一个表单的值。  即使在通过 throw 或 error 异常退出的情况下也会恢复当前缓冲区（请参阅非本地退出）。
 
     如果从 save-current-buffer 退出时曾经是当前的缓冲区已被杀死，那么它当然不会再次成为当前缓冲区。  相反，无论哪个缓冲区在退出之前是当前的，都会保持当前状态。
 
-宏：with-current-buffer buffer-or-name body... ¶
+#+begin_src emacs-lisp
+  Macro: with-current-buffer buffer-or-name body… ¶
+#+end_src
 
     with-current-buffer 宏保存当前缓冲区的标识，使缓冲区或名称成为当前缓冲区，评估主体形式，最后恢复当前缓冲区。  buffer-or-name 必须指定现有缓冲区或现有缓冲区的名称。
 
     返回值是正文中最后一个表单的值。  即使在通过 throw 或 error 异常退出的情况下也会恢复当前缓冲区（请参阅非本地退出）。
 
-宏：with-temp-buffer body… ¶
+#+begin_src emacs-lisp
+  Macro: with-temp-buffer body… ¶
+#+end_src
 
     with-temp-buffer 宏使用临时缓冲区作为当前缓冲区来评估正文表单。  它保存当前缓冲区的标识，创建一个临时缓冲区并使其成为当前缓冲区，评估主体形式，最后在杀死临时缓冲区的同时恢复先前的当前缓冲区。
 
@@ -119,7 +131,9 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 
 短暂且用户通常不感兴趣的缓冲区的名称以空格开头，因此 list-buffers 和 buffer-menu 命令不会提及它们（但如果这样的缓冲区访问文件，则会提及）。  以空格开头的名称最初也会禁用记录撤消信息；  请参阅撤消。
 
-功能：缓冲区名称&可选缓冲区¶
+#+begin_src emacs-lisp
+  Function: buffer-name &optional buffer ¶
+#+end_src
 
     此函数将缓冲区的名称作为字符串返回。  buffer 默认为当前缓冲区。
 
@@ -144,7 +158,9 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 	   ⇒ #<killed buffer>
     #+end_src
 
-命令：rename-buffer newname &optional unique ¶
+#+begin_src emacs-lisp
+  Command: rename-buffer newname &optional unique ¶
+#+end_src
 
     此函数将当前缓冲区重命名为 newname。  如果 newname 不是字符串，则会发出错误信号。
 
@@ -152,7 +168,9 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 
     此函数返回实际赋予缓冲区的名称。
 
-功能：获取缓冲区缓冲区或名称¶
+#+begin_src emacs-lisp
+  Function: get-buffer buffer-or-name ¶
+#+end_src
 
     此函数返回由 buffer-or-name 指定的缓冲区。  如果 buffer-or-name 是一个字符串并且没有具有该名称的缓冲区，则值为 nil。  如果 buffer-or-name 是一个缓冲区，则按给定返回；  这不是很有用，所以参数通常是一个名称。  例如：
     #+begin_src emacs-lisp
@@ -170,7 +188,9 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 
     另请参阅创建缓冲区中的函数 get-buffer-create。
 
-功能：生成新缓冲区名称起始名称&可选忽略¶
+#+begin_src emacs-lisp
+  Function: generate-new-buffer-name starting-name &optional ignore ¶
+#+end_src
 
     此函数返回一个新缓冲区的唯一名称，但不会创建缓冲区。  它以起始名称开头，并通过在“<...>”中附加一个数字来生成一个当前未用于任何缓冲区的名称。  它从 2 开始并不断增加数字，直到它不是现有缓冲区的名称。
 
@@ -189,7 +209,9 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 
 缓冲区文件名是在该缓冲区中访问的文件的名称。  当一个缓冲区没有访问一个文件时，它的缓冲区文件名是 nil。  大多数时候，缓冲区名与缓冲区文件名的非目录部分相同，但缓冲区文件名和缓冲区名是不同的，可以独立设置。  请参阅访问文件。
 
-功能：缓冲区文件名&可选缓冲区¶
+#+begin_src emacs-lisp
+  Function: buffer-file-name &optional buffer ¶
+#+end_src
 
     此函数返回缓冲区正在访问的文件的绝对文件名。  如果 buffer 没有访问任何文件，则 buffer-file-name 返回 nil。  如果未提供缓冲区，则默认为当前缓冲区。
 
@@ -198,7 +220,9 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
      ⇒ "/usr/user/lewis/manual/files.texi"
     #+end_src
 
-变量：缓冲区文件名¶
+#+begin_src emacs-lisp
+  Variable: buffer-file-name ¶
+#+end_src
 
     此缓冲区局部变量包含当前缓冲区中正在访问的文件的名称，如果不访问文件，则为 nil。  它是一个永久的局部变量，不受 kill-all-local-variables 的影响。
 
@@ -209,11 +233,15 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 
     在不做各种其他事情的情况下更改此变量的值是有风险的。  通常最好使用 set-visited-file-name （见下文）；  那里完成的一些事情，例如更改缓冲区名称，并不是绝对必要的，但其他一些事情对于避免混淆 Emacs 是必不可少的。
 
-变量：buffer-file-truename ¶
+#+begin_src emacs-lisp
+  Variable: buffer-file-truename ¶
+#+end_src
 
     这个缓冲区局部变量保存当前缓冲区中访问的文件的缩写真名，如果没有访问文件，则为 nil。  它是一个永久的局部变量，不受 kill-all-local-variables 的影响。  请参见 Truenames 和 abbreviate-file-name。
 
-变量：缓冲区文件编号¶
+#+begin_src emacs-lisp
+  Variable: buffer-file-number ¶
+#+end_src
 
     这个缓冲区局部变量保存当前缓冲区中访问的文件的文件号和目录设备号，如果没有文件或不存在的文件被访问，则为 nil。  它是一个永久的局部变量，不受 kill-all-local-variables 的影响。
 
@@ -221,7 +249,9 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 
     如果 buffer-file-name 是符号链接的名称，则两个数字都指递归目标。
 
-功能：获取文件缓冲区文件名¶
+#+begin_src emacs-lisp
+  Function: get-file-buffer filename ¶
+#+end_src
 
     该函数返回缓冲区访问文件filename。  如果没有这样的缓冲区，则返回 nil。  必须是字符串的参数文件名被扩展（请参阅扩展文件名的函数），然后与所有活动缓冲区的访问文件名进行比较。  请注意，缓冲区的缓冲区文件名必须与文件名的扩展完全匹配。  此函数不会识别同一文件的其他名称。
 
@@ -233,11 +263,15 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 
     在不寻常的情况下，可能有多个缓冲区访问同一个文件名。  在这种情况下，此函数返回缓冲区列表中的第一个此类缓冲区。
 
-功能：查找缓冲区访问文件名&可选谓词¶
+#+begin_src emacs-lisp
+  Function: find-buffer-visiting filename &optional predicate ¶
+#+end_src
 
     这类似于 get-file-buffer，只是它可以返回访问文件的任何缓冲区，可能以不同的名称访问文件。  即缓冲区的缓冲区文件名不需要完全匹配文件名的扩展，它只需要引用同一个文件。  如果谓词非零，它应该是一个参数的函数，一个缓冲区访问文件名。  如果谓词返回非零，则缓冲区仅被视为合适的返回值。  如果找不到合适的缓冲区返回，find-buffer-visiting 返回 nil。
 
-命令：set-visited-file-name filename &optional no-query along-with-file ¶
+#+begin_src emacs-lisp
+  Command: set-visited-file-name filename &optional no-query along-with-file ¶
+#+end_src
 
     如果 filename 是一个非空字符串，则该函数将当前缓冲区中访问的文件的名称更改为 filename。  （如果缓冲区没有访问过的文件，这给它一个。）下次保存缓冲区时，它将进入新指定的文件。
 
@@ -251,7 +285,9 @@ Lisp 缓冲区对象包含大量信息。  程序员可以通过变量直接访�
 
     当交互式调用函数 set-visited-file-name 时，它​​会提示输入 minibuffer 中的文件名。
 
-变量：列表缓冲区目录¶
+#+begin_src emacs-lisp
+  Variable: list-buffers-directory ¶
+#+end_src
 
     对于没有访问文件名的缓冲区，此缓冲区局部变量指定一个字符串，以显示在访问文件名所在的缓冲区列表中。  Dired 缓冲区使用此变量。
 
@@ -263,11 +299,15 @@ Emacs 为每个缓冲区保留一个称为修改标志的标志，以记录您�
 
 修改缓冲区内容的函数在文本中描述。
 
-功能：缓冲区修改-p &可选缓冲区¶
+#+begin_src emacs-lisp
+  Function: buffer-modified-p &optional buffer ¶
+#+end_src
 
     如果缓冲区缓冲区自上次从文件读入或保存后已被修改，则此函数返回 t，否则返回 nil。  如果未提供缓冲区，则测试当前缓冲区。
 
-功能：设置缓冲区修改-p标志¶
+#+begin_src emacs-lisp
+  Function: set-buffer-modified-p flag ¶
+#+end_src
 
     如果 flag 为非 nil，此函数将当前缓冲区标记为已修改，如果 flag 为 nil，则此函数将其标记为未修改。
 
@@ -277,27 +317,37 @@ Emacs 为每个缓冲区保留一个称为修改标志的标志，以记录您�
       (set-buffer-modified-p (buffer-modified-p))
     #+end_src
 
-功能：restore-buffer-modified-p 标志 ¶
+#+begin_src emacs-lisp
+  Function: restore-buffer-modified-p flag ¶
+#+end_src
 
     与 set-buffer-modified-p 类似，但不强制重新显示模式行。
 
-命令：未修改 &optional arg ¶
+#+begin_src emacs-lisp
+  Command: not-modified &optional arg ¶
+#+end_src
 
     该命令将当前缓冲区标记为未修改，不需要保存。  如果 arg 不为零，则将缓冲区标记为已修改，以便在下一个合适的场合保存。  交互式地， arg 是前缀参数。
 
     不要在程序中使用此功能，因为它会在回显区域打印一条消息；  改用 set-buffer-modified-p（上图）。
 
-功能：buffer-modified-tick &optional buffer ¶
+#+begin_src emacs-lisp
+  Function: buffer-modified-tick &optional buffer ¶
+#+end_src
 
     此函数返回缓冲区的修改计数。  这是一个每次修改缓冲区时递增的计数器。  如果 buffer 为 nil（或省略），则使用当前缓冲区。
 
-功能：buffer-chars-modified-tick &optional buffer ¶
+#+begin_src emacs-lisp
+  Function: buffer-chars-modified-tick &optional buffer ¶
+#+end_src
 
     此函数返回缓冲区的字符更改修改计数。  对文本属性的更改使该计数器保持不变；  但是，每次在缓冲区中插入或删除文本时，计数器都会重置为 buffer-modified-tick 返回的值。  通过比较两个 buffer-chars-modified-tick 调用返回的值，您可以判断在调用之间该缓冲区中是否发生了字符更改。  如果 buffer 为 nil（或省略），则使用当前缓冲区。
 
 有时需要以一种不会真正更改其文本的方式修改缓冲区，例如仅更改其文本属性。  如果您的程序需要修改缓冲区而不触发任何对缓冲区修改作出反应的钩子和功能，请使用 with-silent-modifications 宏。
 
-宏：with-silent-modifications body... ¶
+#+begin_src emacs-lisp
+  Macro: with-silent-modifications body… ¶
+#+end_src
 
     执行 body 假装它不修改缓冲区。  这包括检查缓冲区的文件是否被锁定（参见 File Locks）、运行缓冲区修改挂钩（参见 Change Hooks）等。请注意，如果 body 实际修改了缓冲区文本（与其文本属性相反），它的撤消数据可能会变为损坏。
 
@@ -305,7 +355,9 @@ Emacs 为每个缓冲区保留一个称为修改标志的标志，以记录您�
 
 假设您访问一个文件并在其缓冲区中进行更改，同时文件本身在磁盘上也发生了更改。  此时，保存缓冲区将覆盖文件中的更改。  有时这可能是您想要的，但通常它会丢失有价值的信息。  因此，Emacs 在保存文件之前使用下面描述的函数检查文件的修改时间。  （请参阅文件属性，了解如何检查文件的修改时间。）
 
-功能：verify-visited-file-modtime &optional buffer ¶
+#+begin_src emacs-lisp
+  Function: verify-visited-file-modtime &optional buffer ¶
+#+end_src
 
     此函数将其访问文件的修改时间记录的缓冲区（默认情况下，当前缓冲区）与操作系统记录的文件的实际修改时间进行比较。  这两者应该是相同的，除非在 Emacs 访问或保存文件后有其他进程写入了该文件。
 
@@ -313,13 +365,17 @@ Emacs 为每个缓冲区保留一个称为修改标志的标志，以记录您�
 
     对于没有访问文件的缓冲区，它总是返回 t，即使访问文件修改时间返回一个非零值。  例如，它总是为 dired 缓冲区返回 t。  对于访问不存在且从未存在的文件的缓冲区，它返回 t，但对于文件已被删除的文件访问缓冲区，它返回 nil。
 
-功能：清除访问文件修改时间¶
+#+begin_src emacs-lisp
+  Function: clear-visited-file-modtime ¶
+#+end_src
 
     该函数清除当前缓冲区正在访问的文件的最后修改时间记录。  因此，下次保存此缓冲区的尝试不会抱怨文件修改时间的差异。
 
     此函数在 set-visited-file-name 和其他不应该进行通常测试以避免覆盖已更改文件的特殊位置调用。
 
-功能：访问文件修改时间¶
+#+begin_src emacs-lisp
+  Function: visited-file-modtime ¶
+#+end_src
 
     此函数返回当前缓冲区记录的最后文件修改时间，作为 Lisp 时间戳（请参阅时间）。
 
@@ -327,7 +383,9 @@ Emacs 为每个缓冲区保留一个称为修改标志的标志，以记录您�
 
     如果缓冲区正在访问一个不存在的文件，则此函数返回 -1。
 
-功能：set-visited-file-modtime &optional time ¶
+#+begin_src emacs-lisp
+  Function: set-visited-file-modtime &optional time ¶
+#+end_src
 
     该函数将访问文件的最后修改时间的缓冲区记录更新为 time 指定的值，如果 time 不为零，否则更新为访问文件的最后修改时间。
 
@@ -335,7 +393,9 @@ Emacs 为每个缓冲区保留一个称为修改标志的标志，以记录您�
 
     如果缓冲区没有从文件中正常读取，或者文件本身由于某些已知的良性原因而被更改，则此函数很有用。
 
-功能：询问用户关于超级会话威胁文件名¶
+#+begin_src emacs-lisp
+  Function: ask-user-about-supersession-threat filename ¶
+#+end_src
 
     当文件比缓冲区文本更新时，此函数用于询问用户在尝试修改缓冲区访问文件文件名后如何进行。  Emacs 检测到这一点是因为磁盘上文件的修改时间比上次保存时间要新，并且其内容已更改。  这意味着其他一些程序可能已经更改了该文件。
 
@@ -358,17 +418,23 @@ Emacs 为每个缓冲区保留一个称为修改标志的标志，以记录您�
 
     这些模式的特殊命令将 buffer-read-only 绑定到 nil（使用 let）或 bind-inhibit-read-only 到 t 在它们自己更改文本的位置周围。
 
-变量：缓冲区只读 ¶
+#+begin_src emacs-lisp
+  Variable: buffer-read-only ¶
+#+end_src
 
     此缓冲区局部变量指定缓冲区是否为只读。  如果此变量非零，则缓冲区是只读的。  但是，仍然可以修改具有禁止只读文本属性的字符。  请参阅禁止只读。
 
-变量：禁止只读 ¶
+#+begin_src emacs-lisp
+  Variable: inhibit-read-only ¶
+#+end_src
 
     如果此变量非零，则只读缓冲区，并且根据实际值，可能会修改部分或全部只读字符。  缓冲区中的只读字符是那些具有非零只读文本属性的字符。  有关文本属性的更多信息，请参阅具有特殊含义的属性。
 
     如果 inhibitor-read-only 为 t，则所有只读字符属性均无效。  如果 inhibitor-read-only 是一个列表，那么如果它们是列表的成员，则只读字符属性无效（与 eq 进行比较）。
 
-命令：只读模式 &optional arg ¶
+#+begin_src emacs-lisp
+  Command: read-only-mode &optional arg ¶
+#+end_src
 
     这是只读次要模式（缓冲区本地次要模式）的模式命令。  开启模式时，buffer-read-only在缓冲区中为非nil；  禁用时，缓冲区中的缓冲区只读为零。  调用约定与其他次要模式命令相同（请参阅编写次要模式的约定）。
 
@@ -376,7 +442,9 @@ Emacs 为每个缓冲区保留一个称为修改标志的标志，以记录您�
 
     启用只读模式时，如果选项 view-read-only 为非零，则此模式命令也会启用查看模式。  请参阅 GNU Emacs 手册中的 Miscellaneous Buffer Operations。  禁用只读模式时，如果启用了查看模式，它将禁用查看模式。
 
-功能：barf-if-buffer-read-only &optional position ¶
+#+begin_src emacs-lisp
+  Function: barf-if-buffer-read-only &optional position ¶
+#+end_src
 
     如果当前缓冲区是只读的，则此函数会发出缓冲区只读错误信号。  如果位置处的文本（默认为点）设置了禁止只读文本属性，则不会引发错误。
 
@@ -391,7 +459,9 @@ Emacs 为每个缓冲区保留一个称为修改标志的标志，以记录您�
 
 除了刚刚描述的基本缓冲区列表之外，Emacs 还为每一帧维护了一个本地缓冲区列表，其中首先显示了在该帧中显示（或选择了它们的窗口）的缓冲区。  （此顺序记录在帧的缓冲区列表帧参数中；请参阅缓冲区参数。）该帧中从未显示的缓冲区随后出现，根据基本缓冲区列表排序。
 
-功能：缓冲区列表和可选帧¶
+#+begin_src emacs-lisp
+  Function: buffer-list &optional frame ¶
+#+end_src
 
     此函数返回缓冲区列表，包括所有缓冲区，甚至包括名称以空格开头的缓冲区。  这些元素是实际的缓冲区，而不是它们的名称。
 
@@ -426,7 +496,9 @@ buffer-list返回的列表是专门构造的；  它不是 Emacs 内部的数据
 
 要更改特定帧的缓冲区列表的顺序或值，请使用 modify-frame-parameters 设置该帧的缓冲区列表参数（请参阅访问帧参数）。
 
-功能：other-buffer &optional buffer visible-ok frame ¶
+#+begin_src emacs-lisp
+  Function: other-buffer &optional buffer visible-ok frame ¶
+#+end_src
 
     此函数返回缓冲区列表中除缓冲区之外的第一个缓冲区。  通常，这是出现在最近选择的窗口中的缓冲区（在帧帧或所选帧中，请参阅输入焦点），除了缓冲区。  根本不考虑名称以空格开头的缓冲区。
 
@@ -438,13 +510,17 @@ buffer-list返回的列表是专门构造的；  它不是 Emacs 内部的数据
 
     如果不存在合适的缓冲区，则返回缓冲区 *scratch*（并在必要时创建）。
 
-功能：last-buffer &optional buffer visible-ok frame ¶
+#+begin_src emacs-lisp
+  Function: last-buffer &optional buffer visible-ok frame ¶
+#+end_src
 
     此函数返回帧缓冲区列表中除缓冲区之外的最后一个缓冲区。  如果 frame 被省略或为零，它使用选定帧的缓冲区列表。
 
     参数 visible-ok 与 other-buffer 一样处理，见上文。  如果找不到合适的缓冲区，则返回缓冲区 *scratch*。
 
-命令：bury-buffer &optional buffer-or-name ¶
+#+begin_src emacs-lisp
+  Command: bury-buffer &optional buffer-or-name ¶
+#+end_src
 
     此命令将 buffer-or-name 放在缓冲区列表的末尾，而不更改列表中任何其他缓冲区的顺序。  因此，此缓冲区成为其他缓冲区返回的最不理想的候选者。  参数可以是缓冲区本身，也可以是缓冲区的名称。
 
@@ -454,11 +530,15 @@ buffer-list返回的列表是专门构造的；  它不是 Emacs 内部的数据
 
     要在显示它的所有窗口中替换缓冲区，请使用 replace-buffer-in-windows，请参阅缓冲区和窗口。
 
-命令：unbury-buffer ¶
+#+begin_src emacs-lisp
+  Command: unbury-buffer ¶
+#+end_src
 
     此命令切换到所选帧的本地缓冲区列表中的最后一个缓冲区。  更准确地说，它调用函数 switch-to-buffer（参见 Switching to a Buffer in a Window），以在所选窗口中显示 last-buffer 返回的缓冲区（参见上文）。
 
-变量：缓冲区列表更新挂钩¶
+#+begin_src emacs-lisp
+  Variable: buffer-list-update-hook ¶
+#+end_src
 
     每当缓冲区列表更改时，这是一个正常的钩子运行。  运行此钩子的函数（隐式）是 get-buffer-create（参见创建缓冲区）、rename-buffer（参见缓冲区名称）、kill-buffer（参见终止缓冲区）、bury-buffer（参见上文）和 select-window (请参阅选择窗口）。  对于由 get-buffer-create 或 generate-new-buffer 使用非 nil 参数禁止缓冲区钩子创建的内部或临时缓冲区，不会运行此挂钩。
 
@@ -472,7 +552,9 @@ buffer-list返回的列表是专门构造的；  它不是 Emacs 内部的数据
 
 可用于创建缓冲区的其他函数包括 with-output-to-temp-buffer（请参阅临时显示）和 create-file-buffer（请参阅访问文件）。  启动子进程也可以创建缓冲区（请参阅进程）。
 
-功能：get-buffer-create buffer-or-name &optional inhibitor-buffer-hooks ¶
+#+begin_src emacs-lisp
+  Function: get-buffer-create buffer-or-name &optional inhibit-buffer-hooks ¶
+#+end_src
 
     此函数返回一个名为 buffer-or-name 的缓冲区。  返回的缓冲区不会成为当前缓冲区——此函数不会更改哪个缓冲区是当前缓冲区。
 
@@ -484,7 +566,9 @@ buffer-list返回的列表是专门构造的；  它不是 Emacs 内部的数据
 
     新创建的缓冲区的主要模式设置为基本模式。  （变量 major-mode 的默认值在更高级别处理；请参阅 Emacs 如何选择主要模式。）如果名称以空格开头，则缓冲区最初禁用撤消信息记录（请参阅撤消）。
 
-功能：生成新缓冲区名称&可选的禁止缓冲区钩子¶
+#+begin_src emacs-lisp
+  Function: generate-new-buffer name &optional inhibit-buffer-hooks ¶
+#+end_src
 
     此函数返回一个新创建的空缓冲区，但不会使其成为当前缓冲区。  缓冲区的名称是通过将名称传递给函数 generate-new-buffer-name 来生成的（请参阅缓冲区名称）。  因此，如果没有名为 name 的缓冲区，那么它就是新缓冲区的名称；  如果正在使用该名称，则将“<n>”形式的后缀（其中 n 是整数）附加到名称。
 
@@ -512,7 +596,9 @@ buffer-list返回的列表是专门构造的；  它不是 Emacs 内部的数据
 
 当且仅当缓冲区被杀死时，缓冲区的缓冲区名称为 nil。  未被杀死的缓冲区称为活动缓冲区。  要测试缓冲区是活动的还是终止的，请使用函数 buffer-live-p（见下文）。
 
-命令：kill-buffer &optional buffer-or-name ¶
+#+begin_src emacs-lisp
+  Command: kill-buffer &optional buffer-or-name ¶
+#+end_src
 
     此函数会杀死缓冲区 buffer-or-name，释放其所有内存以供其他用途或返回给操作系统。  如果 buffer-or-name 为 nil 或省略，它会终止当前缓冲区。
 
@@ -537,27 +623,37 @@ buffer-list返回的列表是专门构造的；  它不是 Emacs 内部的数据
 	   ⇒ t
     #+end_src
 
-变量：kill-buffer-query-functions ¶
+#+begin_src emacs-lisp
+  Variable: kill-buffer-query-functions ¶
+#+end_src
 
     在确认未保存的更改之前，kill-buffer 按出现的顺序调用列表 kill-buffer-query-functions 中的函数，不带参数。  被杀死的缓冲区是调用它们时的当前缓冲区。  此功能的想法是这些功能将要求用户确认。  如果其中任何一个返回 nil，kill-buffer 会保留缓冲区的生命。
 
     对于由 get-buffer-create 或 generate-new-buffer 使用非 nil 参数禁止缓冲区钩子创建的内部或临时缓冲区，不会运行此挂钩。
 
-变量：kill-buffer-hook ¶
+#+begin_src emacs-lisp
+  Variable: kill-buffer-hook ¶
+#+end_src
 
     这是一个正常的钩子，由 kill-buffer 在询问了它要问的所有问题之后，在实际杀死缓冲区之前运行。  当钩子函数运行时，要杀死的缓冲区是当前的。  请参阅挂钩。  这个变量是一个永久的局部变量，所以它的局部绑定不会通过改变主要模式来清除。
 
     对于由 get-buffer-create 或 generate-new-buffer 使用非 nil 参数禁止缓冲区钩子创建的内部或临时缓冲区，不会运行此挂钩。
 
-用户选项：buffer-offer-save ¶
+#+begin_src emacs-lisp
+  User Option: buffer-offer-save ¶
+#+end_src
 
     该变量，如果在特定缓冲区中非零，则告诉 save-buffers-kill-emacs 提供保存该缓冲区，就像它提供保存文件访问缓冲区一样。  如果在第二个可选参数设置为 t 的情况下调用 save-some-buffers，它也会提供保存缓冲区。  最后，如果此变量始终设置为符号，则 save-buffers-kill-emacs 和 save-some-buffers 将始终提供保存。  请参阅保存一些缓冲区的定义。  变量 buffer-offer-save 在出于任何原因设置时会自动变为缓冲区本地。  请参阅缓冲区局部变量。
 
-变量：没有查询的缓冲区保存¶
+#+begin_src emacs-lisp
+  Variable: buffer-save-without-query ¶
+#+end_src
 
     此变量，如果在特定缓冲区中非零，则告诉 save-buffers-kill-emacs 和 save-some-buffers 保存此缓冲区（如果已修改）而不询问用户。  当出于任何原因设置时，该变量会自动变为缓冲区本地。
 
-功能：buffer-live-p 对象 ¶
+#+begin_src emacs-lisp
+  Function: buffer-live-p object ¶
+#+end_src
 
     如果 object 是活动缓冲区（尚未被杀死的缓冲区），则此函数返回 t，否则返回 nil。
 
@@ -573,7 +669,9 @@ buffer-list返回的列表是专门构造的；  它不是 Emacs 内部的数据
 
 杀死间接缓冲区对其基本缓冲区没有影响。  杀死基本缓冲区有效地杀死了间接缓冲区，因为它不能再次成为当前缓冲区。
 
-命令：make-indirect-buffer base-buffer name &optional clone inhibitor-hooks ¶
+#+begin_src emacs-lisp
+  Command: make-indirect-buffer base-buffer name &optional clone inhibit-buffer-hooks ¶
+#+end_src
 
     这将创建并返回一个名为 name 的间接缓冲区，其基本缓冲区是 base-buffer。  参数 base-buffer 可以是活动缓冲区或现有缓冲区的名称（字符串）。  如果 name 是现有缓冲区的名称，则会发出错误信号。
 
@@ -583,13 +681,17 @@ buffer-list返回的列表是专门构造的；  它不是 Emacs 内部的数据
 
     有关禁止缓冲区挂钩的含义，请参见创建缓冲区。
 
-命令：clone-indirect-buffer newname display-flag &optional norecord ¶
+#+begin_src emacs-lisp
+  Command: clone-indirect-buffer newname display-flag &optional norecord ¶
+#+end_src
 
     此函数创建并返回一个新的间接缓冲区，该缓冲区共享当前缓冲区的基本缓冲区并复制当前缓冲区的其余属性。  （如果当前缓冲区不是间接的，则将其用作基本缓冲区。）
 
     如果 display-flag 不是 nil，就像在交互式调用中一样，这意味着通过调用 pop-to-buffer 来显示新的缓冲区。  如果 norecord 为非 nil，则表示不将新缓冲区放在缓冲区列表的前面。
 
-功能：buffer-base-buffer &可选缓冲区¶
+#+begin_src emacs-lisp
+  Function: buffer-base-buffer &optional buffer ¶
+#+end_src
 
     该函数返回缓冲区的基本缓冲区，默认为当前缓冲区。  如果缓冲区不是间接的，则值为 nil。  否则，该值是另一个缓冲区，它永远不是间接缓冲区。
 
@@ -601,7 +703,9 @@ buffer-list返回的列表是专门构造的；  它不是 Emacs 内部的数据
 
 Emacs 为这种模式提供了另一种工具：您可以使用 buffer-swap-text 在两个缓冲区之间快速交换缓冲区文本。  这个函数非常快，因为它不移动任何文本，它只改变缓冲区对象的内部数据结构以指向不同的文本块。  使用它，您可以假装一组两个或多个缓冲区实际上是一个虚拟缓冲区，它将所有单独缓冲区的内容保存在一起。
 
-功能：缓冲区交换文本缓冲区¶
+#+begin_src emacs-lisp
+  Function: buffer-swap-text buffer ¶
+#+end_src
 
     这个函数交换当前缓冲区的文本和它的参数缓冲区的文本。  如果两个缓冲区之一是间接缓冲区（请参阅间接缓冲区）或间接缓冲区的基本缓冲区，它会发出错误信号。
 
@@ -617,10 +721,14 @@ Emacs 缓冲区是使用一个不可见的间隙来实现的，以使插入和�
 
 这种机制是不可见的，Lisp 代码永远不会受到间隙当前位置的影响，但这些函数可用于获取有关间隙状态的信息。
 
-功能：间隙位置¶
+#+begin_src emacs-lisp
+  Function: gap-position ¶
+#+end_src
 
     此函数返回当前缓冲区中的当前间隙位置。
 
-功能：间隙尺寸¶
+#+begin_src emacs-lisp
+  Function: gap-size ¶
+#+end_src
 
     此函数返回当前缓冲区的当前间隙大小。
