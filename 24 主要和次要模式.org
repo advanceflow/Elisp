@@ -1189,7 +1189,7 @@ mode-line-format 的默认值旨在使用其他变量的值，例如 mode-line-p
 
 您可以使用函数 format-mode-line 来计算将出现在基于特定模式行结构的模式行或标题行中的文本。
 
-功能：format-mode-line format &可选的人脸窗口缓冲区¶
+功能：format-mode-line format &可选的面窗口缓冲区¶
 
     此函数根据格式格式化一行文本，就好像它正在为窗口生成模式行一样，但它也将文本作为字符串返回。  参数窗口默认为选定的窗口。  如果 buffer 为非 nil，则使用的所有信息都取自 buffer；  默认情况下，它来自窗口的缓冲区。
 

@@ -507,7 +507,7 @@ comint.el 文件包含以下顶级表达式：
   (defface . face)
 #+end_src
 
-	 人脸面被定义。
+	 面面被定义。
 #+begin_src emacs-lisp
   (require . feature)
 #+end_src

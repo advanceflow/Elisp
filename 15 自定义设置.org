@@ -81,7 +81,7 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
   (face-link face)
 #+end_src
 
-	 链接到人脸的文档；  face 是一个字符串，它指定当用户调用此链接时要使用 describe-face 描述的人脸名称。
+	 链接到面的文档；  face 是一个字符串，它指定当用户调用此链接时要使用 describe-face 描述的面名称。
 #+begin_src emacs-lisp
   (custom-group-link group)
 #+end_src
@@ -430,7 +430,7 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
   face
 #+end_src
 
-    该值必须是一个符号，即人脸名称。  小部件提供完成。
+    该值必须是一个符号，即面名称。  小部件提供完成。
 #+begin_src emacs-lisp
   boolean
 #+end_src
@@ -805,7 +805,7 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
   :button-face face ¶
 #+end_src
 
-    使用人脸（人脸名称或人脸名称列表）作为显示为“%[…%]”的按钮文本。
+    使用面（面名称或面名称列表）作为显示为“%[…%]”的按钮文本。
 #+begin_src emacs-lisp
   :button-prefix prefix ¶
 #+end_src

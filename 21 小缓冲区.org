@@ -55,7 +55,7 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
 
     minibuffer-prompt-properties 中的文本属性应用于提示。  默认情况下，此属性列表定义用于提示的面。  此面（如果存在）将应用于面列表的末尾并在显示前合并。
 
-    如果用户想要完全控制提示的外观，最方便的方法是在所有人脸列表的末尾指定默认人脸。  例如：
+    如果用户想要完全控制提示的外观，最方便的方法是在所有面列表的末尾指定默认面。  例如：
 
     #+begin_src emacs-lisp
       (read-from-minibuffer
