@@ -15,7 +15,9 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 
 如果缓冲区是多字节的，这些搜索函数会将搜索字符串转换为多字节；  如果缓冲区是单字节的，它们会将搜索字符串转换为单字节。  请参阅文本表示。
 
-命令：搜索前向字符串 &optional limit noerror count ¶
+#+begin_src emacs-lisp
+  Command: search-forward string &optional limit noerror count ¶
+#+end_src
 
     此函数从点向前搜索字符串的精确匹配。  如果成功，它会将 point 设置为找到的事件的末尾，并返回 point 的新值。  如果未找到匹配项，则值和副作用取决于 noerror（见下文）。
 
@@ -44,11 +46,15 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 
     如果count是正数n，则搜索n次；  每个连续的搜索都从前一个匹配的结尾开始。  如果所有这些连续搜索成功，则函数调用成功，移动点并返回其新值。  否则函数调用失败，结果取决于 noerror 的值，如上所述。  如果 count 是负数 -n，则在相反（向后）方向上进行 n 次搜索。
 
-命令：向后搜索字符串 &optional limit noerror count ¶
+#+begin_src emacs-lisp
+  Command: search-backward string &optional limit noerror count ¶
+#+end_src
 
     此函数从点向后搜索字符串。  它类似于向前搜索，只是它向后搜索而不是向前搜索。  向后搜索在匹配开始时离开点。
 
-命令：word-search-forward string &optional limit noerror count ¶
+#+begin_src emacs-lisp
+  Command: word-search-forward string &optional limit noerror count ¶
+#+end_src
 
     此函数从点向前搜索字符串的单词匹配。  如果找到匹配项，则将 point 设置为找到的匹配项的末尾，并返回 point 的新值。
 
@@ -81,15 +87,21 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 
     在内部，word-search-forward 和相关函数使用函数 word-search-regexp 将字符串转换为忽略标点符号的正则表达式。
 
-命令：word-search-forward-lax string &optional limit noerror count ¶
+#+begin_src emacs-lisp
+  Command: word-search-forward-lax string &optional limit noerror count ¶
+#+end_src
 
     此命令与 word-search-forward 相同，除了字符串的开头或结尾不需要匹配单词边界，除非字符串以空格开头或结尾。  例如，搜索“ball boy”匹配“ball boyee”，但不匹配“balls boy”。
 
-命令：word-search-backward string &optional limit noerror count ¶
+#+begin_src emacs-lisp
+  Command: word-search-backward string &optional limit noerror count ¶
+#+end_src
 
     此函数从点向后搜索与字符串匹配的单词。  这个函数就像 word-search-forward 一样，只是它向后搜索并且通常在匹配的开头留下点。
 
-命令：word-search-backward-lax string &optional limit noerror count ¶
+#+begin_src emacs-lisp
+  Command: word-search-backward-lax string &optional limit noerror count ¶
+#+end_src
 
     此命令与 word-search-backward 相同，只是字符串的开头或结尾不需要匹配单词边界，除非字符串以空格开头或结尾。
 
@@ -101,11 +113,15 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 
 请注意，用户级增量搜索功能以不同方式处理大小写区别。  当搜索字符串只包含小写字母时，搜索忽略大小写，但当搜索字符串包含一个或多个大写字母时，搜索变为区分大小写。  但这与 Lisp 代码中使用的搜索功能无关。  请参阅 GNU Emacs 手册中的增量搜索。
 
-用户选项：case-fold-search ¶
+#+begin_src emacs-lisp
+  User Option: case-fold-search ¶
+#+end_src
 
     此缓冲区局部变量确定搜索是否应忽略大小写。  如果变量为 nil，它们不会忽略大小写；  否则（默认情况下）他们会忽略大小写。
 
-用户选项：case-replace ¶
+#+begin_src emacs-lisp
+  User Option: case-replace ¶
+#+end_src
 
     此变量确定更高级别的替换函数是否应保留大小写。  如果变量为 nil，则意味着逐字使用替换文本。  非零值意味着根据被替换的文本转换替换文本的大小写。
 
@@ -133,28 +149,40 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 
 以下是正则表达式中特殊字符的列表。
 
-'。'  （时期） ¶
+#+begin_src emacs-lisp
+  ‘.’ (Period) ¶
+#+end_src
 
     是一个特殊字符，匹配除换行符以外的任何单个字符。  使用连接，我们可以制作像 'a.b' 这样的正则表达式，它匹配任何以 'a' 开头并以 'b' 结尾的三个字符的字符串。
-'*' ¶
+#+begin_src emacs-lisp
+  ‘*’ ¶
+#+end_src
 
     本身不是一个构造；  它是一个后缀运算符，表示尽可能多地重复匹配前面的正则表达式。  因此，“o*”匹配任意数量的“o”（包括没有“o”）。
 
     '*' 始终适用于尽可能小的前面表达式。  因此，“fo*”有一个重复的“o”，而不是一个重复的“fo”。  它匹配“f”、“fo”、“foo”等。
 
     匹配器通过立即匹配尽可能多的重复来处理“*”构造。  然后它继续模式的其余部分。  如果失败了，就会发生回溯，丢弃“*”修饰结构的一些匹配项，希望这样可以匹配模式的其余部分。  例如，在匹配 'ca*ar' 和字符串 'caaar' 时，'a*' 首先尝试匹配所有三个 'a'；  但是模式的其余部分是 'ar' 并且只剩下 'r' 可以匹配，所以这个尝试失败了。  下一个替代方案是让 'a*' 仅匹配两个 'a'。  选择此选项后，正则表达式的其余部分将成功匹配。
-'+' ¶
+#+begin_src emacs-lisp
+  ‘+’ ¶
+#+end_src
 
     是一个后缀运算符，类似于'*'，但它必须至少匹配前面的表达式一次。  因此，例如，'ca+r' 匹配字符串 'car' 和 'caaaar' 但不匹配字符串 'cr'，而 'ca*r' 匹配所有三个字符串。
-“？”  ¶
+#+begin_src emacs-lisp
+  ‘?’ ¶
+#+end_src
 
     是一个后缀运算符，类似于'*'，除了它必须匹配前面的表达式一次或根本不匹配。  例如，'ca?r' 匹配 'car' 或 'cr'；  没有其他的。
-'*?'、'+?'、'??'  ¶
+#+begin_src emacs-lisp
+  ‘*?’, ‘+?’, ‘??’ ¶
+#+end_src
 
     是运算符 '*'、'+' 和 '?' 的非贪婪变体。  这些运算符匹配最大可能的子字符串（与匹配整个包含表达式一致），非贪婪变体匹配最小可能的子字符串（与匹配整个包含表达式一致）。
 
     例如，正则表达式 'c[ad]*a' 在应用于字符串 'cdaaada' 时匹配整个字符串；  但是应用于同一字符串的正则表达式“c[ad]*?a”只匹配“cda”。  （这里允许整个表达式匹配的 '[ad]*?' 的最小可能匹配是 'd'。）
-'[ ... ]' ¶
+#+begin_src emacs-lisp
+  ‘[ … ]’ ¶
+#+end_src
 
     是一个替代字符，以“[”开头，以“]”结尾。  在最简单的情况下，两个括号之间的字符就是这个替代字符可以匹配的字符。
 
@@ -180,7 +208,9 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 	 虽然一个范围只能表示一个、两个或三个字符，但列出这些字符更简单。  例如，“[a-a0]”不如“[a0]”清晰，“[ij]”不如“[ij]”清晰，“[ik]”不如“[ijk]”清晰.
 	 尽管“-”可以出现在替代字符的开头或作为范围的上限，但最好将“-”单独放在替代字符的末尾。  例如，虽然 '[-az]' 是有效的，但 '[az-]' 是更好的样式；  尽管 '[*--]' 有效，但 '[*+,-]' 更清晰。
 
-'[^ ... ]' ¶
+#+begin_src emacs-lisp
+  ‘[^ … ]’ ¶
+#+end_src
 
     '[^' 开始一个补充字符替代。  这匹配除指定字符之外的任何字符。  因此，'[^a-z0-9A-Z]' 匹配除 ASCII 字母和数字之外的所有字符。
 
@@ -189,21 +219,27 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
     补充字符替代可以匹配换行符，除非换行符被提及为不匹配的字符之一。  这与 grep 等程序中正则表达式的处理形成对比。
 
     您可以指定命名字符类，就像在字符替代中一样。  例如，'[^[:ascii:]]' 匹配任何非 ASCII 字符。  请参阅字符类。
-'^' ¶
+#+begin_src emacs-lisp
+  ‘^’ ¶
+#+end_src
 
     匹配缓冲区时，'^' 匹配空字符串，但仅在被匹配文本的行首（或缓冲区可访问部分的开头）。  否则它无法匹配任何东西。  因此，'^foo' 匹配出现在行首的 'foo'。
 
     当匹配字符串而不是缓冲区时，'^' 匹配字符串的开头或换行符之后。
 
     出于历史兼容性的原因，'^' 只能用在正则表达式的开头，或者在 '\('、'\(?:' 或 '\|' 之后。
-'$' ¶
+#+begin_src emacs-lisp
+  ‘$’ ¶
+#+end_src
 
     类似于 '^' 但仅匹配行尾（或缓冲区可访问部分的末尾）。  因此，'x+$' 匹配行尾有一个或多个 'x' 的字符串。
 
     当匹配字符串而不是缓冲区时，'$' 匹配字符串末尾或换行符之前。
 
     出于历史兼容性的原因，'$' 只能用在正则表达式的末尾，或者在 '\)' 或 '\|' 之前。
-'\' ¶
+#+begin_src emacs-lisp
+  ‘\’ ¶
+#+end_src
 
     有两个功能：它引用特殊字符（包括'\'），它引入了额外的特殊结构。
 
@@ -224,55 +260,89 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 
 下表列出了您可以在字符替代中使用的类，以及它们的含义。  请注意，包含类名的 '[' 和 ']' 字符是名称的一部分，因此使用这些类的正则表达式还需要一对括号。  例如，匹配一个或多个字母和数字序列的正则表达式将是 '[[:alnum:]]+'，而不是 '[:alnum:]+'。
 
-'[:ascii:]'
+#+begin_src emacs-lisp
+  ‘[:ascii:]’
+#+end_src
 
     这匹配任何 ASCII 字符（代码 0–127）。
-'[:alnum:]'
+#+begin_src emacs-lisp
+  ‘[:alnum:]’
+#+end_src
 
     这匹配任何字母或数字。  对于多字节字符，它匹配 Unicode 'general-category' 属性（请参阅字符属性）指示它们是字母或十进制数字字符的字符。
-'[：α：]'
+#+begin_src emacs-lisp
+  ‘[:alpha:]’
+#+end_src
 
     这匹配任何字母。  对于多字节字符，它匹配其 Unicode 'general-category' 属性（请参阅字符属性）指示它们是字母字符的字符。
-'[：空白的：]'
+#+begin_src emacs-lisp
+  ‘[:blank:]’
+#+end_src
 
     这与 Unicode 技术标准 #18 的附件 C 中定义的水平空格相匹配。  特别是，它匹配空格、制表符和其他字符，其 Unicode 'general-category' 属性（请参阅字符属性）表明它们是间距分隔符。
-'[:cntrl:]'
+#+begin_src emacs-lisp
+  ‘[:cntrl:]’
+#+end_src
 
     这匹配代码在 0-31 范围内的任何字符。
-'[：数字：]'
+#+begin_src emacs-lisp
+  ‘[:digit:]’
+#+end_src
 
     这匹配“0”到“9”。  因此，'[-+[:digit:]]' 匹配任何数字，以及 '+' 和 '-'。
-'[：图形：]'
+#+begin_src emacs-lisp
+  ‘[:graph:]’
+#+end_src
 
     这匹配图形字符——除空格、ASCII 和非 ASCII 控制字符、代理项和 Unicode 未分配的代码点之外的所有字符，如 Unicode 'general-category' 属性所示（请参阅字符属性）。
-'[：降低：]'
+#+begin_src emacs-lisp
+  ‘[:lower:]’
+#+end_src
 
     这匹配任何由当前大小写表确定的小写字母（请参阅案例表）。  如果 case-fold-search 不为零，则它也匹配任何大写字母。
-'[：多字节：]'
+#+begin_src emacs-lisp
+  ‘[:multibyte:]’
+#+end_src
 
     这匹配任何多字节字符（请参阅文本表示）。
-'[:nonascii:]'
+#+begin_src emacs-lisp
+  ‘[:nonascii:]’
+#+end_src
 
     这匹配任何非 ASCII 字符。
-'[：打印：]'
+#+begin_src emacs-lisp
+  ‘[:print:]’
+#+end_src
 
     这匹配任何打印字符——空格或由 '[:graph:]' 匹配的图形字符。
-'[:punct:]'
+#+begin_src emacs-lisp
+  ‘[:punct:]’
+#+end_src
 
     这匹配任何标点符号。  （目前，对于多字节字符，它匹配任何具有非单词语法的内容。）
-'[：空间：]'
+#+begin_src emacs-lisp
+  ‘[:space:]’
+#+end_src
 
     这匹配任何具有空格语法的字符（请参阅语法类表）。
-'[：单字节：]'
+#+begin_src emacs-lisp
+  ‘[:unibyte:]’
+#+end_src
 
     这匹配任何单字节字符（请参阅文本表示）。
-'[：上：]'
+#+begin_src emacs-lisp
+  ‘[:upper:]’
+#+end_src
 
     这匹配任何大写字母，由当前大小写表确定（请参阅案例表）。  如果 case-fold-search 不为零，则它也匹配任何小写字母。
-'[：单词：]'
+#+begin_src emacs-lisp
+  ‘[:word:]’
+#+end_src
 
     这匹配任何具有单词语法的字符（请参阅语法类表）。
-'[:xdigit:]'
+#+begin_src emacs-lisp
+  ‘[:xdigit:]’
+#+end_src
 
     这匹配十六进制数字：“0”到“9”、“a”到“f”和“A”到“F”。
 
@@ -281,7 +351,9 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 
 大多数情况下，'\' 后跟任何字符都只匹配该字符。  但是，有几个例外：某些以 '\' 开头的具有特殊含义的序列。  这是一个特殊的“\”结构表。
 
-'\|'  ¶
+#+begin_src emacs-lisp
+  ‘\|’ ¶
+#+end_src
 
     指定替代方案。  两个带有 '\|' 的正则表达式 a 和 b  在中间形成一个匹配任何 a 或 b 匹配的表达式的表达式。
 
@@ -290,10 +362,14 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
     '\|'  适用于最大可能的周围表达式。  只有周围的 '\( ... \)' 分组才能限制 '\|' 的分组能力。
 
     如果您需要完整的回溯功能来处理 '\|' 的多次使用，请使用 POSIX 正则表达式函数（请参阅 POSIX 正则表达式搜索）。
-'\{m\}'
+#+begin_src emacs-lisp
+  ‘\{m\}’
+#+end_src
 
     是一个后缀运算符，它恰好重复前一个模式 m 次。  因此，'x\{5\}' 与字符串 'xxxxx' 匹配，仅此而已。  'c[ad]\{3\}r' 匹配字符串，例如 'caaar'、'cdddr'、'cadar' 等。
-'\{m,n\}'
+#+begin_src emacs-lisp
+  ‘\{m,n\}’
+#+end_src
 
     是一个更通用的后缀运算符，它指定最少 m 次重复和最多 n 次重复的重复。  如果省略 m，则最小值为 0；  如果 n 被省略，则没有最大值。  对于这两种形式，如果指定，m 和 n 不得大于 2**16 - 1 。
 
@@ -301,7 +377,9 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
     '\{0,1\}' 或 '\{,1\}' 等价于 '?'。
     '\{0,\}' 或 '\{,\}' 等价于 '*'。
     '\{1,\}' 等价于 '+'。
-'\( ... \)' ¶
+#+begin_src emacs-lisp
+  ‘\( … \)’ ¶
+#+end_src
 
     是一个用于三个目的的分组结构：
 
@@ -310,15 +388,19 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 	 使用 '\digit' 记录匹配的子字符串以供将来参考（见下文）。
 
     最后一个应用不是括号分组概念的结果。  它是一个单独的特征，作为第二个含义分配给同一个 '\( ... \)' 结构，因为在实践中，这两个含义之间通常没有冲突。  但偶尔会发生冲突，这导致引入了害羞的群体。
-'\(?: ... \)' ¶
+#+begin_src emacs-lisp
+  ‘\(?: … \)’ ¶
+#+end_src
 
     是害羞的群体结构。  shy 组服务于普通组的前两个目的（控制其他运算符的嵌套），但它没有得到数字，所以你不能用 '\digit' 引用它的值。  害羞组对于机械构造的正则表达式特别有用，因为它们可以自动添加而无需更改普通非害羞组的编号。
 
     害羞组也称为非捕获组或未编号组。
-'\(?num: ... \)'
 
     是明确编号的组结构。  普通组会根据他们的位置隐含地获得他们的号码，这可能很不方便。  此构造允许您强制使用特定的组号。  编号没有特别的限制，例如，您可以有多个具有相同编号的组，在这种情况下，最后匹配的一组（即最右边的匹配）将获胜。  隐式编号的组总是得到大于任何前一组的最小整数。
-'\数字'
+
+    #+begin_src emacs-lisp
+      ‘\(?num: … \)’
+    #+end_src
 
     匹配与分组 ('\( … \)') 构造的第 digit 次出现匹配的相同文本。
 
@@ -331,54 +413,87 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
     如果一个 '\( ... \)' 构造匹配不止一次（这可能发生，例如，如果它后跟 '*'），则只记录最后一个匹配。
 
     如果正则表达式中的特定分组结构从未匹配过——例如，如果它出现在未使用的替代项中，或者出现在重复零次的重复项中——则相应的 '\digit' 结构永远不会匹配任何内容.  举一个人为的例子，'\(foo\(b*\)\|lose\)\2' 不能匹配 'lose'：较大组内的第二个选择匹配它，但是 '\2' 是未定义的并且可以不匹配任何东西。  但它可以匹配 'foobb'，因为第一个替代匹配 'foob' 而 '\2' 匹配 'b'。
-'\w' ¶
+#+begin_src emacs-lisp
+  ‘\w’ ¶
+#+end_src
 
     匹配任何单词组成字符。  编辑器语法表确定这些是哪些字符。  请参阅语法表。
-'\W' ¶
+
+    #+begin_src emacs-lisp
+‘\W’ ¶
+    #+end_src
 
     匹配任何不是单词成分的字符。
-'\代码' ¶
+#+begin_src emacs-lisp
+  ‘\scode’ ¶
+#+end_src
 
     匹配任何语法为代码的字符。  这里的 code 是一个表示语法代码的字符：因此，'w' 表示单词组成，'-' 表示空格，'(' 表示左括号等。要表示空格语法，请使用 '-' 或空格字符。有关语法代码和代表它们的字符的列表，请参阅语法类表。
-'\代码' ¶
+#+begin_src emacs-lisp
+  ‘\Scode’ ¶
+#+end_src
 
     匹配语法不是代码的任何字符。
-'\cc'
+    #+begin_src emacs-lisp
+‘\cc’
+    #+end_src
+
+
 
     匹配任何类别为 c 的字符。  这里 c 是一个表示类别的字符：因此，在标准类别表中，“c”表示中文字符或“g”表示希腊字符。  您可以使用 Mx describe-categories RET 查看所有当前定义的类别列表。  除了使用 define-category 函数的标准类别之外，您还可以定义自己的类别（请参阅类别）。
-'\抄送'
 
+    #+begin_src emacs-lisp
+      ‘\Cc’
+    #+end_src
     匹配任何类别不是 c 的字符。
 
 以下正则表达式构造匹配空字符串——也就是说，它们不使用任何字符——但它们是否匹配取决于上下文。  总而言之，缓冲区可访问部分的开头和结尾被视为缓冲区的实际开头和结尾。
 
-'\`' ¶
+#+begin_src emacs-lisp
+  ‘\`’ ¶
+#+end_src
 
     匹配空字符串，但仅在要匹配的缓冲区或字符串的开头。
-'\'' ¶
+#+begin_src emacs-lisp
+  ‘\'’ ¶
+#+end_src
 
     匹配空字符串，但仅在要匹配的缓冲区或字符串的末尾。
-'\=' ¶
+#+begin_src emacs-lisp
+  ‘\=’ ¶
+#+end_src
 
     匹配空字符串，但仅在点。  （与字符串匹配时未定义此构造。）
-'\b' ¶
+#+begin_src emacs-lisp
+  ‘\b’ ¶
+#+end_src
 
     匹配空字符串，但仅在单词的开头或结尾。  因此，'\bfoo\b' 将任何出现的 'foo' 匹配为单独的单词。  '\bballs?\b' 匹配 'ball' 或 'balls' 作为单独的词。
 
     '\b' 匹配缓冲区（或字符串）的开头或结尾，无论它旁边出现什么文本。
-'\B' ¶
+#+begin_src emacs-lisp
+  ‘\B’ ¶
+#+end_src
 
     匹配空字符串，但不在单词的开头或结尾，也不在缓冲区（或字符串）的开头或结尾。
-'\<' ¶
+#+begin_src emacs-lisp
+  ‘\<’ ¶
+#+end_src
 
     匹配空字符串，但仅在单词的开头。  '\<' 匹配缓冲区（或字符串）的开头，仅当后面有单词组成字符时。
-'\>' ¶
+#+begin_src emacs-lisp
+  ‘\>’ ¶
+#+end_src
 
     匹配空字符串，但仅在单词的末尾。  '\>' 仅当内容以单词组成字符结尾时才匹配缓冲区（或字符串）的末尾。
-'\_<' ¶
+#+begin_src emacs-lisp
+  ‘\_<’ ¶
+#+end_src
 
     匹配空字符串，但仅在符号的开头。  符号是一个或多个单词或符号组成字符的序列。  '\_<' 仅在符号组成字符后跟在缓冲区（或字符串）的开头匹配。
-'\_>' ¶
+#+begin_src emacs-lisp
+  ‘\_>’ ¶
+#+end_src
 
     匹配空字符串，但仅在符号的末尾。  '\_>' 仅当内容以符号组成字符结尾时才匹配缓冲区（或字符串）的末尾。
 
@@ -400,16 +515,24 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 
 这个正则表达式依次包含四个部分，可以破译如下：
 
-[.?!]
+#+begin_src emacs-lisp
+  [.?!]
+#+end_src
 
     模式的第一部分是与以下三个字符中的任何一个匹配的替代字符：句点、问号和感叹号。  匹配必须以这三个字符之一开始。  （这是 Emacs 使用的新的默认正则表达式与旧的不同的一点。新值还允许一些非 ASCII 字符结束一个句子而没有任何后续空格。）
-[]\"')}]*
+#+begin_src emacs-lisp
+  []\"')}]*
+#+end_src
 
     模式的第二部分匹配任何右大括号和引号，其中零个或多个，可能跟在句号、问号或感叹号之后。  \" 是字符串中双引号的 Lisp 语法。末尾的 '*' 表示紧接在前面的正则表达式（在这种情况下是字符替代）可以重复零次或多次。
-\\($\\| $\\|\t\\| \\)
+#+begin_src emacs-lisp
+  \\($\\| $\\|\t\\|  \\)
+#+end_src
 
     模式的第三部分匹配句子结尾之后的空格：行尾（可选带空格）、制表符或两个空格。  双反斜杠将括号和竖线标记为正则表达式语法；  括号分隔组，竖线分隔备选方案。  美元符号用于匹配行尾。
-[ \t\n]*
+#+begin_src emacs-lisp
+  [ \t\n]*
+#+end_src
 
     最后，模式的最后一部分匹配超出结束句子所需的最小空格的任何额外空格。
 
@@ -464,28 +587,47 @@ rx 符号主要在 Lisp 代码中有用；  它不能用于请求正则表达式
 rx 正则表达式中的各种形式如下所述。  简写 rx 表示任何 rx 形式，而 rx... 表示零个或多个 rx 形式。  这些都是 rx 宏的有效参数。  在给出相应的字符串正则表达式语法的情况下，A、B、……是字符串正则表达式子表达式。
 字面量
 
-“一些字符串”
+#+begin_src emacs-lisp
+  ?C
+#+end_src
 
     从字面上匹配字符串'some-string'。  与字符串正则表达式不同，没有具有特殊含义的字符。
-？C
+#+begin_src emacs-lisp
+  (seq rx…) ¶
+#+end_src
 
     从字面上匹配字符“C”。
 
 顺序和替代
+#+begin_src emacs-lisp
+  (sequence rx…)
+#+end_src
+#+begin_src emacs-lisp
+  (: rx…)
+#+end_src
+#+begin_src emacs-lisp
+  (and rx…)
+#+end_src
+#+begin_src emacs-lisp
+  "some-string"
+#+end_src
 
-(seq rx…) ¶
-（序列 rx…）
-（：接收...）
-（和 rx…）
+
 
     按顺序匹配 rxs。  没有参数，表达式匹配空字符串。
     对应的字符串正则表达式：'AB...'（按顺序排列的子表达式）。
-(或 rx…) ¶
-(| 接收…)
+#+begin_src emacs-lisp
+  (or rx…) ¶
+#+end_src
+#+begin_src emacs-lisp
+  (| rx…)
+#+end_src
 
     完全匹配其中一个 rx。  如果所有参数都是如此受约束的字符串、字符或形式，则将始终使用最长的匹配项。  否则，将使用最长的匹配或第一个（从左到右的顺序）。  没有参数，表达式根本不会匹配任何东西。
     对应的字符串正则表达式：'A\|B\|...'。
-无可匹敌 ¶
+#+begin_src emacs-lisp
+  unmatchable ¶
+#+end_src
 
     拒绝任何比赛。  相当于（或）。  请参阅 regexp-unmatchable。
 
@@ -493,142 +635,226 @@ rx 正则表达式中的各种形式如下所述。  简写 rx 表示任何 rx �
 
 通常，重复形式是贪婪的，因为它们试图匹配尽可能多的次数。  有些形式是非贪婪的；  他们尝试尽可能少地匹配（请参阅非贪婪重复）。
 
-(零个或多个 rx…) ¶
-(0+ rx…)
+#+begin_src emacs-lisp
+  (zero-or-more rx…) ¶
+#+end_src
+#+begin_src emacs-lisp
+  (0+ rx…)
+#+end_src
 
     匹配 rxs 零次或多次。  默认贪婪。
     对应字符串正则表达式：'A*'（贪婪），'A*?'  （非贪婪）
-(一个或多个 rx…) ¶
-（1+ 接收…）
+#+begin_src emacs-lisp
+  (one-or-more rx…) ¶
+#+end_src
+#+begin_src emacs-lisp
+  (1+ rx…)
+#+end_src
 
     匹配 rxs 一次或多次。  默认贪婪。
     对应字符串正则表达式：'A+'（贪婪）、'A+?'  （非贪婪）
-（零或一 rx…） ¶
-（可选 rx…）
-（选择接收...）
+#+begin_src emacs-lisp
+  (zero-or-one rx…) ¶
+#+end_src
+#+begin_src emacs-lisp
+  (optional rx…)
+#+end_src
+#+begin_src emacs-lisp
+  (opt rx…)
+#+end_src
 
     匹配一次 rxs 或一个空字符串。  默认贪婪。
     对应的字符串正则表达式：'A?'  （贪婪），'A??'  （非贪婪）。
-(* rx…) ¶
+#+begin_src emacs-lisp
+  (* rx…) ¶
+#+end_src
 
     匹配 rxs 零次或多次。  贪婪的。
     对应的字符串正则表达式：'A*'
-(+ rx…) ¶
+#+begin_src emacs-lisp
+  (+ rx…) ¶
+#+end_src
 
     匹配 rxs 一次或多次。  贪婪的。
     对应的字符串正则表达式：'A+'
-(?rx…) ¶
+#+begin_src emacs-lisp
+  (? rx…) ¶
+#+end_src
 
     匹配一次 rxs 或一个空字符串。  贪婪的。
     对应的字符串正则表达式：'A?'
-(*?rx…) ¶
+#+begin_src emacs-lisp
+  (*? rx…) ¶
+#+end_src
 
     匹配 rxs 零次或多次。  不贪心。
     对应的字符串正则表达式：'A*?'
-(+?rx…) ¶
+#+begin_src emacs-lisp
+  (+? rx…) ¶
+#+end_src
 
     匹配 rxs 一次或多次。  不贪心。
     对应的字符串正则表达式：'A+?'
-(?? rx…) ¶
+#+begin_src emacs-lisp
+  (?? rx…) ¶
+#+end_src
 
     匹配 rxs 或空字符串。  不贪心。
     对应的字符串正则表达式：'A??'
-(= n rx…)
-（重复 n rx）
+#+begin_src emacs-lisp
+  (= n rx…)
+#+end_src
+#+begin_src emacs-lisp
+  (repeat n rx)
+#+end_src
 
     将 rxs 精确匹配 n 次。
     对应字符串正则表达式：'A\{n\}'
-(>= n rx…) ¶
+#+begin_src emacs-lisp
+  (>= n rx…) ¶
+#+end_src
 
     匹配 rxs n 次或更多次。  贪婪的。
     对应字符串正则表达式：'A\{n,\}'
-(** nm rx…) ¶
-（重复 nm rx…）
+#+begin_src emacs-lisp
+  (** n m rx…) ¶
+  (repeat n m rx…)
+#+end_src
 
     匹配 rxs 至少 n 次但不超过 m 次。  贪婪的。
     对应字符串正则表达式：'A\{n,m\}'
 
 一些重复形式的贪婪可以使用以下结构来控制。  但是，当需要这种匹配时，通常最好使用上面的显式非贪婪形式。
 
-（最小匹配 rx）¶
+#+begin_src emacs-lisp
+  (minimal-match rx) ¶
+#+end_src
 
     匹配 rx，与零或多、0+、一或多、1+、零或一、选择和可选使用非贪婪匹配。
-（最大匹配 rx）¶
+#+begin_src emacs-lisp
+  (maximal-match rx) ¶
+#+end_src
 
     匹配 rx，与零或多个、0+、一个或多个、1+、零或一、opt 和 optional 使用贪婪匹配。  这是默认设置。
 
 匹配单个字符
 
-（任何集合……）¶
-（字符集...）
-（在集合中……）
+#+begin_src emacs-lisp
+  (any set…) ¶
+#+end_src
+#+begin_src emacs-lisp
+  (char set…)
+#+end_src
+#+begin_src emacs-lisp
+  (in set…)
+#+end_src
 
     匹配其中一组中的单个字符。  每个集合都是一个字符、一个表示其字符集的字符串、一个范围或一个字符类（见下文）。  范围可以是连字符分隔的字符串，例如“AZ”，也可以是字符的 cons，例如 (?A . ?Z)。
 
     请注意，连字符 (-) 在此构造中的字符串中是特殊的，因为它充当范围分隔符。  要包含连字符，请将其添加为单独的字符或单字符串。
     对应的字符串正则表达式：'[…]'
-（不是字符规范）¶
+#+begin_src emacs-lisp
+  (not charspec) ¶
+#+end_src
 
     匹配未包含在 charspec 中的字符。  charspec 可以是字符、单字符串、any、not 或 or、交集、语法或类别形式，或字符类。  如果 charspec 是一个 or 形式，它的参数具有与交集相同的限制；  见下文。
     对应字符串正则表达式：'[^…]', '\Scode', '\Ccode'
-（交集字符集...）¶
+#+begin_src emacs-lisp
+  (intersection charset…) ¶
+#+end_src
 
     匹配所有字符集中包含的字符。  每个字符集可以是一个字符、一个单字符串、一个没有字符类的任何形式、一个交集，或者不是其参数也是字符集的形式。
-非换行符，nonl ¶
+#+begin_src emacs-lisp
+  not-newline, nonl ¶
+#+end_src
 
     匹配除换行符以外的任何字符。
     对应的字符串正则表达式：'.'  （点）
-任何字符，任何东西¶
+#+begin_src emacs-lisp
+  anychar, anything ¶
+#+end_src
 
     匹配任何字符。
     对应字符串正则表达式：'.\|\n'（例如）
-字符类¶
+#+begin_src emacs-lisp
+  character class ¶
+#+end_src
 
     匹配命名字符类中的字符：
 
-    阿尔法，字母，字母
+#+begin_src emacs-lisp
+  alpha, alphabetic, letter
+#+end_src
 
 	 匹配字母字符。  更准确地说，匹配 Unicode 'general-category' 属性表明它们是字母的字符。
-    alnum, 字母数字
+#+begin_src emacs-lisp
+  alnum, alphanumeric
+#+end_src
 
 	 匹配字母字符和数字。  更准确地说，匹配其 Unicode 'general-category' 属性表明它们是字母或十进制数字的字符。
-    数字，数字，数字
+#+begin_src emacs-lisp
+  digit, numeric, num
+#+end_src
 
 	 匹配数字“0”-“9”。
-    xdigit，十六进制数字，十六进制
+#+begin_src emacs-lisp
+  xdigit, hex-digit, hex
+#+end_src
 
 	 匹配十六进制数字 '0'-'9'、'A'-'F' 和 'a'-'f'。
-    控制，控制
+#+begin_src emacs-lisp
+  cntrl, control
+#+end_src
 
 	 匹配代码在 0-31 范围内的任何字符。
-    空白的
+#+begin_src emacs-lisp
+  blank
+#+end_src
 
 	 匹配水平空格。  更准确地说，匹配其 Unicode 'general-category' 属性表明它们是间距分隔符的字符。
-    空间, 空白, 白色
+#+begin_src emacs-lisp
+  space, whitespace, white
+#+end_src
 
 	 匹配任何具有空格语法的字符（参见语法类表）。
-    小写，小写
+#+begin_src emacs-lisp
+  lower, lower-case
+#+end_src
 
 	 匹配任何小写字母，由当前大小写表确定。  如果 case-fold-search 不为零，则它也匹配任何大写字母。
-    大写，大写
+#+begin_src emacs-lisp
+  upper, upper-case
+#+end_src
 
 	 匹配任何大写字母，由当前大小写表确定。  如果 case-fold-search 不为零，则它也匹配任何小写字母。
-    图形，图形
+#+begin_src emacs-lisp
+  graph, graphic
+#+end_src
 
 	 匹配除空格、ASCII 和非 ASCII 控制字符、代理项和 Unicode 未分配的代码点以外的任何字符，如 Unicode 'general-category' 属性所示。
-    印刷，印刷
+#+begin_src emacs-lisp
+  print, printing
+#+end_src
 
 	 匹配空格或图形匹配的字符。
-    标点符号，标点符号
+#+begin_src emacs-lisp
+  punct, punctuation
+#+end_src
 
 	 匹配任何标点符号。  （目前，对于多字节字符，任何具有非单词语法的东西。）
-    单词，wordchar
+#+begin_src emacs-lisp
+  word, wordchar
+#+end_src
 
 	 匹配任何具有单词语法的字符（参见语法类表）。
-    ASCII
+#+begin_src emacs-lisp
+  ascii
+#+end_src
 
 	 匹配任何 ASCII 字符（代码 0–127）。
-    非ASCII
+#+begin_src emacs-lisp
+  nonascii
+#+end_src
 
 	 匹配任何非 ASCII 字符（但不匹配原始字节）。
 

@@ -13,7 +13,9 @@
 
 在内部，语法表是一个字符表（请参阅字符表）。  索引 c 处的元素描述了代码为 c 的字符；  它的值是一个 cons 单元格，它指定所讨论字符的语法。  有关详细信息，请参阅语法表内部结构。  但是，您通常应该使用高级函数 char-syntax 和 modify-syntax-entry，而不是使用 aset 和 aref 来修改和检查语法表内容，这些函数在语法表函数中进行了描述。
 
-功能：syntax-table-p 对象 ¶
+#+begin_src emacs-lisp
+  Function: syntax-table-p object ¶
+#+end_src
 
     如果 object 是语法表，则此函数返回 t。
 
@@ -21,7 +23,9 @@
 
 一个语法表可以继承自另一个语法表，称为其父语法表。  语法表可以不指定某些字符的语法类，方法是给它们“继承”语法类；  然后这样的字符获取父语法表指定的语法类（参见语法类表）。  Emacs 定义了一个标准的语法表，它是默认的父语法表，也是 Fundamental 模式使用的语法表。
 
-功能：标准语法表¶
+#+begin_src emacs-lisp
+  Function: standard-syntax-table ¶
+#+end_src
 
     该函数返回标准语法表，即基本模式下使用的语法表。
 
@@ -47,27 +51,41 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
 这是一个语法类表、指定它们的字符、它们的含义以及它们的使用示例。
 
-空白字符：' ' 或 '-'
+#+begin_src emacs-lisp
+  Whitespace characters: ‘ ’ or ‘-’
+#+end_src
 
     将符号和单词彼此分开的字符。  通常，空白字符没有其他语法意义，多个空白字符在语法上等同于一个。  空格、制表符和换页符在几乎所有主要模式中都被归类为空白。
 
     这个语法类可以用' '或'-'来指定。  两个指示符是等效的。
-单词成分：'w'
+#+begin_src emacs-lisp
+  Word constituents: ‘w’
+#+end_src
 
     人类语言中的部分单词。  这些通常用于程序中的变量和命令名称。  所有大写和小写字母以及数字通常都是单词组成部分。
-符号成分：'_'
+#+begin_src emacs-lisp
+  Symbol constituents: ‘_’
+#+end_src
 
     变量和命令名称中使用的额外字符以及单词成分。  示例包括 Lisp 模式中的字符 '$&*+-_<>'，即使它们不是英文单词的一部分，它也可能是符号名称的一部分。  在标准 C 中，符号中唯一有效的非单词组成字符是下划线 ('_')。
-标点符号：'.'
+#+begin_src emacs-lisp
+  Punctuation characters: ‘.’
+#+end_src
 
     在人类语言中用作标点符号或在编程语言中用于分隔符号的字符。  一些编程语言模式，例如 Emacs Lisp 模式，在这个类中没有字符，因为少数不是符号或单词成分的字符都有其他用途。  其他编程语言模式，例如 C 模式，对运算符使用标点语法。
-左括号字符：'('
-右括号字符：')'
+#+begin_src emacs-lisp
+  Open parenthesis characters: ‘(’
+#+end_src
+#+begin_src emacs-lisp
+  Close parenthesis characters: ‘)’
+#+end_src
 
     成对使用不同的字符来包围句子或表达。  这样的分组以左括号字符开始并以结束字符结束。  每个左括号字符匹配一个特定的右括号字符，反之亦然。  通常，当您插入右括号时，Emacs 会立即指示匹配的左括号。  请参阅闪烁括号。
 
     在人类语言和 C 代码中，括号对是“()”、“[]”和“{}”。  在 Emacs Lisp 中，列表和向量的分隔符（'()' 和 '[]'）被归类为括号字符。
-字符串引号：'"'
+#+begin_src emacs-lisp
+  String quotes: ‘"’
+#+end_src
 
     用于分隔字符串常量的字符。  相同的字符串引号字符出现在字符串的开头和结尾。  这种带引号的字符串不会嵌套。
 
@@ -76,37 +94,55 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
     Lisp 模式有两个字符串引号字符：双引号 ('"') 和竖线 ('|')。'|'  在 Emacs Lisp 中不使用，但在 Common Lisp 中使用。C 也有两个字符串引号字符：双引号表示字符串，撇号 (''') 表示字符常量。
 
     人类文本没有字符串引号字符。  我们不希望引号关闭引号中其他字符的常用句法属性。
-转义语法字符：'\'
+#+begin_src emacs-lisp
+  Escape-syntax characters: ‘\’
+#+end_src
 
     开始转义序列的字符，例如在字符串和字符常量中使用的字符。  字符 '\' 在 C 和 Lisp 中都属于这个类。  （在 C 中，它只在字符串中使用，但事实证明，在整个 C 代码中以这种方式处理它不会造成麻烦。）
 
     如果 words-include-escapes 不为零，则此类中的字符计为单词的一部分。  见词动。
-字符引号：'/'
+#+begin_src emacs-lisp
+  Character quotes: ‘/’
+#+end_src
 
     用于引用以下字符的字符，使其失去其正常的句法含义。  这与转义字符的不同之处在于，只有紧随其后的字符才会受到影响。
 
     如果 words-include-escapes 不为零，则此类中的字符计为单词的一部分。  见词动。
 
     此类用于 TeX 模式下的反斜杠。
-成对分隔符：'$'
+#+begin_src emacs-lisp
+  Paired delimiters: ‘$’
+#+end_src
 
     类似于字符串引号字符，不同之处在于分隔符之间的字符的句法属性不被抑制。  目前只有 TeX 模式使用成对的分隔符——进入和离开数学模式的“$”。
-表达式前缀：'''
+#+begin_src emacs-lisp
+  Expression prefixes: ‘'’
+#+end_src
 
     用于语法运算符的字符，如果它们出现在一个旁边，则被视为表达式的一部分。  在 Lisp 模式中，这些字符包括撇号、'''（用于引用）、逗号、','（用于宏）和 '#'（用于某些数据类型的读取语法）。
-评论首发：'<' ¶
-评论结束：'>'
+#+begin_src emacs-lisp
+  Comment starters: ‘<’ ¶
+#+end_src
+#+begin_src emacs-lisp
+  Comment enders: ‘>’
+#+end_src
 
     各种语言中用于分隔注释的字符。  人类文本没有注释字符。  在 Lisp 中，分号 (';') 开始注释，换行符或换页符结束注释。
-继承标准语法：'@'
+#+begin_src emacs-lisp
+  Inherit standard syntax: ‘@’
+#+end_src
 
     这个语法类没有指定特定的语法。  它说在父语法表中查找该字符的语法。
-通用注释分隔符：'!'
+#+begin_src emacs-lisp
+  Generic comment delimiters: ‘!’
+#+end_src
 
     （这个语法类也称为“comment-fence”。）开始或结束一种特殊注释的字符。  任何通用注释定界符匹配任何通用注释定界符，但它们不能匹配注释起始符或注释终止符；  通用注释分隔符只能相互匹配。
 
     此语法类主要用于语法表文本属性（请参阅语法属性）。  通过将范围语法表属性的第一个和最后一个字符标识为通用注释分隔符，您可以将任何范围的字符标记为形成注释。
-通用字符串分隔符：'|'
+#+begin_src emacs-lisp
+  Generic string delimiters: ‘|’
+#+end_src
 
     （此语法类也称为“string-fence”。）开始或结束字符串的字符。  此类与字符串引号类的不同之处在于，任何通用字符串定界符都可以匹配任何其他通用字符串定界符；  但它们不匹配普通的字符串引号字符。
 
@@ -132,50 +168,69 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 
     C++ 的适当注释语法设置如下：
 
-    '/'
+#+begin_src emacs-lisp
+  ‘/’
+#+end_src
 
 	 '124'
-    '*'
+#+begin_src emacs-lisp
+  ‘*’
+#+end_src
 
 	 '23b'
-    新队
+#+begin_src emacs-lisp
+  newline
+#+end_src
 
 	 '>'
 
     这定义了四个注释分隔序列：
 
-    '/*'
+#+begin_src emacs-lisp
+  ‘/*’
+#+end_src
 
 	 这是“b”样式的注释开始序列，因为第二个字符“*”具有“b”标志。
-    '//'
+#+begin_src emacs-lisp
+  ‘//’
+#+end_src
 
 	 这是“a”样式的注释开始序列，因为第二个字符“/”没有“b”标志。
-    '*/'
+#+begin_src emacs-lisp
+  ‘*/’
+#+end_src
 
 	 这是“b”样式的注释结束序列，因为第一个字符“*”具有“b”标志。
-    新队
+#+begin_src emacs-lisp
+  newline
+#+end_src
 
 	 这是“a”样式的注释结束序列，因为换行符没有“b”标志。
 
     'p' 标识 Lisp 语法的附加前缀字符。  当这些字符出现在表达式之间时，它们将被视为空格。  当它们出现在表达式中时，将根据它们通常的语法类进行处理。
 
-    函数backward-prefix-chars 向后移动这些字符，以及主要语法类为前缀（'''）的字符。  请参阅运动和语法。
 
 ** TODO 36.3 语法表函数
 
 在本节中，我们将描述用于创建、访问和更改语法表的函数。
 
-功能：make-syntax-table &optional table ¶
+#+begin_src emacs-lisp
+  Function: make-syntax-table &optional table ¶
+#+end_src
 
     此函数创建一个新的语法表。  如果 table 不是 nil，则新语法表的父级是 table；  否则，父级是标准语法表。
 
     在新的语法表中，所有字符最初都被赋予“继承”（'@'）语法类，即它们的语法是从父表继承的（参见语法类表）。
 
-功能：复制语法表&可选表¶
+#+begin_src emacs-lisp
+  Function: copy-syntax-table &optional table ¶
+#+end_src
 
     此函数构造表的副本并将其返回。  如果 table 被省略或为零，则返回标准语法表的副本。  否则，如果 table 不是语法表，则会发出错误信号。
 
-命令： modify-syntax-entry char syntax-descriptor &optional table ¶
+#+begin_src emacs-lisp
+  Command: modify-syntax-entry char syntax-descriptor &optional table ¶
+#+end_src
 
     该函数根据 syntax-descriptor 设置 char 的语法条目。  char 必须是一个字符，或形式为 (min . max) 的 cons 单元格；  在后一种情况下，该函数为 min 和 max 之间的所有字符设置语法条目，包括 min 和 max。
 
@@ -217,7 +272,9 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 	   ⇒ nil
     #+end_src
 
-功能：字符语法字符¶
+#+begin_src emacs-lisp
+  Function: char-syntax character ¶
+#+end_src
 
     此函数返回字符的语法类，由其指示符表示（参见语法类表）。  这仅返回类，而不是其匹配的字符或语法标志。
 
@@ -244,19 +301,27 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
 	   ⇒ "("
     #+end_src
 
-功能：设置语法表 ¶
+#+begin_src emacs-lisp
+  Function: set-syntax-table table ¶
+#+end_src
 
     此函数使 table 成为当前缓冲区的语法表。  它返回表。
 
-功能：语法表¶
+#+begin_src emacs-lisp
+  Function: syntax-table ¶
+#+end_src
 
     此函数返回当前语法表，即当前缓冲区的表。
 
-命令：describe-syntax &optional buffer ¶
+#+begin_src emacs-lisp
+  Command: describe-syntax &optional buffer ¶
+#+end_src
 
     此命令在帮助缓冲区中显示缓冲区（默认为当前缓冲区）的语法表的内容。
 
-宏：with-syntax-table 表体… ¶
+#+begin_src emacs-lisp
+  Macro: with-syntax-table table body… ¶
+#+end_src
 
     此宏使用 table 作为当前语法表执行 body。  在恢复旧的当前语法表后，它返回正文中最后一个表单的值。
 
