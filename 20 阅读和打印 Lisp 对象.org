@@ -27,23 +27,33 @@
 
 大多数用于读取文本的 Lisp 函数都将输入流作为参数。  输入流指定从何处或如何获取要读取的文本字符。  以下是可能的输入流类型：
 
-缓冲 ¶
+#+begin_src emacs-lisp
+  buffer ¶
+#+end_src
 
     输入字符从缓冲区中读取，从点之后的字符开始。  读取字符时点前进。
-标记¶
+#+begin_src emacs-lisp
+  marker ¶
+#+end_src
 
     输入字符从标记所在的缓冲区中读取，从标记之后的字符开始。  标记位置随着字符的读取而前进。  当流是标记时，缓冲区中的点值无效。
-细绳 ¶
+#+begin_src emacs-lisp
+  string ¶
+#+end_src
 
     输入字符取自字符串，从字符串中的第一个字符开始，并根据需要使用尽可能多的字符。
-功能 ¶
+#+begin_src emacs-lisp
+  function ¶
+#+end_src
 
     输入字符由函数生成，必须支持两种调用：
 
 	 当不带参数调用它时，它应该返回下一个字符。
 	 当使用一个参数（总是一个字符）调用它时，函数应该保存参数并安排在下一次调用时返回它。  这称为未读字符；  当 Lisp 阅读器读取一个字符过多并想将其放回原处时，就会发生这种情况。  在这种情况下，值函数返回什么没有区别。
 
-t¶
+#+begin_src emacs-lisp
+  t ¶
+#+end_src
 
     t 用作流意味着从 minibuffer 中读取输入。  事实上，minibuffer 被调用一次，用户给出的文本被制成一个字符串，然后用作输入流。  如果 Emacs 以批处理模式运行（请参阅批处理模式），则使用标准输入而不是 minibuffer。  例如，
 
@@ -51,10 +61,14 @@ t¶
       (message "%s" (read t))
     #+end_src
     将以批处理模式从标准输入读取 Lisp 表达式并将结果打印到标准输出。
-无¶
+#+begin_src emacs-lisp
+  nil ¶
+#+end_src
 
     nil 作为输入流提供意味着使用标准输入的值来代替；  该值是默认输入流，并且必须是非零输入流。
-象征
+#+begin_src emacs-lisp
+  symbol
+#+end_src
 
     作为输入流的符号等效于符号的函数定义（如果有）。
 
@@ -152,11 +166,15 @@ t¶
 
 如果读取遇到未终止的列表、向量或字符串，则会发出文件结束错误信号。
 
-功能：读取&可选流¶
+#+begin_src emacs-lisp
+  Function: read &optional stream ¶
+#+end_src
 
     此函数从流中读取一个文本 Lisp 表达式，并将其作为 Lisp 对象返回。  这是基本的 Lisp 输入功能。
 
-功能：从字符串中读取字符串&可选的开始结束¶
+#+begin_src emacs-lisp
+  Function: read-from-string string &optional start end ¶
+#+end_src
 
     此函数从字符串中的文本中读取第一个文本 Lisp 表达式。  它返回一个 cons 单元格，其 CAR 是该表达式，其 CDR 是一个整数，给出字符串中下一个剩余字符的位置（即第一个未读取的字符）。
 
@@ -187,17 +205,23 @@ t¶
 	   ⇒ (11 . 8)
     #+end_src
 
-变量：标准输入¶
+#+begin_src emacs-lisp
+  Variable: standard-input ¶
+#+end_src
 
     此变量保存默认输入流——当流参数为 nil 时读取使用的流。  默认值为 t，表示使用 minibuffer。
 
-变量：read-circle ¶
+#+begin_src emacs-lisp
+  Variable: read-circle ¶
+#+end_src
 
     如果非零，则此变量启用循环和共享结构的读取。  请参阅循环对象的读取语法。  它的默认值为 t。
 
 在批处理模式下从 Emacs 进程的标准输入/输出流读取或写入时，有时需要确保将逐字读取/写入任意二进制数据，和/或不转换换行符到 CR-执行 LF 对。  此问题在 POSIX 主机上不存在，仅在 MS-Windows 和 MS-DOS 上存在。  以下函数允许您控制 Emacs 进程的任何标准流的 I/O 模式。
 
-功能：设置二进制模式流模式¶
+#+begin_src emacs-lisp
+  Function: set-binary-mode stream mode ¶
+#+end_src
 
     将流切换到二进制或文本 I/O 模式。  如果模式为非零，则切换到二进制模式，否则切换到文本模式。  stream 的值可以是标准输入、标准输出或标准错误之一。  此函数会刷新流的任何未决输出数据作为副作用，并返回流的 I/O 模式的先前值。  在 POSIX 主机上，它总是返回一个非零值并且除了刷新挂起的输出之外什么都不做。
 
@@ -205,22 +229,34 @@ t¶
 
 输出流指定如何处理打印产生的字符。  大多数打印函数接受输出流作为可选参数。  以下是可能的输出流类型：
 
-缓冲 ¶
+#+begin_src emacs-lisp
+  buffer ¶
+#+end_src
 
     输出字符被插入到缓冲区中。  插入字符时点前进。
-标记¶
+#+begin_src emacs-lisp
+  marker ¶
+#+end_src
 
     输出字符被插入到标记指向的缓冲区中，在标记位置。  标记位置随着字符的插入而前进。  当流为标记时，缓冲区中point的值对打印没有影响，并且这种打印不会移动点（除非标记指向点的位置或之前，点会随着周围的文本前进，照常）。
-功能 ¶
+#+begin_src emacs-lisp
+  function ¶
+#+end_src
 
     输出字符被传递给函数，该函数负责将它们存储起来。  它以单个字符作为参数调用，与要输出的字符一样多次，并负责将字符存储在您想要放置它们的任何位置。
-t¶
+#+begin_src emacs-lisp
+  t ¶
+#+end_src
 
     输出字符显示在回显区域中。  如果 Emacs 以批处理模式运行（请参阅批处理模式），则输出将改为写入标准输出描述符。
-无¶
+#+begin_src emacs-lisp
+  nil ¶
+#+end_src
 
     nil 指定为输出流意味着使用标准输出变量的值；  该值是默认输出流，并且不能为 nil。
-象征
+#+begin_src emacs-lisp
+  symbol
+#+end_src
 
     作为输出流的符号等效于符号的函数定义（如果有）。
 
@@ -276,33 +312,31 @@ t¶
 以下示例显示了回显区域的输出：
 
 #+begin_src emacs-lisp
-(print "Echo Area output" t)
-     ⇒ "Echo Area output"
----------- Echo Area ----------
-"Echo Area output"
----------- Echo Area ----------
+  (print "Echo Area output" t)
+       ⇒ "Echo Area output"
+  ---------- Echo Area ----------
+  "Echo Area output"
+  ---------- Echo Area ----------
 #+end_src
 
 最后输出
 #+begin_src emacs-lisp
+  (setq last-output nil)
+       ⇒ nil
 
 
-(setq last-output nil)
-     ⇒ nil
+  (defun eat-output (c)
+    (setq last-output (cons c last-output)))
+       ⇒ eat-output
 
 
-(defun eat-output (c)
-  (setq last-output (cons c last-output)))
-     ⇒ eat-output
+  (print "This is the output" #'eat-output)
+       ⇒ "This is the output"
 
 
-(print "This is the output" #'eat-output)
-     ⇒ "This is the output"
-
-
-last-output
-     ⇒ (10 34 116 117 112 116 117 111 32 101 104
-    116 32 115 105 32 115 105 104 84 34 10)
+  last-output
+       ⇒ (10 34 116 117 112 116 117 111 32 101 104
+      116 32 115 105 32 115 105 104 84 34 10)
 #+end_src
 
 现在我们可以通过反转列表来将输出按正确的顺序排列：
@@ -315,7 +349,9 @@ last-output
 
 调用 concat 会将列表转换为字符串，以便您可以更清楚地看到其内容。
 
-功能：外部调试输出字符¶
+#+begin_src emacs-lisp
+  Function: external-debugging-output character ¶
+#+end_src
 
     在调试时，此函数可用作输出流。  它将字符写入标准错误流。
 
@@ -345,7 +381,9 @@ Lisp 对象可以引用自己。  以正常方式打印自引用对象将需要�
 
 在下面的函数中，stream 代表输出流。  （有关输出流的描述，请参见上一节。另请参见 external-debugging-output，这是一个对调试有用的流值。）如果 stream 为 nil 或省略，则默认为标准输出的值。
 
-功能：打印对象&可选流¶
+#+begin_src emacs-lisp
+  Function: print object &optional stream ¶
+#+end_src
 
     打印功能是一种方便的打印方式。  它将对象的打印表示输出到流中，在对象之前打印一个换行符，在它之后打印另一个换行符。  使用引号字符。  打印返回对象。  例如：
 
@@ -362,7 +400,9 @@ Lisp 对象可以引用自己。  以正常方式打印自引用对象将需要�
 	   ⇒ " came back"
     #+end_src
 
-功能：prin1 对象&可选流 ¶
+#+begin_src emacs-lisp
+  Function: prin1 object &optional stream ¶
+#+end_src
 
     此函数将对象的打印表示输出到流。  它不像 print 那样打印换行符来分隔输出，但它确实像 print 一样使用引号字符。  它返回对象。
 
@@ -374,7 +414,9 @@ Lisp 对象可以引用自己。  以正常方式打印自引用对象将需要�
 	   ⇒ " came back"
     #+end_src
 
-功能：princ对象&可选流¶
+#+begin_src emacs-lisp
+  Function: princ object &optional stream ¶
+#+end_src
 
     此函数将对象的打印表示输出到流。  它返回对象。
 
@@ -387,15 +429,21 @@ Lisp 对象可以引用自己。  以正常方式打印自引用对象将需要�
 	   ⇒ " in the \"hat\""
     #+end_src
 
-功能：terpri &optional 流确保 ¶
+#+begin_src emacs-lisp
+  Function: terpri &optional stream ensure ¶
+#+end_src
 
     此函数输出换行符以进行流式传输。  该名称代表“终止打印”。  如果 ensure 不为零，则如果流已经在行首，则不打印换行符。  请注意，在这种情况下，流不能是函数，如果是，则会发出错误信号。  如果打印了换行符，此函数返回 t。
 
-功能：写字符&可选流¶
+#+begin_src emacs-lisp
+  Function: write-char character &optional stream ¶
+#+end_src
 
     此函数将字符输出到流。  它返回字符。
 
-功能：prin1-to-string object &optional noescape ¶
+#+begin_src emacs-lisp
+  Function: prin1-to-string object &optional noescape ¶
+#+end_src
 
     此函数返回一个字符串，其中包含 prin1 为相同参数打印的文本。
     #+begin_src emacs-lisp
@@ -418,7 +466,9 @@ Lisp 对象可以引用自己。  以正常方式打印自引用对象将需要�
 
     有关将 Lisp 对象的打印表示形式获取为字符串的其他方法，请参见格式化字符串中的格式。
 
-宏：with-output-to-string body… ¶
+#+begin_src emacs-lisp
+  Macro: with-output-to-string body… ¶
+#+end_src
 
     此宏执行带有标准输出设置的正文表单，以将输出输入字符串。  然后它返回该字符串。
 
@@ -431,7 +481,9 @@ Lisp 对象可以引用自己。  以正常方式打印自引用对象将需要�
 
     返回“缓冲区是 foo”。
 
-功能：pp对象&可选流¶
+#+begin_src emacs-lisp
+  Function: pp object &optional stream ¶
+#+end_src
 
     该函数将对象输出到流中，就像 prin1 一样，但以更漂亮的方式执行。  也就是说，它会缩进并填充对象以使其对人类更具可读性。
 
@@ -439,15 +491,20 @@ Lisp 对象可以引用自己。  以正常方式打印自引用对象将需要�
 
 ** TODO 20.6 影响输出的变量
 
-变量：标准输出¶
-
+#+begin_src emacs-lisp
+  Variable: standard-output ¶
+#+end_src
     此变量的值是默认输出流——当流参数为 nil 时打印函数使用的流。  默认为 t，表示在回显区域显示。
 
-变量：打印引用 ¶
+#+begin_src emacs-lisp
+  Variable: print-quoted ¶
+#+end_src
 
     如果这是非零，这意味着使用缩写的阅读器语法打印引用的形式，例如，(quote foo) 打印为 'foo，并且 (function foo) 打印为 #'foo。  默认值为 t。
 
-变量： print-escape-newlines ¶
+#+begin_src emacs-lisp
+  Variable: print-escape-newlines ¶
+#+end_src
 
     如果此变量不为 nil，则字符串中的换行符将打印为 '\n'，而换页符将打印为 '\f'。  通常这些字符打印为实际的换行符和换页符。
 
@@ -469,23 +526,31 @@ Lisp 对象可以引用自己。  以正常方式打印自引用对象将需要�
     #+end_src
     在第二个表达式中，print-escape-newlines 的本地绑定在调用 prin1 期间有效，但在打印结果期间无效。
 
-变量：打印转义控制字符¶
+#+begin_src emacs-lisp
+  Variable: print-escape-control-characters ¶
+#+end_src
 
     如果此变量为非零，则字符串中的控制字符将由打印函数 prin1 打印为反斜杠序列，并打印带有引号的打印。  如果此变量和 print-escape-newlines 都不是 nil，则后者优先于换行符和换页符。
 
-变量： print-escape-nonascii ¶
+#+begin_src emacs-lisp
+  Variable: print-escape-nonascii ¶
+#+end_src
 
     如果此变量为非零，则字符串中的单字节非 ASCII 字符将由打印函数 prin1 无条件地打印为反斜杠序列，并打印带引号的打印。
 
     当输出流是多字节缓冲区或指向缓冲区的标记时，这些函数还对单字节非 ASCII 字符使用反斜杠序列，无论此变量的值如何。
 
-变量：打印转义多字节¶
+#+begin_src emacs-lisp
+  Variable: print-escape-multibyte ¶
+#+end_src
 
     如果此变量为非零，则字符串中的多字节非 ASCII 字符将由打印函数 prin1 无条件地打印为反斜杠序列，并打印带引号的打印。
 
     当输出流是单字节缓冲区或指向缓冲区的标记时，这些函数还对多字节非 ASCII 字符使用反斜杠序列，而不管此变量的值。
 
-变量：打印字符集文本属性¶
+#+begin_src emacs-lisp
+  Variable: print-charset-text-property ¶
+#+end_src
 
     此变量控制打印字符串时“charset”文本属性的打印。  该值应为 nil、t 或默认值。
 
@@ -493,7 +558,9 @@ Lisp 对象可以引用自己。  以正常方式打印自引用对象将需要�
 
     如果值为默认值，则仅在存在“意外”字符集属性时才打印字符集文本属性。  对于 ascii 字符，所有字符集都被认为是“预期的”。  否则，字符的预期 charset 属性由 char-charset 给出。
 
-变量：打印长度¶
+#+begin_src emacs-lisp
+  Variable: print-length ¶
+#+end_src
 
     此变量的值是要在任何列表、向量或布尔向量中打印的最大元素数。  如果要打印的对象的元素多于这么多，则用省略号缩写。
 
@@ -506,40 +573,58 @@ Lisp 对象可以引用自己。  以正常方式打印自引用对象将需要�
 	   -| (1 2 ...)
 	   ⇒ (1 2 ...)
     #+end_src
-变量：打印级别¶
+#+begin_src emacs-lisp
+  Variable: print-level ¶
+#+end_src
 
     此变量的值是打印时括号和括号的最大嵌套深度。  深度超过此限制的任何列表或向量都用省略号缩写。  nil 值（默认值）表示没有限制。
 
-用户选项：eval-expression-print-length ¶
-用户选项：eval-expression-print-level ¶
+#+begin_src emacs-lisp
+  User Option: eval-expression-print-length ¶
+#+end_src
+#+begin_src emacs-lisp
+  User Option: eval-expression-print-level ¶
+#+end_src
 
     这些是 eval-expression 使用的 print-length 和 print-level 的值，因此间接地被许多交互式评估命令所使用（请参阅 The GNU Emacs Manual 中的 Evaluating Emacs Lisp Expressions）。
 
 这些变量用于检测和报告循环和共享结构：
 
-变量：打印圈¶
+#+begin_src emacs-lisp
+  Variable: print-circle ¶
+#+end_src
 
     如果非零，则此变量可以检测打印中的循环和共享结构。  请参阅循环对象的读取语法。
 
-变量： print-gensym ¶
+#+begin_src emacs-lisp
+  Variable: print-gensym ¶
+#+end_src
 
     如果非零，则此变量启用在打印中检测非驻留符号（请参阅创建和驻留符号）。  启用此功能后，非驻留符号会以前缀 '#:' 打印，这会告诉 Lisp 阅读器生成一个非驻留符号。
 
-变量：打印连续编号¶
+#+begin_src emacs-lisp
+  Variable: print-continuous-numbering ¶
+#+end_src
 
     如果非零，这意味着在打印调用中连续编号。  这会影响为“#n=”标签和“#m#”引用打印的数字。  不要用 setq 设置这个变量；  你应该只用 let 将它临时绑定到 t。  当你这样做时，你还应该将 print-number-table 绑定到 nil。
 
-变量：打印数字表¶
+#+begin_src emacs-lisp
+  Variable: print-number-table ¶
+#+end_src
 
     这个变量保存了一个打印内部使用的向量，以实现打印圈功能。  除非在绑定 print-continuous-numbering 时将其绑定到 nil，否则不应使用它。
 
-变量：浮点输出格式¶
+#+begin_src emacs-lisp
+  Variable: float-output-format ¶
+#+end_src
 
     此变量指定如何打印浮点数。  默认值为 nil，这意味着使用代表数字的最短输出而不会丢失信息。
 
     要更精确地控制输出格式，您可以在此变量中放置一个字符串。  该字符串应包含要在 C 函数 sprintf 中使用的“%”规范。  有关您可以使用的更多限制，请参阅变量的文档字符串。
 
-变量：打印整数作为字符¶
+#+begin_src emacs-lisp
+  Variable: print-integers-as-characters ¶
+#+end_src
 
     当此变量为非零时，表示图形基本字符的整数将使用 Lisp 字符语法打印（请参阅基本字符语法）。  其他数字以通常的方式打印。  例如，列表 (4 65 -1 10) 将打印为 '(4 ?A -1 ?\n)'。
 

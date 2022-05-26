@@ -358,9 +358,9 @@
 
 
 ** 18 Lisp编译成Native代码
-   | Content           | S1   | S2 | S3 |
-   | 18.1 本机编译函数 | DONE |    |    |
-   | 18.2 本机编译变量 | DONE |    |    |
+   | Content           | S1   | S2   | S3 |
+   | 18.1 本机编译函数 | DONE | DONE |    |
+   | 18.2 本机编译变量 | DONE | DONE |    |
 
 ** 19 调试 Lisp 程序
    | Content                       | S1   | S2   | S3 |
@@ -410,13 +410,13 @@
 
 
 ** 20 读入和打印 Lisp 对象
-   | Content             | S1   | S2 | S3 |
-   | 20.1 读入与打印简介 | DONE |    |    |
-   | 20.2 输入流         | DONE |    |    |
-   | 20.3 输入函数       | DONE |    |    |
-   | 20.4 输出流         | DONE |    |    |
-   | 20.5 输出函数       | DONE |    |    |
-   | 20.6 影响输出的变量 | DONE |    |    |
+   | Content             | S1   | S2   | S3 |
+   | 20.1 读入与打印简介 | DONE | DONE |    |
+   | 20.2 输入流         | DONE | DONE |    |
+   | 20.3 输入函数       | DONE | DONE |    |
+   | 20.4 输出流         | DONE | DONE |    |
+   | 20.5 输出函数       | DONE | DONE |    |
+   | 20.6 影响输出的变量 | DONE | DONE |    |
 
 
 ** 21 小缓冲区
