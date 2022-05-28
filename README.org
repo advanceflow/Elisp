@@ -1075,12 +1075,12 @@
 
 
 ** 42 准备分发的 Lisp 代码
-   | Content                      | S1   | S2 | S3/Author |
-   | 42.1 包装基础                | DONE |    |             |
-   | 42.2 简单包                  | DONE |    |             |
-   | 42.3 多文件包                | DONE |    |             |
-   | 42.4 创建和维护包档案        | DONE |    |             |
-   | 42.5 与存档 Web 服务器的接口 | DONE |    |             |
+   | Content                      | S1   | S2   | S3/Author |
+   | 42.1 包装基础                | DONE | DONE |           |
+   | 42.2 简单包                  | DONE | DONE |           |
+   | 42.3 多文件包                | DONE | DONE |           |
+   | 42.4 创建和维护包档案        | DONE | DONE |           |
+   | 42.5 与存档 Web 服务器的接口 | DONE | DONE |           |
 
 
 ** 附录
