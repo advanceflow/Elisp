@@ -2405,6 +2405,3 @@ Whether the action renamed is returned, depends on the used watch library. Other
     Emacs 应用程序具有与其他应用程序相同的竞争条件问题。  例如，即使 (file-readable-p "foo.txt") 返回 t，也可能是 foo.txt 不可读，因为其他程序在调用 file-readable-p 和现在之间更改了文件的权限。  请参阅测试可访问性。
 #+begin_src emacs-lisp
   Resource limits
-#+end_src
-
-    当 Emacs 耗尽内存或其他操作系统资源时，它的行为可能不太可靠，因为通常运行到完成的计算可能会中止回到顶层。  这可能会导致 Emacs 忽略它通常会执行的操作。

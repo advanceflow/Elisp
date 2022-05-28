@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
 * TODO 38 线程
 
 Emacs Lisp 提供了一种有限形式的并发，称为线程。  给定 Emacs 实例中的所有线程共享相同的内存。  Emacs Lisp 中的并发是“主要是协作的”，这意味着 Emacs 只会在明确定义的时间在线程之间切换执行。  然而，Emacs 线程支持被设计成以后允许更细粒度的并发，正确的程序不应该依赖协作线程。

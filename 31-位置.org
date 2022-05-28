@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
 * TODO 31 位置
 
 位置是缓冲区文本中字符的索引。  更准确地说，位置标识了两个字符之间的位置（或在第一个字符之前，或在最后一个字符之后），因此我们可以说在给定位置之前或之后的字符。  但是，我们经常说“在”一个位置的字符，意思是那个位置之后的字符。

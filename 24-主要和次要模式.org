@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
 * TODO 24 主要和次要模式
 模式是一组以有用的方式自定义 Emacs 行为的定义。  有两种模式：次要模式，提供用户可以在编辑时打开和关闭的功能；  和主要模式，用于编辑或与特定类型的文本交互。  每个缓冲区一次只有一个主要模式。
 

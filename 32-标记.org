@@ -1,9 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
-
 * TODO 32 标记
 
 标记是一个 Lisp 对象，用于指定缓冲区中相对于周围文本的位置。  每当插入或删除文本时，标记会自动更改其与缓冲区开头的偏移量，以便它与两侧的两个字符保持一致。

@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
 * TODO 33 文本
 
 本章描述了处理缓冲区中文本的函数。  大多数检查、插入或删除当前缓冲区中的文本，通常在点或与点相邻的文本上操作。  许多是交互式的。  所有更改文本的功能都提供撤消更改（请参阅撤消）。

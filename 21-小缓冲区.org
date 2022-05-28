@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
 * TODO 21 小缓冲区
 
 minibuffer 是一个特殊的缓冲区，Emacs 命令用来读取比单个数字前缀参数更复杂的参数。  这些参数包括文件名、缓冲区名和命令名（如在 Mx 中）。  minibuffer 显示在帧的底行，与回声区域在同一位置（请参阅回声区域），但仅当它用于读取参数时。

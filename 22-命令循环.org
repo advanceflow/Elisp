@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
 * TODO 22 命令循环
 
 当您运行 Emacs 时，它几乎立即进入编辑器命令循环。  这个循环读取键序列，执行它们的定义，并显示结果。  在本章中，我们将描述这些事情是如何完成的，以及允许 Lisp 程序完成这些事情的子例程。

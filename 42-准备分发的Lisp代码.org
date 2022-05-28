@@ -204,6 +204,3 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。  包
     返回文件的签名。
 #+begin_src emacs-lisp
   <file name>
-#+end_src
-
-    返回文件。  这将是多文件包的 tarball，或简单包的单个文件。

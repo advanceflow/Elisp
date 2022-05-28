@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
 * TODO 2 Lisp 数据类型
 
 Lisp 对象是 Lisp 程序使用和操作的一段数据。  对于我们的目的，类型或数据类型是一组可能的对象。

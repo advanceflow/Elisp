@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
 * TODO 29 窗口
 
 本章描述了与 Emacs 窗口相关的函数和变量。  请参阅框架，了解如何为窗口分配可供 Emacs 使用的屏幕区域。  有关文本如何在窗口中显示的信息，请参阅 Emacs 显示。
