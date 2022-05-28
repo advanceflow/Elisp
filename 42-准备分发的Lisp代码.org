@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
 * TODO 42 准备分发的Lisp代码
 
 Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。  包是一个或多个文件的集合，其格式和捆绑方式使用户可以轻松下载、安装、卸载和升级它。
@@ -204,3 +199,5 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。  包
     返回文件的签名。
 #+begin_src emacs-lisp
   <file name>
+#+end_src
+    返回文件。  这将是多文件包的 tarball，或简单包的单个文件。
