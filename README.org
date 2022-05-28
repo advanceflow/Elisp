@@ -1084,38 +1084,38 @@
 
 
 ** 附录
-   | Content                       | S1   | S2 | S3/Author |
-   | 附录 A Emacs 27 反新闻        | DONE |DONE |             |
-   | 附录 B GNU 自由文档许可证     | DONE |DONE |             |
-   | 附录 C GNU 通用公共许可证     | DONE |DONE |             |
-   | 附录 D 提示和约定             | DONE |DONE |             |
-   | D.1 Emacs Lisp 编码约定       | DONE |DONE |             |
-   | D.2 键绑定约定                | DONE |DONE |             |
-   | D.3 Emacs 编程技巧            | DONE |DONE |             |
-   | D.4 快速编译代码的技巧        | DONE |DONE |             |
-   | D.5 避免编译器警告的技巧      | DONE |DONE |             |
-   | D.6 文档字符串提示            | DONE |DONE |             |
-   | D.7 撰写评论的技巧            | DONE |DONE |             |
-   | D.8 Emacs 库的常规头文件      | DONE |DONE |             |
-   | 附录 E GNU Emacs 内部结构     | DONE |DONE |             |
-   | E.1 构建 Emacs                | DONE |DONE |             |
-   | E.2 纯存储                    | DONE |DONE |             |
-   | E.3 垃圾收集                  | DONE |DONE |             |
-   | E.4 堆栈分配的对象            | DONE |DONE |             |
-   | E.5 内存使用                  | DONE |DONE |             |
-   | E.6 C 方言                    | DONE |DONE |             |
-   | E.7 编写 Emacs 原语           | DONE |DONE |             |
-   | E.8 编写动态加载的模块        | DONE |DONE |             |
-   | E.8.1 模块初始化代码          | DONE |DONE |             |
-   | E.8.2 编写模块函数            | DONE |DONE |             |
-   | E.8.3 Lisp 和模块值之间的转换 | DONE |DONE |             |
-   | E.8.4 模块的其他便利功能      | DONE |DONE |             |
-   | E.8.5 模块中的非本地出口      | DONE |DONE |             |
-   | E.9 对象内部                  | DONE |DONE |             |
-   | E.9.1 缓冲器内部              | DONE |DONE |             |
-   | E.9.2 窗口内部                | DONE |DONE |             |
-   | E.9.3 过程内部                | DONE |DONE |             |
-   | E.10 C 整数类型               | DONE |DONE |             |
-   | 附录 F 标准错误               | DONE |DONE |             |
-   | 附录 G 标准键盘映射           | DONE |DONE |             |
-   | 附录 H 标准钩子               | DONE |DONE |             |
+   | Content                       | S1   | S2   | S3/Author |
+   | 附录 A Emacs 27 反新闻        | DONE | DONE |           |
+   | 附录 B GNU 自由文档许可证     | DONE | DONE |           |
+   | 附录 C GNU 通用公共许可证     | DONE | DONE |           |
+   | 附录 D 提示和约定             | DONE | DONE |           |
+   | D.1 Emacs Lisp 编码约定       | DONE | DONE |           |
+   | D.2 键绑定约定                | DONE | DONE |           |
+   | D.3 Emacs 编程技巧            | DONE | DONE |           |
+   | D.4 快速编译代码的技巧        | DONE | DONE |           |
+   | D.5 避免编译器警告的技巧      | DONE | DONE |           |
+   | D.6 文档字符串提示            | DONE | DONE |           |
+   | D.7 撰写评论的技巧            | DONE | DONE |           |
+   | D.8 Emacs 库的常规头文件      | DONE | DONE |           |
+   | 附录 E GNU Emacs 内部结构     | DONE | DONE |           |
+   | E.1 构建 Emacs                | DONE | DONE |           |
+   | E.2 纯存储                    | DONE | DONE |           |
+   | E.3 垃圾收集                  | DONE | DONE |           |
+   | E.4 堆栈分配的对象            | DONE | DONE |           |
+   | E.5 内存使用                  | DONE | DONE |           |
+   | E.6 C 方言                    | DONE | DONE |           |
+   | E.7 编写 Emacs 原语           | DONE | DONE |           |
+   | E.8 编写动态加载的模块        | DONE | DONE |           |
+   | E.8.1 模块初始化代码          | DONE | DONE |           |
+   | E.8.2 编写模块函数            | DONE | DONE |           |
+   | E.8.3 Lisp 和模块值之间的转换 | DONE | DONE |           |
+   | E.8.4 模块的其他便利功能      | DONE | DONE |           |
+   | E.8.5 模块中的非本地出口      | DONE | DONE |           |
+   | E.9 对象内部                  | DONE | DONE |           |
+   | E.9.1 缓冲器内部              | DONE | DONE |           |
+   | E.9.2 窗口内部                | DONE | DONE |           |
+   | E.9.3 过程内部                | DONE | DONE |           |
+   | E.10 C 整数类型               | DONE | DONE |           |
+   | 附录 F 标准错误               | DONE | DONE |           |
+   | 附录 G 标准键盘映射           | DONE | DONE |           |
+   | 附录 H 标准钩子               | DONE | DONE |           |
