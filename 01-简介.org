@@ -22,7 +22,7 @@ Lisp（列表处理语言）最早于20世纪50年代末在麻省理工学院人
 
 GNU Emacs Lisp主要受Maclisp的启发，也有一点受Common Lisp的启发。如果您了解Common Lisp，您将注意到许多相似之处。然而，为了减少GNU Emacs的内存需求，Common Lisp的许多特性被省略或简化。有时，简化是如此剧烈，以至于Common Lisp用户可能会感到非常困惑。我们偶尔会指出GNU Emacs Lisp与Common Lisp的区别。如果你不懂Common Lisp，不要担心它；本手册是独立的。
 
-通过cl lib库可以获得一定数量的公共Lisp仿真。请参见Common Lisp扩展中的概述。
+通过cl lib库可以获得一定数量的Common Lisp仿真。请参见Common Lisp扩展中的概述。
 Emacs Lisp完全不受Scheme的影响；但是GNU项目有一个方案的实现，叫做Guile。我们在所有要求可扩展性的新GNU软件中使用它。
 ** TODO 1.3 约定
 本节说明本手册中使用的符号约定。  您可能想跳过本节，稍后再参考。
