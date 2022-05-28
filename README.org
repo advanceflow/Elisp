@@ -1041,37 +1041,37 @@
 
 
 ** 41 操作系统接口
-   | Content                       | S1   | S2 | S3/Author |
-   | 41.1 启动 Emacs               | DONE |    |             |
-   | 41.1.1 小结：启动时的动作顺序 | DONE |    |             |
-   | 41.1.2 初始化文件             | DONE |    |             |
-   | 41.1.3 终端特定初始化         | DONE |    |             |
-   | 41.1.4 命令行参数             | DONE |    |             |
-   | 41.2 退出 Emacs               | DONE |    |             |
-   | 41.2.1 杀死 Emacs             | DONE |    |             |
-   | 41.2.2 挂起 Emacs             | DONE |    |             |
-   | 41.3 操作系统环境             | DONE |    |             |
-   | 41.4 用户识别                 | DONE |    |             |
-   | 41.5 时间                     | DONE |    |             |
-   | 41.6 时区规则                 | DONE |    |             |
-   | 41.7 时间转换                 | DONE |    |             |
-   | 41.8 解析和格式化时间         | DONE |    |             |
-   | 41.9 处理器运行时间           | DONE |    |             |
-   | 41.10 时间计算                | DONE |    |             |
-   | 41.11 延迟执行的定时器        | DONE |    |             |
-   | 41.12 空闲定时器              | DONE |    |             |
-   | 41.13 终端输入                | DONE |    |             |
-   | 41.13.1 输入模式              | DONE |    |             |
-   | 41.13.2 录音输入              | DONE |    |             |
-   | 41.14 终端输出                | DONE |    |             |
-   | 41.15 声音输出                | DONE |    |             |
-   | 41.16 X11 Keysyms 上的操作    | DONE |    |             |
-   | 41.17 批处理模式              | DONE |    |             |
-   | 41.18 会话管理                | DONE |    |             |
-   | 41.19 桌面通知                | DONE |    |             |
-   | 41.20 文件更改通知            | DONE |    |             |
-   | 41.21 动态加载的库            | DONE |    |             |
-   | 41.22 安全考虑                | DONE |    |             |
+   | Content                       | S1   | S2   | S3/Author |
+   | 41.1 启动 Emacs               | DONE | DONE |           |
+   | 41.1.1 小结：启动时的动作顺序 | DONE | DONE |           |
+   | 41.1.2 初始化文件             | DONE | DONE |           |
+   | 41.1.3 终端特定初始化         | DONE | DONE |           |
+   | 41.1.4 命令行参数             | DONE | DONE |           |
+   | 41.2 退出 Emacs               | DONE | DONE |           |
+   | 41.2.1 杀死 Emacs             | DONE | DONE |           |
+   | 41.2.2 挂起 Emacs             | DONE | DONE |           |
+   | 41.3 操作系统环境             | DONE | DONE |           |
+   | 41.4 用户识别                 | DONE | DONE |           |
+   | 41.5 时间                     | DONE | DONE |           |
+   | 41.6 时区规则                 | DONE | DONE |           |
+   | 41.7 时间转换                 | DONE | DONE |           |
+   | 41.8 解析和格式化时间         | DONE | DONE |           |
+   | 41.9 处理器运行时间           | DONE | DONE |           |
+   | 41.10 时间计算                | DONE | DONE |           |
+   | 41.11 延迟执行的定时器        | DONE | DONE |           |
+   | 41.12 空闲定时器              | DONE | DONE |           |
+   | 41.13 终端输入                | DONE | DONE |           |
+   | 41.13.1 输入模式              | DONE | DONE |           |
+   | 41.13.2 录音输入              | DONE | DONE |           |
+   | 41.14 终端输出                | DONE | DONE |           |
+   | 41.15 声音输出                | DONE | DONE |           |
+   | 41.16 X11 Keysyms 上的操作    | DONE | DONE |           |
+   | 41.17 批处理模式              | DONE | DONE |           |
+   | 41.18 会话管理                | DONE | DONE |           |
+   | 41.19 桌面通知                | DONE | DONE |           |
+   | 41.20 文件更改通知            | DONE | DONE |           |
+   | 41.21 动态加载的库            | DONE | DONE |           |
+   | 41.22 安全考虑                | DONE | DONE |           |
 
 
 ** 42 准备分发的 Lisp 代码
