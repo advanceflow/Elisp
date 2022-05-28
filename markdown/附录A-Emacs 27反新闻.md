@@ -1,11 +1,8 @@
 
-# Table of Contents
-
-1.  [附录 A Emacs 27反新闻](#org44d6929)
 
 
 
-<a id="org44d6929"></a>
+
 
 # TODO 附录 A Emacs 27反新闻
 

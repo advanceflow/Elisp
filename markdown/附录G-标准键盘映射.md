@@ -1,11 +1,8 @@
 
-# Table of Contents
-
-1.  [附录 G 标准键盘映射](#orga9ae230)
 
 
 
-<a id="orga9ae230"></a>
+
 
 # TODO 附录 G 标准键盘映射
 

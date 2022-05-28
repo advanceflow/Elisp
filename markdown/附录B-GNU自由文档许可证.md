@@ -1,11 +1,8 @@
 
-# Table of Contents
-
-1.  [附录 B GNU自由文档许可证](#orge076f62)
 
 
 
-<a id="orge076f62"></a>
+
 
 # TODO 附录 B GNU自由文档许可证
 

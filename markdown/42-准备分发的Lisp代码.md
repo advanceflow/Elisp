@@ -1,15 +1,7 @@
 
-# Table of Contents
-
-1.  [42 准备分发的Lisp代码](#orgbab7795)
-    1.  [42.1 包装基础](#org7f1371e)
-    2.  [42.2 简单包](#org0ca1e92)
-    3.  [42.3 多文件包](#orge08ab23)
-    4.  [42.4 创建和维护包档案](#org5a13880)
-    5.  [42.5 与存档 Web 服务器的接口](#org1cded47)
 
 
-<a id="orgbab7795"></a>
+
 
 # TODO 42 准备分发的Lisp代码
 
@@ -20,7 +12,6 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。  包
 这些部分主要针对包存档维护者——其中大部分信息与包作者（即编写将通过这些存档分发的代码的人）无关。
 
 
-<a id="org7f1371e"></a>
 
 ## TODO 42.1 包装基础
 
@@ -71,7 +62,6 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。  包
 可选参数 no-activate，如果非 nil，会导致 Emacs 更新其已安装包的记录，但实际上并不使它们可用。
 
 
-<a id="org0ca1e92"></a>
 
 ## TODO 42.2 简单包
 
@@ -117,7 +107,6 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。  包
 有关如何将单文件包添加到包存档的说明，请参阅创建和维护包存档。
 
 
-<a id="orge08ab23"></a>
 
 ## TODO 42.3 多文件包
 
@@ -151,7 +140,6 @@ requirements 是所需软件包及其版本的列表。  此列表中的每个�
       (expand-file-name file superfrobnicator-base))
 
 
-<a id="org5a13880"></a>
 
 ## TODO 42.4 创建和维护包档案
 
@@ -184,7 +172,6 @@ requirements 是所需软件包及其版本的列表。  此列表中的每个�
 对这些事项的完整解释超出了本手册的范围。  有关加密密钥和签名的更多信息，请参阅 The GNU Privacy Guard Manual 中的 GnuPG。  Emacs 带有一个到 GNU Privacy Guard 的接口，请参阅 Emacs EasyPG 助手手册中的 EasyPG。
 
 
-<a id="org1cded47"></a>
 
 ## TODO 42.5 与存档 Web 服务器的接口
 

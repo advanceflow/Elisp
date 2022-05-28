@@ -1,12 +1,7 @@
 
-# Table of Contents
-
-1.  [18 Lisp编译成Native代码](#orgb8dec86)
-    1.  [18.1 本机编译函数](#org2f1f88d)
-    2.  [18.2 本机编译变量](#org55dc056)
 
 
-<a id="orgb8dec86"></a>
+
 
 # TODO 18 Lisp编译成Native代码
 
@@ -23,7 +18,6 @@
 no-byte-compile 的非 nil 文件局部变量绑定（请参阅字节编译）也会禁用该文件的本机编译。  此外，类似的变量 no-native-compile 仅禁用文件的本机编译。  如果同时指定了 no-byte-compile 和 no-native-compile，则前者优先。
 
 
-<a id="org2f1f88d"></a>
 
 ## TODO 18.1 本机编译函数
 
@@ -72,7 +66,6 @@ Native-Compilation 是作为字节编译的副作用实现的（请参阅字节�
 如果正在运行的 Emacs 进程已编译了本机编译支持，则此函数返回非 nil。  在动态加载 libgccjit 的系统上，它还确保库可用并且可以加载。  需要预先知道本机编译是否可用的 Lisp 程序应该使用这个谓词。
 
 
-<a id="org55dc056"></a>
 
 ## TODO 18.2 本机编译变量
 
