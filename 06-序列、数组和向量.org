@@ -1,10 +1,10 @@
 * TODO 6 序列、数组和向量
 
-序列类型是另外两种 Lisp 类型的联合：列表和数组。  换句话说，任何列表都是序列，任何数组都是序列。  所有序列的共同属性是每个序列都是有序的元素集合。
+序列类型是另外两种 Lisp 类型的联合：列表和数组。换句话说，任何列表都是序列，任何数组都是序列。所有序列的共同属性是每个序列都是有序的元素集合。
 
-数组是一个固定长度的对象，每个元素都有一个槽。  所有元素都可以在恒定时间内访问。  数组的四种类型是字符串、向量、字符表和布尔向量。
+数组是一个固定长度的对象，每个元素都有一个槽。所有元素都可以在恒定时间内访问。数组的四种类型是字符串、向量、字符表和布尔向量。
 
-列表是一系列元素，但它不是单个原始对象；  它由 cons 单元格组成，每个元素一个单元格。  查找第 n 个元素需要查看 n 个 cons 单元格，因此距离列表开头较远的元素需要更长的时间才能访问。  但是可以将元素添加到列表中，或者删除元素。
+列表是一系列元素，但它不是单个原始对象；  它由 cons 单元格组成，每个元素一个单元格。查找第 n 个元素需要查看 n 个 cons 单元格，因此距离列表开头较远的元素需要更长的时间才能访问。但是可以将元素添加到列表中，或者删除元素。
 
 下图显示了这些类型之间的关系：
 
@@ -36,14 +36,14 @@
 Function: sequencep object ¶
 #+end_src
 
-    如果对象是列表、向量、字符串、布尔向量或字符表，则此函数返回 t，否则返回 nil。  另请参见下面的 seqp。
+    如果对象是列表、向量、字符串、布尔向量或字符表，则此函数返回 t，否则返回 nil。另请参见下面的 seqp。
 
 #+begin_src emacs-lisp
   Function: length sequence ¶
 #+end_src
 
 
-    此函数返回序列中元素的数量。  如果参数不是序列或点列表，则函数会发出错误类型参数错误的信号；  如果参数是循环列表，它会发出循环列表错误信号。  对于 char-table，返回的值总是比最大​​ Emacs 字符代码大一。
+    此函数返回序列中元素的数量。如果参数不是序列或点列表，则函数会发出错误类型参数错误的信号；  如果参数是循环列表，它会发出循环列表错误信号。对于 char-table，返回的值总是比最大​​ Emacs 字符代码大一。
 
     有关安全长度的相关功能，请参见安全长度的定义。
 
@@ -76,7 +76,7 @@ Function: sequencep object ¶
   Function: length< sequence length ¶
 #+end_src
 
-    如果序列短于长度，则返回非零。  如果序列是一个长列表，这可能比计算序列的长度更有效。
+    如果序列短于长度，则返回非零。如果序列是一个长列表，这可能比计算序列的长度更有效。
 
 #+begin_src emacs-lisp
   Function: length> sequence length ¶
@@ -94,7 +94,7 @@ Function: sequencep object ¶
   Function: elt sequence index ¶
 #+end_src
 
-    此函数返回由索引索引的序列元素。  index 的合法值是从 0 到比序列长度小 1 的整数。  如果序列是一个列表，超出范围的值的行为与第 n 个相同。  请参见第 n 个的定义。  否则，超出范围的值会触发 args-out-of-range 错误。
+    此函数返回由索引索引的序列元素。index 的合法值是从 0 到比序列长度小 1 的整数。如果序列是一个列表，超出范围的值的行为与第 n 个相同。请参见第 n 个的定义。否则，超出范围的值会触发 args-out-of-range 错误。
 
     #+begin_src emacs-lisp
       (elt [1 2 3 4] 2)
@@ -120,13 +120,13 @@ Function: sequencep object ¶
   Function: copy-sequence seqr ¶
 #+end_src
 
-    此函数返回 seqr 的副本，它应该是序列或记录。  副本是与原始对象相同类型的对象，并且具有相同顺序的相同元素。  但是，如果 seqr 为空，如字符串或长度为零的向量，则此函数返回的值可能不是副本，而是与 seqr 相同类型且相同的空对象。
+    此函数返回 seqr 的副本，它应该是序列或记录。副本是与原始对象相同类型的对象，并且具有相同顺序的相同元素。但是，如果 seqr 为空，如字符串或长度为零的向量，则此函数返回的值可能不是副本，而是与 seqr 相同类型且相同的空对象。
 
-    将新元素存储到副本中不会影响原始 seqr，反之亦然。  但是，副本的元素不是副本；  它们与原始元素相同（eq）。  因此，在这些元素中所做的更改（通过副本找到）在原始文件中也可见。
+    将新元素存储到副本中不会影响原始 seqr，反之亦然。但是，副本的元素不是副本；  它们与原始元素相同（eq）。因此，在这些元素中所做的更改（通过副本找到）在原始文件中也可见。
 
-    如果参数是具有文本属性的字符串，则副本中的属性列表本身就是副本，不与原始属性列表共享。  但是，属性的​​实际值是共享的。  请参阅文本属性。
+    如果参数是具有文本属性的字符串，则副本中的属性列表本身就是副本，不与原始属性列表共享。但是，属性的​​实际值是共享的。请参阅文本属性。
 
-    此功能不适用于点列表。  尝试复制循环列表可能会导致无限循环。
+    此功能不适用于点列表。尝试复制循环列表可能会导致无限循环。
 
     另请参阅 Building Cons Cells and Lists 中的 append、Creating Strings 中的 concat 和 Vectors 函数中的 vconcat，了解其他复制序列的方法。
     #+begin_src emacs-lisp
@@ -167,7 +167,7 @@ Function: sequencep object ¶
 #+begin_src emacs-lisp
   Function: reverse sequence ¶
 #+end_src
-    此函数创建一个新序列，其元素是序列的元素，但顺序相反。  原始参数序列不会改变。  请注意，字符表不能颠倒。
+    此函数创建一个新序列，其元素是序列的元素，但顺序相反。原始参数序列不会改变。请注意，字符表不能颠倒。
 
     #+begin_src emacs-lisp
       (setq x '(1 2 3 4))
@@ -199,7 +199,7 @@ Function: sequencep object ¶
 #+begin_src emacs-lisp
   Function: nreverse sequence ¶
 #+end_src
-    此函数反转序列元素的顺序。  与反向不同，原始序列可能会被修改。
+    此函数反转序列元素的顺序。与反向不同，原始序列可能会被修改。
 
     例如：
     #+begin_src emacs-lisp
@@ -250,21 +250,21 @@ Function: sequencep object ¶
     #+end_src
 
 
-    请注意，与 reverse 不同，此函数不适用于字符串。  尽管您可以使用 aset 更改字符串数据，但强烈建议将字符串视为不可变的，即使它们是可变的。  请参阅可变性。
+    请注意，与 reverse 不同，此函数不适用于字符串。尽管您可以使用 aset 更改字符串数据，但强烈建议将字符串视为不可变的，即使它们是可变的。请参阅可变性。
 
 #+begin_src emacs-lisp
   Function: sort sequence predicate ¶
 #+end_src
 
-    此功能对序列进行稳定排序。  请注意，此功能不适用于所有序列；  它只能用于列表和向量。  如果序列是一个列表，它会被破坏性地修改。  此函数返回排序后的序列并使用谓词比较元素。  稳定排序是排序键相同的元素在排序前后保持其相对顺序的排序。  当连续排序用于根据不同标准对元素进行排序时，稳定性很重要。
+    此功能对序列进行稳定排序。请注意，此功能不适用于所有序列；  它只能用于列表和向量。如果序列是一个列表，它会被破坏性地修改。此函数返回排序后的序列并使用谓词比较元素。稳定排序是排序键相同的元素在排序前后保持其相对顺序的排序。当连续排序用于根据不同标准对元素进行排序时，稳定性很重要。
 
-    参数谓词必须是接受两个参数的函数。  它用两个序列元素调用。  要获得升序排序，如果第一个元素“小于”第二个元素，则谓词应返回非零，否则返回 nil。
+    参数谓词必须是接受两个参数的函数。它用两个序列元素调用。要获得升序排序，如果第一个元素“小于”第二个元素，则谓词应返回非零，否则返回 nil。
 
-    比较函数谓词必须为任何给定的参数对提供可靠的结果，至少在一次排序调用中。  它必须是反对称的；  也就是说，如果 a 小于 b，则 b 不能小于 a。  它必须是可传递的——也就是说，如果 a 小于 b，并且 b 小于 c，那么 a 必须小于 c。  如果使用不满足这些要求的比较函数，排序的结果是不可预测的。
+    比较函数谓词必须为任何给定的参数对提供可靠的结果，至少在一次排序调用中。它必须是反对称的；  也就是说，如果 a 小于 b，则 b 不能小于 a。它必须是可传递的——也就是说，如果 a 小于 b，并且 b 小于 c，那么 a 必须小于 c。如果使用不满足这些要求的比较函数，排序的结果是不可预测的。
 
-    列表排序的破坏性方面是它通过更改 CDR 重新排列 cons 单元形成序列。  非破坏性排序函数将创建新的 cons 单元格以按排序顺序存储元素。  如果您希望在不破坏原件的情况下制作排序副本，请先使用复制顺序复制它，然后再排序。
+    列表排序的破坏性方面是它通过更改 CDR 重新排列 cons 单元形成序列。非破坏性排序函数将创建新的 cons 单元格以按排序顺序存储元素。如果您希望在不破坏原件的情况下制作排序副本，请先使用复制顺序复制它，然后再排序。
 
-    排序不会按顺序改变 cons 单元格的 CAR；  原本在序列中包含元素a的cons单元格在排序后在其CAR中仍有a，但由于CDR的变化，它现在出现在列表中的不同位置。  例如：
+    排序不会按顺序改变 cons 单元格的 CAR；  原本在序列中包含元素a的cons单元格在排序后在其CAR中仍有a，但由于CDR的变化，它现在出现在列表中的不同位置。例如：
 
     #+begin_src emacs-lisp
       (setq nums (list 1 3 2 6 5 4 0))
@@ -278,14 +278,14 @@ Function: sequencep object ¶
     #+end_src
 
 
-    警告：注意 nums 中的列表不再包含 0；  这是与以前相同的缺点单元格，但它不再是列表中的第一个。  不要假设以前持有参数的变量现在持有整个排序列表！  相反，保存排序结果并使用它。  大多数情况下，我们将结果存储回保存原始列表的变量中：
+    警告：注意 nums 中的列表不再包含 0；  这是与以前相同的缺点单元格，但它不再是列表中的第一个。不要假设以前持有参数的变量现在持有整个排序列表！  相反，保存排序结果并使用它。大多数情况下，我们将结果存储回保存原始列表的变量中：
 
 
     #+begin_src emacs-lisp
       (setq nums (sort nums #'<))
     #+end_src
 
-    为了更好地理解什么是稳定排序，请考虑以下向量示例。  排序后，car 为 8 的所有 item 都分组在 vector 的开头，但它们的相对顺序保持不变。  car 为 9 的所有项目都分组在向量的末尾，但它们的相对顺序也被保留：
+    为了更好地理解什么是稳定排序，请考虑以下向量示例。排序后，car 为 8 的所有 item 都分组在 vector 的开头，但它们的相对顺序保持不变。car 为 9 的所有项目都分组在向量的末尾，但它们的相对顺序也被保留：
 
     #+begin_src emacs-lisp
       (setq
@@ -301,19 +301,19 @@ Function: sequencep object ¶
     #+end_src
 
 
-    有关执行排序的更多功能，请参阅排序文本。  有关排序的有用示例，请参阅访问文档字符串中的文档。
+    有关执行排序的更多功能，请参阅排序文本。有关排序的有用示例，请参阅访问文档字符串中的文档。
 
-seq.el 库提供以下附加的序列操作宏和函数，前缀为 seq-。  要使用它们，您必须首先加载 seq 库。
+seq.el 库提供以下附加的序列操作宏和函数，前缀为 seq-。要使用它们，您必须首先加载 seq 库。
 
-这个库中定义的所有函数都没有副作用；  即，它们不会修改您作为参数传递的任何序列（列表、向量或字符串）。  除非另有说明，否则结果是与输入相同类型的序列。  对于那些接受谓词的函数，这应该是一个参数的函数。
+这个库中定义的所有函数都没有副作用；  即，它们不会修改您作为参数传递的任何序列（列表、向量或字符串）。除非另有说明，否则结果是与输入相同类型的序列。对于那些接受谓词的函数，这应该是一个参数的函数。
 
-seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，所有函数都使用 cl-defgeneric 定义。  有关使用 cl-defgeneric 添加扩展的更多详细信息，请参阅通用函数。
+seq.el 库可以扩展为使用其他类型的顺序数据结构。为此，所有函数都使用 cl-defgeneric 定义。有关使用 cl-defgeneric 添加扩展的更多详细信息，请参阅通用函数。
 
 #+begin_src emacs-lisp
   Function: seq-elt sequence index ¶
 #+end_src
 
-    此函数返回指定索引处的序列元素，该元素是一个整数，其有效值范围是零到比序列长度小一。  对于内置序列类型的超出范围的值，seq-elt 的行为类似于 elt。  详见 elt 的定义。
+    此函数返回指定索引处的序列元素，该元素是一个整数，其有效值范围是零到比序列长度小一。对于内置序列类型的超出范围的值，seq-elt 的行为类似于 elt。详见 elt 的定义。
 
     #+begin_src emacs-lisp
       (seq-elt [1 2 3 4] 2)
@@ -335,13 +335,13 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-length sequence ¶
 #+end_src
 
-    此函数返回序列中元素的数量。  对于内置序列类型，seq-length 的行为类似于长度。  见长度定义。
+    此函数返回序列中元素的数量。对于内置序列类型，seq-length 的行为类似于长度。见长度定义。
 
 #+begin_src emacs-lisp
   Function: seqp object ¶
 #+end_src
 
-    如果 object 是一个序列（列表或数组）或通过 seq.el 泛型函数定义的任何其他类型的序列，则此函数返回非 nil。  这是 sequencep 的可扩展变体。
+    如果 object 是一个序列（列表或数组）或通过 seq.el 泛型函数定义的任何其他类型的序列，则此函数返回非 nil。这是 sequencep 的可扩展变体。
 
     #+begin_src emacs-lisp
       (seqp [1 2])
@@ -356,7 +356,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-drop sequence n ¶
 #+end_src
 
-    此函数返回除序列的前 n（整数）个元素之外的所有元素。  如果 n 为负数或零，则结果为序列。
+    此函数返回除序列的前 n（整数）个元素之外的所有元素。如果 n 为负数或零，则结果为序列。
     #+begin_src emacs-lisp
       (seq-drop [1 2 3 4 5 6] 3)
       ⇒ [4 5 6]
@@ -371,7 +371,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-take sequence n ¶
 #+end_src
 
-    此函数返回序列的前 n 个（整数）元素。  如果 n 为负数或零，则结果为零。
+    此函数返回序列的前 n 个（整数）元素。如果 n 为负数或零，则结果为零。
 
     #+begin_src emacs-lisp
       (seq-take '(1 2 3 4) 3)
@@ -422,7 +422,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-map function sequence ¶
 #+end_src
 
-    此函数返回将函数应用于序列的每个元素的结果。  返回值是一个列表。
+    此函数返回将函数应用于序列的每个元素的结果。返回值是一个列表。
 
     #+begin_src emacs-lisp
       (seq-map #'1+ '(2 4 6))
@@ -437,7 +437,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-map-indexed function sequence ¶
 #+end_src
 
-    此函数返回将函数应用于序列的每个元素及其在 seq 中的索引的结果。  返回值是一个列表。
+    此函数返回将函数应用于序列的每个元素及其在 seq 中的索引的结果。返回值是一个列表。
     #+begin_src emacs-lisp
       (seq-map-indexed (lambda (elt idx)
 			 (list idx elt))
@@ -451,7 +451,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-mapn function &rest sequences ¶
 #+end_src
 
-    此函数返回将函数应用于序列的每个元素的结果。  function 的 arity （参见 subr-arity ）必须与序列的数量相匹配。  映射在最短序列的末尾停止，返回值是一个列表。
+    此函数返回将函数应用于序列的每个元素的结果。function 的 arity （参见 subr-arity ）必须与序列的数量相匹配。映射在最短序列的末尾停止，返回值是一个列表。
 
 
     #+begin_src emacs-lisp
@@ -501,7 +501,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
 
     这个函数返回用初始值和序列的第一个元素调用函数的结果，然后用那个结果和序列的第二个元素调用函数，然后用那个结果和序列的第三个元素调用函数，等等。函数应该是一个函数的两个论点。
 
-    使用两个参数调用函数。  初始值（然后是累加值）用作第一个参数，序列中的元素用作第二个参数。
+    使用两个参数调用函数。初始值（然后是累加值）用作第一个参数，序列中的元素用作第二个参数。
 
     如果序列为空，则返回初始值而不调用函数。
 
@@ -542,7 +542,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-find predicate sequence &optional default ¶
 #+end_src
 
-    此函数返回谓词返回非零的序列中的第一个元素。  如果没有元素与谓词匹配，则函数返回默认值。
+    此函数返回谓词返回非零的序列中的第一个元素。如果没有元素与谓词匹配，则函数返回默认值。
 
     请注意，如果找到的元素与默认元素相同，则此函数具有歧义，因为在这种情况下，无法知道是否找到了元素。
     #+begin_src emacs-lisp
@@ -610,7 +610,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-sort-by function predicate sequence ¶
 #+end_src
 
-    此功能类似于 seq-sort，但序列的元素在排序之前通过对其应用函数进行转换。  function 是一个参数的函数。
+    此功能类似于 seq-sort，但序列的元素在排序之前通过对其应用函数进行转换。function 是一个参数的函数。
 
     #+begin_src emacs-lisp
       (seq-sort-by #'seq-length #'> ["a" "ab" "abc"])
@@ -621,7 +621,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-contains-p sequence elt &optional function ¶
 #+end_src
 
-    如果序列中至少有一个元素等于 elt，则此函数返回非 nil。  如果可选参数函数不为 nil，则它是一个使用两个参数的函数，而不是默认的 equal。
+    如果序列中至少有一个元素等于 elt，则此函数返回非 nil。如果可选参数函数不为 nil，则它是一个使用两个参数的函数，而不是默认的 equal。
     #+begin_src emacs-lisp
       (seq-contains-p '(symbol1 symbol2) 'symbol1)
       ⇒ t
@@ -634,7 +634,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-set-equal-p sequence1 sequence2 &optional testfn ¶
 #+end_src
 
-    此函数检查 sequence1 和 sequence2 是否包含相同的元素，而不管顺序如何。  如果可选参数 testfn 不是 nil，它是一个使用两个参数的函数，而不是默认的 equal。
+    此函数检查 sequence1 和 sequence2 是否包含相同的元素，而不管顺序如何。如果可选参数 testfn 不是 nil，它是一个使用两个参数的函数，而不是默认的 equal。
     #+begin_src emacs-lisp
 
 
@@ -657,7 +657,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-position sequence elt &optional function ¶
 #+end_src
 
-    此函数返回序列中等于 elt 的第一个元素的索引。  如果可选参数函数不为 nil，则它是一个使用两个参数的函数，而不是默认的 equal。
+    此函数返回序列中等于 elt 的第一个元素的索引。如果可选参数函数不为 nil，则它是一个使用两个参数的函数，而不是默认的 equal。
 
     #+begin_src emacs-lisp
       (seq-position '(a b c) 'b)
@@ -672,7 +672,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-uniq sequence &optional function ¶
 #+end_src
 
-    此函数返回删除重复项的序列元素列表。  如果可选参数函数不为 nil，则它是一个使用两个参数的函数，而不是默认的 equal。
+    此函数返回删除重复项的序列元素列表。如果可选参数函数不为 nil，则它是一个使用两个参数的函数，而不是默认的 equal。
 
     #+begin_src emacs-lisp
       (seq-uniq '(1 2 2 1 3))
@@ -687,7 +687,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-subseq sequence start &optional end ¶
 #+end_src
 
-    此函数返回从开始到结束的序列子集，均为整数（结束默认为最后一个元素）。  如果 start 或 end 为负数，则从序列的末尾开始计数。
+    此函数返回从开始到结束的序列子集，均为整数（结束默认为最后一个元素）。如果 start 或 end 为负数，则从序列的末尾开始计数。
 
     #+begin_src emacs-lisp
       (seq-subseq '(1 2 3 4 5) 1)
@@ -705,7 +705,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-concatenate type &rest sequences ¶
 #+end_src
 
-    此函数返回由序列串联组成的类型类型序列。  类型可以是：向量、列表或字符串。
+    此函数返回由序列串联组成的类型类型序列。类型可以是：向量、列表或字符串。
 
     #+begin_src emacs-lisp
       (seq-concatenate 'list '(1 2) '(3 4) [5 6])
@@ -719,7 +719,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-mapcat function sequence &optional type ¶
 #+end_src
 
-    此函数将应用 seq-concatenate 的结果返回到将函数应用于序列的每个元素的结果。  结果是类型类型的序列，如果类型为 nil，则为列表。
+    此函数将应用 seq-concatenate 的结果返回到将函数应用于序列的每个元素的结果。结果是类型类型的序列，如果类型为 nil，则为列表。
 
 #+begin_src emacs-lisp
 (seq-mapcat #'seq-reverse '((3 2 1) (6 5 4)))
@@ -731,7 +731,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-partition sequence n ¶
 #+end_src
 
-    此函数返回序列元素的列表，这些元素被分组为长度为 n 的子序列。  最后一个序列可能包含比 n 少的元素。  n 必须是整数。  如果 n 为负整数或 0，则返回值为 nil。
+    此函数返回序列元素的列表，这些元素被分组为长度为 n 的子序列。最后一个序列可能包含比 n 少的元素。n 必须是整数。如果 n 为负整数或 0，则返回值为 nil。
 
 #+begin_src emacs-lisp
   (seq-partition '(0 1 2 3 4 5 6 7) 3)
@@ -742,7 +742,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-union sequence1 sequence2 &optional function ¶
 #+end_src
 
-    此函数返回出现在 sequence1 或 sequence2 中的元素列表。  返回列表的元素都是唯一的，因为没有两个元素会比较相等。  如果可选参数函数不为 nil，则它应该是用于比较元素的两个参数的函数，而不是默认的 equal。
+    此函数返回出现在 sequence1 或 sequence2 中的元素列表。返回列表的元素都是唯一的，因为没有两个元素会比较相等。如果可选参数函数不为 nil，则它应该是用于比较元素的两个参数的函数，而不是默认的 equal。
 
 #+begin_src emacs-lisp
   (seq-union [1 2 3] [3 5])
@@ -753,7 +753,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-intersection sequence1 sequence2 &optional function ¶
 #+end_src
 
-    此函数返回同时出现在 sequence1 和 sequence2 中的元素列表。  如果可选参数函数不为 nil，则它是用于比较元素的两个参数的函数，而不是默认的 equal。
+    此函数返回同时出现在 sequence1 和 sequence2 中的元素列表。如果可选参数函数不为 nil，则它是用于比较元素的两个参数的函数，而不是默认的 equal。
 
 #+begin_src emacs-lisp
   (seq-intersection [2 3 4 5] [1 3 5 6 7])
@@ -764,7 +764,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-difference sequence1 sequence2 &optional function ¶
 #+end_src
 
-    此函数返回出现在序列 1 中但未出现在序列 2 中的元素列表。  如果可选参数函数不为 nil，则它是用于比较元素的两个参数的函数，而不是默认的 equal。
+    此函数返回出现在序列 1 中但未出现在序列 2 中的元素列表。如果可选参数函数不为 nil，则它是用于比较元素的两个参数的函数，而不是默认的 equal。
 
 #+begin_src emacs-lisp
   (seq-difference '(2 3 4 5) [1 3 5 6 7])
@@ -775,7 +775,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-group-by function sequence ¶
 #+end_src
 
-    该函数将序列的元素分成一个列表，其键是对序列的每个元素应用函数的结果。  使用 equal 比较键。
+    该函数将序列的元素分成一个列表，其键是对序列的每个元素应用函数的结果。使用 equal 比较键。
 
 #+begin_src emacs-lisp
   (seq-group-by #'integerp '(1 2.1 3 2 3.2))
@@ -789,7 +789,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-into sequence type ¶
 #+end_src
 
-    该函数将序列序列转换为类型类型的序列。  type 可以是以下符号之一：向量、字符串或列表。
+    该函数将序列序列转换为类型类型的序列。type 可以是以下符号之一：向量、字符串或列表。
 
 #+begin_src emacs-lisp
   (seq-into [1 2 3] 'list)
@@ -806,7 +806,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-min sequence ¶
 #+end_src
 
-    此函数返回序列的最小元素。  序列的元素必须是数字或标记（请参阅标记）。
+    此函数返回序列的最小元素。序列的元素必须是数字或标记（请参阅标记）。
 
 #+begin_src emacs-lisp
   (seq-min [3 1 2])
@@ -820,7 +820,7 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Function: seq-max sequence ¶
 #+end_src
 
-    此函数返回序列的最大元素。  序列的元素必须是数字或标记。
+    此函数返回序列的最大元素。序列的元素必须是数字或标记。
 
 #+begin_src emacs-lisp
   (seq-max [1 3 2])
@@ -834,13 +834,13 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
   Macro: seq-doseq (var sequence) body… ¶
 #+end_src
 
-    这个宏类似于 dolist（参见 dolist），只是序列可以是列表、向量或字符串。  这主要用于副作用。
+    这个宏类似于 dolist（参见 dolist），只是序列可以是列表、向量或字符串。这主要用于副作用。
 
 #+begin_src emacs-lisp
   Macro: seq-let var-sequence val-sequence body… ¶
 #+end_src
 
-    此宏将 var-sequence 中定义的变量绑定到作为 val-sequence 的相应元素的值。  这称为解构绑定。  var-sequence 的元素本身可以包含序列，允许嵌套解构。
+    此宏将 var-sequence 中定义的变量绑定到作为 val-sequence 的相应元素的值。这称为解构绑定。var-sequence 的元素本身可以包含序列，允许嵌套解构。
 
     var-sequence 序列还可以包括 &rest 标记，后跟要绑定到 val-sequence 其余部分的变量名。
     #+begin_src emacs-lisp
@@ -901,27 +901,27 @@ seq.el 库可以扩展为使用其他类型的顺序数据结构。  为此，�
 
 ** TODO 6.2 数组
 
-一个数组对象有多个槽，其中包含许多其他的 Lisp 对象，称为数组的元素。  可以在恒定时间内访问数组的任何元素。  相反，访问列表元素的时间与该元素在列表中的位置成正比。
+一个数组对象有多个槽，其中包含许多其他的 Lisp 对象，称为数组的元素。可以在恒定时间内访问数组的任何元素。相反，访问列表元素的时间与该元素在列表中的位置成正比。
 
-Emacs 定义了四种类型的数组，都是一维的：字符串（参见字符串类型）、向量（参见向量类型）、布尔向量（参见布尔向量类型）和字符表（参见字符表类型）。  向量和字符表可以保存任何类型的元素，但字符串只能保存字符，而布尔向量只能保存 t 和 nil。
+Emacs 定义了四种类型的数组，都是一维的：字符串（参见字符串类型）、向量（参见向量类型）、布尔向量（参见布尔向量类型）和字符表（参见字符表类型）。向量和字符表可以保存任何类型的元素，但字符串只能保存字符，而布尔向量只能保存 t 和 nil。
 
 所有四种阵列都具有以下特征：
 
-    数组的第一个元素的索引为零，第二个元素的索引为 1，依此类推。  这称为零原点索引。  例如，一个包含四个元素的数组的索引为 0、1、2 和 3。
+    数组的第一个元素的索引为零，第二个元素的索引为 1，依此类推。这称为零原点索引。例如，一个包含四个元素的数组的索引为 0、1、2 和 3。
     数组的长度在创建后是固定的；  您不能更改现有数组的长度。
     出于求值的目的，数组是一个常数——即，它对自身求值。
     数组的元素可以分别用函数 aref 和 aset 引用或更改（请参阅对数组进行操作的函数）。
 
-当你创建一个数组时，除了一个字符表，你必须指定它的长度。  您不能指定字符表的长度，因为这是由字符代码的范围决定的。
+当你创建一个数组时，除了一个字符表，你必须指定它的长度。您不能指定字符表的长度，因为这是由字符代码的范围决定的。
 
-原则上，如果你想要一个文本字符数组，你可以使用字符串或向量。  在实践中，我们总是为此类应用选择字符串，原因有四个：
+原则上，如果你想要一个文本字符数组，你可以使用字符串或向量。在实践中，我们总是为此类应用选择字符串，原因有四个：
 
     它们占据相同元素向量空间的四分之一。
     字符串以文本形式更清晰地显示内容的方式打印。
-    字符串可以保存文本属性。  请参阅文本属性。
-    Emacs 的许多专门的编辑和 I/O 工具只接受字符串。  例如，您不能像插入字符串那样将字符向量插入缓冲区。  请参阅字符串和字符。
+    字符串可以保存文本属性。请参阅文本属性。
+    Emacs 的许多专门的编辑和 I/O 工具只接受字符串。例如，您不能像插入字符串那样将字符向量插入缓冲区。请参阅字符串和字符。
 
-相比之下，对于键盘输入字符数组（例如键序列），可能需要一个向量，因为许多键盘输入字符超出了适合字符串的范围。  请参阅按键序列输入。
+相比之下，对于键盘输入字符数组（例如键序列），可能需要一个向量，因为许多键盘输入字符超出了适合字符串的范围。请参阅按键序列输入。
 
 ** TODO 6.3 操作数组的函数
 
@@ -946,7 +946,7 @@ Emacs 定义了四种类型的数组，都是一维的：字符串（参见字�
   Function: aref arr index ¶
 #+end_src
 
-    此函数返回数组或记录 arr 的索引元素。  第一个元素的索引为零。
+    此函数返回数组或记录 arr 的索引元素。第一个元素的索引为零。
 
     #+begin_src emacs-lisp
       (setq primes [2 3 5 7 11 13])
@@ -965,7 +965,7 @@ Emacs 定义了四种类型的数组，都是一维的：字符串（参见字�
   Function: aset array index object ¶
 #+end_src
 
-    此函数将数组的第一个元素设置为对象。  它返回对象。
+    此函数将数组的第一个元素设置为对象。它返回对象。
 
     #+begin_src emacs-lisp
       (setq w (vector 'foo 'bar 'baz))
@@ -985,15 +985,15 @@ Emacs 定义了四种类型的数组，都是一维的：字符串（参见字�
 	   ⇒ "asdZasfd"
     #+end_src
 
-    数组应该是可变的。  请参阅可变性。
+    数组应该是可变的。请参阅可变性。
 
-    如果数组是字符串而对象不是字符，则会导致错误类型参数错误。  如果需要插入字符，该函数会将单字节字符串转换为多字节。
+    如果数组是字符串而对象不是字符，则会导致错误类型参数错误。如果需要插入字符，该函数会将单字节字符串转换为多字节。
 
 #+begin_src emacs-lisp
   Function: fillarray array object ¶
 #+end_src
 
-    该函数用对象填充数组数组，使数组的每个元素都是对象。  它返回数组。
+    该函数用对象填充数组数组，使数组的每个元素都是对象。它返回数组。
 
     #+begin_src emacs-lisp
       (setq a (copy-sequence [a b c d e f g]))
@@ -1010,17 +1010,17 @@ Emacs 定义了四种类型的数组，都是一维的：字符串（参见字�
     #+end_src
     如果数组是字符串而对象不是字符，则会导致错误类型参数错误。
 
-通用序列函数 copy-sequence 和 length 通常对已知为数组的对象很有用。  请参阅序列。
+通用序列函数 copy-sequence 和 length 通常对已知为数组的对象很有用。请参阅序列。
 
 ** TODO 6.4 向量
 
-向量是一个通用数组，其元素可以是任何 Lisp 对象。  （相比之下，字符串的元素只能是字符。请参阅字符串和字符。）向量在 Emacs 中用于多种用途：作为键序列（请参阅键序列），作为符号查找表（请参阅创建和内部符号） ，作为字节编译函数表示的一部分（请参阅字节编译）等。
+向量是一个通用数组，其元素可以是任何 Lisp 对象。（相比之下，字符串的元素只能是字符。请参阅字符串和字符。）向量在 Emacs 中用于多种用途：作为键序列（请参阅键序列），作为符号查找表（请参阅创建和内部符号） ，作为字节编译函数表示的一部分（请参阅字节编译）等。
 
 与其他数组一样，向量使用零原点索引：第一个元素的索引为 0。
 
-向量在元素周围用方括号打印。  因此，元素为符号 a、b 和 a 的向量被打印为 [aba]。  您可以在 Lisp 输入中以相同的方式编写向量。
+向量在元素周围用方括号打印。因此，元素为符号 a、b 和 a 的向量被打印为 [aba]。您可以在 Lisp 输入中以相同的方式编写向量。
 
-向量，如字符串或数字，被认为是评估的常数：评估它的结果是相同的向量。  这不会评估甚至检查向量的元素。  请参阅自我评估表。  用方括号编写的向量不应通过 aset 或其他破坏性操作进行修改。  请参阅可变性。
+向量，如字符串或数字，被认为是评估的常数：评估它的结果是相同的向量。这不会评估甚至检查向量的元素。请参阅自我评估表。用方括号编写的向量不应通过 aset 或其他破坏性操作进行修改。请参阅可变性。
 
 以下是说明这些原则的示例：
 #+begin_src emacs-lisp
@@ -1081,7 +1081,7 @@ Emacs 定义了四种类型的数组，都是一维的：字符串（参见字�
   Function: vconcat &rest sequences ¶
 #+end_src
 
-    此函数返回一个包含序列所有元素的新向量。  参数序列可以是正确的列表、向量、字符串或布尔向量。  如果没有给出序列，则返回空向量。
+    此函数返回一个包含序列所有元素的新向量。参数序列可以是正确的列表、向量、字符串或布尔向量。如果没有给出序列，则返回空向量。
 
     该值要么是空向量，要么是新构造的非空向量，它与任何现有向量都不相等。
 
@@ -1098,7 +1098,7 @@ Emacs 定义了四种类型的数组，都是一维的：字符串（参见字�
     #+end_src
 
 
-    vconcat 函数还允许字节码函数对象作为参数。  这是一个特殊功能，可以轻松访问字节码函数对象的全部内容。  请参阅字节码函数对象。
+    vconcat 函数还允许字节码函数对象作为参数。这是一个特殊功能，可以轻松访问字节码函数对象的全部内容。请参阅字节码函数对象。
 
     有关其他连接函数，请参阅映射函数中的 mapconcat、创建字符串中的 concat 和构建 Cons 单元格和列表中的 append。
 
@@ -1114,26 +1114,26 @@ append 函数还提供了一种将向量转换为具有相同元素的列表的�
 
 ** TODO 6.6 字符表
 
-一个字符表很像一个向量，除了它是由字符代码索引的。  任何没有修饰符的有效字符代码都可以用作字符表中的索引。  与任何数组一样，您可以使用 aref 和 aset 访问 char-table 的元素。  此外，一个字符表可以有额外的槽来保存与特定字符代码无关的附加数据。  与向量一样，char-tables 在求值时是常量，可以保存任何类型的元素。
+一个字符表很像一个向量，除了它是由字符代码索引的。任何没有修饰符的有效字符代码都可以用作字符表中的索引。与任何数组一样，您可以使用 aref 和 aset 访问 char-table 的元素。此外，一个字符表可以有额外的槽来保存与特定字符代码无关的附加数据。与向量一样，char-tables 在求值时是常量，可以保存任何类型的元素。
 
 每个字符表都有一个子类型，一个符号，它有两个用途：
 
-    子类型提供了一种简单的方法来判断 char-table 的用途。  例如，显示表是以display-table为子类型的char-table，语法表是以syntax-table为子类型的char-table。  可以使用函数 char-table-subtype 查询子类型，如下所述。
-    子类型控制字符表中额外槽的数量。  此数字由子类型的 char-table-extra-slots 符号属性指定（请参阅符号属性），其值应为 0 到 10 之间的整数。如果子类型没有此类符号属性，则 char-table 没有额外的槽.
+    子类型提供了一种简单的方法来判断 char-table 的用途。例如，显示表是以display-table为子类型的char-table，语法表是以syntax-table为子类型的char-table。可以使用函数 char-table-subtype 查询子类型，如下所述。
+    子类型控制字符表中额外槽的数量。此数字由子类型的 char-table-extra-slots 符号属性指定（请参阅符号属性），其值应为 0 到 10 之间的整数。如果子类型没有此类符号属性，则 char-table 没有额外的槽.
 
-一个 char-table 可以有一个 parent，它是另一个 char-table。  如果是这样，那么每当 char-table 为特定字符 c 指定 nil 时，它都会继承父级中指定的值。  换句话说，如果 char-table 本身指定 nil，则 (aref char-table c) 从 char-table 的父级返回值。
+一个 char-table 可以有一个 parent，它是另一个 char-table。如果是这样，那么每当 char-table 为特定字符 c 指定 nil 时，它都会继承父级中指定的值。换句话说，如果 char-table 本身指定 nil，则 (aref char-table c) 从 char-table 的父级返回值。
 
-一个字符表也可以有一个默认值。  如果是这样，那么 (aref char-table c) 会在 char-table 未指定任何其他非 nil 值时返回默认值。
+一个字符表也可以有一个默认值。如果是这样，那么 (aref char-table c) 会在 char-table 未指定任何其他非 nil 值时返回默认值。
 
 #+begin_src emacs-lisp
 Function:  make-char-table subtype &optional init ¶
 #+end_src
 
-    返回一个新创建的字符表，带有子类型 subtype（一个符号）。  每个元素都初始化为 init，默认为 nil。  创建 char-table 后，您无法更改 char-table 的子类型。
+    返回一个新创建的字符表，带有子类型 subtype（一个符号）。每个元素都初始化为 init，默认为 nil。创建 char-table 后，您无法更改 char-table 的子类型。
 
     没有参数来指定 char-table 的长度，因为所有 char-tables 都有任何有效字符代码作为索引的空间。
 
-    如果 subtype 具有 char-table-extra-slots 符号属性，则指定 char-table 中的额外插槽数。  这应该是 0 到 10 之间的整数；  否则，make-char-table 会引发错误。  如果 subtype 没有 char-table-extra-slots 符号属性（请参阅属性列表），则 char-table 没有额外的插槽。
+    如果 subtype 具有 char-table-extra-slots 符号属性，则指定 char-table 中的额外插槽数。这应该是 0 到 10 之间的整数；  否则，make-char-table 会引发错误。如果 subtype 没有 char-table-extra-slots 符号属性（请参阅属性列表），则 char-table 没有额外的插槽。
 
 #+begin_src emacs-lisp
 Function: char-table-p object ¶
@@ -1146,13 +1146,13 @@ Function: char-table-subtype char-table ¶
 
     该函数返回 char-table 的子类型符号。
 
-没有特殊的函数可以访问字符表中的默认值。  为此，请使用 char-table-range（见下文）。
+没有特殊的函数可以访问字符表中的默认值。为此，请使用 char-table-range（见下文）。
 
 #+begin_src emacs-lisp
 Function: char-table-parent char-table ¶
 #+end_src
 
-    此函数返回 char-table 的父级。  父级总是 nil 或另一个字符表。
+    此函数返回 char-table 的父级。父级总是 nil 或另一个字符表。
 
 #+begin_src emacs-lisp
 Function: set-char-table-parent char-table new-parent ¶
@@ -1164,7 +1164,7 @@ Function: set-char-table-parent char-table new-parent ¶
 Function: char-table-extra-slot char-table n ¶
 #+end_src
 
-    此函数返回字符表的额外槽 n（从零开始）的内容。  字符表中的额外槽数由其子类型决定。
+    此函数返回字符表的额外槽 n（从零开始）的内容。字符表中的额外槽数由其子类型决定。
 
 #+begin_src emacs-lisp
 Function: set-char-table-extra-slot char-table n value ¶
@@ -1178,7 +1178,7 @@ char-table 可以为单个字符代码指定一个元素值；  它还可以为�
 Function: char-table-range char-table range ¶
 #+end_src
 
-    这将返回在 char-table 中为一系列字符范围指定的值。  以下是范围的可能性：
+    这将返回在 char-table 中为一系列字符范围指定的值。以下是范围的可能性：
 
     #+begin_src emacs-lisp
       nil
@@ -1200,7 +1200,7 @@ Function: char-table-range char-table range ¶
 Function: set-char-table-range char-table range value ¶
 #+end_src
 
-    此函数设置字符表中字符范围的值。  以下是范围的可能性：
+    此函数设置字符表中字符范围的值。以下是范围的可能性：
 
     #+begin_src emacs-lisp
       nil
@@ -1226,11 +1226,11 @@ Function: set-char-table-range char-table range value ¶
   Function: map-char-table function char-table ¶
 #+end_src
 
-    此函数为 char-table 中具有非 nil 值的每个元素调用其参数函数。  函数调用有两个参数，一个键和一个值。  键是 char-table-range 的可能范围参数——有效字符或 cons 单元格（从 . 到），指定共享相同值的字符范围。  该值是 (char-table-range char-table key) 返回的值。
+    此函数为 char-table 中具有非 nil 值的每个元素调用其参数函数。函数调用有两个参数，一个键和一个值。键是 char-table-range 的可能范围参数——有效字符或 cons 单元格（从 . 到），指定共享相同值的字符范围。该值是 (char-table-range char-table key) 返回的值。
 
     总的来说，传递给函数的键值对描述了存储在 char-table 中的所有值。
 
-    返回值始终为零；  为了使调用 map-char-table 有用，函数应该有副作用。  例如，这里是如何检查语法表的元素：
+    返回值始终为零；  为了使调用 map-char-table 有用，函数应该有副作用。例如，这里是如何检查语法表的元素：
     #+begin_src emacs-lisp
       (let (accumulator)
 	 (map-char-table
@@ -1251,7 +1251,7 @@ Function: set-char-table-range char-table range value ¶
     #+end_src
 ** TODO 6.7 布尔向量
 
-布尔向量很像向量，只是它只存储值 t 和 nil。  如果您尝试将任何非零值存储到布尔向量的元素中，则效果是将 t 存储在那里。  与所有数组一样，布尔向量索引从 0 开始，一旦创建布尔向量，长度就不能更改。  布尔向量在评估时是常数。
+布尔向量很像向量，只是它只存储值 t 和 nil。如果您尝试将任何非零值存储到布尔向量的元素中，则效果是将 t 存储在那里。与所有数组一样，布尔向量索引从 0 开始，一旦创建布尔向量，长度就不能更改。布尔向量在评估时是常数。
 
 有几个函数专门用于布尔向量；  除此之外，您可以使用与其他类型数组相同的函数来操作它们。
 
@@ -1279,43 +1279,43 @@ Function: set-char-table-range char-table range value ¶
   Function: bool-vector-exclusive-or a b &optional c ¶
 #+end_src
 
-    返回布尔向量 a 和 b 的按位异或。  如果给定可选参数 c，则此操作的结果将存储到 c 中。  所有参数都应该是相同长度的布尔向量。
+    返回布尔向量 a 和 b 的按位异或。如果给定可选参数 c，则此操作的结果将存储到 c 中。所有参数都应该是相同长度的布尔向量。
 
 #+begin_src emacs-lisp
   Function: bool-vector-union a b &optional c ¶
 #+end_src
 
-    返回布尔向量 a 和 b 的按位或。  如果给定可选参数 c，则此操作的结果将存储到 c 中。  所有参数都应该是相同长度的布尔向量。
+    返回布尔向量 a 和 b 的按位或。如果给定可选参数 c，则此操作的结果将存储到 c 中。所有参数都应该是相同长度的布尔向量。
 
 #+begin_src emacs-lisp
   Function: bool-vector-intersection a b &optional c ¶
 #+end_src
 
-    返回布尔向量 a 和 b 的按位与。  如果给定可选参数 c，则此操作的结果将存储到 c 中。  所有参数都应该是相同长度的布尔向量。
+    返回布尔向量 a 和 b 的按位与。如果给定可选参数 c，则此操作的结果将存储到 c 中。所有参数都应该是相同长度的布尔向量。
 
 #+begin_src emacs-lisp
   Function: bool-vector-set-difference a b &optional c ¶
 #+end_src
 
-    返回 bool 向量 a 和 b 的集合差。  如果给定可选参数 c，则此操作的结果将存储到 c 中。  所有参数都应该是相同长度的布尔向量。
+    返回 bool 向量 a 和 b 的集合差。如果给定可选参数 c，则此操作的结果将存储到 c 中。所有参数都应该是相同长度的布尔向量。
 
 #+begin_src emacs-lisp
   Function: bool-vector-not a &optional b ¶
 #+end_src
 
-    返回 bool 向量 a 的补集。  如果给定可选参数 b，则此操作的结果将存储到 b 中。  所有参数都应该是相同长度的布尔向量。
+    返回 bool 向量 a 的补集。如果给定可选参数 b，则此操作的结果将存储到 b 中。所有参数都应该是相同长度的布尔向量。
 
 #+begin_src emacs-lisp
   Function: bool-vector-subsetp a b ¶
 #+end_src
 
-    如果 a 中的每个 t 值也是 b 中的 t，则返回 t，否则返回 nil。  所有参数都应该是相同长度的布尔向量。
+    如果 a 中的每个 t 值也是 b 中的 t，则返回 t，否则返回 nil。所有参数都应该是相同长度的布尔向量。
 
 #+begin_src emacs-lisp
   Function: bool-vector-count-consecutive a b i ¶
 #+end_src
 
-    返回从 i 开始的相等 b 中连续元素的数量。  a 是一个布尔向量，b 是 t 或 nil，而 i 是 a 的索引。
+    返回从 i 开始的相等 b 中连续元素的数量。a 是一个布尔向量，b 是 t 或 nil，而 i 是 a 的索引。
 
 #+begin_src emacs-lisp
   Function: bool-vector-count-population a ¶
@@ -1356,7 +1356,7 @@ Function: set-char-table-range char-table range value ¶
 
 ** TODO 6.8 管理固定大小的对象环
 
-环是一种固定大小的数据结构，支持插入、删除、旋转和模索引引用和遍历。  ring 包实现了一个高效的环数据结构。  它提供了本节中列出的功能。
+环是一种固定大小的数据结构，支持插入、删除、旋转和模索引引用和遍历。ring 包实现了一个高效的环数据结构。它提供了本节中列出的功能。
 
 请注意，Emacs 中的几个环，例如 kill ring 和 mark ring，实际上是作为简单列表实现的，而不是使用 ring 包；  因此以下功能对它们不起作用。
 
@@ -1364,7 +1364,7 @@ Function: set-char-table-range char-table range value ¶
   Function: make-ring size ¶
 #+end_src
 
-    这将返回一个能够容纳 size 对象的新环。  大小应该是一个整数。
+    这将返回一个能够容纳 size 对象的新环。大小应该是一个整数。
 
 #+begin_src emacs-lisp
   Function: ring-p object ¶
@@ -1382,7 +1382,7 @@ Function: set-char-table-range char-table range value ¶
   Function: ring-length ring ¶
 #+end_src
 
-    这将返回 ring 当前包含的对象数。  该值永远不会超过 ring-size 返回的值。
+    这将返回 ring 当前包含的对象数。该值永远不会超过 ring-size 返回的值。
 
 #+begin_src emacs-lisp
   Function: ring-elements ring ¶
@@ -1394,7 +1394,7 @@ Function: set-char-table-range char-table range value ¶
   Function: ring-copy ring ¶
 #+end_src
 
-    这将返回一个新的环，它是环的副本。  新环包含与环相同的 (eq) 对象。
+    这将返回一个新的环，它是环的副本。新环包含与环相同的 (eq) 对象。
 
 #+begin_src emacs-lisp
   Function: ring-empty-p ring ¶
@@ -1402,13 +1402,13 @@ Function: set-char-table-range char-table range value ¶
 
     如果 ring 为空，则返回 t，否则返回 nil。
 
-环中最新的元素始终具有索引 0。更高的索引对应于较旧的元素。  索引以环长度为模计算。  索引 -1 对应于最旧的元素，-2 对应于下一个最旧的元素，依此类推。
+环中最新的元素始终具有索引 0。更高的索引对应于较旧的元素。索引以环长度为模计算。索引 -1 对应于最旧的元素，-2 对应于下一个最旧的元素，依此类推。
 
 #+begin_src emacs-lisp
   Function: ring-ref ring index ¶
 #+end_src
 
-    这将返回在索引索引处找到的环中的对象。  index 可能为负数或大于环长度。  如果 ring 为空，则 ring-ref 发出错误信号。
+    这将返回在索引索引处找到的环中的对象。index 可能为负数或大于环长度。如果 ring 为空，则 ring-ref 发出错误信号。
 
 #+begin_src emacs-lisp
   Function: ring-insert ring object ¶
@@ -1422,13 +1422,13 @@ Function: set-char-table-range char-table range value ¶
   Function: ring-remove ring &optional index ¶
 #+end_src
 
-    从环中移除一个对象，并返回该对象。  参数 index 指定要删除的项目；  如果为 nil，则表示删除最旧的项目。  如果 ring 为空，则 ring-remove 会发出错误信号。
+    从环中移除一个对象，并返回该对象。参数 index 指定要删除的项目；  如果为 nil，则表示删除最旧的项目。如果 ring 为空，则 ring-remove 会发出错误信号。
 
 #+begin_src emacs-lisp
   Function: ring-insert-at-beginning ring object ¶
 #+end_src
 
-    这会将对象插入到环中，将其视为最旧的元素。  返回值不重要。
+    这会将对象插入到环中，将其视为最旧的元素。返回值不重要。
 
     如果环已满，此函数将删除最新的元素，为插入的元素腾出空间。
 
@@ -1436,9 +1436,9 @@ Function: set-char-table-range char-table range value ¶
   Function: ring-resize ring size ¶
 #+end_src
 
-    将环的大小设置为大小。  如果新大小更小，则丢弃环中最旧的项目。
+    将环的大小设置为大小。如果新大小更小，则丢弃环中最旧的项目。
 
-如果您注意不要超过环大小，则可以将环用作先进先出队列。  例如：
+如果您注意不要超过环大小，则可以将环用作先进先出队列。例如：
 #+begin_src emacs-lisp
   (let ((fifo (make-ring 5)))
     (mapc (lambda (obj) (ring-insert fifo obj))
