@@ -4,7 +4,7 @@ minibuffer 是一个特殊的缓冲区，Emacs 命令用来读取比单个数字
 
 ** TODO 21.1 Minibuffers 简介
 
-在大多数情况下，minibuffer 是一个普通的 Emacs 缓冲区。缓冲区中的大多数操作，例如编辑命令，都在微型缓冲区中正常工作。但是，许多管理缓冲区的操作不适用于小缓冲区。minibuffer 的名称始终采用“*Minibuf-number*”形式，并且不能更改。Minibuffers 仅显示在仅用于 minibuffers 的特殊窗口中；  这些窗口总是出现在框架的底部。（有时帧没有 minibuffer 窗口，有时一种特殊的帧只包含一个 minibuffer 窗口；请参阅 Minibuffers 和 Frames。）
+在大多数情况下，minibuffer 是一个普通的 Emacs 缓冲区。缓冲区中的大多数操作，例如编辑命令，都在微型缓冲区中正常工作。但是，许多管理缓冲区的操作不适用于小缓冲区。minibuffer 的名称始终采用 ~*Minibuf-number*~ 形式，并且不能更改。Minibuffers 仅显示在仅用于 minibuffers 的特殊窗口中；  这些窗口总是出现在框架的底部。（有时帧没有 minibuffer 窗口，有时一种特殊的帧只包含一个 minibuffer 窗口；请参阅 Minibuffers 和 Frames。）
 
 minibuffer 中的文本总是以提示字符串开头，该文本由使用 minibuffer 的程序指定，以告诉用户要键入哪种类型的输入。此文本被标记为只读，因此您不会意外删除或更改它。它也被标记为一个字段（请参阅定义和使用字段），以便某些运动功能，包括行首、前向词、前向句子和前向段落，停止在提示符和实际文字。
 
@@ -38,9 +38,9 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
 
     当用户键入命令退出 minibuffer 时，read-from-minibuffer 从 minibuffer 中的文本构造返回值。通常它会返回一个包含该文本的字符串。但是，如果 read 不是 nil，read-from-minibuffer 会读取文本并返回结果 Lisp 对象，未计算。（有关阅读的信息，请参阅输入函数。）
 
-    参数 default 指定通过历史命令可用的默认值。它应该是一个字符串、一个字符串列表或 nil。字符串或字符串成为 minibuffer 的“未来历史”，用户可以使用 Mn。
+    参数 default 指定通过历史命令可用的默认值。它应该是一个字符串、一个字符串列表或 nil。字符串或字符串成为 minibuffer 的 ~未来历史~ ，用户可以使用 Mn。
 
-    如果 read 不为 nil，则如果用户输入空输入，则 default 也用作要读取的输入。如果 default 是字符串列表，则第一个字符串用作输入。如果默认值为 nil，则空输入会导致文件结束错误。但是，在通常情况下（read 为 nil），当用户输入空输入并返回空字符串“”时，从 minibuffer 读取会忽略默认值。在这方面，它不同于本章中的所有其他 minibuffer 输入函数。
+    如果 read 不为 nil，则如果用户输入空输入，则 default 也用作要读取的输入。如果 default 是字符串列表，则第一个字符串用作输入。如果默认值为 nil，则空输入会导致文件结束错误。但是，在通常情况下（read 为 nil），当用户输入空输入并返回空字符串 ~~ 时，从 minibuffer 读取会忽略默认值。在这方面，它不同于本章中的所有其他 minibuffer 输入函数。
 
     如果 keymap 不为零，则该 keymap 是要在 minibuffer 中使用的本地 keymap。如果 keymap 省略或为零，则 minibuffer-local-map 的值用作 keymap。指定 keymap 是为各种应用程序（例如完成）自定义 minibuffer 的最重要方法。
 
@@ -69,7 +69,7 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
 
     这个函数从 minibuffer 中读取一个字符串并返回它。参数 prompt、initial、history 和 inherit-input-method 与 read-from-minibuffer 一样使用。使用的键映射是 minibuffer-local-map。
 
-    可选参数 default 在 read-from-minibuffer 中使用，除了如果非零，它还指定用户输入空输入时返回的默认值。就像在 read-from-minibuffer 中一样，它应该是一个字符串、一个字符串列表或 nil，相当于一个空字符串。当 default 是一个字符串时，该字符串是默认值。当它是一个字符串列表时，第一个字符串是默认值。（所有这些字符串都可以在“未来的 minibuffer 历史”中供用户使用。）
+    可选参数 default 在 read-from-minibuffer 中使用，除了如果非零，它还指定用户输入空输入时返回的默认值。就像在 read-from-minibuffer 中一样，它应该是一个字符串、一个字符串列表或 nil，相当于一个空字符串。当 default 是一个字符串时，该字符串是默认值。当它是一个字符串列表时，第一个字符串是默认值。（所有这些字符串都可以在 ~未来的 minibuffer 历史~ 中供用户使用。）
 
     此函数通过调用 read-from-minibuffer 函数来工作：
     #+begin_src emacs-lisp
@@ -103,7 +103,7 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
 	 - 增量搜索中使用的最后一个字符串。
 	 - 查询替换命令中使用的最后一个字符串或模式。
 
-    该函数现在有一个正则表达式列表，它传递给 read-from-minibuffer 以获取用户的输入。列表的第一个元素是空输入时的默认结果。列表中的所有元素都可以作为“future minibuffer history”列表供用户使用（参见 GNU Emacs 手册中的 future 列表）。
+    该函数现在有一个正则表达式列表，它传递给 read-from-minibuffer 以获取用户的输入。列表的第一个元素是空输入时的默认结果。列表中的所有元素都可以作为 ~future minibuffer history~ 列表供用户使用（参见 GNU Emacs 手册中的 future 列表）。
 
     可选参数历史，如果非零，是一个符号，指定要使用的小缓冲区历史列表（请参阅小缓冲区历史）。如果省略或为零，历史列表默认为 regexp-history。
 
@@ -132,7 +132,7 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
     #+end_src
 
 
-    在此示例中，用户键入“foo”，然后按 TAB 键，因此仅保留最后三个字符的文本属性。
+    在此示例中，用户键入 ~foo~ ，然后按 TAB 键，因此仅保留最后三个字符的文本属性。
 
 #+begin_src emacs-lisp
   Variable: minibuffer-local-map ¶
@@ -212,7 +212,7 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
 
     根据 minibuffer-default-prompt-format 变量使用默认值 default 格式化提示。
 
-    minibuffer-default-prompt-format 是一个格式字符串（默认为 '" (default %s)"' ，它表示提示中的“默认”位如 '"Local filename (default somefile): "' 将如何被格式化。
+    minibuffer-default-prompt-format 是一个格式字符串（默认为 '" (default %s)"' ，它表示提示中的 ~默认~ 位如 '"Local filename (default somefile): "' 将如何被格式化。
 
     为了允许用户自定义其显示方式，提示用户输入值（并具有默认值）的代码应类似于以下代码片段：
 
@@ -226,7 +226,7 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
 
     minibuffer-default-prompt-format 可以是 '""'，在这种情况下不显示默认值。
 
-    如果 default 为 nil，则没有默认值，因此结果值中不包含“默认值”字符串。如果 default 是非 nil 列表，则在提示中使用列表的第一个元素。
+    如果 default 为 nil，则没有默认值，因此结果值中不包含 ~默认值~ 字符串。如果 default 是非 nil 列表，则在提示中使用列表的第一个元素。
 
 #+begin_src emacs-lisp
   Variable: read-minibuffer-restore-windows ¶
@@ -255,7 +255,7 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
   (read-from-minibuffer prompt initial nil t))
     #+end_src
 
-    这是一个示例，其中我们提供字符串“(testing)”作为初始输入：
+    这是一个示例，其中我们提供字符串 ~(testing)~ 作为初始输入：
     #+begin_src emacs-lisp
 
 
@@ -500,7 +500,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 	   ⇒ t
     #+end_src
 
-    在以下示例中，许多符号以字符“forw”开头，并且所有符号都以单词“forward”开头。在大多数符号中，这后面都带有一个“-”，但不是全部，所以最多只能完成“前进”。
+    在以下示例中，许多符号以字符 ~forw~ 开头，并且所有符号都以单词 ~forward~ 开头。在大多数符号中，这后面都带有一个 ~-~ ，但不是全部，所以最多只能完成 ~前进~ 。
 
     #+begin_src emacs-lisp
       (try-completion "forw" obarray)
@@ -561,7 +561,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     此函数返回集合将操作的字段的边界，假设字符串保存点之前的文本，后缀保存点之后的文本。
 
-    通常完成对整个字符串进行操作，因此对于所有普通集合，这将始终返回 (0 . (length suffix))。但更复杂的完成，例如文件完成，一次完成一个字段。例如，“/usr/sh”的完成将包括“/usr/share/”但不包括“/usr/share/doc”，即使“/usr/share/doc”存在。此外，“/usr/sh”上的所有完成将不包括“/usr/share/”，而只包括“share/”。因此，如果字符串是“/usr/sh”且后缀是“e/doc”，完成边界将返回 (5 . 1)，这告诉我们该集合将仅返回与“/usr/”之后的区域相关的完成信息" 和 "/doc" 之前。尝试完成不受非平凡边界的影响；  例如，“/usr/sh”上的尝试完成可能仍会返回“/usr/share/”，而不是“share/”。
+    通常完成对整个字符串进行操作，因此对于所有普通集合，这将始终返回 (0 . (length suffix))。但更复杂的完成，例如文件完成，一次完成一个字段。例如， ~/usr/sh~ 的完成将包括 ~/usr/share/~ 但不包括 ~/usr/share/doc~ ，即使 ~/usr/share/doc~ 存在。此外， ~/usr/sh~ 上的所有完成将不包括 ~/usr/share/~ ，而只包括 ~share/~ 。因此，如果字符串是 ~/usr/sh~ 且后缀是 ~e/doc~ ，完成边界将返回 (5 . 1)，这告诉我们该集合将仅返回与 ~/usr/~ 之后的区域相关的完成信息" 和 "/doc" 之前。尝试完成不受非平凡边界的影响；  例如， ~/usr/sh~ 上的尝试完成可能仍会返回 ~/usr/share/~ ，而不是 ~share/~ 。
 
 如果您将完成列表存储在变量中，您应该通过给它一个非零风险局部变量属性来将该变量标记为有风险的。请参阅文件局部变量。
 
@@ -796,7 +796,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     可选参数谓词，如果非 nil，则指定一个函数来过滤应考虑的缓冲区：该函数将以每个潜在候选者作为其参数调用，并应返回 nil 拒绝候选者，非 nil 接受它.
 
-    在以下示例中，用户输入“minibuffer.t”，然后键入 RET。参数 require-match 是 t，唯一以给定输入开头的缓冲区名称是“minibuffer.texi”，因此该名称就是值。
+    在以下示例中，用户输入 ~minibuffer.t~ ，然后键入 RET。参数 require-match 是 t，唯一以给定输入开头的缓冲区名称是 ~minibuffer.texi~ ，因此该名称就是值。
     #+begin_src emacs-lisp
       (read-buffer "Buffer name: " "foo" t)
 
@@ -870,7 +870,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
   Command: read-color &optional prompt convert allow-empty display ¶
 #+end_src
 
-    此函数读取作为颜色规范的字符串，可以是颜色名称或 RGB 十六进制值，例如 #RRRGGGBBB。它提示提示符（默认值：“颜色（名称或#RGB 三元组）：”）并为颜色名称提供补全，但不为十六进制 RGB 值提供补全。除了标准颜色的名称，完成候选包括点的前景色和背景色。
+    此函数读取作为颜色规范的字符串，可以是颜色名称或 RGB 十六进制值，例如 #RRRGGGBBB。它提示提示符（默认值： ~颜色（名称或#RGB 三元组）：~ ）并为颜色名称提供补全，但不为十六进制 RGB 值提供补全。除了标准颜色的名称，完成候选包括点的前景色和背景色。
 
     颜色名称中描述了有效的 RGB 值。
 
@@ -934,7 +934,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
       ---------- Buffer: Minibuffer ----------
     #+end_src
 
-    如果用户键入 RET，read-file-name 以字符串“/gp/gnu/elisp/manual.texi”的形式返回文件名。
+    如果用户键入 RET，read-file-name 以字符串 ~/gp/gnu/elisp/manual.texi~ 的形式返回文件名。
 
 #+begin_src emacs-lisp
   Variable: read-file-name-function ¶
@@ -1235,11 +1235,11 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
 
     该函数向用户询问一个问题，期望在 minibuffer 中输入。如果用户输入 y，则返回 t，如果用户输入 n，则返回 nil。此函数还接受 SPC 表示是，DEL 表示否。它接受 C-] 和 Cg 退出，因为问题使用了 minibuffer，因此用户可能会尝试使用 C-] 退出。答案是单个字符，不需要 RET 来终止它。大写和小写是等价的。
 
-    “提出问题”是指在 minibuffer 中打印提示，后跟字符串 '(y or n) '。如果输入不是预期答案之一（y、n、SPC、DEL 或退出的内容），则函数响应“请回答 y 或 n。”，并重复请求。
+     ~提出问题~ 是指在 minibuffer 中打印提示，后跟字符串 '(y or n) '。如果输入不是预期答案之一（y、n、SPC、DEL 或退出的内容），则函数响应 ~请回答 y 或 n。~ ，并重复请求。
 
     此函数实际上使用了 minibuffer，但不允许编辑答案。在提出问题时，光标会移动到迷你缓冲区。
 
-    答案及其含义，甚至是“y”和“n”，都不是硬连线的，而是由键映射查询替换映射指定的（请参阅搜索和替换）。特别是，如果用户输入特殊响应recenter、scroll-up、scroll-down、scroll-other-window或scroll-other-window-down（分别绑定到查询中的Cl、Cv、Mv、CMv和CMSv- replace-map)，此函数执行指定的窗口居中或滚动操作，并再次提出问题。
+    答案及其含义，甚至是 ~y~ 和 ~n~ ，都不是硬连线的，而是由键映射查询替换映射指定的（请参阅搜索和替换）。特别是，如果用户输入特殊响应recenter、scroll-up、scroll-down、scroll-other-window或scroll-other-window-down（分别绑定到查询中的Cl、Cv、Mv、CMv和CMSv- replace-map)，此函数执行指定的窗口居中或滚动操作，并再次提出问题。
 
     如果在调用 y-or-np 时将 help-form（请参阅帮助函数）绑定到非 nil 值，则按 help-char 会导致它评估 help-form 并显示结果。help-char 会自动添加到提示中。
 
@@ -1253,9 +1253,9 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
   Function: yes-or-no-p prompt ¶
 #+end_src
 
-    该函数向用户询问一个问题，期望在 minibuffer 中输入。如果用户输入“是”，则返回 t，如果用户输入“否”，则返回 nil。用户必须键入 RET 才能完成响应。大写和小写是等价的。
+    该函数向用户询问一个问题，期望在 minibuffer 中输入。如果用户输入 ~是~ ，则返回 t，如果用户输入 ~否~ ，则返回 nil。用户必须键入 RET 才能完成响应。大写和小写是等价的。
 
-    yes-or-no-p 首先在 minibuffer 中显示提示，然后是 '(yes or no) '。用户必须键入预期的响应之一；  否则，该函数会响应“请回答是或否。”，等待大约两秒钟并重复请求。
+    yes-or-no-p 首先在 minibuffer 中显示提示，然后是 '(yes or no) '。用户必须键入预期的响应之一；  否则，该函数会响应 ~请回答是或否。~ ，等待大约两秒钟并重复请求。
 
     yes-or-no-p 比 y-or-np 需要用户更多的工作，并且适用于更关键的决策。
 
@@ -1286,7 +1286,7 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
 
 本节描述了用于向用户询问更复杂问题或几个类似问题的工具。
 
-当您有一系列类似的问题要问时，例如“您要保存此缓冲区吗？”  对于每个缓冲区，您应该使用 map-y-or-np 来询问问题集合，而不是单独询问每个问题。这为用户提供了一定的便利设施，例如一次回答整个系列的能力。
+当您有一系列类似的问题要问时，例如 ~您要保存此缓冲区吗？~   对于每个缓冲区，您应该使用 map-y-or-np 来询问问题集合，而不是单独询问每个问题。这为用户提供了一定的便利设施，例如一次回答整个系列的能力。
 
 #+begin_src emacs-lisp
   Function: map-y-or-n-p prompter actor list &optional help action-alist no-cursor-in-echo-area ¶
@@ -1317,7 +1317,7 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
 
     其中单数是包含单数名词的字符串，它描述要作用的单个对象，复数是对应的复数名词，动作是及物动词，描述演员对对象所做的事情。
 
-    如果您不指定帮助，则默认为列表（“object”“objects”“act on”）。
+    如果您不指定帮助，则默认为列表（ ~object~  ~objects~  ~act on~ ）。
 
     每次提出问题时，用户可以回答如下：
 
@@ -1368,7 +1368,7 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
   Function: read-answer question answers ¶
 #+end_src
 
-    此功能会提示用户有问题的文本，该文本应以“SPC”字符结尾。该功能通过将答案附加到问题的末尾来在提示中包含可能的答案。可能的响应以列表形式在答案中提供，其元素具有以下形式：
+    此功能会提示用户有问题的文本，该文本应以 ~SPC~ 字符结尾。该功能通过将答案附加到问题的末尾来在提示中包含可能的答案。可能的响应以列表形式在答案中提供，其元素具有以下形式：
     #+begin_src emacs-lisp
       (long-answer short-answer help-message)
     #+end_src
@@ -1403,7 +1403,7 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
   Function: read-passwd prompt &optional confirm default ¶
 #+end_src
 
-    该函数读取密码，以提示符提示。它不会在用户键入密码时回显密码；  相反，它会为密码中的每个字符回显“*”。如果要应用另一个字符来隐藏密码，请将变量 read-hide-char 与该字符绑定。
+    该函数读取密码，以提示符提示。它不会在用户键入密码时回显密码；  相反，它会为密码中的每个字符回显 ~*~ 。如果要应用另一个字符来隐藏密码，请将变量 read-hide-char 与该字符绑定。
 
     可选参数确认，如果非零，表示读取两次密码并坚持两次必须相同。如果不一样，用户必须一遍又一遍地输入，直到最后两次匹配。
 
@@ -1435,7 +1435,7 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
   Command: next-history-element n ¶
 #+end_src
 
-    此命令将 minibuffer 内容替换为第 n 个最近的历史元素的值。历史中的位置可以超出当前位置并调用“未来历史”（请参阅​​使用 Minibuffer 读取文本字符串）。
+    此命令将 minibuffer 内容替换为第 n 个最近的历史元素的值。历史中的位置可以超出当前位置并调用 ~未来历史~ （请参阅​​使用 Minibuffer 读取文本字符串）。
 
 #+begin_src emacs-lisp
   Command: previous-matching-history-element pattern n ¶
@@ -1465,7 +1465,7 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
   Command: goto-history-element nabs ¶
 #+end_src
 
-    此函数将 minibuffer 历史的元素放入 minibuffer。参数 nabs 以降序指定绝对历史位置，其中 0 表示当前元素，正数 n 表示前第 n 个元素。NABS 为负数 -n 表示“未来历史”的第 n 个条目。
+    此函数将 minibuffer 历史的元素放入 minibuffer。参数 nabs 以降序指定绝对历史位置，其中 0 表示当前元素，正数 n 表示前第 n 个元素。NABS 为负数 -n 表示 ~未来历史~ 的第 n 个条目。
 
 ** TODO 21.11 小缓冲窗口
 

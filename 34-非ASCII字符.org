@@ -98,7 +98,7 @@ Emacs 缓冲区和字符串支持来自许多不同脚本的大量字符，允�
 
 在非常特殊的情况下，您可能希望禁用特定缓冲区的多字节字符支持。当缓冲区中禁用多字节字符时，我们称之为单字节模式。在单字节模式下，缓冲区中的每个字符都有一个字符代码，范围从 0 到 255（八进制 0377）；  0 到 127（八进制 0177）代表 ASCII 字符，128（八进制 0200）到 255（八进制 0377）代表非 ASCII 字符。
 
-要以单字节表示编辑特定文件，请使用 find-file-literally 访问它。请参阅访问文件的函数。您可以通过将多字节缓冲区保存到文件、终止缓冲区并再次使用 find-file-literally 访问文件来将多字节缓冲区转换为单字节。或者，您可以使用 Cx RET c（通用编码系统参数）并指定“原始文本”作为访问或保存文件的编码系统。请参阅 GNU Emacs 手册中的为文件文本指定编码系统。与 find-file-literally 不同，以“原始文本”形式查找文件不会禁用格式转换、解压缩或自动模式选择。
+要以单字节表示编辑特定文件，请使用 find-file-literally 访问它。请参阅访问文件的函数。您可以通过将多字节缓冲区保存到文件、终止缓冲区并再次使用 find-file-literally 访问文件来将多字节缓冲区转换为单字节。或者，您可以使用 Cx RET c（通用编码系统参数）并指定 ~原始文本~ 作为访问或保存文件的编码系统。请参阅 GNU Emacs 手册中的为文件文本指定编码系统。与 find-file-literally 不同，以 ~原始文本~ 形式查找文件不会禁用格式转换、解压缩或自动模式选择。
 
 缓冲区局部变量 enable-multibyte-characters 在多字节缓冲区中为非 nil，在单字节缓冲区中为 nil。模式行还指示缓冲区是否为多字节。对于图形显示，在多字节缓冲区中，模式行中指示字符集的部分有一个工具提示（除其他外），说明该缓冲区是多字节的。在单字节缓冲区中，不存在字符集指示符。因此，在单字节缓冲区中（当使用图形显示时），在访问文件的行尾约定（冒号、反斜杠等）的指示之前通常没有任何内容，除非您使用的是输入法。
 
@@ -257,7 +257,7 @@ Emacs 字符代码是 Unicode 标准的超集。值 0 到 #x10FFFF (1114111) 对
   name
 #+end_src
 
-    对应于 Name Unicode 属性。该值是一个字符串，由大写拉丁字母 A 到 Z、数字、空格和连字符“-”字符组成。对于未分配的代码点，该值为 nil。
+    对应于 Name Unicode 属性。该值是一个字符串，由大写拉丁字母 A 到 Z、数字、空格和连字符 ~-~ 字符组成。对于未分配的代码点，该值为 nil。
 #+begin_src emacs-lisp
   general-category
 #+end_src
@@ -282,17 +282,17 @@ Emacs 字符代码是 Unicode 标准的超集。值 0 到 #x10FFFF (1114111) 对
   decimal-digit-value
 #+end_src
 
-    对应于 Numeric_Type 为“十进制”的字符的 Unicode Numeric_Value 属性。该值是一个整数，如果字符没有十进制数字值，则为 nil。对于未分配的代码点，该值为 nil，表示 NaN，或“不是数字”。
+    对应于 Numeric_Type 为 ~十进制~ 的字符的 Unicode Numeric_Value 属性。该值是一个整数，如果字符没有十进制数字值，则为 nil。对于未分配的代码点，该值为 nil，表示 NaN，或 ~不是数字~ 。
 #+begin_src emacs-lisp
   digit-value
 #+end_src
 
-    对应于 Numeric_Type 为“Digit”的字符的 Unicode Numeric_Value 属性。该值是一个整数。此类字符的示例包括兼容性下标和上标数字，其值为对应的数字。对于没有任何数值的字符和未分配的代码点，该值为 nil，表示 NaN。
+    对应于 Numeric_Type 为 ~Digit~ 的字符的 Unicode Numeric_Value 属性。该值是一个整数。此类字符的示例包括兼容性下标和上标数字，其值为对应的数字。对于没有任何数值的字符和未分配的代码点，该值为 nil，表示 NaN。
 #+begin_src emacs-lisp
   numeric-value
 #+end_src
 
-    对应于 Numeric_Type 为“Numeric”的字符的 Unicode Numeric_Value 属性。此属性的值是一个数字。具有此属性的字符示例包括分数、下标、上标、罗马数字、货币分子和带圆圈的数字。例如，字符 U+2155 VULGAR FRACTION ONE FIFTH 的此属性的值为 0.2。对于没有任何数值的字符和未分配的代码点，该值为 nil，表示 NaN。
+    对应于 Numeric_Type 为 ~Numeric~ 的字符的 Unicode Numeric_Value 属性。此属性的值是一个数字。具有此属性的字符示例包括分数、下标、上标、罗马数字、货币分子和带圆圈的数字。例如，字符 U+2155 VULGAR FRACTION ONE FIFTH 的此属性的值为 0.2。对于没有任何数值的字符和未分配的代码点，该值为 nil，表示 NaN。
 #+begin_src emacs-lisp
   mirrored
 #+end_src
@@ -342,17 +342,17 @@ Emacs 字符代码是 Unicode 标准的超集。值 0 到 #x10FFFF (1114111) 对
   special-uppercase
 #+end_src
 
-    对应于 Unicode 语言和上下文无关的特殊大写规则。此属性的值是一个字符串（可能为空）。例如，U+00DF LATIN SMALL LETTER SHARP S 的映射是“SS”。对于没有特殊映射的字符，该值为 nil，这意味着需要查询大写属性。
+    对应于 Unicode 语言和上下文无关的特殊大写规则。此属性的值是一个字符串（可能为空）。例如，U+00DF LATIN SMALL LETTER SHARP S 的映射是 ~SS~ 。对于没有特殊映射的字符，该值为 nil，这意味着需要查询大写属性。
 #+begin_src emacs-lisp
   special-lowercase
 #+end_src
 
-    对应于 Unicode 语言和上下文无关的特殊小写规则。此属性的值是一个字符串（可能为空）。例如，U+0130 LATIN CAPITAL LETTER I WITH DOT ABOVE 的映射值为“i\u0307”（即由拉丁小写字母 I 后跟 U+0307 COMBINING DOT ABOVE 组成的 2 个字符的字符串）。对于没有特殊映射的字符，该值为 nil，这意味着需要查询小写属性。
+    对应于 Unicode 语言和上下文无关的特殊小写规则。此属性的值是一个字符串（可能为空）。例如，U+0130 LATIN CAPITAL LETTER I WITH DOT ABOVE 的映射值为 ~i\u0307~ （即由拉丁小写字母 I 后跟 U+0307 COMBINING DOT ABOVE 组成的 2 个字符的字符串）。对于没有特殊映射的字符，该值为 nil，这意味着需要查询小写属性。
 #+begin_src emacs-lisp
   special-titlecase
 #+end_src
 
-    对应于 Unicode 无条件特殊标题大小写规则。此属性的值是一个字符串（可能为空）。例如 U+FB01 LATIN SMALL LIGATURE FI 的映射，其值为“Fi”。对于没有特殊映射的字符，该值为 nil，这意味着需要查询 titlecase 属性。
+    对应于 Unicode 无条件特殊标题大小写规则。此属性的值是一个字符串（可能为空）。例如 U+FB01 LATIN SMALL LIGATURE FI 的映射，其值为 ~Fi~ 。对于没有特殊映射的字符，该值为 nil，这意味着需要查询 titlecase 属性。
 
 #+begin_src emacs-lisp
   Function: get-char-code-property char propname ¶
@@ -425,7 +425,7 @@ Emacs 字符代码是 Unicode 标准的超集。值 0 到 #x10FFFF (1114111) 对
   Variable: char-script-table ¶
 #+end_src
 
-    该变量的值是一个字符表，它为每个字符指定一个符号，其名称是该字符所属的脚本，根据 Unicode 标准将 Unicode 代码空间分类为特定于脚本的块。这个字符表有一个额外的槽，其值是所有脚本符号的列表。请注意，Emacs 将字符分类为脚本并不是 Unicode 标准的一对一反映，例如，Unicode 中没有“符号”脚本。
+    该变量的值是一个字符表，它为每个字符指定一个符号，其名称是该字符所属的脚本，根据 Unicode 标准将 Unicode 代码空间分类为特定于脚本的块。这个字符表有一个额外的槽，其值是所有脚本符号的列表。请注意，Emacs 将字符分类为脚本并不是 Unicode 标准的一对一反映，例如，Unicode 中没有 ~符号~ 脚本。
 
 #+begin_src emacs-lisp
   Variable: char-width-table ¶
@@ -629,7 +629,7 @@ Emacs 可以在字符的内部表示和特定字符集中的字符代码点之�
 
 行尾转换处理各种系统上用于表示文件中行尾的三种不同约定。用于 GNU 和 Unix 系统的 Unix 约定是使用换行符（也称为换行符）。在 MS-Windows 和 MS-DOS 系统上使用的 DOS 约定是在行尾使用回车符和换行符。Mac 的惯例是只使用回车。（这是 Classic Mac OS 中使用的约定。）
 
-诸如 latin-1 之类的基本编码系统未指定行尾转换，以根据数据进行选择。诸如 latin-1-unix、latin-1-dos 和 latin-1-mac 等变体编码系统也明确指定了行尾转换。大多数基本编码系统都有三个相应的变体，它们的名称是通过添加“-unix”、“-dos”和“-mac”形成的。
+诸如 latin-1 之类的基本编码系统未指定行尾转换，以根据数据进行选择。诸如 latin-1-unix、latin-1-dos 和 latin-1-mac 等变体编码系统也明确指定了行尾转换。大多数基本编码系统都有三个相应的变体，它们的名称是通过添加 ~-unix~ 、 ~-dos~ 和 ~-mac~ 形成的。
 
 编码系统原始文本的特殊之处在于它阻止了字符代码转换，并使使用该编码系统访问的缓冲区成为单字节缓冲区。由于历史原因，您可以使用此编码系统保存单字节和多字节文本。当您使用原始文本对多字节文本进行编码时，它会执行一种字符代码转换：它将八位字符转换为其单字节外部表示。raw-text 不指定行尾转换，允许像往常一样由数据确定，并且具有指定行尾转换的通常的三个变体。
 

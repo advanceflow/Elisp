@@ -4,13 +4,13 @@
 
 许多与文本相关的函数对由传入参数 start 和 end 的两个缓冲区位置定义的文本区域进行操作。这些参数应该是标记（请参阅标记）或数字字符位置（请参阅位置）。这些论点的顺序无关紧要；  start 是区域的结束，结束开始是可以的。例如，(delete-region 1 10) 和 (delete-region 10 1) 是等价的。如果 start 或 end 超出缓冲区的可访问部分，则会发出 args-out-of-range 错误信号。在交互式调用中，点和标记用于这些参数。
 
-在本章中，“文本”指的是缓冲区中的字符，以及它们的属性（如果相关）。请记住，点始终位于两个字符之间，并且光标出现在点之后的字符上。
+在本章中， ~文本~ 指的是缓冲区中的字符，以及它们的属性（如果相关）。请记住，点始终位于两个字符之间，并且光标出现在点之后的字符上。
 
 ** TODO 33.1 检查文本近点
 
 提供了许多功能来查看点周围的字符。这里描述了几个简单的功能。另请参阅正则表达式搜索中的查看。
 
-在以下四个函数中，缓冲区的“开始”或“结束”指的是可访问部分的开始或结束。
+在以下四个函数中，缓冲区的 ~开始~ 或 ~结束~ 指的是可访问部分的开始或结束。
 
 #+begin_src emacs-lisp
   Function: char-after &optional position ¶
@@ -18,7 +18,7 @@
 
     此函数返回当前缓冲区中位于（即紧随其后）位置的字符。如果 position 超出范围，无论是在缓冲区的开头之前，还是在缓冲区的末尾或之后，则该值为 nil。位置的默认值是点。
 
-    在以下示例中，假设缓冲区中的第一个字符是“@”：
+    在以下示例中，假设缓冲区中的第一个字符是 ~@~ ：
 
     #+begin_src emacs-lisp
       (string (char-after 1))
@@ -39,7 +39,7 @@
 
     请记住，该点始终位于字符之间，并且光标通常出现在字符后面的点上。因此，following-char 返回的字符就是光标所在的字符。
 
-    在此示例中，点位于“a”和“c”之间。
+    在此示例中，点位于 ~a~ 和 ~c~ 之间。
     #+begin_src emacs-lisp
 
 
@@ -231,7 +231,7 @@ Function: compare-buffer-substrings buffer1 start1 end1 buffer2 start2 end2 ¶
 
     如果 case-fold-search 不为零，则此函数在比较字符时忽略大小写。它总是忽略文本属性。
 
-    假设您有文本“foobarbar haha​​！rara！”  在当前缓冲区中；  那么在这个例子中，两个子字符串是'rbar'和'rara！'。该值为 2，因为第一个子字符串在第二个字符处更大。
+    假设您有文本 ~foobarbar haha​​！rara！~   在当前缓冲区中；  那么在这个例子中，两个子字符串是'rbar'和'rara！'。该值为 2，因为第一个子字符串在第二个字符处更大。
     #+begin_src emacs-lisp
       (compare-buffer-substrings nil 6 11 nil 16 21)
 	   ⇒ 2
@@ -281,7 +281,7 @@ Function: compare-buffer-substrings buffer1 start1 end1 buffer2 start2 end2 ¶
 
     此函数将缓冲区 from-buffer-or-name 的一部分插入到当前缓冲区中之前的点。插入的文本是开始（包括）和结束（不包括）之间的区域。（这些参数默认为该缓冲区可访问部分的开头和结尾。）此函数返回 nil。
 
-    在此示例中，执行表单时使用缓冲区“bar”作为当前缓冲区。我们假设缓冲区“bar”最初是空的。
+    在此示例中，执行表单时使用缓冲区 ~bar~ 作为当前缓冲区。我们假设缓冲区 ~bar~ 最初是空的。
     #+begin_src emacs-lisp
 
 
@@ -498,7 +498,7 @@ Function: compare-buffer-substrings buffer1 start1 end1 buffer2 start2 end2 ¶
 
     在一行的开头或结尾，适当的空格是无。在具有右括号语法的字符之前，或者在具有开括号或表达式前缀语法的字符之后，也没有空格是合适的。否则，一个空格是合适的。请参阅语法类表。
 
-    在下面的示例中，第一次调用 fixup-whitespace，并在第一行中的单词“空格”之前添加点。对于第二次调用，point 直接位于 '(' 之后。
+    在下面的示例中，第一次调用 fixup-whitespace，并在第一行中的单词 ~空格~ 之前添加点。对于第二次调用，point 直接位于 '(' 之后。
     #+begin_src emacs-lisp
 
 
@@ -549,13 +549,13 @@ Function: compare-buffer-substrings buffer1 start1 end1 buffer2 start2 end2 ¶
 
 ** TODO 33.8 杀戮戒指
 
-Kill 函数像删除函数一样删除文本，但保存它以便用户可以通过 yanking 重新插入它。大多数这些函数的名称中都有“kill-”。相比之下，名称以“delete-”开头的函数通常不会保存文本以供拉取（尽管它们仍然可以撤消）；  这些是删除功能。
+Kill 函数像删除函数一样删除文本，但保存它以便用户可以通过 yanking 重新插入它。大多数这些函数的名称中都有 ~kill-~ 。相比之下，名称以 ~delete-~ 开头的函数通常不会保存文本以供拉取（尽管它们仍然可以撤消）；  这些是删除功能。
 
 大部分kill命令主要用于交互使用，这里不再赘述。我们所描述的是提供用于编写​​此类命令的函数。您可以使用这些函数编写用于杀死文本的命令。当您需要在 Lisp 函数中出于内部目的删除文本时，通常应该使用删除函数，以免干扰 kill ring 内容。请参阅删除文本。
 
-被杀死的文本被保存以供以后在杀死环中猛拉。这是一个包含许多最近杀戮的列表，而不仅仅是最后的文本杀戮。我们称其为“环”，因为 yanking 将其视为具有循环顺序的元素。列表保存在变量 kill-ring 中，可以使用列表的常用函数进行操作；  本节中描述的还有一些专门的函数将其视为一个环。
+被杀死的文本被保存以供以后在杀死环中猛拉。这是一个包含许多最近杀戮的列表，而不仅仅是最后的文本杀戮。我们称其为 ~环~ ，因为 yanking 将其视为具有循环顺序的元素。列表保存在变量 kill-ring 中，可以使用列表的常用函数进行操作；  本节中描述的还有一些专门的函数将其视为一个环。
 
-有些人认为“杀死”这个词的使用是不幸的，因为它指的是专门不破坏被杀死实体的操作。这与普通生活形成鲜明对比，在普通生活中，死亡是永久性的，被杀死的实体不会复活。因此，人们提出了其他隐喻。例如，“剪环”一词对于在计算机出现之前使用剪刀和粘贴来剪切和重新排列手稿的人来说是有意义的。但是，现在很难更改术语。
+有些人认为 ~杀死~ 这个词的使用是不幸的，因为它指的是专门不破坏被杀死实体的操作。这与普通生活形成鲜明对比，在普通生活中，死亡是永久性的，被杀死的实体不会复活。因此，人们提出了其他隐喻。例如， ~剪环~ 一词对于在计算机出现之前使用剪刀和粘贴来剪切和重新排列手稿的人来说是有意义的。但是，现在很难更改术语。
 
 *** TODO 33.8.1 杀戮环概念
 
@@ -572,7 +572,7 @@ kill ring 将已删除的文本记录为列表中的字符串，最近的在前�
 
 *** TODO 33.8.2 杀死函数
 
-kill-region 是杀死文本的常用子程序。任何调用此函数的命令都是 kill 命令（并且名称中可能应该包含“kill”）。kill-region 将新删除的文本放入 kill ring 开头的新元素中，或将其添加到最近的元素中。它会自动（使用 last-command）确定前一个命令是否是 kill 命令，如果是，则将被杀死的文本附加到最近的条目中。
+kill-region 是杀死文本的常用子程序。任何调用此函数的命令都是 kill 命令（并且名称中可能应该包含 ~kill~ ）。kill-region 将新删除的文本放入 kill ring 开头的新元素中，或将其添加到最近的元素中。它会自动（使用 last-command）确定前一个命令是否是 kill 命令，如果是，则将被杀死的文本附加到最近的条目中。
 
 下面描述的命令可以在将被杀死的文本保存在杀伤环中之前对其进行过滤。他们调用 filter-buffer-substring（参见检查缓冲区内容）来执行过滤。默认情况下，没有过滤，但主要和次要模式和钩子函数可以设置过滤，使保存在 kill ring 中的文本与缓冲区中的文本不同。
 
@@ -757,13 +757,13 @@ function
 
 变量 kill-ring 以字符串列表的形式保存 kill ring 的内容。最近的杀戮总是在列表的前面。
 
-kill-ring-yank-pointer 变量指向 kill ring 列表中的一个链接，其 CAR 是接下来要 yank 的文本。我们说它标识了环的前部。将 kill-ring-yank-pointer 移动到不同的链接称为旋转 kill ring。我们将 kill ring 称为“环”，因为移动 yank 指针的函数会从列表的末尾环绕到开头，反之亦然。杀环的旋转是虚拟的；  它不会改变 kill-ring 的值。
+kill-ring-yank-pointer 变量指向 kill ring 列表中的一个链接，其 CAR 是接下来要 yank 的文本。我们说它标识了环的前部。将 kill-ring-yank-pointer 移动到不同的链接称为旋转 kill ring。我们将 kill ring 称为 ~环~ ，因为移动 yank 指针的函数会从列表的末尾环绕到开头，反之亦然。杀环的旋转是虚拟的；  它不会改变 kill-ring 的值。
 
-kill-ring 和 kill-ring-yank-pointer 都是 Lisp 变量，其值通常是列表。kill-ring-yank-pointer 名称中的单词“pointer”表示该变量的目的是标识列表中的一个元素以供下一个 yank 命令使用。
+kill-ring 和 kill-ring-yank-pointer 都是 Lisp 变量，其值通常是列表。kill-ring-yank-pointer 名称中的单词 ~pointer~ 表示该变量的目的是标识列表中的一个元素以供下一个 yank 命令使用。
 
 kill-ring-yank-pointer 的值始终等于 kill ring 列表中的链接之一。它标识的元素是该链接的 CAR。更改 kill ring 的 Kill 命令也将此变量设置为 kill-ring 的值。效果是旋转圆环，使新杀死的文本在最前面。
 
-下图显示了变量 kill-ring-yank-pointer 指向 kill ring 中的第二个条目（“some text” “a different piece of text” “yet old text”）。
+下图显示了变量 kill-ring-yank-pointer 指向 kill ring 中的第二个条目（ ~some text~   ~a different piece of text~   ~yet old text~ ）。
 
 #+begin_src emacs-lisp
   kill-ring                  ---- kill-ring-yank-pointer
@@ -1042,7 +1042,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     此函数返回正确的对齐样式以用于填充点周围的文本。
 
-    这将返回 justification 文本属性的值，如果没有这样的文本属性，则返回变量 default-justification。然而，它返回 nil 而不是 none 表示“不证明”。
+    这将返回 justification 文本属性的值，如果没有这样的文本属性，则返回变量 default-justification。然而，它返回 nil 而不是 none 表示 ~不证明~ 。
 
 #+begin_src emacs-lisp
   User Option: sentence-end-double-space ¶
@@ -1211,7 +1211,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     仅在单行段落中使用，此正则表达式充当对一个可用候选填充前缀有效性的附加检查：候选必须匹配此正则表达式，或匹配 comment-start-skip。如果不是，则 fill-context-prefix 将候选者替换为与它相同宽度的空格字符串。
 
-    这个变量的默认值是“\\`[ \t]*\\'”，它只匹配一个空格字符串。此默认值的效果是强制在单行段落中找到的填充前缀始终为纯空格。
+    这个变量的默认值是 ~\\`[ \t]*\\'~ ，它只匹配一个空格字符串。此默认值的效果是强制在单行段落中找到的填充前缀始终为纯空格。
 
 #+begin_src emacs-lisp
   User Option: adaptive-fill-function ¶
@@ -1354,7 +1354,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 	 然后 sort-regexp-fields 在记录中搜索正则表达式的匹配项。如果找到这样的匹配，它就是排序键。如果记录中的 key-regexp 不匹配，则忽略该记录，这意味着它在缓冲区中的位置不会改变。（其他记录可能会在它周围移动。）
 
-    例如，如果您计划按每行以字母“f”开头的第一个单词对区域中的所有行进行排序，则应将 record-regexp 设置为 '^.*$' 并将 key-regexp 设置为 '\ <f\w*\>'。结果表达式如下所示：
+    例如，如果您计划按每行以字母 ~f~ 开头的第一个单词对区域中的所有行进行排序，则应将 record-regexp 设置为 '^.*$' 并将 key-regexp 设置为 '\ <f\w*\>'。结果表达式如下所示：
 
     #+begin_src emacs-lisp
       (sort-regexp-fields nil "^.*$" "\\<f\\w*\\>"
@@ -1391,7 +1391,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
   Command: sort-numeric-fields field start end ¶
 #+end_src
 
-    此命令对开始和结束之间的区域中的行进行排序，并通过每行的字段字段对它们进行数字比较。字段由空格分隔并从 1 开始编号。指定的字段必须在区域的每一行中包含一个数字。以 0 开头的数字被视为八进制，以“0x”开头的数字被视为十六进制。
+    此命令对开始和结束之间的区域中的行进行排序，并通过每行的字段字段对它们进行数字比较。字段由空格分隔并从 1 开始编号。指定的字段必须在区域的每一行中包含一个数字。以 0 开头的数字被视为八进制，以 ~0x~ 开头的数字被视为十六进制。
 
     如果 field 为负数，则从行尾的第 -fieldth 字段排序。此命令对排序表很有用。
 
@@ -1674,7 +1674,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 *** TODO 33.17.5 可调制表位
 
-本节说明用户指定制表位的机制以及使用和设置它们的机制。之所以使用“制表位”这个名称，是因为该功能类似于打字机上的制表位。该功能通过插入适当数量的空格和制表符来到达下一个制表位列；  它不会影响缓冲区中制表符的显示（请参阅通常的显示约定）。请注意，作为输入的 TAB 字符仅在少数主要模式（例如文本模式）中使用此制表位功能。请参阅 GNU Emacs 手册中的制表位。
+本节说明用户指定制表位的机制以及使用和设置它们的机制。之所以使用 ~制表位~ 这个名称，是因为该功能类似于打字机上的制表位。该功能通过插入适当数量的空格和制表符来到达下一个制表位列；  它不会影响缓冲区中制表符的显示（请参阅通常的显示约定）。请注意，作为输入的 TAB 字符仅在少数主要模式（例如文本模式）中使用此制表位功能。请参阅 GNU Emacs 手册中的制表位。
 
 #+begin_src emacs-lisp
   Command: tab-to-tab-stop ¶
@@ -1785,7 +1785,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 ** TODO 33.19 文本属性
 
-缓冲区或字符串中的每个字符位置都可以有一个文本属性列表，很像符号的属性列表（请参阅属性列表）。属性属于特定位置的特定字符，例如，此句开头的字母“T”或“foo”中的第一个“o”——如果相同的字符出现在两个不同的位置，则两次出现一般有不同的属性。
+缓冲区或字符串中的每个字符位置都可以有一个文本属性列表，很像符号的属性列表（请参阅属性列表）。属性属于特定位置的特定字符，例如，此句开头的字母 ~T~ 或 ~foo~ 中的第一个 ~o~ ——如果相同的字符出现在两个不同的位置，则两次出现一般有不同的属性。
 
 每个属性都有一个名称和一个值。这两者都可以是任何 Lisp 对象，但名称通常是一个符号。通常，每个属性名称符号都用于特定目的；  例如，文本属性 face 指定显示字符的面（请参阅具有特殊含义的属性）。访问属性列表的常用方法是指定一个名称并询问与其对应的值。
 
@@ -2094,7 +2094,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     如果找不到 text 属性，则函数返回 nil。如果找到，则将 point 放置在具有此文本属性匹配的区域的末尾，并返回 prop-match 结构。
 
-    谓词可以是 t（等于的同义词）、nil（表示“不等于”）或将使用两个参数调用的谓词：第一个是值，第二个是文本属性的值我们正在检查。
+    谓词可以是 t（等于的同义词）、nil（表示 ~不等于~ ）或将使用两个参数调用的谓词：第一个是值，第二个是文本属性的值我们正在检查。
 
     如果不是当前的，如果点在我们有匹配的区域中，则跳过该区域并找到下一个实例。
 
@@ -2105,7 +2105,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
       This is a bold and here's bolditalic and this is the end.
     #+end_src
 
-    即“粗体”字为粗体，“斜体”字为斜体。
+    即 ~粗体~ 字为粗体， ~斜体~ 字为斜体。
 
     以点开头：
     #+begin_src emacs-lisp
@@ -2135,7 +2135,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
     #+end_src
 
 
-    这将挑选出所有面部被设置为某物的区域，但这会被分成属性更改的地方，所以这里的结果将是“（“粗体”“粗体”“斜体”）'。
+    这将挑选出所有面部被设置为某物的区域，但这会被分成属性更改的地方，所以这里的结果将是 ~（ ~粗体~  ~粗体~  ~斜体~ ）'。
 
     对于可能使用它的更实际的示例，请考虑您有一个缓冲区，其中某些部分表示 URL，并且这些部分用 shr-url 标记。
 
@@ -2188,7 +2188,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
   mouse-face ¶
 #+end_src
 
-    当鼠标在角色上或角色附近时，使用此属性代替 face。为此，“near”表示字符和鼠标所在位置之间的所有文本都具有相同的 mouse-face 属性值。
+    当鼠标在角色上或角色附近时，使用此属性代替 face。为此， ~near~ 表示字符和鼠标所在位置之间的所有文本都具有相同的 mouse-face 属性值。
 
     Emacs 会忽略 mouse-face 属性中所有改变文本大小的 face 属性（例如，:height、:weight 和 :slant）。这些属性始终与未突出显示的文本相同。
 #+begin_src emacs-lisp
@@ -2292,7 +2292,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
     此属性的一个微妙之处在于，将此属性放在作为显示或覆盖字符串一部分的换行符上不起作用。这是因为换行符在屏幕上没有图形表示，以便 Emacs 在查找具有该光标属性的显示字符时查找。
 
-    当缓冲区有许多覆盖字符串（例如，请参阅 before-string）隐藏一些缓冲区文本或显示字符串属性时，最好使用这些字符串上的 cursor 属性来提示 Emacs 显示的位置遍历这些字符串时将光标放在哪里。当点位于显示或覆盖字符串“覆盖”的某个缓冲区位置时，这直接与显示引擎通信 Lisp 程序想要放置光标的位置，或者用户期望光标的位置。
+    当缓冲区有许多覆盖字符串（例如，请参阅 before-string）隐藏一些缓冲区文本或显示字符串属性时，最好使用这些字符串上的 cursor 属性来提示 Emacs 显示的位置遍历这些字符串时将光标放在哪里。当点位于显示或覆盖字符串 ~覆盖~ 的某个缓冲区位置时，这直接与显示引擎通信 Lisp 程序想要放置光标的位置，或者用户期望光标的位置。
 #+begin_src emacs-lisp
   pointer ¶
 #+end_src
@@ -2408,7 +2408,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
   hard
 #+end_src
 
-    如果换行符具有此属性，则它是“硬”换行符。填充命令不会改变硬换行符，也不会在它们之间移动单词。但是，此属性仅在启用 use-hard-newlines 次要模式时才生效。请参阅 GNU Emacs 手册中的硬换行和软换行。
+    如果换行符具有此属性，则它是 ~硬~ 换行符。填充命令不会改变硬换行符，也不会在它们之间移动单词。但是，此属性仅在启用 use-hard-newlines 次要模式时才生效。请参阅 GNU Emacs 手册中的硬换行和软换行。
 #+begin_src emacs-lisp
   right-margin
 #+end_src
@@ -2595,7 +2595,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
   a string or vector
 #+end_src
 
-    如果动作代码是字符串或向量，则将 mouse-1 事件转换为字符串或向量的第一个元素；  即，鼠标 1 单击的动作是该字符或符号的本地或全局绑定。因此，如果操作代码是“foo”，则 mouse-1 会转换为 f。如果是 [foo]，则 mouse-1 会转换为 foo。
+    如果动作代码是字符串或向量，则将 mouse-1 事件转换为字符串或向量的第一个元素；  即，鼠标 1 单击的动作是该字符或符号的本地或全局绑定。因此，如果操作代码是 ~foo~ ，则 mouse-1 会转换为 f。如果是 [foo]，则 mouse-1 会转换为 foo。
 #+begin_src emacs-lisp
   anything else
 #+end_src
@@ -2709,7 +2709,7 @@ Lisp 程序可以通过调用 undo-amalgamate-change-group 将一系列更改合
 
 在间隔之间的边界插入文本也会引发无法令人满意的答案的问题。
 
-但是，很容易安排编辑以一致的方式处理以下形式的问题，“此缓冲区或字符串位置的文本属性是什么？”  所以我们决定这些是唯一有意义的问题；  我们还没有实施询问有关间隔开始或结束的问题。
+但是，很容易安排编辑以一致的方式处理以下形式的问题， ~此缓冲区或字符串位置的文本属性是什么？~   所以我们决定这些是唯一有意义的问题；  我们还没有实施询问有关间隔开始或结束的问题。
 
 在实践中，您通常可以使用文本属性搜索功能来代替显式区间边界。您可以将它们视为寻找区间的边界，假设区间总是尽可能合并。请参阅文本属性搜索功能。
 
@@ -3225,7 +3225,7 @@ libxml-parse-html-region（和其他 XML 解析函数）返回的 DOM 是一个�
   dom-tag node
 #+end_src
 
-    返回节点的标签（也称为“节点名称”）。
+    返回节点的标签（也称为 ~节点名称~ ）。
 #+begin_src emacs-lisp
   dom-attr node attribute
 #+end_src
@@ -3464,9 +3464,9 @@ jsonrpc 库实现了 JSONRPC 规范 2.0 版，如 https://www.jsonrpc.org/ 中�
 
 *** TODO 33.30.1 概述
 
-从规范中引用，JSONRPC“与传输无关，因为这些概念可以在同一进程中、通过套接字、通过 http 或在许多不同的消息传递环境中使用。”
+从规范中引用，JSONRPC ~与传输无关，因为这些概念可以在同一进程中、通过套接字、通过 http 或在许多不同的消息传递环境中使用~ 。
 
-为了模拟这种不可知论，jsonrpc 库使用 jsonrpc-connection 类的对象，它表示到远程 JSON 端点的连接（有关 Emacs 对象系统的详细信息，请参阅 EIEIO 中的 EIEIO）。在现代面向对象的说法中，这个类是“抽象的”，即有用的连接对象的实际类总是jsonrpc-connection 的子类。尽管如此，我们可以围绕 jsonrpc-connection 类定义两个不同的 API：
+为了模拟这种不可知论，jsonrpc 库使用 jsonrpc-connection 类的对象，它表示到远程 JSON 端点的连接（有关 Emacs 对象系统的详细信息，请参阅 EIEIO 中的 EIEIO）。在现代面向对象的说法中，这个类是 ~抽象的~ ，即有用的连接对象的实际类总是jsonrpc-connection 的子类。尽管如此，我们可以围绕 jsonrpc-connection 类定义两个不同的 API：
 
     用于构建 JSONRPC 应用程序的用户界面
 
@@ -3481,7 +3481,7 @@ jsonrpc 库实现了 JSONRPC 规范 2.0 版，如 https://www.jsonrpc.org/ 中�
 
     为了允许其用户发起 JSONRPC 联系（通知或请求）或回复端点请求，子类必须具有 jsonrpc-connection-send 方法的实现。
 
-    同样，为了处理三种类型的远程联系（请求、通知和对本地请求的响应），传输实现必须安排函数 jsonrpc-connection-receive 在注意到线路上的新 JSONRPC 消息后调用（无论是什么“电线”可能是）。
+    同样，为了处理三种类型的远程联系（请求、通知和对本地请求的响应），传输实现必须安排函数 jsonrpc-connection-receive 在注意到线路上的新 JSONRPC 消息后调用（无论是什么 ~电线~ 可能是）。
 
     最后，如果这些概念适用于传输，则 jsonrpc-connection 子类应该实现 jsonrpc-shutdown 和 jsonrpc-running-p 方法。如果他们这样做了，那么任何用于在线路上侦听消息的系统资源（例如进程、计时器等）都应该在 jsonrpc-shutdown 中释放，即它们应该只在 jsonrpc-running-p 为非零时才需要。
 
@@ -3489,7 +3489,7 @@ jsonrpc 库实现了 JSONRPC 规范 2.0 版，如 https://www.jsonrpc.org/ 中�
 
 为方便起见，jsonrpc 库带有一个内置的 jsonrpc-process-connection 传输实现，可以与本地子进程对话（使用标准输入和标准输出）；  或 TCP 主机（使用套接字）；  或 Emacs 的进程对象可以表示的任何其他远程端点（请参阅进程）。
 
-使用这种传输方式，JSONRPC 消息在网络上被编码为纯文本，并以一些基本的 HTTP 样式的封装头开头，例如“Content-Length”。
+使用这种传输方式，JSONRPC 消息在网络上被编码为纯文本，并以一些基本的 HTTP 样式的封装头开头，例如 ~Content-Length~ 。
 
 有关在 JSONRPC 之上使用此传输方案的应用程序示例，请参阅语言服务器协议。
 

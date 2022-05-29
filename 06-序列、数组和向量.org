@@ -258,7 +258,7 @@ Function: sequencep object ¶
 
     此功能对序列进行稳定排序。请注意，此功能不适用于所有序列；  它只能用于列表和向量。如果序列是一个列表，它会被破坏性地修改。此函数返回排序后的序列并使用谓词比较元素。稳定排序是排序键相同的元素在排序前后保持其相对顺序的排序。当连续排序用于根据不同标准对元素进行排序时，稳定性很重要。
 
-    参数谓词必须是接受两个参数的函数。它用两个序列元素调用。要获得升序排序，如果第一个元素“小于”第二个元素，则谓词应返回非零，否则返回 nil。
+    参数谓词必须是接受两个参数的函数。它用两个序列元素调用。要获得升序排序，如果第一个元素~ 小于~ 第二个元素，则谓词应返回非零，否则返回 nil。
 
     比较函数谓词必须为任何给定的参数对提供可靠的结果，至少在一次排序调用中。它必须是反对称的；  也就是说，如果 a 小于 b，则 b 不能小于 a。它必须是可传递的——也就是说，如果 a 小于 b，并且 b 小于 c，那么 a 必须小于 c。如果使用不满足这些要求的比较函数，排序的结果是不可预测的。
 
@@ -1194,7 +1194,7 @@ Function: char-table-range char-table range ¶
       (from . to)
     #+end_src
 
-	 cons 单元格引用包含范围“[from..to]”中的所有字符。
+	 cons 单元格引用包含范围~ [from..to]~ 中的所有字符。
 
 #+begin_src emacs-lisp
 Function: set-char-table-range char-table range value ¶
@@ -1220,7 +1220,7 @@ Function: set-char-table-range char-table range value ¶
     #+begin_src emacs-lisp
       (from . to)
     #+end_src
-	 cons 单元格引用包含范围“[from..to]”中的所有字符。
+	 cons 单元格引用包含范围~ [from..to]~ 中的所有字符。
 
 #+begin_src emacs-lisp
   Function: map-char-table function char-table ¶

@@ -208,7 +208,7 @@ define-abbrev 是用于在缩写表中定义缩写的低级基本函数。
 
     这个变量的值是一个函数，expand-abbrev 将不带参数调用来进行扩展。该函数可以在执行扩展之前和之后做任何它想做的事情。如果发生扩展，它应该返回缩写符号。
 
-以下示例代码显示了 abbrev-expand-function 的简单使用。它假定 foo-mode 是一种用于编辑某些文件的模式，其中以“#”开头的行是注释。您想对这些行使用文本模式缩写。常规的本地缩写表 foo-mode-abbrev-table 适用于所有其他行。有关 local-abbrev-table 和 text-mode-abbrev-table 的定义，请参见标准缩写表。有关 add-function 的详细信息，请参阅 Advising Emacs Lisp Functions。
+以下示例代码显示了 abbrev-expand-function 的简单使用。它假定 foo-mode 是一种用于编辑某些文件的模式，其中以 ~#~ 开头的行是注释。您想对这些行使用文本模式缩写。常规的本地缩写表 foo-mode-abbrev-table 适用于所有其他行。有关 local-abbrev-table 和 text-mode-abbrev-table 的定义，请参见标准缩写表。有关 add-function 的详细信息，请参阅 Advising Emacs Lisp Functions。
 #+begin_src emacs-lisp
 (defun foo-mode-abbrev-expand-function (expand)
   (if (not (save-excursion (forward-line 0) (eq (char-after) ?#)))

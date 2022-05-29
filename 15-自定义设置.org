@@ -36,7 +36,7 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
   (custom-manual info-node)
 #+end_src
 
-	 链接到信息节点；  info-node 是一个字符串，它指定节点名称，如“(emacs)Top”。该链接在自定义缓冲区中显示为“[Manual]”，并进入 info-node 上的内置信息阅读器。
+	 链接到信息节点；  info-node 是一个字符串，它指定节点名称，如 ~(emacs)Top~ 。该链接在自定义缓冲区中显示为 ~[Manual]~ ，并进入 info-node 上的内置信息阅读器。
 #+begin_src emacs-lisp
   (info-link info-node)
 #+end_src
@@ -506,9 +506,9 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
     #+end_src
 
 
-    指定有三个已知键，即“foo”、“bar”和“baz”，它们总是首先显示。
+    指定有三个已知键，即 ~foo~ 、 ~bar~ 和 ~baz~ ，它们总是首先显示。
 
-    您可能希望限制特定键的值类型，例如，与“bar”键关联的值只能是整数。您可以通过使用列表而不是列表中的原子来指定这一点。像以前一样，第一个元素将指定键，而第二个元素将指定值类型。例如：
+    您可能希望限制特定键的值类型，例如，与 ~bar~ 键关联的值只能是整数。您可以通过使用列表而不是列表中的原子来指定这一点。像以前一样，第一个元素将指定键，而第二个元素将指定值类型。例如：
 
     #+begin_src emacs-lisp
       :options '("foo" ("bar" integer) "baz")
@@ -580,7 +580,7 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 	      (string :tag "Literal text"))
     #+end_src
 
-    以便菜单提供“空格数”和“文字文本”。
+    以便菜单提供 ~空格数~ 和 ~文字文本~ 。
 
     在 nil 不是有效值的任何替代项中，除了 const 之外，您应该使用 :value 关键字为该替代项指定一个有效的默认值。请参阅键入关键字。
 
@@ -614,7 +614,7 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
     #+end_src
 
 
-    描述一个变量，其中 t 表示是，nil 表示否，foo 表示“询问”。
+    描述一个变量，其中 t 表示是，nil 表示否，foo 表示 ~询问~ 。
 #+begin_src emacs-lisp
   (other value)
 #+end_src
@@ -629,7 +629,7 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
 	      (other :tag "Ask" foo))
     #+end_src
 
-    描述一个变量，其中 t 表示是，nil 表示否，任何其他都表示“询问”。如果用户从备选菜单中选择“询问”，则指定值 foo；  但任何其他值（不是 t、nil 或 foo）都显示为“Ask”，就像 foo。
+    描述一个变量，其中 t 表示是，nil 表示否，任何其他都表示 ~询问~ 。如果用户从备选菜单中选择 ~询问~ ，则指定值 foo；  但任何其他值（不是 t、nil 或 foo）都显示为 ~Ask~ ，就像 foo。
 #+begin_src emacs-lisp
   (function-item function)
 #+end_src
@@ -666,7 +666,7 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
   (repeat element-type)
 #+end_src
 
-    该值必须是一个列表，并且列表的每个元素都必须适合类型 element-type。这在自定义缓冲区中显示为元素列表，带有用于添加更多元素或删除元素的“[INS]”和“[DEL]”按钮。
+    该值必须是一个列表，并且列表的每个元素都必须适合类型 element-type。这在自定义缓冲区中显示为元素列表，带有用于添加更多元素或删除元素的 ~[INS]~ 和 ~[DEL]~ 按钮。
 #+begin_src emacs-lisp
   (restricted-sexp :match-alternatives criteria)
 #+end_src
@@ -800,7 +800,7 @@ Emacs 的用户可以通过使用 Customize 界面来自定义变量和面孔，
   :button-face face ¶
 #+end_src
 
-    使用面（面名称或面名称列表）作为显示为“%[…%]”的按钮文本。
+    使用面（面名称或面名称列表）作为显示为 ~%[…%]~ 的按钮文本。
 #+begin_src emacs-lisp
   :button-prefix prefix ¶
 #+end_src
@@ -896,7 +896,7 @@ defcustom 显示了如何将新的小部件用作普通的自定义类型。
 
 ** 15.5 应用自定义
 
-以下函数分别负责安装用户对变量和面的自定义设置。当用户在 Customize 界面中调用“Save for future sessions”时，通过将 custom-set-variables 和/或 custom-set-faces 表单写入自定义文件来生效，以便在 Emacs 下次启动时进行评估。
+以下函数分别负责安装用户对变量和面的自定义设置。当用户在 Customize 界面中调用 ~Save for future sessions~ 时，通过将 custom-set-variables 和/或 custom-set-faces 表单写入自定义文件来生效，以便在 Emacs 下次启动时进行评估。
 
 #+begin_src emacs-lisp
   Function: custom-set-variables &rest args ¶
@@ -938,7 +938,7 @@ defcustom 显示了如何将新的小部件用作普通的自定义类型。
   Macro: deftheme theme &optional doc ¶
 #+end_src
 
-    此宏将主题（一个符号）声明为自定义主题的名称。可选参数 doc 应该是描述主题的字符串；  这是用户调用 describe-theme 命令或类型时显示的描述？  在“*自定义主题*”缓冲区中。
+    此宏将主题（一个符号）声明为自定义主题的名称。可选参数 doc 应该是描述主题的字符串；  这是用户调用 describe-theme 命令或类型时显示的描述？  在 ~*自定义主题*~ 缓冲区中。
 
     不允许使用两个特殊的主题名称（使用它们会导致错误）：user 是存储用户直接自定义设置的虚拟主题，changed 是存储在自定义系统之外所做的更改的虚拟主题。
 
@@ -1000,7 +1000,7 @@ defcustom 显示了如何将新的小部件用作普通的自定义类型。
 
     此函数在 custom-theme-load-path 中搜索提供功能的文件，然后加载它。这类似于函数 require（请参阅功能），除了它搜索 custom-theme-load-path 而不是 load-path（请参阅库搜索）。这在需要加载支持 Lisp 文件时需要不适合的自定义主题中很有用。
 
-    如果根据 featurep 在当前 Emacs 会话中不存在应该是符号的特性，则 require-theme 会按顺序搜索名为 feature 并添加了“.elc”或“.el”后缀的文件，在 custom-theme-load-path 指定的目录中。
+    如果根据 featurep 在当前 Emacs 会话中不存在应该是符号的特性，则 require-theme 会按顺序搜索名为 feature 并添加了 ~.elc~ 或 ~.el~ 后缀的文件，在 custom-theme-load-path 指定的目录中。
 
     如果成功找到并加载了提供功能的文件，则 require-theme 返回功能。可选参数 noerror 确定如果搜索或加载失败会发生什么。如果为 nil，则该函数发出错误信号；  否则，它返回 nil。如果文件加载成功但不提供功能，则 require-theme 会发出错误信号；  这是无法压制的。
 

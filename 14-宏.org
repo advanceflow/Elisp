@@ -344,7 +344,7 @@ for 主体内对 max 的引用，应该是指用户对 max 的绑定，实际上
   defun
 #+end_src
 
-    像处理“def”结构一样处理这个函数：将第二行视为正文的开始。
+    像处理 ~def~ 结构一样处理这个函数：将第二行视为正文的开始。
 #+begin_src emacs-lisp
   an integer, number
 #+end_src
