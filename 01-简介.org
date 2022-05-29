@@ -227,9 +227,13 @@ Emacs 的次要版本号，为整数。对于 Emacs 版本 23.1，该值为 1。
 一个字符串，它给出了构建 Emacs 的存储库分支。在大多数情况下，这是 ~主人~ 。如果 Emacs 是在版本控制之外构建的，则该值为 nil。
 
 
-** TODO 1.5 致谢
-本手册最初由GNU手册小组的志愿者Robert Krawitz、Bil Lewis、Dan LaLiberte、Richard M.Stallman和Chris Welty编写，历时数年。Robert J.Chassell在国防高级研究计划局的支持下，协助审查和编辑了该手册，ARPA 6082号令，由计算逻辑公司的Warren A.Hunt Jr.安排。此后，Miles Bader、Lars Brinkhoff、Chong Yidong、Kenichi Handa、Lute Kamstra、Juri Linkov、Glenn Morris、Thien Thi Nguyen、Dan Nicolaescu、Martin Rudaliss、，Kim F.Storm、Luc Teirlinck、Eli Zaretskii和其他人。
+** DONE 1.5 致谢
+   CLOSED: [2022-05-29 Sun 19:26]
+   :LOGBOOK:
+   - State "DONE"       from "TODO"       [2022-05-29 Sun 19:26]
+   :END:
+本手册最初由GNU手册小组的志愿者Robert Krawitz、Bil Lewis、Dan LaLiberte、Richard M.Stallman和Chris Welty历时数年编写。在国防高级研究计划局ARPA 6082项目(由计算逻辑公司的Warren A.Hunt Jr负责）的支持下，Robert J.Chassell协助审查和编辑了该手册。此后，Miles Bader、Lars Brinkhoff、Chong Yidong、Kenichi Handa、Lute Kamstra、Juri Linkov、Glenn Morris、Thien Thi Nguyen、Dan Nicolaescu、Martin Rudaliss、，Kim F.Storm、Luc Teirlinck、Eli Zaretskii等人亦有参与。
 
-更正由Drew Adams、Juanma Barrankero、Karl Berry、Jim Blandy、Bard Bloom、Stephane Boucher、David Boyes、Alan Carroll、Richard Davis、Lawrence R.Dodd、Peter Doornbosch、David A.Duff、Chris Eich、Beverly Erlebacher、David Eckelkamp、Ralf Fassel、Eirik Fuller、Stephen Gildea、Bob Glickstein、Eric Hanchrow、Jesper Harder、George Hartzell、Nathan Hess、Masayuki Ida、，Dan Jacobson、Jak Kirman、Bob Knighten、Frederick M.Korz、Joe Lammens、Glenn M.Lewis、K.Richard Magill、Brian Marick、Roland McGrath、Stefan Monnier、Skip Montanaro、John Gardiner Myers、Thomas A.Peterson、Francesco Potortì、Friedrich Pukelsheim、Arnold D.Robbins、Raul Rockwell、Jason Rumney、Per Starbä、Shinichrou Sugou、Kimmo Suominen、Edward Tharp、Bill Trost、Rickard Westman、，Jean White、Eduard Wiebe、Matthew Wilding、Carl Witty、Dale Worley、Rusty Wright和David D.Zuhn。
+参与更正的人员有Drew Adams、Juanma Barrankero、Karl Berry、Jim Blandy、Bard Bloom、Stephane Boucher、David Boyes、Alan Carroll、Richard Davis、Lawrence R.Dodd、Peter Doornbosch、David A.Duff、Chris Eich、Beverly Erlebacher、David Eckelkamp、Ralf Fassel、Eirik Fuller、Stephen Gildea、Bob Glickstein、Eric Hanchrow、Jesper Harder、George Hartzell、Nathan Hess、Masayuki Ida、，Dan Jacobson、Jak Kirman、Bob Knighten、Frederick M.Korz、Joe Lammens、Glenn M.Lewis、K.Richard Magill、Brian Marick、Roland McGrath、Stefan Monnier、Skip Montanaro、John Gardiner Myers、Thomas A.Peterson、Francesco Potortì、Friedrich Pukelsheim、Arnold D.Robbins、Raul Rockwell、Jason Rumney、Per Starbä、Shinichrou Sugou、Kimmo Suominen、Edward Tharp、Bill Trost、Rickard Westman、，Jean White、Eduard Wiebe、Matthew Wilding、Carl Witty、Dale Worley、Rusty Wright和David D.Zuhn等人。
 
 有关贡献者的更完整列表，请参阅Emacs源存储库中的相关更改日志条目。
