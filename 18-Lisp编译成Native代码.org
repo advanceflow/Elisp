@@ -1,4 +1,4 @@
-* TODO 18 Lisp编译成Native代码
+* 18 Lisp编译成Native代码
 
 除了上一章中描述的字节编译之外，Emacs 还可以选择性地将 Lisp 函数定义编译成真正的编译代码，称为本地代码。此功能使用 libgccjit 库，它是 GCC 发行版的一部分，并且要求构建 Emacs 时支持使用该库。它还需要在您的系统上安装 GCC 和 Binutils（汇编器和链接器），以便您能够本地编译 Lisp 代码。
 

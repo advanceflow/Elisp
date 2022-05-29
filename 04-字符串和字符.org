@@ -1,12 +1,9 @@
-
-* TODO 4 字符串和字符
-
+* TODO 4 字符串和字
 Emacs Lisp 中的字符串是一个包含有序字符序列的数组。字符串用作符号、缓冲区和文件的名称；  向用户发送消息；  保存在缓冲区之间复制的文本；  并用于许多其他目的。因为字符串非常重要，Emacs Lisp 有许多专门用于操作它们的函数。Emacs Lisp 程序比单个字符更频繁地使用字符串。
 
 有关键盘字符事件字符串的特殊注意事项，请参阅将键盘事件放入字符串中。
 
-** TODO 4.1 字符串和字符基础
-
+** 4.1 字符串和字符基础
 字符是一个 Lisp 对象，它表示文本的单个字符。在 Emacs Lisp 中，字符只是整数；  整数是否为字符仅取决于它的使用方式。有关 Emacs 中字符表示的详细信息，请参阅字符代码。
 
 字符串是固定的字符序列。它是一种称为数组的序列，这意味着它的长度是固定的，一旦创建就不能更改（请参阅序列、数组和向量）。与 C 不同，Emacs Lisp 字符串不以可区分的字符代码终止。
@@ -23,8 +20,7 @@ Emacs 字符串（和缓冲区）中的非 ASCII 字符有两种文本表示：�
 
 有关显示字符串或将字符串复制到缓冲区的函数的信息，请参阅文本。有关字符和字符串的语法的信息，请参阅字符类型和字符串类型。有关在文本表示之间进行转换以及对字符代码进行编码和解码的函数，请参见非 ASCII 字符。另外，请注意，长度不应用于计算显示字符串的宽度；  请改用字符串宽度（请参阅显示文本的大小）。
 
-** TODO 4.2 字符串谓词
-
+** 4.2 字符串谓词
 有关一般序列和数组谓词的更多信息，请参阅序列、数组和向量以及数组。
 
 #+begin_src emacs-lisp
@@ -45,8 +41,7 @@ Function: char-or-string-p object
 
     如果 object 是字符串或字符（即整数），则此函数返回 t，否则返回 nil。
 
-** TODO 4.3 创建字符串
-
+** 4.3 创建字符串
 以下函数创建字符串，可以从头开始，也可以将字符串放在一起，或者将它们分开。（对于根据其他字符串的修改内容创建字符串的函数，如 string-replace 和 replace-regexp-in-string，请参阅搜索和替换。）
 
 #+begin_src emacs-lisp
@@ -66,7 +61,7 @@ Function: char-or-string-p object
 
     通常，如果字符是 ASCII 字符，则结果是单字节字符串。但是，如果可选参数 multibyte 不为 nil，则该函数将生成一个多字节字符串。当您稍后需要将结果与非 ASCII 字符串连接或用非 ASCII 字符替换其中的一些字符时，这很有用。
 
-    与此比较的其他函数包括 make-vector（请参阅 Vectors）和 make-list（请参阅 Building Cons Cells and Lists）。 
+    与此比较的其他函数包括 make-vector（请参阅 Vectors）和 make-list（请参阅 Building Cons Cells and Lists）。
 
 #+begin_src emacs-lisp
   Function: string &rest characters
@@ -128,13 +123,13 @@ Function: substring string &optional start end
 
     如果 start 不是整数或 end 既不是整数也不是 nil，则会发出错误类型参数错误的信号。如果 start 指示字符跟在 end 之后，或者任何一个整数超出字符串的范围，则会发出 args-out-of-range 错误信号。
 
-    将此函数与 buffer-substring 进行对比（请参阅检查缓冲区内容），后者返回一个字符串，其中包含当前缓冲区中的部分文本。字符串的开头是索引 0，但缓冲区的开头是索引 1。 
+    将此函数与 buffer-substring 进行对比（请参阅检查缓冲区内容），后者返回一个字符串，其中包含当前缓冲区中的部分文本。字符串的开头是索引 0，但缓冲区的开头是索引 1。
 
 #+begin_src emacs-lisp
   Function: substring-no-properties string &optional start end
 #+end_src
 
-    这类似于子字符串，但会丢弃值中的所有文本属性。此外， start 可以省略或 nil，相当于 0。因此，(substring-no-properties string) 返回字符串的副本，删除所有文本属性。 
+    这类似于子字符串，但会丢弃值中的所有文本属性。此外， start 可以省略或 nil，相当于 0。因此，(substring-no-properties string) 返回字符串的副本，删除所有文本属性。
 
 #+begin_src emacs-lisp
   Function: concat &rest sequences
@@ -143,20 +138,19 @@ Function: substring string &optional start end
     此函数返回一个字符串，该字符串由传递给它的参数中的字符组成（以及它们的文本属性，如果有的话）。参数可以是字符串、数字列表或数字向量；  他们自己并没有改变。如果 concat 没有接收到参数，它会返回一个空字符串。
 
     #+begin_src emacs-lisp
-(concat "abc" "-def")
-     ⇒ "abc-def"
-(concat "abc" (list 120 121) [122])
-     ⇒ "abcxyz"
-;; nil is an empty sequence.
-(concat "abc" nil "-def")
-     ⇒ "abc-def"
-(concat "The " "quick brown " "fox.")
-     ⇒ "The quick brown fox."
-(concat)
-     ⇒ ""
+      (concat "abc" "-def")
+	   ⇒ "abc-def"
+      (concat "abc" (list 120 121) [122])
+	   ⇒ "abcxyz"
+      ;; nil is an empty sequence.
+      (concat "abc" nil "-def")
+	   ⇒ "abc-def"
+      (concat "The " "quick brown " "fox.")
+	   ⇒ "The quick brown fox."
+      (concat)
+	   ⇒ ""
     #+end_src
 
-  
     这个函数并不总是分配一个新的字符串。建议调用者不要依赖结果是一个新字符串，也不要依赖它是现有字符串的 eq。
 
     特别是，改变返回值可能会无意中更改另一个字符串，更改程序中的常量字符串，甚至引发错误。要获得可以安全地变异的字符串，请对结果使用复制序列。
@@ -307,7 +301,7 @@ Function: string-pad string length &optional padding start
 #+end_src
     从字符串中删除最后的换行符（如果有）。
 
-** TODO 4.4 修改字符串
+** 4.4 修改字符串
 
 您可以通过本节中描述的操作更改可变字符串的内容。请参阅可变性。
 
@@ -333,7 +327,7 @@ Function: store-substring string idx obj
 
     这使 string 成为单字节字符串并将其内容清除为零。它也可能改变字符串的长度。
 
-** TODO 4.5 字符与字符串的比较
+** 4.5 字符与字符串的比较
 
 
    #+begin_src emacs-lisp
@@ -542,7 +536,7 @@ Function: string-suffix-p suffix string &optional ignore-case
 
 另请参阅比较文本中的函数 compare-buffer-substrings，了解比较缓冲区中文本的方法。函数 string-match 将正则表达式与字符串进行匹配，可用于一种字符串比较；  请参阅正则表达式搜索。
 
-** TODO 4.6 字符和字符串的转换
+** 4.6 字符和字符串的转换
 
 本节介绍用于在字符、字符串和整数之间进行转换的函数。format（请参阅格式化字符串）和 prin1-to-string（请参阅输出函数）也可以将 Lisp 对象转换为字符串。read-from-string（参见输入函数）可以将 Lisp 对象的字符串表示形式转换为对象。函数 string-to-multibyte 和 string-to-unibyte 转换字符串的文本表示（请参阅转换文本表示）。
 
@@ -632,7 +626,7 @@ byte-to-string
 
     该函数将一个字节的字符数据转换为一个单字节字符串。请参阅转换文本表示。
 
-** TODO 4.7 格式化字符串
+** 4.7 格式化字符串
 
 格式化是指通过替换常量字符串中不同位置的计算值来构造字符串。这个常量字符串控制其他值的打印方式，以及它们出现的位置；  它被称为格式字符串。
 
@@ -805,7 +799,7 @@ Function: format string &rest objects
 
 本节中描述的函数接受一组固定的规范字符。下一节描述了一个函数 format-spec，它可以接受自定义规范字符，例如 '%a' 或 '%z'。
 
-** TODO 4.8 自定义格式字符串
+** 4.8 自定义格式字符串
 
 有时允许用户和 Lisp 程序等通过自定义格式控制字符串来控制某些文本的生成方式很有用。例如，格式字符串可以控制如何显示某人的名字、姓氏和电子邮件地址。使用上一节中描述的函数格式，格式字符串可能类似于 ~%s %s <%s>~ 。然而，这种方法很快变得不切实际，因为可能不清楚哪个规范字符对应于哪条信息。
 
@@ -936,7 +930,7 @@ format-spec 接受的格式规范的语法与 format 接受的语法相似，但
 
 正如本节中的示例所示，格式规范通常用于有选择地格式化各种不同的信息。这在提供用户可自定义格式字符串的程序中很有用，因为用户可以选择使用常规语法并以任何所需的顺序仅格式化程序提供的信息的子集。
 
-** TODO 4.9 Lisp 中的大小写转换
+** 4.9 Lisp 中的大小写转换
 
 字符大小写函数改变单个字符或字符串内容的大小写。这些函数通常只转换字母字符（字母 'A' 到 'Z' 和 'a' 到 'z'，以及非 ASCII 字母）；  其他字符不变。您可以通过指定案例表来指定不同的案例转换映射（请参阅案例表）。
 
@@ -1037,7 +1031,7 @@ Function: upcase string-or-char
 
 有关比较字符串的函数，请参见字符和字符串的比较；  其中一些忽略大小写差异，或者可以选择忽略大小写差异。
 
-** TODO 4.10 案例表
+** 4.10 案例表
 
 您可以通过安装特殊案例表来自定义案例转换。大小写表指定大写和小写字母之间的映射。它影响 Lisp 对象的大小写转换函数（参见上一节）和应用于缓冲区中文本的那些（参见大小写更改）。每个缓冲区都有一个案例表；  还有一个标准案例表，用于初始化新缓冲区的案例表。
 

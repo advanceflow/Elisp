@@ -1,9 +1,7 @@
 * 3 数字
-
 GNU Emacs 支持两种数字数据类型：整数和浮点数。整数是整数，例如 -3、0、7、13 和 511。浮点数是带有小数部分的数字，例如 -4.5、0.0 和 2.71828。它们也可以用指数符号表示： ~1.5e2~ 与~ 150.0~ 相同；  在这里，~ e2~ 代表 10 的二次方，即乘以 1.5。整数计算是精确的。浮点计算通常涉及舍入误差，因为数字具有固定的精度。
 
 ** 3.1 整数基础
-
 Lisp 阅读器将整数读取为具有可选初始符号和可选最后句点的十进制数字的非空序列。
 
 #+begin_src emacs-lisp
@@ -595,37 +593,33 @@ Emacs Lisp 中的按位运算仅适用于整数。
     以下是 ash 的示例，将位模式向左和向右移动一个位置。这些示例仅显示了二进制模式的低位；  前导位都与所示的最高位一致。如您所见，左移一相当于乘以二，而右移一相当于除以二，然后向负无穷大舍入。
 
     #+begin_src emacs-lisp
+      (ash 7 1) ⇒ 14
+      ;; Decimal 7 becomes decimal 14.
+      …000111
+	   ⇒
+      …001110
 
 
-(ash 7 1) ⇒ 14
-;; Decimal 7 becomes decimal 14.
-…000111
-     ⇒
-…001110
+      (ash 7 -1) ⇒ 3
+      …000111
+	   ⇒
+      …000011
 
 
-(ash 7 -1) ⇒ 3
-…000111
-     ⇒
-…000011
+      (ash -7 1) ⇒ -14
+      …111001
+	   ⇒
+      …110010
 
 
-(ash -7 1) ⇒ -14
-…111001
-     ⇒
-…110010
-
-
-(ash -7 -1) ⇒ -4
-…111001
-     ⇒
-…111100
+      (ash -7 -1) ⇒ -4
+      …111001
+	   ⇒
+      …111100
     #+end_src
 
     以下是左移或右移两位的示例：
     #+begin_src emacs-lisp
-
-
 			;         binary values
       (ash 5 2)         ;   5  =  …000101
 	   ⇒ 20         ;      =  …010100
@@ -676,7 +670,6 @@ Function: lsh integer1 count
 	   ⇒ 12
     #+end_src
 
-
     如果 logand 未传递任何参数，则返回值 -1。这个数字是 logand 的标识元素，因为它的二进制表示完全由 1 组成。如果 logand 只传递了一个参数，它将返回该参数。
 
     #+begin_src emacs-lisp
@@ -705,8 +698,6 @@ Function: logior &rest ints-or-markers
     此函数返回其参数的按位或运算：当且仅当至少一个参数中的第 n 位为 1 时，结果中的第 n 位为 1。如果没有参数，则结果为 0，这是此操作的标识元素。如果 logior 仅传递一个参数，则返回该参数。
 
     #+begin_src emacs-lisp
-
-
 			 ;        binary values
 
       (logior 12 5)      ; 12  =  …001100
@@ -722,7 +713,7 @@ Function: logior &rest ints-or-markers
 
 
 #+begin_src emacs-lisp
-Function: logxor &rest ints-or-markers
+  Function: logxor &rest ints-or-markers
 #+end_src
 
     此函数返回其参数的按位异或：当且仅当第 n 位在奇数个参数中为 1 时，结果中的第 n 位为 1。如果没有参数，则结果为 0，这是此操作的标识元素。如果 logxor 只传递了一个参数，它将返回该参数。
@@ -781,37 +772,37 @@ Function: logxor &rest ints-or-markers
 #+end_src
 
 #+begin_src emacs-lisp
-Function: tan arg
+  Function: tan arg
 #+end_src
     这些是基本的三角函数，参数 arg 以弧度为单位。
 
 
 #+begin_src emacs-lisp
-Function: asin arg
+  Function: asin arg
 #+end_src
 
     (asin arg) 的值是介于 -pi/2 和 pi/2（含）之间的数字，其正弦为 arg。如果 arg 超出范围（在 [-1, 1] 之外），则 asin 返回 NaN。
 
 #+begin_src emacs-lisp
-Function: acos arg
+  Function: acos arg
 #+end_src
 
     (acos arg) 的值是一个介于 0 和 pi（含）之间的数字，其余弦为 arg。如果 arg 超出范围（在 [-1, 1] 之外），acos 返回一个 NaN。
 
 #+begin_src emacs-lisp
-Function: atan y &optional x
+  Function: atan y &optional x
 #+end_src
 
     (atan y) 的值是介于 -pi/2 和 pi/2（不包括）之间的数字，其正切为 y。如果给定了可选的第二个参数 x，则 (atan yx) 的值是向量 [x, y] 和 X 轴之间的弧度角。
 
 #+begin_src emacs-lisp
-Function: exp arg
+  Function: exp arg
 #+end_src
 
     这是指数函数；  它将 e 返回到幂 arg。
 
 #+begin_src emacs-lisp
-Function: log arg &optional base
+  Function: log arg &optional base
 #+end_src
 
     此函数返回 arg 的对数，以底为底。如果不指定基数，则使用自然基数 e。如果 arg 或 base 为负数，则 log 返回 NaN。

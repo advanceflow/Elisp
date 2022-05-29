@@ -3,7 +3,7 @@
 #+OPTIONS: prop:t
 #+OPTIONS: ^:nil
 
-* TODO 附录 C GNU通用公共许可证
+* 附录 C GNU通用公共许可证
 
 第 3 版，2007 年 6 月 29 日
 
