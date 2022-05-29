@@ -3485,7 +3485,7 @@ jsonrpc 库实现了 JSONRPC 规范 2.0 版，如 https://www.jsonrpc.org/ 中�
 
     最后，如果这些概念适用于传输，则 jsonrpc-connection 子类应该实现 jsonrpc-shutdown 和 jsonrpc-running-p 方法。如果他们这样做了，那么任何用于在线路上侦听消息的系统资源（例如进程、计时器等）都应该在 jsonrpc-shutdown 中释放，即它们应该只在 jsonrpc-running-p 为非零时才需要。
 
-*** TODO 33.30.2 基于进程的 JSONRPC 连接
+*** 33.30.2 基于进程的 JSONRPC 连接
 
 为方便起见，jsonrpc 库带有一个内置的 jsonrpc-process-connection 传输实现，可以与本地子进程对话（使用标准输入和标准输出）；  或 TCP 主机（使用套接字）；  或 Emacs 的进程对象可以表示的任何其他远程端点（请参阅进程）。
 
@@ -3506,7 +3506,7 @@ jsonrpc 库实现了 JSONRPC 规范 2.0 版，如 https://www.jsonrpc.org/ 中�
 
     值必须是单个参数的函数，即 jsonrpc-process-connection 对象。该函数在底层进程对象被删除后调用（要么是 jsonrpc-shutdown 故意的，要么是由于某些外部原因而意外）。
 
-*** TODO 33.30.3 JSONRPC JSON对象格式
+*** 33.30.3 JSONRPC JSON对象格式
 
 JSONRPC JSON 对象作为 Lisp plist 进行交换（请参阅属性列表）：与 JSON 兼容的 plist 被交给调度程序函数，同样，JSON 兼容的 plist 应该被提供给 jsonrpc-notify、jsonrpc-request 和 jsonrpc-async-request .
 
@@ -3522,7 +3522,7 @@ JSONRPC JSON 对象作为 Lisp plist 进行交换（请参阅属性列表）：�
 			code message)))
 #+end_src
 
-*** TODO 33.30.4 延迟的 JSONRPC 请求
+*** 33.30.4 延迟的 JSONRPC 请求
 
 在许多 RPC 情况下，两个通信端点之间的同步是正确设计 RPC 应用程序的问题：当需要同步时，应该使用请求（阻塞）；  如果不是，通知就足够了。但是，当 Emacs 充当这些端点之一时，可能会触发异步事件（例如，与计时器或进程相关的事件），而远程端点的状态仍然不确定。此外，根据事件的具体性质，对这些事件采取行动有时可能只需要同步。
 
@@ -3530,7 +3530,7 @@ jsonrpc-request 和 jsonrpc-async-request 的 :deferred 关键字参数旨在让
 
 在任何尝试发送请求之前，都会检查特定于应用程序的条件。由于 jsonrpc 库无法知道这些条件是什么，因此程序可以使用 jsonrpc-connection-ready-p 泛型函数（请参阅泛型函数）来指定它们。此函数的默认方法返回 t，但您可以添加在某些情况下返回 nil 的覆盖方法，基于传递给它的参数，即 jsonrpc-connection 对象（请参阅概述）和您作为 :deferred 传递的任何值关键字参数。
 
-** TODO 33.31 原子变更组
+** 33.31 原子变更组
 
 在数据库术语中，原子更改是不可分割的更改——它可以完全成功，也可以完全失败，但不能部分成功。Lisp 程序可以对一个或多个缓冲区进行一系列更改，作为一个原子更改组，这意味着整个系列的更改将安装在它们的缓冲区中，或者在发生错误的情况下，它们都不会安装。
 
@@ -3595,7 +3595,7 @@ jsonrpc-request 和 jsonrpc-async-request 的 :deferred 关键字参数旨在让
 
 对同一个缓冲区嵌套使用多个更改组的工作方式与您期望的一样。对同一个缓冲区非嵌套使用更改组会使 Emacs 感到困惑，所以不要让它发生；  您为任何给定缓冲区启动的第一个更改组应该是最后一个完成的更改组。
 
-** TODO 33.32 更改挂钩
+** 33.32 更改挂钩
 
 这些钩子变量让您可以安排注意缓冲区（或特定缓冲区中的更改，如果您将它们设为缓冲区本地）。有关如何检测文本特定部分的更改，另请参见具有特殊含义的属性。
 

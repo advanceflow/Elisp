@@ -443,7 +443,7 @@ Emacs 会定期保存您正在访问的所有文件；  这称为自动保存。
 
     在 Emacs 读取您的 init 文件后，它会根据此前缀初始化 auto-save-list-file-name（如果您尚未将其设置为非 nil），并添加主机名和进程 ID。如果你在你的 init 文件中将它设置为 nil，那么 Emacs 不会初始化 auto-save-list-file-name。
 
-** TODO 27.3 还原
+** 27.3 还原
 
 如果您对文件进行了大量更改，然后改变主意，您可以通过使用 revert-buffer 命令读取文件的先前版本来摆脱它们。请参阅 GNU Emacs 手册中的恢复缓冲区。
 

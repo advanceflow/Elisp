@@ -659,7 +659,7 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     该函数返回编码系统的别名列表。
 
-*** TODO 34.10.2 编码和 I/O
+*** 34.10.2 编码和 I/O
 
 编码系统的主要目的是用于读取和写入文件。函数 insert-file-contents 使用编码系统对文件数据进行解码，而 write-region 使用编码系统对缓冲区内容进行编码。
 
@@ -701,7 +701,7 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
 在 Windows 2000 及更高版本上，Emacs 默认使用 Unicode API 将文件名传递给操作系统，因此 file-name-coding-system 的值在很大程度上被忽略了。当系统类型为 windows-nt 时，需要在 Lisp 级别对文件名进行编码或解码的 Lisp 应用程序应使用 utf-8 编码系统；  将 UTF-8 编码的文件名转换为适合与操作系统通信的编码是由 Emacs 内部执行的。
 
-*** TODO 34.10.3 Lisp 中的编码系统
+*** 34.10.3 Lisp 中的编码系统
 
 以下是使用编码系统的 Lisp 工具：
 
@@ -822,7 +822,7 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
 请参阅进程信息，特别是对函数 process-coding-system 和 set-process-coding-system 的描述，了解如何检查或设置用于子进程 I/O 的编码系统。
 
-*** TODO 34.10.4 用户选择的编码系统
+*** 34.10.4 用户选择的编码系统
 
 #+begin_src emacs-lisp
   Function: select-safe-coding-system from to &optional default-coding-system accept-default-p file ¶
@@ -864,7 +864,7 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     此函数使用 minibuffer 读取编码系统，以字符串提示进行提示，并将编码系统名称作为符号返回。如果用户尝试输入空输入，它会要求用户再试一次。请参阅编码系统。
 
-*** TODO 34.10.5 默认编码系统
+*** 34.10.5 默认编码系统
 
 本节描述了为某些文件或运行某些子程序时指定默认编码系统的变量，以及 I/O 操作用来访问它们的函数。
 
@@ -964,7 +964,7 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     如果 operation 是 insert-file-contents，则对应于目标的参数可能是形式的 cons 单元格 (filename.buffer)。在这种情况下，filename 是要在 file-coding-system-alist 中查找的文件名，而 buffer 是包含文件内容（尚未解码）的缓冲区。如果 file-coding-system-alist 指定了一个函数来调用这个文件，并且该函数需要检查文件的内容（就像它通常那样），它应该检查缓冲区的内容而不是读取文件。
 
-*** TODO 34.10.6 为一个操作指定编码系统
+*** 34.10.6 为一个操作指定编码系统
 
 您可以通过绑定变量 coding-system-for-read 和/或 coding-system-for-write 来指定特定操作的编码系统。
 
@@ -1027,7 +1027,7 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     这个宏执行主体，就像 progn 一样（参见 progn），编码系统位于编码系统的优先级列表的前面。encoding-systems 应该是在执行主体期间首选的编码系统列表。
 
-*** TODO 34.10.7 显式编码和解码
+*** 34.10.7 显式编码和解码
 
 所有将文本传入和传出 Emacs 的操作都能够使用编码系统对文本进行编码或解码。您还可以使用本节中的函数显式编码和解码文本。
 
@@ -1093,7 +1093,7 @@ no-conversion（及其别名二进制）等价于 raw-text-unix：它指定不�
 
     使用此功能的正常方法是从文件中读取文本而不进行解码，如果您决定更愿意对其进行解码。而不是删除文本并再次阅读它，这次解码，您可以调用此函数。
 
-*** TODO 34.10.8 终端 I/O 编码
+*** 34.10.8 终端 I/O 编码
 
 Emacs 可以使用编码系统来解码键盘输入和编码终端输出。这对于使用特定编码（例如 Latin-1）传输或显示文本的终端很有用。Emacs 在编码或解码终端 I/O 时没有设置 last-coding-system-used。
 
@@ -1122,7 +1122,7 @@ Emacs 可以使用编码系统来解码键盘输入和编码终端输出。这�
     此命令将 coding-system 指定为用于对终端输出进行编码的编码系统。如果 coding-system 为 nil，则意味着不对终端输出进行编码。如果终端是一个框架，则表示该框架的终端；  如果为 nil，则表示当前选择的帧的终端。
 
 
-** TODO 34.11 输入法
+** 34.11 输入法
 
 输入法提供了从键盘输入非 ASCII 字符的便捷方式。与将非 ASCII 字符与程序读取的编码进行转换的编码系统不同，输入法提供了人性化的命令。（有关用户如何使用输入法输入文本的信息，请参阅 GNU Emacs 手册中的输入法。）本手册中尚未记录如何定义输入法，但我们在此描述如何使用它们。
 
@@ -1173,7 +1173,7 @@ Emacs 可以使用编码系统来解码键盘输入和编码终端输出。这�
 
 输入法的基本接口是通过变量输入法函数。请参阅读取一个事件和调用输入法。
 
-** TODO 34.12 语言环境
+** 34.12 语言环境
 
 在 POSIX 中，语言环境控制在与语言相关的功能中使用哪种语言。这些 Emacs 变量控制 Emacs 如何与这些功能交互。
 

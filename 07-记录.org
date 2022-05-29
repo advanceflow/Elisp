@@ -12,7 +12,7 @@
 
 记录被认为是评估的常数：评估它的结果是相同的记录。这不会评估甚至检查插槽。请参阅自我评估表。
 
-** TODO 7.1 记录功能
+** 7.1 记录功能
 
 #+begin_src emacs-lisp
   Function: recordp object
@@ -48,7 +48,7 @@ Function: make-record type length object
      ⇒ #s(foo Z Z Z Z Z Z Z Z Z)
 #+end_src
 
-** TODO 7.2 向后兼容性
+** 7.2 向后兼容性
 
 使用旧版本的不使用记录的 cl-defstruct 编译的代码在新 Emacs 中使用时可能会遇到问题。为了缓解这种情况，Emacs 会检测何时使用旧的 cl-defstruct，并启用一种模式，在该模式中 type-of 处理旧的结构对象，就好像它们是记录一样。
 

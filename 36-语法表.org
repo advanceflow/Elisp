@@ -505,7 +505,7 @@ Emacs 还定义了原始语法描述符，用于描述较低级别的语法类�
     如果扫描返回状态的结束位置在字符串中，则返回字符串，如果在注释中，则为注释。否则返回零。
 
 
-*** TODO 36.6.4 低级解析
+*** 36.6.4 低级解析
 
 使用表达式解析器最基本的方法是告诉它以特定状态从给定位置开始，并解析到指定的结束位置。
 
@@ -522,7 +522,7 @@ Function: parse-partial-sexp start limit &optional target-depth stop-before stat
 
     如果 state 为 nil，则假定 start 位于括号结构的顶层，例如函数定义的开头。或者，您可能希望在结构中间恢复解析。为此，您必须提供一个描述解析初始状态的状态参数。之前调用 parse-partial-sexp 返回的值会很好。
 
-*** TODO 36.6.5 控制解析的参数
+*** 36.6.5 控制解析的参数
 
 #+begin_src emacs-lisp
   Variable: multibyte-syntax-as-symbol ¶
@@ -546,7 +546,7 @@ parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请�
 
 您可以使用 forward-comment 在一条或多条评论上向前或向后移动。
 
-** TODO 36.7 语法表内部
+** 36.7 语法表内部
 
 语法表被实现为 char-tables（参见 Char-Tables），但大多数 Lisp 程序并不直接使用它们的元素。语法表不将语法数据存储为语法描述符（请参阅语法描述符）；  它们使用本节中记录的内部格式。这种内部格式也可以分配为语法属性（请参阅语法属性）。
 
@@ -609,7 +609,7 @@ parse-partial-sexp 的行为也受 parse-sexp-lookup-properties 的影响（请�
     #+end_src
     如果 pos 在缓冲区的可访问部分之外，则计算结果为 nil，而不会引发错误或返回不正确的代码。
 
-** TODO 36.8 类别
+** 36.8 类别
 
 类别提供了另一种按语法对字符进行分类的方法。您可以根据需要定义多个类别，然后将每个字符独立分配给一个或多个类别。与语法类不同，类别不是相互排斥的；  一个字符属于多个类别是正常的。
 
