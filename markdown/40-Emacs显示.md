@@ -1,8 +1,3 @@
-
-
-
-
-
 # TODO 40 Emacs显示
 
 本章描述了许多与 Emacs 呈现给用户的显示相关的特性。
@@ -91,14 +86,11 @@ Emacs 通常会在等待输入时尝试重新显示屏幕。  使用以下函数
 
 也可以使用 line-prefix text 或 overlay 属性为文本区域指定行前缀。  这优先于行前缀变量。  请参阅具有特殊含义的属性。
 
-
-
 ## TODO 40.4 回声区
 
 回显区域用于显示错误消息（请参阅错误）、使用消息原语生成的消息以及回显击键。  它与 minibuffer 不同，尽管 minibuffer 出现在屏幕上与回声区域相同的位置（当激活时）。  请参阅 GNU Emacs 手册中的 Minibuffer。
 
 除了本节中记录的函数之外，您还可以通过将 t 指定为输出流来将 Lisp 对象打印到回显区域。  请参阅输出流。
-
 
 
 ### TODO 40.4.1 在回显区显示消息
@@ -120,8 +112,8 @@ Emacs 通常会在等待输入时尝试重新显示屏幕。  使用以下函数
     (message "Reverting `%s'..." (buffer-name))
      -| Reverting ‘subr.el’...
     ⇒ "Reverting ‘subr.el’..."
-    
-    
+
+
     ---------- Echo Area ----------
     Reverting ‘subr.el’...
     ---------- Echo Area ----------
@@ -184,8 +176,7 @@ Emacs 通常会在等待输入时尝试重新显示屏幕。  使用以下函数
 
 这是一个没有任何用处的工作示例：
 
-    
-    
+
     (let ((progress-reporter
            (make-progress-reporter "Collecting mana for Emacs..."
     			       0  500)))
@@ -2555,7 +2546,7 @@ persistent 的值是最后一次成功调用 set-window-scroll-bars 时为 windo
 
 
 
-## TODO 40.16 display财产
+## TODO 40.16 display属性
 
 显示文本属性（或覆盖属性）用于将图像插入到文本中，并控制文本显示方式的其他方面。  display 属性的值应该是一个显示规范，或者是一个包含多个显示规范的列表或向量。  相同显示属性值中的显示规范通常与它们所涵盖的文本同时应用。
 
