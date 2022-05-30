@@ -1,0 +1,381 @@
+\input texinfo    @c -*- texinfo -*-
+@c %**start of header
+@setfilename 附录H-标准钩子.info
+@settitle 
+@documentencoding UTF-8
+@documentlanguage en
+@c %**end of header
+
+@finalout
+@titlepage
+@title 
+@author zunrong
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top 
+@end ifnottex
+
+@menu
+* 附录 H 标准钩子::
+@end menu
+
+@node 附录 H 标准钩子
+@chapter 附录 H 标准钩子
+
+以下是一些钩子变量的列表，这些变量让您可以在适当的情况下提供从 Emacs 中调用的函数。
+
+大多数这些变量的名称都以 @code{-hook} 结尾。它们是普通的钩子，通过 run-hooks 运行。这种钩子的值是一个函数列表；  这些函数在没有参数的情况下被调用，并且它们的值被完全忽略。在这种钩子上放置新函数的推荐方法是调用 add-hook。有关使用钩子的更多信息，请参阅钩子。
+
+名称以 @code{-functions} 结尾的变量通常是异常钩子（一些旧代码也可能使用已弃用的 @code{-hooks} 后缀）。它们的值是函数列表，但这些函数以特殊方式调用：它们要么是传递的参数，要么以某种方式使用它们的返回值。名称以 @code{-function} 结尾的变量具有单个函数作为它们的值。
+
+这不是一个详尽的列表，它只涵盖了更一般的钩子。例如，每个主要模式都定义了一个名为 @code{modename-mode-hook} 的钩子。主模式命令使用 run-mode-hooks 作为它执行的最后一件事来运行这个普通的钩子。请参阅模式钩子。大多数次要模式也有模式钩子。
+
+一项特殊功能允许您指定表达式以评估是否以及何时加载文件（请参阅加载钩子）。该功能不完全是一个钩子，但做了类似的工作。
+
+@lisp
+activate-mark-hook
+@end lisp
+@lisp
+deactivate-mark-hook
+@end lisp
+
+见标记。
+@lisp
+after-change-functions
+@end lisp
+@lisp
+before-change-functions
+@end lisp
+@lisp
+first-change-hook
+@end lisp
+
+请参阅更改钩子。
+@lisp
+after-change-major-mode-hook
+@end lisp
+@lisp
+change-major-mode-after-body-hook
+@end lisp
+
+请参阅模式钩子。
+@lisp
+after-init-hook
+@end lisp
+@lisp
+before-init-hook
+@end lisp
+@lisp
+emacs-startup-hook
+@end lisp
+@lisp
+window-setup-hook
+@end lisp
+
+请参阅初始化文件。
+@lisp
+after-insert-file-functions
+@end lisp
+@lisp
+write-region-annotate-functions
+@end lisp
+@lisp
+write-region-post-annotation-function
+@end lisp
+
+请参阅文件格式转换。
+@lisp
+after-make-frame-functions
+@end lisp
+@lisp
+before-make-frame-hook
+@end lisp
+@lisp
+server-after-make-frame-hook
+@end lisp
+
+请参阅创建框架。
+@lisp
+after-save-hook
+@end lisp
+@lisp
+before-save-hook
+@end lisp
+@lisp
+write-contents-functions
+@end lisp
+@lisp
+write-file-functions
+@end lisp
+
+请参阅保存缓冲区。
+@lisp
+after-setting-font-hook ¶
+@end lisp
+
+框架字体更改后的钩子运行。
+@lisp
+auto-save-hook
+@end lisp
+
+请参阅自动保存。
+@lisp
+before-hack-local-variables-hook
+@end lisp
+@lisp
+hack-local-variables-hook
+@end lisp
+
+请参阅文件局部变量。
+@lisp
+buffer-access-fontify-functions
+@end lisp
+
+请参阅文本属性的延迟计算。
+@lisp
+buffer-list-update-hook ¶
+@end lisp
+
+当缓冲区列表更改时钩子运行（请参阅缓冲区列表）。
+@lisp
+buffer-quit-function ¶
+@end lisp
+
+调用以退出当前缓冲区的函数。
+@lisp
+change-major-mode-hook
+@end lisp
+
+请参阅创建和删除缓冲区本地绑定。
+@lisp
+comint-password-function
+@end lisp
+
+这个异常钩子允许派生模式在不提示用户的情况下为底层命令解释器提供密码。
+@lisp
+command-line-functions
+@end lisp
+
+请参阅命令行参数。
+@lisp
+delayed-warnings-hook ¶
+@end lisp
+
+命令循环在 post-command-hook (qv) 后不久运行。
+@lisp
+focus-in-hook ¶
+@end lisp
+@lisp
+focus-out-hook
+@end lisp
+
+请参阅输入焦点。
+@lisp
+delete-frame-functions
+@end lisp
+@lisp
+after-delete-frame-functions
+@end lisp
+
+请参阅删除框架。
+@lisp
+delete-terminal-functions
+@end lisp
+
+请参阅多个终端。
+@lisp
+pop-up-frame-function
+@end lisp
+@lisp
+split-window-preferred-function
+@end lisp
+
+请参阅显示缓冲区的其他选项。
+@lisp
+echo-area-clear-hook
+@end lisp
+
+请参阅回声区域自定义。
+@lisp
+find-file-hook
+@end lisp
+@lisp
+find-file-not-found-functions
+@end lisp
+
+请参阅访问文件的函数。
+@lisp
+font-lock-extend-after-change-region-function
+@end lisp
+
+请参阅缓冲区更改后要字体化的区域。
+@lisp
+font-lock-extend-region-functions
+@end lisp
+
+请参阅多行字体锁定结构。
+@lisp
+font-lock-fontify-buffer-function
+@end lisp
+@lisp
+font-lock-fontify-region-function
+@end lisp
+@lisp
+font-lock-mark-block-function
+@end lisp
+@lisp
+font-lock-unfontify-buffer-function
+@end lisp
+@lisp
+font-lock-unfontify-region-function
+@end lisp
+
+请参阅其他字体锁定变量。
+@lisp
+fontification-functions
+@end lisp
+
+请参阅自动面分配。
+@lisp
+frame-auto-hide-function
+@end lisp
+
+请参阅退出 Windows。
+@lisp
+quit-window-hook
+@end lisp
+
+请参阅退出 Windows。
+@lisp
+kill-buffer-hook
+@end lisp
+@lisp
+kill-buffer-query-functions
+@end lisp
+
+请参阅杀死缓冲区。
+@lisp
+kill-emacs-hook
+@end lisp
+@lisp
+kill-emacs-query-functions
+@end lisp
+
+请参阅杀死 Emacs。
+@lisp
+menu-bar-update-hook
+@end lisp
+
+请参阅菜单栏。
+@lisp
+minibuffer-setup-hook
+@end lisp
+@lisp
+minibuffer-exit-hook
+@end lisp
+
+请参阅 Minibuffer Miscellany。
+@lisp
+mouse-leave-buffer-hook ¶
+@end lisp
+
+当用户在窗口中单击鼠标时钩子运行。
+@lisp
+mouse-position-function
+@end lisp
+
+请参阅鼠标位置。
+@lisp
+prefix-command-echo-keystrokes-functions ¶
+@end lisp
+
+由前缀命令（例如 Cu）运行的异常钩子，它应该返回描述当前前缀状态的字符串。例如，Cu 产生 @code{Cu-} 和 @code{Cu 1 2 3-} 。每个钩子函数都在没有参数的情况下被调用，并且应该返回一个描述当前前缀状态的字符串，如果没有前缀状态，则返回 nil。请参阅前缀命令参数。
+@lisp
+prefix-command-preserve-state-hook ¶
+@end lisp
+
+当前缀命令需要通过将当前前缀命令状态传递给下一个命令来保留前缀时，钩子运行。例如，当用户键入 Cu 时，Cu 需要将状态传递给下一个命令 - 或者在 Cu 后面跟一个数字。
+@lisp
+pre-redisplay-functions
+@end lisp
+
+在重新显示之前在每个窗口中运行钩子。请参阅强制重新显示。
+@lisp
+post-command-hook
+@end lisp
+@lisp
+pre-command-hook
+@end lisp
+
+请参阅命令循环概述。
+@lisp
+post-gc-hook
+@end lisp
+
+请参阅垃圾收集。
+@lisp
+post-self-insert-hook
+@end lisp
+
+请参阅键盘映射和次要模式。
+@lisp
+suspend-hook
+@end lisp
+@lisp
+suspend-resume-hook
+@end lisp
+@lisp
+suspend-tty-functions
+@end lisp
+@lisp
+resume-tty-functions
+@end lisp
+
+请参阅暂停 Emacs。
+@lisp
+syntax-begin-function
+@end lisp
+@lisp
+syntax-propertize-extend-region-functions
+@end lisp
+@lisp
+syntax-propertize-function
+@end lisp
+@lisp
+font-lock-syntactic-face-function
+@end lisp
+
+请参阅语法字体锁定。请参阅语法属性。
+@lisp
+temp-buffer-setup-hook
+@end lisp
+@lisp
+temp-buffer-show-function
+@end lisp
+@lisp
+temp-buffer-show-hook
+@end lisp
+
+请参阅临时展示。
+@lisp
+tty-setup-hook
+@end lisp
+
+请参阅特定于终端的初始化。
+@lisp
+window-configuration-change-hook
+@end lisp
+@lisp
+window-scroll-functions
+@end lisp
+@lisp
+window-size-change-functions
+@end lisp
+
+请参阅用于窗口滚动和更改的钩子。
+
+@bye

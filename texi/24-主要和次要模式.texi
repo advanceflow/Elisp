@@ -1,0 +1,2807 @@
+\input texinfo    @c -*- texinfo -*-
+@c %**start of header
+@setfilename 24-主要和次要模式.info
+@settitle 
+@documentencoding UTF-8
+@documentlanguage en
+@c %**end of header
+
+@finalout
+@titlepage
+@title 
+@author zunrong
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top 
+@end ifnottex
+
+@menu
+* 24 主要和次要模式::
+
+@detailmenu
+--- The Detailed Node Listing ---
+
+24 主要和次要模式
+
+* 24.1 钩子: 241 钩子. 
+* 24.2 主要模式: 242 主要模式. 
+* 24.3 次要模式: 243 次要模式. 
+* 24.4 模式线格式: 244 模式线格式. 
+* 24.5 名称: 245 名称. 
+* 24.6 字体锁定模式: 246 字体锁定模式. 
+* 24.7 代码自动缩进: 247 代码自动缩进. 
+* 24.8 桌面保存模式: 248 桌面保存模式. 
+
+24.1 钩子
+
+* 24.1.1 运行钩子: 2411 运行钩子. 
+* 24.1.2 设置挂钩: 2412 设置挂钩. 
+
+24.2 主要模式
+
+* 24.2.1 主要模式约定: 2421 主要模式约定. 
+* 24.2.2 Emacs 如何选择主模式: 2422 Emacs 如何选择主模式. 
+* 24.2.3 获取有关主要模式的帮助: 2423 获取有关主要模式的帮助. 
+* 24.2.4 定义派生模式: 2424 定义派生模式. 
+* 24.2.5 基本主要模式: 2425 基本主要模式. 
+* 24.2.6 模式挂钩: 2426 模式挂钩. 
+* 24.2.7 列表模式: 2427 列表模式. 
+* 24.2.8 通用模式: 2428 通用模式. 
+* 24.2.9 主要模式示例: 2429 主要模式示例. 
+
+24.3 次要模式
+
+* 24.3.1 编写次要模式的约定: 2431 编写次要模式的约定. 
+* 24.3.2 键盘映射和次要模式: 2432 键盘映射和次要模式. 
+* 24.3.3 定义次要模式: 2433 定义次要模式. 
+
+24.4 模式线格式
+
+* 24.4.1 模式线基础: 2441 模式线基础. 
+* 24.4.2 模式行的数据结构: 2442 模式行的数据结构. 
+* 24.4.3 顶层模式线控制: 2443 顶层模式线控制. 
+* 24.4.4 模式行中使用的变量: 2444 模式行中使用的变量. 
+* 24.4.5 %- 模式线中的构造: 2445 %- 模式线中的构造. 
+* 24.4.6 模式行中的属性: 2446 模式行中的属性. 
+* 24.4.7 窗口标题行: 2447 窗口标题行. 
+* 24.4.8 模拟模式行格式: 2448 模拟模式行格式. 
+
+24.6 字体锁定模式
+
+* 24.6.1 字体锁定基础: 2461 字体锁定基础. 
+* 24.6.2 基于搜索的字体: 2462 基于搜索的字体. 
+* 24.6.3 自定义基于搜索的字体: 2463 自定义基于搜索的字体. 
+* 24.6.4 其他字体锁定变量: 2464 其他字体锁定变量. 
+* 24.6.5 字体锁定级别: 2465 字体锁定级别. 
+* 24.6.6 预计算字体: 2466 预计算字体. 
+* 24.6.7 字体锁定面: 2467 字体锁定面. 
+* 24.6.8 语法字体锁定: 2468 语法字体锁定. 
+* 24.6.9 多行字体锁定结构: 2469 多行字体锁定结构. 
+
+24.7 代码自动缩进
+
+* 24.7.1 简单的缩进引擎: 2471 简单的缩进引擎. 
+
+@end detailmenu
+@end menu
+
+@node 24 主要和次要模式
+@chapter 24 主要和次要模式
+
+模式是一组以有用的方式自定义 Emacs 行为的定义。有两种模式：次要模式，提供用户可以在编辑时打开和关闭的功能；  和主要模式，用于编辑或与特定类型的文本交互。每个缓冲区一次只有一个主要模式。
+
+本章介绍如何编写主要和次要模式，如何在模式行中指示它们，以及它们如何运行用户提供的挂钩。有关键映射和语法表等相关主题，请参阅键映射和语法表。
+
+@menu
+* 24.1 钩子: 241 钩子. 
+* 24.2 主要模式: 242 主要模式. 
+* 24.3 次要模式: 243 次要模式. 
+* 24.4 模式线格式: 244 模式线格式. 
+* 24.5 名称: 245 名称. 
+* 24.6 字体锁定模式: 246 字体锁定模式. 
+* 24.7 代码自动缩进: 247 代码自动缩进. 
+* 24.8 桌面保存模式: 248 桌面保存模式. 
+@end menu
+
+@node 241 钩子
+@section 24.1 钩子
+
+钩子是一个变量，您可以在其中存储一个或多个函数（请参阅什么是函数？），以便在特定场合由现有程序调用。Emacs 提供了钩子来进行定制。大多数情况下，挂钩是在 init 文件中设置的（参见 The Init File），但 Lisp 程序也可以设置它们。有关一些标准钩子变量的列表，请参阅标准钩子。
+
+Emacs 中的大部分钩子都是普通的钩子。这些变量包含要调用的不带参数的函数列表。按照惯例，只要钩子名称以 @code{-hook} 结尾，就说明这是正常的。我们尽量使所有的钩子正常，以便您可以统一使用它们。
+
+每个主要模式命令都应该运行一个称为模式挂钩的普通挂钩，作为初始化的最后步骤之一。这使得用户可以很容易地自定义模式的行为，方法是覆盖模式已经进行的缓冲区局部变量分配。大多数次要模式函数最后也会运行一个模式挂钩。但是钩子也用于其他情况。例如，挂起钩子钩子在 Emacs 挂起之前运行（请参阅挂起 Emacs）。
+
+如果钩子变量的名称不以 @code{-hook} 结尾，则表明它可能是一个异常钩子。它们在两个方面不同于普通的钩子：它们可以用一个或多个参数调用，它们的返回值可以以某种方式使用。钩子的文档说明了如何调用函数以及如何使用它们的返回值。添加到异常钩子的任何函数都必须遵循钩子的调用约定。按照惯例，异常的钩子名称以 @code{-functions} 结尾。
+
+如果变量的名称以 @code{-predicate} 或 @code{-function} （单数）结尾，那么它的值必须是一个函数，而不是函数列表。与异常钩子一样，预期的参数和返回值的含义因此类单个函数钩子而异。详细信息在每个变量的文档字符串中进行了说明。
+
+由于钩子（多函数和单函数）是变量，它们的值可以用 setq 或临时用 let 修改。但是，从钩子中添加或删除特定函数同时保留它可能具有的任何其他函数通常很有用。对于多功能挂钩，推荐的方法是使用 add-hook 和 remove-hook（请参阅设置挂钩）。大多数正常的钩子变量最初都是无效的；  add-hook 知道如何处理这个问题。您可以使用 add-hook 全局或本地缓冲区添加挂钩。对于只包含一个函数的钩子，add-hook 是不合适的，但您可以使用 add-function（请参阅 Advising Emacs Lisp Functions）将新函数与钩子结合起来。请注意，某些单个函数挂钩可能为 nil，而 add-function 无法处理，因此您必须在调用 add-function 之前检查这一点。
+
+@menu
+* 24.1.1 运行钩子: 2411 运行钩子. 
+* 24.1.2 设置挂钩: 2412 设置挂钩. 
+@end menu
+
+@node 2411 运行钩子
+@subsection 24.1.1 运行钩子
+
+在本节中，我们记录了 run-hooks 函数，它用于运行普通的钩子。我们还记录了运行各种异常钩子的函数。
+
+@lisp
+Function: run-hooks &rest hookvars ¶
+@end lisp
+
+该函数将一个或多个普通钩子变量名作为参数，并依次运行每个钩子。每个参数都应该是一个符号，它是一个普通的钩子变量。这些参数按指定的顺序处理。
+
+如果挂钩变量具有非零值，则该值应该是函数列表。run-hooks 一个一个地调用所有函数，没有参数。
+
+钩子变量的值也可以是一个单独的函数——一个 lambda 表达式或一个带有函数定义的符号——它会被 run-hooks 调用。但是这种用法已经过时了。
+
+如果挂钩变量是缓冲区局部变量，则将使用缓冲区局部变量而不是全局变量。但是，如果缓冲区局部变量包含元素 t，则全局挂钩变量也将运行。
+
+@lisp
+Function: run-hook-with-args hook &rest args ¶
+@end lisp
+
+该函数通过调用钩子中的所有钩子函数来运行异常钩子，并为每个函数传递参数 args。
+
+@lisp
+Function: run-hook-with-args-until-failure hook &rest args ¶
+@end lisp
+
+该函数通过依次调用每个钩子函数来运行异常钩子，如果其中一个函数失败并返回 nil 则停止。每个钩子函数都传递参数 args。如果此函数由于其中一个钩子函数失败而停止，则返回 nil；  否则它返回一个非零值。
+
+@lisp
+Function: run-hook-with-args-until-success hook &rest args ¶
+@end lisp
+
+这个函数通过调用每个钩子函数来运行一个异常钩子，如果其中一个函数成功返回一个非零值，则停止。每个钩子函数都传递参数 args。如果这个函数因为一个钩子函数返回一个非零值而停止，它返回那个值；  否则返回零。
+
+@node 2412 设置挂钩
+@subsection 24.1.2 设置挂钩
+
+这是一个在 Lisp 交互模式下将函数添加到模式挂钩以打开自动填充模式的示例：
+
+@lisp
+(add-hook 'lisp-interaction-mode-hook 'auto-fill-mode)
+@end lisp
+
+
+挂钩变量的值应该是函数列表。您可以使用普通的 Lisp 工具来操作该列表，但模块化方式是使用下面定义的 add-hook 和 remove-hook 函数。他们注意处理一些不寻常的情况并避免出现问题。
+
+将 lambda 表达式函数放在钩子上是可行的，但我们建议避免这样做，因为它会导致混淆。如果您再次添加相同的 lambda 表达式，但编写方式略有不同，您将获得两个等效但不同的函数。如果您随后删除其中一个，另一个将仍然存在。
+
+@lisp
+Function: add-hook hook function &optional depth local ¶
+@end lisp
+
+此函数是将函数函数添加到钩子变量钩子的便捷方法。您可以将它用于异常钩子以及正常钩子。function 可以是任何可以接受适当数量的钩子参数的 Lisp 函数。例如，
+
+@lisp
+(add-hook 'text-mode-hook 'my-text-hook-function)
+@end lisp
+
+
+将 my-text-hook-function 添加到名为 text-mode-hook 的钩子中。
+
+如果钩子中已经存在函数（使用相等比较），则 add-hook 不会再次添加它。
+
+如果函数有一个非零属性permanent-local-hook，那么kill-all-local-variables（或改变主要模式）不会从钩子变量的本地值中删除它。
+
+对于一个普通的钩子，钩子函数应该被设计成它们的执行顺序无关紧要。任何对订单的依赖都是自找麻烦。但是，顺序是可预测的：通常，函数位于钩子列表的前面，因此它首先被执行（除非另一个 add-hook 调用）。
+
+在某些情况下，控制钩子上函数的相对顺序很重要。可选参数 depth 允许您指示函数应在列表中插入的位置：它应该是介于 -100 和 100 之间的数字，其中值越高，函数应该越接近列表的末尾。深度默认为 0，为了向后兼容，当深度为非零符号时，它被解释为深度 90。此外，当深度严格大于 0 时，将在相同深度的函数之后而不是之前添加函数。永远不应该使用 100（或 -100）的深度，因为我们永远无法确定没有其他函数需要在我们之前（或之后）出现。
+
+add-hook 可以处理 hook 为 void 或其值为单个函数的情况；  它将值设置或更改为函数列表。
+
+如果 local 不为零，则表示将函数添加到缓冲区本地挂钩列表而不是全局挂钩列表。这使钩子成为缓冲区本地并将 t 添加到缓冲区本地值。后者充当标志以在默认值和本地值中运行钩子函数。
+
+@lisp
+Function: remove-hook hook function &optional local ¶
+@end lisp
+
+此函数从钩子变量钩子中删除函数。它使用 equal 将函数与钩子的元素进行比较，因此它适用于符号和 lambda 表达式。
+
+如果 local 不为零，则表示从缓冲区本地挂钩列表中删除函数，而不是从全局挂钩列表中删除。
+
+@node 242 主要模式
+@section 24.2 主要模式
+
+主要模式专门用于 Emacs 编辑或与特定类型的文本交互。每个缓冲区一次只有一个主要模式。每个主要模式都与一个主要模式命令相关联，其名称应以 @code{-mode} 结尾。该命令通过设置各种缓冲区局部变量（例如本地键盘映射）来处理在当前缓冲区中切换到该模式。请参阅主要模式约定。请注意，与次要模式不同，无法 @code{关闭} 主要模式，而是必须将缓冲区切换到不同的模式。但是，您可以暂时暂停主要模式，然后再恢复暂停模式，见下文。
+
+最不专业的主要模式称为基本模式，它没有特定于模式的定义或变量设置。
+
+@lisp
+Command: fundamental-mode ¶
+@end lisp
+
+这是基本模式的主要模式命令。与其他模式命令不同，它不运行任何模式挂钩（请参阅主要模式约定），因为您不应该自定义此模式。
+
+@lisp
+Function: major-mode-suspend ¶
+@end lisp
+
+这个函数像基本模式一样工作，因为它会杀死所有缓冲区局部变量，但它也会记录有效的主模式，以便随后可以恢复它。当您需要将缓冲区置于 Emacs 自动为其选择的模式之外的某个特定模式下时（请参阅 Emacs 如何选择主模式），此功能和主模式恢复（接下来将描述）很有用，但也想成为以后可以切换回原来的模式。
+
+@lisp
+Function: major-mode-restore &optional avoided-modes ¶
+@end lisp
+
+该函数恢复major-mode-suspend记录的主模式。如果没有记录主要模式，则此函数调用正常模式（请参阅正常模式），但如果该参数为非零，则尝试强制它不在避免模式中选择任何模式。
+
+编写主模式最简单的方法是使用宏定义派生模式，它将新模式设置为现有主模式的变体。请参阅定义派生模式。即使新模式不是另一种模式的明显派生，我们也建议使用 define-derived-mode，因为它会自动为您强制执行许多编码约定。有关派生的常见模式，请参阅基本主要模式。
+
+标准的 GNU Emacs Lisp 目录树包含几个主要模式的代码，在 text-mode.el、texinfo.el、lisp-mode.el 和 rmail.el 等文件中。您可以研究这些库以了解模式是如何编写的。
+
+@lisp
+User Option: major-mode ¶
+@end lisp
+
+此变量的缓冲区本地值保存当前主要模式的符号。它的默认值保存新缓冲区的默认主模式。标准默认值是基本模式。
+
+如果默认值为 nil，那么每当 Emacs 通过诸如 Cx b (switch-to-buffer) 之类的命令创建一个新缓冲区时，新缓冲区就会被置于先前当前缓冲区的主模式。作为一个例外，如果前一个缓冲区的主模式具有一个具有特殊值的模式类符号属性，则新缓冲区将置于基本模式（请参阅主模式约定）。
+
+@menu
+* 24.2.1 主要模式约定: 2421 主要模式约定. 
+* 24.2.2 Emacs 如何选择主模式: 2422 Emacs 如何选择主模式. 
+* 24.2.3 获取有关主要模式的帮助: 2423 获取有关主要模式的帮助. 
+* 24.2.4 定义派生模式: 2424 定义派生模式. 
+* 24.2.5 基本主要模式: 2425 基本主要模式. 
+* 24.2.6 模式挂钩: 2426 模式挂钩. 
+* 24.2.7 列表模式: 2427 列表模式. 
+* 24.2.8 通用模式: 2428 通用模式. 
+* 24.2.9 主要模式示例: 2429 主要模式示例. 
+@end menu
+
+@node 2421 主要模式约定
+@subsection 24.2.1 主要模式约定
+
+每个主要模式的代码都应遵循各种编码约定，包括本地键盘映射和语法表初始化、函数和变量名称以及挂钩的约定。
+
+如果您使用 define-derived-mode 宏，它会自动处理许多这些约定。请参阅定义派生模式。另请注意，基本模式是许多这些约定的例外，因为它代表 Emacs 的默认状态。
+
+以下约定列表只是部分约定。每个主要模式都应该旨在与其他 Emacs 主要模式保持总体上的一致性，因为这使得 Emacs 整体上更加一致。不可能在这里列出可能出现此问题的所有可能点；  如果 Emacs 开发人员指出您的主要模式偏离通常约定的区域，请使其兼容。
+
+定义一个名称以 @code{-mode} 结尾的主要模式命令。当不带参数调用时，此命令应通过在现有缓冲区中设置键映射、语法表和缓冲区局部变量来切换到当前缓冲区中的新模式。它不应该改变缓冲区的内容。
+为此命令编写一个文档字符串，描述此模式下可用的特殊命令。请参阅获取有关主要模式的帮助。
+
+@enumerate
+@item
+文档字符串可能包括特殊的文档子字符串 @code{\[command]} 、 @code{\@{keymap@}} 和 @code{\<keymap>} ，它们允许帮助显示自动适应用户自己的键绑定。请参阅替换文档中的键绑定。
+@item
+主要模式命令应该从调用 kill-all-local-variables 开始。这将运行正常的钩子 change-major-mode-hook，然后摆脱以前有效的主要模式的缓冲区局部变量。请参阅创建和删除缓冲区本地绑定。
+@item
+主模式命令应该将变量主模式设置为主模式命令符号。这就是 describe-mode 发现要打印的文档的方式。
+@item
+主模式命令应该将变量 mode-name 设置为模式的 @code{漂亮} 名称，通常是一个字符串（但请参阅模式行的数据结构，以了解其他可能的形式）。模式的名称出现在模式行中。
+@item
+直接连续调用两次主模式命令不应失败，并且应该与仅调用一次命令执行相同的操作。换句话说，主模式命令应该是幂等的。
+@item
+由于所有全局名称都在同一个名称空间中，因此作为模式一部分的所有全局变量、常量和函数的名称都应该以主模式名称开头（或者如果名称很长，则使用它的缩写）。请参阅 Emacs Lisp 编码约定。
+@item
+在诸如编程语言之类的用于编辑某种结构化文本的主要模式中，根据结构对文本进行缩进可能很有用。所以模式应该将 indent-line-function 设置为合适的函数，并且可能自定义其他变量进行缩进。请参阅代码的自动缩进。
+@item
+主模式通常应该有自己的键映射，在该模式的所有缓冲区中用作本地键映射。主模式命令应该调用 use-local-map 来安装这个本地地图。有关详细信息，请参阅活动键盘映射。
+@item
+此键映射应永久存储在名为 modename-mode-map 的全局变量中。通常定义模式的库会设置这个变量。
+@item
+有关如何编写代码来设置模式的键映射变量的建议，请参见稳健定义变量的技巧。
+@item
+主模式键映射中绑定的键序列通常应以 Cc 开头，后跟控制字符、数字或 @{、@}、<、>、: 或 ;。其他标点符号为次要模式保留，普通字母为用户保留。
+@item
+主要模式也可以重新绑定键 Mn、Mp 和 Ms。Mn 和 Mp 的绑定通常应该是某种向前和向后移动，但这并不一定意味着光标移动。
+@item
+如果主模式提供的命令以更适合该模式所用文本的方式执行相同的工作，则主模式重新绑定标准键序列是合法的。例如，用于编辑编程语言的主要模式可能会重新定义 CMa，以便以更适合该语言的方式移动到函数的开头。根据主要模式的需要定制 CMa 的推荐方法是设置开始定义函数（请参阅移动平衡表达式）以调用特定于模式的函数。
+@item
+主模式重新绑定标准键序列也是合法的，其标准含义在该模式中很少有用。例如，minibuffer 模式重新绑定 Mr，其标准含义在 minibuffer 中很少使用。Dired 或 Rmail 等不允许自插入文本的主要模式可以合理地将字母和其他打印字符重新定义为特殊命令。
+@item
+编辑文本的主要模式不应将 RET 定义为除了插入换行符之外的任何操作。但是，对于用户不直接编辑的文本的特殊模式（例如 Dired 和 Info 模式）重新定义 RET 以执行完全不同的操作是可以的。
+@item
+主要模式不应更改主要取决于用户偏好的选项，例如是否启用自动填充模式。让每个用户来决定。但是，主要模式应该自定义其他变量，以便在用户决定使用自动填充模式时有用。
+@item
+该模式可以有自己的语法表，也可以与其他相关模式共享一个语法表。如果它有自己的语法表，它应该将其存储在名为 modename-mode-syntax-table 的变量中。请参阅语法表。
+@item
+如果该模式处理具有注释语法的语言，它应该设置定义注释语法的变量。请参阅 GNU Emacs 手册中的选项控制注释。
+@item
+模式可能有自己的缩写表，也可能与其他相关模式共享一个缩写表。如果它有自己的缩写表，它应该将其存储在名为 modename-mode-abbrev-table 的变量中。如果主模式命令本身定义了任何缩写，它应该将系统标志参数的 t 传递给 define-abbrev。请参阅定义缩写。
+@item
+该模式应通过为变量 font-lock-defaults 设置缓冲区本地值来指定如何为字体锁定模式进行突出显示（请参阅字体锁定模式）。
+@item
+如果可能，模式定义的每个面都应该从现有的 Emacs 面继承。请参见基本面和字体锁定面。
+@item
+考虑将特定于模式的菜单添加到菜单栏。这最好包括最重要的菜单特定设置和命令，使用户能够快速有效地发现主要功能。
+@item
+考虑为模式添加特定于模式的上下文菜单，以便在用户激活上下文菜单模式时使用（请参阅 Emacs 手册中的菜单鼠标单击）。为此，定义一个特定于模式的函数，该函数根据鼠标在缓冲区中单击 3 的位置构建一个或多个菜单，然后将该函数添加到 context-menu-functions 的缓冲区本地值。
+@item
+模式应指定 Imenu 应如何查找缓冲区的定义或部分，方法是为变量 imenu-generic-expression 设置缓冲区局部值，为两个变量 imenu-prev-index-position-function 和 imenu-extract -index-name-function，或用于变量 imenu-create-index-function（参见 Imenu）。
+@item
+该模式可以告诉 ElDoc 模式如何通过向特殊钩子 eldoc-documentation-functions 添加一个或多个缓冲区本地条目来检索不同类型的文档。
+@item
+该模式可以通过将一个或多个缓冲区本地条目添加到特殊的钩子完成点函数来指定如何完成各种关键字。请参阅普通缓冲区中的完成。
+@item
+要为 Emacs 自定义变量创建缓冲区本地绑定，请在主要模式命令中使用 make-local-variable，而不是 make-variable-buffer-local。后一个函数将使变量对随后设置的每个缓冲区都是局部的，这将影响不使用此模式的缓冲区。模式具有这样的全局效应是不可取的。请参阅缓冲区局部变量。
+@item
+除了极少数例外，在 Lisp 包中使用 make-variable-buffer-local 的唯一合理方法是用于仅在该包中使用的变量。在其他包使用的变量上使用它会干扰它们。
+@item
+每个主要模式都应该有一个名为 modename-mode-hook 的普通模式挂钩。主模式命令应该做的最后一件事是调用 run-mode-hooks。这将运行正常的钩子 change-major-mode-after-body-hook、模式钩子、函数 hack-local-variables（当缓冲区访问文件时），然后运行正常的钩子 after-change-major-mode -钩。请参阅模式挂钩。
+@item
+主模式命令可以通过调用其他一些主模式命令（称为父模式）开始，然后更改它的一些设置。执行此操作的模式称为派生模式。定义一个的推荐方法是使用 define-derived-mode 宏，但这不是必需的。这种模式应该在延迟模式挂钩表单中调用父模式命令。（使用 define-derived-mode 会自动执行此操作。）请参阅定义派生模式和模式挂钩。
+@item
+如果用户将缓冲区从该模式切换到任何其他主要模式时需要做一些特殊的事情，则该模式可以为 change-major-mode-hook 设置一个缓冲区本地值（请参阅创建和删除缓冲区本地绑定）。
+@item
+如果此模式仅适用于由模式本身（而不是用户在键盘上键入或通过外部文件）生成的特别准备的文本，则主模式命令符号应具有名为 mode-class 的属性，其值为 special ，穿上如下：
+@end enumerate
+
+@lisp
+(put 'funny-mode 'mode-class 'special)
+@end lisp
+
+这告诉 Emacs 在当前缓冲区处于搞笑模式时创建的新缓冲区不应置于搞笑模式，即使主要模式的默认值为 nil。默认情况下，major-mode 的值 nil 表示在创建新缓冲区时使用当前缓冲区的主要模式（请参阅 Emacs 如何选择主要模式），但对于此类特殊模式，将使用基本模式。Dired、Rmail 和缓冲区列表等模式使用此功能。
+
+函数 view-buffer 不会在 mode-class 特殊的缓冲区中启用 View 模式，因为这些模式通常提供它们自己的类似 View 的绑定。
+
+如果父模式是特殊的，define-derived-mode 宏会自动将派生模式标记为特殊。特殊模式是此类模式继承的方便父级；  请参阅基本主要模式。
+如果您想让新模式成为具有某些可识别名称的文件的默认模式，请将一个元素添加到 auto-mode-alist 以选择这些文件名的模式（请参阅 Emacs 如何选择主要模式）。如果将模式命令定义为自动加载，则应将此元素添加到调用自动加载的同一文件中。如果您为 mode 命令使用自动加载 cookie，您还可以为添加元素的表单使用自动加载 cookie（请参阅自动加载 cookie）。如果您不自动加载模式命令，则在包含模式定义的文件中添加元素就足够了。
+应该编写文件中定义模式的顶级表单，以便可以对它们进行多次评估而不会产生不利后果。例如，使用 defvar 或 defcustom 设置与模式相关的变量，这样如果它们已经有值就不会重新初始化（请参阅定义全局变量）。
+
+@node 2422 Emacs 如何选择主模式
+@subsection 24.2.2 Emacs 如何选择主模式
+
+当 Emacs 访问一个文件时，它会根据文件名或文件本身的信息自动为缓冲区选择一个主要模式。它还处理文件文本中指定的局部变量。
+
+@lisp
+Command: normal-mode &optional find-file ¶
+@end lisp
+
+此函数为当前缓冲区建立正确的主模式和缓冲区局部变量绑定。它调用 set-auto-mode（见下文）。从 Emacs 26.1 开始，它不再运行 hack-local-variables，这现在在主要模式初始化时在 run-mode-hooks 中完成（请参阅 Mode Hooks）。
+
+如果 normal-mode 的 find-file 参数不为 nil，则 normal-mode 假定 find-file 函数正在调用它。在这种情况下，它可能会在 @code{-*-} 行或文件末尾处理局部变量。变量 enable-local-variables 控制是否这样做。有关文件的局部变量部分的语法，请参阅 GNU Emacs 手册中的文件中的局部变量。
+
+如果您以交互方式运行正常模式，则参数 find-file 通常为零。在这种情况下，正常模式无条件地处理任何文件局部变量。
+
+该函数调用 set-auto-mode 来选择和设置主模式。如果这没有指定模式，则缓冲区保持在由默认值 major-mode 确定的主要模式（见下文）。
+
+normal-mode 在对主要模式命令的调用周围使用条件大小写，因此错误被捕获并报告为 @code{文件模式规范错误} ，然后是原始错误消息。
+
+@lisp
+Function: set-auto-mode &optional keep-mode-if-same ¶
+@end lisp
+
+该函数选择和设置适合当前缓冲区的主要模式。它基于 @code{-*-} 行、文件末尾附近的任何 @code{模式：} 局部变量、 @code{#！} 做出决定（按优先顺序）  行（使用interpreter-mode-alist），缓冲区开头的文本（使用magic-mode-alist），最后是访问的文件名（使用auto-mode-alist）。请参阅 GNU Emacs 手册中的如何选择主要模式。如果 enable-local-variables 为 nil，set-auto-mode 不会检查 '-*-' 行或文件末尾附近的任何模式标记。
+
+有些文件类型不适合扫描文件内容以查找模式说明符。例如，一个 tar 归档文件可能碰巧在文件末尾附近包含一个成员文件，该文件具有一个局部变量部分，该部分指定该特定文件的模式。这不应应用于包含的 tar 文件。类似地，一个 tiff 图像文件可能恰好包含似乎与 @code{-*-} 模式匹配的第一行。由于这些原因，这两个文件扩展名都是禁止本地变量正则表达式列表的成员。将模式添加到此列表以防止 Emacs 搜索它们以查找任何类型的局部变量（不仅仅是模式说明符）。
+
+如果 keep-mode-if-same 不为零，如果缓冲区已经处于正确的主模式，则此函数不会调用模式命令。例如， set-visited-file-name 将其设置为 t 以避免杀死用户可能已设置的缓冲区局部变量。
+
+@lisp
+Function: set-buffer-major-mode buffer ¶
+@end lisp
+
+该函数将缓冲区的主模式设置为默认值major-mode；  如果为 nil，则使用当前缓冲区的主要模式（如果合适的话）。作为一个例外，如果缓冲区的名称是 *scratch*，它会将模式设置为 initial-major-mode。
+
+用于创建缓冲区的低级原语不使用此函数，但中级命令（例如 switch-to-buffer 和 find-file-noselect）在创建缓冲区时使用它。
+
+@lisp
+User Option: initial-major-mode ¶
+@end lisp
+
+该变量的值决定了初始 @strong{scratch} 缓冲区的主要模式。该值应该是一个主要模式命令的符号。默认值为 lisp-interaction-mode。
+
+@lisp
+Variable: interpreter-mode-alist ¶
+@end lisp
+
+此变量指定用于在 @code{#！} 中指定命令解释器的脚本的主要模式 线。它的值是一个具有表单元素的列表（regexp .mode）；  如果文件指定了与 \\`regexp\\' 匹配的解释器，则表示使用模式模式。例如，默认元素之一是 ("python[0-9.]*" .python-mode)。
+
+@lisp
+Variable: magic-mode-alist ¶
+@end lisp
+
+该变量的值是一个具有 (regexp . function) 形式元素的列表，其中 regexp 是正则表达式，而 function 是函数或 nil。访问文件后，如果缓冲区开头的文本与正则表达式匹配且函数非零，则 set-auto-mode 调用函数；  如果 function 为 nil，则 auto-mode-alist 将决定模式。
+
+@lisp
+Variable: magic-fallback-mode-alist ¶
+@end lisp
+
+这与magic-mode-alist 类似，但仅在auto-mode-alist 未指定此文件的模式时才处理。
+
+@lisp
+Variable: auto-mode-alist ¶
+@end lisp
+
+此变量包含文件名模式（正则表达式）和相应的主要模式命令的关联列表。通常，文件名模式会测试后缀，例如 @code{.el} 和 @code{.c} ，但不必如此。alist 的一个普通元素看起来像 (regexp . mode-function)。
+
+例如，
+@lisp
+(("\\`/tmp/fol/" . text-mode)
+ ("\\.texinfo\\'" . texinfo-mode)
+ ("\\.texi\\'" . texinfo-mode)
+
+ ("\\.el\\'" . emacs-lisp-mode)
+ ("\\.c\\'" . c-mode)
+ ("\\.h\\'" . c-mode)
+ …)
+@end lisp
+
+当您访问扩展文件名（请参阅扩展文件名的函数）的文件时，使用 file-name-sans-versions（请参阅文件名组件）删除版本号和备份后缀，匹配正则表达式，set-auto-mode 调用相应的模式功能。此功能使 Emacs 能够为大多数文件选择正确的主要模式。
+
+如果 auto-mode-alist 的元素具有 (regexp function t) 形式，那么在调用函数之后，Emacs 会再次搜索 auto-mode-alist 以匹配文件名中之前不匹配的部分。这个特性对解压包很有用：一个形式的条目（ @code{\\.gz\\'} 函数t）可以解压文件，然后根据名称sans'.gz'将解压后的文件置于正确的模式。
+
+如果 auto-mode-alist 有多个元素的正则表达式匹配文件名，Emacs 将使用第一个匹配项。
+
+下面是一个示例，说明如何将几个模式对添加到 auto-mode-alist。（你可以在你的 init 文件中使用这种表达式。）
+
+@lisp
+(setq auto-mode-alist
+  (append
+   ;; File name (within directory) starts with a dot.
+   '(("/\\.[^/]*\\'" . fundamental-mode)
+     ;; File name has no dot.
+     ("/[^\\./]*\\'" . fundamental-mode)
+     ;; File name ends in ‘.C’.
+     ("\\.C\\'" . c++-mode))
+   auto-mode-alist))
+@end lisp
+
+@node 2423 获取有关主要模式的帮助
+@subsection 24.2.3 获取有关主要模式的帮助
+
+describe-mode 函数提供有关主要模式的信息。它通常绑定到 Ch m。它使用变量major-mode 的值（参见Major Modes），这就是为什么每个主要模式命令都需要设置该变量的原因。
+
+@lisp
+Command: describe-mode &optional buffer ¶
+@end lisp
+
+此命令显示当前缓冲区的主要模式和次要模式的文档。它使用文档功能来检索主要和次要模式命令的文档字符串（请参阅访问文档字符串）。
+
+如果使用非零缓冲区参数从 Lisp 调用，此函数将显示该缓冲区的主要和次要模式的文档，而不是当前缓冲区的文档。
+
+@node 2424 定义派生模式
+@subsection 24.2.4 定义派生模式
+
+定义新的主要模式的推荐方法是使用 define-derived-mode 从现有的主要模式派生它。如果没有密切相关的模式，您应该从 text-mode、special-mode 或 prog-mode 继承。请参阅基本主要模式。如果这些都不合适，您可以从基本模式继承（请参阅主要模式）。
+
+@lisp
+Macro: define-derived-mode variant parent name docstring keyword-args… body… ¶
+@end lisp
+
+该宏将variant 定义为主要模式命令，使用name 作为模式名称的字符串形式。variant 和 parent 应该是不带引号的符号。
+
+新的命令变体被定义为调用函数 parent，然后覆盖该父模式的某些方面：
+
+新模式有自己的稀疏键映射，名为 variant-map。define-derived-mode 使父模式的键映射成为新映射的父映射，除非变体映射已经设置并且已经有一个父映射。
+新模式有自己的语法表，保存在变量 variant-syntax-table 中，除非您使用 :syntax-table 关键字覆盖它（见下文）。define-derived-mode 使父模式的语法表成为变体语法表的父模式，除非后者已经设置并且已经有一个不同于标准语法表的父模式。
+新模式有自己的缩写表，保存在变量 variant-abbrev-table 中，除非您使用 :abbrev-table 关键字覆盖它（见下文）。
+新模式有自己的模式挂钩，variant-hook。它运行这个钩子，在运行它的祖先模式的钩子之后，使用 run-mode-hooks，作为它做的最后一件事，除了运行它可能有的任何 :after-hook 形式。请参阅模式挂钩。
+
+此外，您可以指定如何使用 body 覆盖 parent 的其他方面。命令变体在设置所有通常的覆盖之后，就在运行模式挂钩之前评估正文中的表单。
+
+如果 parent 具有非 nil 模式类符号属性，则 define-derived-mode 将 variant 的模式类属性设置为相同的值。例如，这可以确保如果 parent 是特殊模式，则 variant 也是特殊模式（请参阅主要模式约定）。
+
+您还可以为父级指定 nil。这使新模式没有父模式。然后，define-derived-mode 的行为如上所述，但是，当然，省略了与 parent 相关的所有操作。
+
+参数 docstring 指定新模式的文档字符串。define-derived-mode 在此文档字符串的末尾添加一些有关模式挂钩的一般信息，然后是模式的键盘映射。如果省略 docstring，define-derived-mode 会生成一个文档字符串。
+
+关键字参数是关键字和值对。评估除 :after-hook 之外的值。当前支持以下关键字：
+
+@lisp
+:syntax-table
+@end lisp
+
+您可以使用它来显式指定新模式的语法表。如果指定 nil 值，则新模式使用与 parent 相同的语法表，如果 parent 为 nil，则使用标准语法表。（请注意，这不遵循用于非关键字参数的约定，即 nil 值等同于不指定参数。）
+@lisp
+:abbrev-table
+@end lisp
+
+您可以使用它来明确指定新模式的缩写表。如果指定 nil 值，则新模式使用与父级相同的缩写表，如果父级为 nil，则使用基本模式缩写表。（同样，一个 nil 值不等同于不指定这个关键字。）
+@lisp
+:interactive
+@end lisp
+
+默认情况下，模式是交互式命令。如果您指定 nil 值，则此处定义的模式将不是交互式的。这对于那些从不打算由用户手动激活但只应该在某些特殊格式的缓冲区中使用的模式很有用。
+@lisp
+:group
+@end lisp
+
+如果指定了此项，则该值应该是此模式的自定义组。（并非所有主要模式都有一个。）customize-mode 命令使用它。define-derived-mode 不会自动定义指定的定制组。
+@lisp
+:after-hook
+@end lisp
+
+这个可选的关键字指定了一个 Lisp 表单，在模式钩子运行之后，作为模式函数的最终动作进行评估。它不应该被引用。由于可能在模式函数终止后评估表单，因此它不应访问模式函数本地状态的任何元素。:after-hook 形式对于设置依赖于用户设置的模式方面很有用，而这些设置又可能在模式挂钩中被更改。
+
+这是一个假设的例子：
+
+@lisp
+(defvar hypertext-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [down-mouse-3] 'do-hyper-link)
+    map))
+
+(define-derived-mode hypertext-mode
+  text-mode "Hypertext"
+  "Major mode for hypertext."
+  (setq-local case-fold-search nil))
+@end lisp
+
+不要在定义中编写交互式规范；  定义派生模式会自动执行此操作。
+
+@lisp
+Function: derived-mode-p &rest modes ¶
+@end lisp
+
+如果当前主模式派生自符号模式给出的任何主模式，则此函数返回非零。
+
+@node 2425 基本主要模式
+@subsection 24.2.5 基本主要模式
+
+除基本模式外，其他主要模式通常源自三种主要模式：文本模式、程序模式和特殊模式。虽然 Text 模式本身很有用（例如，用于编辑以 .txt 结尾的文件），但 Prog 模式和 Special 模式的存在主要是为了让其他模式从中派生。
+
+应尽可能直接或间接地从这三种模式中的一种派生出新的主要模式。一个原因是这允许用户为整个系列的相关模式（例如，所有编程语言模式）定制单个模式挂钩（例如，prog-mode-hook）。
+
+@lisp
+Command: text-mode ¶
+@end lisp
+
+文本模式是编辑人类语言的主要模式。它将 '"' 和 '\' 字符定义为具有标点语法（参见语法类表），并将 M-TAB 绑定到 ispell-complete-word（参见 GNU Emacs 手册中的拼写）。
+
+从文本模式派生的主要模式的一个示例是 HTML 模式。请参阅 GNU Emacs 手册中的 SGML 和 HTML 模式。
+
+@lisp
+Command: prog-mode ¶
+@end lisp
+
+Prog 模式是包含编程语言源代码的缓冲区的基本主要模式。Emacs 中内置的大部分编程语言主要模式都是从它衍生而来的。
+
+Prog 模式将 parse-sexp-ignore-comments 绑定到 t（参见基于解析的运动命令）和从左到右的双向段落方向（参见双向显示）。
+
+@lisp
+Command: special-mode ¶
+@end lisp
+
+特殊模式是包含由 Emacs 专门生成的文本的缓冲区的基本主要模式，而不是直接从文件中生成。从特殊模式派生的主要模式被赋予特殊的模式类属性（请参阅主要模式约定）。
+
+特殊模式将缓冲区设置为只读。它的键映射定义了几个常见的绑定，包括 q 用于退出窗口和 g 用于恢复缓冲区（请参阅 Reverting）。
+
+从特殊模式派生的主要模式的一个示例是缓冲区菜单模式，它由 @strong{Buffer List} 缓冲区使用。请参阅 GNU Emacs 手册中的列出现有缓冲区。
+
+此外，制表数据缓冲区的模式可以继承自制表模式，而制表模式又派生自特殊模式。请参阅列表模式。
+
+@node 2426 模式挂钩
+@subsection 24.2.6 模式挂钩
+
+每个主要模式命令都应该通过运行与模式无关的普通钩子 change-major-mode-after-body-hook、其模式钩子和普通钩子 after-change-major-mode-hook 来完成。它通过调用 run-mode-hooks 来做到这一点。如果主模式是派生模式，也就是说，如果它在其主体中调用另一个主模式（父模式），它应该在 delay-mode-hooks 中执行此操作，以便父模式不会自己运行这些挂钩。相反，派生模式对 run-mode-hooks 的调用也会运行父模式挂钩。请参阅主要模式约定。
+
+Emacs 22 之前的 Emacs 版本没有延迟模式挂钩。24 之前的版本没有 change-major-mode-after-body-hook。当用户实现的主要模式不使用 run-mode-hooks 并且尚未更新以使用这些新功能时，它们将不会完全遵循这些约定：它们可能过早运行父模式挂钩，或者无法运行之后-更改主要模式挂钩。如果您遇到这样的主要模式，请更正它以遵循这些约定。
+
+当您使用 define-derived-mode 定义主要模式时，它会自动确保遵循这些约定。如果您 @code{手动} 定义主模式，而不是使用定义派生模式，请使用以下函数自动处理这些约定。
+
+@lisp
+Function: run-mode-hooks &rest hookvars ¶
+@end lisp
+
+主要模式应使用此函数运行其模式挂钩。它类似于 run-hooks（参见 Hooks），但它也运行 change-major-mode-after-body-hook、hack-local-variables（当缓冲区访问文件时）（参见文件局部变量）和更改后主要模式挂钩。它所做的最后一件事是评估父模式声明的任何 :after-hook 形式（请参阅定义派生模式）。
+
+在执行延迟模式挂钩表单期间调用此函数时，它不会运行挂钩或破解本地变量或立即评估表单。相反，它会安排下一次调用 run-mode-hooks 来运行它们。
+
+@lisp
+Macro: delay-mode-hooks body… ¶
+@end lisp
+
+当一个主模式命令调用另一个主模式命令时，它应该在延迟模式挂钩内执行此操作。
+
+该宏执行 body，但在 body 执行期间告诉所有 run-mode-hooks 调用延迟运行它们的钩子。在 delay-mode-hooks 构造结束后，挂钩将在下一次调用 run-mode-hooks 期间实际运行。
+
+@lisp
+Variable: change-major-mode-after-body-hook ¶
+@end lisp
+
+这是一个由 run-mode-hooks 运行的普通钩子。它在模式挂钩之前运行。
+
+@lisp
+Variable: after-change-major-mode-hook ¶
+@end lisp
+
+这是一个由 run-mode-hooks 运行的普通钩子。它在每个正确编写的主要模式命令的最后运行。
+
+@node 2427 列表模式
+@subsection 24.2.7 列表模式
+
+列表模式是显示列表数据的主要模式，即由条目组成的数据，每个条目占一行文本，其内容分为列。表格列表模式提供了漂亮打印行和列的工具，并根据每列中的值对行进行排序。它源自特殊模式（参见基本主要模式）。
+
+表格列表模式旨在被更专业的主要模式用作父模式。示例包括进程菜单模式（参见进程信息）和包菜单模式（参见 GNU Emacs 手册中的包菜单）。
+
+这样的派生模式应该以通常的方式使用 define-derived-mode，将 tabulated-list-mode 指定为第二个参数（请参阅定义派生模式）。define-derived-mode 表单的主体应通过为下面记录的变量分配值来指定表格数据的格式；  可选地，然后它可以调用函数 tabulated-list-init-header，它将用列的名称填充标题。
+
+派生模式还应该定义一个列表命令。这不是模式命令，是用户调用的（例如，Mx list-processes）。列表命令应该创建或切换到缓冲区，打开派生模式，指定列表数据，最后调用 tabulated-list-print 填充缓冲区。
+
+@lisp
+User Option: tabulated-list-gui-sort-indicator-asc ¶
+@end lisp
+
+此变量指定要在 GUI 框架上使用的字符，以指示该列按升序排序。
+
+每当您更改列表缓冲区中的排序方向时，该指示器都会在升序（ @code{asc} ）和降序（ @code{desc} ）之间切换。
+
+@lisp
+User Option: tabulated-list-gui-sort-indicator-desc ¶
+@end lisp
+
+与 tabulated-list-gui-sort-indicator-asc 类似，但在列按降序排序时使用。
+
+@lisp
+User Option: tabulated-list-tty-sort-indicator-asc ¶
+@end lisp
+
+与 tabulated-list-gui-sort-indicator-asc 类似，但用于文本模式框架。
+
+@lisp
+User Option: tabulated-list-tty-sort-indicator-desc ¶
+@end lisp
+
+与 tabulated-list-tty-sort-indicator-asc 类似，但在列按降序排序时使用。
+
+@lisp
+Variable: tabulated-list-format ¶
+@end lisp
+
+此缓冲区局部变量指定列表数据的格式。它的值应该是一个向量。向量的每个元素代表一个数据列，并且应该是一个列表（名称宽度排序），其中
+
+name 是列的名称（字符串）。
+width 是为列保留的宽度（整数）。这对于运行到每行末尾的最后一列是没有意义的。
+sort 指定如何按列对条目进行排序。如果为 nil，则该列不能用于排序。如果为 t，则通过比较字符串值对列进行排序。否则，这应该是排序的谓词函数（请参阅重新排列列表的函数），它接受与表格列表条目的元素形式相同的两个参数（见下文）。
+
+@lisp
+Variable: tabulated-list-entries ¶
+@end lisp
+
+此缓冲区局部变量指定列表缓冲区中显示的条目。它的值应该是一个列表或一个函数。
+
+如果值是一个列表，每个列表元素对应一个条目，并且应该有形式（id 内容），其中
+
+id 要么是 nil，要么是一个标识条目的 Lisp 对象。如果是后者，则在重新排序条目时，光标将停留在同一条目上。比较是用相等的。
+contents 是一个向量，其元素数量与 tabulated-list-format 相同。每个向量元素要么是一个字符串，它按原样插入缓冲区，要么是一个列表（label .properties），这意味着通过调用 insert-text-button 以标签和属性作为参数来插入一个文本按钮（参见制作纽扣）。
+
+这些字符串中的任何一个都不应有换行符。
+
+否则，该值应该是一个函数，该函数在不带参数调用时返回上述形式的列表。
+
+@lisp
+Variable: tabulated-list-revert-hook ¶
+@end lisp
+
+这个正常的钩子在恢复列表缓冲区之前运行。派生模式可以向此挂钩添加一个函数以重新计算表格列表条目。
+
+@lisp
+Variable: tabulated-list-printer ¶
+@end lisp
+
+这个变量的值是被调用来插入一个条目的函数，包括它的终止换行符。该函数应接受两个参数，id 和 contents，其含义与 tabulated-list-entries 中的含义相同。默认值是一个以直接方式插入条目的函数；  以更复杂的方式使用列表模式的模式可以指定另一个功能。
+
+@lisp
+Variable: tabulated-list-sort-key ¶
+@end lisp
+
+此变量的值指定列表缓冲区的当前排序键。如果为 nil，则不进行排序。否则，它应该具有 (name .flip) 形式，其中 name 是与 tabulated-list-format 中的列名之一匹配的字符串，并且如果非 nil，则翻转表示反转排序顺序。
+
+@lisp
+Function: tabulated-list-init-header ¶
+@end lisp
+
+此函数计算并设置列表缓冲区的标题行格式（请参阅窗口标题行），并为标题行分配一个键盘映射，以允许通过单击列标题对条目进行排序。
+
+来自 Tabulated List 模式的模式应该在设置上述变量后调用它（特别是，仅在设置 tabulated-list-format 之后）。
+
+@lisp
+Function: tabulated-list-print &optional remember-pos update ¶
+@end lisp
+
+此函数使用条目填充当前缓冲区。它应该由列表命令调用。它擦除缓冲区，根据 tabulated-list-sort-key 对 tabulated-list-entries 指定的条目进行排序，然后调用 tabulated-list-printer 指定的函数插入每个条目。
+
+如果可选参数 remember-pos 不为零，则此函数在当前行查找 id 元素（如果有），并在（重新）插入所有条目后尝试移动到该条目。
+
+如果可选参数 update 不为零，则此函数将仅删除或添加自上次打印以来已更改的条目。如果自上次调用此函数以来大多数条目没有更改，则速度会快几倍。结果的唯一区别是通过 tabulated-list-put-tag 放置的标签不会从未更改的条目中删除（通常所有标签都被删除）。
+
+@lisp
+Function: tabulated-list-delete-entry ¶
+@end lisp
+
+此函数删除点处的条目。
+
+它返回一个列表（id cols），其中 id 是已删除条目的 ID，而 cols 是其列描述符的向量。它将点移动到当前行的开头。如果该点没有条目，则返回 nil。
+
+请注意，此函数仅更改缓冲区内容；  它不会改变表格列表条目。
+
+@lisp
+Function: tabulated-list-get-id &optional pos ¶
+@end lisp
+
+这个 defsubst 从 tabulated-list-entries（如果它是一个列表）或从 tabulated-list-entries 返回的列表（如果它是一个函数）返回 ID 对象。如果省略或为零，则 pos 默认为点。
+
+@lisp
+Function: tabulated-list-get-entry &optional pos ¶
+@end lisp
+
+这个 defsubst 从 tabulated-list-entries （如果它是一个列表）或从 tabulated-list-entries 返回的列表（如果它是一个函数）返回条目对象。这将是 pos 处 ID 的向量。如果 pos 处没有条目，则函数返回 nil。
+
+@lisp
+Function: tabulated-list-header-overlay-p &optional POS ¶
+@end lisp
+
+如果 pos 处有假头，则此 defsubst 返回非 nil。如果 tabulated-list-use-header-line 为 nil，则使用假标题将列名放在缓冲区的开头。如果省略或为零，则 pos 默认为 point-min。
+
+@lisp
+Function: tabulated-list-put-tag tag &optional advance ¶
+@end lisp
+
+该函数将标签放在当前行的填充区域。填充区域可以是行首的空白区域，其宽度由 tabulated-list-padding 控制。tag 应该是一个字符串，长度小于或等于 tabulated-list-padding。如果Advance 不为零，则此函数逐行前进。
+
+@lisp
+Function: tabulated-list-clear-all-tags ¶
+@end lisp
+
+此函数清除当前缓冲区中填充区域的所有标签。
+
+@lisp
+Function: tabulated-list-set-col col desc &optional change-entry-data ¶
+@end lisp
+
+此函数在点更改列表条目，将 col 设置为 desc。col 是要更改的列号，或要更改的列的名称。desc 是新的列描述符，它是通过 tabulated-list-print-col 插入的。
+
+如果 change-entry-data 不为零，则此函数通过将向量的列描述符设置为 desc 来修改底层数据（通常是列表 tabulated-list-entries 中的列描述符）。
+
+@node 2428 通用模式
+@subsection 24.2.8 通用模式
+
+通用模式是简单的主要模式，基本支持注释语法和字体锁定模式。要定义通用模式，请使用宏 define-generic-mode。有关使用 define-generic-mode 的一些示例，请参见文件 generic-x.el。
+
+@lisp
+Macro: define-generic-mode mode comment-list keyword-list font-lock-list auto-mode-list function-list &optional docstring ¶
+@end lisp
+
+
+该宏定义了一个名为 mode 的通用模式命令（一个符号，不带引号）。可选参数 docstring 是 mode 命令的文档。如果您不提供它，define-generic-mode 默认会生成一个。
+
+参数注释列表是一个列表，其中每个元素要么是一个字符，要么是一个或两个字符的字符串，要么是一个 cons 单元格。在模式的语法表中设置一个字符或字符串作为注释起始符。如果条目是 cons 单元格，则将 CAR 设置为评论起始者，并将 CDR 设置为评论结束者。（如果您希望注释在行尾结束，则使用 nil 表示后者。）请注意，语法表机制对实际可能的注释起始符和结束符有限制。请参阅语法表。
+
+参数关键字列表是要使用 font-lock-keyword-face 突出显示的关键字列表。每个关键字都应该是一个字符串。同时，font-lock-list 是要突出显示的附加表达式的列表。此列表的每个元素都应具有与 font-lock-keywords 元素相同的形式。请参阅基于搜索的字体。
+
+参数 auto-mode-list 是要添加到变量 auto-mode-alist 的正则表达式列表。它们是通过执行 define-generic-mode 形式添加的，而不是通过扩展宏调用。
+
+最后，function-list 是 mode 命令调用额外设置的函数列表。它在运行模式挂钩变量 mode-hook 之前调用这些函数。
+
+@node 2429 主要模式示例
+@subsection 24.2.9 主要模式示例
+
+文本模式可能是除基本模式之外最简单的模式。以下是 text-mode.el 的摘录，说明了上面列出的许多约定：
+
+@lisp
+
+
+;; Create the syntax table for this mode.
+(defvar text-mode-syntax-table
+  (let ((st (make-syntax-table)))
+    (modify-syntax-entry ?\" ".   " st)
+    (modify-syntax-entry ?\\ ".   " st)
+    ;; Add 'p' so M-c on 'hello' leads to 'Hello', not 'hello'.
+    (modify-syntax-entry ?' "w p" st)
+    …
+    st)
+  "Syntax table used while in `text-mode'.")
+
+
+;; Create the keymap for this mode.
+
+(defvar text-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\e\t" 'ispell-complete-word)
+    …
+    map)
+  "Keymap for `text-mode'.
+Many other modes, such as `mail-mode', `outline-mode' and
+`indented-text-mode', inherit all the commands defined in this map.")
+@end lisp
+
+以下是 Lisp 模式语法和缩写表的定义方式：
+@lisp
+(define-derived-mode text-mode nil "Text"
+  "Major mode for editing text written for humans to read.
+In this mode, paragraphs are delimited only by blank or white lines.
+You can thus get the full benefit of adaptive filling
+ (see the variable `adaptive-fill-mode').
+\\@{text-mode-map@}
+Turning on Text mode runs the normal hook `text-mode-hook'."
+
+  (setq-local text-mode-variant t)
+  (setq-local require-final-newline mode-require-final-newline))
+@end lisp
+
+Lisp 的三种模式共享它们的大部分代码。例如，Lisp 模式和 Emacs Lisp 模式继承自 Lisp Data 模式，Lisp 交互模式继承自 Emacs Lisp 模式。
+
+除此之外，Lisp 数据模式设置了 comment-start 变量来处理 Lisp 注释：
+
+@lisp
+(setq-local comment-start ";")
+…
+@end lisp
+
+
+每种不同的 Lisp 模式都有一个稍微不同的键盘映射。例如，Lisp 模式将 Cc Cz 绑定到 run-lisp，但其他 Lisp 模式没有。然而，所有的 Lisp 模式都有一些共同的命令。以下代码设置常用命令：
+@lisp
+(defvar lisp-mode-shared-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map prog-mode-map)
+    (define-key map "\e\C-q" 'indent-sexp)
+    (define-key map "\177" 'backward-delete-char-untabify)
+    map)
+  "Keymap for commands shared by all sorts of Lisp modes.")
+@end lisp
+
+这是为 Lisp 模式设置键盘映射的代码：
+@lisp
+(defvar lisp-mode-map
+  (let ((map (make-sparse-keymap))
+        (menu-map (make-sparse-keymap "Lisp")))
+    (set-keymap-parent map lisp-mode-shared-map)
+    (define-key map "\e\C-x" 'lisp-eval-defun)
+    (define-key map "\C-c\C-z" 'run-lisp)
+    …
+    map)
+  "Keymap for ordinary Lisp mode.
+All commands in `lisp-mode-shared-map' are inherited by this map.")
+@end lisp
+
+最后，这是 Lisp 模式的主要模式命令：
+@lisp
+(define-derived-mode lisp-mode lisp-data-mode "Lisp"
+  "Major mode for editing Lisp code for Lisps other than GNU Emacs Lisp.
+Commands:
+Delete converts tabs to spaces as it moves back.
+Blank lines separate paragraphs.  Semicolons start comments.
+
+\\@{lisp-mode-map@}
+Note that `run-lisp' may be used either to start an inferior Lisp job
+or to switch back to an existing one."
+
+  (setq-local find-tag-default-function 'lisp-find-tag-default)
+  (setq-local comment-start-skip
+              "\\(\\(^\\|[^\\\n]\\)\\(\\\\\\\\\\)*\\)\\(;+\\|#|\\) *")
+  (setq imenu-case-fold-search t))
+@end lisp
+
+@node 243 次要模式
+@section 24.3 次要模式
+
+次要模式提供可选功能，用户可以独立于主要模式的选择启用或禁用这些功能。次要模式可以单独或组合启用。
+
+大多数次要模式实现独立于主要模式的功能，因此可以与大多数主要模式一起使用。例如，自动填充模式适用于任何允许文本插入的主要模式。然而，一些次要模式特定于特定的主要模式。例如，Diff Auto Refine 模式是一种次要模式，仅用于 Diff 模式。
+
+理想情况下，无论其他有效的次要模式如何，次要模式都应该具有其所需的效果。应该可以以任何顺序激活和停用次要模式。
+
+@lisp
+Variable: local-minor-modes ¶
+@end lisp
+
+此缓冲区局部变量列出了当前缓冲区中当前启用的次要模式，并且是符号列表。
+
+@lisp
+Variable: global-minor-modes ¶
+@end lisp
+
+此变量列出当前启用的全局次要模式，并且是符号列表。
+
+@lisp
+Variable: minor-mode-list ¶
+@end lisp
+
+此变量的值是所有次要模式命令的列表。
+
+@menu
+* 24.3.1 编写次要模式的约定: 2431 编写次要模式的约定. 
+* 24.3.2 键盘映射和次要模式: 2432 键盘映射和次要模式. 
+* 24.3.3 定义次要模式: 2433 定义次要模式. 
+@end menu
+
+@node 2431 编写次要模式的约定
+@subsection 24.3.1 编写次要模式的约定
+
+编写次要模式有一些约定，就像主要模式一样（请参阅主要模式）。这些约定如下所述。遵循它们的最简单方法是使用宏define-minor-mode。请参阅定义次要模式。
+
+定义一个名称以 @code{-mode} 结尾的变量。我们称之为模式变量。次要模式命令应设置此变量。如果模式被禁用，该值将为 nil，如果模式被启用，则值为非 nil。如果次要模式是缓冲区本地，则该变量应该是缓冲区本地。
+
+此变量与 minor-mode-alist 结合使用，以在模式行中显示次要模式名称。它还通过 minor-mode-map-alist 确定次要模式键盘映射是否处于活动状态（请参阅控制活动键盘映射）。单独的命令或钩​​子也可以检查它的值。
+定义一个命令，称为模式命令，其名称与模式变量相同。它的工作是设置模式变量的值，以及实际启用或禁用模式功能所需执行的任何其他操作。
+
+mode 命令应该接受一个可选参数。如果在没有前缀参数的情况下交互调用，它应该切换模式（即，如果它被禁用，则启用，如果它被启用，则禁用）。如果使用前缀参数交互调用，则如果参数为正，则应启用该模式，否则禁用该模式。
+
+如果从 Lisp 调用模式命令（即非交互方式），如果参数被省略或为零，它应该启用模式；  如果参数是符号切换，它应该切换模式；  否则，它应该以与带有数字前缀参数的交互式调用相同的方式处理该参数，如上所述。
+
+以下示例显示了如何实现此行为（它类似于由 define-minor-mode 宏生成的代码）：
+@lisp
+(interactive (list (or current-prefix-arg 'toggle)))
+(let ((enable
+       (if (eq arg 'toggle)
+           (not foo-mode) ; this is the mode’s mode variable
+         (> (prefix-numeric-value arg) 0))))
+  (if enable
+      do-enable
+    do-disable))
+@end lisp
+
+这种有点复杂的行为的原因是它让用户可以轻松地交互切换次要模式，并且还可以在模式挂钩中轻松启用次要模式，如下所示：
+@lisp
+(add-hook 'text-mode-hook 'foo-mode)
+@end lisp
+
+无论 foo-mode 是否已经启用，这都会正确运行，因为 foo-mode mode 命令在从 Lisp 调用时无条件启用次要模式，没有参数。在模式挂钩中禁用次要模式有点难看：
+
+@lisp
+(add-hook 'text-mode-hook (lambda () (foo-mode -1)))
+@end lisp
+
+但是，这并不常见。
+
+连续两次启用或禁用次要模式不应失败，并且应该与仅启用或禁用一次相同。换句话说，次要模式命令应该是幂等的。
+如果要在模式行中指示次要模式，请为每个次要模式添加一个元素到次要模式（请参阅次要模式的定义）。此元素应为以下形式的列表：
+
+@lisp
+(mode-variable string)
+@end lisp
+这里 mode-variable 是控制次要模式启用的变量，而 string 是一个短字符串，以空格开头，表示模式行中的模式。这些字符串必须很短，以便有空间同时容纳几个。
+
+将元素添加到 minor-mode-alist 时，使用 assq 检查现有元素，以避免重复。例如：
+@lisp
+(unless (assq 'leif-mode minor-mode-alist)
+  (push '(leif-mode " Leif") minor-mode-alist))
+@end lisp
+或者像这样，使用 add-to-list （请参阅修改列表变量）：
+@lisp
+(add-to-list 'minor-mode-alist '(leif-mode " Leif"))
+@end lisp
+此外，一些主要模式约定（请参阅主要模式约定）也适用于次要模式：关于全局符号名称、在初始化函数末尾使用挂钩以及使用键映射和其他表的那些。
+
+如果可能，次要模式应支持通过自定义启用和禁用（请参阅自定义设置）。为此，模式变量应使用 defcustom 定义，通常使用 :type 'boolean.  如果仅设置变量不足以启用该模式，您还应该指定一个 :set 方法，该方法通过调用 mode 命令来启用该模式。请注意，在变量的文档字符串中，通过自定义以外的方式设置变量可能不会生效。此外，使用自动加载 cookie 标记定义（请参阅自动加载 cookie），并指定 :require 以便自定义变量将加载定义模式的库。例如：
+
+@lisp
+;;;###autoload
+(defcustom msb-mode nil
+  "Toggle msb-mode.
+Setting this variable directly does not take effect;
+use either \\[customize] or the function `msb-mode'."
+  :set 'custom-set-minor-mode
+  :initialize 'custom-initialize-default
+  :version "20.4"
+  :type    'boolean
+  :group   'msb
+  :require 'msb)
+@end lisp
+
+@node 2432 键盘映射和次要模式
+@subsection 24.3.2 键盘映射和次要模式
+
+每个次要模式都可以有自己的键盘映射，该映射在启用该模式时处于活动状态。要为次要模式设置键映射，请将元素添加到 alist minor-mode-map-alist。请参阅次要模式映射列表的定义。
+
+次要模式键映射的一种用途是修改某些自插入字符的行为，以便它们执行其他操作以及自插入。（自定义 self-insert-command 的另一种方法是通过 post-self-insert-hook，请参阅用户级插入命令。除此之外，自定义 self-insert-command 的工具仅限于特殊情况，专为缩写和自动填充模式。不要尝试用你自己定义的 self-insert-command 代替标准的。编辑器命令循环专门处理这个功能。）
+
+次要模式可以将命令绑定到由 Cc 后跟标点字符组成的键序列。但是，由 Cc 后跟 @{@}<>:; 之一或控制字符或数字组成的序列保留用于主要模式。此外，抄送字母是为用户保留的。请参阅键绑定约定。
+
+@node 2433 定义次要模式
+@subsection 24.3.3 定义次要模式
+
+宏 define-minor-mode 提供了一种在一个自包含定义中实现模式的便捷方式。
+
+@lisp
+Macro: define-minor-mode mode doc keyword-args… body… ¶
+@end lisp
+
+这个宏定义了一个新的次要模式，它的名字是模式（一个符号）。它定义了一个名为 mode 的命令来切换次要模式，其中 doc 作为其文档字符串。
+
+toggle 命令采用一个可选（前缀）参数。如果在没有参数的情况下以交互方式调用，它会打开或关闭模式。正前缀参数启用该模式，任何其他前缀参数禁用它。在 Lisp 中，toggle 的参数切换模式，而省略或 nil 参数启用模式。例如，这使得在主要模式挂钩中启用次要模式变得容易。如果 doc 为 nil，则宏提供解释上述内容的默认文档字符串。
+
+默认情况下，它还定义了一个名为 mode 的变量，通过启用或禁用该模式将其设置为 t 或 nil。
+
+关键字参数由关键字和相应的值组成。一些关键字具有特殊含义：
+
+@lisp
+:global global
+@end lisp
+
+如果非零，这指定次要模式应该是全局的而不是缓冲区本地的。它默认为零。
+
+使次要模式全局化的效果之一是模式变量成为自定义变量。通过自定义界面切换它可以打开和关闭模式，并且可以保存它的值以供将来的 Emacs 会话使用（请参阅 GNU Emacs 手册中的保存自定义。要使保存的变量起作用，您应该确保次要模式功能可用每次 Emacs 启动时；通常这是通过将 define-minor-mode 表单标记为自动加载来完成的。
+@lisp
+:init-value init-value
+@end lisp
+
+这是模式变量初始化的值。除非在不寻常的情况下（见下文），此值必须为零。
+@lisp
+:lighter lighter
+@end lisp
+
+字符串打火机表示启用模式时在模式行中显示的内容；  如果为 nil，则模式不显示在模式行中。
+@lisp
+:keymap keymap
+@end lisp
+
+可选参数 keymap 指定次要模式的键盘映射。如果非零，它应该是一个变量名（它的值是一个keymap），一个keymap，或者一个形式的alist
+
+@lisp
+(key-sequence . definition)
+@end lisp
+
+其中每个键序列和定义都是适合传递给定义键的参数（请参阅更改键绑定）。如果 keymap 是 keymap 或 alist，这也定义了变量 mode-map。
+@lisp
+:variable place
+@end lisp
+
+这替换了默认变量模式，用于存储模式的状态。如果您指定它，则未定义模式变量，并且未使用任何初始值参数。place 可以是不同的命名变量（您必须自己定义），也可以是任何可以与 setf 函数一起使用的变量（请参阅通用变量）。place 也可以是一个 cons (get . set)，其中 get 是一个返回当前状态的表达式，set 是一个应分配给 place 的参数（一个状态）的函数。
+@lisp
+:after-hook after-hook
+@end lisp
+
+这定义了一个单一的 Lisp 表单，它在模式挂钩运行后进行评估。它不应该被引用。
+@lisp
+:interactive value
+@end lisp
+
+默认情况下，次要模式是交互式命令。如果值为 nil，则禁止此操作。如果 value 是符号列表，则用于说明该次要模式在哪些主要模式中有用。
+
+任何其他关键字参数都直接传递给为变量模式生成的 defcustom。
+
+名为 mode 的命令首先执行标准操作，例如设置名为 mode 的变量，然后执行主体表单（如果有）。然后它运行模式挂钩变量 mode-hook 并通过评估 :after-hook 中的任何形式来完成。（请注意，所有这些，包括运行钩子，都是在启用和禁用模式时完成的。）
+
+初始值必须为 nil，除非 (1) 模式在 Emacs 中预加载，或者 (2) 即使用户没有请求，加载也能轻松启用模式。例如，如果除非启用其他功能，否则该模式无效，并且将始终在那时加载，则默认启用它是无害的。但这些都是不寻常的情况。通常，初始值必须为零。
+
+名称 easy-mmode-define-minor-mode 是此宏的别名。
+
+以下是使用 define-minor-mode 的示例：
+
+@lisp
+(define-minor-mode hungry-mode
+  "Toggle Hungry mode.
+Interactively with no argument, this command toggles the mode.
+A positive prefix argument enables the mode, any other prefix
+argument disables it.  From Lisp, argument omitted or nil enables
+the mode, `toggle' toggles the state.
+
+When Hungry mode is enabled, the control delete key
+gobbles all preceding whitespace except the last.
+See the command \\[hungry-electric-delete]."
+ ;; The initial value.
+ nil
+ ;; The indicator for the mode line.
+ " Hungry"
+ ;; The minor mode bindings.
+ '(([C-backspace] . hungry-electric-delete)))
+@end lisp
+
+这定义了一个名为 @code{饥饿模式} 的次要模式，一个名为饥饿模式的命令来切换它，一个名为饥饿模式的变量指示该模式是否启用，以及一个名为饥饿模式地图的变量，它保存的是键盘映射启用该模式时激活。它使用 C-DEL 的键绑定初始化键映射。没有身体形式——许多次要模式不需要任何形式。
+
+这是一种等效的编写方式：
+@lisp
+(define-minor-mode hungry-mode
+  "Toggle Hungry mode.
+...rest of documentation as before..."
+ ;; The initial value.
+ :init-value nil
+ ;; The indicator for the mode line.
+ :lighter " Hungry"
+ ;; The minor mode bindings.
+ :keymap
+ '(([C-backspace] . hungry-electric-delete)
+   ([C-M-backspace]
+    . (lambda ()
+        (interactive)
+        (hungry-electric-delete t)))))
+@end lisp
+
+
+@lisp
+Macro: define-globalized-minor-mode global-mode mode turn-on keyword-args… body… ¶
+@end lisp
+
+这定义了一个名为 global-mode 的全局切换，其含义是在所有（或一些；见下文）缓冲区中启用或禁用缓冲区本地次要模式模式。它还执行身体形式。要打开缓冲区中的次要模式，它使用函数打开；  要关闭次要模式，它会以 -1 作为参数调用模式。
+
+全局启用该模式还会影响随后通过访问文件创建的缓冲区，以及使用除基本模式以外的主要模式的缓冲区；  但在基本模式下它不会检测到新缓冲区的创建。
+
+这定义了自定义选项 global-mode（请参阅自定义设置），可以在自定义界面中切换以打开和关闭次要模式。与 define-minor-mode 一样，您应该确保每次 Emacs 启动时都会评估 define-globalized-minor-mode 表单，例如通过提供 :require 关键字。
+
+在关键字参数中使用 :group group 为全局次要模式的模式变量指定自定义组。
+
+默认情况下，表示模式是打开还是关闭的缓冲区局部次要模式变量与模式本身的名称相同。如果不是这种情况，请使用 :variable 变量——一些次要模式使用不同的变量来存储此状态信息。
+
+一般来说，当你定义一个全球化的次要模式时，你还应该定义一个非全球化的版本，以便人们可以在单独的缓冲区中使用（或禁用）它。这也允许他们通过使用该模式的钩子在特定的主要模式中禁用全局启用的次要模式。
+
+如果给定一个 :predicate 关键字，将创建一个与全局模式变量调用相同的用户选项，但最后会创建 -modes 而不是 -mode。该变量用作谓词，指定应在哪些主要模式中激活次要模式。有效值包括 t（在所有主要模式中使用，nil（在非主要模式中使用）或模式名称列表（或（不mode-name @dots{})) 元素（以及 t 和 nil）。
+@lisp
+(c-mode (not mail-mode message-mode) text-mode)
+@end lisp
+
+这意味着 @code{在从 c-mode 派生的模式中使用，而不是在从 message-mode 或 mail-mode 派生的模式中使用，但在从 text-mode 派生的模式中使用，否则没有其他模式} 。
+@lisp
+((not c-mode) t)
+@end lisp
+
+这意味着 @code{不要使用从 c-mode 派生的模式，而是在其他任何地方使用} 。
+
+@lisp
+(text-mode)
+@end lisp
+这意味着 @code{在从文本模式派生的模式中使用，但在其他地方没有} 。（最后有一个隐含的 nil 元素。）
+
+@node 244 模式线格式
+@section 24.4 模式线格式
+
+每个 Emacs 窗口（除了 minibuffer 窗口）通常在底部都有一个模式行，它显示窗口中显示的缓冲区的状态信息。模式行包含有关缓冲区的信息，例如其名称、关联文件、递归编辑深度以及主要和次要模式。一个窗口也可以有一个标题行，它很像模式行，但出现在窗口的顶部。
+
+本节介绍如何控制模式行和标题行的内容。我们在本章中包含它是因为模式行中显示的大部分信息都与启用的主要和次要模式有关。
+
+@menu
+* 24.4.1 模式线基础: 2441 模式线基础. 
+* 24.4.2 模式行的数据结构: 2442 模式行的数据结构. 
+* 24.4.3 顶层模式线控制: 2443 顶层模式线控制. 
+* 24.4.4 模式行中使用的变量: 2444 模式行中使用的变量. 
+* 24.4.5 %- 模式线中的构造: 2445 %- 模式线中的构造. 
+* 24.4.6 模式行中的属性: 2446 模式行中的属性. 
+* 24.4.7 窗口标题行: 2447 窗口标题行. 
+* 24.4.8 模拟模式行格式: 2448 模拟模式行格式. 
+@end menu
+
+@node 2441 模式线基础
+@subsection 24.4.1 模式线基础
+
+每个模式行的内容由缓冲区局部变量模式行格式指定（请参阅模式行控制的顶层）。这个变量包含一个模式行结构：一个控制缓冲区模式行上显示内容的模板。header-line-format 的值以相同的方式指定缓冲区的标题行。相同缓冲区的所有窗口都使用相同的模式行格式和标题行格式，除非已为该窗口指定了模式行格式或标题行格式参数（请参阅窗口参数）。
+
+为了效率，Emacs 不会不断地重新计算每个窗口的模式行和标题行。当环境需要它时，它会这样做——例如，如果您更改窗口配置、切换缓冲区、缩小或扩大缓冲区、滚动或修改缓冲区。如果您更改了由 mode-line-format 或 header-line-format 引用的任何变量（请参阅在模式行中使用的变量），或任何其他影响文本显示方式的数据结构（请参阅 Emacs 显示），您应该使用函数 force-mode-line-update 更新显示。
+
+@lisp
+Function: force-mode-line-update &optional all ¶
+@end lisp
+
+
+该函数强制 Emacs 在下一个重新显示周期期间根据所有相关变量的最新值更新当前缓冲区的模式行和标题行。如果可选参数 all 不为零，则强制更新所有模式行和标题行。
+
+此函数还强制更新菜单栏和框架标题。
+
+所选窗口的模式线通常使用面部模式线以不同的颜色显示。其他窗口的模式线出现在 face mode-line-inactive 中。请参见面。
+
+一些模式将大量数据放在模式行中，将模式行末尾的元素推到右侧。如果 mode-line-compact 变量不为 nil，Emacs 可以通过将空格转换为单个空格来 @code{压缩} 模式行。如果此变量很长，则仅当模式线比当前选定的窗口宽时才会这样做。（这个计算是近似的，基于字符的数量，而不是它们的显示宽度。）这个变量可以是缓冲区局部的，只压缩某些缓冲区中的模式行。
+
+@node 2442 模式行的数据结构
+@subsection 24.4.2 模式行的数据结构
+
+模式行内容由称为模式行结构的数据结构控制，由保存在缓冲区局部变量中的列表、字符串、符号和数字组成。每种数据类型对模式线外观都有特定的含义，如下所述。相同的数据结构用于构造框架标题（参见框架标题）和标题行（参见窗口标题行）。
+
+模式行构造可能与固定的文本字符串一样简单，但它通常指定如何将固定字符串与变量的值组合以构造文本。许多这些变量本身被定义为具有模式线构造作为它们的值。
+
+以下是作为模式线结构的各种数据类型的含义：
+
+@lisp
+string
+@end lisp
+
+作为模式行构造的字符串逐字显示，但其中的 %-constructs 除外。这些代表其他数据的替代；  请参阅模式行中的 %-Constructs。
+
+如果字符串的某些部分具有面属性，则它们控制文本的显示，就像它们控制缓冲区中的文本一样。默认情况下，任何没有面属性的字符都显示在面模式行或模式行非活动中（参见 GNU Emacs 手册中的标准面）。string 中的 help-echo 和 keymap 属性有特殊含义。请参阅模式行中的属性。
+@lisp
+symbol
+@end lisp
+
+作为模式线结构的符号代表它的值。symbol 的值用作模式线构造，代替 symbol。但是，符号 t 和 nil 被忽略，任何值为 void 的符号也是如此。
+
+有一个例外：如果 symbol 的值是一个字符串，它会逐字显示：%-constructs 无法识别。
+
+除非符号被标记为有风险的（即，它具有非零风险局部变量属性），否则符号值中指定的所有文本属性都将被忽略。这包括符号值中字符串的文本属性，以及其中的所有 :eval 和 :properize 形式。（这样做的原因是安全性：可以从文件变量中自动设置非风险变量，而无需提示用户。）
+@lisp
+(string rest…)
+@end lisp
+@lisp
+(list rest…)
+@end lisp
+
+第一个元素是字符串或列表的列表意味着递归处理所有元素并将结果连接起来。这是最常见的模式线构造形式。（请注意，在模式行中显示字符串时，会专门处理文本属性（出于效率原因）：仅考虑字符串第一个字符上的文本属性，然后将它们用于整个字符串。如果您需要具有不同文本属性的字符串，您必须使用特殊的 :properize 模式行构造。）
+@lisp
+(:eval form)
+@end lisp
+
+一个列表，其第一个元素是符号 :eval 表示评估表单，并将结果用作要显示的字符串。确保此评估无法加载任何文件，因为这样做可能会导致无限递归。
+@lisp
+(:propertize elt props…)
+@end lisp
+
+第一个元素是符号 :properize 的列表表示递归处理模式行构造 elt，然后将 props 指定的文本属性添加到结果中。参数 props 应该包含零个或多个文本属性值对。如果 elt 是或产生一个具有文本属性的字符串，则该字符串的所有字符都应该具有相同的属性，否则其中一些可能会被 :properize 删除。
+@lisp
+(symbol then else)
+@end lisp
+
+第一个元素是不是关键字的符号的列表指定条件。它的含义取决于符号的值。如果 symbol 具有非 nil 值，则第二个元素将作为模式行构造递归处理。否则，递归处理第三个元素else。你可以省略其他；  那么如果 symbol 的值为 nil 或 void，则模式行构造不显示任何内容。
+@lisp
+(width rest…)
+@end lisp
+第一个元素是整数的列表指定剩余结果的截断或填充。其余元素 rest 作为模式线构造递归处理并连接在一起。当宽度为正时，如果其宽度小于宽度，则结果是在右侧填充空间。当宽度为负时，如果其宽度超过 -width，则结果在右侧被截断到 -width 列。
+
+例如，显示窗口顶部上方缓冲区百分比的常用方法是使用如下列表：(-3 "%p")。
+
+@node 2443 顶层模式线控制
+@subsection 24.4.3 顶层模式线控制
+
+模式线整体控制的变量是模式线格式。
+
+@lisp
+User Option: mode-line-format ¶
+@end lisp
+
+此变量的值是控制模式行内容的模式行结构。它在所有缓冲区中始终是缓冲区本地的。
+
+如果在缓冲区中将此变量设置为 nil，则该缓冲区没有模式行。（只有一行高的窗口也不会显示模式行。）
+
+mode-line-format 的默认值旨在使用其他变量的值，例如 mode-line-position 和 mode-line-modes（它又包含变量 mode-name 和 minor-mode-alist 的值）。很少有模式需要改变模式行格式本身。对于大多数目的，更改 mode-line-format 直接或间接引用的一些变量就足够了。
+
+如果您更改 mode-line-format 本身，则新值应使用出现在默认值中的相同变量（请参阅模式行中使用的变量），而不是复制它们的内容或以另一种方式显示信息。这样，用户或 Lisp 程序（例如显示时间和主要模式）通过更改这些变量进行的自定义仍然有效。
+
+下面是一个可能对 Shell 模式有用的 mode-line-format 的假设示例（实际上，Shell 模式不设置 mode-line-format）：
+
+@lisp
+(setq mode-line-format
+  (list "-"
+   'mode-line-mule-info
+   'mode-line-modified
+   'mode-line-frame-identification
+   "%b--"
+
+   ;; Note that this is evaluated while making the list.
+   ;; It makes a mode line construct which is just a string.
+   (getenv "HOST")
+
+   ":"
+   'default-directory
+   "   "
+   'global-mode-string
+   "   %[("
+   '(:eval (format-time-string "%F"))
+   'mode-line-process
+   'minor-mode-alist
+   "%n"
+   ")%]--"
+
+   '(which-function-mode ("" which-func-format "--"))
+   '(line-number-mode "L%l--")
+   '(column-number-mode "C%c--")
+   '(-3 "%p")))
+@end lisp
+
+（变量 line-number-mode、column-number-mode 和 which-function-mode 启用特定的次要模式；像往常一样，这些变量名称也是次要模式命令名称。）
+
+@node 2444 模式行中使用的变量
+@subsection 24.4.4 模式行中使用的变量
+
+本节描述由 mode-line-format 的标准值合并到模式行文本中的变量。这些变量本身并没有什么特别之处。如果将 mode-line-format 的值更改为使用它们，则任何其他变量都可能对模式行产生相同的影响。然而，Emacs 的各个部分设置这些变量的理解是它们将控制部分模式行；  因此，实际上，模式线必须使用它们。另请参阅 GNU Emacs 手册中的可选模式行。
+
+@lisp
+Variable: mode-line-mule-info ¶
+@end lisp
+
+此变量保存模式行构造的值，该构造显示有关语言环境、缓冲区编码系统和当前输入法的信息。请参阅非 ASCII 字符。
+
+@lisp
+Variable: mode-line-modified ¶
+@end lisp
+
+此变量保存显示当前缓冲区是否被修改的模式行构造的值。如果缓冲区被修改，它的默认值显示'@strong{*'，如果缓冲区未修改，则显示'--'，如果缓冲区是只读的，则显示'%%'，如果缓冲区是只读和修改的，则显示'%}'。
+
+更改此变量不会强制更新模式行。
+
+@lisp
+Variable: mode-line-frame-identification ¶
+@end lisp
+
+此变量标识当前帧。如果您使用的是可以显示多帧的窗口系统，则其默认值显示 @code{~ ，或者在一次仅显示一帧的普通终端上显示 ~-%F} 。
+
+@lisp
+Variable: mode-line-buffer-identification ¶
+@end lisp
+
+此变量标识窗口中显示的缓冲区。它的默认值显示缓冲区名称，用空格填充至少 12 列。
+
+@lisp
+Variable: mode-line-position ¶
+@end lisp
+
+此变量指示缓冲区中的位置。它的默认值显示缓冲区百分比，以及可选的缓冲区大小、行号和列号。
+
+@lisp
+User Option: mode-line-percent-position ¶
+@end lisp
+
+此选项用于模式行位置。它的值指定要显示的缓冲区百分比（nil、 @code{%o} 、 @code{%p} 、 @code{%P} 或 @code{%q} 之一，请参阅模式行中的 %-Constructs）和空间填充的宽度或截断为。建议您使用自定义变量工具设置此选项。
+
+@lisp
+Variable: vc-mode ¶
+@end lisp
+
+每个缓冲区中的变量vc-mode，buffer-local，记录缓冲区访问的文件是否使用版本控制维护，如果是，是哪种。它的值是出现在模式行中的字符串，或者 nil 表示没有版本控制。
+
+@lisp
+Variable: mode-line-modes ¶
+@end lisp
+
+此变量显示缓冲区的主要和次要模式。其默认值还显示递归编辑级别、进程状态信息以及缩小是否生效。
+
+@lisp
+Variable: mode-line-remote ¶
+@end lisp
+
+此变量用于显示当前缓冲区的默认目录是否是远程的。
+
+@lisp
+Variable: mode-line-client ¶
+@end lisp
+
+此变量用于标识 emacsclient 帧。
+
+在 mode-line-modes 中使用了以下三个变量：
+
+@lisp
+Variable: mode-name ¶
+@end lisp
+
+这个缓冲区局部变量保存了当前缓冲区主要模式的 @code{漂亮} 名称。每个主要模式都应设置此变量，以便模式名称将出现在模式行中。该值不必是字符串，但可以使用模式行构造中有效的任何数据类型（请参阅模式行的数据结构）。要计算将在模式行中标识模式名称的字符串，请使用 format-mode-line（请参阅模拟模式行格式）。
+
+@lisp
+Variable: mode-line-process ¶
+@end lisp
+
+此缓冲区局部变量包含有关用于与子进程通信的模式中的进程状态的模式行信息。它紧跟主要模式名称显示，中间没有空格。例如，它在 @strong{shell} 缓冲区中的值为 (":%s")，它允许 shell 将其状态与主要模式一起显示为：'(@uref{run})'。通常这个变量是零。
+
+@lisp
+Variable: mode-line-front-space ¶
+@end lisp
+
+此变量显示在模式行的前面。默认情况下，此结构显示在模式行的开头，除非有内存已满消息，否则首先显示。
+
+@lisp
+Variable: mode-line-end-spaces ¶
+@end lisp
+
+此变量显示在模式行的末尾。
+
+@lisp
+Variable: mode-line-misc-info ¶
+@end lisp
+
+用于杂项信息的模式线构造。默认情况下，这显示由 global-mode-string 指定的信息。
+
+@lisp
+Variable: mode-line-position-line-format ¶
+@end lisp
+
+当 line-number-mode（参见 GNU Emacs 手册中的 Optional Mode Line）打开时用于显示行号的格式。格式中的 '%l' 将被替换为行号。
+
+@lisp
+Variable: mode-line-position-column-format ¶
+@end lisp
+
+当 column-number-mode（参见 GNU Emacs 手册中的 Optional Mode Line）打开时用于显示列号的格式。格式中的 @code{%c} 将被替换为从零开始的列号， @code{%C} 将被替换为从一开始的列号。
+
+@lisp
+Variable: mode-line-position-column-line-format ¶
+@end lisp
+
+当 line-number-mode 和 column-number-mode 都打开时用于显示列号的格式。有关 @code{%l} 、 @code{%c} 和 @code{%C} 格式规范的含义，请参见前两个变量。
+
+@lisp
+Variable: minor-mode-alist ¶
+@end lisp
+
+此变量保存一个关联列表，其元素指定模式行应如何指示次要模式处于活动状态。minor-mode-alist 的每个元素都应该是一个包含两个元素的列表：
+
+@lisp
+(minor-mode-variable mode-line-string)
+@end lisp
+
+更一般地，模式线串可以是任何模式线结构。当 minor-mode-variable 的值为非 nil 时，它出现在模式行中，否则不出现。这些字符串应该以空格开头，这样它们就不会一起运行。通常，当激活该次要模式时，特定模式的次要模式变量设置为非零值。
+
+次要模式列表本身不是缓冲区本地的。如果可以在每个缓冲区中单独启用其次要模式，则 alist 中提到的每个变量都应该是缓冲区本地的。
+
+@lisp
+Variable: global-mode-string ¶
+@end lisp
+
+这个变量包含一个模式行结构，默认情况下，如果设置，它会出现在模式行中，紧跟在 which-function-mode 次要模式之后，否则在模式行模式之后。添加到此构造的元素通常应以空格结尾（以确保连续的全局模式字符串元素正确显示）。例如，命令 display-time 将 global-mode-string 设置为引用变量 display-time-string，该变量包含一个包含时间和负载信息的字符串。
+
+'%M' 构造替换了 global-mode-string 的值，但这是过时的，因为该变量包含在 mode-line-format 的模式行中。
+
+这是 mode-line-format 的默认值的简化版本。真正的默认值还指定添加文本属性。
+
+@lisp
+("-"
+ mode-line-mule-info
+ mode-line-modified
+ mode-line-frame-identification
+ mode-line-buffer-identification
+
+ "   "
+ mode-line-position
+ (vc-mode vc-mode)
+ "   "
+
+ mode-line-modes
+ (which-function-mode ("" which-func-format "--"))
+ (global-mode-string ("--" global-mode-string))
+ "-%-")
+@end lisp
+
+@node 2445 %- 模式线中的构造
+@subsection 24.4.5 %- 模式线中的构造
+
+用作模式线构造的字符串可以使用某些 %-构造来替换各种数据。以下是定义的 %-constructs 的列表，以及它们的含义。
+
+在除 '%%' 之外的任何构造中，您可以在 '%' 之后添加一个十进制整数来指定最小字段宽度。如果宽度更小，则将该字段填充到该宽度。纯数字结构（'c'、'i'、'I' 和 'l'）通过在左侧插入空格来填充，而其他结构通过在右侧插入空格来填充。
+
+@lisp
+%b
+@end lisp
+
+当前缓冲区名称，通过 buffer-name 函数获得。请参阅缓冲区名称。
+@lisp
+%c
+@end lisp
+
+点的当前列数，从窗口的左边距开始从零开始计数。
+@lisp
+%C
+@end lisp
+
+点的当前列数，从窗口的左边距开始计数。
+@lisp
+%e
+@end lisp
+
+当 Emacs 几乎没有 Lisp 对象的内存时，一条简短的消息说明了这一点。否则，这是空的。
+@lisp
+%f
+@end lisp
+
+被访问的文件名，通过 buffer-file-name 函数获得。请参阅缓冲区文件名。
+@lisp
+%F
+@end lisp
+
+标题（仅在窗口系统上）或所选框架的名称。请参阅基本参数。
+@lisp
+%i
+@end lisp
+
+当前缓冲区的可访问部分的大小；  基本上 (- (point-max) (point-min))。
+@lisp
+%I
+@end lisp
+
+与 '%i' 类似，但使用 'k' 表示 10@math{^3}、'M' 表示 10@math{^6}、'G' 表示 10@math{^9} 等以更易读的方式打印大小。
+@lisp
+%l
+@end lisp
+
+点的当前行数，在缓冲区的可访问部分内计数。
+@lisp
+%n
+@end lisp
+
+收窄生效时为 @code{收窄} ；  没有别的（参见 Narrowing 中的narrow-to-region）。
+@lisp
+%o
+@end lisp
+
+窗口通过缓冲区（的可见部分）的移动程度，即窗口顶部上方的文本大小，表示为窗口外所有文本的百分比，或 @code{顶部} 、 @code{底部} 或'全部'。
+@lisp
+%p
+@end lisp
+
+窗口顶部上方的缓冲区文本的百分比，或 @code{顶部} 、 @code{底部} 或 @code{全部} 。请注意，默认模式行构造会将其截断为三个字符。
+@lisp
+%P
+@end lisp
+
+窗口底部上方的缓冲区文本的百分比（包括窗口中可见的文本以及顶部上方的文本），如果缓冲区顶部在屏幕上可见，则加上 @code{顶部} ；  或 @code{底部} 或 @code{全部} 。
+@lisp
+%q
+@end lisp
+
+窗口顶部和底部上方的文本百分比，以 @code{-} 或 @code{全部} 分隔。
+@lisp
+%s
+@end lisp
+
+属于当前缓冲区的子进程的状态，通过 process-status 获得。请参阅过程信息。
+@lisp
+%z
+@end lisp
+
+键盘、终端和缓冲区编码系统的助记符。
+@lisp
+%Z
+@end lisp
+
+与 '%z' 类似，但包括行尾格式。
+@lisp
+%*
+@end lisp
+
+'%' 如果缓冲区是只读的（请参阅缓冲区只读）；
+'*' 如果缓冲区被修改（参见 buffer-modified-p）；
+'-' 除此以外。请参阅缓冲区修改。
+@lisp
+%+
+@end lisp
+
+'*' 如果缓冲区被修改（参见 buffer-modified-p）；
+'%' 如果缓冲区是只读的（请参阅缓冲区只读）；
+'-' 除此以外。这与 '%*' 的不同之处仅在于修改后的只读缓冲区。请参阅缓冲区修改。
+@lisp
+%&
+@end lisp
+
+如果缓冲区被修改，则为 @code{*} ，否则为 @code{-} 。
+@lisp
+%@@
+@end lisp
+
+如果缓冲区的默认目录（请参阅扩展文件名的函数）在远程计算机上，则为 @code{@@} ，否则为 @code{-} 。
+@lisp
+%[
+@end lisp
+
+递归编辑级别深度的指示（不包括小缓冲区级别）：每个编辑级别一个 @code{[} 。请参阅递归编辑。
+@lisp
+%]
+@end lisp
+
+每个递归编辑级别都有一个 @code{]} （不包括迷你缓冲区级别）。
+@lisp
+%-
+@end lisp
+
+短划线足以填充模式线的其余部分。
+@lisp
+%%
+@end lisp
+
+字符 '%' - 这是如何在允许 %-constructs 的字符串中包含文字 '%'。
+
+以下 %-construct 仍受支持，但已过时，因为您可以使用变量 mode-name 获得相同的结果。
+
+@lisp
+%m
+@end lisp
+
+模式名称的值。
+
+@node 2446 模式行中的属性
+@subsection 24.4.6 模式行中的属性
+
+某些文本属性在模式行中是有意义的。face 属性影响文本的外观；  help-echo 属性将帮助字符串与文本相关联，而 keymap 可以使文本对鼠标敏感。
+
+有四种方法可以为模式行中的文本指定文本属性：
+
+@itemize
+@item
+将带有文本属性的字符串直接放入模式线数据结构中，但请参阅模式线的数据结构以了解相关注意事项。
+@item
+将文本属性放在模式行 %-construct 例如 '%12b';  那么 %-construct 的扩展将具有相同的文本属性。
+@item
+使用 (:properize elt props@dots{}) 构造给 elt 一个由 props 指定的文本属性。
+@item
+在模式行数据结构中使用包含 :eval 形式的列表，并使形式评估为具有文本属性的字符串。
+@end itemize
+
+您可以使用 keymap 属性来指定键盘映射。这个keymap只对鼠标点击生效；  将字符键和功能键绑定到它没有效果，因为不可能将点移动到模式行中。
+
+当模式行引用不具有非零风险局部变量属性的变量时，将忽略该变量值中给出或指定的任何文本属性。这是因为这些属性可能会指定要调用的函数，并且这些函数可能来自文件局部变量。
+
+@node 2447 窗口标题行
+@subsection 24.4.7 窗口标题行
+
+一个窗口可以在顶部有一个标题行，就像它可以在底部有一个模式行一样。标题行功能就像模式行功能一样，除了它由标题行格式控制：
+
+@lisp
+Variable: header-line-format ¶
+@end lisp
+
+这个变量，在每个缓冲区中都是本地的，指定如何显示标题行，用于显示缓冲区的窗口。该值的格式与模式行格式相同（请参阅模式行的数据结构）。它通常为 nil，因此普通缓冲区没有标题行。
+
+@lisp
+Function: window-header-line-height &optional window ¶
+@end lisp
+
+此函数返回窗口标题行的高度（以像素为单位）。window 必须是活动窗口，并且默认为选定的窗口。
+
+只有一行高的窗口永远不会显示标题行。两行高的窗口不能同时显示模式行和标题行；  如果它有一个模式行，那么它不显示标题行。
+
+@node 2448 模拟模式行格式
+@subsection 24.4.8 模拟模式行格式
+
+您可以使用函数 format-mode-line 来计算将出现在基于特定模式行结构的模式行或标题行中的文本。
+
+@lisp
+Function: format-mode-line format &optional face window buffer ¶
+@end lisp
+
+此函数根据格式格式化一行文本，就好像它正在为窗口生成模式行一样，但它也将文本作为字符串返回。参数窗口默认为选定的窗口。如果 buffer 为非 nil，则使用的所有信息都取自 buffer；  默认情况下，它来自窗口的缓冲区。
+
+值字符串通常具有与模式行将具有的面、键映射等相对应的文本属性。任何没有按格式指定面属性的字符都将获得一个由面确定的默认值。如果 face 是 t，如果选择了窗口，则表示任一模式行，否则表示模式行不活动。如果 face 为 nil 或省略，则表示默认面。如果 face 是整数，则此函数返回的值将没有文本属性。
+
+您还可以指定其他有效的面作为面的值。如果指定，则该面为其面未由格式指定的字符提供面属性。
+
+请注意，使用 mode-line、mode-line-inactive 或 header-line 作为面实际上将分别使用相应面的当前定义重新显示模式行或标题行，此外还返回格式化字符串。（其他面不会导致重新显示。）
+
+例如，(format-mode-line header-line-format) 返回将出现在所选窗口的标题行中的文本（如果没有标题行，则返回""）。(format-mode-line header-line-format 'header-line) 返回相同的文本，每个字符都带有标题行本身将具有的面孔，并且还重绘标题行。
+
+@node 245 名称
+@section 24.5 名称
+
+Imenu 是一项功能，它允许用户从列出所有定义或部分的菜单中选择缓冲区中的定义或部分，以直接转到缓冲区中的该位置。Imenu 通过构造一个缓冲区索引来工作，该索引列出了定义的名称和缓冲区位置，或缓冲区的其他命名部分；  然后用户可以选择其中一个并将点移动到它。主要模式可以使用 imenu-add-to-menubar 添加菜单栏项以使用 Imenu。
+
+@lisp
+Command: imenu-add-to-menubar name ¶
+@end lisp
+
+该函数定义了一个名为 name 的本地菜单栏项来运行 Imenu。
+
+Emacs 手册中描述了使用 Imenu 的用户级命令（请参阅 Emacs 手册中的 Imenu）。本节说明如何自定义 Imenu 查找特定主要模式的定义或缓冲区部分的方法。
+
+通常和最简单的方法是设置变量 imenu-generic-expression：
+
+@lisp
+Variable: imenu-generic-expression ¶
+@end lisp
+
+此变量，如果非零，是一个列表，指定用于查找 Imenu 定义的正则表达式。imenu-generic-expression 的简单元素如下所示：
+
+@lisp
+(menu-title regexp index)
+@end lisp
+
+
+这里，如果 menu-title 不为 nil，则表示该元素的匹配项应该放在缓冲区索引的子菜单中；  menu-title 本身指定子菜单的名称。如果 menu-title 为 nil，则此元素的匹配项直接进入缓冲区索引的顶层。
+
+列表中的第二项 regexp 是正则表达式（请参阅正则表达式）；  缓冲区中与它匹配的任何内容都被视为定义，需要在缓冲区索引中提及。第三项 index 是一个非负整数，指示 regexp 中的哪个子表达式与定义的名称匹配。
+
+一个元素也可以是这样的：
+
+@lisp
+(menu-title regexp index function arguments…)
+@end lisp
+
+（菜单标题正则表达式索引函数参数@dots{}）
+
+此元素的每个匹配项都会创建一个索引项，当用户选择索引项时，它会调用函数，其参数由项目名称、缓冲区位置和参数组成。
+
+对于 Emacs Lisp 模式，imenu-generic-expression 可能如下所示：
+@lisp
+
+
+((nil "^\\s-*(def\\(un\\|subst\\|macro\\|advice\\)\
+\\s-+\\([-A-Za-z0-9+]+\\)" 2)
+
+ ("*Vars*" "^\\s-*(def\\(var\\|const\\)\
+\\s-+\\([-A-Za-z0-9+]+\\)" 2)
+
+ ("*Types*"
+  "^\\s-*\
+(def\\(type\\|struct\\|class\\|ine-condition\\)\
+\\s-+\\([-A-Za-z0-9+]+\\)" 2))
+@end lisp
+
+
+
+设置此变量使其在当前缓冲区中成为局部缓冲区。
+
+@lisp
+Variable: imenu-case-fold-search ¶
+@end lisp
+
+此变量控制匹配 imenu-generic-expression 值中的正则表达式是否区分大小写：t，默认值，表示匹配应忽略大小写。
+
+设置此变量使其在当前缓冲区中成为局部缓冲区。
+
+@lisp
+Variable: imenu-syntax-alist ¶
+@end lisp
+
+此变量是处理 imenu-generic-expression 时使用的语法表修饰符列表，用于覆盖当前缓冲区的语法表。每个元素都应具有以下形式：
+
+@lisp
+(characters . syntax-description)
+@end lisp
+
+CAR，characters，可以是字符或字符串。该元素表示为该字符提供由 syntax-description 指定的语法，该语法被传递给 modify-syntax-entry（请参阅语法表函数）。
+
+此功能通常用于为通常具有符号语法的字符提供单词语法，从而简化 imenu-generic-expression 并加快匹配速度。例如，Fortran 模式以这种方式使用它：
+
+@lisp
+(setq imenu-syntax-alist '(("_$" . "w")))
+@end lisp
+
+imenu-generic-expression 正则表达式可以使用 '\+' 而不是 '\+'。请注意，当模式需要将名称的初始字符限制为小于名称其余部分所允许的字符集时，此技术可能不方便。
+
+设置此变量使其在当前缓冲区中成为局部缓冲区。
+
+为主要模式自定义 Imenu 的另一种方法是设置变量 imenu-prev-index-position-function 和 imenu-extract-index-name-function：
+
+@lisp
+Variable: imenu-prev-index-position-function ¶
+@end lisp
+
+如果这个变量不是 nil，它的值应该是一个函数，它找到下一个定义放入缓冲区索引，从点向后扫描缓冲区。如果在 point 之前没有找到另一个定义，它应该返回 nil。否则它应该在找到定义的地方留下点并返回任何非零值。
+
+设置此变量使其在当前缓冲区中成为局部缓冲区。
+
+@lisp
+Variable: imenu-extract-index-name-function ¶
+@end lisp
+
+如果这个变量不是零，它的值应该是一个返回定义名称的函数，假设点在那个定义中，因为 imenu-prev-index-position-function 函数会离开它。
+
+设置此变量使其在当前缓冲区中成为局部缓冲区。
+
+为主要模式自定义 Imenu 的最后一种方法是设置变量 imenu-create-index-function：
+
+@lisp
+Variable: imenu-create-index-function ¶
+@end lisp
+
+此变量指定用于创建缓冲区索引的函数。该函数不应接受任何参数，并返回当前缓冲区的索引列表。它在 save-excursion 中被调用，所以它离开点的位置没有区别。
+
+索引 alist 可以具有三种类型的元素。简单元素如下所示：
+@lisp
+(index-name . index-position)
+@end lisp
+
+选择一个简单元素的效果是移动到缓冲区中的 index-position 位置。特殊元素如下所示：
+
+@lisp
+(index-name index-position function arguments…)
+
+@end lisp
+
+
+选择一个特殊元素执行：
+
+@lisp
+(funcall function
+         index-name index-position arguments…)
+@end lisp
+
+
+嵌套的 sub-alist 元素如下所示：
+
+@lisp
+(menu-title . sub-alist)
+@end lisp
+它创建由 sub-alist 指定的子菜单菜单标题。
+
+imenu-create-index-function 的默认值为 imenu-default-create-index-function。此函数调用 imenu-prev-index-position-function 的值和 imenu-extract-index-name-function 的值来生成索引 alist。但是，如果这两个变量中的任何一个为 nil，则默认函数将使用 imenu-generic-expression 代替。
+
+设置此变量使其在当前缓冲区中成为局部缓冲区。
+
+@node 246 字体锁定模式
+@section 24.6 字体锁定模式
+
+字体锁定模式是一种缓冲区局部次要模式，可根据其句法角色自动将面部属性附加到缓冲区的某些部分。它如何解析缓冲区取决于主要模式；  大多数主要模式定义了在哪些上下文中使用哪些面孔的句法标准。本节介绍如何为特定的主要模式自定义字体锁定。
+
+字体锁定模式通过两种方式查找要突出显示的文本：通过基于语法表的语法解析和通过搜索（通常用于正则表达式）。句法字体化首先发生；  它找到注释和字符串常量并突出显示它们。其次是基于搜索的字体化。
+
+@menu
+* 24.6.1 字体锁定基础: 2461 字体锁定基础. 
+* 24.6.2 基于搜索的字体: 2462 基于搜索的字体. 
+* 24.6.3 自定义基于搜索的字体: 2463 自定义基于搜索的字体. 
+* 24.6.4 其他字体锁定变量: 2464 其他字体锁定变量. 
+* 24.6.5 字体锁定级别: 2465 字体锁定级别. 
+* 24.6.6 预计算字体: 2466 预计算字体. 
+* 24.6.7 字体锁定面: 2467 字体锁定面. 
+* 24.6.8 语法字体锁定: 2468 语法字体锁定. 
+* 24.6.9 多行字体锁定结构: 2469 多行字体锁定结构. 
+@end menu
+
+@node 2461 字体锁定基础
+@subsection 24.6.1 字体锁定基础
+
+字体锁定功能基于几个基本功能。这些中的每一个都调用由相应变量指定的函数。这种间接允许主要和次要模式修改字体化在该模式的缓冲区中的工作方式，甚至对与字体化无关的功能使用字体锁定机制。（这就是为什么下面的描述在描述函数做什么时说 @code{应该} ：模式可以自定义相应变量的值来做完全不同的事情。）下面提到的变量在其他字体锁定变量中描述。
+
+@lisp
+font-lock-fontify-buffer ¶
+@end lisp
+
+这个函数应该通过调用由 font-lock-fontify-buffer-function 指定的函数来字体化当前缓冲区的可访问部分。
+@lisp
+font-lock-unfontify-buffer ¶
+@end lisp
+
+在关闭字体锁定以删除字体化时使用。调用由 font-lock-unfontify-buffer-function 指定的函数。
+@lisp
+font-lock-fontify-region beg end &optional loudly ¶
+@end lisp
+
+应该字体化 beg 和 end 之间的区域。如果loudly 不为零，则应在字体化时显示状态消息。调用由 font-lock-fontify-region-function 指定的函数。
+@lisp
+font-lock-unfontify-region beg end ¶
+@end lisp
+
+应该从 beg 和 end 之间的区域移除字体。调用由 font-lock-unfontify-region-function 指定的函数。
+@lisp
+font-lock-flush &optional beg end ¶
+@end lisp
+
+此函数应将 beg 和 end 之间区域的字体标记为过期。如果未指定或 nil，beg 和 end 默认为缓冲区可访问部分的开头和结尾。调用由 font-lock-flush-function 指定的函数。
+@lisp
+font-lock-ensure &optional beg end ¶
+@end lisp
+
+此函数应确保 beg 和 end 之间的区域已被字体化。可选参数 beg 和 end 默认为缓冲区可访问部分的开头和结尾。调用由 font-lock-ensure-function 指定的函数。
+@lisp
+font-lock-debug-fontify ¶
+@end lisp
+
+这是一个方便的命令，旨在为模式开发字体锁定时使用，不应从 Lisp 代码中调用。它重新计算所有相关变量，然后在整个缓冲区上调用 font-lock-fontify-region。
+
+有几个变量可以控制字体锁定模式如何突出显示文本。但是主要模式不应该直接设置任何这些变量。相反，他们应该将 font-lock-defaults 设置为缓冲区局部变量。如果启用字体锁定模式，则使用分配给此变量的值来设置所有其他变量。
+
+@lisp
+Variable: font-lock-defaults ¶
+@end lisp
+
+此变量由模式设置以指定如何在该模式下字体化文本。设置后它会自动变为缓冲区本地。如果其值为 nil，则字体锁定模式不会突出显示，您可以使用 @code{面} 菜单（在 @code{编辑} 下，然后在菜单栏中的 @code{文本属性} 下）将面显式分配给缓冲区中的文本。
+
+如果非零，则该值应如下所示：
+
+@lisp
+(keywords [keywords-only [case-fold
+ [syntax-alist other-vars…]]])
+@end lisp
+第一个元素，keywords，间接指定了 font-lock-keywords 的值，它指导基于搜索的字体化。它可以是一个符号、一个变量或一个函数，其值是用于字体锁定关键字的列表。它也可以是几个这样的符号的列表，每个可能的字体化级别一个。第一个符号指定字体化的 @code{模式默认} 级别，下一个符号级别 1 字体化，下一个级别 2，依此类推。'mode default' 级别通常与级别 1 相同。当 font-lock-maximum-decoration 具有 nil 值时使用它。请参阅字体锁定级别。
+
+第二个元素，keywords-only，指定变量 font-lock-keywords-only 的值。如果省略或为零，则还执行（字符串和注释的）语法字体化。如果这是非零，则不执行句法字体化。请参阅语法字体锁定。
+
+第三个元素 case-fold 指定 font-lock-keywords-case-fold-search 的值。如果它不为 nil，则字体锁定模式在基于搜索的字体化过程中会忽略大小写。
+
+如果第四个元素 syntax-alist 不为 nil，则它应该是格式为 (char-or-string . string) 的 cons 单元的列表。这些用于建立句法字体化的句法表；  生成的语法表存储在 font-lock-syntax-table 中。如果 syntax-alist 被省略或为零，则语法字体化使用 syntax-table 函数返回的语法表。请参阅语法表函数。
+
+所有剩余的元素（如果有的话）统称为 other-vars。这些元素中的每一个都应具有 (variable . value) 形式——这意味着，将变量设置为缓冲区本地，然后将其设置为 value。除了可以使用前五个元素控制的变量之外，您可以使用这些 other-vars 设置影响字体化的其他变量。请参阅其他字体锁定变量。
+
+如果您的模式通过添加 font-lock-face 属性显式字体化文本，它可以为 font-lock-defaults 指定 (nil t) 以关闭所有自动字体化。但是，这不是必需的；  可以使用 font-lock-face 属性对某些内容进行字体化，并为文本的其他部分设置自动字体化。
+
+@node 2462 基于搜索的字体
+@subsection 24.6.2 基于搜索的字体
+
+直接控制基于搜索的字体化的变量是 font-lock-keywords，通常通过 font-lock-defaults 中的关键字元素指定。
+
+@lisp
+Variable: font-lock-keywords ¶
+@end lisp
+
+此变量的值是要突出显示的关键字列表。Lisp 程序不应该直接设置这个变量。通常，该值由字体锁定模式自动设置，使用 font-lock-defaults 中的关键字元素。也可以使用函数 font-lock-add-keywords 和 font-lock-remove-keywords 更改该值（请参阅自定义基于搜索的字体）。
+
+font-lock-keywords 的每个元素都指定如何查找某些文本案例，以及如何突出显示这些案例。字体锁定模式会一个一个地处理 font-lock-keywords 的元素，并且对于每个元素，它会查找并处理所有匹配项。通常，一旦部分文本已经字体化，就不能被同一文本中的后续匹配覆盖；  但是您可以使用 subexp-highlighter 的 override 元素指定不同的行为。
+
+font-lock-keywords 的每个元素都应具有以下形式之一：
+
+@lisp
+regexp
+@end lisp
+
+使用 font-lock-keyword-face 突出显示正则表达式的所有匹配项。例如，
+
+@lisp
+;; Highlight occurrences of the word ‘foo’
+;; using font-lock-keyword-face.
+"\\<foo\\>"
+@end lisp
+
+编写这些正则表达式时要小心；  写得不好的模式会大大减慢速度！  函数 regexp-opt（请参阅正则表达式函数）对于计算最佳正则表达式以匹配多个关键字很有用。
+@lisp
+function
+@end lisp
+
+通过调用函数查找文本，并使用 font-lock-keyword-face 突出显示它找到的匹配项。
+
+调用函数时，它接收一个参数，即搜索的限制；  它应该从点开始搜索，而不是搜索超出限制。如果成功，它应该返回非零，并设置匹配数据来描述找到的匹配。返回 nil 表示搜索失败。
+
+Fontification 会以相同的限制重复调用函数，并使用前一次调用离开它的点，直到函数失败。发生故障时，功能无需以任何特定方式重置点。
+@lisp
+(matcher . subexp)
+@end lisp
+
+在这种元素中，matcher 或者是一个正则表达式或者一个函数，如上所述。CDR，subexp，指定应该突出显示匹配器的哪个子表达式（而不是匹配器匹配的整个文本）。
+@lisp
+;; Highlight the ‘bar’ in each occurrence of ‘fubar’,
+;; using font-lock-keyword-face.
+("fu\\(bar\\)" . 1)
+@end lisp
+
+@lisp
+(matcher . facespec)
+@end lisp
+
+在这种元素中，facespec 是一个表达式，其值指定用于突出显示的面部。在最简单的情况下，facespec 是一个 Lisp 变量（一个符号），它的值是一个面名。
+
+@lisp
+;; Highlight occurrences of ‘fubar’,
+;; using the face which is the value of fubar-face.
+("fubar" . fubar-face)
+@end lisp
+
+但是，facespec 也可以评估为这种形式的列表：
+
+@lisp
+(subexp
+(face face prop1 val1 prop2 val2…))
+@end lisp
+
+
+指定面部和各种附加文本属性以放置在匹配的文本上。如果您这样做，请务必将您以这种方式设置的其他文本属性名称添加到 font-lock-extra-managed-props 的值中，以便当这些属性不再适用时也会被清除。或者，您可以将变量 font-lock-unfontify-region-function 设置为清除这些属性的函数。请参阅其他字体锁定变量。
+@lisp
+(matcher . subexp-highlighter)
+@end lisp
+
+在这种元素中，subexp-highlighter 是一个列表，它指定如何突出显示匹配器找到的匹配项。它具有以下形式：
+
+@lisp
+(subexp facespec [override [laxmatch]])
+@end lisp
+
+
+CAR subexp 是一个整数，指定要字体化的匹配子表达式（0 表示整个匹配文本）。第二个子元素 facespec 是一个表达式，其值指定面，如上所述。
+
+subexp-highlighter 中的最后两个值 override 和 laxmatch 是可选标志。如果 override 为 t，则此元素可以覆盖由 font-lock-keywords 的先前元素所做的现有字体化。如果保留，则如果每个字符尚未被其他元素字体化，则每个字符都会被字体化。如果它是前置的，则将 facespec 指定的面添加到 font-lock-face 属性的开头。如果是追加，则将面添加到 font-lock-face 属性的末尾。
+
+如果 laxmatch 为非 nil，则意味着如果 matcher 中没有子表达式编号 subexp，则应该没有错误。显然，子表达式编号 subexp 的字体化不会发生。但是，其他子表达式（和其他正则表达式）的字体化将继续。如果 laxmatch 为 nil，并且缺少指定的子表达式，则会发出错误信号，终止基于搜索的字体化。
+
+以下是此类元素的一些示例，以及它们的作用：
+
+@lisp
+;; Highlight occurrences of either ‘foo’ or ‘bar’, using
+;; foo-bar-face, even if they have already been highlighted.
+;; foo-bar-face should be a variable whose value is a face.
+("foo\\|bar" 0 foo-bar-face t)
+
+;; Highlight the first subexpression within each occurrence
+;; that the function fubar-match finds,
+;; using the face which is the value of fubar-face.
+(fubar-match 1 fubar-face)
+@end lisp
+
+@lisp
+(matcher . anchored-highlighter)
+@end lisp
+
+在这种元素中，anchored-highlighter 指定如何突出显示匹配器找到的匹配项之后的文本。因此，matcher 找到的匹配项充当了由 anchored-highlighter 指定的进一步搜索的锚点。anchored-highlighter 是以下形式的列表：
+
+@lisp
+(anchored-matcher pre-form post-form
+                        subexp-highlighters…)
+@end lisp
+
+在这里，anchored-matcher 和 matcher 一样，要么是正则表达式，要么是函数。找到 matcher 的 match 后，point 位于 match 的末尾。现在，Font Lock 评估表单预制件。然后它搜索 anchored-matcher 的匹配项并使用 subexp-highlighters 突出显示这些。subexp-highlighter 如上所述。最后，Font Lock 评估表单后。
+
+表单 pre-form 和 post-form 可用于在使用锚定匹配器之前进行初始化和清理之后。通常，在使用锚定匹配器开始之前，预制件用于将点移动到相对于匹配器匹配的某个位置。在使用 matcher 恢复之前，可以使用 post-form 向后移动。
+
+在 Font Lock 评估 pre-form 之后，它不会搜索超出行尾的锚定匹配器。但是，如果 pre-form 在计算 pre-form 后返回的缓冲区位置大于 point 的位置，则使用 pre-form 返回的位置作为搜索的限制。返回大于行尾的位置通常是个坏主意；  换句话说，锚定匹配器搜索不应跨越行。
+
+例如，
+@lisp
+;; Highlight occurrences of the word ‘item’ following
+;; an occurrence of the word ‘anchor’ (on the same line)
+;; in the value of item-face.
+("\\<anchor\\>" "\\<item\\>" nil nil (0 item-face))
+@end lisp
+
+
+
+在这里，pre-form 和 post-form 都是零。因此，搜索 @code{item} 在 @code{anchor} 匹配结束时开始，搜索 @code{anchor} 的后续实例从搜索 @code{item} 结束处开始。
+@lisp
+(matcher highlighters…)
+@end lisp
+
+这种元素为单个匹配器指定了几个荧光笔列表。荧光笔列表可以是 subexp-highlighter 或anchored-highlighter 类型，如上所述。
+
+例如，
+@lisp
+;; Highlight occurrences of the word ‘anchor’ in the value
+;; of anchor-face, and subsequent occurrences of the word
+;; ‘item’ (on the same line) in the value of item-face.
+("\\<anchor\\>" (0 anchor-face)
+                ("\\<item\\>" nil nil (0 item-face)))
+@end lisp
+
+
+@lisp
+(eval . form)
+@end lisp
+
+这里的 form 是第一次在缓冲区中使用这个 font-lock-keywords 值时要评估的表达式。其值应具有此表中描述的形式之一。
+
+警告：不要设计一个 font-lock-keywords 元素来匹配跨行的文本；  这不能可靠地工作。有关详细信息，请参阅多行字体锁定结构。
+
+您可以在 font-lock-defaults 中使用 case-fold 来指定 font-lock-keywords-case-fold-search 的值，它表示基于搜索的字体化是否应该不区分大小写。
+
+@lisp
+Variable: font-lock-keywords-case-fold-search ¶
+@end lisp
+
+
+非零意味着为了字体锁定关键字的正则表达式匹配应该不区分大小写。
+
+@node 2463 自定义基于搜索的字体
+@subsection 24.6.3 自定义基于搜索的字体
+
+您可以使用 font-lock-add-keywords 将其他基于搜索的字体化规则添加到主要模式，并使用 font-lock-remove-keywords 删除规则。
+
+@lisp
+Function: font-lock-add-keywords mode keywords &optional how ¶
+@end lisp
+
+此函数为当前缓冲区或主要模式模式添加突出显示关键字。参数关键字应该是一个与变量 font-lock-keywords 格式相同的列表。
+
+如果 mode 是一个主要模式命令名称的符号，例如 c-mode，则效果是在 mode 中启用 Font Lock 模式会将关键字添加到 font-lock-keywords。仅在 ~/.emacs 文件中使用非零值 mode 调用是正确的。
+
+如果 mode 为 nil，此函数将关键字添加到当前缓冲区中的 font-lock-keywords。这种调用 font-lock-add-keywords 的方式通常用于模式挂钩函数中。
+
+默认情况下，关键字添加在 font-lock-keywords 的开头。如果设置了可选参数 how ，它们用于替换 font-lock-keywords 的值。如果有任何其他非零值，则将它们添加到 font-lock-keywords 的末尾。
+
+某些模式提供专门的支持，您可以在其他突出显示模式中使用。例如，请参阅变量 c-font-lock-extra-types、c++-font-lock-extra-types 和 java-font-lock-extra-types。
+
+警告：主要模式命令在任何情况下都不得直接或间接调用 font-lock-add-keywords，除非通过它们的模式挂钩。（这样做会导致某些次要模式的错误行为。）他们应该通过设置 font-lock-keywords 来设置基于搜索的字体化规则。
+
+@lisp
+Function: font-lock-remove-keywords mode keywords ¶
+@end lisp
+
+此函数从 font-lock-keywords 中删除当前缓冲区或主要模式模式的关键字。与 font-lock-add-keywords 一样，mode 应该是主要模式命令名称或 nil。font-lock-add-keywords 的所有注意事项和要求也适用于此处。参数关键字必须与相应的 font-lock-add-keywords 使用的关键字完全匹配。
+
+例如，以下代码为 C 模式添加了两种字体化模式：一种用于字体化单词 @code{FIXME} ，甚至在注释中，另一种将单词 @code{and} 、 @code{or} 和 @code{not} 字体化为关键字。
+
+@lisp
+(font-lock-add-keywords 'c-mode
+ '(("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
+   ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)))
+@end lisp
+
+此示例仅影响正确的 C 模式。要将相同的模式添加到 C 模式和从它派生的所有模式，请改为执行以下操作：
+
+@lisp
+(add-hook 'c-mode-hook
+ (lambda ()
+  (font-lock-add-keywords nil
+   '(("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
+     ("\\<\\(and\\|or\\|not\\)\\>" .
+      font-lock-keyword-face)))))
+@end lisp
+
+@node 2464 其他字体锁定变量
+@subsection 24.6.4 其他字体锁定变量
+
+本节介绍主要模式可以通过 font-lock-defaults 中的 other-vars 设置的其他变量（请参阅字体锁定基础知识）。
+
+@lisp
+Variable: font-lock-mark-block-function ¶
+@end lisp
+
+如果这个变量是非零，它应该是一个不带参数调用的函数，为命令 Mx font-lock-fontify-block 选择一个封闭的文本范围进行重新字体化。
+
+该函数应通过在其周围放置区域来报告其选择。一个好的选择是足够大的文本范围以提供适当的结果，但不要太大，以免重新字体变慢。典型值是用于编程模式的 mark-defun 或用于文本模式的 mark-paragraph。
+
+@lisp
+Variable: font-lock-extra-managed-props ¶
+@end lisp
+
+此变量指定由字体锁定模式管理的其他属性（font-lock-face 除外）。它由 font-lock-default-unfontify-region 使用，它通常只管理 font-lock-face 属性。如果您还希望 Font Lock 管理其他属性，则必须在 font-lock-keywords 的 facespec 中指定它们并将它们添加到此列表中。请参阅基于搜索的字体。
+
+@lisp
+Variable: font-lock-fontify-buffer-function ¶
+@end lisp
+
+用于字体化缓冲区的函数。默认值为 font-lock-default-fontify-buffer。
+
+@lisp
+Variable: font-lock-unfontify-buffer-function ¶
+@end lisp
+
+用于取消字体化缓冲区的函数。这在关闭字体锁定模式时使用。默认值为 font-lock-default-unfontify-buffer。
+
+@lisp
+Variable: font-lock-fontify-region-function ¶
+@end lisp
+
+用于字体化区域的函数。它应该有两个参数，区域的开始和结束，以及可选的第三个参数详细。如果详细信息不为零，则该函数应打印状态消息。默认值为 font-lock-default-fontify-region。
+
+@lisp
+Variable: font-lock-unfontify-region-function ¶
+@end lisp
+
+用于取消字体化区域的函数。它应该有两个参数，区域的开始和结束。默认值为 font-lock-default-unfontify-region。
+
+@lisp
+Variable: font-lock-flush-function ¶
+@end lisp
+
+用于声明区域字体已过期的函数。它需要两个参数，区域的开始和结束。此变量的默认值为 font-lock-after-change-function。
+
+@lisp
+Variable: font-lock-ensure-function ¶
+@end lisp
+
+用于确保当前缓冲区的区域已被字体化的函数。它用两个参数调用，区域的开始和结束。该变量的默认值是一个函数，如果缓冲区没有字体化，则调用 font-lock-default-fontify-buffer；  效果是确保缓冲区的整个可访问部分被字体化。
+
+@lisp
+Function: jit-lock-register function &optional contextual ¶
+@end lisp
+
+这个函数告诉字体锁定模式在任何时候必须对当前缓冲区的一部分进行字体化或重新字体化时运行 Lisp 函数。它在调用默认字体化函数之前调用函数，并给它两个参数，开始和结束，指定要字体化或重新字体化的区域。如果函数进行字体化，它可以返回一个表单列表（jit-lock-bounds beg .end），以指示它实际字体化的区域的边界；  JIT font-lock 将使用此信息来优化随后的重新显示周期和缓冲区文本区域，它将传递给未来的函数调用。
+
+可选参数上下文，如果非零，强制字体锁定模式总是重新字体缓冲区的语法相关部分，而不仅仅是修改的行。这个参数通常可以省略。
+
+当在缓冲区中激活字体锁定时，如果 font-lock-keywords-only 的值（请参阅语法字体锁定）为 nil，它会使用上下文的非 nil 值调用此函数。
+
+@lisp
+Function: jit-lock-unregister function ¶
+@end lisp
+
+如果函数之前使用 jit-lock-register 注册为字体化函数，则此函数将取消注册它。
+
+@node 2465 字体锁定级别
+@subsection 24.6.5 字体锁定级别
+
+一些主要模式提供三种不同级别的字体化。您可以通过使用 font-lock-defaults 中关键字的符号列表来定义多个级别。每个符号指定一个字体化级别；  由用户选择这些级别之一，通常通过设置 font-lock-maximum-decoration （请参阅 GNU Emacs 手册中的字体锁定）。所选级别的符号值用于初始化 font-lock-keywords。
+
+以下是如何定义字体化级别的约定：
+
+级别 1：突出显示函数声明、文件指令（例如包含或导入指令）、字符串和注释。这个想法是速度，所以只有最重要和顶级的组件被字体化。
+级别 2：除了级别 1，突出显示所有语言关键字，包括类似于关键字的类型名称，以及命名的常量值。这个想法是所有关键字（句法或语义）都应该适当地字体化。
+第 3 级：除第 2 级外，突出显示在函数和变量声明中定义的符号，以及所有内置函数名称，无论它们出现在何处。
+
+@node 2466 预计算字体
+@subsection 24.6.6 预计算字体
+
+一些主要的模式，如列表缓冲区和发生以编程方式构造缓冲区文本。他们支持字体锁定模式的最简单方法是在他们将文本插入缓冲区时指定文本的面。
+
+这样做的方法是使用特殊的文本属性 font-lock-face 指定文本中的面（请参阅具有特殊含义的属性）。启用字体锁定模式时，此属性控制显示，就像 face 属性一样。禁用字体锁定模式时，font-lock-face 对显示没有影响。
+
+一种模式可以对某些文本使用 font-lock-face 并使用普通的 Font Lock 机制。但如果该模式不使用正常的字体锁定机制，则不应设置变量 font-lock-defaults。在这种情况下，face 属性不会被覆盖，因此使用 face 属性也可以。但是，通常最好使用 font-lock-face，因为它允许用户通过切换 font-lock-mode 来控制字体化，并且无论该模式是否使用 Font Lock 机制，都可以让代码工作。
+
+@node 2467 字体锁定面
+@subsection 24.6.7 字体锁定面
+
+Font Lock 模式可以使用任何面来突出显示，但 Emacs 定义了几个面专门用于 Font Lock 用于突出显示文本。下面列出了这些字体锁定面。它们也可以被主要模式用于字体锁定模式之外的语法突出显示（请参阅主要模式约定）。
+
+这些符号中的每一个都是面名和默认值为符号本身的变量。因此，font-lock-comment-face 的默认值为 font-lock-comment-face。
+
+列出了这些面孔及其典型用法的描述，并按照突出程度从高到低排列。如果一个模式的句法类别与使用描述不太吻合，则可以使用排序作为指导来分配面孔。
+
+@lisp
+font-lock-warning-face ¶
+@end lisp
+
+对于一个特殊的构造（例如，在 Emacs Lisp 符号中未转义的易混淆引号，如 ''foo'），或者极大地改变了其他文本的含义，如 Emacs Lisp 中的 ';;;###autoload' 和 ' C中的#error'。
+@lisp
+font-lock-function-name-face ¶
+@end lisp
+
+用于定义或声明的函数的名称。
+@lisp
+font-lock-variable-name-face ¶
+@end lisp
+
+用于定义或声明的变量的名称。
+@lisp
+font-lock-keyword-face ¶
+@end lisp
+
+用于具有特殊语法意义的关键字，例如 C 中的 @code{for} 和 @code{if} 。
+@lisp
+font-lock-comment-face ¶
+@end lisp
+
+征求意见。
+@lisp
+font-lock-comment-delimiter-face ¶
+@end lisp
+
+对于注释分隔符，例如 C 中的 '@emph{@strong{' 和 '}}'。在大多数终端上，它继承自 font-lock-comment-face。
+@lisp
+font-lock-type-face ¶
+@end lisp
+
+用于用户定义数据类型的名称。
+@lisp
+font-lock-constant-face ¶
+@end lisp
+
+对于常量的名称，例如 C 中的 'NULL'。
+@lisp
+font-lock-builtin-face ¶
+@end lisp
+
+用于内置函数的名称。
+@lisp
+font-lock-preprocessor-face ¶
+@end lisp
+
+用于预处理器命令。默认情况下，它继承自 font-lock-builtin-face。
+@lisp
+font-lock-string-face ¶
+@end lisp
+
+对于字符串常量。
+@lisp
+font-lock-doc-face ¶
+@end lisp
+
+用于嵌入在特殊格式的注释或字符串中的程序代码中的文档。默认情况下，此面继承自 font-lock-string-face。
+@lisp
+font-lock-doc-markup-face ¶
+@end lisp
+
+使用 font-lock-doc-face 标记文本中的元素。它通常用于嵌入在程序代码中的文档中的标记结构，遵循诸如 Haddock、Javadoc 或 Doxygen 之类的约定。默认情况下，此面继承自 font-lock-constant-face。
+@lisp
+font-lock-negation-char-face ¶
+@end lisp
+
+用于容易被忽视的否定字符。
+
+@node 2468 语法字体锁定
+@subsection 24.6.8 语法字体锁定
+
+句法字体化使用句法表（参见句法表）来查找和突出显示与句法相关的文本。如果启用，它将在基于搜索的字体化之前运行。下面记录的变量 font-lock-syntactic-face-function 确定要突出显示的句法结构。有几个变量会影响句法字体化；  您应该通过 font-lock-defaults 设置它们（请参阅字体锁定基础）。
+
+每当 Font Lock 模式对一段文本进行语法字体化时，它首先调用 syntax-properize-function 指定的函数。主要模式可以使用它来应用语法表文本属性以在特殊情况下覆盖缓冲区的语法表。请参阅语法属性。
+
+@lisp
+Variable: font-lock-keywords-only ¶
+@end lisp
+
+如果这个变量的值是非零，Font Lock 不做语法字体化，只根据 font-lock-keywords 进行基于搜索的字体化。它通常由字体锁定模式基于 font-lock-defaults 中的关键字元素设置。如果值为 nil，字体锁定将调用 jit-lock-register（请参阅其他字体锁定变量）来设置缓冲区文本在修改后的自动重新字体化，以反映由于更改而产生的新语法上下文。
+
+@lisp
+Variable: font-lock-syntax-table ¶
+@end lisp
+
+此变量保存用于注释和字符串字体化的语法表。它通常由字体锁定模式基于 font-lock-defaults 中的 syntax-alist 元素设置。如果此值为 nil，则语法字体化使用缓冲区的语法表（由函数 syntax-table 返回的值；请参阅语法表函数）。
+
+@lisp
+Variable: font-lock-syntactic-face-function ¶
+@end lisp
+
+如果这个变量是非零，它应该是一个函数来确定给定句法元素（字符串或注释）使用哪个面。
+
+该函数使用一个参数调用，即 parse-partial-sexp 返回的点的解析状态，并且应该返回一张脸。默认值返回 font-lock-comment-face 用于注释和 font-lock-string-face 用于字符串（参见字体锁定面）。
+
+此变量通常通过 font-lock-defaults 中的 @code{其他} 元素设置：
+@lisp
+(setq-local font-lock-defaults
+            `(,python-font-lock-keywords
+              nil nil nil nil
+              (font-lock-syntactic-face-function
+               . python-font-lock-syntactic-face-function)))
+@end lisp
+
+@node 2469 多行字体锁定结构
+@subsection 24.6.9 多行字体锁定结构
+
+通常，font-lock-keywords 的元素不应该跨多行匹配；  这不能可靠地工作，因为字体锁定通常只扫描缓冲区的一部分，并且它可能会错过跨越扫描开始的行边界的多行构造。（扫描通常从一行的开头开始。）
+
+使匹配多行结构的元素正常工作有两个方面：正确识别和正确重新突出显示。第一个意味着字体锁定找到所有多行结构。第二个意味着当多行结构发生变化时，字体锁定将正确地重新突出显示所有相关文本——例如，如果以前是多行结构一部分的一些文本不再是它的一部分。这两个方面密切相关，通常让其中一个工作似乎会使另一个工作。但是，为了获得可靠的结果，您必须明确注意这两个方面。
+
+有三种方法可以确保正确识别多行结构：
+
+向 font-lock-extend-region-functions 添加一个函数，该函数执行识别并扩展扫描，以便扫描的文本永远不会在多行结构的中间开始或结束。
+类似地使用 font-lock-fontify-region-function 挂钩来扩展扫描，以便扫描的文本永远不会在多行结构的中间开始或结束。
+以某种方式在它被插入缓冲区时（或在此之后但在 font-lock 尝试突出显示它之前的任何时间）识别多行构造，并用 font-lock-multiline 标记它，这将指示 font-lock 不启动或在构造中间结束扫描。
+
+有几种方法可以重新突出显示多行结构：
+
+在构造上放置一个 font-lock-multiline 属性。如果它的任何部分被更改，这将重新突出显示整个构造。在某些情况下，您可以通过设置 font-lock-multiline 变量来自动执行此操作，请参见。
+确保设置了 jit-lock-contextually 并依赖它来完成它的工作。这只会重新突出显示实际更改之后的构造部分，并且会在短暂的延迟后执行。这仅在多行构造的各个部分的突出显示从不依赖于后续行中的文本时才有效。由于 jit-lock-contextually 是默认激活的，这可能是一个有吸引力的解决方案。
+在构造上放置一个 jit-lock-defer-multiline 属性。这仅在使用 jit-lock-contextually 时有效，并且在重新突出显示之前具有相同的延迟，但与 font-lock-multiline 一样，它也处理突出显示取决于后续行的情况。
+如果解析一个构造的语法依赖于它在一个单独的块中被解析，您可以在所讨论的构造上添加 syntax-multiline 文本属性。最常见的用途是应用于 'FOO' 的语法属性取决于稍后的一些文本 'BAR'：通过将此文本属性放置在整个 'FOO@dots{}BAR' 上，您可以确保任何更改'BAR' 也会导致重新计算 'FOO' 的语法属性。注意：为此，该模式需要将 syntax-propertize-multiline 添加到 syntax-propertize-extend-region-functions。
+
+@enumerate
+@item
+24.6.9.1 字体锁定多行
+
+
+确保可靠地重新突出显示多行字体锁定结构的一种方法是在它们上放置文本属性 font-lock-multiline。对于属于多行结构的文本，它应该存在且非零。
+
+当 Font Lock 即将突出显示文本范围时，它首先根据需要扩展范围的边界，以便它们不会落在使用 font-lock-multiline 属性标记的文本中。然后它从范围中删除任何 font-lock-multiline 属性，并突出显示它。突出显示规范（主要是 font-lock-keywords）必须每次都重新安装此属性，只要合适。
+
+警告：不要在大范围的文本上使用 font-lock-multiline 属性，因为这会使重新突出显示变慢。
+
+@lisp
+Variable: font-lock-multiline ¶
+@end lisp
+
+如果 font-lock-multiline 变量设置为 t，Font Lock 将尝试在多行结构上自动添加 font-lock-multiline 属性。然而，这不是一个通用的解决方案，因为它会稍微减慢字体锁定的速度。它可能会遗漏一些多行构造，或者使属性大于或小于必要的值。
+
+对于匹配器为函数的元素，该函数应确保子匹配 0 覆盖整个相关的多行结构，即使只有一小部分会突出显示。手动添加 font-lock-multiline 属性通常同样容易。
+
+font-lock-multiline 属性旨在确保正确的重新字体化；  它不会自动识别新的多行结构。识别它们需要字体锁定模式一次在足够大的块上运行。这在许多情况下会偶然发生，这可能会给人一种多行构造神奇地工作的印象。如果您将 font-lock-multiline 变量设置为非 nil，这种印象会更加强烈，因为从那时起，找到的那些结构的突出显示将被正确更新。但这并不可靠。
+
+要可靠地找到多行结构，您必须在字体锁定模式查看文本之前手动将 font-lock-multiline 属性放置在文本上，或者使用 font-lock-fontify-region-function。
+
+@item
+24.6.9.2 缓冲区更改后要字体化的区域
+
+
+当缓冲区更改时，Font Lock 重新设置字体的区域默认是跨越更改的最小整行序列。虽然这在大多数情况下都能正常工作，但有时却不能——例如，当更改改变了前一行文本的句法含义时。
+
+您可以通过设置以下变量来放大（甚至缩小）要重新字体化的区域：
+
+@lisp
+Variable: font-lock-extend-after-change-region-function ¶
+@end lisp
+
+这个缓冲区局部变量要么是 nil，要么是 Font Lock 模式调用以确定要扫描和字体化的区域的函数。
+
+该函数有三个参数，标准 beg、end 和来自 after-change-functions 的 old-len（请参阅 Change Hooks）。它应该返回要字体化的区域的开始和结束缓冲区位置（按该顺序）的 cons，或者返回 nil（这意味着以标准方式选择区域）。此功能需要保留点、匹配数据和当前限制。它返回的区域可能在一行的中间开始或结束。
+
+由于每次缓冲区更改后都会调用此函数，因此它应该相当快。
+@end enumerate
+
+@node 247 代码自动缩进
+@section 24.7 代码自动缩进
+
+对于编程语言来说，主要模式的一个重要特性是提供自动缩进。有两个部分：一个是决定什么是行的正确缩进，另一个是决定何时重新缩进一行。默认情况下，每当您在电子缩进字符中键入字符时，Emacs 都会重新缩进一行，默认情况下仅包括换行符。主要模式可以根据语言的语法将字符添加到电子缩进字符中。
+
+确定什么是正确的缩进在 Emacs 中由 indent-line-function 控制（请参阅由主要模式控制的缩进）。对于某些模式，不能可靠地知道正确的缩进，通常是因为缩进很重要，所以几个缩进是有效的但具有不同的含义。在这种情况下，模式应该设置为electric-indent-inhibit 以确保线路不会不断地重新缩进而不符合用户的意愿。
+
+编写一个好的缩进函数可能很困难，而且在很大程度上它仍然是一种魔法。许多主要模式的作者会首先编写一个适用于简单情况的简单缩进函数，例如通过与前一行的缩进进行比较。对于大多数并非真正基于行的编程语言，这往往扩展性很差：改进这样一个函数以使其处理更多不同的情况往往变得越来越困难，最终导致一个大的、复杂的、不可维护的缩进无人敢碰的功能。
+
+一个好的缩进函数通常需要根据语言的语法来实际解析文本。幸运的是，没有必要像编译器那样详细地解析文本，但另一方面，嵌入在缩进代码中的解析器希望对语法错误的代码有点友好。
+
+良好的可维护缩进函数通常分为两类：从某个安全起点向前解析直到感兴趣的位置，或者从感兴趣的位置向后解析。两者都不是比另一个更好的选择：向后解析通常比向前解析更困难，因为编程语言被设计为向前解析，但出于缩进的目的，它具有不需要猜测安全开始的优点点，并且它通常具有只分析最少的文本来决定行的缩进的特性，因此在一些早期不相关的代码中，缩进往往受语法错误的影响较小。另一方面，向前解析通常更容易，并且具有可以通过一次解析一次有效地重新缩进整个区域的优点。
+
+与其从头开始编写自己的缩进函数，不如尝试重用一些现有的函数或依赖通用缩进引擎。可悲的是，这样的引擎很少。CC 模式缩进代码（用于 C、C++、Java、Awk 和其他一些此类模式）多年来变得更加通用，因此如果您的语言看起来与其中一种语言有些相似，您可以尝试使用那个引擎。另一个是 SMIE，它采用了 Lisp sexps 精神的方法，并将其改编为非 Lisp 语言。
+
+@menu
+* 24.7.1 简单的缩进引擎: 2471 简单的缩进引擎. 
+@end menu
+
+@node 2471 简单的缩进引擎
+@subsection 24.7.1 简单的缩进引擎
+
+SMIE 是一个提供通用导航和缩进引擎的包。基于使用运算符优先语法的非常简单的解析器，它允许主要模式将 Lisp 的基于 sexp 的导航扩展到非 Lisp 语言，并提供简单易用但可靠的自动缩进。
+
+与编译器中使用的一些更常见的技术相比，运算符优先语法是一种非常原始的解析技术。它具有以下特点：其解析能力非常有限，并且在很大程度上无法检测语法错误，但它具有算法高效且能够向前和向后解析的优点。在实践中，这意味着 SMIE 可以将其用于基于反向解析的缩进，它可以提供 forward-sexp 和 back-sexp 功能，并且它自然会在语法不正确的代码上工作，而无需任何额外的努力。不利的一面是，这也意味着大多数编程语言无法使用 SMIE 正确解析，至少在不诉诸一些特殊技巧的情况下无法正确解析（参见 Living With a Weak Parser）。
+
+SMIE 设置和功能
+
+@enumerate
+@item
+24.7.1.1 SMIE 设置和功能
+
+
+SMIE 旨在成为结构导航和各种其他功能的一站式商店，这些功能依赖于代码的句法结构，特别是自动缩进。主要入口点是 smie-setup，这是一个通常在设置主模式时调用的函数。
+
+@lisp
+Function: smie-setup grammar rules-function &rest keywords ¶
+@end lisp
+
+设置 SMIE 导航和缩进。语法是smie-prec2->grammar生成的语法表。rules-function 是一组用于 smie-rules-function 的缩进规则。关键字是附加参数，可以包括以下关键字：
+
+:forward-token fun：指定要使用的正向词法分析器。
+:backward-token fun：指定要使用的反向词法分析器。
+
+调用此函数足以使诸如 forward-sexp、backward-sexp 和 transpose-sexps 之类的命令能够正确处理结构元素，而不仅仅是已经由语法表处理的成对括号。例如，如果提供的语法足够精确，则 transpose-sexps 可以正确转置 + 运算符的两个参数，同时考虑到语言的优先规则。
+
+调用 smie-setup 也足以使 TAB 缩进以预期的方式工作，扩展 blink-matching-paren 以应用于像 begin@dots{}end 这样的元素，并提供一些可以在主模式键盘映射中绑定的命令。
+
+@lisp
+Command: smie-close-block ¶
+@end lisp
+
+此命令关闭最近打开（但尚未关闭）的块。
+
+@lisp
+Command: smie-down-list &optional arg ¶
+@end lisp
+
+此命令类似于 down-list，但它也注意括号以外的标记的嵌套，例如 begin@dots{}end。
+
+@item
+24.7.1.2 运算符优先级文法
+
+
+SMIE 的优先语法只是给每个标记一对优先级：左优先和右优先。如果令牌 T1 的右优先级小于令牌 T2 的左优先级，我们说 T1 < T2。阅读此 < 的一种好方法是作为一种括号：如果我们找到 @dots{} T1 某物 T2 @dots{} 那么应该将其解析为 @dots{} T1 (某物 T2 @dots{} 而不是 @dots{} T1 某物) T2 @dots{}. 如果我们有 T1 > T2，则后一种解释将是这种情况。如果我们有 T1 = T2，这意味着令牌 T2 在相同的句法结构中跟随令牌 T1，所以通常我们有 @code{开始} = @code{结束} 。这样的优先级对足以表达中缀运算符的左结合性或右结合性、括号等标记的嵌套以及许多其他情况。
+
+@lisp
+Function: smie-prec2->grammar table ¶
+@end lisp
+
+此函数采用 prec2 语法表并返回适合在 smie-setup 中使用的 alist。prec2 表本身就是由以下函数之一构建的。
+
+@lisp
+Function: smie-merge-prec2s &rest tables ¶
+@end lisp
+
+这个函数需要几个 prec2 表并将它们合并到一个新的 prec2 表中。
+
+@lisp
+Function: smie-precs->prec2 precs ¶
+@end lisp
+
+此函数从优先级 precs 表构建 prec2 表。precs 应该是一个列表，按优先级排序（例如 @code{+} 将在 @code{*} 之前），形式为 (assoc op @dots{}) 的元素，其中每个 op 是充当运算符的标记；  assoc 是它们的关联性，可以是左、右、关联或非关联。给定元素中的所有运算符共享相同的优先级和关联性。
+
+@lisp
+Function: smie-bnf->prec2 bnf &rest resolvers ¶
+@end lisp
+
+此函数允许您使用 BNF 表示法指定语法。它接受语法的 bnf 描述以及一组冲突解决规则解析器，并返回一个 prec2 表。
+
+bnf 是 (nonterm rhs1 rhs2 @dots{}) 形式的非终结定义列表，其中每个 rhs 是终结（又名标记）或非终结的（非空）列表。
+
+并非所有语法都被接受：
+
+rhs 不能是空列表（永远不需要空列表，因为 SMIE 无论如何都允许所有非终结符匹配空字符串）。
+一个 rhs 不能有 2 个连续的非终结符：每对非终结符都需要用一个终结符（又名令牌）分隔。这是运算符优先语法的一个基本限制。
+
+此外，可能会发生冲突：
+
+返回的 prec2 表包含标记对之间的约束，对于任何给定的标记对，只能存在一个约束：T1 < T2、T1 = T2 或 T1 > T2。
+标记可以是开启符（类似于 open-paren）、关闭符（如 close-paren）或两者都不是（例如，中缀运算符或像 @code{else} 这样的内部标记）。
+
+优先级冲突可以通过解析器解决，它是一个 precs 表的列表（参见 smie-precs->prec2）：对于每个优先级冲突，如果这些 precs 表指定了一个特定的约束，那么可以通过使用这个约束来解决冲突，否则报告一个冲突，并且任意选​​择一个冲突的约束，而其他的则被简单地忽略。
+
+@item
+24.7.1.3 定义语言的语法
+
+
+定义语言的 SMIE 语法的常用方法是定义一个新的全局变量，该变量通过给出一组 BNF 规则来保存优先表。例如，类似 Pascal 的小型语言的语法定义可能如下所示：
+
+@lisp
+
+
+(require 'smie)
+(defvar sample-smie-grammar
+  (smie-prec2->grammar
+   (smie-bnf->prec2
+
+    '((id)
+      (inst ("begin" insts "end")
+            ("if" exp "then" inst "else" inst)
+            (id ":=" exp)
+            (exp))
+      (insts (insts ";" insts) (inst))
+      (exp (exp "+" exp)
+           (exp "*" exp)
+           ("(" exps ")"))
+      (exps (exps "," exps) (exp)))
+
+    '((assoc ";"))
+    '((assoc ","))
+    '((assoc "+") (assoc "*")))))
+@end lisp
+
+需要注意的几点：
+
+上面的语法没有明确提到函数调用的语法：SMIE 将自动允许任何sexp 序列，例如标识符、平衡括号或开始@dots{}结束块无论如何都出现在任何地方。
+语法类别 id 没有右手边：这并不意味着它只能匹配空字符串，因为如前所述，任何 sexps 序列都可以出现在任何地方。
+因为非终结符在BNF文法中不能连续出现，所以很难正确处理充当终结符的记号，所以上述文法把 @code{;}   作为语句分隔符，SMIE 可以很好地处理。
+序列中使用的分隔符（例如上面的 @code{，} 和 @code{;} ）最好用 BNF 规则定义，例如 (foo (foo "separator" foo) @dots{})，这些规则会产生优先级冲突，然后通过给它们一个显式的来解决（关联 @code{分隔符} ）。
+("(" exps ")") 规则不需要配对括号，因为 SMIE 将配对语法表中标记为具有括号语法的任何字符。这条规则的作用（连同 exps 的定义）是为了明确 @code{，} 不应出现在括号之外。
+与其使用单个 precs 表来解决冲突，不如使用多个表，以便让语法的 BNF 部分尽可能指定相对优先级。
+除非有充分的理由偏爱左或右，否则通常最好使用 assoc 将运算符标记为关联。出于这个原因， @code{+} 和 @code{*} 在上面被定义为 assoc，尽管语言将它们正式定义为左结合。
+
+@item
+24.7.1.4 定义令牌
+
+
+SMIE 带有一个预定义的词法分析器，它以下列方式使用语法表：任何具有单词或符号语法的字符序列都被视为标记，任何具有标点语法的字符序列也是如此。这个默认的词法分析器通常是一个很好的起点，但对于任何给定的语言实际上很少是正确的。例如，它将认为 @code{2,+3} 由 3 个标记组成： @code{2} 、 @code{,+} 和 @code{3} 。
+
+要将您的语言的词法规则描述为 SMIE，您需要 2 个函数，一个用于获取下一个标记，另一个用于获取前一个标记。这些函数通常会首先跳过空格和注释，然后查看下一个文本块，看看它是否是一个特殊的标记。如果是这样，它应该跳过令牌并返回此令牌的描述。通常这只是从缓冲区中提取的字符串，但它可以是您想要的任何内容。例如：
+@lisp
+
+
+(defvar sample-keywords-regexp
+  (regexp-opt '("+" "*" "," ";" ">" ">=" "<" "<=" ":=" "=")))
+
+(defun sample-smie-forward-token ()
+  (forward-comment (point-max))
+  (cond
+   ((looking-at sample-keywords-regexp)
+    (goto-char (match-end 0))
+    (match-string-no-properties 0))
+   (t (buffer-substring-no-properties
+       (point)
+       (progn (skip-syntax-forward "w_")
+              (point))))))
+
+(defun sample-smie-backward-token ()
+  (forward-comment (- (point)))
+  (cond
+   ((looking-back sample-keywords-regexp (- (point) 2) t)
+    (goto-char (match-beginning 0))
+    (match-string-no-properties 0))
+   (t (buffer-substring-no-properties
+       (point)
+       (progn (skip-syntax-backward "w_")
+              (point))))))
+@end lisp
+
+注意这些词法分析器在括号前面时如何返回空字符串。这是因为 SMIE 会自动处理语法表中定义的括号。更具体地说，如果词法分析器返回 nil 或空字符串，SMIE 会尝试根据语法表将相应的文本作为 sexp 处理。
+
+@item
+24.7.1.5 使用弱解析器
+
+
+SMIE 使用的解析技术不允许令牌在不同的上下文中表现不同。对于大多数编程语言，这表现为转换 BNF 语法时的优先级冲突。
+
+有时，可以通过稍微不同的语法表达来解决这些冲突。例如，对于 Modula-2，BNF 语法看起来很自然，如下所示：
+
+@lisp
+...
+(inst ("IF" exp "THEN" insts "ELSE" insts "END")
+      ("CASE" exp "OF" cases "END")
+      ...)
+(cases (cases "|" cases)
+       (caselabel ":" insts)
+       ("ELSE" insts))
+...
+@end lisp
+
+但这会为 @code{ELSE} 造成冲突：一方面，IF 规则暗示（除其他外） @code{ELSE} = @code{END} ；  但另一方面，由于 @code{ELSE} 出现在 @code{END} 左侧的案例中，我们也有 @code{ELSE} > @code{END} 。我们可以通过以下方式解决冲突：
+
+@lisp
+...
+(inst ("IF" exp "THEN" insts "ELSE" insts "END")
+      ("CASE" exp "OF" cases "END")
+      ("CASE" exp "OF" cases "ELSE" insts "END")
+      ...)
+(cases (cases "|" cases) (caselabel ":" insts))
+...
+@end lisp
+或者
+@lisp
+...
+(inst ("IF" exp "THEN" else "END")
+      ("CASE" exp "OF" cases "END")
+      ...)
+(else (insts "ELSE" insts))
+(cases (cases "|" cases) (caselabel ":" insts) (else))
+...
+@end lisp
+
+重新编写语法以尝试解决冲突有其缺点，因为 SMIE 假设语法反映了代码的逻辑结构，因此最好使 BNF 更接近预期的抽象语法树。
+
+其他时候，经过仔细考虑，您可能会得出结论，这些冲突并不严重，只需通过 smie-bnf->prec2 的解析器参数解决它们。通常这是因为语法只是模棱两可的：冲突不会影响语法所描述的程序集，而只会影响这些程序的解析方式。这通常是分隔符和关联中缀运算符的情况，您希望在其中添加像 '((assoc "|")) 这样的解析器。另一种可能发生这种情况的情况是经典的悬空 else 问题，您将在其中使用 '((assoc "else" "then"))。它也可能发生在冲突是真实存在且无法真正解决的情况下，但在实践中不太可能造成问题。
+
+最后，在许多情况下，尽管努力重构语法，一些冲突仍然存在。不要绝望：虽然解析器不能变得更聪明，但你可以让词法分析器变得更聪明。因此，解决方案是查看冲突中涉及的令牌并将这些令牌中的一个拆分为 2 个（或更多）不同的令牌。例如，如果语法需要区分标记 @code{begin} 的两种不兼容用法，则根据它找到的 @code{begin} 类型，让词法分析器返回不同的标记（比如 @code{begin-fun} 和 @code{begin-plain} ）。这将区分不同案例的工作推给了词法分析器，因此词法分析器必须查看周围的文本以找到临时线索。
+
+@item
+24.7.1.6 指定缩进规则
+
+
+根据提供的语法，SMIE 将能够提供自动缩进，而无需任何额外的努力。但在实践中，这种默认的缩进样式可能还不够好。您将需要在许多不同的情况下对其进行调整。
+
+SMIE 缩进基于缩进规则应尽可能本地化的理念。为此，它依赖于虚拟缩进的思想，即如果特定程序点位于行首时，它会具有的缩进。当然，如果该程序点确实在行首，那么它的虚拟缩进就是它的当前缩进。但如果不是，则 SMIE 使用缩进算法来计算该点的虚拟缩进。现在在实践中，程序点的虚拟缩进不必与我们在它之前插入换行符时的缩进相同。要了解它是如何工作的，在 C 中 @{ 之后的缩进的 SMIE 规则并不关心 @{ 是站在它自己的一行上还是在前一行的末尾。相反，这些不同的情况在缩进规则中处理，该规则决定如何在 @{ 之前缩进。
+
+另一个重要的概念是 parent 的概念：token 的 parent 是最近的封闭句法结构的头 token。例如，else 的父级是它所属的 if，而 if 的父级又是周围构造的前导标记。命令backward-sexp 从一个标记跳转到它的父级，但有一些警告：对于开启者（启动一个构造的标记，如 if），您需要从标记之前的点开始，而对于其他人，您需要从指向令牌之后。如果它是感兴趣的令牌的开启者，则backward-sexp在父令牌之前的点停止，否则它在父令牌之后的点停止。
+
+SMIE 缩进规则是使用带有两个参数 method 和 arg 的函数指定的，其中 arg 的含义和预期的返回值取决于方法。
+
+方法可以是：
+
+:after，在这种情况下，arg 是一个标记，函数应该返回偏移量以用于 arg 之后的缩进。
+:before，在这种情况下，arg 是一个标记，函数应该返回偏移量以用于缩进 arg 本身。
+:elem，在这种情况下，函数应该返回用于缩进函数参数的偏移量（如果 arg 是符号 arg）或基本缩进步骤（如果 arg 是基本符号）。
+:list-intro，在这种情况下，arg 是一个标记，如果标记后面是表达式列表（不被任何标记分隔）而不是表达式，则函数应该返回非零。
+
+当 arg 是一个标记时，该函数在该标记之前的点被调用。返回值 nil 总是意味着回退到默认行为，因此函数应该为它不期望的参数返回 nil。
+
+偏移量可以是：
+
+nil：使用默认的缩进规则。
+(column .column)：缩进到column column。
+number：按数字偏移，相对于基础令牌，该基础令牌是 :after 的当前令牌及其 :before 的父令牌。
+
+@item
+24.7.1.7 缩进规则的辅助函数
+
+
+SMIE 提供了各种专门设计用于缩进规则功能的功能（如果在其他上下文中使用，其中一些功能会中断）。这些函数都以前缀 smie-rule- 开头。
+
+@lisp
+Function: smie-rule-bolp ¶
+@end lisp
+
+如果当前令牌是行中的第一个，则返回非零。
+
+@lisp
+Function: smie-rule-hanging-p ¶
+@end lisp
+
+如果当前令牌挂起，则返回非零。如果一个令牌是行上的最后一个令牌并且它前面有其他令牌，则该令牌正在挂起：一行上的一个单独的令牌没有挂起。
+
+@lisp
+Function: smie-rule-next-p &rest tokens ¶
+@end lisp
+
+如果下一个标记在标记中，则返回非零。
+
+@lisp
+Function: smie-rule-prev-p &rest tokens ¶
+@end lisp
+
+如果前一个令牌在令牌中，则返回非零。
+
+@lisp
+Function: smie-rule-parent-p &rest parents ¶
+@end lisp
+
+如果当前令牌的父级在父级之间，则返回非零。
+
+@lisp
+Function: smie-rule-sibling-p ¶
+@end lisp
+
+如果当前令牌的父级实际上是兄弟级，则返回非零。例如，当 @code{，} 的父级只是前一个 @code{，} 时就是这种情况。
+
+@lisp
+Function: smie-rule-parent &optional offset ¶
+@end lisp
+
+返回正确的偏移量以将当前标记与父标记对齐。如果非零，偏移量应该是一个整数，给出一个额外的偏移量来应用。
+
+@lisp
+Function: smie-rule-separator method ¶
+@end lisp
+
+缩进当前标记作为分隔符。
+
+分隔符在这里是指一个标记，其唯一目的是分隔某个封闭句法结构中的各种元素，并且它本身没有任何语义意义（即，它通常不会作为抽象句法树中的节点存在）。
+
+这样的标记应具有关联语法并与其语法父级密切相关。典型的例子是参数列表中的 @code{，} （括在括号内），或 @code{;}   在指令序列中（包含在 @{@dots{}@} 或 begin@dots{}end 块中）。
+
+method 应该是传递给 smie-rules-function 的方法名称。
+
+@item
+24.7.1.8 缩进规则示例
+
+
+下面是一个缩进函数的例子：
+
+@lisp
+(defun sample-smie-rules (kind token)
+  (pcase (cons kind token)
+    (`(:elem . basic) sample-indent-basic)
+    (`(,_ . ",") (smie-rule-separator kind))
+    (`(:after . ":=") sample-indent-basic)
+    (`(:before . ,(or `"begin" `"(" `"@{"))
+     (if (smie-rule-hanging-p) (smie-rule-parent)))
+    (`(:before . "if")
+     (and (not (smie-rule-bolp)) (smie-rule-prev-p "else")
+          (smie-rule-parent)))))
+@end lisp
+
+需要注意的几点：
+
+第一种情况表示要使用的基本缩进增量。如果 sample-indent-basic 为 nil，则 SMIE 使用全局设置 smie-indent-basic。主要模式可以设置 smie-indent-basic buffer-locally，但不鼓励这样做。
+标记 @code{，} 的规则使 SMIE 在逗号分隔符放在行首时尝试更聪明。它尝试突出分隔符以对齐逗号后的代码；  例如：
+
+@lisp
+x = longfunctionname (
+        arg1
+      , arg2
+    );
+@end lisp
+
+":=" 之后的缩进规则存在，因为否则 SMIE 会将 ":=" 视为中缀运算符，并将右参数与左参数对齐。
+ @code{begin} 之前的缩进规则是使用虚拟缩进的一个例子：该规则仅在 @code{begin} 挂起时使用，只有当 @code{begin} 不在行首时才会发生。因此，在缩进 @code{开始} 本身时不使用它，而仅在缩进与该 @code{开始} 相关的内容时使用。具体来说，这条规则改变了缩进：
+
+@lisp
+if x > 0 then begin
+           dosomething(x);
+       end
+@end lisp
+到
+@lisp
+if x > 0 then begin
+    dosomething(x);
+end
+@end lisp
+"if" 之前的缩进规则类似于 "begin" 的规则，但目的是将 "else if" 视为一个单元，以便对齐一系列测试而不是将每个测试进一步缩进对。此函数仅在 @code{if} 没有放在单独的行上的情况下执行此操作，因此是 smie-rule-bolp 测试。
+
+如果我们知道 "else" 总是与其 "if" 对齐并且总是在行首，我们可以使用更有效的规则：
+@lisp
+((equal token "if")
+ (and (not (smie-rule-bolp))
+      (smie-rule-prev-p "else")
+      (save-excursion
+        (sample-smie-backward-token)
+        (cons 'column (current-column)))))
+@end lisp
+这个公式的优点是它重用了前一个 @code{else} 的缩进，而不是一直回到序列的第一个 @code{if} 。
+
+@item
+24.7.1.9 自定义缩进
+
+
+如果您使用的是由 SMIE 提供缩进的模式，您可以自定义缩进以满足您的喜好。您可以基于每个模式（使用选项 smie-config）或每个文件（使用文件局部变量规范中的函数 smie-config-local）来执行此操作。
+
+@lisp
+User Option: smie-config ¶
+@end lisp
+
+此选项允许您基于每个模式自定义缩进。它是一个具有表单元素的列表（模式.规则）。有关规则的精确形式，请参阅变量的文档；  但您可能会发现使用命令 smie-config-guess 更容易。
+
+@lisp
+Command: smie-config-guess ¶
+@end lisp
+
+此命令尝试制定适当的设置以产生您喜欢的缩进样式。只需在访问以您的样式缩进的文件时调用该命令。
+
+@lisp
+Command: smie-config-save ¶
+@end lisp
+
+使用 smie-config-guess 后调用此命令，以保存您的设置以供将来的会话使用。
+
+@lisp
+Command: smie-config-show-indent &optional move ¶
+@end lisp
+
+此命令显示用于缩进当前行的规则。
+
+@lisp
+Command: smie-config-set-indent ¶
+@end lisp
+
+此命令添加一个本地规则来调整当前行的缩进。
+
+@lisp
+Function: smie-config-local rules ¶
+@end lisp
+
+此函数将规则添加为当前缓冲区的缩进规则。这些添加到由 smie-config 选项定义的任何特定于模式的规则。要为特定文件指定自定义缩进规则，请在文件的局部变量中添加一个条目，格式为：eval: (smie-config-local '(rules))。
+@end enumerate
+
+@node 248 桌面保存模式
+@section 24.8 桌面保存模式
+
+桌面保存模式是一种将 Emacs 的状态从一个会话保存到另一个会话的功能。GNU Emacs 手册中描述了使用桌面保存模式的用户级命令（请参阅 GNU Emacs 手册中的保存 Emacs 会话）。缓冲区访问文件的模式无需执行任何操作即可使用此功能。
+
+对于不访问文件以保存其状态的缓冲区，主要模式必须将缓冲区局部变量 desktop-save-buffer 绑定到非零值。
+
+@lisp
+Variable: desktop-save-buffer ¶
+@end lisp
+
+如果此缓冲区局部变量不为零，则缓冲区将在桌面保存时将其状态保存在桌面文件中。如果该值是一个函数，则在桌面保存时使用参数 desktop-dirname 调用它，并且它的值与调用它的缓冲区的状态一起保存在桌面文件中。当文件名作为辅助信息的一部分返回时，它们应该使用调用格式化
+
+@lisp
+(desktop-file-name file-name desktop-dirname)
+@end lisp
+
+
+对于不访问要恢复的文件的缓冲区，主要模式必须定义一个函数来完成这项工作，并且该函数必须列在 alist desktop-buffer-mode-handlers 中。
+
+@lisp
+Variable: desktop-buffer-mode-handlers ¶
+@end lisp
+
+Alist 与元素
+@lisp
+(major-mode . restore-buffer-function)
+@end lisp
+
+将使用参数列表调用函数 restore-buffer-function
+
+@lisp
+(buffer-file-name buffer-name desktop-buffer-misc)
+@end lisp
+它应该返回恢复的缓冲区。此处 desktop-buffer-misc 是可选绑定到 desktop-save-buffer 的函数返回的值。
+
+@bye

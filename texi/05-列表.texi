@@ -1,0 +1,1521 @@
+\input texinfo    @c -*- texinfo -*-
+@c %**start of header
+@setfilename 05-列表.info
+@settitle 
+@documentencoding UTF-8
+@documentlanguage en
+@c %**end of header
+
+@finalout
+@titlepage
+@title 
+@author zunrong
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top 
+@end ifnottex
+
+@menu
+* 5 列表::
+
+@detailmenu
+--- The Detailed Node Listing ---
+
+5 列表
+
+* 5.1 列表和缺点单元格: 51 列表和缺点单元格. 
+* 5.2 列表上的谓词: 52 列表上的谓词. 
+* 5.3 访问列表元素: 53 访问列表元素. 
+* 5.4 构建 Cons 单元格和列表: 54 构建 Cons 单元格和列表. 
+* 5.5 修改列表变量: 55 修改列表变量. 
+* 5.6 修改现有列表结构: 56 修改现有列表结构. 
+* 5.7 使用列表作为集合: 57 使用列表作为集合. 
+* 5.8 关联列表: 58 关联列表. 
+* 5.9 属性列表: 59 属性列表. 
+
+5.6 修改现有列表结构
+
+* 5.6.1 改变列表元素 setcar: 561 改变列表元素 setcar. 
+* 5.6.2 更改列表的 CDR: 562 更改列表的 CDR. 
+* 5.6.3 重新排列列表的函数: 563 重新排列列表的函数. 
+
+5.9 属性列表
+
+* 5.9.1 属性列表和关联列表: 591 属性列表和关联列表. 
+* 5.9.2 符号外的属性列表: 592 符号外的属性列表. 
+
+@end detailmenu
+@end menu
+
+@node 5 列表
+@chapter 5 列表
+
+列表表示零个或多个元素的序列（可以是任何 Lisp 对象）。列表和向量之间的重要区别在于两个或多个列表可以共享它们的部分结构。此外，您可以在列表中插入或删除元素，而无需复制整个列表。
+
+@menu
+* 5.1 列表和缺点单元格: 51 列表和缺点单元格. 
+* 5.2 列表上的谓词: 52 列表上的谓词. 
+* 5.3 访问列表元素: 53 访问列表元素. 
+* 5.4 构建 Cons 单元格和列表: 54 构建 Cons 单元格和列表. 
+* 5.5 修改列表变量: 55 修改列表变量. 
+* 5.6 修改现有列表结构: 56 修改现有列表结构. 
+* 5.7 使用列表作为集合: 57 使用列表作为集合. 
+* 5.8 关联列表: 58 关联列表. 
+* 5.9 属性列表: 59 属性列表. 
+@end menu
+
+@node 51 列表和缺点单元格
+@section 5.1 列表和缺点单元格
+
+Lisp 中的列表不是原始数据类型；  它们是由 cons 单元格构建的（请参阅 Cons 单元格和列表类型）。cons 单元格是表示有序对的数据对象。也就是说，它有两个插槽，每个插槽都保存或引用某个 Lisp 对象。一个插槽称为 CAR，另一个称为 CDR。（这些名称是传统的；请参阅 Cons Cell 和 List Types。） CDR 发音为 @code{could-er} 。
+
+我们说 @code{这个 cons 单元的 CAR 是} 它的 CAR 槽当前持有的任何对象，对于 CDR 也是如此。
+
+列表是一系列链接在一​​起的 cons 单元格，因此每个单元格都指向下一个单元格。列表的每个元素都有一个 cons 单元格。按照约定，cons 单元的 CAR 保存列表的元素，CDR 用于链接列表（CAR 和 CDR 之间的这种不对称完全是约定问题；在 cons 单元的级别，CAR 和 CDR插槽具有相似的属性）。因此，列表中每个 cons 信元的 CDR 时隙指的是后面的 cons 信元。
+
+同样按照惯例，列表中最后一个 cons 单元的 CDR 为 nil。我们称这样的零终止结构为适当的列表3。在 Emacs Lisp 中，符号 nil 既是符号又是没有元素的列表。为方便起见，符号 nil 被认为将 nil 作为其 CDR（也作为其 CAR）。
+
+因此，正确列表的 CDR 始终是正确列表。非空真列表的 CDR 是包含除第一个之外的所有元素的真列表。
+
+如果列表的最后一个 cons 单元格的 CDR 是 nil 以外的某个值，我们将结构称为点列表，因为它的打印表示将使用点对表示法（请参阅点对表示法）。还有另一种可能性：某个 cons 单元格的 CDR 可能指向列表中先前的 cons 单元格之一。我们称该结构为循环列表。
+
+出于某些目的，列表是正确的、循环的还是点状的并不重要。如果一个程序在列表中看不到最后一个 cons 单元的 CDR，它不会在意。但是，某些对列表进行操作的函数需要正确的列表，如果给定一个点列表，则会发出错误信号。如果给定一个循环列表，大多数尝试查找列表末尾的函数都会进入无限循环。
+
+因为大多数 cons 单元被用作列表的一部分，所以我们将任何由 cons 单元组成的结构称为列表结构。
+脚注
+(3)
+
+它有时也被称为真实列表，但我们通常不会在本手册中使用此术语。
+
+@node 52 列表上的谓词
+@section 5.2 列表上的谓词
+
+下面的谓词测试一个 Lisp 对象是否是一个原子，它是一个 cons 单元格还是一个列表，或者它是否是可区分的对象 nil。（其中许多谓词可以根据其他谓词来定义，但它们的使用如此频繁以至于值得拥有它们。）
+
+@lisp
+Function: consp object
+@end lisp
+
+如果 object 是一个 cons 单元，此函数返回 t，否则返回 nil。nil 不是一个缺点单元格，尽管它是一个列表。
+@lisp
+Function: atom object
+@end lisp
+
+如果 object 是原子，则此函数返回 t，否则返回 nil。除了 cons 单元之外的所有对象都是原子。符号 nil 是一个原子，也是一个列表；  它是唯一兼具两者的 Lisp 对象。
+
+@lisp
+(atom object) ≡ (not (consp object))
+@end lisp
+
+@lisp
+Function: listp object
+@end lisp
+
+如果 object 是 cons 单元格或 nil，则此函数返回 t。否则，它返回零。
+
+@lisp
+(listp '(1))
+     ⇒ t
+
+(listp '())
+     ⇒ t
+@end lisp
+
+
+@lisp
+Function: nlistp object
+@end lisp
+
+此函数与 listp 相反：如果 object 不是列表，则返回 t。否则，它返回零。
+
+@lisp
+(listp object) ≡ (not (nlistp object))
+@end lisp
+
+
+@lisp
+Function: null object
+@end lisp
+
+如果 object 为 nil，此函数返回 t，否则返回 nil。此函数与 not 相同，但为了清楚起见，我们在将对象视为列表时使用 null，而不是在将其视为真值时使用 null（请参阅组合条件的构造中的 not）。
+
+@lisp
+(null '(1))
+     ⇒ nil
+
+(null '())
+     ⇒ t
+@end lisp
+
+
+@lisp
+Function: proper-list-p object
+@end lisp
+
+如果对象是正确的列表，则此函数返回对象的长度，否则返回 nil（请参阅列表和 Cons 单元格）。除了满足 listp 之外，正确的列表既不是圆形的也不是点状的。
+@lisp
+(proper-list-p '(a b c))
+    ⇒ 3
+
+(proper-list-p '(a b . c))
+    ⇒ nil
+@end lisp
+
+@node 53 访问列表元素
+@section 5.3 访问列表元素
+
+@lisp
+Function: car cons-cell
+@end lisp
+
+
+此函数返回由 cons 单元 cons-cell 的第一个槽引用的值。换句话说，它返回 cons-cell 的 CAR。
+
+作为一种特殊情况，如果 cons-cell 为 nil，则此函数返回 nil。因此，任何列表都是有效的参数。如果参数不是 cons 单元格或 nil，则会发出错误信号。
+
+@lisp
+(car '(a b c))
+     ⇒ a
+
+(car '())
+     ⇒ nil
+@end lisp
+
+
+@lisp
+Function: cdr cons-cell
+@end lisp
+
+此函数返回 cons 单元 cons-cell 的第二个槽引用的值。换句话说，它返回 cons-cell 的 CDR。
+
+作为一种特殊情况，如果 cons-cell 为 nil，则此函数返回 nil；  因此，任何列表都是有效的参数。如果参数不是 cons 单元格或 nil，则会发出错误信号。
+
+@lisp
+(cdr '(a b c))
+     ⇒ (b c)
+
+(cdr '())
+     ⇒ nil
+@end lisp
+
+
+@lisp
+Function: car-safe object
+@end lisp
+
+此函数允许您获取 cons 单元格的 CAR，同时避免其他数据类型的错误。如果 object 是 cons 单元格，则返回 object 的 CAR，否则返回 nil。这与 car 不同，如果 object 不是列表，则会发出错误信号。
+
+@lisp
+(car-safe object)
+≡
+(let ((x object))
+  (if (consp x)
+      (car x)
+    nil))
+@end lisp
+
+
+@lisp
+Function: cdr-safe object
+@end lisp
+
+此函数允许您获取 cons 单元的 CDR，同时避免其他数据类型的错误。如果 object 是 cons 单元格，则返回 object 的 CDR，否则返回 nil。这与 cdr 不同，如果 object 不是列表，则会发出错误信号。
+
+@lisp
+(cdr-safe object)
+≡
+(let ((x object))
+  (if (consp x)
+      (cdr x)
+    nil))
+@end lisp
+
+
+@lisp
+Macro: pop listname
+@end lisp
+
+这个宏提供了一种方便的方法来检查列表的 CAR，并一次性将其从列表中删除。它对存储在 listname 中的列表进行操作。它从列表中删除第一个元素，将 CDR 保存到 listname 中，然后返回删除的元素。
+
+在最简单的情况下，listname 是命名列表的不带引号的符号；  在这种情况下，此宏等效于 (prog1 (car listname) (setq listname (cdr listname)))。
+
+@lisp
+x
+     ⇒ (a b c)
+(pop x)
+     ⇒ a
+x
+     ⇒ (b c)
+@end lisp
+
+
+更一般地说，listname 可以是一个广义变量。在这种情况下，此宏使用 setf 保存到 listname 中。请参阅广义变量。
+
+对于将元素添加到列表的 push 宏，请参阅修改列表变量。
+
+@lisp
+Function: nth n list
+@end lisp
+
+此函数返回列表的第 n 个元素。元素从零开始编号，因此列表的 CAR 是元素编号为零。如果列表的长度为 n 或更小，则值为 nil。
+
+@lisp
+(nth 2 '(1 2 3 4))
+     ⇒ 3
+
+(nth 10 '(1 2 3 4))
+     ⇒ nil
+
+(nth n x) ≡ (car (nthcdr n x))
+@end lisp
+
+
+elt 函数类似，但适用于任何类型的序列。由于历史原因，它以相反的顺序提出论点。请参阅序列。
+
+@lisp
+Function: nthcdr n list
+@end lisp
+
+此函数返回列表的第 n 个 CDR。换句话说，它跳过了 list 的前 n 个链接并返回后面的内容。
+
+如果 n 为零，则 nthcdr 返回所有列表。如果列表的长度为 n 或更小，则 nthcdr 返回 nil。
+
+@lisp
+
+
+(nthcdr 1 '(1 2 3 4))
+     ⇒ (2 3 4)
+
+(nthcdr 10 '(1 2 3 4))
+     ⇒ nil
+
+(nthcdr 0 '(1 2 3 4))
+     ⇒ (1 2 3 4)
+
+@end lisp
+
+
+@lisp
+Function: last list &optional n
+@end lisp
+
+此函数返回列表的最后一个链接。此链接的汽车是列表的最后一个元素。如果 list 为 null，则返回 nil。如果 n 不为零，则返回第 n 个到最后一个链接，或者如果 n 大于列表的长度，则返回整个列表。
+
+@lisp
+Function: safe-length list
+@end lisp
+
+此函数返回列表的长度，没有错误或无限循环的风险。它通常返回列表中不同的 cons 单元格的数量。但是，对于循环列表，该值只是一个上限；  它通常太大。
+
+如果 list 不是 nil 或 cons 单元格，则安全长度返回 0。
+
+当您不担心它可能是圆形时，计算列表长度的最常用方法是使用长度。请参阅序列。
+
+@lisp
+Function: caar cons-cell
+@end lisp
+
+这与 (car (car cons-cell)) 相同。
+
+@lisp
+Function: cadr cons-cell
+@end lisp
+
+这与 (car (cdr cons-cell)) 或 (nth 1 cons-cell) 相同。
+
+@lisp
+Function: cdar cons-cell
+@end lisp
+
+这与 (cdr (car cons-cell)) 相同。
+
+@lisp
+Function: cddr cons-cell
+@end lisp
+这与 (cdr (cdr cons-cell)) 或 (nthcdr 2 cons-cell) 相同。
+
+除了上述之外，car 和 cdr 的另外 24 个组合被定义为 cxxxr 和 cxxxxr，其中每个 x 是 a 或 d。cadr、caddr 和 cadddr 分别选出列表的第二个、第三个或第四个元素。cl-lib 以 cl-second、cl-third 和 cl-fourth 的名称提供相同的功能。请参阅 Common Lisp Extensions 中的列表函数。
+
+@lisp
+Function: butlast x &optional n
+@end lisp
+此函数返回删除了最后一个元素或最后 n 个元素的列表 x。如果 n 大于零，它会复制列表，以免损坏原始列表。通常， (append (butlast xn) (last xn)) 将返回一个等于 x 的列表。
+
+@lisp
+Function: nbutlast x &optional n
+@end lisp
+
+这是 butlast 的一个版本，它通过破坏性地修改适当元素的 cdr 来工作，而不是制作列表的副本。
+
+@node 54 构建 Cons 单元格和列表
+@section 5.4 构建 Cons 单元格和列表
+
+许多函数构建列表，因为列表位于 Lisp 的核心。cons 是基本的列表构建功能；  然而，有趣的是，list 在 Emacs 源代码中的使用次数比 cons 多。
+
+@lisp
+Function: cons object1 object2
+@end lisp
+
+该函数是构建新列表结构的最基本函数。它创建了一个新的 cons 单元，使 object1 成为 CAR，object2 成为 CDR。然后它返回新的 cons 单元格。参数 object1 和 object2 可以是任何 Lisp 对象，但最常见的 object2 是一个列表。
+
+@lisp
+(cons 1 '(2))
+     ⇒ (1 2)
+
+(cons 1 '())
+     ⇒ (1)
+
+(cons 1 2)
+     ⇒ (1 . 2)
+@end lisp
+
+
+cons 通常用于将单个元素添加到列表的前面。这称为将元素添加到列表中。4 例如：
+
+@lisp
+(setq list (cons newelt list))
+@end lisp
+
+请注意，本例中使用的名为 list 的变量与下面描述的名为 list 的函数之间没有冲突；  任何符号都可以用于这两个目的。
+
+@lisp
+Function: list &rest objects
+@end lisp
+
+此函数创建一个以对象为元素的列表。结果列表总是以零结尾的。如果没有给出对象，则返回空列表。
+
+@lisp
+(list 1 2 3 4 5)
+     ⇒ (1 2 3 4 5)
+
+(list 1 2 '(3 4 5) 'foo)
+     ⇒ (1 2 (3 4 5) foo)
+
+(list)
+     ⇒ nil
+@end lisp
+
+
+@lisp
+Function: make-list length object
+@end lisp
+
+此函数创建一个长度元素列表，其中每个元素都是对象。将 make-list 与 make-string 进行比较（请参阅创建字符串）。
+
+@lisp
+
+
+(make-list 3 'pigs)
+     ⇒ (pigs pigs pigs)
+
+(make-list 0 'pigs)
+     ⇒ nil
+
+(setq l (make-list 3 '(a b)))
+     ⇒ ((a b) (a b) (a b))
+(eq (car l) (cadr l))
+     ⇒ t
+
+@end lisp
+
+
+@lisp
+Function: append &rest sequences
+@end lisp
+
+这个函数返回一个包含所有序列元素的列表。序列可以是列表、向量、布尔向量或字符串，但最后一个通常应该是列表。除了最后一个参数之外的所有参数都被复制，因此没有任何参数被更改。（请参阅重新排列列表的函数中的 nconc，了解一种无需复制即可加入列表的方法。）
+
+更一般地， append 的最后一个参数可以是任何 Lisp 对象。最后一个参数不会被复制或转换；  它成为新列表中最后一个 cons 单元的 CDR。如果最后一个参数本身是一个列表，那么它的元素将成为结果列表的有效元素。如果最终元素不是列表，则结果是一个点列表，因为它的最终 CDR 不是正确列表中要求的 nil（请参阅列表和缺点单元格）。
+
+下面是一个使用 append 的例子：
+
+@lisp
+
+
+(setq trees '(pine oak))
+     ⇒ (pine oak)
+(setq more-trees (append '(maple birch) trees))
+     ⇒ (maple birch pine oak)
+
+
+trees
+     ⇒ (pine oak)
+more-trees
+     ⇒ (maple birch pine oak)
+
+(eq trees (cdr (cdr more-trees)))
+     ⇒ t
+@end lisp
+
+
+您可以通过查看箱形图了解 append 的工作原理。将变量 trees 设置为列表（松树橡木），然后将变量 more-trees 设置为列表（枫桦树松橡树）。但是，变量树继续引用原始列表：
+
+@lisp
+more-trees                trees
+|                           |
+|     --- ---      --- ---   -> --- ---      --- ---
+ --> |   |   |--> |   |   |--> |   |   |--> |   |   |--> nil
+      --- ---      --- ---      --- ---      --- ---
+       |            |            |            |
+       |            |            |            |
+        --> maple    -->birch     --> pine     --> oak
+@end lisp
+
+
+空序列对 append 返回的值没有任何贡献。因此，最终的 nil 参数强制复制前一个参数：
+
+@lisp
+
+
+trees
+     ⇒ (pine oak)
+
+(setq wood (append trees nil))
+     ⇒ (pine oak)
+
+wood
+     ⇒ (pine oak)
+
+(eq wood trees)
+     ⇒ nil
+@end lisp
+
+
+在发明函数复制序列之前，这曾经是复制列表的常用方法。请参阅序列、数组和向量。
+
+在这里，我们展示了使用向量和字符串作为附加参数：
+
+@lisp
+(append [a b] "cd" nil)
+     ⇒ (a b 99 100)
+@end lisp
+
+在 apply 的帮助下（请参阅调用函数），我们可以将所有列表附加到列表列表中：
+
+@lisp
+(apply 'append '((a b c) nil (x y z) nil))
+     ⇒ (a b c x y z)
+@end lisp
+
+如果没有给出序列，则返回 nil：
+
+@lisp
+(append)
+     ⇒ nil
+@end lisp
+
+以下是一些最终参数不是列表的示例：
+
+@lisp
+(append '(x y) 'z)
+     ⇒ (x y . z)
+(append '(x y) [z])
+     ⇒ (x y . [z])
+@end lisp
+
+
+第二个示例表明，当最后一个参数是序列而不是列表时，序列的元素不会成为结果列表的元素。相反，该序列成为最终的 CDR，就像任何其他非列表最终参数一样。
+
+@lisp
+Function: copy-tree tree &optional vecp
+@end lisp
+
+此函数返回树树的副本。如果树是一个 cons 单元，这将创建一个具有相同 CAR 和 CDR 的新 cons 单元，然后以相同的方式递归复制 CAR 和 CDR。
+
+通常，当 tree 不是 cons 单元格时，copy-tree 只返回 tree。但是，如果 vecp 不为零，它也会复制向量（并递归地对其元素进行操作）。
+
+@lisp
+Function: flatten-tree tree
+@end lisp
+
+此函数返回树的 @code{扁平化} 副本，即包含以 tree 为根的 cons 单元树的所有非 nil 终端节点或叶子的列表。返回列表中的叶子与树中的叶子顺序相同。
+
+@lisp
+(flatten-tree '(1 (2 . 3) nil (4 5 (6)) 7))
+    ⇒(1 2 3 4 5 6 7)
+@end lisp
+
+@lisp
+Function: ensure-list object
+@end lisp
+
+此函数将对象作为列表返回。如果 object 已经是一个列表，则函数返回它；  否则，该函数返回一个包含对象的单元素列表。
+
+如果您有一个可能是也可能不是列表的变量，这通常很有用，然后您可以说，例如：
+
+@lisp
+(dolist (elem (ensure-list foo))
+  (princ elem))
+@end lisp
+
+
+@lisp
+Function: number-sequence from &optional to separation
+@end lisp
+
+此函数返回一个数字列表，该列表以 from 开头并按分隔递增，并在 to 或之前结束。分隔可以是正数或负数，默认为 1。如果 to 为 nil 或数值等于 from，则值为单元素列表 (from)。如果 to 小于 from 且为正分隔，或大于 from 且为负分隔，则值为 nil，因为这些参数指定了一个空序列。
+
+如果分隔为 0 并且 to 既不为零也不在数值上等于 from，则 number-sequence 表示错误，因为这些参数指定了无限序列。
+
+所有参数都是数字。浮点参数可能很棘手，因为浮点算术是不精确的。例如，根据机器的不同，很可能 (number-sequence 0.4 0.6 0.2) 返回一个元素列表 (0.4)，而 (number-sequence 0.4 0.8 0.2) 返回一个包含三个元素的列表。列表的第 n 个元素由精确公式（+ from (* n separator)）计算。因此，如果想要确保 to 包含在列表中，可以传递这种精确类型的表达式 for to。或者，可以将 to 替换为稍大的值（如果分离为负，则使用稍大的负值）。
+
+一些例子：
+@lisp
+(number-sequence 4 9)
+     ⇒ (4 5 6 7 8 9)
+(number-sequence 9 4 -1)
+     ⇒ (9 8 7 6 5 4)
+(number-sequence 9 4 -2)
+     ⇒ (9 7 5)
+(number-sequence 8)
+     ⇒ (8)
+(number-sequence 8 5)
+     ⇒ nil
+(number-sequence 5 8 -1)
+     ⇒ nil
+(number-sequence 1.5 6 2)
+     ⇒ (1.5 3.5 5.5)
+@end lisp
+
+
+
+脚注 (4)
+
+没有严格等价的方法可以将元素添加到列表的末尾。您可以使用 (append listname (list newelt))，它通过复制 listname 并将 newelt 添加到其末尾来创建一个全新的列表。或者您可以使用 (nconc listname (list newelt))，它通过遵循所有 CDR 然后替换终止的 nil 来修改 listname。将此与使用 cons 将元素添加到列表的开头进行比较，既不复制也不修改列表。
+
+@node 55 修改列表变量
+@section 5.5 修改列表变量
+
+这些函数和一个宏提供了修改存储在变量中的列表的便捷方法。
+
+@lisp
+Macro: push element listname
+@end lisp
+
+
+此宏创建一个新列表，其 CAR 为元素，其 CDR 为 listname 指定的列表，并将该列表保存在 listname 中。在最简单的情况下，listname 是一个不带引号的符号来命名一个列表，这个宏等价于 (setq listname (cons element listname))。
+
+@lisp
+(setq l '(a b))
+     ⇒ (a b)
+(push 'c l)
+     ⇒ (c a b)
+l
+     ⇒ (c a b)
+@end lisp
+
+
+更一般地说，listname 可以是一个广义变量。在这种情况下，这个宏相当于 (setf listname (cons element listname))。请参阅广义变量。
+
+对于从列表中删除第一个元素的 pop 宏，请参阅访问列表元素。
+
+两个函数修改作为变量值的列表。
+
+@lisp
+Function: add-to-list symbol element &optional append compare-fn
+@end lisp
+
+如果 element 还不是该值的成员，则此函数通过将 element 转换为旧值来设置变量符号。它返回结果列表，无论是否更新。symbol 的值最好是在调用之前已经存在的列表。add-to-list 使用 compare-fn 将元素与现有列表成员进行比较；  如果 compare-fn 为 nil，则使用 equal。
+
+通常，如果添加元素，则将其添加到符号的前面，但如果可选参数 append 为非 nil，则将其添加到末尾。
+
+参数符号没有被隐式引用；  add-to-list 是一个普通函数，与 set 类似，但与 setq 不同。如果这是您想要的，请自己引用论点。
+
+当符号引用词法变量时不要使用此函数。
+
+这是一个展示如何使用添加到列表的场景：
+@lisp
+(setq foo '(a b))
+     ⇒ (a b)
+
+(add-to-list 'foo 'c)     ;; Add c.
+     ⇒ (c a b)
+
+(add-to-list 'foo 'b)     ;; No effect.
+     ⇒ (c a b)
+
+foo                       ;; foo was changed.
+     ⇒ (c a b)
+@end lisp
+
+
+
+(add-to-list 'var value) 的等效表达式是：
+
+@lisp
+(if (member value var)
+    var
+  (setq var (cons value var)))
+
+@end lisp
+
+
+@lisp
+Function: add-to-ordered-list symbol element &optional order
+@end lisp
+
+此函数通过在 order 指定的位置将元素插入旧值（必须是列表）来设置变量符号。如果元素已经是列表的成员，则根据顺序调整其在列表中的位置。使用 eq 测试成员资格。此函数返回结果列表，无论是否更新。
+
+顺序通常是一个数字（整数或浮点数），列表的元素按非递减数字顺序排序。
+
+order 也可以省略或为零。如果元素已经有一个，则元素的数字顺序保持不变；  否则，元素没有数字顺序。没有数字列表顺序的元素被放置在列表的末尾，没有特定的顺序。
+
+order 的任何其他值都会删除元素的数字顺序，如果它已经有一个；  否则，它等价于 nil。
+
+参数符号没有被隐式引用；  add-to-ordered-list 是一个普通函数，与 set 类似，但与 setq 不同。如有必要，请自己引用论点。
+
+排序信息存储在符号列表顺序属性的哈希表中。symbol 不能引用词法变量。
+
+这是一个展示如何使用 add-to-ordered-list 的场景：
+
+@lisp
+(setq foo '())
+     ⇒ nil
+
+(add-to-ordered-list 'foo 'a 1)     ;; Add a.
+     ⇒ (a)
+
+(add-to-ordered-list 'foo 'c 3)     ;; Add c.
+     ⇒ (a c)
+
+(add-to-ordered-list 'foo 'b 2)     ;; Add b.
+     ⇒ (a b c)
+
+(add-to-ordered-list 'foo 'b 4)     ;; Move b.
+     ⇒ (a c b)
+
+(add-to-ordered-list 'foo 'd)       ;; Append d.
+     ⇒ (a c b d)
+
+(add-to-ordered-list 'foo 'e)       ;; Add e.
+     ⇒ (a c b e d)
+
+foo                       ;; foo was changed.
+     ⇒ (a c b e d)
+@end lisp
+
+@node 56 修改现有列表结构
+@section 5.6 修改现有列表结构
+
+您可以使用原语 setcar 和 setcdr 修改 cons 单元的 CAR 和 CDR 内容。这些是破坏性操作，因为它们改变了现有的列表结构。破坏性操作应仅应用于可变列表，即通过 cons、list 或类似操作构造的列表。通过引用创建的列表是程序的一部分，不应被破坏性操作更改。请参阅可变性。
+
+Common Lisp 注意：Common Lisp 使用函数 rplaca 和 rplacd 来改变列表结构；  它们改变结构的方式与 setcar 和 setcdr 相同，但 Common Lisp 函数返回 cons 单元，而 setcar 和 setcdr 返回新的 CAR 或 CDR。
+
+@menu
+* 5.6.1 改变列表元素 setcar: 561 改变列表元素 setcar. 
+* 5.6.2 更改列表的 CDR: 562 更改列表的 CDR. 
+* 5.6.3 重新排列列表的函数: 563 重新排列列表的函数. 
+@end menu
+
+@node 561 改变列表元素 setcar
+@subsection 5.6.1 改变列表元素 setcar
+
+使用 setcar 更改 cons 单元的 CAR。当用于列表时，setcar 将列表中的一个元素替换为不同的元素。
+
+@lisp
+Function: setcar cons object
+@end lisp
+
+
+此函数将对象存储为 cons 的新 CAR，替换其先前的 CAR。换句话说，它改变了 cons 的 CAR slot 来引用 object。它返回值对象。例如：
+
+@lisp
+(setq x (list 1 2))
+     ⇒ (1 2)
+
+(setcar x 4)
+     ⇒ 4
+
+x
+     ⇒ (4 2)
+@end lisp
+
+
+当一个 cons 单元是多个列表的共享结构的一部分时，将一个新的 CAR 存储到 cons 中会更改每个列表的一个元素。这是一个例子：
+
+@lisp
+
+
+;; Create two lists that are partly shared.
+(setq x1 (list 'a 'b 'c))
+     ⇒ (a b c)
+(setq x2 (cons 'z (cdr x1)))
+     ⇒ (z b c)
+
+
+;; Replace the CAR of a shared link.
+(setcar (cdr x1) 'foo)
+     ⇒ foo
+x1                           ; Both lists are changed.
+     ⇒ (a foo c)
+x2
+     ⇒ (z foo c)
+
+
+;; Replace the CAR of a link that is not shared.
+(setcar x1 'baz)
+     ⇒ baz
+x1                           ; Only one list is changed.
+     ⇒ (baz foo c)
+x2
+     ⇒ (z foo c)
+
+@end lisp
+
+
+这是变量 x1 和 x2 中两个列表的共享结构的图形描述，显示了为什么替换 b 会改变它们：
+
+@lisp
+        --- ---        --- ---      --- ---
+x1---> |   |   |----> |   |   |--> |   |   |--> nil
+        --- ---        --- ---      --- ---
+         |        -->   |            |
+         |       |      |            |
+          --> a  |       --> b        --> c
+                 |
+       --- ---   |
+x2--> |   |   |--
+       --- ---
+        |
+        |
+         --> z
+@end lisp
+
+
+这是箱形图的另一种形式，显示了相同的关系：
+
+@lisp
+x1:
+ --------------       --------------       --------------
+| car   | cdr  |     | car   | cdr  |     | car   | cdr  |
+|   a   |   o------->|   b   |   o------->|   c   |  nil |
+|       |      |  -->|       |      |     |       |      |
+ --------------  |    --------------       --------------
+                 |
+x2:              |
+ --------------  |
+| car   | cdr  | |
+|   z   |   o----
+|       |      |
+ --------------
+@end lisp
+
+@node 562 更改列表的 CDR
+@subsection 5.6.2 更改列表的 CDR
+
+用于修改 CDR 的最低级原语是 setcdr：
+
+@lisp
+Function: setcdr cons object
+@end lisp
+
+
+此函数将对象存储为 cons 的新 CDR，替换其先前的 CDR。换句话说，它将 cons 的 CDR slot 更改为引用 object。它返回值对象。
+
+这是一个用不同列表替换列表的 CDR 的示例。除了第一个元素之外的所有元素都被删除，以支持不同的元素序列。第一个元素没有改变，因为它位于列表的 CAR 中，并且无法通过 CDR 到达。
+
+@lisp
+(setq x (list 1 2 3))
+     ⇒ (1 2 3)
+
+(setcdr x '(4))
+     ⇒ (4)
+
+x
+     ⇒ (1 4)
+
+@end lisp
+
+您可以通过更改列表中 cons 单元格的 CDR 从列表中间删除元素。例如，这里我们通过更改第一个 cons 单元的 CDR 从列表 (abc) 中删除第二个元素 b：
+
+@lisp
+(setq x1 (list 'a 'b 'c))
+     ⇒ (a b c)
+(setcdr x1 (cdr (cdr x1)))
+     ⇒ (c)
+x1
+     ⇒ (a c)
+@end lisp
+
+
+这是框符号的结果：
+
+@lisp
+                   --------------------
+                  |                    |
+ --------------   |   --------------   |    --------------
+| car   | cdr  |  |  | car   | cdr  |   -->| car   | cdr  |
+|   a   |   o-----   |   b   |   o-------->|   c   |  nil |
+|       |      |     |       |      |      |       |      |
+ --------------       --------------        --------------
+@end lisp
+
+
+之前保存元素 b 的第二个 cons 单元仍然存在，并且它的 CAR 仍然是 b，但它不再构成此列表的一部分。
+
+通过更改 CDR 插入新元素同样容易：
+
+@lisp
+(setq x1 (list 'a 'b 'c))
+     ⇒ (a b c)
+(setcdr x1 (cons 'd (cdr x1)))
+     ⇒ (d b c)
+x1
+     ⇒ (a d b c)
+@end lisp
+
+
+这是框符号的结果：
+
+@lisp
+ --------------        -------------       -------------
+| car  | cdr   |      | car  | cdr  |     | car  | cdr  |
+|   a  |   o   |   -->|   b  |   o------->|   c  |  nil |
+|      |   |   |  |   |      |      |     |      |      |
+ --------- | --   |    -------------       -------------
+           |      |
+     -----         --------
+    |                      |
+    |    ---------------   |
+    |   | car   | cdr   |  |
+     -->|   d   |   o------
+        |       |       |
+         ---------------
+@end lisp
+
+@node 563 重新排列列表的函数
+@subsection 5.6.3 重新排列列表的函数
+
+以下是一些通过修改其组件 cons 单元格的 CDR 来破坏性地重新排列列表的函数。这些函数具有破坏性，因为它们会破坏作为参数传递给它们的原始列表，重新链接它们的 cons 单元以形成一个作为返回值的新列表。
+
+有关修改 cons 单元格的另一个函数，请参见使用列表作为集合中的 delq。
+
+@lisp
+Function: nconc &rest lists
+@end lisp
+
+此函数返回一个包含列表所有元素的列表。与 append 不同（参见 Building Cons Cells and Lists），列表不会被复制。而是将每个列表的最后一个 CDR 更改为引用以下列表。最后一个列表没有改变。例如：
+
+@lisp
+(setq x (list 1 2 3))
+     ⇒ (1 2 3)
+
+(nconc x '(4 5))
+     ⇒ (1 2 3 4 5)
+
+x
+     ⇒ (1 2 3 4 5)
+
+@end lisp
+由于 nconc 的最后一个参数本身没有被修改，因此使用常量列表是合理的，例如 '(4 5)，如上例所示。出于同样的原因，最后一个参数不必是列表：
+
+@lisp
+
+
+(setq x (list 1 2 3))
+     ⇒ (1 2 3)
+
+(nconc x 'z)
+     ⇒ (1 2 3 . z)
+
+x
+     ⇒ (1 2 3 . z)
+@end lisp
+
+
+但是，其他参数（除了最后一个）应该是可变列表。
+
+一个常见的陷阱是使用常量列表作为 nconc 的非最后一个参数。如果您这样做，则结果行为是未定义的（请参阅自我评估表格）。您的程序可能会在每次运行时发生变化！  以下是可能发生的情况（尽管不保证会发生）：
+
+@lisp
+
+
+(defun add-foo (x)            ; We want this function to add
+  (nconc '(foo) x))           ;   foo to the front of its arg.
+
+
+(symbol-function 'add-foo)
+     ⇒ (lambda (x) (nconc '(foo) x))
+
+
+(setq xx (add-foo '(1 2)))    ; It seems to work.
+     ⇒ (foo 1 2)
+
+(setq xy (add-foo '(3 4)))    ; What happened?
+     ⇒ (foo 1 2 3 4)
+
+(eq xx xy)
+     ⇒ t
+
+
+(symbol-function 'add-foo)
+     ⇒ (lambda (x) (nconc '(foo 1 2 3 4) x))
+
+@end lisp
+
+@node 57 使用列表作为集合
+@section 5.7 使用列表作为集合
+
+一个列表可以表示一个无序的数学集合——如果一个值出现在列表中，只需将其视为集合的元素，而忽略列表的顺序。要形成两个集合的并集，请使用 append（只要您不介意重复元素）。您可以使用 delete-dups 或 seq-uniq 删除相同的重复项。集合的其他有用函数包括 memq 和 delq，以及它们的相同版本，成员和删除。
+
+Common Lisp 注释：Common Lisp 具有联合函数（避免重复元素）和集合操作的交集。在 Emacs Lisp 中，这些工具的变体由 cl-lib 库提供。请参阅 Common Lisp Extensions 中的列表作为集合。
+
+@lisp
+Function: memq object list
+@end lisp
+
+此函数测试对象是否是列表的成员。如果是，memq 返回一个从第一次出现的对象开始的列表。否则，它返回零。memq 中的字母 'q' 表示它使用 eq 将对象与列表的元素进行比较。例如：
+@lisp
+(memq 'b '(a b c b a))
+     ⇒ (b c b a)
+
+(memq '(2) '((1) (2)))    ; The two (2)s need not be eq.
+     ⇒ Unspecified; might be nil or ((2)).
+
+@end lisp
+
+@lisp
+Function: delq object list ¶
+@end lisp
+
+
+此函数破坏性地从列表中删除所有元素 eq 到对象，并返回结果列表。delq 中的字母 'q' 表示它使用 eq 将 object 与列表的元素进行比较，例如 memq 和 remq。
+
+通常，当您调用 delq 时，您应该通过将返回值分配给保存原始列表的变量来使用它。下面解释其原因。
+
+delq 函数通过简单地向下推进列表并返回从这些元素之后开始的子列表来从列表的前面删除元素。例如：
+
+@lisp
+(delq 'a '(a b c)) ≡ (cdr '(a b c))
+@end lisp
+
+当要删除的元素出现在列表中间时，删除它涉及更改 CDR（请参阅更改列表的 CDR）。
+
+@lisp
+
+
+(setq sample-list (list 'a 'b 'c '(4)))
+     ⇒ (a b c (4))
+
+(delq 'a sample-list)
+     ⇒ (b c (4))
+
+sample-list
+     ⇒ (a b c (4))
+
+(delq 'c sample-list)
+     ⇒ (a b (4))
+
+sample-list
+     ⇒ (a b (4))
+
+@end lisp
+
+
+注意 (delq 'c sample-list) 修改 sample-list 以拼接出第三个元素，但 (delq 'a sample-list) 不拼接任何东西——它只是返回一个较短的列表。不要假设以前保存参数列表的变量现在有更少的元素，或者它仍然保存原始列表！  相反，保存 delq 的结果并使用它。大多数情况下，我们将结果存储回保存原始列表的变量中：
+
+@lisp
+(setq flowers (delq 'rose flowers))
+@end lisp
+
+在以下示例中，delq 尝试匹配的 (list 4) 和 sample-list 中的 (4) 相等但不 eq：
+
+@lisp
+(delq (list 4) sample-list)
+     ⇒ (a c (4))
+@end lisp
+
+如果要删除等于给定值的元素，请使用 delete（见下文）。
+
+功能：remq 对象列表¶
+
+此函数返回列表的副本，其中删除了所有 eq 到对象的元素。remq 中的字母 'q' 表示它使用 eq 将对象与列表的元素进行比较。
+
+@lisp
+
+
+(setq sample-list (list 'a 'b 'c 'a 'b 'c))
+     ⇒ (a b c a b c)
+
+(remq 'a sample-list)
+     ⇒ (b c b c)
+
+sample-list
+     ⇒ (a b c a b c)
+@end lisp
+
+@lisp
+Function: memql object list ¶
+@end lisp
+
+
+函数 memql 测试 object 是否是 list 的成员，使用 eql 将成员与 object 进行比较，因此浮点元素按值进行比较。如果 object 是成员，则 memql 返回一个列表，从它在列表中的第一次出现开始。否则，它返回零。
+
+将此与 memq 进行比较：
+@lisp
+
+
+(memql 1.2 '(1.1 1.2 1.3))  ; 1.2 and 1.2 are eql.
+     ⇒ (1.2 1.3)
+
+(memq 1.2 '(1.1 1.2 1.3))  ; The two 1.2s need not be eq.
+     ⇒ Unspecified; might be nil or (1.2 1.3).
+
+@end lisp
+
+
+
+以下三个函数类似于 memq、delq 和 remq，但使用 equal 而不是 eq 来比较元素。请参见等式谓词。
+
+@lisp
+Function: member object list ¶
+@end lisp
+
+
+函数 member 测试对象是否是 list 的成员，将成员与 object 使用 equal 进行比较。如果 object 是成员，则 member 返回一个列表，从它在列表中的第一次出现开始。否则，它返回零。
+
+将此与 memq 进行比较：
+@lisp
+(member '(2) '((1) (2)))  ; (2) and (2) are equal.
+     ⇒ ((2))
+
+(memq '(2) '((1) (2)))    ; The two (2)s need not be eq.
+     ⇒ Unspecified; might be nil or (2).
+
+;; Two strings with the same contents are equal.
+(member "foo" '("foo" "bar"))
+     ⇒ ("foo" "bar")
+@end lisp
+
+@lisp
+Function: delete object sequence ¶
+@end lisp
+
+
+
+此函数从序列中删除所有等于 object 的元素，并返回结果序列。
+
+如果sequence是一个列表，delete之于delq就像member之于memq：它使用equal来比较元素和对象，比如member；  当它找到一个匹配的元素时，它会像 delq 那样删除该元素。与 delq 一样，您通常应该通过将返回值分配给保存原始列表的变量来使用它。
+
+如果 sequence 是向量或字符串，则 delete 返回序列的副本，其中所有等于 object 的元素都已删除。
+
+例如：
+@lisp
+(setq l (list '(2) '(1) '(2)))
+(delete '(2) l)
+     ⇒ ((1))
+l
+     ⇒ ((2) (1))
+;; If you want to change l reliably,
+;; write (setq l (delete '(2) l)).
+
+(setq l (list '(2) '(1) '(2)))
+(delete '(1) l)
+     ⇒ ((2) (2))
+l
+     ⇒ ((2) (2))
+;; In this case, it makes no difference whether you set l,
+;; but you should do so for the sake of the other case.
+
+(delete '(2) [(2) (1) (2)])
+     ⇒ [(1)]
+@end lisp
+
+
+
+@lisp
+Function: remove object sequence ¶
+@end lisp
+
+
+此功能是删除的非破坏性对应物。它返回序列、列表、向量或字符串的副本，其中删除了等于对象的元素。例如：
+
+@lisp
+(remove '(2) '((2) (1) (2)))
+     ⇒ ((1))
+
+(remove '(2) [(2) (1) (2)])
+     ⇒ [(1)]
+@end lisp
+
+
+Common Lisp 注意：GNU Emacs Lisp 中的成员、删除和删除函数是从 Maclisp 派生的，而不是 Common Lisp。Common Lisp 版本不使用相等来比较元素。
+
+@lisp
+Function: member-ignore-case object list ¶
+@end lisp
+
+
+这个函数和 member 一样，除了 object 应该是一个字符串并且它忽略字母大小写和文本表示的差异：大写和小写字母被视为相等，并且在比较之前将单字节字符串转换为多字节。
+
+@lisp
+Function: delete-dups list ¶
+@end lisp
+
+此函数破坏性地从列表中删除所有相等的重复项，将结果存储在列表中并返回。在列表中多次出现相同的元素时，delete-dups 保留第一个。请参阅 seq-uniq 以了解非破坏性操作（请参阅序列）。
+
+另请参阅修改列表变量中的 add-to-list 函数，了解将元素添加到存储在变量中并用作集合的列表的方法。
+
+@node 58 关联列表
+@section 5.8 关联列表
+
+关联列表，或简称为 alist，记录了从键到值的映射。它是一个 cons 单元的列表，称为关联：每个 cons 单元的 CAR 是 key，CDR 是关联的 value.5
+
+这是一个alist的例子。键松树与值锥相关联；  关键橡木与橡子有关；  关键枫树与种子相关联。
+
+@lisp
+((pine . cones)
+ (oak . acorns)
+ (maple . seeds))
+@end lisp
+
+
+alist 中的值和键都可以是任何 Lisp 对象。例如，在下面的 alist 中，符号 a 与数字 1 相关联，字符串 @code{b} 与列表 (2 3) 相关联，即 alist 元素的 CDR：
+
+@lisp
+((a . 1) ("b" 2 3))
+@end lisp
+
+有时最好设计一个alist来将关联的值存储在元素的CDR的CAR中。以下是此类 alist 的示例：
+
+@lisp
+((rose red) (lily white) (buttercup yellow))
+@end lisp
+
+在这里，我们将红色视为与玫瑰相关的值。这种列表的一个优点是您可以在 CDR 的 CDR 中存储其他相关信息——甚至是其他项目的列表。一个缺点是您不能使用 rassq（见下文）来查找包含给定值的元素。当这些考虑都不重要时，选择是一个品味问题，只要您对任何给定的列表保持一致即可。
+
+上面显示的相同 alist 可以认为在元素的 CDR 中具有关联值；  与玫瑰相关的值将是列表（红色）。
+
+关联列表通常用于记录您可能会保留在堆栈中的信息，因为可以轻松地将新关联添加到列表的前面。在关联列表中搜索与给定键的关联时，如果有多个，则返回找到的第一个。
+
+在 Emacs Lisp 中，如果关联列表的元素不是 cons 单元格，则不会出错。alist 搜索功能只是忽略这些元素。在这种情况下，许多其他版本的 Lisp 都会发出错误信号。
+
+请注意，属性列表在几个方面类似于关联列表。属性列表的行为类似于关联列表，其中每个键只能出现一次。有关属性列表和关联列表的比较，请参见属性列表。
+
+@lisp
+Function: assoc key alist &optional testfn ¶
+@end lisp
+
+
+此函数返回 alist 中 key 的第一个关联，如果 key 是函数，则使用 testfn 将 key 与 alist 元素进行比较，否则相等（请参阅相等谓词）。如果 testfn 是一个函数，则使用两个参数调用它：来自 alist 的元素的 CAR 和 key。如果 alist 中没有关联的 CAR 等于 key，则该函数返回 nil，如 testfn 所测试。例如：
+@lisp
+(setq trees '((pine . cones) (oak . acorns) (maple . seeds)))
+     ⇒ ((pine . cones) (oak . acorns) (maple . seeds))
+(assoc 'oak trees)
+     ⇒ (oak . acorns)
+(cdr (assoc 'oak trees))
+     ⇒ acorns
+(assoc 'birch trees)
+     ⇒ nil
+@end lisp
+
+
+这是另一个示例，其中键和值不是符号：
+
+@lisp
+(setq needles-per-cluster
+      '((2 "Austrian Pine" "Red Pine")
+        (3 "Pitch Pine")
+        (5 "White Pine")))
+
+(cdr (assoc 3 needles-per-cluster))
+     ⇒ ("Pitch Pine")
+(cdr (assoc 2 needles-per-cluster))
+     ⇒ ("Austrian Pine" "Red Pine")
+@end lisp
+
+
+函数 assoc-string 很像 assoc，只是它忽略了字符串之间的某些差异。请参阅字符和字符串的比较。
+
+@lisp
+Function: rassoc value alist ¶
+@end lisp
+
+
+此函数返回与 alist 中值 value 的第一个关联。如果 alist 中没有关联的 CDR 等于 value，则返回 nil。
+
+rassoc 与 assoc 类似，只是它比较每个 alist 关联的 CDR 而不是 CAR。您可以将其视为反向关联，查找给定值的键。
+
+@lisp
+Function: assq key alist ¶
+@end lisp
+
+这个函数与 assoc 类似，它返回 alist 中 key 的第一个关联，但它使用 eq 进行比较。如果 alist 中没有关联具有 CAR eq 键，则 assq 返回 nil。这个函数比 assoc 更常用，因为 eq 比 equal 更快，而且大多数 alists 使用符号作为键。请参见等式谓词。
+
+@lisp
+(setq trees '((pine . cones) (oak . acorns) (maple . seeds)))
+     ⇒ ((pine . cones) (oak . acorns) (maple . seeds))
+(assq 'pine trees)
+     ⇒ (pine . cones)
+@end lisp
+
+另一方面， assq 通常在键可能不是符号的列表中没有用：
+
+@lisp
+(setq leaves
+      '(("simple leaves" . oak)
+        ("compound leaves" . horsechestnut)))
+
+(assq "simple leaves" leaves)
+     ⇒ Unspecified; might be nil or ("simple leaves" . oak).
+(assoc "simple leaves" leaves)
+     ⇒ ("simple leaves" . oak)
+@end lisp
+
+
+@lisp
+Function: alist-get key alist &optional default remove testfn ¶
+@end lisp
+
+
+这个函数类似于 assq。它通过将 key 与 alist 元素进行比较来找到第一个关联（key . value），如果找到，则返回该关联的值。如果未找到关联，则该函数返回默认值。key 与 alist 元素的比较使用 testfn 指定的函数，默认为 eq。
+
+这是一个广义变量（参见广义变量），可用于使用 setf 更改值。使用它设置值时，可选参数 remove non-nil 表示如果新值 eql 为默认值，则从 alist 中删除键的关联。
+
+@lisp
+Function: rassq value alist ¶
+@end lisp
+
+
+此函数返回与 alist 中值 value 的第一个关联。如果 alist 中没有关联具有 CDR eq 值，则返回 nil。
+
+rassq 与 assq 类似，只是它比较每个 alist 关联的 CDR 而不是 CAR。您可以将其视为反向 assq，查找给定值的键。
+
+例如：
+
+@lisp
+(setq trees '((pine . cones) (oak . acorns) (maple . seeds)))
+
+(rassq 'acorns trees)
+     ⇒ (oak . acorns)
+(rassq 'spores trees)
+     ⇒ nil
+
+@end lisp
+
+
+rassq 无法搜索存储在元素 CDR 的 CAR 中的值：
+
+@lisp
+(setq colors '((rose red) (lily white) (buttercup yellow)))
+
+(rassq 'white colors)
+     ⇒ nil
+@end lisp
+
+
+在这种情况下，关联的 CDR（百合白）不是符号白色，而是列表（白色）。如果关联是用点对表示法编写的，这会变得更清楚：
+
+@lisp
+(lily white) ≡ (lily . (white))
+@end lisp
+
+@lisp
+Function: assoc-default key alist &optional test default ¶
+@end lisp
+
+
+此函数在 alist 中搜索 key 的匹配项。对于 alist 的每个元素，它通过使用两个参数调用 test 将元素（如果它是原子）或元素的 CAR（如果它是 cons）与键进行比较：元素或其 CAR 和键。参数按该顺序传递，以便您可以使用字符串匹配和包含正则表达式的列表获得有用的结果（请参阅正则表达式搜索）。如果 test 被省略或为零，则使用相等进行比较。
+
+如果 alist 元素通过此条件与 key 匹配，则 assoc-default 根据此元素返回一个值。如果元素是 cons，则值是元素的 CDR。否则，返回值为默认值。
+
+如果没有 alist 元素与 key 匹配，则 assoc-default 返回 nil。
+
+@lisp
+Function: copy-alist alist ¶
+@end lisp
+
+此函数返回 alist 的两级深层副本：它为每个关联创建一个新副本，以便您可以更改新 alist 的关联而不更改旧 alist。
+
+@lisp
+
+
+(setq needles-per-cluster
+      '((2 . ("Austrian Pine" "Red Pine"))
+        (3 . ("Pitch Pine"))
+
+        (5 . ("White Pine"))))
+⇒
+((2 "Austrian Pine" "Red Pine")
+ (3 "Pitch Pine")
+ (5 "White Pine"))
+
+(setq copy (copy-alist needles-per-cluster))
+⇒
+((2 "Austrian Pine" "Red Pine")
+ (3 "Pitch Pine")
+ (5 "White Pine"))
+
+(eq needles-per-cluster copy)
+     ⇒ nil
+(equal needles-per-cluster copy)
+     ⇒ t
+(eq (car needles-per-cluster) (car copy))
+     ⇒ nil
+(cdr (car (cdr needles-per-cluster)))
+     ⇒ ("Pitch Pine")
+
+(eq (cdr (car (cdr needles-per-cluster)))
+    (cdr (car (cdr copy))))
+     ⇒ t
+
+@end lisp
+
+
+这个例子展示了 copy-alist 如何在不影响另一个副本的情况下更改一个副本的关联：
+
+@lisp
+(setcdr (assq 3 copy) '("Martian Vacuum Pine"))
+(cdr (assq 3 needles-per-cluster))
+     ⇒ ("Pitch Pine")
+@end lisp
+
+
+@lisp
+Function: assq-delete-all key alist ¶
+@end lisp
+
+此函数从 alist 中删除所有 CAR 为 eq to key 的元素，就像您使用 delq 将每个这样的元素一个一个删除一样。它返回缩短的 alist，并经常修改 alist 的原始列表结构。要获得正确的结果，请使用 assq-delete-all 的返回值，而不是查看 alist 的保存值。
+
+@lisp
+(setq alist (list '(foo 1) '(bar 2) '(foo 3) '(lose 4)))
+     ⇒ ((foo 1) (bar 2) (foo 3) (lose 4))
+(assq-delete-all 'foo alist)
+     ⇒ ((bar 2) (lose 4))
+alist
+     ⇒ ((foo 1) (bar 2) (lose 4))
+@end lisp
+
+
+@lisp
+Function: assoc-delete-all key alist &optional test ¶
+@end lisp
+
+这个函数类似于 assq-delete-all，除了它接受一个可选参数 test，一个用于比较 alist 中键的谓词函数。如果省略或为零，则测试默认为相等。如 assq-delete-all，这个函数经常修改 alist 原有的列表结构。
+
+@lisp
+Function: rassq-delete-all value alist ¶
+@end lisp
+
+
+此函数从 alist 中删除 CDR 为 eq to value 的所有元素。它返回缩短的 alist，并经常修改 alist 的原始列表结构。rassq-delete-all 与 assq-delete-all 类似，只是它比较每个 alist 关联的 CDR 而不是 CAR。
+
+@lisp
+Macro: let-alist alist body ¶
+@end lisp
+为用作关联列表 alist 的键的每个符号创建一个绑定，以点为前缀。这在访问同一个关联列表中的多个项目时很有用，最好通过一个简单的示例来理解：
+
+@lisp
+(setq colors '((rose . red) (lily . white) (buttercup . yellow)))
+(let-alist colors
+  (if (eq .rose 'red)
+      .lily))
+     ⇒ white
+@end lisp
+
+
+在编译时检查正文，并且仅检查正文中带有 @code{。} 的符号 因为符号名称中的第一个字符将被绑定。查找键是使用 assq 完成的，并将这个 assq 的返回值的 cdr 分配为绑定的值。
+
+支持嵌套关联列表：
+
+@lisp
+(setq colors '((rose . red) (lily (belladonna . yellow) (brindisi . pink))))
+(let-alist colors
+  (if (eq .rose 'red)
+      .lily.belladonna))
+     ⇒ yellow
+@end lisp
+
+允许将 let-alist 相互嵌套，但内部 let-alist 中的代码无法访问外部 let-alist 绑定的变量。
+
+脚注 (5)
+
+@code{键} 的这种用法与 @code{键序列} 一词无关；  它表示用于在表中查找项目的值。在这种情况下，表是 alist，而 alist 关联是项目。
+
+@node 59 属性列表
+@section 5.9 属性列表
+
+属性列表（简称 plist）是成对元素的列表。每对都将属性名称（通常是符号）与属性或值相关联。以下是属性列表的示例：
+
+@lisp
+(pine cones numbers (1 2 3) color "blue")
+@end lisp
+
+
+此属性列表将 pine 与锥体相关联，将数字与 (1 2 3) 相关联，并将颜色与 @code{蓝色} 相关联。属性名称和值可以是任何 Lisp 对象，但名称通常是符号（如本例中所示）。
+
+属性列表用于多种情况。例如，函数 put-text-property 接受一个作为属性列表的参数，指定将应用于字符串或缓冲区中的文本的文本属性和相关值。请参阅文本属性。
+
+属性列表的另一个突出用途是用于存储符号属性。每个符号都有一个属性列表，用于记录有关该符号的各种信息；  这些属性以属性列表的形式存储。请参阅符号属性。
+
+@menu
+* 5.9.1 属性列表和关联列表: 591 属性列表和关联列表. 
+* 5.9.2 符号外的属性列表: 592 符号外的属性列表. 
+@end menu
+
+@node 591 属性列表和关联列表
+@subsection 5.9.1 属性列表和关联列表
+
+关联列表（请参阅关联列表）与属性列表非常相似。与关联列表相反，属性列表中的对的顺序并不重要，因为属性名称必须是不同的。
+
+属性列表比关联列表更适合将信息附加到各种 Lisp 函数名称或变量。如果您的程序将所有此类信息保存在一个关联列表中，则通常需要在每次检查特定 Lisp 函数名称或变量的关联时搜索整个列表，这可能会很慢。相比之下，如果您在函数名或变量本身的属性列表中保留相同的信息，则每次搜索将仅扫描一个属性列表的长度，该长度通常很短。这就是为什么变量的文档记录在名为 variable-documentation 的属性中的原因。字节编译器同样使用属性来记录那些需要特殊处理的函数。
+
+但是，关联列表有其自身的优势。根据您的应用程序，将关联添加到关联列表的前面可能比更新属性更快。一个符号的所有属性都存储在同一个属性列表中，因此属性名称的不同用途之间可能会发生冲突。（出于这个原因，最好选择可能是唯一的属性名称，例如以程序通常的变量和函数名称前缀开始属性名称。）关联列表可以像堆栈一样使用，其中关联被推到列表的前面，后来被丢弃；  这对于属性列表是不可能的。
+
+@node 592 符号外的属性列表
+@subsection 5.9.2 符号外的属性列表
+
+以下函数可用于操作属性列表。他们都使用 eq 比较属性名称。
+
+@lisp
+Function: plist-get plist property ¶
+@end lisp
+
+这将返回存储在属性列表 plist 中的属性值。它接受格式错误的 plist 参数。如果在 plist 中找不到属性，则返回 nil。例如，
+@lisp
+(plist-get '(foo 4) 'foo)
+     ⇒ 4
+(plist-get '(foo 4 bad) 'foo)
+     ⇒ 4
+(plist-get '(foo 4 bad) 'bad)
+     ⇒ nil
+(plist-get '(foo 4 bad) 'bar)
+     ⇒ nil
+@end lisp
+
+@lisp
+Function: plist-put plist property value ¶
+@end lisp
+
+这会将值作为属性属性的值存储在属性列表 plist 中。它可能会破坏性地修改 plist，或者它可能会构造一个新的列表结构而不改变旧的。该函数返回修改后的属性列表，因此您可以将其存储回您获得 plist 的位置。例如，
+
+@lisp
+(setq my-plist (list 'bar t 'foo 4))
+     ⇒ (bar t foo 4)
+(setq my-plist (plist-put my-plist 'foo 69))
+     ⇒ (bar t foo 69)
+(setq my-plist (plist-put my-plist 'quux '(a)))
+     ⇒ (bar t foo 69 quux (a))
+@end lisp
+
+
+@lisp
+Function: lax-plist-get plist property ¶
+@end lisp
+与 plist-get 类似，只是它使用 equal 而不是 eq 比较属性。
+
+@lisp
+Function: lax-plist-put plist property value ¶
+@end lisp
+与 plist-put 类似，只是它使用 equal 而不是 eq 比较属性。
+
+@lisp
+Function: plist-member plist property ¶
+@end lisp
+如果 plist 包含给定属性，则返回非零。与 plist-get 不同，这允许您区分缺失的属性和值为 nil 的属性。该值实际上是 plist 的尾部，其汽车是财产。
+
+@bye

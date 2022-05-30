@@ -1,0 +1,550 @@
+\input texinfo    @c -*- texinfo -*-
+@c %**start of header
+@setfilename 09-符号.info
+@settitle 
+@documentencoding UTF-8
+@documentlanguage en
+@c %**end of header
+
+@finalout
+@titlepage
+@title 
+@author zunrong
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top 
+@end ifnottex
+
+@menu
+* 9 符号::
+
+@detailmenu
+--- The Detailed Node Listing ---
+
+9 符号
+
+* 9.1 符号组件: 91 符号组件. 
+* 9.2 定义符号: 92 定义符号. 
+* 9.3 创建和嵌入符号: 93 创建和嵌入符号. 
+* 9.4 符号属性: 94 符号属性. 
+* 9.5 速记: 95 速记. 
+
+9.4 符号属性
+
+* 9.4.1 访问符号属性: 941 访问符号属性. 
+* 9.4.2 标准符号属性: 942 标准符号属性. 
+
+9.5 速记
+
+* 9.5.1 例外: 951 例外. 
+
+@end detailmenu
+@end menu
+
+@node 9 符号
+@chapter 9 符号
+
+符号是具有唯一名称的对象。本章介绍符号、它们的组件、它们的属性列表，以及它们是如何创建和嵌入的。单独的章节描述了符号作为变量和函数名的使用；  请参阅变量和函数。有关符号的精确读取语法，请参阅符号类型。
+
+您可以使用 symbolp 测试任意 Lisp 对象是否是符号：
+
+@lisp
+Function: symbolp object ¶
+@end lisp
+
+如果 object 是符号，则此函数返回 t，否则返回 nil。
+
+@menu
+* 9.1 符号组件: 91 符号组件. 
+* 9.2 定义符号: 92 定义符号. 
+* 9.3 创建和嵌入符号: 93 创建和嵌入符号. 
+* 9.4 符号属性: 94 符号属性. 
+* 9.5 速记: 95 速记. 
+@end menu
+
+@node 91 符号组件
+@section 9.1 符号组件
+
+每个符号都有四个组件（或~ 单元格~ ），每个组件都引用另一个对象：
+
+@lisp
+Print name ¶
+@end lisp
+
+符号的名称。
+@lisp
+Value ¶
+@end lisp
+
+符号的当前值作为变量。
+@lisp
+Function ¶
+@end lisp
+
+符号的函数定义。它还可以包含符号、键盘映射或键盘宏。
+@lisp
+Property list ¶
+@end lisp
+
+符号的属性列表。
+
+打印名称单元格始终包含一个字符串，并且无法更改。其他三个单元格中的每一个都可以设置为任何 Lisp 对象。
+
+打印名称单元格包含作为符号名称的字符串。由于符号在文本上由它们的名称表示，因此不要有两个具有相同名称的符号很重要。Lisp 阅读器确保了这一点：每次读取符号时，它都会在创建新符号之前查找具有指定名称的现有符号。要获取符号的名称，请使用函数符号名称（请参阅创建和内部符号）。然而，尽管每个符号只有一个唯一的打印名称，但仍然可以通过称为~ 速记~ 的不同别名来引用同一个符号（请参阅速记）。
+
+值单元格将符号的值作为变量保存，如果符号本身被评估为 Lisp 表达式，则可以得到该值。有关如何设置和检索值的详细信息，请参阅变量，包括本地绑定和范围规则等复杂性。大多数符号可以将任何 Lisp 对象作为值，但某些特殊符号的值无法更改；  这些包括 nil 和 t，以及名称以~ :~ 开头的任何符号（这些称为关键字）。请参阅永不改变的变量。
+
+函数单元保存符号的函数定义。通常，当我们真正指的是存储在 foo 的函数单元中的函数时，我们会提到~ 函数 foo~ ；  我们仅在必要时明确区分。通常，函数单元用于保存函数（请参阅函数）或宏（请参阅宏）。但是，它也可用于保存符号（请参阅符号函数间接）、键盘宏（请参阅键盘宏）、键盘映射（请参阅键盘映射）或自动加载对象（请参阅自动加载）。要获取符号函数单元格的内容，请使用函数 symbol-function（请参阅访问函数单元格内容）。
+
+属性列表单元格通常应该包含格式正确的属性列表。要获取符号的属性列表，请使用函数 symbol-plist。请参阅符号属性。
+
+函数单元格或值单元格可能为 void，这意味着该单元格不引用任何对象。（这与持有符号 void 不同，也与持有符号 nil 不同。）检查 void 的函数或值单元格会导致错误，例如~ 作为变量的符号值是 void~ 。
+
+因为每个符号都有单独的值和函数单元格，所以变量名称和函数名称不会冲突。例如，符号 buffer-file-name 有一个值（在当前缓冲区中被访问的文件的名称）以及一个函数定义（一个返回文件名的原始函数）：
+
+@lisp
+buffer-file-name
+     ⇒ "/gnu/elisp/symbols.texi"
+(symbol-function 'buffer-file-name)
+     ⇒ #<subr buffer-file-name>
+@end lisp
+
+@node 92 定义符号
+@section 9.2 定义符号
+
+定义是一种特殊的 Lisp 表达式，它表明您打算以特定方式使用符号。它通常为一种用途的符号指定一个值或含义，以及以这种方式使用时的含义的文档。因此，当您将符号定义为变量时，您可以为变量提供初始值，并为变量提供文档。
+
+defvar 和 defconst 是把符号定义为全局变量的特殊形式——一个可以在 Lisp 程序中的任何位置访问的变量。有关变量的详细信息，请参阅变量。要定义可自定义的变量，请使用 defcustom 宏，该宏也将 defvar 作为子例程调用（请参阅自定义设置）。
+
+原则上，您可以使用 setq 将变量值分配给任何符号，无论它是否首先被定义为变量。但是，您应该为要使用的每个全局变量编写一个变量定义；  否则，如果在启用词法作用域的情况下对其进行评估，您的 Lisp 程序可能无法正确运行（请参阅变量绑定的作用域规则）。
+
+defun 将符号定义为函数，创建一个 lambda 表达式并将其存储在符号的函数单元中。因此，这个 lambda 表达式成为符号的函数定义。（术语~ 函数定义~ ，意思是函数单元的内容，源于 defun 将符号定义为函数的想法。） defsubst 和 defalias 是定义函数的另外两种方式。请参阅函数。
+
+defmacro 将符号定义为宏。它创建一个宏对象并将其存储在符号的函数单元中。请注意，给定的符号可以是宏或函数，但不能同时是两者，因为宏和函数定义都保存在函数单元格中，并且该单元格在任何给定时间只能保存一个 Lisp 对象。请参阅宏。
+
+如前所述，Emacs Lisp 允许将相同的符号定义为变量（例如，使用 defvar）和函数或宏（例如，使用 defun）。这样的定义并不冲突。
+
+这些定义也可作为编程工具的指南。例如，Ch f 和 Ch v 命令创建包含指向相关变量、函数或宏定义的链接的帮助缓冲区。请参阅 GNU Emacs 手册中的名称帮助。
+
+@node 93 创建和嵌入符号
+@section 9.3 创建和嵌入符号
+
+要了解符号是如何在 GNU Emacs Lisp 中创建的，您必须知道 Lisp 如何读取它们。Lisp 必须确保每次在相同的上下文中读取相同的字符序列时都能找到相同的符号。不这样做会导致完全混乱。
+
+当 Lisp 阅读器遇到引用源代码中符号的名称时，它会读取该名称的所有字符。然后它在名为 obarray 的表中查找该名称，以找到程序员所指的符号。此查找中使用的技术称为~ 哈希~ ，这是一种通过将字符序列转换为数字（称为~ 哈希码~ ）来查找内容的有效方法。例如，在查找 Jan Jones 时，不要搜索电话簿封面，而是从 J 开始，然后从那里开始。这是散列的简单版本。obarray 的每个元素都是一个桶，其中包含具有给定哈希码的所有符号；  要查找给定名称，只需查看存储桶中的所有符号以查找该名称的哈希码即可。（同样的想法也用于一般的 Emacs 哈希表，但它们是不同的数据类型；请参阅哈希表。）
+
+在查找名称时，Lisp 阅读器还会考虑~ 速记~ 。如果程序员提供了它们，这允许读者找到一个符号，即使它的名称在源代码中没有以其完整形式出现。当然，读者需要了解一些关于这种速记的预先确定的上下文，就像一个人需要上下文才能通过名称~ Jan~ 唯一地引用 Jan Jones：在 Joneses 中可能很好，或者最近提到了 Jan，但在任何其他情况下都非常模棱两可。请参见速记。
+
+如果找到具有所需名称的符号，则阅读器将使用该符号。如果 obarray 不包含具有该名称的符号，则读取器创建一个新符号并将其添加到 obarray。查找或添加具有特定名称的符号称为实习符号，然后该符号称为实习符号。
+
+实习确保每个 obarray 只有一个具有任何特定名称的符号。可能存在其他同名符号，但不在同一个 obarray 中。因此，只要您继续使用相同的 obarray 阅读，读者就会获得相同名称的相同符号。
+
+实习通常在阅读器中自动发生，但有时其他程序可能想要这样做。例如，在 Mx 命令使用 minibuffer 将命令名称作为字符串获取后，它会对该字符串进行实习，以获取具有该名称的实习符号。作为另一个例子，一个假设的电话簿程序可以将每个查找的人的名字作为一个符号，即使 obarray 不包含它，以便它可以将信息附加到该新符号，例如某人最后一次查看它了。
+
+没有 obarray 包含所有符号；  事实上，有些符号并不在任何 obarray 中。它们被称为非驻留符号。一个 uninterned 符号与其他符号具有相同的四个单元格；  然而，获得它的唯一方法是在其他对象中找到它或作为变量的值。Uninterned 符号有时在生成 Lisp 代码时很有用，见下文。
+
+在 Emacs Lisp 中，obarray 实际上是一个向量。向量的每个元素都是一个桶；  它的值是一个内部符号，其名称散列到该存储桶，如果存储桶为空，则为 0。每个驻留符号都有一个指向存储桶中下一个符号的内部链接（用户不可见）。因为这些链接是不可见的，所以除了使用 mapatoms（如下）之外，没有办法找到 obarray 中的所有符号。桶中符号的顺序并不重要。
+
+在一个空的 obarray 中，每个元素都是 0，因此您可以使用 (make-vector length 0) 创建一个 obarray。这是创建 obarray 的唯一有效方法。作为长度的素数往往会产生良好的散列；  长度小于 2 的幂也很好。
+
+不要尝试自己将符号放入 obarray 中。这不起作用——只有实习生可以正确地在 obarray 中输入符号。
+
+Common Lisp 注意：与 Common Lisp 不同，Emacs Lisp 不提供在几个不同的~ 包~ 中实习相同的名称，因此创建多个具有相同名称但不同包的符号。Emacs Lisp 提供了一个不同的命名空间系统，称为~ shorthands~ （参见 Shorthands）。
+
+下面的大多数函数都使用名称，有时还使用 obarray 作为参数。如果名称不是字符串，或者 obarray 不是向量，则会发出错误类型参数错误的信号。
+
+@lisp
+Function: symbol-name symbol ¶
+@end lisp
+
+此函数返回作为符号名称的字符串。例如：
+
+@lisp
+(symbol-name 'foo)
+     ⇒ "foo"
+@end lisp
+
+
+警告：通过替换字符来更改字符串确实会更改符号的名称，但无法更新 obarray，所以不要这样做！
+
+在生成 Lisp 代码时创建非驻留符号很有用，因为在您生成的代码中用作变量的非驻留符号不会与其他 Lisp 程序中使用的任何变量发生冲突。
+
+@lisp
+Function: make-symbol name ¶
+@end lisp
+
+这个函数返回一个新分配的、名称为 name（必须是字符串）的非内部符号。它的值和函数定义为 void，其属性列表为 nil。在下面的示例中，sym 的值不是 eq 到 foo，因为它是一个不同的 uninterned 符号，其名称也是 'foo'。
+
+@lisp
+(setq sym (make-symbol "foo"))
+     ⇒ foo
+(eq sym 'foo)
+     ⇒ nil
+@end lisp
+
+@lisp
+Function: gensym &optional prefix ¶
+@end lisp
+
+此函数使用 make-symbol 返回一个符号，其名称是通过将 gensym-counter 附加到 prefix 并递增该计数器来生成的，确保没有两次调用此函数将生成具有相同名称的符号。前缀默认为~ g~ 。
+
+为避免意外嵌入生成代码的打印表示时出现问题（请参阅打印表示和读取语法），建议使用 gensym 而不是 make-symbol。
+
+@lisp
+Function: intern name &optional obarray ¶
+@end lisp
+
+此函数返回名称为 name 的内部符号。如果 obarray obarray 中没有这样的符号，intern 创建一个新符号，将其添加到 obarray，然后返回。如果省略 obarray，则使用全局变量 obarray 的值。
+
+@lisp
+(setq sym (intern "foo"))
+     ⇒ foo
+(eq sym 'foo)
+     ⇒ t
+
+(setq sym1 (intern "foo" other-obarray))
+     ⇒ foo
+(eq sym1 'foo)
+     ⇒ nil
+@end lisp
+
+Common Lisp 注意：在 Common Lisp 中，您可以在 obarray 中实习现有的符号。在 Emacs Lisp 中，您不能这样做，因为 intern 的参数必须是字符串，而不是符号。
+
+@lisp
+Function: intern-soft name &optional obarray ¶
+@end lisp
+
+此函数返回 obarray 中名称为 name 的符号，如果 obarray 没有具有该名称的符号，则返回 nil。因此，您可以使用 intern-soft 来测试具有给定名称的符号是否已被实习。如果省略 obarray，则使用全局变量 obarray 的值。
+
+参数名称也可以是符号；  在这种情况下，如果 name 被实习在指定的 obarray 中，则该函数返回 name，否则返回 nil。
+
+@lisp
+
+
+(intern-soft "frazzle")        ; No such symbol exists.
+     ⇒ nil
+(make-symbol "frazzle")        ; Create an uninterned one.
+     ⇒ frazzle
+
+(intern-soft "frazzle")        ; That one cannot be found.
+     ⇒ nil
+
+(setq sym (intern "frazzle"))  ; Create an interned one.
+     ⇒ frazzle
+
+(intern-soft "frazzle")        ; That one can be found!
+     ⇒ frazzle
+
+(eq sym 'frazzle)              ; And it is the same one.
+     ⇒ t
+@end lisp
+
+
+@lisp
+Variable: obarray ¶
+@end lisp
+
+此变量是供实习生和读取使用的标准 obarray。
+
+@lisp
+Function: mapatoms function &optional obarray ¶
+@end lisp
+
+此函数对 obarray obarray 中的每个符号调用一次函数。然后它返回零。如果省略 obarray，则默认为 obarray 的值，即普通符号的标准 obarray。
+
+@lisp
+(setq count 0)
+     ⇒ 0
+(defun count-syms (s)
+  (setq count (1+ count)))
+     ⇒ count-syms
+(mapatoms 'count-syms)
+     ⇒ nil
+count
+     ⇒ 1871
+@end lisp
+
+有关使用 mapatoms 的另一个示例，请参阅访问文档字符串中的文档。
+
+@lisp
+Function: unintern symbol obarray ¶
+@end lisp
+
+此函数从 obarray obarray 中删除符号。如果 symbol 实际上不在 obarray 中， unintern 什么也不做。如果 obarray 为 nil，则使用当前的 obarray。
+
+如果您提供字符串而不是符号作为符号，则它代表符号名称。然后 unintern 删除 obarray 中具有该名称的符号（如果有）。如果没有这样的符号，unintern 什么也不做。
+
+如果 unintern 确实删除了一个符号，它返回 t。否则返回零。
+
+@node 94 符号属性
+@section 9.4 符号属性
+
+一个符号可以拥有任意数量的符号属性，这些属性可用于记录有关该符号的各种信息。例如，当符号具有具有非零值的风险局部变量属性时，这意味着符号命名的变量是风险文件局部变量（请参阅文件局部变量）。
+
+每个符号的属性和属性值都以属性列表（参见属性列表）的形式存储在符号的属性列表单元格（参见符号组件）中。
+
+@menu
+* 9.4.1 访问符号属性: 941 访问符号属性. 
+* 9.4.2 标准符号属性: 942 标准符号属性. 
+@end menu
+
+@node 941 访问符号属性
+@subsection 9.4.1 访问符号属性
+
+以下函数可用于访问符号属性。
+
+@lisp
+Function: get symbol property ¶
+@end lisp
+
+此函数返回符号属性列表中名为 property 的属性的值。如果没有这样的属性，则返回 nil。因此，nil 值与该属性不存在之间没有区别。
+
+name 属性使用 eq 与现有属性名称进行比较，因此任何对象都是合法属性。
+
+请参阅 put 示例。
+
+@lisp
+Function: put symbol property value ¶
+@end lisp
+
+此函数将值放在属性名称属性下的符号属性列表中，替换任何先前的属性值。put 函数返回值。
+@lisp
+(put 'fly 'verb 'transitive)
+     ⇒'transitive
+(put 'fly 'noun '(a buzzing little bug))
+     ⇒ (a buzzing little bug)
+(get 'fly 'verb)
+     ⇒ transitive
+(symbol-plist 'fly)
+     ⇒ (verb transitive noun (a buzzing little bug))
+@end lisp
+
+
+@lisp
+Function: symbol-plist symbol ¶
+@end lisp
+
+该函数返回符号的属性列表。
+
+@lisp
+Function: setplist symbol plist ¶
+@end lisp
+
+此函数将符号的属性列表设置为 plist。通常，plist 应该是一个格式良好的属性列表，但这不是强制的。返回值为 plist。
+@lisp
+(setplist 'foo '(a 1 b (2 3) c nil))
+     ⇒ (a 1 b (2 3) c nil)
+(symbol-plist 'foo)
+     ⇒ (a 1 b (2 3) c nil)
+@end lisp
+
+
+对于不用于普通目的的特殊 obarray 中的符号，以非标准方式使用属性列表单元格可能是有意义的；  事实上，缩写机制就是这样做的（参见缩写和缩写扩展）。
+
+您可以根据 setplist 和 plist-put 定义 put，如下所示：
+@lisp
+(defun put (symbol prop value)
+  (setplist symbol
+            (plist-put (symbol-plist symbol) prop value)))
+@end lisp
+
+
+@lisp
+Function: function-get symbol property &optional autoload ¶
+@end lisp
+
+此函数与 get 相同，除了如果 symbol 是函数别名的名称，它会在命名实际函数的符号的属性列表中查找。请参阅定义函数。如果可选参数 autoload 不为零，并且符号是自动加载的，则此函数将尝试自动加载它，因为自动加载可能会设置符号的属性。如果 autoload 是符号宏，仅当 symbol 是自动加载的宏时才尝试自动加载。
+
+@lisp
+Function: function-put function property value ¶
+@end lisp
+
+此函数将函数的属性设置为值。函数应该是一个符号。这个函数比调用 put 来设置函数的属性更受欢迎，因为它会让我们有一天能够实现旧属性到新属性的重新映射。
+
+@node 942 标准符号属性
+@subsection 9.4.2 标准符号属性
+
+在这里，我们列出了在 Emacs 中用于特殊用途的符号属性。在下表中，每当我们说~ 命名函数~ 时，就是指名称为相关符号的函数；  对于~ 命名变量~ 等类似。
+
+@lisp
+:advertised-binding
+@end lisp
+
+在显示文档时，此属性值指定命名函数的首选键绑定。请参阅替换文档中的键绑定。
+@lisp
+char-table-extra-slots
+@end lisp
+
+该值（如果非零）指定命名字符表类型中的额外槽数。请参阅字符表。
+@lisp
+customized-face
+face-defface-spec
+saved-face
+theme-face
+@end lisp
+
+
+这些属性用于记录人脸的标准、已保存、自定义和主题人脸规格。不要直接设置它们；  它们由 defface 和相关函数管理。请参见定义面。
+@lisp
+customized-value
+saved-value
+standard-value
+theme-value
+@end lisp
+
+
+这些属性用于记录可自定义变量的标准值、已保存值、已自定义但未保存的值和主题值。不要直接设置它们；  它们由 defcustom 和相关函数管理。请参阅定义自定义变量。
+@lisp
+disabled
+@end lisp
+
+如果该值为非零，则命名函数作为命令被禁用。请参阅禁用命令。
+@lisp
+face-documentation
+@end lisp
+
+该值存储命名人脸的文档字符串。这是由 defface 自动设置的。请参见定义面。
+@lisp
+history-length
+@end lisp
+
+该值，如果非零，指定命名历史列表变量的最大迷你缓冲区历史长度。请参阅小缓冲区历史记录。
+@lisp
+interactive-form
+@end lisp
+
+该值是命名函数的交互形式。通常，您不应该直接设置它；  请改用交互式特殊形式。请参阅交互式呼叫。
+@lisp
+menu-enable
+@end lisp
+
+该值是一个表达式，用于确定是否应在菜单中启用命名菜单项。请参阅简单菜单项。
+@lisp
+mode-class
+@end lisp
+
+如果该值是特殊的，则命名的主要模式是特殊的。请参阅主要模式约定。
+@lisp
+permanent-local
+@end lisp
+
+如果值为非零，则命名变量是缓冲区局部变量，其值不应在更改主要模式时重置。请参阅创建和删除缓冲区本地绑定。
+@lisp
+permanent-local-hook
+@end lisp
+
+如果该值为非 nil，则在更改主要模式时不应从挂钩变量的本地值中删除命名函数。请参阅设置挂钩。
+@lisp
+pure
+@end lisp
+
+如果该值不是 nil，则命名函数被认为是纯函数（请参阅什么是函数？）。可以在编译时评估带有常量参数的调用。这可能会将运行时错误转移到编译时。不要与纯存储混淆（请参阅纯存储）。
+@lisp
+risky-local-variable
+@end lisp
+
+如果该值为非 nil，则命名变量被视为文件局部变量有风险。请参阅文件局部变量。
+@lisp
+safe-function
+@end lisp
+
+如果该值为非零，则命名函数通常被认为是安全的评估。请参阅确定函数是否可以安全调用。
+@lisp
+safe-local-eval-function
+@end lisp
+
+如果该值为非零，则命名函数可以安全地在文件本地评估表单中调用。请参阅文件局部变量。
+@lisp
+safe-local-variable
+@end lisp
+
+该值指定用于确定命名变量的安全文件本地值的函数。请参阅文件局部变量。
+@lisp
+side-effect-free
+@end lisp
+
+非 nil 值表示命名函数没有副作用（请参阅什么是函数？），因此字节编译器可能会忽略其值未使用的调用。如果属性的值没有错误，字节编译器甚至可以删除这些未使用的调用。除了字节编译器优化之外，此属性还用于确定函数安全性（请参阅确定函数是否可以安全调用）。
+@lisp
+undo-inhibit-region
+@end lisp
+
+如果非零，则命名函数阻止撤消操作被限制在活动区域​​，如果撤消是在函数之后立即调用的。请参阅撤消。
+@lisp
+variable-documentation
+@end lisp
+如果非零，则指定命名变量的文档字符串。这是由 defvar 和相关函数自动设置的。请参见定义面。
+
+@node 95 速记
+@section 9.5 速记
+
+符号速记，有时称为~ 重命名符号~ ，是在 Lisp 源代码中发现的符号形式。它们就像常规的符号形式，除了当 Lisp 阅读器遇到它们时，它会生成具有不同且通常更长的打印名称的符号（请参阅符号组件）。
+
+将速记视为预期符号全名的缩写很有用。尽管如此，不要将速记与缩写系统混淆，请参阅缩写和缩写扩展。
+
+简写使 Emacs Lisp 的命名空间礼仪更易于使用。由于所有符号都存储在单个 obarray 中（请参阅创建和内部符号），程序员通常在每个符号名称前加上它所在的库的名称。例如，函数 text-property-search-forward 和 text-property-search-backward 都属于 text-property-search.el 库（请参阅加载）。通过正确地为符号名称添加前缀，可以有效地防止属于不同库的类似名称符号之间的冲突，从而执行不同的操作。然而，这种做法通常会产生很长的符号名称，一段时间后输入和阅读不方便。速记以干净的方式解决了这些问题。
+
+@lisp
+Variable: read-symbol-shorthands ¶
+@end lisp
+
+这个变量的值是一个alist，其元素的格式为(shorthand-prefix . longhand-prefix)。每个元素都指示 Lisp 阅读器读取以 shorthand-prefix 开头的每个符号形式，就好像它以 longhand-prefix 开头一样。
+
+此变量只能在文件局部变量中设置（请参阅 GNU Emacs 手册中的文件中的局部变量）。
+
+这是一个假设的字符串操作库 some-nice-string-utils.el 中的速记用法示例。
+
+@lisp
+(defun some-nice-string-utils-split (separator s &optional omit-nulls)
+  "A match-data saving variant of `split-string'."
+  (save-match-data (split-string s separator omit-nulls)))
+
+(defun some-nice-string-utils-lines (s)
+  "Split string S at newline characters into a list of strings."
+  (some-nice-string-utils-split "\\(\r\n\\|[\n\r]\\)" s))
+@end lisp
+
+可以看出，由于要输入的符号名称很长，因此阅读或开发此代码非常乏味。我们可以使用速记来缓解这种情况。
+
+@lisp
+(defun snu-split (separator s &optional omit-nulls)
+  "A match-data saving variation on `split-string'."
+  (save-match-data (split-string s separator omit-nulls)))
+
+(defun snu-lines (s)
+  "Split string S into a list of strings on newline characters."
+  (snu-split "\\(\r\n\\|[\n\r]\\)" s))
+
+;; Local Variables:
+;; read-symbol-shorthands: (("snu-" . "some-nice-string-utils-"))
+;; End:
+@end lisp
+
+尽管这两个摘录看起来不同，但在 Lisp 阅读器处理它们之后它们是完全相同的。两者都将导致相同的符号被实习（请参阅创建和实习符号）。因此，加载或字节编译这两个文件中的任何一个都具有相同的结果。在第二个版本中使用的简写 snu-split 和 snu-lines 没有被嵌入到 obarray 中。这很容易通过将点移动到使用速记的位置并等待 ElDoc（参见 GNU Emacs 手册中的文件中的局部变量）提示回显区域中点下符号的真实全名。
+
+由于 read-symbol-shorthands 是文件局部变量，因此依赖于 some-nice-string-utils-lines.el 的多个库可能会在不同的简写下引用相同的符号，或者根本不使用简写。在下一个示例中，my-tricks.el 库使用 sns- 前缀而不是 snu- 来引用符号 some-nice-string-utils-lines。
+@lisp
+(defun t-reverse-lines (s) (string-join (reverse (sns-lines s)) "\n")
+
+;; Local Variables:
+;; read-symbol-shorthands: (("t-" . "my-tricks-")
+;;                          ("sns-" . "some-nice-string-utils-"))
+       ;; End:
+@end lisp
+
+@menu
+* 9.5.1 例外: 951 例外. 
+@end menu
+
+@node 951 例外
+@subsection 9.5.1 例外
+
+管理速记转换的规则有两个例外：
+
+完全由 Emacs Lisp 符号组成类（参见语法类表）中的字符组成的符号形式不会被转换。例如，可以使用 - 或 /= 作为速记前缀，但这不会影响这些名称的算术函数。
+名称以 @code{#_} 开头的符号形式不会被转换。
+
+@bye
