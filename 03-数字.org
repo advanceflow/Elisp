@@ -3,7 +3,6 @@ GNU Emacs 支持两种数字数据类型：整数和浮点数。整数是整数�
 
 ** 3.1 整数基础
 Lisp 阅读器将整数读取为具有可选初始符号和可选最后句点的十进制数字的非空序列。
-
 #+begin_src emacs-lisp
    1               ; The integer 1.
    1.              ; The integer 1.
@@ -14,7 +13,6 @@ Lisp 阅读器将整数读取为具有可选初始符号和可选最后句点的
 #+end_src
 
 以 10 为基数的整数的语法由 '#' 后跟一个基数指示，后跟一个或多个数字组成。基数指示是~ b~ 表示二进制，~ o~ 表示八进制，~ x~ 表示十六进制，~ radixr~ 表示基数。因此，'#binteger' 以二进制读取整数，而 '#radixrinteger' 以 radix radix 读取整数。radix 的允许值从 2 到 36，允许的数字是从 '0'-'9'、'A'-'Z' 中取出的第一个 radix 字符。字母大小写被忽略，没有初始符号或最后一个句点。例如：
-
 #+begin_src emacs-lisp
   #b101100 ⇒ 44
   #o54 ⇒ 44
@@ -25,14 +23,12 @@ Lisp 阅读器将整数读取为具有可选初始符号和可选最后句点的
 要了解各种函数如何处理整数，尤其是位运算符（请参阅整数的位运算），查看二进制形式的数字通常会有所帮助。
 
 在二进制中，十进制整数 5 如下所示：
-
 #+begin_src emacs-lisp
   …000101
 #+end_src
 （省略号~ ...~ 在概念上代表与前导位匹配的无限数量的位；这里是无限数量的 0 位。后面的示例也使用此~ ...~ 表示法。）
 
 整数 -1 如下所示：
-
 #+begin_src emacs-lisp
   …111111
 #+end_src
@@ -40,7 +36,6 @@ Lisp 阅读器将整数读取为具有可选初始符号和可选最后句点的
 -1 表示为全1。（这称为二进制补码表示法。）
 
 从 -1 中减去 4 返回负整数 -5。在二进制中，十进制整数 4 是 100。因此，-5 看起来像这样：
-
 #+begin_src emacs-lisp
   …111011
 #+end_src
@@ -72,7 +67,6 @@ fixnum 的值范围取决于机器。最小范围是 -536,870,912 到 536,870,91
     该变量的值是一个非负整数，用于控制 Emacs 在计算大整数时是否发出范围错误信号。绝对值小于 2**n 的整数（其中 n 是此变量的值）不表示范围错误。尝试创建更大的整数通常表示范围错误，但如果可以廉价地创建更大的整数，则可能没有信号。如果计算创建巨大的整数，则将此变量设置为较大的数字可能会很昂贵。
 
 ** 3.2 浮点基础
-
 浮点数对于表示非整数的数字很有用。浮点数的范围与您使用的机器上的 C 数据类型 double 的范围相同。在 Emacs 支持的所有计算机上，这是 IEEE binary64 浮点格式，由 IEEE Std 754-2019 标准化，并在 David Goldberg 的论文~ What Every Computer Scientist Should Know About Floating-Point Arithmetic~ 中进一步讨论。在现代平台上，浮点运算严格遵循 IEEE-754 标准；  然而，在一些过时的平台上，结果并不总是正确四舍五入，尤其是 32 位 x86。
 
 浮点数的读取语法需要小数点、指数或两者。可选符号（~ +~ 或~ -~ ）位于数字及其指数之前。例如'1500.0', '+15e2', '15.0e+2', '+1500000e-3', '.15e4' 是浮点数1500的五种写法，它们都是等价的.  与 Common Lisp 一样，Emacs Lisp 要求在没有指数的浮点数中小数点后至少有一位数字；  ~ 1500。~   是整数，而不是浮点数。
@@ -182,7 +176,6 @@ not-a-number
     #+end_src
 
 ** 3.4 数字比较
-
 要测试数字是否相等，通常应该使用 = 而不是非数字比较谓词，如 eq、eql 和 equal。不同的浮点数和大整数对象可以在数值上相等。如果你用 eq 来比较它们，你测试它们是否是同一个对象；  如果使用 eql 或 equal，则测试它们的值是否无法区分。相反，= 使用数字比较，当非数字比较返回 nil 时，有时会返回 t，反之亦然。请参阅浮点基础知识。
 
 在 Emacs Lisp 中，如果两个 fixnum 在数值上相等，则它们是同一个 Lisp 对象。也就是说，eq 等价于 = on fixnums。有时使用 eq 比较未知值与固定值比较方便，因为如果未知值不是数字，eq 不会报告错误——它接受任何类型的参数。相反，如果参数不是数字或标记，则 = 表示错误。但是，如果可以，最好使用 =，即使是比较整数也是如此。
@@ -273,7 +266,7 @@ not-a-number
 要将整数转换为浮点数，请使用函数 float。
 
 #+begin_src emacs-lisp
-Function: float number
+  Function: float number
 #+end_src
 
     这将返回转换为浮点数的数字。如果 number 已经是浮点数，则 float 将其原封不动地返回。
@@ -287,20 +280,19 @@ Function: truncate number &optional divisor
     这将返回数字，通过向零舍入转换为整数。
 
     #+begin_src emacs-lisp
-(truncate 1.2)
-     ⇒ 1
-(truncate 1.7)
-     ⇒ 1
-(truncate -1.2)
-     ⇒ -1
-(truncate -1.7)
-     ⇒ -1
-
+      (truncate 1.2)
+	   ⇒ 1
+      (truncate 1.7)
+	   ⇒ 1
+      (truncate -1.2)
+	   ⇒ -1
+      (truncate -1.7)
+	   ⇒ -1
     #+end_src
 
 
 #+begin_src emacs-lisp
-Function: floor number &optional divisor
+  Function: floor number &optional divisor
 #+end_src
 
     这将返回数字，通过向下舍入（向负无穷大）转换为整数。
@@ -308,18 +300,17 @@ Function: floor number &optional divisor
     如果指定了除数，则使用与 mod 对应的除法运算，向下舍入。
 
     #+begin_src emacs-lisp
-(floor 1.2)
-     ⇒ 1
-(floor 1.7)
-     ⇒ 1
-(floor -1.2)
-     ⇒ -2
-(floor -1.7)
-     ⇒ -2
-(floor 5.99 3)
-     ⇒ 1
+      (floor 1.2)
+	   ⇒ 1
+      (floor 1.7)
+	   ⇒ 1
+      (floor -1.2)
+	   ⇒ -2
+      (floor -1.7)
+	   ⇒ -2
+      (floor 5.99 3)
+	   ⇒ 1
     #+end_src
-
 
 #+begin_src emacs-lisp
   Function: ceiling number &optional divisor
@@ -335,7 +326,6 @@ Function: floor number &optional divisor
 	   ⇒ -1
       (ceiling -1.7)
 	   ⇒ -1
-
     #+end_src
 
 #+begin_src emacs-lisp
@@ -376,8 +366,8 @@ Emacs Lisp 提供了传统的四种算术运算（加法、减法、乘法和除
     此函数与 C 运算符 ++ 不同——它不会增加变量。它只是计算一个总和。因此，如果我们继续，
 
     #+begin_src emacs-lisp
-foo
-     ⇒ 4
+      foo
+	   ⇒ 4
 
     #+end_src
 
@@ -385,20 +375,19 @@ foo
     如果要增加变量，则必须使用 setq，如下所示：
 
     #+begin_src emacs-lisp
-(setq foo (1+ foo))
-     ⇒ 5
-
+      (setq foo (1+ foo))
+	   ⇒ 5
     #+end_src
 
 
 #+begin_src emacs-lisp
-Function: 1- number-or-marker
+  Function: 1- number-or-marker
 #+end_src
 
     此函数返回数字或标记减 1。
 
 #+begin_src emacs-lisp
-Function: + &rest numbers-or-markers
+  Function: + &rest numbers-or-markers
 #+end_src
 
     该函数将其参数相加。当不给定参数时，+ 返回 0。
@@ -414,18 +403,18 @@ Function: + &rest numbers-or-markers
 
 
 #+begin_src emacs-lisp
-Function: - &optional number-or-marker &rest more-numbers-or-markers
+  Function: - &optional number-or-marker &rest more-numbers-or-markers
 #+end_src
 
     - 函数有两个用途：否定和减法。当 - 有一个参数时，该值是参数的负数。当有多个参数时， - 从 number-or-marker 中累积减去每个 more-numbers-or-markers。如果没有参数，则结果为 0。
 
       #+begin_src emacs-lisp
-(- 10 1 2 3 4)
-     ⇒ 0
-(- 10)
-     ⇒ -10
-(-)
-     ⇒ 0
+	(- 10 1 2 3 4)
+	     ⇒ 0
+	(- 10)
+	     ⇒ -10
+	(-)
+	     ⇒ 0
       #+end_src
 
 
@@ -454,8 +443,6 @@ Function: - &optional number-or-marker &rest more-numbers-or-markers
     如果所有参数都是整数，则结果是整数，通过在每次除法后将商向零舍入获得。
 
     #+begin_src emacs-lisp
-
-
       (/ 6 2)
 	   ⇒ 3
 
@@ -636,7 +623,7 @@ Emacs Lisp 中的按位运算仅适用于整数。
 
 
 #+begin_src emacs-lisp
-Function: lsh integer1 count
+  Function: lsh integer1 count
 #+end_src
 
     lsh 是逻辑移位的缩写，它将整数 1 中的位移动到左侧计数位置，或者如果计数为负数则向右移动，将零带入空出的位。如果 count 是负数，那么 integer1 必须是一个 fixnum 或一个正 bignum，并且 lsh 通过在移位前减去两次 most-negative-fixnum 来将负的 fixnum 视为无符号，从而产生非负结果。这种古怪的行为可以追溯到 Emacs 仅支持 fixnums 的时候。如今，灰烬是更好的选择。
@@ -692,7 +679,7 @@ Function: lsh integer1 count
     #+end_src
 
 #+begin_src emacs-lisp
-Function: logior &rest ints-or-markers
+  Function: logior &rest ints-or-markers
 #+end_src
 
     此函数返回其参数的按位或运算：当且仅当至少一个参数中的第 n 位为 1 时，结果中的第 n 位为 1。如果没有参数，则结果为 0，这是此操作的标识元素。如果 logior 仅传递一个参数，则返回该参数。

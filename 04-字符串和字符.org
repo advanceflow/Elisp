@@ -81,8 +81,8 @@ Function: substring string &optional start end
     此函数返回一个新字符串，该字符串由字符串中的那些字符组成，范围从（并包括）索引开始处的字符到（但不包括）索引结束处的字符。第一个字符位于索引零处。有一个参数，这个函数只是复制字符串。
 
 #+begin_src emacs-lisp
-(substring "abcdefg" 0 3)
-     ⇒ "abc"
+  (substring "abcdefg" 0 3)
+       ⇒ "abc"
 #+end_src
 
     在上面的例子中，'a' 的索引是 0，'b' 的索引是 1，'c' 的索引是 2。索引 3（字符串中的第四个字符）标记了字符位置子字符串被复制到的位置。因此， ~abc~ 是从字符串 ~abcdefg~ 复制而来的。
@@ -90,8 +90,8 @@ Function: substring string &optional start end
     负数从字符串末尾开始计数，因此 -1 表示字符串最后一个字符的索引。例如：
 
 #+begin_src emacs-lisp
-(substring "abcdefg" -3 -1)
-     ⇒ "ef"
+  (substring "abcdefg" -3 -1)
+       ⇒ "ef"
 #+end_src
 
     在此示例中， ~e~ 的索引为 -3， ~f~ 的索引为 -2， ~g~ 的索引为 -1。因此， ~e~ 和 ~f~ 被包括在内， ~g~ 被排除在外。
@@ -99,15 +99,15 @@ Function: substring string &optional start end
     当 nil 用于 end 时，它代表字符串的长度。因此，
 
 #+begin_src emacs-lisp
-(substring "abcdefg" -3 nil)
-     ⇒ "efg"
+  (substring "abcdefg" -3 nil)
+       ⇒ "efg"
 #+end_src
 
     省略参数 end 等效于指定 nil。随之而来的是 (substring string 0) 返回所有字符串的副本。
 
 #+begin_src emacs-lisp
-(substring "abcdefg" 0)
-     ⇒ "abcdefg"
+  (substring "abcdefg" 0)
+       ⇒ "abcdefg"
 #+end_src
 
     但我们建议为此目的使用复制序列（请参阅序列）。
@@ -174,26 +174,26 @@ Function: substring string &optional start end
     例子：
 
 #+begin_src emacs-lisp
-(split-string "  two words ")
-     ⇒ ("two" "words")
+  (split-string "  two words ")
+       ⇒ ("two" "words")
 #+end_src
 
     结果不是 ("" "two" "words" "")，它很少有用。如果您需要这样的结果，请为分隔符使用显式值：
 
 #+begin_src emacs-lisp
-(split-string "  two words "
-              split-string-default-separators)
-     ⇒ ("" "two" "words" "")
+  (split-string "  two words "
+		split-string-default-separators)
+       ⇒ ("" "two" "words" "")
 #+end_src
 
 
 #+begin_src emacs-lisp
-(split-string "Soup is good food" "o")
-     ⇒ ("S" "up is g" "" "d f" "" "d")
-(split-string "Soup is good food" "o" t)
-     ⇒ ("S" "up is g" "d f" "d")
-(split-string "Soup is good food" "o+")
-     ⇒ ("S" "up is g" "d f" "d")
+  (split-string "Soup is good food" "o")
+       ⇒ ("S" "up is g" "" "d f" "" "d")
+  (split-string "Soup is good food" "o" t)
+       ⇒ ("S" "up is g" "d f" "d")
+  (split-string "Soup is good food" "o+")
+       ⇒ ("S" "up is g" "d f" "d")
 #+end_src
 
 
@@ -239,41 +239,41 @@ Function: substring string &optional start end
 
 
 #+begin_src emacs-lisp
-Function: string-clean-whitespace string
+  Function: string-clean-whitespace string
 #+end_src
 
     通过将一段空格折叠为单个空格字符，以及从字符串的开头和结尾删除所有空格来清理字符串中的空格。 
 
 #+begin_src emacs-lisp
-Function: string-trim-left string &optional regexp
+  Function: string-trim-left string &optional regexp
 #+end_src
 
     从字符串中删除与正则表达式匹配的前导文本。正则表达式默认为 '[ \t\n\r]+'。 
 
 
 #+begin_src emacs-lisp
-Function: string-trim-right string &optional regexp
+  Function: string-trim-right string &optional regexp
 #+end_src
 
     从字符串中删除匹配正则表达式的尾随文本。正则表达式默认为 '[ \t\n\r]+'。 
 
 
 #+begin_src emacs-lisp
-Function: string-trim string &optional trim-left trim-right
+  Function: string-trim string &optional trim-left trim-right
 #+end_src
 
     从字符串中删除匹配 trim-left 的前导文本和匹配 trim-right 的尾随文本。两个正则表达式都默认为 '[ \t\n\r]+'。 
 
 
 #+begin_src emacs-lisp
-Function: string-fill string length
+  Function: string-fill string length
 #+end_src
 
     尝试对字符串进行自动换行，以便没有行长于长度。填充仅在空白边界上完成。如果有个别词长于长度，这些将不会被缩短。 
 
 
 #+begin_src emacs-lisp
-Function: string-limit string length &optional end coding-system
+  Function: string-limit string length &optional end coding-system
 #+end_src
 
     如果 string 比 length 个字符短，则按原样返回 string。否则，返回由第一个长度字符组成的字符串子串。如果给出了可选的 end 参数，则返回一个长度为最后一个字符的字符串。
@@ -284,13 +284,13 @@ Function: string-limit string length &optional end coding-system
 
 
 #+begin_src emacs-lisp
-Function: string-lines string &optional omit-nulls
+  Function: string-lines string &optional omit-nulls
 #+end_src
 
     将字符串拆分为换行符边界上的字符串列表。如果省略空值，则从结果中删除空行。 
 
 #+begin_src emacs-lisp
-Function: string-pad string length &optional padding start
+  Function: string-pad string length &optional padding start
 #+end_src
 
     使用 padding 作为填充字符（默认为空格字符）将字符串填充到长度。如果字符串短于长度，则不进行填充。如果 start 为 nil（或不存在），则填充到字符串的末尾，如果它不是 nil，则填充到字符串的开头。 
@@ -302,7 +302,6 @@ Function: string-pad string length &optional padding start
     从字符串中删除最后的换行符（如果有）。
 
 ** 4.4 修改字符串
-
 您可以通过本节中描述的操作更改可变字符串的内容。请参阅可变性。
 
 更改现有字符串内容的最基本方法是使用 aset（请参阅操作数组的函数）。(aset string idx char) 将 char 存储到索引 idx 处的字符串中。每个字符占用一个或多个字节，如果 char 需要与该索引处已经存在的字符不同的字节数，则 aset 会发出错误信号。
@@ -328,8 +327,6 @@ Function: store-substring string idx obj
     这使 string 成为单字节字符串并将其内容清除为零。它也可能改变字符串的长度。
 
 ** 4.5 字符与字符串的比较
-
-
    #+begin_src emacs-lisp
      Function: char-equal character1 character2
    #+end_src
@@ -364,14 +361,14 @@ Function: store-substring string idx obj
     #+end_src
 
 
-    出于技术原因，当且仅当单字节和多字节字符串包含相同的字符代码序列并且所有这些代码都在 0 到 127（ASCII）或 160 到 255（八位图形）范围内时，它们才相等.  但是，当单字节字符串转换为多字节字符串时，代码在 160 到 255 范围内的所有字符都将转换为代码更高的字符，而 ASCII 字符保持不变。因此，单字节字符串及其到多字节的转换只有在字符串都是 ASCII 时才相等。字符代码 160 到 255 在多字节文本中并不完全正确，即使它们可能出现。因此，一个单字节字符串和一个多字节字符串是相等的而不都是 ASCII 的情况是一个技术上的怪事，很少有 Emacs Lisp 程序员遇到过。请参阅文本表示。 
+    出于技术原因，当且仅当单字节和多字节字符串包含相同的字符代码序列并且所有这些代码都在 0 到 127（ASCII）或 160 到 255（八位图形）范围内时，它们才相等.  但是，当单字节字符串转换为多字节字符串时，代码在 160 到 255 范围内的所有字符都将转换为代码更高的字符，而 ASCII 字符保持不变。因此，单字节字符串及其到多字节的转换只有在字符串都是 ASCII 时才相等。字符代码 160 到 255 在多字节文本中并不完全正确，即使它们可能出现。因此，一个单字节字符串和一个多字节字符串是相等的而不都是 ASCII 的情况是一个技术上的怪事，很少有 Emacs Lisp 程序员遇到过。请参阅文本表示。
 
 
     #+begin_src emacs-lisp
       Function: string-equal string1 string2
     #+end_src
 
-    string-equal 是 string= 的另一个名称。 
+    string-equal 是 string= 的另一个名称。
 
 
     #+begin_src emacs-lisp
@@ -396,7 +393,7 @@ Function: store-substring string idx obj
 
     如果您的系统不支持 locale 环境，则此函数的行为类似于 string-equal。
 
-    不要使用此函数来比较文件名是否相等，因为文件系统通常不尊重排序规则实现的字符串的语言等价性。 
+    不要使用此函数来比较文件名是否相等，因为文件系统通常不尊重排序规则实现的字符串的语言等价性。
 
 
     #+begin_src emacs-lisp
@@ -432,20 +429,19 @@ Function: store-substring string idx obj
     #+end_src
 
 
-    符号也可以作为参数，在这种情况下，它们的打印名称会被比较。 
+    符号也可以作为参数，在这种情况下，它们的打印名称会被比较。
 
 #+begin_src emacs-lisp
 Function: string-lessp string1 string2
 #+end_src
 
-    string-lessp 是 string< 的另一个名称。 
-
+    string-lessp 是 string< 的另一个名称。
 
     #+begin_src emacs-lisp
       Function: string-greaterp string1 string2
     #+end_src
 
-    该函数以相反的顺序返回string1和string2的比较结果，即相当于调用(string-lessp string2 string1)。 
+    该函数以相反的顺序返回string1和string2的比较结果，即相当于调用(string-lessp string2 string1)。
 
 
     #+begin_src emacs-lisp
@@ -484,55 +480,54 @@ Function: string-lessp string1 string2
 Function: string-version-lessp string1 string2
     #+end_src
 
-    此函数按字典顺序比较字符串，但它将数字字符序列视为包含以十为基数的数字，然后比较这些数字。所以根据这个谓词，'foo2.png' 比 'foo12.png'  ~小~ ，即使 '12' 在字典上比 '2'  ~小~ 。 
+    此函数按字典顺序比较字符串，但它将数字字符序列视为包含以十为基数的数字，然后比较这些数字。所以根据这个谓词，'foo2.png' 比 'foo12.png'  ~小~ ，即使 '12' 在字典上比 '2'  ~小~ 。
 
 
     #+begin_src emacs-lisp
 Function: string-prefix-p string1 string2 &optional ignore-case
     #+end_src
 
-    如果 string1 是 string2 的前缀，则此函数返回非 nil；  即，如果string2 以string1 开头。如果可选参数 ignore-case 不为零，则比较忽略大小写差异。 
+    如果 string1 是 string2 的前缀，则此函数返回非 nil；  即，如果string2 以string1 开头。如果可选参数 ignore-case 不为零，则比较忽略大小写差异。
 
 
     #+begin_src emacs-lisp
 Function: string-suffix-p suffix string &optional ignore-case
     #+end_src
 
-    如果 suffix 是字符串的后缀，此函数返回非 nil；  即，如果字符串以后缀结尾。如果可选参数 ignore-case 不为零，则比较忽略大小写差异。 
+    如果 suffix 是字符串的后缀，此函数返回非 nil；  即，如果字符串以后缀结尾。如果可选参数 ignore-case 不为零，则比较忽略大小写差异。
 
 
     #+begin_src emacs-lisp
-      Function: string-search needle haystack &optional start-pos 
+      Function: string-search needle haystack &optional start-pos
     #+end_src
 
-    返回 haystack 中第一个 needle 实例的位置，两者都是字符串。如果 start-pos 不为零，则从针中的该位置开始搜索。如果未找到匹配项，则返回 nil。该函数在进行比较时只考虑字符串中的字符；  文本属性被忽略。匹配始终区分大小写。 
+    返回 haystack 中第一个 needle 实例的位置，两者都是字符串。如果 start-pos 不为零，则从针中的该位置开始搜索。如果未找到匹配项，则返回 nil。该函数在进行比较时只考虑字符串中的字符；  文本属性被忽略。匹配始终区分大小写。
 
     #+begin_src emacs-lisp
-      Function: compare-strings string1 start1 end1 string2 start2 end2 &optional ignore-case 
+      Function: compare-strings string1 start1 end1 string2 start2 end2 &optional ignore-case
     #+end_src
-
 
     此函数将 string1 的指定部分与 string2 的指定部分进行比较。string1 的指定部分从索引 start1（包括）一直到索引 end1（不包括）；  start1 的 nil 表示字符串的开头，而 end1 的 nil 表示字符串的长度。同样，string2 的指定部分从索引 start2 一直运行到索引 end2。
 
     字符串通过其字符的数值进行比较。例如，如果 str1 的第一个不同字符具有较小的数值，则认为 str1 小于 str2。如果 ignore-case 不为零，则字符在比较之前转换为大写。单字节字符串被​​转换为多字节以进行比较（请参阅文本表示），因此单字节字符串及其到多字节的转换始终被视为相等。
 
-    如果两个字符串的指定部分匹配，则值为 t。否则，该值是一个整数，表示有多少前导字符一致，哪个字符串少。它的绝对值是一加两个字符串开头一致的字符数。如果 string1（或其指定部分）小于，则符号为负。 
+    如果两个字符串的指定部分匹配，则值为 t。否则，该值是一个整数，表示有多少前导字符一致，哪个字符串少。它的绝对值是一加两个字符串开头一致的字符数。如果 string1（或其指定部分）小于，则符号为负。
 
 
     #+begin_src emacs-lisp
-      Function: string-distance string1 string2 &optional bytecompare 
+      Function: string-distance string1 string2 &optional bytecompare
     #+end_src
 
     此函数返回源字符串 string1 和目标字符串 string2 之间的 Levenshtein 距离。Levenshtein 距离是将源字符串转换为目标字符串所需的单个字符更改（删除、插入或替换）的数量；  这是字符串之间编辑距离的一种可能定义。
 
-    字符串的字母大小写对于计算距离很重要，但它们的文本属性被忽略。如果可选参数 bytecompare 不为 nil，则函数以字节而不是字符来计算距离。逐字节比较使用字符的内部 Emacs 表示，因此对于包含原始字节的多字节字符串会产生不准确的结果（请参阅文本表示）；  如果您需要原始字节的准确结果，请通过对字符串进行编码（请参阅显式编码和解码）使字符串成为单字节。 
+    字符串的字母大小写对于计算距离很重要，但它们的文本属性被忽略。如果可选参数 bytecompare 不为 nil，则函数以字节而不是字符来计算距离。逐字节比较使用字符的内部 Emacs 表示，因此对于包含原始字节的多字节字符串会产生不准确的结果（请参阅文本表示）；  如果您需要原始字节的准确结果，请通过对字符串进行编码（请参阅显式编码和解码）使字符串成为单字节。
 
 
     #+begin_src emacs-lisp
-      Function: assoc-string key alist &optional case-fold 
+      Function: assoc-string key alist &optional case-fold
     #+end_src
 
-    这个函数和 assoc 一样工作，除了 key 必须是一个字符串或符号，并且比较是使用 compare-strings 完成的。符号在测试前被转换为字符串。如果 case-fold 不为 nil，则 key 和 alist 的元素在比较之前转换为大写。与 assoc 不同，此函数还可以匹配 alist 中的字符串或符号元素，而不是 conses。特别是，alist 可以是字符串或符号的列表，而不是实际的 alist。请参阅关联列表。 
+    这个函数和 assoc 一样工作，除了 key 必须是一个字符串或符号，并且比较是使用 compare-strings 完成的。符号在测试前被转换为字符串。如果 case-fold 不为 nil，则 key 和 alist 的元素在比较之前转换为大写。与 assoc 不同，此函数还可以匹配 alist 中的字符串或符号元素，而不是 conses。特别是，alist 可以是字符串或符号的列表，而不是实际的 alist。请参阅关联列表。
 
 另请参阅比较文本中的函数 compare-buffer-substrings，了解比较缓冲区中文本的方法。函数 string-match 将正则表达式与字符串进行匹配，可用于一种字符串比较；  请参阅正则表达式搜索。
 
@@ -543,30 +538,30 @@ Function: string-suffix-p suffix string &optional ignore-case
 有关生成文本字符的文本描述和一般输入事件（单键描述和文本字符描述）的函数，请参阅文档。这些主要用于制作帮助信息。
 
 #+begin_src emacs-lisp
-Function: number-to-string number 
+  Function: number-to-string number
 #+end_src
 
 
     此函数返回一个字符串，该字符串由打印的以十为基数的数字表示形式组成。如果参数为负，则返回值以减号开头。
 
     #+begin_src emacs-lisp
-    (number-to-string 256)
-         ⇒ "256"
+      (number-to-string 256)
+	   ⇒ "256"
 
-    (number-to-string -23)
-         ⇒ "-23"
+      (number-to-string -23)
+	   ⇒ "-23"
 
-    (number-to-string -23.5)
-         ⇒ "-23.5"
+      (number-to-string -23.5)
+	   ⇒ "-23.5"
     #+end_src
 
 
     int-to-string 是此函数的半过时别名。
 
-    另请参阅格式化字符串中的函数格式。 
+    另请参阅格式化字符串中的函数格式。
 
 #+begin_src emacs-lisp
-  Function: string-to-number string &optional base 
+  Function: string-to-number string &optional base
 #+end_src
 
     该函数返回字符串中字符的数值。如果 base 不是 nil，它必须是 2 到 16（含）之间的整数，并且整数在该基数中转换。如果 base 为 nil，则使用 base 10。浮点转换仅适用于十进制；  我们还没有为浮点数实现其他基数，因为那会做更多的工作并且似乎没有用。如果 string 看起来像一个整数，但它的值太大而无法放入 Lisp 整数，则 string-to-number 返回一个浮点结果。
@@ -589,39 +584,39 @@ Function: number-to-string number
     string-to-int 是此函数的过时别名。
 
 #+begin_src emacs-lisp
-Function: char-to-string character 
+  Function: char-to-string character
 #+end_src
 
-    这个函数返回一个包含一个字符的新字符串，character。这个函数是半过时的，因为函数字符串更通用。请参阅创建字符串。 
+    这个函数返回一个包含一个字符的新字符串，character。这个函数是半过时的，因为函数字符串更通用。请参阅创建字符串。
 
 #+begin_src emacs-lisp
-Function: string-to-char string 
+  Function: string-to-char string
 #+end_src
 
-    此函数返回字符串中的第一个字符。这与 (aref string 0) 基本相同，只是如果字符串为空则返回 0。（当字符串的第一个字符为空字符时，该值也为 0，ASCII 码为 0。）如果它看起来没有足够的用处，可能会被淘汰。保留。 
+    此函数返回字符串中的第一个字符。这与 (aref string 0) 基本相同，只是如果字符串为空则返回 0。（当字符串的第一个字符为空字符时，该值也为 0，ASCII 码为 0。）如果它看起来没有足够的用处，可能会被淘汰。保留。
 
 以下是一些可以转换为字符串或从字符串转换的其他函数：
 
 #+begin_src emacs-lisp
-concat
+  concat
 #+end_src
 
     此函数将向量或列表转换为字符串。请参阅创建字符串。
 
 #+begin_src emacs-lisp
-vconcat
+  vconcat
 #+end_src
 
     此函数将字符串转换为向量。请参阅向量函数。
 
 #+begin_src emacs-lisp
-append
+  append
 #+end_src
 
     此函数将字符串转换为列表。请参阅构建缺点单元格和列表。
 
 #+begin_src emacs-lisp
-byte-to-string
+  byte-to-string
 #+end_src
 
     该函数将一个字节的字符数据转换为一个单字节字符串。请参阅转换文本表示。
@@ -633,7 +628,7 @@ byte-to-string
 格式化对于计算要显示的消息通常很有用。事实上，函数 message 和 error 提供了与这里描述的相同的格式化特性；  它们与 format-message 的区别仅在于它们如何使用格式化结果。
 
 #+begin_src emacs-lisp
-Function: format string &rest objects 
+  Function: format string &rest objects
 #+end_src
 
 
@@ -641,21 +636,21 @@ Function: format string &rest objects
 
     字符串中的字符（格式规范除外）直接复制到输出中，包括它们的文本属性（如果有）。格式规范的任何文本属性都被复制到参数对象的生成字符串表示中。
 
-    输出字符串不需要重新分配。例如，如果 x 是字符串 "foo"，则表达式 (eq x (format x)) 和 (eq x (format "%s" x)) 可能都产生 t。 
+    输出字符串不需要重新分配。例如，如果 x 是字符串 "foo"，则表达式 (eq x (format x)) 和 (eq x (format "%s" x)) 可能都产生 t。
 
 #+begin_src emacs-lisp
-  Function: format-message string &rest objects 
+  Function: format-message string &rest objects
 #+end_src
 
     此函数的作用类似于格式，除了它还根据 text-quoting-style 的值转换字符串中的任何重音符 (`) 和撇号 (')。
 
-    通常，格式中的重音和撇号会转换为匹配的弯引号，例如， ~Missing `%s'~ 可能会导致 ~Missing 'foo'~ 。有关如何影响或禁止此翻译的信息，请参阅文本引用样式。 
+    通常，格式中的重音和撇号会转换为匹配的弯引号，例如， ~Missing `%s'~ 可能会导致 ~Missing 'foo'~ 。有关如何影响或禁止此翻译的信息，请参阅文本引用样式。
 
 格式规范是以 ~%~ 开头的字符序列。因此，如果字符串中有 '%d'，则格式化函数将其替换为要格式化的值之一（参数对象之一）的打印表示。例如：
 
 #+begin_src emacs-lisp
-(format "The value of fill-column is %d." fill-column)
-     ⇒ "The value of fill-column is 72."
+  (format "The value of fill-column is %d." fill-column)
+       ⇒ "The value of fill-column is 72."
 #+end_src
 
 由于 format 将 '%' 字符解释为格式规范，因此您永远不应将任意字符串作为第一个参数传递。当字符串由一些 Lisp 代码生成时尤其如此。除非已知字符串不包含任何 '%' 字符，否则将下面描述的 ~%s~ 作为第一个参数传递，将字符串作为第二个参数传递，如下所示：
@@ -670,50 +665,50 @@ Function: format string &rest objects
 以下是有效格式规范表：
 
 #+begin_src emacs-lisp
-‘%s’
+  ‘%s’
 #+end_src
 
     将规范替换为对象的打印表示，不带引号（即使用 princ，而不是 prin1 - 请参阅输出函数）。因此，字符串仅由其内容表示，没有 '"' 字符，符号出现时没有 '\' 字符。
 
     如果对象是字符串，则将其文本属性复制到输出中。'%s' 本身的文本属性也被复制，但对象的文本属性优先。
 #+begin_src emacs-lisp
-‘%S’
+  ‘%S’
 #+end_src
 
     用引用的对象的打印表示替换规范（即，使用 prin1 - 请参阅输出函数）。因此，字符串包含在 '"' 字符中，并且 '\' 字符在必要时出现在特殊字符之前。
 #+begin_src emacs-lisp
-‘%o’ 
+  ‘%o’
 #+end_src
 
     将规范替换为整数的以 8 为基数的表示形式。负整数的格式与平台相关。该对象也可以是格式化为整数的浮点数，去掉任何分数。
 #+begin_src emacs-lisp
-‘%d’
+  ‘%d’
 #+end_src
 
     用带符号整数的以十进制表示的形式替换规范。该对象也可以是格式化为整数的浮点数，去掉任何分数。
 #+begin_src emacs-lisp
-‘%x’ 
-‘%X’
+  ‘%x’
+  ‘%X’
 #+end_src
 
     用整数的十六进制表示替换规范。负整数的格式与平台相关。 ~%x~ 使用小写， ~%X~ 使用大写。该对象也可以是格式化为整数的浮点数，去掉任何分数。
 #+begin_src emacs-lisp
-‘%c’
+  ‘%c’
 #+end_src
 
     用给定值的字符替换规范。
 #+begin_src emacs-lisp
-‘%e’
+  ‘%e’
 #+end_src
     将规范替换为浮点数的指数表示法。
 
 #+begin_src emacs-lisp
-‘%f’
+  ‘%f’
 #+end_src
     将规范替换为浮点数的小数点表示法。
 
 #+begin_src emacs-lisp
-‘%g’
+  ‘%g’
 #+end_src
     使用指数表示法或小数点表示法将规范替换为浮点数的表示法。如果指数小于 -4 或大于或等于精度（默认值：6），则使用指数表示法。默认情况下，从结果的小数部分中删除尾随零，并且仅当小数点字符后跟数字时才会出现小数点字符。
 
@@ -721,7 +716,7 @@ Function: format string &rest objects
   ‘%%’
 #+end_src
 
-    用单个 ~%~ 替换规范。此格式规范的不同之处在于它的唯一形式是普通的 '%%' 并且它不使用值。例如，（格式 ~%% %d~ 30）返回 ~%30~ 。 
+    用单个 ~%~ 替换规范。此格式规范的不同之处在于它的唯一形式是普通的 '%%' 并且它不使用值。例如，（格式 ~%% %d~ 30）返回 ~%30~ 。
 
 任何其他格式字符都会导致 ~无效格式操作~ 错误。
 
@@ -763,15 +758,15 @@ Function: format string &rest objects
 标志 '-' 导致按宽度插入的任何填充（如果指定）插入右侧而不是左侧。如果同时存在 ~-~ 和 ~0~ ，则忽略 ~0~ 标志。
 
 #+begin_src emacs-lisp
-(format "%06d is padded on the left with zeros" 123)
-     ⇒ "000123 is padded on the left with zeros"
+  (format "%06d is padded on the left with zeros" 123)
+       ⇒ "000123 is padded on the left with zeros"
 
-(format "'%-6d' is padded on the right" 123)
-     ⇒ "'123   ' is padded on the right"
+  (format "'%-6d' is padded on the right" 123)
+       ⇒ "'123   ' is padded on the right"
 
-(format "The word '%-7s' actually has %d letters in it."
-	"foo" (length "foo"))
-     ⇒ "The word 'foo    ' actually has 3 letters in it."
+  (format "The word '%-7s' actually has %d letters in it."
+	  "foo" (length "foo"))
+       ⇒ "The word 'foo    ' actually has 3 letters in it."
 
 #+end_src
 
@@ -808,7 +803,7 @@ Function: format string &rest objects
 本节中描述的函数 format-spec 执行与 format 类似的功能，不同之处在于它对使用任意规范字符的格式控制字符串进行操作。
 
 #+begin_src emacs-lisp
-  Function: format-spec template spec-alist &optional ignore-missing split 
+  Function: format-spec template spec-alist &optional ignore-missing split
 #+end_src
 
     此函数根据在 spec-alist 中指定的转换返回从格式字符串模板生成的字符串，该字符串是形式（字母 . 替换）的 alist（参见关联列表）。格式化结果字符串时，模板中的每个规范 %letter 将被替换替换。
@@ -820,7 +815,7 @@ Function: format string &rest objects
         如果 spec-alist 包含的唯一字母键多于模板中唯一规范字符的数量，则简单地忽略未使用的键。
         如果 spec-alist 包含多个具有相同字母的关联，则使用最接近列表开头的关联。
         如果 template 多次包含相同的规范字符，则在 spec-alist 中找到的相同替换将用作所有该字符替换的基础。
-        模板中规范的顺序不必与规范列表中的关联顺序相对应。 
+        模板中规范的顺序不必与规范列表中的关联顺序相对应。
 
     可选参数 ignore-missing 指示如何处理模板中未在 spec-alist 中找到的规范字符。如果它为 nil 或省略，则函数发出错误信号；  如果忽略，则将这些格式规范逐字保留在输出中，包括它们的文本属性（如果有）；  如果是删除，则从输出中删除这些格式规范；  任何其他非 nil 值都像忽略一样处理，但任何出现的 '%%' 也会逐字保留在输出中。
 
@@ -834,7 +829,6 @@ Function: format string &rest objects
 format-spec 接受的格式规范的语法与 format 接受的语法相似，但并不完全相同。在这两种情况下，格式规范都是以 ~%~ 开头并以 ~s~ 等字母结尾的字符序列。
 
 与为一组固定的规范字符分配特定含义的格式不同，格式规范接受任意规范字符并平等对待它们。例如：
-
 #+begin_src emacs-lisp
   (setq my-site-info
 	(list (cons ?s system-name)
@@ -855,39 +849,38 @@ format-spec 接受的格式规范的语法与 format 接受的语法相似，但
 
 
 格式规范可以在 '%' 之后立即包含任意数量的以下标志字符，以修改替换的各个方面。
-
 #+begin_src emacs-lisp
   ‘0’
 #+end_src
     此标志导致由宽度指定的任何填充由 ~0~ 字符而不是空格组成。
 
 #+begin_src emacs-lisp
-‘-’
+  ‘-’
 #+end_src
 
     此标志会导致将宽度指定的任何填充插入右侧而不是左侧。
 
 #+begin_src emacs-lisp
-‘<’
+  ‘<’
 #+end_src
 
     如果指定，此标志会导致替换在左侧被截断到给定的宽度和精度。
 
 #+begin_src emacs-lisp
-‘>’
+  ‘>’
 #+end_src
 
     如果指定，此标志会导致在给定宽度的右侧截断替换。
 
 #+begin_src emacs-lisp
-‘^’
+  ‘^’
 #+end_src
 
     此标志将替换的文本转换为大写（请参阅 Lisp 中的大小写转换）。
 #+begin_src emacs-lisp
-‘_’
+  ‘_’
 #+end_src
-    此标志将替换的文本转换为小写（请参阅 Lisp 中的大小写转换）。 
+    此标志将替换的文本转换为小写（请参阅 Lisp 中的大小写转换）。
 
 使用矛盾标志（例如，大写和小写）的结果是未定义的。
 
@@ -895,9 +888,9 @@ format-spec 接受的格式规范的语法与 format 接受的语法相似，但
 
 如果替换包含的字符少于其指定宽度，则在左侧填充：
 #+begin_src emacs-lisp
-(format-spec "%8a is padded on the left with spaces"
-	     '((?a . "alpha")))
-     ⇒ "   alpha is padded on the left with spaces"
+  (format-spec "%8a is padded on the left with spaces"
+	       '((?a . "alpha")))
+       ⇒ "   alpha is padded on the left with spaces"
 #+end_src
 
 
@@ -955,8 +948,7 @@ format-spec 接受的格式规范的语法与 format 接受的语法相似，但
     #+end_src
 
 #+begin_src emacs-lisp
-
-Function: upcase string-or-char 
+  Function: upcase string-or-char 
 #+end_src
 
     此函数将 string-or-char（应该是字符或字符串）转换为大写。
@@ -973,7 +965,7 @@ Function: upcase string-or-char
     #+end_src
 
 #+begin_src emacs-lisp
-  Function: upcase string-or-char 
+  Function: upcase string-or-char
 #+end_src
 
     此函数将字符串或字符大写。如果 string-or-char 是字符串，则该函数返回一个新字符串，其内容是 string-or-char 的副本，其中每个单词都已大写。这意味着每个单词的第一个字符转换为大写，其余的转换为小写。
@@ -988,11 +980,10 @@ Function: upcase string-or-char
 
       (upcase ?x)
 	   ⇒ 88
-
     #+end_src
 
 #+begin_src emacs-lisp
-  Function: capitalize string-or-char 
+  Function: capitalize string-or-char
 #+end_src
 
     如果 string-or-char 是字符串，则此函数将 string-or-char 中单词的首字母大写，而不更改除首字母以外的任何字母。它返回一个新字符串，其内容是 string-or-char 的副本，其中每个单词的首字母都已转换为大写。
@@ -1022,7 +1013,6 @@ Function: upcase string-or-char
 
   (upcase ?ﬁ)
        ⇒ 64257  ; i.e. ?ﬁ
-
 #+end_src
 
 为避免这种情况，必须首先使用字符串函数将字符转换为字符串，然后再将其传递给其中一个大小写函数。当然，不能对结果的长度做出任何假设。
@@ -1072,7 +1062,7 @@ Function: upcase string-or-char
     如果 object 是有效的 case 表，则此谓词返回非 nil。
 
 #+begin_src emacs-lisp
-Function: set-standard-case-table table
+  Function: set-standard-case-table table
 #+end_src
 
     此函数使 table 成为标准案例表，因此它将在随后创建的任何缓冲区中使用。
@@ -1084,7 +1074,7 @@ Function: set-standard-case-table table
     这将返回标准案例表。
 
 #+begin_src emacs-lisp
-Function: current-case-table
+  Function: current-case-table
 #+end_src
 
     此函数返回当前缓冲区的案例表。
@@ -1099,7 +1089,7 @@ Function: current-case-table
   Macro: with-case-table table body
 #+end_src
 
-    with-case-table 宏保存当前 case 表，使 table 成为当前 case 表，评估 body 形式，最后恢复 case 表。返回值是正文中最后一个表单的值。即使在通过 throw 或 error 异常退出的情况下也会恢复 case 表（请参阅非本地退出）。 
+    with-case-table 宏保存当前 case 表，使 table 成为当前 case 表，评估 body 形式，最后恢复 case 表。返回值是正文中最后一个表单的值。即使在通过 throw 或 error 异常退出的情况下也会恢复 case 表（请参阅非本地退出）。
 
 一些语言环境修改了 ASCII 字符的大小写转换；  例如，在土耳其语环境中，ASCII 大写字母 I 被缩减为土耳其语无点 i ('ı')。这可能会干扰需要普通 ASCII 大小写转换的代码，例如基于 ASCII 的网络协议的实现。在这种情况下，请使用带有变量 ascii-case-table 的 with-case-table 宏，该变量存储 ASCII 字符集的未修改大小写表。
 
@@ -1107,13 +1097,12 @@ Function: current-case-table
   Variable: ascii-case-table
 #+end_src
 
-
     ASCII 字符集的大小写表。这不应被任何语言环境设置修改。
 
 以下三个函数是定义非 ASCII 字符集的包的方便子例程。他们修改指定的案例表case-table；  他们还修改了标准语法表。请参阅语法表。通常您会使用这些函数来更改标准案例表。
 
 #+begin_src emacs-lisp
-Function: set-case-syntax-pair uc lc case-table
+  Function: set-case-syntax-pair uc lc case-table
 #+end_src
 
     该函数指定一对对应的字母，一个大写一个小写。
