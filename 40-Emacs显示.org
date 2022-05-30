@@ -1,3 +1,8 @@
+#+LATEX_COMPILER: xelatex
+#+LATEX_CLASS: elegantpaper
+#+OPTIONS: prop:t
+#+OPTIONS: ^:nil
+
 * 40 Emacs显示
 本章描述了许多与 Emacs 呈现给用户的显示相关的特性。
 
