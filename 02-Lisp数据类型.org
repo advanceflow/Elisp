@@ -114,7 +114,6 @@ Emacs Lisp 通过特殊的散列符号表示许多特殊的对象和结构。
      跳过接下来的 ~N~ 个字符（见评论）。这在字节编译文件中使用，并不意味着在 Emacs Lisp 源文件中使用。
 
 ** 2.3 注释
-
 注释是写在程序中的文本，仅供阅读程序的人使用，对程序的含义没有影响。在 Lisp 中，如果未转义的分号 (';') 不在字符串或字符常量内，则它会开始注释。注释继续到行尾。Lisp 阅读器会丢弃注释；  它们不会成为 Lisp 对象的一部分，这些对象代表 Lisp 系统中的程序。
 
  '#@count' 结构会跳过下一个 count 字符，对于程序生成的包含二进制数据的注释很有用。Emacs Lisp 字节编译器在其输出文件中使用它（参见字节编译）。但是，它不适用于源文件。
@@ -529,23 +528,21 @@ char-table 是任何类型的元素的一维数组，由字符代码索引。字
 
 有关对字符表进行操作的特殊功能，请参见字符表。字符表的用途包括：
 
-   案例表（见案例表）。
-   字符类别表（参见类别）。
-   显示表格（请参阅显示表格）。
-   语法表（请参阅语法表）。
-
+   - 案例表（见案例表）。
+   - 字符类别表（参见类别）。
+   - 显示表格（请参阅显示表格）。
+   - 语法表（请参阅语法表）。
 *** 2.4.11 Bool-Vector 类型
 bool-vector 是一个一维数组，其元素必须为 t 或 nil。
 
 布尔向量的打印表示类似于字符串，只是它以 '#&' 开头，后跟长度。后面的字符串常量实际上将 bool-vector 的内容指定为位图——字符串中的每个字符包含 8 位，它们指定 bool-vector 的下 8 个元素（1 代表 t，0 代表 nil）。字符的最低有效位对应于布尔向量中的最低索引。
 
 #+begin_src emacs-lisp
-(make-bool-vector 3 t)
-   ⇒ #&3"^G"
-(make-bool-vector 3 nil)
-   ⇒ #&3"^@"
+  (make-bool-vector 3 t)
+     ⇒ #&3"^G"
+  (make-bool-vector 3 nil)
+     ⇒ #&3"^@"
 #+end_src
-
 
 这些结果是有意义的，因为 ~C-g~ 的二进制代码是 111，而 ~C-@~ 是代码为 0 的字符。
 
@@ -560,9 +557,9 @@ bool-vector 是一个一维数组，其元素必须为 t 或 nil。
 哈希表是一种非常快速的查找表，有点像 alist，因为它将键映射到相应的值，但要快得多。哈希表的打印表示指定了它的属性和内容，如下所示：
 
 #+begin_src emacs-lisp
-(make-hash-table)
-     ⇒ #s(hash-table size 65 test eql rehash-size 1.5
-			       rehash-threshold 0.8125 data ())
+  (make-hash-table)
+       ⇒ #s(hash-table size 65 test eql rehash-size 1.5
+				 rehash-threshold 0.8125 data ())
 #+end_src
 
 有关哈希表的更多信息，请参阅哈希表。
@@ -634,7 +631,6 @@ Lisp 宏对象通常使用内置的 defmacro 宏定义，但任何以 macro 开�
 ** 2.5 编辑类型
 上一节中的类型用于一般编程目的，其中大部分是大多数 Lisp 方言所共有的。Emacs Lisp 提供了几种附加的数据类型，用于与编辑相关的目的。
 
-
 *** 2.5.1 缓冲区类型
 缓冲区是保存可编辑文本的对象（请参阅缓冲区）。大多数缓冲区保存磁盘文件的内容（请参阅文件），因此可以对其进行编辑，但有些缓冲区用于其他目的。大多数缓冲区也意味着用户可以看到，因此有时会在窗口中显示（参见 Windows）。但是缓冲区不需要显示在任何窗口中。每个缓冲区都有一个称为点的指定位置（请参阅位置）；  大多数编辑命令作用于点附近的当前缓冲区的内容。在任何时候，一个缓冲区都是当前缓冲区。
 
@@ -644,11 +640,11 @@ Lisp 宏对象通常使用内置的 defmacro 宏定义，但任何以 macro 开�
 
 其他几个数据结构与每个缓冲区相关联：
 
-   本地语法表（参见语法表）；
-   本地键盘映射（请参阅键盘映射）；  和，
-   缓冲区局部变量绑定列表（请参阅缓冲区局部变量）。
-   叠加（参见叠加）。
-   缓冲区中文本的文本属性（请参阅文本属性）。
+   - 本地语法表（参见语法表）；
+   - 本地键盘映射（请参阅键盘映射）；  和，
+   - 缓冲区局部变量绑定列表（请参阅缓冲区局部变量）。
+   - 叠加（参见叠加）。
+   - 缓冲区中文本的文本属性（请参阅文本属性）。
 
 本地键映射和变量列表包含单独覆盖全局绑定或值的条目。这些用于自定义不同缓冲区中程序的行为，而无需实际更改程序。
 
@@ -657,18 +653,17 @@ Lisp 宏对象通常使用内置的 defmacro 宏定义，但任何以 macro 开�
 缓冲区没有读取语法。它们以哈希表示法打印，显示缓冲区名称。
 
 #+begin_src emacs-lisp
- (current-buffer)
-	⇒ #<buffer objects.texi>
+  (current-buffer)
+	 ⇒ #<buffer objects.texi>
 #+end_src
-
 *** 2.5.2 标记类型
 标记表示特定缓冲区中的位置。因此，标记有两个组成部分：一个用于缓冲区，另一个用于位置。缓冲区文本中的更改会根据需要自动重新定位位置值，以确保标记始终指向缓冲区中相同的两个字符之间。
 
 标记没有读取语法。它们以散列表示法打印，给出当前字符位置和缓冲区名称。
 
 #+begin_src emacs-lisp
- (point-marker)
-	⇒ #<marker at 10779 in objects.texi>
+  (point-marker)
+	 ⇒ #<marker at 10779 in objects.texi>
 #+end_src
 
 
@@ -682,24 +677,24 @@ Lisp 宏对象通常使用内置的 defmacro 宏定义，但任何以 macro 开�
 Windows 没有读取语法。它们以哈希表示法打印，给出窗口编号和正在显示的缓冲区的名称。窗口编号的存在是为了唯一标识窗口，因为任何给定窗口中显示的缓冲区都可能经常更改。
 
 #+begin_src emacs-lisp
- (selected-window)
-	⇒ #<window 1 on objects.texi>
+  (selected-window)
+	 ⇒ #<window 1 on objects.texi>
 #+end_src
 
 有关在 Windows 上工作的功能的描述，请参阅 Windows。
 
 *** 2.5.4 帧类型
-框架是包含一个或多个 Emacs 窗口的屏幕区域；  我们还使用术语 ~框架~ 来指代 Emacs 用来指代屏幕区域的 Lisp 对象。
+框架是包含一个或多个 Emacs 窗口的屏幕区域；  我们还使用术语 ~帧~ 来指代 Emacs 用来指代屏幕区域的 Lisp 对象。
 
-帧没有读取语法。它们以哈希表示法打印，给出框架的标题，加上它的核心地址（用于唯一地识别框架）。
+帧没有读取语法。它们以哈希表示法打印，给出框架的标题，加上它的核心地址（用于唯一地识别帧）。
 
 #+begin_src emacs-lisp
- (selected-frame)
-	⇒ #<frame emacs@psilocin.gnu.org 0xdac80>
+  (selected-frame)
+	 ⇒ #<frame emacs@psilocin.gnu.org 0xdac80>
 #+end_src
 
 
-有关适用于框架的功能的描述，请参阅框架。
+有关适用于帧的功能的描述，请参阅帧。
 
 *** 2.5.5 终端类型
 终端是能够显示一个或多个 Emacs 帧的设备（请参阅帧类型）。
@@ -727,8 +722,8 @@ Windows 没有读取语法。它们以哈希表示法打印，给出窗口编号
 进程对象没有读取语法。它们以哈希表示法打印，并给出进程的名称：
 
 #+begin_src emacs-lisp
- (process-list)
-	⇒ (#<process shell>)
+  (process-list)
+	 ⇒ (#<process shell>)
 #+end_src
 有关创建、删除、返回有关信息、向进程发送输入或信号以及从进程接收输出的函数的信息，请参阅进程。
 
@@ -738,8 +733,8 @@ Emacs 中的一个线程代表 Emacs Lisp 执行的一个单独线程。它运�
 线程对象没有读取语法。它们以哈希表示法打印，给出线程的名称（如果它已被赋予名称）或其在核心中的地址：
 
 #+begin_src emacs-lisp
- (all-threads)
-     ⇒ (#<thread 0176fc40>)
+  (all-threads)
+      ⇒ (#<thread 0176fc40>)
 #+end_src
 
 
@@ -748,10 +743,10 @@ Emacs 中的一个线程代表 Emacs Lisp 执行的一个单独线程。它运�
 
 互斥对象没有读取语法。它们以哈希表示法打印，给出互斥体的名称（如果它已被命名）或其在核心中的地址：
 #+begin_src emacs-lisp
- (make-mutex "my-mutex")
-     ⇒ #<mutex my-mutex>
- (make-mutex)
-     ⇒ #<mutex 01c7e4e0>
+  (make-mutex "my-mutex")
+      ⇒ #<mutex my-mutex>
+  (make-mutex)
+      ⇒ #<mutex 01c7e4e0>
 #+end_src
 
 *** 2.5.11 条件变量类型
@@ -761,8 +756,8 @@ Emacs 中的一个线程代表 Emacs Lisp 执行的一个单独线程。它运�
 
 
 #+begin_src emacs-lisp
-(make-condition-variable (make-mutex))
-    ⇒ #<condvar 01c45ae8>
+  (make-condition-variable (make-mutex))
+      ⇒ #<condvar 01c45ae8>
 #+end_src
 
 *** 2.5.12 流类型

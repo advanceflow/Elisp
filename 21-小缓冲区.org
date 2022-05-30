@@ -1,9 +1,7 @@
 * 21 小缓冲区
-
 minibuffer 是一个特殊的缓冲区，Emacs 命令用来读取比单个数字前缀参数更复杂的参数。这些参数包括文件名、缓冲区名和命令名（如在 Mx 中）。minibuffer 显示在帧的底行，与回声区域在同一位置（请参阅回声区域），但仅当它用于读取参数时。
 
 ** 21.1 Minibuffers 简介
-
 在大多数情况下，minibuffer 是一个普通的 Emacs 缓冲区。缓冲区中的大多数操作，例如编辑命令，都在微型缓冲区中正常工作。但是，许多管理缓冲区的操作不适用于小缓冲区。minibuffer 的名称始终采用 ~*Minibuf-number*~ 形式，并且不能更改。Minibuffers 仅显示在仅用于 minibuffers 的特殊窗口中；  这些窗口总是出现在框架的底部。（有时帧没有 minibuffer 窗口，有时一种特殊的帧只包含一个 minibuffer 窗口；请参阅 Minibuffers 和 Frames。）
 
 minibuffer 中的文本总是以提示字符串开头，该文本由使用 minibuffer 的程序指定，以告诉用户要键入哪种类型的输入。此文本被标记为只读，因此您不会意外删除或更改它。它也被标记为一个字段（请参阅定义和使用字段），以便某些运动功能，包括行首、前向词、前向句子和前向段落，停止在提示符和实际文字。
@@ -23,7 +21,6 @@ minibuffer 的窗口通常是一行；  如果内容需要更多空间，它会�
 当 Emacs 以批处理模式运行时，任何从 minibuffer 读取的请求实际上都会从 Emacs 启动时提供的标准输入描述符中读取一行。这仅支持基本输入：在批处理模式下没有任何特殊的 minibuffer 功能（历史、完成等）可用。
 
 ** 21.2 用 Minibuffer 读取文本字符串
-
 minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读取文本形式的字符串或 Lisp 对象。函数 read-regexp 用于读取正则表达式（参见正则表达式），这是一种特殊的字符串。还有用于读取命令、变量、文件名等的专用函数（参见完成）。
 
 在大多数情况下，您不应该在 Lisp 函数的中间调用 minibuffer 输入函数。相反，在交互式规范中，将所有 minibuffer 输入作为读取命令参数的一部分。请参阅定义命令。
@@ -237,7 +234,6 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
     如果此选项为零，则不进行此类恢复。因此，上面提到的窗口拆分将在退出 minibuffer 后持续存在。
 
 ** 21.3 用 Minibuffer 读取 Lisp 对象
-
 本节介绍使用 minibuffer 读取 Lisp 对象的函数。
 
 #+begin_src emacs-lisp
@@ -307,7 +303,6 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
     立即键入 RET 将退出 minibuffer 并评估表达式，从而向前移动一个单词。
 
 ** 21.4 小缓冲区历史
-
 minibuffer 历史列表记录以前的 minibuffer 输入，以便用户可以方便地重用它们。它是一个变量，其值是字符串列表（以前的输入），最近的在前。
 
 有许多单独的 minibuffer 历史列表，用于不同类型的输入。为每次使用 minibuffer 指定正确的历史列表是 Lisp 程序员的工作。
@@ -436,7 +431,6 @@ read-from-minibuffer 和 complete-read 都会自动将新元素添加到历史�
     goto-line 参数的历史列表。通过自定义用户选项 goto-line-history-local，可以使该变量在每个缓冲区中成为本地变量。
 
 ** 21.5 初始输入
-
 用于 minibuffer 输入的几个函数有一个称为 initial 的参数。这是一个主要被弃用的功能，用于指定 minibuffer 应该以某些文本开始，而不是像往常一样为空。
 
 如果 initial 是一个字符串，当用户开始编辑文本时，minibuffer 开始包含字符串的文本，点在末尾。如果用户简单地键入 RET 以退出 minibuffer，它将使用初始输入字符串来确定要返回的值。
@@ -452,7 +446,6 @@ initial 也可以是形式的 cons 单元格（字符串 . 位置）。这意味
 不推荐使用 cons 单元格作为初始参数的值。
 
 ** 21.6 完成
-
 补全是一项功能，它从名称的缩写开始填充名称的其余部分。完成通过将用户的输入与有效名称列表进行比较，并确定有多少名称是由用户键入的内容唯一确定的。例如，当你输入 Cx b (switch-to-buffer)，然后输入你想切换到的缓冲区名称的前几个字母，然后输入 TAB (minibuffer-complete)，Emacs 将名称扩展为尽其所能。
 
 标准 Emacs 命令提供符号、文件、缓冲区和进程名称的补全；  使用本节中的函数，您可以实现其他类型名称的补全。
@@ -463,7 +456,6 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
 
 *** 21.6.1 基本完成函数
-
 以下完成函数本身与 minibuffers 无关。我们在这里对其进行描述是为了使它们接近使用 minibuffer 的更高级别的完成功能。
 
 #+begin_src emacs-lisp
@@ -590,7 +582,6 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 有几个函数采用现有的完成表并返回修改后的版本。完成表大小写折叠返回一个不区分大小写的表。completion-table-in-turn 和 completion-table-merge 以不同的方式组合多个输入表。完成表颠覆改变表以使用不同的初始前缀。completion-table-with-quoting 返回一个适合对引用文本进行操作的表。completion-table-with-predicate 过滤带有谓词函数的表。completion-table-with-terminator 添加一个终止字符串。
 
 *** 21.6.2 完成和小缓冲区
-
 本节描述了从 minibuffer 中读取并完成的基本接口。
 
 #+begin_src emacs-lisp
@@ -653,7 +644,6 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     这个变量的值必须是一个函数，通过完成读取调用它来实际完成它的工作。它应该接受与完成读取相同的参数。这可以绑定到不同的函数以完全覆盖完成读取的正常行为。
 
 *** 21.6.3 完成完成的 Minibuffer 命令
-
 本节描述了在 minibuffer 中用于完成的键盘映射、命令和用户选项。
 
 #+begin_src emacs-lisp
@@ -779,7 +769,6 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     如果非零，如果 point 位于提示符末尾，则 M-< 命令将移动到提示符末尾。如果 point 在提示结束处或之前，则移动到缓冲区的开头。如果此变量为 nil，则该命令的行为类似于缓冲区的开头。
 
 *** 21.6.4 高级完成函数
-
 本节描述用于读取某些类型名称的高级便利函数。
 
 在大多数情况下，您不应该在 Lisp 函数的中间调用这些函数。如果可能，在交互式规范中，将所有 minibuffer 输入作为读取命令参数的一部分。请参阅定义命令。
@@ -881,7 +870,6 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 另请参见用户选择的编码系统中的函数 read-coding-system 和 read-non-nil-coding-system 以及输入法中的 read-input-method-name。
 
 *** 21.6.5 读取文件名
-
 高级完成函数 read-file-name、read-directory-name 和 read-shell-command 旨在分别读取文件名、目录名和 shell 命令。它们提供特殊功能，包括自动插入默认目录。
 
 #+begin_src emacs-lisp
@@ -1003,7 +991,6 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     此键映射由 read-shell-command 用于完成作为 shell 命令一部分的命令和文件名。它使用 minibuffer-local-map 作为其父键映射，并将 TAB 绑定到完成点。
 
 *** 21.6.6 完成变量
-
 以下是一些可用于更改默认完成行为的变量。
 
 #+begin_src emacs-lisp
@@ -1072,7 +1059,6 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 	 该值应该是执行完成后要运行的函数。该函数应该接受两个参数，字符串和状态，其中字符串是字段完成的文本，状态指示发生了什么样的操作：如果文本现在完成，则完成，如果文本无法进一步完成但完成是唯一的未完成，或者如果文本是有效的完成，但可以进一步完成。
 
 *** 21.6.7 编程完成
-
 有时，提前创建包含所有预期可能完成的 alist 或 obarray 是不可能或不方便的。在这种情况下，您可以提供自己的函数来计算给定字符串的完成。这称为程序完成。Emacs 在完成文件名时使用程序完成（参见文件名完成），以及许多其他情况。
 
 要使用此功能，请将函数作为集合参数传递给完成读取。complete-read 函数安排将您的完成函数传递给 try-completion、all-completions 和其他基本完成函数，然后让您的函数完成所有工作。
@@ -1163,7 +1149,6 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     这是完成表动态的包装器，它保存最后一个参数结果对。这意味着具有相同参数的多个查找只需要调用一次函数。当涉及缓慢的操作时，这可能很有用，例如调用外部进程。
 
 *** 21.6.8 在普通缓冲区中完成
-
 虽然完成通常在 minibuffer 中完成，但完成功能也可以用于普通 Emacs 缓冲区中的文本。在许多主要模式中，缓冲区内完成由 CMi 或 M-TAB 命令执行，绑定到完成点。请参阅 GNU Emacs 手册中的符号完成。该命令使用异常钩子变量completion-at-point-functions：
 
 #+begin_src emacs-lisp
@@ -1222,7 +1207,6 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     要使此功能起作用，点必须位于开始和结束之间的某个位置。
 
 ** 21.7 是或否查询
-
 本节介绍用于向用户询问是或否问题的功能。函数 y-or-np 可以用单个字符来回答；  对于无意的错误答案不会造成严重后果的问题，它很有用。yes-or-no-p 适用于更重要的问题，因为它需要三个或四个字符来回答。
 
 如果在使用鼠标调用的命令中调用了这些函数中的任何一个——更准确地说，如果 last-nonmenu-event（请参阅命令循环中的信息）为 nil 或列表——则它使用对话框或 pop-向上菜单询问问题。否则，它使用键盘输入。您可以通过将 last-nonmenu-event 绑定到调用周围的合适值来强制使用鼠标或键盘输入。
@@ -1283,7 +1267,6 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
     #+end_src
 
 ** 21.8 提出多项选择题
-
 本节描述了用于向用户询问更复杂问题或几个类似问题的工具。
 
 当您有一系列类似的问题要问时，例如 ~您要保存此缓冲区吗？~   对于每个缓冲区，您应该使用 map-y-or-np 来询问问题集合，而不是单独询问每个问题。这为用户提供了一定的便利设施，例如一次回答整个系列的能力。
@@ -1396,7 +1379,6 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
     如果在调用 read-char-from-minibuffer 时将 help-form（请参阅帮助函数）绑定到非 nil 值，则按 help-char 会导致它评估 help-form 并显示结果。
 
 ** 21.9 读取密码
-
 要读取密码以传递给另一个程序，可以使用函数 read-passwd。
 
 #+begin_src emacs-lisp
@@ -1410,7 +1392,6 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
     可选参数 default 指定用户输入空输入时要返回的默认密码。如果 default 为 nil，则 read-passwd 在这种情况下返回空字符串。
 
 ** 21.10 小缓冲区命令
-
 本节描述了一些用于 minibuffer 的命令。
 
 #+begin_src emacs-lisp
@@ -1468,7 +1449,6 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
     此函数将 minibuffer 历史的元素放入 minibuffer。参数 nabs 以降序指定绝对历史位置，其中 0 表示当前元素，正数 n 表示前第 n 个元素。NABS 为负数 -n 表示 ~未来历史~ 的第 n 个条目。
 
 ** 21.11 小缓冲窗口
-
 这些函数访问和选择 minibuffer 窗口，测试它们是否处于活动状态并控制它们如何调整大小。
 
 #+begin_src emacs-lisp
@@ -1536,7 +1516,6 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
     任何其他非零值意味着通过调用 fit-mini-frame-to-buffer 来调整仅 minibuffer 帧的大小，该函数的行为类似于 fit-frame-to-buffer（请参阅调整窗口大小），但不会去除前导或尾随空缓冲区文本中的行。
 
 ** 21.12 小缓冲区内容
-
 这些函数访问 minibuffer 提示和内容。
 
 #+begin_src emacs-lisp
@@ -1576,7 +1555,6 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
     如果 minibuffer 是当前的，此命令将擦除 minibuffer 的可编辑内容（即除了提示符之外的所有内容）。否则，它会擦除​​整个当前缓冲区。
 
 ** 21.13 递归小缓冲区
-
 这些函数和变量处理递归小缓冲区（请参阅递归编辑）：
 
 #+begin_src emacs-lisp
@@ -1595,7 +1573,6 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
 如果命令名称具有非 nil 的属性 enable-recursive-minibuffers，则该命令可以使用 minibuffer 来读取参数，即使它是从 minibuffer 调用的。命令也可以通过在交互式声明中将 enable-recursive-minibuffers 绑定到 t 来实现这一点（请参阅使用交互式）。minibuffer 命令 next-matching-history-element（通常是 minibuffer 中的 Ms）执行后者。
 
 ** 21.14 抑制交互
-
 有时能够将 Emacs 作为无头服务器进程运行以响应通过网络连接给出的命令是很有用的。然而，Emacs 主要是一个交互式使用的平台，因此在某些异常情况下，许多命令会提示用户进行反馈。这使得这个用例变得更加困难，因为服务器进程只会挂起等待用户输入。
 
 将禁止交互变量绑定到非 nil 的东西会使 Emacs 发出禁止交互错误而不是提示，然后服务器进程可以使用它来处理这些情况。
@@ -1612,7 +1589,6 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
 
 如果 my-client-handling-function 最终调用了向用户询问某事的内容（通过 y-or-np 或 read-from-minibuffer 等），则会发出禁止交互错误的信号。然后服务器代码捕获该错误并将其报告给客户端。
 ** 21.15 小缓冲区杂记
-
 #+begin_src emacs-lisp
   Function: minibufferp &optional buffer-or-name live ¶
 #+end_src

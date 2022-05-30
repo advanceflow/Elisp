@@ -52,7 +52,6 @@ Lisp 代码示例的格式如下： ~(list 1 2 3)~ 。代表元句法变量的�
 #+end_src
 如果 object 是两个规范布尔值 ~t~ 或 ~nil~ 之一，则返回非 ~nil~ 。
 *** 1.3.3 评估符号
-    :LOGBOOK:
 您可以评估的 Lisp 表达式称为 ~形式~ ( ~form~ ) 。计算一个 ~形式~ ( ~form~ ) 总是会产生一个结果，它是一个 Lisp 对象。在本手册的示例中，这用 ~⇒~ 表示：
 
 #+begin_src emacs-lisp
