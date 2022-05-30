@@ -3,16 +3,16 @@
 #+OPTIONS: prop:t
 #+OPTIONS: ^:nil
 
-* 附录 H 标准挂钩
+* 附录 H 标准钩子
 以下是一些钩子变量的列表，这些变量让您可以在适当的情况下提供从 Emacs 中调用的函数。
 
 大多数这些变量的名称都以 ~-hook~ 结尾。它们是普通的钩子，通过 run-hooks 运行。这种钩子的值是一个函数列表；  这些函数在没有参数的情况下被调用，并且它们的值被完全忽略。在这种钩子上放置新函数的推荐方法是调用 add-hook。有关使用钩子的更多信息，请参阅钩子。
 
 名称以 ~-functions~ 结尾的变量通常是异常钩子（一些旧代码也可能使用已弃用的 ~-hooks~ 后缀）。它们的值是函数列表，但这些函数以特殊方式调用：它们要么是传递的参数，要么以某种方式使用它们的返回值。名称以 ~-function~ 结尾的变量具有单个函数作为它们的值。
 
-这不是一个详尽的列表，它只涵盖了更一般的钩子。例如，每个主要模式都定义了一个名为 ~modename-mode-hook~ 的钩子。主模式命令使用 run-mode-hooks 作为它执行的最后一件事来运行这个普通的钩子。请参阅模式挂钩。大多数次要模式也有模式挂钩。
+这不是一个详尽的列表，它只涵盖了更一般的钩子。例如，每个主要模式都定义了一个名为 ~modename-mode-hook~ 的钩子。主模式命令使用 run-mode-hooks 作为它执行的最后一件事来运行这个普通的钩子。请参阅模式钩子。大多数次要模式也有模式钩子。
 
-一项特殊功能允许您指定表达式以评估是否以及何时加载文件（请参阅加载挂钩）。该功能不完全是一个钩子，但做了类似的工作。
+一项特殊功能允许您指定表达式以评估是否以及何时加载文件（请参阅加载钩子）。该功能不完全是一个钩子，但做了类似的工作。
 
 #+begin_src emacs-lisp
   activate-mark-hook
@@ -32,7 +32,7 @@
   first-change-hook
 #+end_src
 
-    请参阅更改挂钩。
+    请参阅更改钩子。
 #+begin_src emacs-lisp
   after-change-major-mode-hook
 #+end_src
@@ -40,7 +40,7 @@
   change-major-mode-after-body-hook
 #+end_src
 
-    请参阅模式挂钩。
+    请参阅模式钩子。
 #+begin_src emacs-lisp
   after-init-hook
 #+end_src
@@ -95,7 +95,7 @@
   after-setting-font-hook ¶
 #+end_src
 
-    框架字体更改后的挂钩运行。
+    框架字体更改后的钩子运行。
 #+begin_src emacs-lisp
   auto-save-hook
 #+end_src
@@ -118,7 +118,7 @@
   buffer-list-update-hook ¶
 #+end_src
 
-    当缓冲区列表更改时挂钩运行（请参阅缓冲区列表）。
+    当缓冲区列表更改时钩子运行（请参阅缓冲区列表）。
 #+begin_src emacs-lisp
   buffer-quit-function ¶
 #+end_src
@@ -261,7 +261,7 @@
   mouse-leave-buffer-hook ¶
 #+end_src
 
-    当用户在窗口中单击鼠标时挂钩运行。
+    当用户在窗口中单击鼠标时钩子运行。
 #+begin_src emacs-lisp
   mouse-position-function
 #+end_src
@@ -276,7 +276,7 @@
   prefix-command-preserve-state-hook ¶
 #+end_src
 
-    当前缀命令需要通过将当前前缀命令状态传递给下一个命令来保留前缀时，挂钩运行。例如，当用户键入 Cu 时，Cu 需要将状态传递给下一个命令 - 或者在 Cu 后面跟一个数字。
+    当前缀命令需要通过将当前前缀命令状态传递给下一个命令来保留前缀时，钩子运行。例如，当用户键入 Cu 时，Cu 需要将状态传递给下一个命令 - 或者在 Cu 后面跟一个数字。
 #+begin_src emacs-lisp
   pre-redisplay-functions
 #+end_src
@@ -354,4 +354,4 @@
   window-size-change-functions
 #+end_src
 
-    请参阅用于窗口滚动和更改的挂钩。
+    请参阅用于窗口滚动和更改的钩子。

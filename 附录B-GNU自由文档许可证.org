@@ -4,7 +4,6 @@
 #+OPTIONS: ^:nil
 
 * 附录 B GNU自由文档许可证
-
 1.3 版，2008 年 11 月 3 日
 
 版权所有 © 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.

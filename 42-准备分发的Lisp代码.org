@@ -1,5 +1,4 @@
 * 42 准备分发的Lisp代码
-
 Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。包是一个或多个文件的集合，其格式和捆绑方式使用户可以轻松下载、安装、卸载和升级它。
 
 以下部分描述了如何创建一个包，以及如何将它放在一个包存档中以供其他人下载。请参阅 The GNU Emacs Manual 中的 Packages，了解对打包系统的用户级功能的描述。
@@ -7,7 +6,6 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。包�
 这些部分主要针对包存档维护者——其中大部分信息与包作者（即编写将通过这些存档分发的代码的人）无关。
 
 ** 42.1 包装基础
-
 包可以是简单包，也可以是多文件包。一个简单的包以单个 Emacs Lisp 文件的形式存储在包存档中，而多文件包则以 tar 文件的形式存储（包含多个 Lisp 文件，可能还有非 Lisp 文件，例如手册）。
 
 平时使用中，简单包和多文件包的区别相对不重要；  Package Menu 界面不区分它们。但是，创建它们的过程有所不同，如以下部分所述。
@@ -65,7 +63,6 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。包�
     可选参数 no-activate，如果非 nil，会导致 Emacs 更新其已安装包的记录，但实际上并不使它们可用。
 
 ** 42.2 简单包
-
 一个简单的包由一个 Emacs Lisp 源文件组成。该文件必须符合 Emacs Lisp 库头文件约定（请参阅 Emacs 库的约定头文件）。包的属性取自各种标头，如下例所示：
 
 #+begin_src emacs-lisp
@@ -110,7 +107,6 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。包�
 有关如何将单文件包添加到包存档的说明，请参阅创建和维护包存档。
 
 ** 42.3 多文件包
-
 创建多文件包不如创建单文件包方便，但它提供了更多功能：它可以包含多个 Emacs Lisp 文件、一个 Info 手册和其他文件类型（如图像）。
 
 在安装之前，多文件包作为 tar 文件存储在包存档中。tar 文件必须命名为 name-version.tar，其中 name 是包名，version 是版本号。它的内容一旦被提取，必须全部出现在名为 name-version 的目录中，即内容目录（参见 Packaging Basics）。文件也可以提取到内容目录的子目录中。
@@ -144,7 +140,6 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。包�
     (expand-file-name file superfrobnicator-base))
 #+end_src
 ** 42.4 创建和维护包档案
-
 通过包菜单，用户可以从包档案中下载包。此类档案由变量 package-archives 指定，其默认值列出了托管在 GNU ELPA 和非 GNU ELPA 上的档案。本节介绍如何设置和维护包存档。
 
 #+begin_src emacs-lisp
@@ -179,7 +174,6 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。包�
 对这些事项的完整解释超出了本手册的范围。有关加密密钥和签名的更多信息，请参阅 The GNU Privacy Guard Manual 中的 GnuPG。Emacs 带有一个到 GNU Privacy Guard 的接口，请参阅 Emacs EasyPG 助手手册中的 EasyPG。
 
 ** 42.5 与存档 Web 服务器的接口
-
 提供对包存档的访问的 Web 服务器必须支持以下查询：
 
 #+begin_src emacs-lisp

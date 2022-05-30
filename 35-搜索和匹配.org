@@ -1,11 +1,9 @@
 * 35 搜索和匹配
-
 GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字符串搜索和正则表达式搜索。在正则表达式搜索之后，您可以检查匹配数据以确定哪些文本与整个正则表达式或其各个部分匹配。
 
 'skip-chars...' 函数也执行一种搜索。请参阅跳过字符。要搜索字符属性的更改，请参阅文本属性搜索函数。
 
 ** 35.1 搜索字符串
-
 这些是在缓冲区中搜索文本的原始函数。它们旨在用于程序中，但您可以交互地调用它们。如果您这样做，他们会提示您输入搜索字符串；  参数 limit 和 noerror 为 nil，repeat 为 1。有关交互式搜索的更多详细信息，请参阅 The GNU Emacs Manual 中的 Searching and Replacement。
 
 如果缓冲区是多字节的，这些搜索函数会将搜索字符串转换为多字节；  如果缓冲区是单字节的，它们会将搜索字符串转换为单字节。请参阅文本表示。
@@ -101,7 +99,6 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
     此命令与 word-search-backward 相同，只是字符串的开头或结尾不需要匹配单词边界，除非字符串以空格开头或结尾。
 
 ** 35.2 搜索和案例
-
 默认情况下，Emacs 中的搜索会忽略正在搜索的文本的大小写；  如果您指定搜索 ~FOO~ ，则 ~Foo~ 或 ~foo~ 也被视为匹配项。这也适用于正则表达式；  因此， ~[aB]~ 将匹配 ~a~ 或 ~A~ 或 ~b~ 或 ~B~ 。
 
 如果您不想要此功能，请将变量 case-fold-search 设置为 nil。然后所有字母必须完全匹配，包括大小写。这是一个缓冲区局部变量；  更改变量仅影响当前缓冲区。（请参阅缓冲区局部变量简介。）或者，您可以更改默认值。在 Lisp 代码中，您通常会使用 let 将 case-fold-search 绑定到所需的值。
@@ -123,7 +120,6 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
     该变量通过将其作为参数传递给函数 replace-match 来使用。请参阅替换匹配的文本。
 
 ** 35.3 正则表达式
-
 正则表达式，或简称 regexp，是表示一组（可能是无限的）字符串的模式。搜索正则表达式的匹配项是一项非常强大的操作。本节介绍如何编写正则表达式；  以下部分说明如何搜索它们。
 
 对于正则表达式的交互式开发，可以使用 Mx re-builder 命令。它通过在单独的缓冲区中提供即时视觉反馈，为创建正则表达式提供了一个方便的界面。当您编辑正则表达式时，它在目标缓冲区中的所有匹配项都会突出显示。正则表达式的每个带括号的子表达式都以不同的面显示，这使得即使是非常复杂的正则表达式也更容易验证。
@@ -131,7 +127,6 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 请注意，默认情况下 Emacs 搜索忽略大小写（请参阅搜索和大小写）。要启用区分大小写的正则表达式搜索和匹配，请将 case-fold-search 绑定到 nil 您希望区分大小写的代码周围。
 
 *** 35.3.1 正则表达式的语法
-
 正则表达式有一种语法，其中一些字符是特殊结构，其余的都是普通的。一个普通的字符是一个简单的正则表达式，它只匹配那个字符而不是别的。特殊字符有'.'、'*'、'+'、'?'、'['、'^'、'$'和'\'；  将来不会定义新的特殊字符。如果字符 ']' 结束替代字符，则它是特殊的（见下文）。字符 ~-~ 在替代字符中是特殊的。'[:' 和平衡 ':]' 将字符类包含在字符替代项中。正则表达式中出现的任何其他字符都是普通字符，除非它前面有一个 ~\~ 。
 
 例如，'f'不是特殊字符，所以是普通字符，因此'f'是匹配字符串'f'而不匹配其他字符串的正则表达式。（它不匹配字符串'fg'，但它匹配该字符串的一部分。）同样，'o' 是一个只匹配'o' 的正则表达式。
@@ -141,7 +136,6 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 作为一个简单的例子，我们可以连接正则表达式'f'和'o'来得到正则表达式'fo'，它只匹配字符串'fo'。还是微不足道的。为了做一些更强大的事情，你需要使用一种特殊的正则表达式结构。
 
 **** 35.3.1.1 正则表达式中的特殊字符
-
 以下是正则表达式中特殊字符的列表。
 
 #+begin_src emacs-lisp
@@ -252,7 +246,6 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 
 
 **** 35.3.1.2 字符类
-
 下表列出了您可以在字符替代中使用的类，以及它们的含义。请注意，包含类名的 '[' 和 ']' 字符是名称的一部分，因此使用这些类的正则表达式还需要一对括号。例如，匹配一个或多个字母和数字序列的正则表达式将是 '[[:alnum:]]+'，而不是 '[:alnum:]+'。
 
 #+begin_src emacs-lisp
@@ -343,7 +336,6 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 
 
 **** 35.3.1.3 正则表达式中的反斜杠结构
-
 大多数情况下，'\' 后跟任何字符都只匹配该字符。但是，有几个例外：某些以 '\' 开头的具有特殊含义的序列。这是一个特殊的 ~\~ 结构表。
 
 #+begin_src emacs-lisp
@@ -495,7 +487,6 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 并非每个字符串都是有效的正则表达式。例如，以替代字符结尾而没有终止 ~]~ 的字符串是无效的，以单个 ~\~ 结尾的字符串也是如此。如果将无效的正则表达式传递给任何搜索函数，则会发出无效正则表达式错误信号。
 
 *** 35.3.2 复杂正则表达式示例
-
 这是一个复杂的正则表达式，以前 Emacs 使用它来识别句子的结尾以及后面的任何空格。（现在 Emacs 使用类似但更复杂的默认正则表达式，由函数 sentence-end 构造。请参阅编辑中使用的标准正则表达式。）
 
 下面，我们首先将正则表达式显示为 Lisp 语法中的字符串（以区分空格和制表符），然后显示计算结果。字符串常量以双引号开始和结束。'\"' 表示双引号作为字符串的一部分，'\\' 表示反斜杠作为字符串的一部分，'\t' 表示制表符，'\n' 表示换行符。
@@ -546,7 +537,6 @@ GNU Emacs 提供了两种在缓冲区中搜索指定文本的方法：精确字�
 由于 rx 正则表达式只是 S 表达式，因此可以对其进行格式化和注释。
 
 *** 35.3.3 该 rx结构化正则表达式表示法
-
 作为基于字符串的语法的替代方案，Emacs 提供了基于 Lisp S 表达式的结构化 rx 表示法。这种表示法通常比正则表达式字符串更易于阅读、编写和维护，并且可以自由缩进和注释。它需要转换为字符串形式，因为这是正则表达式函数所期望的，但是这种转换通常发生在字节编译期间，而不是在运行使用正则表达式的 Lisp 代码时发生。
 
 这是一个匹配 C 编程语言中的块注释的 rx regexp21：
@@ -1128,7 +1118,9 @@ pcase 宏可以直接使用 rx 表达式作为模式；  请参阅 pcase 中的 
 
 这些函数对正则表达式进行操作。
 
-功能：正则表达式引用字符串 ¶
+#+begin_src emacs-lisp
+  Function: regexp-quote string ¶
+#+end_src
 
     此函数返回一个正则表达式，其唯一完全匹配的是字符串。仅当缓冲区中的下一个字符是字符串时，在查看中使用此正则表达式才会成功；  如果正在搜索的文本包含字符串，则在搜索函数中使用它会成功。请参阅正则表达式搜索。
 
@@ -1149,7 +1141,9 @@ pcase 宏可以直接使用 rx 表达式作为模式；  请参阅 pcase 中的 
 
     如果返回的字符串不包含任何特殊字符，则它可能是字符串本身。
 
-功能：regexp-opt 字符串 &optional paren ¶
+#+begin_src emacs-lisp
+  Function: regexp-opt strings &optional paren ¶
+#+end_src
 
     此函数返回一个有效的正则表达式，它将匹配列表字符串中的任何字符串。当您需要尽可能快地进行匹配或搜索时，这很有用 - 例如，对于字体锁定模式 22。
 
@@ -1157,19 +1151,29 @@ pcase 宏可以直接使用 rx 表达式作为模式；  请参阅 pcase 中的 
 
     可选参数 paren 可以是以下任何一种：
 
-    一个字符串
+#+begin_src emacs-lisp
+  a string
+#+end_src
 
 	 生成的正则表达式前面是paren，后面是'\)'，例如，使用'"\\(?1:"' 来生成一个明确编号的组。
-    字
+#+begin_src emacs-lisp
+  words
+#+end_src
 
 	 生成的正则表达式被 '\<\(' 和 '\)\>' 包围。
-    符号
+#+begin_src emacs-lisp
+  symbols
+#+end_src
 
 	 生成的正则表达式被 '\_<\(' 和 '\)\_>' 包围（这在匹配编程语言关键字等时通常是合适的）。
-    非零
+#+begin_src emacs-lisp
+  non-nil
+#+end_src
 
 	 生成的正则表达式被 '\(' 和 '\)' 包围。
-    零
+#+begin_src emacs-lisp
+  nil
+#+end_src
 
 	 如果有必要确保附加到它的后缀运算符将应用于整个表达式，则生成的正则表达式被 '\(?:' 和 '\)' 包围。
 
@@ -1191,11 +1195,15 @@ pcase 宏可以直接使用 rx 表达式作为模式；  请参阅 pcase 中的 
 		 (cdr parens))))
     #+end_src
 
-功能：正则表达式选择深度正则表达式¶
+#+begin_src emacs-lisp
+  Function: regexp-opt-depth regexp ¶
+#+end_src
 
     此函数返回正则表达式中的分组结构（带括号的表达式）的总数。这不包括害羞组（请参阅正则表达式中的反斜杠构造）。
 
-功能：regexp-opt-charset chars ¶
+#+begin_src emacs-lisp
+  Function: regexp-opt-charset chars ¶
+#+end_src
 
     此函数返回与字符列表中的字符匹配的正则表达式。
 
@@ -1204,7 +1212,9 @@ pcase 宏可以直接使用 rx 表达式作为模式；  请参阅 pcase 中的 
 	   ⇒ "[a-e]"
     #+end_src
 
-变量：regexp-unmatchable ¶
+#+begin_src emacs-lisp
+  Variable: regexp-unmatchable ¶
+#+end_src
 
     该变量包含一个保证不匹配任何字符串的正则表达式。它作为变量的默认值特别有用，这些变量可以设置为实际匹配的模式。
 
@@ -1236,7 +1246,9 @@ Emacs 正则表达式实现，和许多同类实现一样，通常是健壮的�
 
 如果缓冲区是多字节的，这些搜索函数会将正则表达式转换为多字节；  如果缓冲区是单字节的，它们会将正则表达式转换为单字节。请参阅文本表示。
 
-命令：re-search-forward regexp &optional limit noerror count ¶
+#+begin_src emacs-lisp
+  Command: re-search-forward regexp &optional limit noerror count ¶
+#+end_src
 
     此函数在当前缓冲区中向前搜索与正则表达式 regexp 匹配的文本字符串。该函数跳过任何数量的正则表达式不匹配的文本，并在找到的第一个匹配项的末尾留下点。它返回点的新值。
 
@@ -1244,13 +1256,19 @@ Emacs 正则表达式实现，和许多同类实现一样，通常是健壮的�
 
     搜索失败时 re-search-forward 的作用取决于 noerror 的值：
 
-    零
+#+begin_src emacs-lisp
+  nil
+#+end_src
 
 	 发出搜索失败错误信号。
-    吨
+#+begin_src emacs-lisp
+  t
+#+end_src
 
 	 什么都不做，返回 nil。
-    还要别的吗
+#+begin_src emacs-lisp
+  anything else
+#+end_src
 
 	 将点移动到限制（或缓冲区可访问部分的末尾）并返回 nil。
 
@@ -1278,7 +1296,9 @@ Emacs 正则表达式实现，和许多同类实现一样，通常是健壮的�
     #+end_src
 
 
-命令：re-search-backward regexp &optional limit noerror count ¶
+#+begin_src emacs-lisp
+  Command: re-search-backward regexp &optional limit noerror count ¶
+#+end_src
 
     此函数在当前缓冲区中向后搜索与正则表达式 regexp 匹配的文本字符串，将 point 留在找到的第一个文本的开头。
 
@@ -1286,7 +1306,9 @@ Emacs 正则表达式实现，和许多同类实现一样，通常是健壮的�
 
     re-search-forward 的真正镜像将需要一个特殊的功能来匹配正则表达式从头到尾。不值得为实现它而烦恼。
 
-功能：字符串匹配正则表达式字符串&可选开始¶
+#+begin_src emacs-lisp
+  Function: string-match regexp string &optional start ¶
+#+end_src
 
     此函数返回字符串中正则表达式 regexp 的第一个匹配项的开始索引，如果没有匹配项，则返回 nil。如果 start 不为零，则搜索从字符串中的该索引开始。
 
@@ -1314,11 +1336,15 @@ Emacs 正则表达式实现，和许多同类实现一样，通常是健壮的�
      ⇒ 32
     #+end_src
 
-功能：string-match-p 正则表达式 string &optional start ¶
+#+begin_src emacs-lisp
+  Function: string-match-p regexp string &optional start ¶
+#+end_src
 
     这个谓词函数做了字符串匹配所做的事情，但它避免了修改匹配数据。
 
-功能：查看正则表达式¶
+#+begin_src emacs-lisp
+  Function: looking-at regexp ¶
+#+end_src
 
     此函数确定当前缓冲区中紧跟 point 的文本是否与正则表达式 regexp 匹配。 ~直接跟随~ 的意思就是：搜索是 ~锚定的~ ，只有从跟随点的第一个字符开始才能成功。如果是，则结果为 t，否则为 nil。
 
@@ -1335,7 +1361,9 @@ Emacs 正则表达式实现，和许多同类实现一样，通常是健壮的�
 	   ⇒ t
     #+end_src
 
-功能：回溯正则表达式限制 &optional greedy ¶
+#+begin_src emacs-lisp
+  Function: looking-back regexp limit &optional greedy ¶
+#+end_src
 
     如果正则表达式匹配点之前的文本（即在点结束），则此函数返回 t，否则返回 nil。
 
@@ -1359,42 +1387,52 @@ Emacs 正则表达式实现，和许多同类实现一样，通常是健壮的�
 
     作为一般建议，尽量避免使用回溯，因为它很慢。出于这个原因，没有计划添加回顾-p 功能。
 
-功能：查看-p regexp ¶
+#+begin_src emacs-lisp
+  Function: looking-at-p regexp ¶
+#+end_src
 
     此谓词函数的工作方式类似于查看，但不更新匹配数据。
 
-变量：搜索空间正则表达式 ¶
+#+begin_src emacs-lisp
+  Variable: search-spaces-regexp ¶
+#+end_src
 
     如果这个变量不是零，它应该是一个正则表达式，说明如何搜索空格。在这种情况下，正在搜索的正则表达式中的任何一组空格都代表使用该正则表达式。但是，诸如 '[...]' 和 '*'、'+'、'?' 等结构内部的空格 不受搜索空间正则表达式的影响。
 
     由于此变量影响所有正则表达式搜索和匹配结构，因此您应该将其临时绑定到尽可能小的代码部分。
 
 ** 35.5 POSIX正则表达式搜索
-
 通常的正则表达式函数在需要处理'\|'时进行回溯 和重复结构，但他们只会继续这样做，直到找到一些匹配。然后他们成功并报告找到的第一个匹配项。
 
 本节介绍替代搜索函数，这些函数执行 POSIX 标准为正则表达式匹配指定的完整回溯。他们继续回溯，直到他们尝试了所有可能性并找到了所有匹配项，因此他们可以按照 POSIX 的要求报告最长的匹配项。这要慢得多，因此仅在您确实需要最长匹配时才使用这些函数。
 
 POSIX 搜索和匹配函数不能正确支持非贪婪重复运算符（请参阅非贪婪）。这是因为 POSIX 回溯与非贪婪重复的语义冲突。
 
-命令：posix-search-forward regexp &optional limit noerror count ¶
+#+begin_src emacs-lisp
+  Command: posix-search-forward regexp &optional limit noerror count ¶
+#+end_src
 
     这类似于 re-search-forward，只是它执行 POSIX 标准为正则表达式匹配指定的完整回溯。
 
-命令：posix-search-backward regexp &optional limit noerror count ¶
+#+begin_src emacs-lisp
+  Command: posix-search-backward regexp &optional limit noerror count ¶
+#+end_src
 
     这类似于 re-search-backward，只是它执行 POSIX 标准为正则表达式匹配指定的完整回溯。
 
-功能：posix-looking-at 正则表达式 ¶
+#+begin_src emacs-lisp
+  Function: posix-looking-at regexp ¶
+#+end_src
 
     这就像查看一样，只是它执行 POSIX 标准为正则表达式匹配指定的完整回溯。
 
-功能：posix-string-match 正则表达式字符串 &optional start ¶
+#+begin_src emacs-lisp
+  Function: posix-string-match regexp string &optional start ¶
+#+end_src
 
     这类似于字符串匹配，只是它执行 POSIX 标准为正则表达式匹配指定的完整回溯。
 
-** 35.6 比赛数据
-
+** 35.6 匹配数据
 Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称为匹配数据。借助匹配数据，您可以搜索复杂的模式，例如邮件消息中的日期，然后在模式的控制下提取部分匹配。
 
 因为匹配数据通常只描述最近的搜索，所以您必须注意不要在您希望返回的搜索和匹配数据的使用之间无意中进行另一次搜索。如果您无法避免另一次介入搜索，则必须保存并恢复其周围的匹配数据，以防止其被覆盖。
@@ -1402,10 +1440,12 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
 请注意，所有函数都可以覆盖匹配数据，除非明确记录不这样做。结果是在后台隐式运行的函数（请参阅延迟执行的计时器和空闲计时器）可能应该显式地保存和恢复匹配数据。
 
 *** 35.6.1 替换匹配的文本
-
 此函数替换上次搜索匹配的全部或部分文本。它通过匹配数据工作。
 
-功能：replace-match 替换 &optional 固定大小写字符串 subexp ¶
+#+begin_src emacs-lisp
+  Function: replace-match replacement &optional fixedcase literal string subexp ¶
+#+end_src
+
 
     此函数对缓冲区或字符串执行替换操作。
 
@@ -1417,16 +1457,24 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
 
     如果literal 不是nil，那么替换会按原样插入，唯一的更改是根据需要更改大小写。如果它是 nil（默认值），那么字符 '\' 会被特殊处理。如果替换中出现 ~\~ ，则它必须是以下序列之一的一部分：
 
-    '\&' ¶
+#+begin_src emacs-lisp
+  ‘\&’ ¶
+#+end_src
 
 	 这代表整个文本被替换。
-    '\n'，其中 n 是一个数字 ¶
+#+begin_src emacs-lisp
+  ‘\n’, where n is a digit ¶
+#+end_src
 
 	 这代表与原始正则表达式中的第 n 个子表达式匹配的文本。子表达式是分组在 '\(...\)' 中的那些表达式。如果第 n 个子表达式从不匹配，则替换为空字符串。
-    '\\' ¶
+#+begin_src emacs-lisp
+  ‘\\’ ¶
+#+end_src
 
 	 这代表替换文本中的单个 ~\~ 。
-    '\?'
+#+begin_src emacs-lisp
+  ‘\?’
+#+end_src
 
 	 这代表它本身（为了与 replace-regexp 和相关命令的兼容性；请参阅 The GNU Emacs Manual 中的 Regexp Replace）。
 
@@ -1436,7 +1484,9 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
 
     如果 subexp 不为零，则表示仅替换匹配的正则表达式的子表达式编号 subexp，而不是整个匹配。例如，匹配 'foo \(ba*r\)' 后，调用 replace-match with 1 as subexp 意味着只替换匹配 '\(ba*r\)' 的文本。
 
-功能：match-substitute-replacement 替换 &optional 固定大小写字符串 subexp ¶
+#+begin_src emacs-lisp
+  Function: match-substitute-replacement replacement &optional fixedcase literal string subexp ¶
+#+end_src
 
     此函数返回将通过替换匹配插入缓冲区的文本，但不修改缓冲区。如果您想向用户展示实际的替换结果，使用 '\n' 或 '\&' 等结构替换匹配的组，这将非常有用。参数替换和可选的固定大小写、文字、字符串和子表达式与替换匹配具有相同的含义。
 
@@ -1452,7 +1502,9 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
 
 失败的搜索可能会也可能不会改变匹配数据。在当前的实现中，它没有，但我们将来可能会改变它。不要试图在搜索失败后依赖匹配数据的值。
 
-功能：匹配字符串计数&可选字符串内¶
+#+begin_src emacs-lisp
+  Function: match-string count &optional in-string ¶
+#+end_src
 
     此函数以字符串形式返回在上次搜索或匹配操作中匹配的文本。如果 count 为零，则返回整个文本，如果 count 为正，则返回与第 count 个括号子表达式相对应的部分。
 
@@ -1460,11 +1512,15 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
 
     如果 count 超出范围，或者对于 '\|' 内的子表达式，则值为 nil  未使用的替代方法或重复零次的重复。
 
-功能：匹配字符串无属性计数&可选字符串内¶
+#+begin_src emacs-lisp
+  Function: match-string-no-properties count &optional in-string ¶
+#+end_src
 
     此函数类似于匹配字符串，只是结果没有文本属性。
 
-功能：匹配开始计数¶
+#+begin_src emacs-lisp
+  Function: match-beginning count ¶
+#+end_src
 
     如果最后一次正则表达式搜索找到匹配项，则此函数返回匹配文本或其子表达式的开始位置。
 
@@ -1472,7 +1528,9 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
 
     '\|' 中的子表达式的值为 nil  未使用的替代方法或重复零次的重复。
 
-功能：比赛结束计数¶
+#+begin_src emacs-lisp
+  Function: match-end count ¶
+#+end_src
 
     此函数类似于 match-beginning，只是它返回匹配结束的位置，而不是开始的位置。
 
@@ -1531,10 +1589,11 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
 
 
 *** 35.6.3 访问整个比赛数据
-
 函数 match-data 和 set-match-data 一次读取或写入整个匹配数据。
 
-功能：匹配数据 & 可选整数重用 reseat ¶
+#+begin_src emacs-lisp
+  Function: match-data &optional integers reuse reseat ¶
+#+end_src
 
     此函数返回一个位置列表（标记或整数），这些位置记录了上次搜索匹配的文本的所有信息。元素零是整个表达式匹配开始的位置；  元素一是表达式匹配结束的位置。接下来的两个元素是第一个子表达式匹配的开始和结束的位置，依此类推。一般情况下，元素编号 2n 对应（匹配开始 n）；  元素编号 2n + 1 对应于 (match-end n)。
 
@@ -1554,7 +1613,9 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
 		#<marker at 17 in foo>)
     #+end_src
 
-功能：set-match-data match-list &optional reseat ¶
+#+begin_src emacs-lisp
+  Function: set-match-data match-list &optional reseat ¶
+#+end_src
 
     此函数从 match-list 的元素中设置匹配数据，它应该是一个列表，它是之前调用 match-data 的值。（更准确地说，任何具有相同格式的东西都可以使用。）
 
@@ -1564,21 +1625,23 @@ Emacs 跟踪搜索过程中找到的文本段的开始和结束位置；  这称
 
     store-match-data 是 set-match-data 的半过时别名。
 
-*** 35.6.4 保存和恢复比赛数据
-
+*** 35.6.4 保存和恢复匹配数据
 当您调用可能搜索的函数时，如果您想保留先前搜索的匹配数据以供以后使用，则可能需要保存和恢复该调用周围的匹配数据。这是一个示例，显示了如果未能保存匹配数据会出现的问题：
 
 #+begin_src emacs-lisp
-(re-search-forward "The \\(cat \\)")
-     ⇒ 48
-(foo)                   ; foo does more searching.
-(match-end 0)
-     ⇒ 61              ; Unexpected result—not 48!
+  (re-search-forward "The \\(cat \\)")
+       ⇒ 48
+  (foo)                   ; foo does more searching.
+  (match-end 0)
+       ⇒ 61              ; Unexpected result—not 48!
 #+end_src
 
 您可以使用 save-match-data 保存和恢复匹配数据：
 
-宏：保存匹配数据体… ¶
+#+begin_src emacs-lisp
+  Macro: save-match-data body… ¶
+#+end_src
+
 
     这个宏执行主体，保存和恢复它周围的匹配数据。返回值是正文中最后一个表单的值。
 
@@ -1606,7 +1669,9 @@ Emacs 在运行进程过滤函数（参见进程过滤函数）和进程哨兵�
 
 将替换限制在特定区域可能更方便。函数 replace-regexp-in-region 就是这样做的。
 
-功能：replace-regexp-in-region 正则表达式替换&可选开始结束¶
+#+begin_src emacs-lisp
+  Function: replace-regexp-in-region regexp replacement &optional start end ¶
+#+end_src
 
     此函数将所有出现的正则表达式替换为开始和结束之间的缓冲区文本区域中的替换；  start 默认为点的位置， end 默认为缓冲区的最后一个可访问位置。regexp 的搜索区分大小写，并且在不改变其字母大小写的情况下插入替换。替换字符串可以使用与替换匹配相同的以 '\' 开头的特殊元素。该函数返回被替换的次数，如果没有找到正则表达式，则返回 nil。该函数保留点的位置。
 
@@ -1614,13 +1679,17 @@ Emacs 在运行进程过滤函数（参见进程过滤函数）和进程哨兵�
       (replace-regexp-in-region "foo[ \t]+bar" "foobar")
     #+end_src
 
-功能：replace-string-in-region 字符串替换&可选开始结束 ¶
+#+begin_src emacs-lisp
+  Function: replace-string-in-region string replacement &optional start end ¶
+#+end_src
 
     此函数的工作方式类似于 replace-regexp-in-region，但搜索和替换文字字符串而不是正则表达式。
 
 Emacs 还具有替换字符串中匹配项的特殊功能。
 
-功能：replace-regexp-in-string regexp rep string &optional fixedcase literal subexp start ¶
+#+begin_src emacs-lisp
+  Function: replace-regexp-in-string regexp rep string &optional fixedcase literal subexp start ¶
+#+end_src
 
     此函数复制字符串并在其中搜索正则表达式的匹配项，并用 rep 替换它们。它返回修改后的副本。如果 start 不为零，则从 string 中的该索引开始搜索匹配项，并且返回的值不包括 string 的第一个开始字符。要获取整个转换后的字符串，请将字符串的第一个起始字符与返回值连接起来。
 
@@ -1628,13 +1697,17 @@ Emacs 还具有替换字符串中匹配项的特殊功能。
 
     rep 可以是一个函数，而不是一个字符串。在这种情况下，replace-regexp-in-string 为每个匹配调用 rep，将匹配的文本作为其唯一参数传递。它收集 rep 返回的值并将其作为替换字符串传递给 replace-match。此时的匹配数据是匹配正则表达式与字符串子串的结果。
 
-功能：将字符串替换为字符串中的字符串¶
+#+begin_src emacs-lisp
+  Function: string-replace from-string to-string in-string ¶
+#+end_src
 
     此函数将 in-string 中所有出现的 from-string 替换为 to-string 并返回结果。它可能会返回一个不变的参数，一个常量字符串或一个新字符串。大小写很重要，文本属性被忽略。
 
 如果您想按照查询替换的方式编写命令，您可以使用 perform-replace 来完成这项工作。
 
-功能：perform-replace from-string replacements query-flag regexp-flag delimited-flag &optional repeat-count map start end backward region-noncontiguous-p ¶
+#+begin_src emacs-lisp
+  Function: perform-replace from-string replacements query-flag regexp-flag delimited-flag &optional repeat-count map start end backward region-noncontiguous-p ¶
+#+end_src
 
     这个函数是查询替换和相关命令的核心。它在开始和结束位置之间的文本中搜索出现的 from-string 并替换其中的部分或全部。如果 start 为 nil（或省略），则使用 point 代替，缓冲区可访问部分的结尾用于 end。（如果可选参数向后不为零，则搜索从末尾开始并向后。）
 
@@ -1656,7 +1729,9 @@ Emacs 还具有替换字符串中匹配项的特殊功能。
 
     此函数使用两个函数之一来搜索下一个出现的 from-string。这些函数由两个变量的值指定：replace-re-search-function 和 replace-search-function。当参数 regexp-flag 为非 nil 时调用前者，当它为 nil 时调用后者。
 
-变量：查询替换映射¶
+#+begin_src emacs-lisp
+  Variable: query-replace-map ¶
+#+end_src
 
     此变量包含一个特殊的键映射，它定义了 perform-replace 的有效用户响应和使用它的命令，以及 y-or-np 和 map-y-or-np。这张地图有两个不同寻常之处：
 
@@ -1665,75 +1740,123 @@ Emacs 还具有替换字符串中匹配项的特殊功能。
 
 以下是 query-replace-map 的有意义的绑定。其中一些仅对查询替换和朋友有意义。
 
-行为
+#+begin_src emacs-lisp
+  act
+#+end_src
 
     一定要采取正在考虑的行动——换句话说， ~是~ 。
-跳过
+#+begin_src emacs-lisp
+  skip
+#+end_src
 
     不要对这个问题采取行动——换句话说， ~不~ 。
-出口
+#+begin_src emacs-lisp
+  exit
+#+end_src
 
     回答这个问题 ~否~ ，并放弃整个系列的问题，假设答案是 ~否~ 。
-退出前缀
+#+begin_src emacs-lisp
+  exit-prefix
+#+end_src
 
     与退出类似，但将按下的键添加到未读命令事件（请参阅杂项事件输入功能）。
-行动和退出
+#+begin_src emacs-lisp
+  act-and-exit
+#+end_src
 
     回答这个问题 ~是~ ，并放弃整个系列的问题，假设随后的答案将是 ~否~ 。
-表演和表演
+#+begin_src emacs-lisp
+  act-and-show
+#+end_src
 
     回答这个问题 ~是~ ，但显示结果——不要前进到下一个问题。
-自动的
+#+begin_src emacs-lisp
+  automatic
+#+end_src
 
     用 ~是~ 回答这个问题和该系列中的所有后续问题，无需进一步的用户交互。
-备份
+#+begin_src emacs-lisp
+  backup
+#+end_src
 
     回到之前提出问题的地方。
-撤消
+#+begin_src emacs-lisp
+  undo
+#+end_src
 
     撤消上次更换并返回执行更换的位置。
-全部撤消
+#+begin_src emacs-lisp
+  undo-all
+#+end_src
 
     撤消所有替换并返回执行第一次替换的位置。
-编辑
+#+begin_src emacs-lisp
+  edit
+#+end_src
 
     输入一个递归编辑来处理这个问题——而不是通常会采取的任何其他操作。
-编辑替换
+#+begin_src emacs-lisp
+  edit-replacement
+#+end_src
 
     在 minibuffer 中编辑这个问题的替换。
-删除和编辑
+#+begin_src emacs-lisp
+  delete-and-edit
+#+end_src
 
     删除正在考虑的文本，然后输入递归编辑以替换它。
-居中者
-向上滚动
-向下滚动
-滚动其他窗口
-向下滚动其他窗口
+#+begin_src emacs-lisp
+  recenter
+#+end_src
+#+begin_src emacs-lisp
+  scroll-up
+#+end_src
+#+begin_src emacs-lisp
+  scroll-down
+#+end_src
+#+begin_src emacs-lisp
+  scroll-other-window
+#+end_src
+#+begin_src emacs-lisp
+  scroll-other-window-down
+#+end_src
 
     执行指定的窗口滚动操作，然后再问同样的问题。只有 y-or-np 和相关函数使用这个答案。
-辞职
+#+begin_src emacs-lisp
+  quit
+#+end_src
 
     立即执行戒烟。只有 y-or-np 和相关函数使用这个答案。
-帮助
-
+#+begin_src emacs-lisp
+  help
+#+end_src
     显示一些帮助，然后再次询问。
 
-变量：多查询替换映射¶
-
+#+begin_src emacs-lisp
+  Variable: multi-query-replace-map ¶
+#+end_src
     此变量包含一个键映射，该键映射通过提供在多缓冲区替换中有用的附加键绑定来扩展查询替换映射。额外的绑定是：
 
-    自动全部
+#+begin_src emacs-lisp
+  automatic-all
+#+end_src
 
 	 对于所有剩余的缓冲区，用 ~是~ 回答这个问题和该系列中的所有后续问题，无需进一步的用户交互。
-    退出电流
+#+begin_src emacs-lisp
+  exit-current
+#+end_src
 
 	 回答 ~否~ 这个问题，并放弃当前缓冲区的整个系列问题。继续到序列中的下一个缓冲区。
 
-变量：替换搜索功能¶
+#+begin_src emacs-lisp
+  Variable: replace-search-function ¶
+#+end_src
 
     此变量指定一个函数，该函数执行替换调用以搜索下一个要替换的字符串。它的默认值是向前搜索。任何其他值都应命名为 3 个参数的函数：search-forward 的前 3 个参数（请参阅搜索字符串）。
 
-变量：replace-re-search-function ¶
+#+begin_src emacs-lisp
+  Variable: replace-re-search-function ¶
+#+end_src
 
     此变量指定一个函数，该函数执行替换调用以搜索下一个要替换的正则表达式。它的默认值是重新搜索。任何其他值都应命名为 3 个参数的函数：re-search-forward 的前 3 个参数（请参阅正则表达式搜索）。
 
@@ -1741,26 +1864,36 @@ Emacs 还具有替换字符串中匹配项的特殊功能。
 
 本节描述了一些变量，这些变量包含在编辑中用于特定目的的正则表达式：
 
-用户选项：页面分隔符¶
+#+begin_src emacs-lisp
+  User Option: page-delimiter ¶
+#+end_src
 
     这是描述分隔页面的行开头的正则表达式。默认值为 ~^\014~ （即 ~^^L~ 或 ~^\Cl~ ）；  这匹配以换页符开头的行。
 
 以下两个正则表达式不应假定匹配总是从行首开始；  他们不应该使用 '^' 来锚定比赛。大多数情况下，段落命令只在行首检查匹配，这意味着 ~^~ 是多余的。当左边距不为零时，它们接受在左边距之后开始的匹配。在这种情况下，'^' 将是不正确的。但是，在从不使用左边距的模式中，'^' 是无害的。
 
-用户选项：段落分隔¶
+#+begin_src emacs-lisp
+  User Option: paragraph-separate ¶
+#+end_src
 
     这是用于识别分隔段落的行开头的正则表达式。（如果您更改此设置，您可能还必须更改段落开头。）默认值为 ~[ \t\f]*$~ ，它匹配完全由空格、制表符和换页符组成的行（在它之后左边距）。
 
-用户选项：段落开始¶
+#+begin_src emacs-lisp
+  User Option: paragraph-start ¶
+#+end_src
 
     这是用于识别开始或分隔段落的行开头的正则表达式。默认值为 "\f\\|[ \t]*$"，它匹配仅包含空格或以换页开头（在其左边距之后）的行。
 
-用户选项：sentence-end ¶
+#+begin_src emacs-lisp
+  User Option: sentence-end ¶
+#+end_src
 
     如果非零，则该值应该是描述句子结尾的正则表达式，包括句子后面的空格。（无论如何，所有段落边界也结束句子。）
 
     如果该值为 nil（默认情况下），则函数 sentence-end 构造正则表达式。这就是为什么你应该总是调用函数 sentence-end 来获取用于识别句子结尾的正则表达式。
 
-功能：句尾¶
+#+begin_src emacs-lisp
+  Function: sentence-end ¶
+#+end_src
 
     如果非 nil，此函数返回变量 sentence-end 的值。否则，它会根据变量 sentence-end-double-space（参见 sentence-end-double-space 的定义）、sentence-end-without-period 和 sentence-end-without-space 的值返回一个默认值。
