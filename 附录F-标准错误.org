@@ -34,7 +34,7 @@
  args-out-of-range
 #+end_src
 
-  消息是Args~ 超出范围~ 。当试图访问超出序列、缓冲区或其他容器类对象范围的元素时，就会发生这种情况。请参阅序列、数组和向量，并参阅文本。
+  消息是Args ~超出范围~ 。当试图访问超出序列、缓冲区或其他容器类对象范围的元素时，就会发生这种情况。请参阅序列、数组和向量，并参阅文本。
 #+begin_src~ emacs-lisp
  arith-error
 #+end_src
@@ -64,27 +64,27 @@
  coding-system-error
 #+end_src
 
- 消息是无效的编码系统~ 。请参阅~ Lisp~ 中的编码系统。
+ 消息是无效的编码系统 。请参阅 ~Lisp~ 中的编码系统。
 #+begin_src~ emacs-lisp
  cyclic-function-indirection
 #+end_src
 
- 消息是符号的函数间接链包含一个循环~ 。请参阅符号函数间接。
+ 消息是符号的函数间接链包含一个循环。请参阅符号函数间接。
 #+begin_src~ emacs-lisp
  cyclic-variable-indirection
 #+end_src
 
- 消息是符号的变量间接链包含一个循环~ 。请参见变量别名。
+ 消息是符号的变量间接链包含一个循环。请参见变量别名。
 #+begin_src~ emacs-lisp
  dbus-error
 #+end_src
 
- 消息是D-Bus~ 错误~ 。请参阅~ Emacs~ 中~ D-Bus~ 集成中的错误和事件。
+ 消息是D-Bus ~错误~ 。请参阅 ~Emacs~ 中 ~D-Bus~ 集成中的错误和事件。
 #+begin_src~ emacs-lisp
  end-of-buffer
 #+end_src
 
- 消息是缓冲区结束~ 。请参阅按字符移动。
+ 消息是缓冲区结束。请参阅按字符移动。
 #+begin_src~ emacs-lisp
  end-of-file
 #+end_src
