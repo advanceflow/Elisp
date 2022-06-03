@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
 * 附录 E GNU Emacs内部结构
 本章描述了如何将可运行的 Emacs 可执行文件与其中预加载的 Lisp 库一起转储，如何分配存储空间，以及 C 程序员可能感兴趣的 GNU Emacs 的一些内部方面。
 
@@ -60,7 +55,7 @@
 
     - 安排在生成 etc/DOC 文件时扫描这些文件，并使用 site-load.el 加载它们。
     - 使用 site-init.el 加载文件，然后在安装 Emacs 时将文件复制到 Lisp 文件的安装目录。
-    - 在每个文件中为 byte-compile-dynamic-docstrings 指定一个 nil 值作为局部变量，并使用 site-load.el 或 site-init.el 加载它们。（此方法的缺点是文档字符串一直占用 Emacs 中的空间。）
+    - 在每个文件中为 byte-compile-dynamic-docstrings 指定一个  ~nil~  值作为局部变量，并使用 site-load.el 或 site-init.el 加载它们。（此方法的缺点是文档字符串一直占用 Emacs 中的空间。）
 
 不建议在 site-load.el 或 site-init.el 中放置任何会改变用户在普通未修改 Emacs 中期望的任何功能的内容。如果您觉得必须覆盖站点的正常功能，请使用 default.el 执行此操作，以便用户可以根据需要覆盖您的更改。请参阅摘要：启动时的操作顺序。请注意，如果 site-load.el 或 site-init.el 更改了 load-path，则转储后更改将丢失。请参阅图书馆搜索。要永久更改加载路径，请使用配置的 --enable-locallisppath 选项。
 
@@ -78,7 +73,7 @@
   Function: dump-emacs-portable to-file &optional track-referrers ¶
 #+end_src
 
-    此函数使用 pdump 方法将 Emacs 的当前状态转储到转储文件到文件中。通常，转储文件称为 emacs-name.dmp，其中 emacs-name 是 Emacs 可执行文件的名称。可选参数 track-referrers，如果非 nil，会导致可移植转储程序保留附加信息，以帮助追踪 pdump 方法尚不支持的对象类型的出处。
+    此函数使用 pdump 方法将 Emacs 的当前状态转储到转储文件到文件中。通常，转储文件称为 emacs-name.dmp，其中 emacs-name 是 Emacs 可执行文件的名称。可选参数 track-referrers，如果非  ~nil~ ，会导致可移植转储程序保留附加信息，以帮助追踪 pdump 方法尚不支持的对象类型的出处。
 
     尽管可移植的转储程序代码可以在许多平台上运行，但它生成的转储文件是不可移植的——它们只能由转储它们的 Emacs 可执行文件加载。
 
@@ -96,7 +91,7 @@
   Function: pdumper-stats ¶
 #+end_src
 
-    如果当前 Emacs 会话从转储文件恢复其状态，则此函数返回有关转储文件的信息以及恢复 Emacs 状态所用的时间。该值是一个alist ((dumped-with-pdumper .t) (load-time .time) (dump-file-name .file))，其中file是转储文件的名称，time是以秒为单位的时间它需要从转储文件中恢复状态。如果当前会话不是从转储文件中恢复的，则该值为 nil。
+    如果当前 Emacs 会话从转储文件恢复其状态，则此函数返回有关转储文件的信息以及恢复 Emacs 状态所用的时间。该值是一个alist ((dumped-with-pdumper .t) (load-time .time) (dump-file-name .file))，其中file是转储文件的名称，time是以秒为单位的时间它需要从转储文件中恢复状态。如果当前会话不是从转储文件中恢复的，则该值为  ~nil~ 。
 
 ** E.2 纯存储
 Emacs Lisp 对用户创建的 Lisp 对象使用两种存储方式：普通存储和纯存储。普通存储是保存在 Emacs 会话期间创建的所有新数据的地方（请参阅垃圾收集）。纯存储用于预加载的标准 Lisp 文件中的某些数据——这些数据在 Emacs 的实际使用过程中永远不会改变。
@@ -123,7 +118,7 @@ Emacs Lisp 对用户创建的 Lisp 对象使用两种存储方式：普通存储
 
     这个变量决定了 defun 是否应该在纯存储中复制函数定义。如果它是非零，那么函数定义被复制到纯存储中。
 
-    在最初加载构建 Emacs 的所有基本函数时，此标志为 t（允许这些函数可共享和不可收集）。将 Emacs 作为可执行文件转储始终会在此变量中写入 nil，无论转储前后它实际具有的值如何。
+    在最初加载构建 Emacs 的所有基本函数时，此标志为 t（允许这些函数可共享和不可收集）。将 Emacs 作为可执行文件转储始终会在此变量中写入  ~nil~ ，无论转储前后它实际具有的值如何。
 
     您不应该在正在运行的 Emacs 中更改此标志。
 
@@ -313,13 +308,13 @@ Emacs Lisp 对用户创建的 Lisp 对象使用两种存储方式：普通存储
 
 	 当前未使用的堆空间，以单位大小为单位。
 
-    如果纯空间发生溢出（请参阅 Pure Storage），并且 Emacs 使用（现已过时的）unexec 方法（请参阅构建 Emacs）转储，则垃圾收集返回 nil，因为在这种情况下无法完成真正的垃圾收集。
+    如果纯空间发生溢出（请参阅 Pure Storage），并且 Emacs 使用（现已过时的）unexec 方法（请参阅构建 Emacs）转储，则垃圾收集返回  ~nil~ ，因为在这种情况下无法完成真正的垃圾收集。
 
 #+begin_src emacs-lisp
   User Option: garbage-collection-messages ¶
 #+end_src
 
-    如果这个变量不为 nil，Emacs 会在垃圾回收的开始和结束时显示一条消息。默认值为无。
+    如果这个变量不为  ~nil~ ，Emacs 会在垃圾回收的开始和结束时显示一条消息。默认值为无。
 
 #+begin_src emacs-lisp
   Variable: post-gc-hook ¶
@@ -359,7 +354,7 @@ Emacs Lisp 对用户创建的 Lisp 对象使用两种存储方式：普通存储
   Variable: memory-full ¶
 #+end_src
 
-    如果 Emacs 的 Lisp 对象几乎没有内存，则此变量为 t，否则为 nil。
+    如果 Emacs 的 Lisp 对象几乎没有内存，则此变量为 t，否则为  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: memory-use-counts ¶
@@ -584,7 +579,7 @@ DEFUN (lname, fname, sname, min, max, interactive, doc)
 
 如果您向已经定义了 Lisp 原语的文件添加新原语，请找到名为 syms_of_something 的函数（靠近文件末尾），然后在此处添加对 defsubr 的调用。如果该文件没有此功能，或者如果您创建了一个新文件，请在其中添加一个 syms_of_filename（例如，syms_of_myfile）。然后在 emacs.c 中找到调用所有这些函数的位置，并在那里添加对 syms_of_filename 的调用。
 
-函数 syms_of_filename 也是定义任何作为 Lisp 变量可见的 C 变量的地方。DEFVAR_LISP 使 Lisp_Object 类型的 C 变量在 Lisp 中可见。DEFVAR_INT 使 int 类型的 C 变量在 Lisp 中可见，其值始终为整数。DEFVAR_BOOL 使 int 类型的 C 变量在 Lisp 中可见，其值为 t 或 nil。请注意，使用 DEFVAR_BOOL 定义的变量会自动添加到字节编译器使用的列表 byte-boolean-vars 中。
+函数 syms_of_filename 也是定义任何作为 Lisp 变量可见的 C 变量的地方。DEFVAR_LISP 使 Lisp_Object 类型的 C 变量在 Lisp 中可见。DEFVAR_INT 使 int 类型的 C 变量在 Lisp 中可见，其值始终为整数。DEFVAR_BOOL 使 int 类型的 C 变量在 Lisp 中可见，其值为 t 或  ~nil~ 。请注意，使用 DEFVAR_BOOL 定义的变量会自动添加到字节编译器使用的列表 byte-boolean-vars 中。
 
 这些宏都需要三个参数：
 
@@ -1210,10 +1205,9 @@ API 不提供操作 Lisp 数据结构的函数，例如，使用 cons 和 list �
 #+begin_src emacs-lisp
   Function: bool is_not_nil (emacs_env *env, emacs_value arg) ¶
 #+end_src
+    该函数测试 arg 表示的 Lisp 对象是否为非  ~nil~ ；  它相应地返回真或假。
 
-    该函数测试 arg 表示的 Lisp 对象是否为非 nil；  它相应地返回真或假。
-
-    请注意，您可以通过使用 intern 来获得一个表示 nil 的 emacs_value 来实现等效测试，然后使用上述 eq 来测试相等性。但是使用这个功能更方便。
+    请注意，您可以通过使用 intern 来获得一个表示  ~nil~  的 emacs_value 来实现等效测试，然后使用上述 eq 来测试相等性。但是使用这个功能更方便。
 
 #+begin_src emacs-lisp
   Function: emacs_value type_of (emacs_env *env, emacs_value arg) ¶
@@ -1561,7 +1555,7 @@ Emacs Lisp 支持非本地退出，由此程序控制从程序中的一个点转
    directory
  #+end_src
 
-     在此缓冲区中访问的文件的名称，或 nil。这是缓冲区局部变量缓冲区文件名的值（请参阅缓冲区文件名）。
+     在此缓冲区中访问的文件的名称，或  ~nil~ 。这是缓冲区局部变量缓冲区文件名的值（请参阅缓冲区文件名）。
  #+begin_src emacs-lisp
    filename
  #+end_src
@@ -1766,7 +1760,7 @@ Emacs Lisp 支持非本地退出，由此程序控制从程序中的一个点转
    last_selected_window
  #+end_src
 
-     这是最后一个选择的带有此缓冲区的窗口，如果该窗口不再显示此缓冲区，则为 nil。
+     这是最后一个选择的带有此缓冲区的窗口，如果该窗口不再显示此缓冲区，则为  ~nil~ 。
 
 **** E.9.2 窗口内部
  一个窗口的字段（完整列表见window.h中struct window的定义）包括：
@@ -1790,14 +1784,14 @@ Emacs Lisp 支持非本地退出，由此程序控制从程序中的一个点转
    parent
  #+end_src
 
-     在内部，Emacs 将窗口排列成一棵树；  每组兄弟姐妹都有一个父窗口，其区域包括所有兄弟姐妹。该字段指向该树中窗口的父级，作为 Lisp 对象。对于树的根窗口和一个 minibuffer 窗口，它总是 nil。
+     在内部，Emacs 将窗口排列成一棵树；  每组兄弟姐妹都有一个父窗口，其区域包括所有兄弟姐妹。该字段指向该树中窗口的父级，作为 Lisp 对象。对于树的根窗口和一个 minibuffer 窗口，它总是  ~nil~ 。
 
      父窗口不显示缓冲区，并且在显示中几乎没有作用，除了塑造它们的子窗口。Emacs Lisp 程序不能直接操作父窗口；  它们在树的叶子上的窗口上操作，实际上显示缓冲区。
  #+begin_src emacs-lisp
    contents
  #+end_src
 
-     对于叶窗口和显示工具提示的窗口，这是作为 Lisp 对象的窗口正在显示的缓冲区。对于内部（ ~父~ ）窗口，这是它的第一个子窗口。对于显示菜单或工具栏的伪窗口，此值为 nil。对于已删除的窗口，它也为零。
+     对于叶窗口和显示工具提示的窗口，这是作为 Lisp 对象的窗口正在显示的缓冲区。对于内部（ ~父~ ）窗口，这是它的第一个子窗口。对于显示菜单或工具栏的伪窗口，此值为  ~nil~ 。对于已删除的窗口，它也为零。
  #+begin_src emacs-lisp
    next
  #+end_src
@@ -1805,7 +1799,7 @@ Emacs Lisp 支持非本地退出，由此程序控制从程序中的一个点转
    prev
  #+end_src
 
-     此窗口的下一个和上一个兄弟姐妹作为 Lisp 对象。如果窗口在其组中的最右边或最底部，则 next 为 nil；  如果 prev 在其组中位于最左侧或最顶部，则 prev 为 nil。兄弟姐妹是左/右还是上/下由兄弟姐妹的父级的水平字段确定：如果它非零，则兄弟姐妹水平排列。
+     此窗口的下一个和上一个兄弟姐妹作为 Lisp 对象。如果窗口在其组中的最右边或最底部，则 next 为  ~nil~ ；  如果 prev 在其组中位于最左侧或最顶部，则 prev 为  ~nil~ 。兄弟姐妹是左/右还是上/下由兄弟姐妹的父级的水平字段确定：如果它非零，则兄弟姐妹水平排列。
 
      作为一种特殊情况，帧的根窗口的下一个指向该帧的 minibuffer 窗口，前提是这不是 minibuffer-only 或 minibuffer-less 帧。在此类帧上，微型缓冲区窗口的 prev 指向该帧的根窗口。在任何其他情况下，根窗口的 next 和 minibuffer 窗口（如果存在）的 prev 字段为零。
  #+begin_src emacs-lisp
@@ -1861,7 +1855,7 @@ Emacs Lisp 支持非本地退出，由此程序控制从程序中的一个点转
    force_start
  #+end_src
 
-     如果这个标志不为 nil，它表示窗口已经被 Lisp 程序显式滚动，并且窗口的 start 值被设置为重新显示以兑现。如果点不在屏幕上，这会影响下一次重新显示的操作：不是滚动窗口以显示点周围的文本，而是将点移动到屏幕上的某个位置。
+     如果这个标志不为  ~nil~ ，它表示窗口已经被 Lisp 程序显式滚动，并且窗口的 start 值被设置为重新显示以兑现。如果点不在屏幕上，这会影响下一次重新显示的操作：不是滚动窗口以显示点周围的文本，而是将点移动到屏幕上的某个位置。
  #+begin_src emacs-lisp
    optional_new_start
  #+end_src
@@ -1871,7 +1865,7 @@ Emacs Lisp 支持非本地退出，由此程序控制从程序中的一个点转
    start_at_line_beg
  #+end_src
 
-     非 nil 表示 start 的当前值在选择时是行的开头。
+     非  ~nil~  表示 start 的当前值在选择时是行的开头。
  #+begin_src emacs-lisp
    use_time
  #+end_src
@@ -2039,7 +2033,7 @@ Emacs Lisp 支持非本地退出，由此程序控制从程序中的一个点转
    display_table
  #+end_src
 
-     窗口的显示表，如果没有指定，则为 nil。
+     窗口的显示表，如果没有指定，则为  ~nil~ 。
  #+begin_src emacs-lisp
    update_mode_line
  #+end_src
@@ -2088,7 +2082,7 @@ Emacs Lisp 支持非本地退出，由此程序控制从程序中的一个点转
    command
  #+end_src
 
-     包含用于启动此过程的命令参数的列表。对于网络或串行进程，如果进程正在运行，则为 nil，如果进程停止，则为 t。
+     包含用于启动此过程的命令参数的列表。对于网络或串行进程，如果进程正在运行，则为  ~nil~ ，如果进程停止，则为 t。
  #+begin_src emacs-lisp
    filter
  #+end_src
@@ -2161,7 +2155,7 @@ Emacs Lisp 支持非本地退出，由此程序控制从程序中的一个点转
    tty_name
  #+end_src
 
-     子进程正在使用的终端的名称，如果使用管道，则为 nil。
+     子进程正在使用的终端的名称，如果使用管道，则为  ~nil~ 。
  #+begin_src emacs-lisp
    decode_coding_system
  #+end_src

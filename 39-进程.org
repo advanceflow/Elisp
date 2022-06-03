@@ -10,7 +10,7 @@ Function: processp object ¶
 #+end_src
 
 
-    如果 object 表示 Emacs 进程对象，则此函数返回 t，否则返回 nil。进程对象可以表示运行程序的子进程或任何受支持类型的连接。
+    如果 object 表示 Emacs 进程对象，则此函数返回 t，否则返回  ~nil~ 。进程对象可以表示运行程序的子进程或任何受支持类型的连接。
 
 除了当前 Emacs 会话的子进程之外，您还可以访问在您的机器上运行的其他进程。请参阅访问其他进程。
 
@@ -19,7 +19,7 @@ Function: processp object ¶
 
 同步和异步进程将在以下部分进行说明。由于这三个函数都以类似的方式调用，因此这里描述了它们的共同参数。
 
-在所有情况下，函数指定要运行的程序。如果找不到文件或无法执行文件，则会发出错误信号。如果文件名是相对的，则变量 exec-path 包含要搜索的目录列表。Emacs 在启动时根据环境变量 PATH 的值初始化 exec-path。标准文件名结构 ~~~ 、 ~.~ 和 ~..~ 在 exec-path 中照常解释，但无法识别环境变量替换（ ~$HOME~ 等）；  使用替换文件名来执行它们（请参阅扩展文件名的函数）。此列表中的 nil 指的是默认目录。
+在所有情况下，函数指定要运行的程序。如果找不到文件或无法执行文件，则会发出错误信号。如果文件名是相对的，则变量 exec-path 包含要搜索的目录列表。Emacs 在启动时根据环境变量 PATH 的值初始化 exec-path。标准文件名结构 ~~~ 、 ~.~ 和 ~..~ 在 exec-path 中照常解释，但无法识别环境变量替换（ ~$HOME~ 等）；  使用替换文件名来执行它们（请参阅扩展文件名的函数）。此列表中的  ~nil~  指的是默认目录。
 
 执行程序也可以尝试给指定名称加后缀：
 
@@ -31,7 +31,7 @@ Function: processp object ¶
 
 请注意：参数 program 仅包含程序文件的名称；  它可能不包含任何命令行参数。您必须使用单独的参数 args 来提供这些参数，如下所述。
 
-每个创建子进程的函数都有一个缓冲区或名称参数，用于指定程序的输出将去往何处。它应该是一个缓冲区或缓冲区名称；  如果它是一个缓冲区名称，如果它不存在，它将创建缓冲区。它也可以是 nil，表示丢弃输出，除非自定义过滤器函数处理它。（请参阅进程过滤器函数，以及读取和打印 Lisp 对象。）通常，您应该避免让多个进程将输出发送到同一个缓冲区，因为它们的输出会随机混合。对于同步进程，您可以将输出发送到文件而不是缓冲区（因此相应的参数更适合称为目标）。默认情况下，标准输出和标准错误流都去同一个目的地，但是所有 3 个原语都允许选择性地将标准错误流导向不同的目的地。
+每个创建子进程的函数都有一个缓冲区或名称参数，用于指定程序的输出将去往何处。它应该是一个缓冲区或缓冲区名称；  如果它是一个缓冲区名称，如果它不存在，它将创建缓冲区。它也可以是  ~nil~ ，表示丢弃输出，除非自定义过滤器函数处理它。（请参阅进程过滤器函数，以及读取和打印 Lisp 对象。）通常，您应该避免让多个进程将输出发送到同一个缓冲区，因为它们的输出会随机混合。对于同步进程，您可以将输出发送到文件而不是缓冲区（因此相应的参数更适合称为目标）。默认情况下，标准输出和标准错误流都去同一个目的地，但是所有 3 个原语都允许选择性地将标准错误流导向不同的目的地。
 
 所有三个子进程创建函数都允许为要运行的进程指定命令行参数。对于 call-process 和 call-process-region，它们以 &rest 参数 args 的形式出现。对于 make-process，要运行的程序及其命令行参数都被指定为字符串列表。命令行参数必须都是字符串，并且它们作为单独的参数字符串提供给程序。通配符和其他 shell 结构在这些字符串中没有特殊含义，因为这些字符串直接传递给指定的程序。
 
@@ -47,7 +47,7 @@ Function: processp object ¶
   User Option: exec-path ¶
 #+end_src
 
-    此变量的值是用于搜索要在子进程中运行的程序的目录列表。每个元素要么是目录的名称（即字符串），要么是 nil，它代表默认目录（即 default-directory 的值）。有关此搜索的详细信息，请参见可执行文件查找。
+    此变量的值是用于搜索要在子进程中运行的程序的目录列表。每个元素要么是目录的名称（即字符串），要么是  ~nil~ ，它代表默认目录（即 default-directory 的值）。有关此搜索的详细信息，请参见可执行文件查找。
 
     当程序参数不是绝对文件名时，调用进程和启动进程使用 exec-path 的值。
 
@@ -156,13 +156,12 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 #+begin_src emacs-lisp
   nil
 #+end_src
-
 	 丢弃输出。
 #+begin_src emacs-lisp
   0
 #+end_src
 
-	 丢弃输出，并立即返回 nil 而无需等待子进程完成。
+	 丢弃输出，并立即返回  ~nil~  而无需等待子进程完成。
 
 	 在这种情况下，进程并不是真正同步的，因为它可以与 Emacs 并行运行；  但是你可以认为它是同步的，因为只要这个函数返回，Emacs 就基本上完成了子进程。
 
@@ -176,7 +175,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
   (real-destination error-destination
 #+end_src
 
-	 将标准输出流与标准错误流分开；  按照real-destination指定的处理普通输出，按照error-destination处理错误输出。如果error-destination为nil，则表示丢弃错误输出，t表示将其与普通输出混合，字符串指定将错误输出重定向到的文件名。
+	 将标准输出流与标准错误流分开；  按照real-destination指定的处理普通输出，按照error-destination处理错误输出。如果error-destination为 ~nil~ ，则表示丢弃错误输出，t表示将其与普通输出混合，字符串指定将错误输出重定向到的文件名。
 
 	 您不能直接指定一个缓冲区来放置错误输出；  这太难实施了。但是您可以通过将错误输出发送到临时文件，然后在子进程完成时将文件插入缓冲区来实现此结果。
 
@@ -186,7 +185,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     其余参数 args 是为程序指定命令行参数的字符串。每个字符串作为单独的参数传递给程序。
 
-    call-process 返回的值（除非您告诉它不要等待）指示进程终止的原因。一个数字给出了子进程的退出状态；  0 表示成功，任何其他值表示失败。如果进程以信号终止，则 call-process 返回一个描述该信号的字符串。如果你告诉调用进程不要等待，它会返回 nil。
+    call-process 返回的值（除非您告诉它不要等待）指示进程终止的原因。一个数字给出了子进程的退出状态；  0 表示成功，任何其他值表示失败。如果进程以信号终止，则 call-process 返回一个描述该信号的字符串。如果你告诉调用进程不要等待，它会返回  ~nil~ 。
 
     在下面的示例中，缓冲区 ~foo~ 是当前的。
     #+begin_src emacs-lisp
@@ -226,7 +225,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     参数的处理方式几乎与 call-process 相同，但有以下区别：
 
-    某些文件名处理程序可能不支持参数 infile、buffer 和 display 的所有组合和形式。例如，某些文件名处理程序可能表现得好像 display 为 nil，而不管实际传递的值如何。作为另一个示例，某些文件名处理程序可能不支持通过缓冲区参数分隔标准输出和错误输出。
+    某些文件名处理程序可能不支持参数 infile、buffer 和 display 的所有组合和形式。例如，某些文件名处理程序可能表现得好像 display 为  ~nil~ ，而不管实际传递的值如何。作为另一个示例，某些文件名处理程序可能不支持通过缓冲区参数分隔标准输出和错误输出。
 
     如果调用文件名处理程序，它会根据第一个参数 program 确定要运行的程序。例如，假设调用了远程文件的处理程序。那么用于搜索程序的路径可能与 exec-path 不同。
 
@@ -242,7 +241,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     此变量指示 process-file 的调用是否更改远程文件。
 
-    默认情况下，此变量始终设置为 t，这意味着调用 process-file 可能会更改远程主机上的任何文件。当设置为 nil 时，文件名处理程序可以针对远程文件属性缓存优化其行为。
+    默认情况下，此变量始终设置为 t，这意味着调用 process-file 可能会更改远程主机上的任何文件。当设置为  ~nil~  时，文件名处理程序可以针对远程文件属性缓存优化其行为。
 
     您应该只使用 let-binding 更改此变量；  从不使用 setq。
 
@@ -262,11 +261,11 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     此函数将文本从头到尾作为标准输入发送到正在运行的程序的进程。如果 delete 不为零，则删除发送的文本；  当目标为 t 时，这很有用，可将输出插入当前缓冲区以代替输入。
 
-    参数 destination 和 display 控制如何处理来自子进程的输出，以及是否在显示进入时更新它。有关详细信息，请参阅上面的 call-process 描述。如果destination 是整数0，call-process-region 丢弃输出并立即返回nil，而不等待子进程完成（这仅在支持异步子进程时有效；即，在MS-DOS 上不可用）。
+    参数 destination 和 display 控制如何处理来自子进程的输出，以及是否在显示进入时更新它。有关详细信息，请参阅上面的 call-process 描述。如果destination 是整数0，call-process-region 丢弃输出并立即返回 ~nil~ ，而不等待子进程完成（这仅在支持异步子进程时有效；即，在MS-DOS 上不可用）。
 
     其余参数 args 是为程序指定命令行参数的字符串。
 
-    call-process-region 的返回值和 call-process 一样：如果你告诉它不等待就返回，则返回 nil；  否则，一个数字或字符串，指示子进程如何终止。
+    call-process-region 的返回值和 call-process 一样：如果你告诉它不等待就返回，则返回  ~nil~ ；  否则，一个数字或字符串，指示子进程如何终止。
 
     在下面的示例中，我们使用 call-process-region 来运行 cat 实用程序，标准输入是缓冲区 ~foo~ （单词 ~input~ ）中的前五个字符。cat 将其标准输入复制到其标准输出中。由于参数目标是 t，因此该输出被插入到当前缓冲区中。
     #+begin_src emacs-lisp
@@ -354,7 +353,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     此函数是启动异步子进程的基本低级原语。它返回一个代表子流程的流程对象。与下面描述的更高级的启动进程相比，它采用关键字参数，更灵活，并允许在单个调用中指定进程过滤器和哨兵。
 
-    参数 args 是关键字/参数对的列表。省略关键字始终等同于使用值 nil 指定它。以下是有意义的关键字：
+    参数 args 是关键字/参数对的列表。省略关键字始终等同于使用值  ~nil~  指定它。以下是有意义的关键字：
 
 #+begin_src emacs-lisp
   :name name
@@ -365,24 +364,24 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
   :buffer buffer
 #+end_src
 
-	 使用缓冲区作为进程缓冲区。如果值为 nil，则子进程不与任何缓冲区关联。
+	 使用缓冲区作为进程缓冲区。如果值为  ~nil~ ，则子进程不与任何缓冲区关联。
 #+begin_src emacs-lisp
   :command command
 #+end_src
 
-	 使用 command 作为进程的命令行。该值应该是一个以程序的可执行文件名开头的列表，后跟作为参数提供给程序的字符串。如果列表的第一个元素为 nil，则 Emacs 会打开一个新的伪终端（pty）并将其输入和输出与缓冲区相关联，而不实际运行任何程序；  在这种情况下，其余的列表元素将被忽略。
+	 使用 command 作为进程的命令行。该值应该是一个以程序的可执行文件名开头的列表，后跟作为参数提供给程序的字符串。如果列表的第一个元素为  ~nil~ ，则 Emacs 会打开一个新的伪终端（pty）并将其输入和输出与缓冲区相关联，而不实际运行任何程序；  在这种情况下，其余的列表元素将被忽略。
 #+begin_src emacs-lisp
   :coding coding
 #+end_src
 
 	 如果编码是一个符号，它指定用于从连接读取和向连接写入数据的编码系统。如果 encoding 是一个 cons 单元（解码.编码），那么解码将用于读取和编码用于写入。用于对写入程序的数据进行编码的编码系统也用于对命令行参数进行编码（但不是程序本身，其文件名被编码为任何其他文件名；请参阅文件名编码系统）。
 
-	 如果 coding 为 nil，则将应用查找编码系统的默认规则。请参阅默认编码系统。
+	 如果 coding 为  ~nil~ ，则将应用查找编码系统的默认规则。请参阅默认编码系统。
 #+begin_src emacs-lisp
   :connection-type type
 #+end_src
 
-	 初始化用于与子进程通信的设备类型。可能的值是使用 pty 的 pty、使用管道的 pipe 或使用从 process-connection-type 变量的值派生的默认值的 nil。如果为 :stderr 参数指定了非 nil 值，则忽略此参数和 process-connection-type 的值；  在这种情况下，类型将始终是管道。在 pty 不可用的系统 (MS-Windows) 上，此参数同样被忽略，并且无条件使用管道。
+	 初始化用于与子进程通信的设备类型。可能的值是使用 pty 的 pty、使用管道的 pipe 或使用从 process-connection-type 变量的值派生的默认值的  ~nil~ 。如果为 :stderr 参数指定了非  ~nil~  值，则忽略此参数和 process-connection-type 的值；  在这种情况下，类型将始终是管道。在 pty 不可用的系统 (MS-Windows) 上，此参数同样被忽略，并且无条件使用管道。
 #+begin_src emacs-lisp
   :noquery query-flag
 #+end_src
@@ -407,7 +406,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
   :stderr stderr
 #+end_src
 
-	 将 stderr 与流程的标准错误相关联。非零值应该是缓冲区或使用 make-pipe-process 创建的管道进程，如下所述。如果 stderr 为 nil，则标准错误与标准输出混合，两者都被发送到缓冲区或过滤器。
+	 将 stderr 与流程的标准错误相关联。非零值应该是缓冲区或使用 make-pipe-process 创建的管道进程，如下所述。如果 stderr 为  ~nil~ ，则标准错误与标准输出混合，两者都被发送到缓冲区或过滤器。
 
 	 如果 stderr 是一个缓冲区，Emacs 将创建一个管道进程，即标准错误进程。该进程将具有默认过滤器（参见进程过滤器功能）、哨兵（参见哨兵：检测进程状态更改）和编码系统（参见默认编码系统）。另一方面，它将使用 query-flag 作为退出时的查询标志（请参阅退出前的查询）。它将与 stderr 缓冲区相关联（请参阅进程缓冲区）并将其输出（这是主进程的标准错误）发送到那里。要获取标准错误进程的进程对象，请将 stderr 缓冲区传递给 get-buffer-process。
 
@@ -416,7 +415,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
   :file-handler file-handler
 #+end_src
 
-	 如果 file-handler 不为 nil，则为当前缓冲区的默认目录查找文件名处理程序，并调用该文件名处理程序来创建进程。如果没有这样的处理程序，就好像文件处理程序是 nil 一样继续。
+	 如果 file-handler 不为  ~nil~ ，则为当前缓冲区的默认目录查找文件名处理程序，并调用该文件名处理程序来创建进程。如果没有这样的处理程序，就好像文件处理程序是  ~nil~  一样继续。
 
     使用实际连接信息修改的原始参数列表可通过过程联系功能获得。
 
@@ -424,7 +423,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     根据文件名处理程序的实现，可能无法将过滤器或哨兵应用于生成的进程对象。:stderr 参数不能是管道进程，文件名处理程序不支持管道进程。接受作为 :stderr 参数的缓冲区，其内容在不使用管道进程的情况下显示。请参阅流程过滤器函数、哨兵：检测流程状态更改和接受流程的输出。
 
-    某些文件名处理程序可能不支持 make-process。在这种情况下，这个函数什么都不做并且返回 nil。
+    某些文件名处理程序可能不支持 make-process。在这种情况下，这个函数什么都不做并且返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: make-pipe-process &rest args ¶
@@ -432,7 +431,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     此函数创建一个可以附加到子进程的双向管道。这对 make-process 的 :stderr 关键字很有用。该函数返回一个进程对象。
 
-    参数 args 是关键字/参数对的列表。省略关键字始终等同于使用值 nil 指定它。
+    参数 args 是关键字/参数对的列表。省略关键字始终等同于使用值  ~nil~  指定它。
 
     以下是有意义的关键字：
 
@@ -452,7 +451,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
 	 如果编码是一个符号，它指定用于从连接读取和向连接写入数据的编码系统。如果 encoding 是一个 cons 单元（解码.编码），那么解码将用于读取和编码用于写入。
 
-	 如果 coding 为 nil，则将应用查找编码系统的默认规则。请参阅默认编码系统。
+	 如果 coding 为  ~nil~ ，则将应用查找编码系统的默认规则。请参阅默认编码系统。
 #+begin_src emacs-lisp
   :noquery query-flag
 #+end_src
@@ -482,7 +481,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     这个函数是 make-process 的一个更高级别的包装器，它暴露了一个类似于 call-process 的接口。它创建一个新的异步子进程并启动在其中运行的指定程序。它返回一个进程对象，它代表 Lisp 中的新子进程。参数名称指定进程对象的名称；  与 make-process 一样，如有必要，它会被修改以使其唯一。缓冲区 buffer-or-name 是与进程关联的缓冲区。
 
-    如果 program 为 nil，Emacs 会打开一个新的伪终端（pty）并将其输入和输出与缓冲区或名称相关联，而不创建子进程。在这种情况下，其余参数 args 将被忽略。
+    如果 program 为  ~nil~ ，Emacs 会打开一个新的伪终端（pty）并将其输入和输出与缓冲区或名称相关联，而不创建子进程。在这种情况下，其余参数 args 将被忽略。
 
     其余的 args 是为子进程指定命令行参数的字符串。
 
@@ -522,7 +521,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     根据文件名处理程序的实现，可能无法将 process-filter 或 process-sentinel 应用于生成的进程对象。请参阅进程过滤器函数和哨兵：检测进程状态更改。
 
-    某些文件名处理程序可能不支持 start-file-process（例如函数 ange-ftp-hook-function）。在这种情况下，这个函数什么都不做并且返回 nil。
+    某些文件名处理程序可能不支持 start-file-process（例如函数 ange-ftp-hook-function）。在这种情况下，这个函数什么都不做并且返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: start-process-shell-command name buffer-or-name command ¶
@@ -542,7 +541,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
   Variable: process-connection-type ¶
 #+end_src
 
-    此变量控制用于与异步子进程通信的设备类型。如果它不是 nil，则在可用时使用 pty。否则，使用管道。
+    此变量控制用于与异步子进程通信的设备类型。如果它不是  ~nil~ ，则在可用时使用 pty。否则，使用管道。
 
     process-connection-type 的值在调用 make-process 或 start-process 时生效。因此，您可以通过将变量绑定到对这些函数的调用来指定如何与一个子进程通信。
 
@@ -565,7 +564,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
   User Option: delete-exited-processes ¶
 #+end_src
 
-    此变量控制自动删除已终止的进程（由于调用 exit 或信号）。如果它是 nil，那么它们将继续存在，直到用户运行列表进程。否则，它们会在退出后立即被删除。
+    此变量控制自动删除已终止的进程（由于调用 exit 或信号）。如果它是  ~nil~ ，那么它们将继续存在，直到用户运行列表进程。否则，它们会在退出后立即被删除。
 
 #+begin_src emacs-lisp
   Function: delete-process process ¶
@@ -591,7 +590,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     进程显示在名为 *Process List* 的缓冲区中（除非您使用可选参数缓冲区另外指定），其主要模式是进程菜单模式。
 
-    如果 query-only 为非 nil，它只列出查询标志为非 nil 的进程。请参阅退出前查询。
+    如果 query-only 为非  ~nil~ ，它只列出查询标志为非  ~nil~  的进程。请参阅退出前查询。
 
 #+begin_src emacs-lisp
   Function: process-list ¶
@@ -614,7 +613,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
   Function: get-process name ¶
 #+end_src
 
-    此函数返回名为 name 的进程（一个字符串），如果没有则返回 nil。参数名称也可以是一个进程对象，在这种情况下它被返回。
+    此函数返回名为 name 的进程（一个字符串），如果没有则返回  ~nil~ 。参数名称也可以是一个进程对象，在这种情况下它被返回。
     #+begin_src emacs-lisp
       (get-process "shell")
 	   ⇒ #<process shell>
@@ -624,7 +623,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
   Function: process-command process ¶
 #+end_src
 
-    此函数返回为启动进程而执行的命令。这是一个字符串列表，第一个字符串是执行的程序，其余的字符串是给程序的参数。对于网络、串行或管道连接，这要么是 nil，这意味着进程正在运行，要么是 t（进程已停止）。
+    此函数返回为启动进程而执行的命令。这是一个字符串列表，第一个字符串是执行的程序，其余的字符串是给程序的参数。对于网络、串行或管道连接，这要么是  ~nil~ ，这意味着进程正在运行，要么是 t（进程已停止）。
 
     #+begin_src emacs-lisp
       (process-command (get-process "shell"))
@@ -635,7 +634,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
   Function: process-contact process &optional key no-block ¶
 #+end_src
 
-    此函数返回有关如何设置网络、串行或管道连接的信息。当 key 为 nil 时，它为网络连接返回 (hostname service)，为串行连接返回 (port speed)，为管道连接返回 t。对于一个普通的子进程，这个函数在使用 nil 键调用时总是返回 t。
+    此函数返回有关如何设置网络、串行或管道连接的信息。当 key 为  ~nil~  时，它为网络连接返回 (hostname service)，为串行连接返回 (port speed)，为管道连接返回 t。对于一个普通的子进程，这个函数在使用  ~nil~  键调用时总是返回 t。
 
     如果key为t，则value为连接、服务器、串口或管道的完整状态信息；  即在 make-network-process、make-serial-process 或 make-pipe-process 中指定的关键字和值的列表，除了某些值表示当前状态而不是您指定的状态。
 
@@ -678,13 +677,13 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     如果 key 是关键字，则函数返回与该关键字对应的值。
 
-    如果进程是尚未完全设置的非阻塞网络流，则此函数将阻塞直到发生。如果给定可选的 no-block 参数，此函数将返回 nil 而不是阻塞。
+    如果进程是尚未完全设置的非阻塞网络流，则此函数将阻塞直到发生。如果给定可选的 no-block 参数，此函数将返回  ~nil~  而不是阻塞。
 
 #+begin_src emacs-lisp
   Function: process-id process ¶
 #+end_src
 
-    该函数返回进程的PID。这是一个整数，用于将进程进程与当前在同一台计算机上运行的所有其他进程区分开来。进程的 PID 在进程启动时由操作系统内核选择，并且只要进程存在就保持不变。对于网络、串行和管道连接，此函数返回 nil。
+    该函数返回进程的PID。这是一个整数，用于将进程进程与当前在同一台计算机上运行的所有其他进程区分开来。进程的 PID 在进程启动时由操作系统内核选择，并且只要进程存在就保持不变。对于网络、串行和管道连接，此函数返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: process-name process ¶
@@ -780,7 +779,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
   Function: process-tty-name process ¶
 #+end_src
 
-    此函数返回进程用于与 Emacs 通信的终端名称——如果它使用管道而不是 pty，则返回 nil（请参阅创建异步进程中的 process-connection-type）。如果 process 表示在远程主机上运行的程序，则远程主机上该程序使用的终端名称作为进程属性 remote-tty 提供。如果 process 表示网络、串行或管道连接，则值为 nil。
+    此函数返回进程用于与 Emacs 通信的终端名称——如果它使用管道而不是 pty，则返回  ~nil~ （请参阅创建异步进程中的 process-connection-type）。如果 process 表示在远程主机上运行的程序，则远程主机上该程序使用的终端名称作为进程属性 remote-tty 提供。如果 process 表示网络、串行或管道连接，则值为  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: process-coding-system process ¶
@@ -829,7 +828,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
 有时系统无法接受该进程的输入，因为输入缓冲区已满。发生这种情况时，发送函数会等待片刻，接受来自子进程的输出，然后重试。这使子进程有机会读取更多待处理的输入并在缓冲区中腾出空间。它还允许过滤器（包括当前运行的过滤器）、哨兵和计时器运行——所以在编写代码时要考虑到这一点。
 
-在这些函数中，进程参数可以是进程或进程名称，或者缓冲区或缓冲区名称（通过 get-buffer-process 表示进程）。nil 表示当前缓冲区的进程。
+在这些函数中，进程参数可以是进程或进程名称，或者缓冲区或缓冲区名称（通过 get-buffer-process 表示进程）。 ~nil~  表示当前缓冲区的进程。
 
 #+begin_src emacs-lisp
   Function: process-send-string process string ¶
@@ -865,7 +864,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
   Function: process-running-child-p &optional process ¶
 #+end_src
 
-    这个函数会告诉你一个进程，它不能是一个连接，而是一个真正的子进程，是否已经将其终端的控制权交给了它自己的子进程。如果为真，则函数返回进程的前台进程组的数字 ID；  如果 Emacs 可以确定不是这样，它返回 nil。如果 Emacs 无法判断这是否为真，则值为 t。如果进程是网络、串行或管道连接，或者子进程未处于活动状态，则此函数会发出错误信号。
+    这个函数会告诉你一个进程，它不能是一个连接，而是一个真正的子进程，是否已经将其终端的控制权交给了它自己的子进程。如果为真，则函数返回进程的前台进程组的数字 ID；  如果 Emacs 可以确定不是这样，它返回  ~nil~ 。如果 Emacs 无法判断这是否为真，则值为 t。如果进程是网络、串行或管道连接，或者子进程未处于活动状态，则此函数会发出错误信号。
 
 ** 39.8 向进程发送信号
 向子流程发送信号是中断其活动的一种方式。有几种不同的信号，每一种都有自己的含义。信号集及其名称由操作系统定义。例如，信号 SIGINT 表示用户键入了  ~C-c~ ，或者发生了类似的事情。
@@ -876,9 +875,9 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
 每个信号发送函数都有两个可选参数：process 和 current-group。
 
-参数 process 必须是进程、进程名称、缓冲区、缓冲区名称或 nil。缓冲区或缓冲区名称通过 get-buffer-process 代表一个进程。nil 代表与当前缓冲区关联的进程。除了 stop-process 和 continue-process 之外，如果 process 没有识别活动进程，或者它表示网络、串行或管道连接，则会发出错误信号。
+参数 process 必须是进程、进程名称、缓冲区、缓冲区名称或  ~nil~ 。缓冲区或缓冲区名称通过 get-buffer-process 代表一个进程。 ~nil~  代表与当前缓冲区关联的进程。除了 stop-process 和 continue-process 之外，如果 process 没有识别活动进程，或者它表示网络、串行或管道连接，则会发出错误信号。
 
-参数 current-group 是一个标志，当您将作业控制 shell 作为 Emacs 子进程运行时会有所不同。如果它是非零，那么信号被发送到 Emacs 用来与子进程通信的终端的当前进程组。如果进程是一个作业控制外壳，这意味着外壳的当前子作业。如果 current-group 为 nil，则将信号发送到 Emacs 的直接子进程的进程组。如果子进程是一个作业控制外壳，这就是外壳本身。如果 current-group 是 lambda，则信号被发送到拥有终端的进程组，但前提是它不是 shell 本身。
+参数 current-group 是一个标志，当您将作业控制 shell 作为 Emacs 子进程运行时会有所不同。如果它是非零，那么信号被发送到 Emacs 用来与子进程通信的终端的当前进程组。如果进程是一个作业控制外壳，这意味着外壳的当前子作业。如果 current-group 为  ~nil~ ，则将信号发送到 Emacs 的直接子进程的进程组。如果子进程是一个作业控制外壳，这就是外壳本身。如果 current-group 是 lambda，则信号被发送到拥有终端的进程组，但前提是它不是 shell 本身。
 
 当使用管道与子进程通信时，标志 current-group 无效，因为操作系统不支持管道情况下的区分。出于同样的原因，当使用管道时，作业控制 shell 将不起作用。请参阅创建异步进程中的 process-connection-type。
 
@@ -886,7 +885,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
   Function: interrupt-process &optional process current-group ¶
 #+end_src
 
-    该函数通过发送信号 SIGINT 来中断进程进程。在 Emacs 之外，键入中断字符（通常在某些系统上是  ~C-c~ ，而在其他系统上是 DEL）会发送此信号。当参数 current-group 不为 nil 时，您可以将此函数视为在 Emacs 与子进程对话的终端上键入  ~C-c~ 。
+    该函数通过发送信号 SIGINT 来中断进程进程。在 Emacs 之外，键入中断字符（通常在某些系统上是  ~C-c~ ，而在其他系统上是 DEL）会发送此信号。当参数 current-group 不为  ~nil~  时，您可以将此函数视为在 Emacs 与子进程对话的终端上键入  ~C-c~ 。
 
 #+begin_src emacs-lisp
   Function: kill-process &optional process current-group ¶
@@ -906,7 +905,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
     该函数停止指定的进程。如果它是运行程序的真正子进程，它会向该子进程发送信号 SIGTSTP。如果 process 表示网络、串行或管道连接，则此函数禁止处理来自连接的传入数据；  对于网络服务器，这意味着不接受新连接。使用 continue-process 恢复正常执行。
 
-    在 Emacs 之外，在具有作业控制的系统上，停止字符（通常是 Cz）通常会将 SIGTSTP 信号发送到子进程。当 current-group 不为 nil 时，您可以将此函数视为在 Emacs 用来与子进程通信的终端上键入 Cz。
+    在 Emacs 之外，在具有作业控制的系统上，停止字符（通常是 Cz）通常会将 SIGTSTP 信号发送到子进程。当 current-group 不为  ~nil~  时，您可以将此函数视为在 Emacs 用来与子进程通信的终端上键入 Cz。
 
 #+begin_src emacs-lisp
   Function: continue-process &optional process current-group ¶
@@ -937,7 +936,7 @@ Lisp 程序有时需要运行一个 shell 并给它一个包含用户指定文�
 
 如果子进程写入其标准错误流，默认情况下，错误输出也会传递给进程过滤器函数。如果 Emacs 使用伪 TTY (pty) 与子进程通信，那么就不可能将子进程的标准输出流和标准错误流分开，因为伪 TTY 只有一个输出通道。在这种情况下，如果您想将这些流的输出分开，您应该将其中一个重定向到一个文件，例如，通过 start-process-shell-command 或类似函数使用适当的 shell 命令。
 
-或者，您可以在调用 make-process（参见 make-process）时使用带有非 nil 值的 :stderr 参数，以使错误输出的目标与标准输出分开；  在这种情况下，Emacs 将使用管道与子进程进行通信。
+或者，您可以在调用 make-process（参见 make-process）时使用带有非  ~nil~  值的 :stderr 参数，以使错误输出的目标与标准输出分开；  在这种情况下，Emacs 将使用管道与子进程进行通信。
 
 当一个子进程终止时，Emacs 读取任何挂起的输出，然后停止从该子进程读取输出。因此，如果子进程的子进程仍然存在并且仍在产生输出，那么 Emacs 将不会收到该输出。
 
@@ -948,7 +947,7 @@ Variable: process-adaptive-read-buffering ¶
 #+end_src
 
 
-    在某些系统上，当 Emacs 从子进程读取输出时，输出数据以非常小的块读取，可能会导致性能非常差。通过将变量 process-adaptive-read-buffering 设置为非 nil 值（默认值）可以在一定程度上纠正这种行为，因为它会自动延迟从此类进程中读取，从而允许它们在 Emacs 尝试之前产生更多输出阅读它。
+    在某些系统上，当 Emacs 从子进程读取输出时，输出数据以非常小的块读取，可能会导致性能非常差。通过将变量 process-adaptive-read-buffering 设置为非  ~nil~  值（默认值）可以在一定程度上纠正这种行为，因为它会自动延迟从此类进程中读取，从而允许它们在 Emacs 尝试之前产生更多输出阅读它。
 
 *** 39.9.1 进程缓冲区
 
@@ -956,7 +955,7 @@ Variable: process-adaptive-read-buffering ¶
 
 默认情况下，进程输出被插入到相关的缓冲区中。（您可以通过定义自定义过滤器函数来更改此设置，请参阅处理过滤器函数。）插入输出的位置由处理标记确定，然后将其更新为指向刚刚插入的文本的末尾。通常，但并非总是如此，进程标记位于缓冲区的末尾。
 
-终止进程的关联缓冲区也会终止该进程。如果进程的 process-query-on-exit-flag 不为 nil，Emacs 会首先要求确认（请参阅 Querying Before Exit）。此确认由函数 process-kill-buffer-query-function 完成，该函数从 kill-buffer-query-functions 运行（请参阅 Killing Buffers）。
+终止进程的关联缓冲区也会终止该进程。如果进程的 process-query-on-exit-flag 不为  ~nil~ ，Emacs 会首先要求确认（请参阅 Querying Before Exit）。此确认由函数 process-kill-buffer-query-function 完成，该函数从 kill-buffer-query-functions 运行（请参阅 Killing Buffers）。
 
 #+begin_src emacs-lisp
   Function: process-buffer process ¶
@@ -986,7 +985,7 @@ Variable: process-adaptive-read-buffering ¶
   Function: set-process-buffer process buffer ¶
 #+end_src
 
-    此函数将与进程关联的缓冲区设置为缓冲区。如果 buffer 为 nil，则进程与无缓冲区关联；  如果非零，进程标记将被设置为指向缓冲区的结尾。
+    此函数将与进程关联的缓冲区设置为缓冲区。如果 buffer 为  ~nil~ ，则进程与无缓冲区关联；  如果非零，进程标记将被设置为指向缓冲区的结尾。
 
 #+begin_src emacs-lisp
   Function: get-buffer-process buffer-or-name ¶
@@ -1017,7 +1016,7 @@ Variable: process-adaptive-read-buffering ¶
   User Option: window-adjust-process-window-size-function ¶
 #+end_src
 
-    这个变量的值应该是两个参数的函数：一个进程和显示进程缓冲区的窗口列表。当函数被调用时，进程的缓冲区就是当前缓冲区。该函数应返回一个 cons 单元格 (width . height)，该单元格描述要通过调用 set-process-window-size 传递的逻辑进程窗口的尺寸。该函数也可以返回 nil，在这种情况下，Emacs 不会为此进程调用 set-process-window-size。
+    这个变量的值应该是两个参数的函数：一个进程和显示进程缓冲区的窗口列表。当函数被调用时，进程的缓冲区就是当前缓冲区。该函数应返回一个 cons 单元格 (width . height)，该单元格描述要通过调用 set-process-window-size 传递的逻辑进程窗口的尺寸。该函数也可以返回  ~nil~ ，在这种情况下，Emacs 不会为此进程调用 set-process-window-size。
 
     Emacs 为这个变量提供了两个预定义的值：window-adjust-process-window-size-smallest，它返回显示进程缓冲区的所有窗口尺寸中最小的一个；  和 window-adjust-process-window-size-largest，它返回最大的尺寸。对于更复杂的策略，编写自己的函数。
 
@@ -1033,7 +1032,7 @@ Variable: process-adaptive-read-buffering ¶
 
 过滤器函数必须接受两个参数：关联的进程和一个字符串，它是刚刚从它接收到的输出。然后，该函数可以自由地对输出进行任何选择。
 
-退出通常在过滤器函数中被禁止——否则，在命令级别键入  ~C-g~  或退出用户命令的效果将是不可预测的。如果您想允许在过滤器函数内退出，请将禁止退出绑定到 nil。在大多数情况下，正确的方法是使用 with-local-quit 宏。请参阅退出。
+退出通常在过滤器函数中被禁止——否则，在命令级别键入  ~C-g~  或退出用户命令的效果将是不可预测的。如果您想允许在过滤器函数内退出，请将禁止退出绑定到  ~nil~ 。在大多数情况下，正确的方法是使用 with-local-quit 宏。请参阅退出。
 
 如果在过滤器函数执行期间发生错误，它会被自动捕获，因此它不会停止过滤器函数启动时正在运行的任何程序的执行。但是，如果 debug-on-error 不为零，则不会捕获错误。这使得使用 Lisp 调试器来调试过滤器函数成为可能。请参阅 Lisp 调试器。
 
@@ -1070,7 +1069,7 @@ Variable: process-adaptive-read-buffering ¶
   Function: set-process-filter process filter ¶
 #+end_src
 
-    该函数给出处理过滤函数filter。如果 filter 为 nil，它为进程提供默认过滤器，它将进程输出插入到进程缓冲区中。如果 filter 为 t，Emacs 将停止接受来自该进程的输出，除非它是一个网络服务器进程来监听传入的连接。
+    该函数给出处理过滤函数filter。如果 filter 为  ~nil~ ，它为进程提供默认过滤器，它将进程输出插入到进程缓冲区中。如果 filter 为 t，Emacs 将停止接受来自该进程的输出，除非它是一个网络服务器进程来监听传入的连接。
 
 #+begin_src emacs-lisp
   Function: process-filter process ¶
@@ -1126,15 +1125,15 @@ Variable: process-adaptive-read-buffering ¶
   Function: accept-process-output &optional process seconds millisec just-this-one ¶
 #+end_src
 
-    这个函数允许 Emacs 从进程中读取挂起的输出。将输出提供给它们的过滤器功能。如果 process 不是 nil，那么这个函数不会返回，直到从 process 接收到一些输出或 process 关闭了连接。
+    这个函数允许 Emacs 从进程中读取挂起的输出。将输出提供给它们的过滤器功能。如果 process 不是  ~nil~ ，那么这个函数不会返回，直到从 process 接收到一些输出或 process 关闭了连接。
 
     参数 seconds 和 millisec 允许您指定超时时间。前者指定以秒为单位的周期，后者指定以毫秒为单位的周期。如此指定的两个时间段相加，即使没有子进程输出，accept-process-output 也会在这段时间后返回。
 
     参数毫秒已过时（不应使用），因为秒可以是浮点数来指定等待的小数秒数。如果秒为 0，则该函数接受任何待处理的输出但不等待。
 
-    如果 process 是一个进程，并且参数 just-this-one 不是 nil，则只处理来自该进程的输出，暂停其他进程的输出，直到从该进程接收到一些输出或超时到期。如果 just-this-one 是整数，也禁止运行计时器。通常不建议使用此功能，但对于特定应用程序（例如语音合成）可能是必需的。
+    如果 process 是一个进程，并且参数 just-this-one 不是  ~nil~ ，则只处理来自该进程的输出，暂停其他进程的输出，直到从该进程接收到一些输出或超时到期。如果 just-this-one 是整数，也禁止运行计时器。通常不建议使用此功能，但对于特定应用程序（例如语音合成）可能是必需的。
 
-    如果函数accept-process-output从进程获得输出，则返回非nil，如果进程为nil，则从任何进程获得输出；  如果相应的连接包含缓冲数据，即使在进程退出后也会发生这种情况。如果超时过期或连接在输出到达之前关闭，则该函数返回 nil。
+    如果函数accept-process-output从进程获得输出，则返回非 ~nil~ ，如果进程为 ~nil~ ，则从任何进程获得输出；  如果相应的连接包含缓冲数据，即使在进程退出后也会发生这种情况。如果超时过期或连接在输出到达之前关闭，则该函数返回  ~nil~ 。
 
 如果来自进程的连接包含缓冲数据，即使在进程退出后，accept-process-output 也可以返回非零。因此，虽然下面的循环：
 #+begin_src emacs-lisp
@@ -1143,7 +1142,7 @@ Variable: process-adaptive-read-buffering ¶
     (accept-process-output process))
 #+end_src
 
-通常会从进程读取所有输出，它有一个竞争条件，如果 process-live-p 返回 nil 而连接仍然包含数据，它可能会丢失一些输出。更好的是这样编写循环：
+通常会从进程读取所有输出，它有一个竞争条件，如果 process-live-p 返回  ~nil~  而连接仍然包含数据，它可能会丢失一些输出。更好的是这样编写循环：
 
 #+begin_src emacs-lisp
   (while (accept-process-output process))
@@ -1172,7 +1171,7 @@ Variable: process-adaptive-read-buffering ¶
 #+end_src
 
 
-只有当两个 accept-process-output 表单都返回 nil 时，你才能确定进程已经退出并且 Emacs 已经读取了它的所有输出。
+只有当两个 accept-process-output 表单都返回  ~nil~  时，你才能确定进程已经退出并且 Emacs 已经读取了它的所有输出。
 
 以这种方式无法从远程主机上运行的进程中读取挂起的标准错误。
 
@@ -1188,13 +1187,13 @@ Lisp 程序可以指定将一个进程锁定到哪个线程，或者指示 Emacs
   Function: process-thread process ¶
 #+end_src
 
-    返回进程被锁定的线程。如果进程未锁定，则返回 nil。
+    返回进程被锁定的线程。如果进程未锁定，则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: set-process-thread process thread ¶
 #+end_src
 
-    将进程的锁定线程设置为线程。thread 可能为 nil，在这种情况下进程被解锁。
+    将进程的锁定线程设置为线程。thread 可能为  ~nil~ ，在这种情况下进程被解锁。
 
 ** 39.10 Sentinels：检测进程状态变化
 进程哨兵是一个函数，每当相关进程因任何原因改变状态时都会调用该函数，包括终止、停止或继续进程的信号（无论是由 Emacs 发送还是由进程自己的操作引起）。如果进程退出，也会调用进程哨兵。哨兵接收两个参数：事件发生的进程和描述事件类型的字符串。
@@ -1221,13 +1220,13 @@ Emacs 不会保留多个原因的队列来调用一个进程的哨兵；  它只
 
 Emacs 在运行进程哨兵之前显式检查进程的输出。一旦哨兵由于进程终止而运行，就无法从进程中获得进一步的输出。
 
-将输出写入进程缓冲区的哨兵应检查缓冲区是否还活着。如果它试图插入一个死缓冲区，它会得到一个错误。如果缓冲区死了， (buffer-name (process-buffer process)) 返回 nil。
+将输出写入进程缓冲区的哨兵应检查缓冲区是否还活着。如果它试图插入一个死缓冲区，它会得到一个错误。如果缓冲区死了， (buffer-name (process-buffer process)) 返回  ~nil~ 。
 
-退出通常在哨兵中被禁止——否则，在命令级别键入 ~C-g~ 或退出用户命令的效果将是不可预测的。如果您想允许在哨兵内部退出，请将禁止退出绑定到 nil。在大多数情况下，正确的方法是使用 with-local-quit 宏。请参阅退出。
+退出通常在哨兵中被禁止——否则，在命令级别键入 ~C-g~ 或退出用户命令的效果将是不可预测的。如果您想允许在哨兵内部退出，请将禁止退出绑定到  ~nil~ 。在大多数情况下，正确的方法是使用 with-local-quit 宏。请参阅退出。
 
 如果在哨兵的执行过程中发生错误，它会被自动捕获，这样它就不会停止哨兵启动时正在运行的任何程序的执行。但是，如果 debug-on-error 不为零，则不会捕获错误。这使得使用 Lisp 调试器来调试哨兵成为可能。请参阅 Lisp 调试器。
 
-当哨兵正在运行时，进程哨兵被临时设置为 nil，这样哨兵就不会递归运行。由于这个原因，哨兵不可能指定新的哨兵。
+当哨兵正在运行时，进程哨兵被临时设置为  ~nil~ ，这样哨兵就不会递归运行。由于这个原因，哨兵不可能指定新的哨兵。
 
 请注意，Emacs 在执行哨兵时会自动保存和恢复匹配数据。请参阅匹配数据。
 
@@ -1235,7 +1234,7 @@ Emacs 在运行进程哨兵之前显式检查进程的输出。一旦哨兵由�
   Function: set-process-sentinel process sentinel ¶
 #+end_src
 
-    该函数将哨兵与进程相关联。如果 sentinel 为 nil，则进程将具有默认的 sentinel，当进程状态发生变化时，它将在进程的缓冲区中插入一条消息。
+    该函数将哨兵与进程相关联。如果 sentinel 为  ~nil~ ，则进程将具有默认的 sentinel，当进程状态发生变化时，它将在进程的缓冲区中插入一条消息。
 
     进程哨兵的更改立即生效——如果哨兵计划运行但尚未被调用，并且您指定了新哨兵，则对哨兵的最终调用将使用新哨兵。
 
@@ -1264,10 +1263,10 @@ Emacs 在运行进程哨兵之前显式检查进程的输出。一旦哨兵由�
   Function: waiting-for-user-input-p ¶
 #+end_src
 
-    当哨兵或过滤器函数正在运行时，如果 Emacs 在调用哨兵或过滤器函数时正在等待用户的键盘输入，则此函数返回非 nil，否则返回 nil。
+    当哨兵或过滤器函数正在运行时，如果 Emacs 在调用哨兵或过滤器函数时正在等待用户的键盘输入，则此函数返回非  ~nil~ ，否则返回  ~nil~ 。
 
 ** 39.11 退出前查询
-当 Emacs 退出时，它会终止它的所有子进程。对于运行程序的子进程，它会向它们发送 SIGHUP 信号；  连接被简单地关闭。因为子进程可能正在做有价值的工作，Emacs 通常会要求用户确认可以终止它们。每个进程都有一个查询标志，如果不是 nil，则表示 Emacs 应该在退出之前要求确认，从而终止该进程。查询标志的默认值为 t，表示执行查询。
+当 Emacs 退出时，它会终止它的所有子进程。对于运行程序的子进程，它会向它们发送 SIGHUP 信号；  连接被简单地关闭。因为子进程可能正在做有价值的工作，Emacs 通常会要求用户确认可以终止它们。每个进程都有一个查询标志，如果不是  ~nil~ ，则表示 Emacs 应该在退出之前要求确认，从而终止该进程。查询标志的默认值为 t，表示执行查询。
 
 #+begin_src emacs-lisp
   Function: process-query-on-exit-flag process ¶
@@ -1291,13 +1290,12 @@ Emacs 在运行进程哨兵之前显式检查进程的输出。一旦哨兵由�
 #+begin_src emacs-lisp
   User Option: confirm-kill-processes ¶
 #+end_src
-
-    如果此用户选项设置为 t（默认值），那么 Emacs 会在退出时终止进程之前要求确认。如果为 nil，Emacs 会在不确认的情况下杀死进程，即忽略所有进程的查询标志。
+    如果此用户选项设置为 t（默认值），那么 Emacs 会在退出时终止进程之前要求确认。如果为  ~nil~ ，Emacs 会在不确认的情况下杀死进程，即忽略所有进程的查询标志。
 
 ** 39.12 访问其他进程
 除了访问和操作作为当前 Emacs 会话的子进程的进程之外，Emacs Lisp 程序还可以访问在同一台机器上运行的其他进程。我们将这些系统进程称为系统进程，以将它们与 Emacs 子进程区分开来。
 
-Emacs 提供了几个用于访问系统进程的原语。并非所有平台都支持这些原语；  在那些没有的情况下，这些原语返回 nil。
+Emacs 提供了几个用于访问系统进程的原语。并非所有平台都支持这些原语；  在那些没有的情况下，这些原语返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: list-system-processes ¶
@@ -1536,7 +1534,7 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
 
     name 参数指定进程对象的名称。根据需要对其进行修改以使其唯一。
 
-    buffer 参数是与连接关联的缓冲区。连接的输出被插入缓冲区，除非您指定自己的过滤器函数来处理输出。如果 buffer 为 nil，则表示该连接未与任何缓冲区关联。
+    buffer 参数是与连接关联的缓冲区。连接的输出被插入缓冲区，除非您指定自己的过滤器函数来处理输出。如果 buffer 为  ~nil~ ，则表示该连接未与任何缓冲区关联。
 
     参数 host 和 service 指定连接到哪里；  host 是主机名（字符串），service 是定义的网络服务的名称（字符串）或端口号（整数，如 80 或整数字符串，如 ~80~ ）。
 
@@ -1583,7 +1581,7 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
   starttls
 #+end_src
 
-	     至于 nil，但如果 STARTTLS 失败则断开连接。
+	     至于  ~nil~ ，但如果 STARTTLS 失败则断开连接。
 #+begin_src emacs-lisp
   shell
 #+end_src
@@ -1611,7 +1609,7 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
   :starttls-function function
 #+end_src
 
-	 一个参数的函数（对能力命令的响应），它返回 nil，或者如果支持，则返回激活 STARTTLS 的命令。
+	 一个参数的函数（对能力命令的响应），它返回  ~nil~ ，或者如果支持，则返回激活 STARTTLS 的命令。
 #+begin_src emacs-lisp
   :success regexp
 #+end_src
@@ -1621,12 +1619,12 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
   :use-starttls-if-possible boolean
 #+end_src
 
-	 如果非 nil，即使 Emacs 没有内置的 TLS 支持，也要进行机会性 STARTTLS 升级。
+	 如果非  ~nil~ ，即使 Emacs 没有内置的 TLS 支持，也要进行机会性 STARTTLS 升级。
 #+begin_src emacs-lisp
   :warn-unless-encrypted boolean
 #+end_src
 
-	 如果非 nil 并且 :return-value 也非 nil，如果连接未加密，Emacs 将发出警告。这对于 IMAP 等协议很有用，大多数用户都希望网络流量被加密。
+	 如果非  ~nil~  并且 :return-value 也非  ~nil~ ，如果连接未加密，Emacs 将发出警告。这对于 IMAP 等协议很有用，大多数用户都希望网络流量被加密。
 #+begin_src emacs-lisp
   :client-certificate list-or-t
 #+end_src
@@ -1635,13 +1633,11 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
 #+begin_src emacs-lisp
   :return-list cons-or-nil
 #+end_src
-
 	 此函数的返回值。如果省略或为零，则返回一个进程对象。否则，形式的缺点 (process-object . plist)，其中 plist 有关键字：
 
 #+begin_src emacs-lisp
   :greeting string-or-nil
 #+end_src
-
 	     如果非零，则主机返回的问候字符串。
 #+begin_src emacs-lisp
   :capabilities string-or-nil
@@ -1699,7 +1695,7 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
   Function: make-network-process &rest args ¶
 #+end_src
 
-    该函数创建一个网络连接或服务器，并返回代表它的进程对象。参数 args 是关键字/参数对的列表。除了 :coding、:filter-multibyte 和 :reuseaddr 之外，省略关键字总是等同于指定它的值为 nil。以下是有意义的关键字（与网络选项相对应的关键字在下一节中列出）：
+    该函数创建一个网络连接或服务器，并返回代表它的进程对象。参数 args 是关键字/参数对的列表。除了 :coding、:filter-multibyte 和 :reuseaddr 之外，省略关键字总是等同于指定它的值为  ~nil~ 。以下是有意义的关键字（与网络选项相对应的关键字在下一节中列出）：
 
 #+begin_src emacs-lisp
   :name name
@@ -1710,7 +1706,7 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
   :type type
 #+end_src
 
-	 指定通信类型。nil 值指定流连接（默认）；  datagram 指定一个数据报连接；  seqpacket 指定一个有序的数据包流连接。连接和服务器都可以是这些类型。
+	 指定通信类型。 ~nil~  值指定流连接（默认）；  datagram 指定一个数据报连接；  seqpacket 指定一个有序的数据包流连接。连接和服务器都可以是这些类型。
 #+begin_src emacs-lisp
   :server server-flag
 #+end_src
@@ -1730,7 +1726,7 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
   :family family
 #+end_src
 
-	 family 指定用于通信的地址（和协议）族。nil 表示为给定的主机和服务自动确定正确的地址族。local 指定一个 Unix 套接字，在这种情况下 host 被忽略。ipv4 和 ipv6 分别指定使用 IPv4 和 IPv6。
+	 family 指定用于通信的地址（和协议）族。 ~nil~  表示为给定的主机和服务自动确定正确的地址族。local 指定一个 Unix 套接字，在这种情况下 host 被忽略。ipv4 和 ipv6 分别指定使用 IPv4 和 IPv6。
 #+begin_src emacs-lisp
   :use-external-socket use-external-socket
 #+end_src
@@ -1803,7 +1799,7 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
   :filter-multibyte multibyte
 #+end_src
 
-	 如果 multibyte 不是 nil，则给进程过滤器的字符串是多字节的，否则它们是单字节的。默认值为 t。
+	 如果 multibyte 不是  ~nil~ ，则给进程过滤器的字符串是多字节的，否则它们是单字节的。默认值为 t。
 #+begin_src emacs-lisp
   :sentinel sentinel
 #+end_src
@@ -1831,34 +1827,34 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
   :bindtodevice device-name
 #+end_src
 
-    如果 device-name 是标识网络接口名称的非空字符串（请参阅 network-interface-list），则仅处理在该接口上接收到的数据包。如果 device-name 为 nil（默认值），则处理在任何接口上接收到的数据包。
+    如果 device-name 是标识网络接口名称的非空字符串（请参阅 network-interface-list），则仅处理在该接口上接收到的数据包。如果 device-name 为  ~nil~ （默认值），则处理在任何接口上接收到的数据包。
 
     在某些系统上使用此选项可能需要特殊权限。
 #+begin_src emacs-lisp
   :broadcast broadcast-flag
 #+end_src
 
-    如果一个数据报进程的broadcast-flag 为非nil，该进程将接收发送到广播地址的数据报包，并且能够将数据包发送到广播地址。对于流连接，这将被忽略。
+    如果一个数据报进程的broadcast-flag 为非 ~nil~ ，该进程将接收发送到广播地址的数据报包，并且能够将数据包发送到广播地址。对于流连接，这将被忽略。
 #+begin_src emacs-lisp
   :dontroute dontroute-flag
 #+end_src
 
-    如果 dontroute-flag 为非 nil，则进程只能发送到与本地主机位于同一网络的主机。
+    如果 dontroute-flag 为非  ~nil~ ，则进程只能发送到与本地主机位于同一网络的主机。
 #+begin_src emacs-lisp
   :keepalive keepalive-flag
 #+end_src
 
-    如果流连接的 keepalive-flag 为非 nil，则启用低级 keep-alive 消息的交换。
+    如果流连接的 keepalive-flag 为非  ~nil~ ，则启用低级 keep-alive 消息的交换。
 #+begin_src emacs-lisp
   :linger linger-arg
 #+end_src
 
-    如果 linger-arg 不为零，则在删除之前等待连接上所有排队数据包的成功传输（请参阅delete-process）。如果 linger-arg 是一个整数，它指定在关闭连接之前等待发送排队数据包的最长时间（以秒为单位）。默认为 nil，表示进程被删除时丢弃未发送的排队数据包。
+    如果 linger-arg 不为零，则在删除之前等待连接上所有排队数据包的成功传输（请参阅delete-process）。如果 linger-arg 是一个整数，它指定在关闭连接之前等待发送排队数据包的最长时间（以秒为单位）。默认为  ~nil~ ，表示进程被删除时丢弃未发送的排队数据包。
 #+begin_src emacs-lisp
   :oobinline oobinline-flag
 #+end_src
 
-    如果 oobinline-flag 对于流连接不为 nil，则在正常数据流中接收带外数据。否则，忽略带外数据。
+    如果 oobinline-flag 对于流连接不为  ~nil~ ，则在正常数据流中接收带外数据。否则，忽略带外数据。
 #+begin_src emacs-lisp
   :priority priority
 #+end_src
@@ -1868,13 +1864,13 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
   :reuseaddr reuseaddr-flag
 #+end_src
 
-    如果对于流服务器进程，reuseaddr-flag 为非 nil（默认值），则允许此服务器重用特定端口号（请参阅 :service），除非此主机上的另一个进程已经在侦听该端口。如果reuseaddr-flag 为nil，则在最后一次使用该端口（主机上的任何进程）之后的一段时间内，可能无法在该端口上创建新服务器。
+    如果对于流服务器进程，reuseaddr-flag 为非  ~nil~ （默认值），则允许此服务器重用特定端口号（请参阅 :service），除非此主机上的另一个进程已经在侦听该端口。如果reuseaddr-flag 为 ~nil~ ，则在最后一次使用该端口（主机上的任何进程）之后的一段时间内，可能无法在该端口上创建新服务器。
 
 #+begin_src emacs-lisp
   Function: set-network-process-option process option value &optional no-error ¶
 #+end_src
 
-    该函数设置或修改网络进程进程的网络选项。接受的选项和值与 make-network-process 相同。如果 no-error 为非 nil，则如果 option 不是受支持的选项，则此函数返回 nil 而不是发出错误信号。如果函数成功完成，则返回 t。
+    该函数设置或修改网络进程进程的网络选项。接受的选项和值与 make-network-process 相同。如果 no-error 为非  ~nil~ ，则如果 option 不是受支持的选项，则此函数返回  ~nil~  而不是发出错误信号。如果函数成功完成，则返回 t。
 
     选项的当前设置可通过过程联系功能获得。
 
@@ -1912,7 +1908,7 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
   (:service t)
 #+end_src
 
-    如果系统可以为服务器选择端口，则非 nil。
+    如果系统可以为服务器选择端口，则非  ~nil~ 。
 
 要测试给定网络选项的可用性，请像这样使用 featurep：
 
@@ -2028,7 +2024,7 @@ Emacs 可以使用对 GnuTLS 传输层安全库的内置支持创建加密网络
 
     此函数用于对名称执行主机名查找，该名称应为纯 ASCII 字符串，否则会发出错误信号。如果您希望查找国际化主机名，请先在名称上调用 puny-encode-domain。
 
-    如果成功，则返回网络地址的 Lisp 表示列表，否则返回 nil。在后一种情况下，它还会显示错误消息，希望能解释出了什么问题。
+    如果成功，则返回网络地址的 Lisp 表示列表，否则返回  ~nil~ 。在后一种情况下，它还会显示错误消息，希望能解释出了什么问题。
 
     默认情况下，会尝试 IPv4 和 IPv6 查找。可选参数系列控制此行为，指定符号 ipv4 或 ipv6 将查找分别限制为 IPv4 和 IPv6。
 
@@ -2049,7 +2045,7 @@ Emacs 可以与串口通信。为了交互使用，Mx serial-term 打开一个�
 
     为新缓冲区中的串行端口启动终端仿真器。port 是要连接的串行端口的名称。例如，这可能是 Unix 上的 /dev/ttyS0。在 MS Windows 上，这可能是 COM1 或 \\.\COM10（Lisp 字符串中的双反斜杠）。
 
-    speed 是串行端口的速度，以比特/秒为单位。9600 是一个常见的值。缓冲区处于 Term 模式；  请参阅 The GNU Emacs Manual 中的 Term Mode，了解在该缓冲区中使用的命令。您可以在模式行菜单中更改速度和配置。如果 line-mode 不是 nil，则使用 term-line-mode；  否则使用术语原始模式。
+    speed 是串行端口的速度，以比特/秒为单位。9600 是一个常见的值。缓冲区处于 Term 模式；  请参阅 The GNU Emacs Manual 中的 Term Mode，了解在该缓冲区中使用的命令。您可以在模式行菜单中更改速度和配置。如果 line-mode 不是  ~nil~ ，则使用 term-line-mode；  否则使用术语原始模式。
 
 #+begin_src emacs-lisp
   Function: make-serial-process &rest args ¶
@@ -2086,7 +2082,7 @@ Emacs 可以与串口通信。为了交互使用，Mx serial-term 打开一个�
   :noquery query-flag
 #+end_src
 
-	 将进程查询标志初始化为query-flag。请参阅退出前查询。如果未指定，标志默认为 nil。
+	 将进程查询标志初始化为query-flag。请参阅退出前查询。如果未指定，标志默认为  ~nil~ 。
 #+begin_src emacs-lisp
   :stop bool
 #+end_src
@@ -2152,17 +2148,17 @@ Emacs 可以与串口通信。为了交互使用，Mx serial-term 打开一个�
   :speed speed
 #+end_src
 
-	 串行端口的速度（以每秒位数为单位），即波特率。该值可以是任何数字，但大多数串行端口仅在 1200 和 115200 之间的几个定义值下工作，其中 9600 是最常见的值。如果 speed 为 nil，该函数将忽略所有其他参数并且不配置端口。这可能对特殊的串行端口有用，例如蓝牙到串行转换器，只能通过通过连接发送的 ~AT~ 命令进行配置。速度的 nil 值仅对先前调用 make-serial-process 或 serial-term 已打开的连接有效。
+	 串行端口的速度（以每秒位数为单位），即波特率。该值可以是任何数字，但大多数串行端口仅在 1200 和 115200 之间的几个定义值下工作，其中 9600 是最常见的值。如果 speed 为  ~nil~ ，该函数将忽略所有其他参数并且不配置端口。这可能对特殊的串行端口有用，例如蓝牙到串行转换器，只能通过通过连接发送的 ~AT~ 命令进行配置。速度的  ~nil~  值仅对先前调用 make-serial-process 或 serial-term 已打开的连接有效。
 #+begin_src emacs-lisp
   :bytesize bytesize
 #+end_src
 
-	 每个字节的位数，可以是 7 或 8。如果未给定字节大小或为 nil，则默认为 8。
+	 每个字节的位数，可以是 7 或 8。如果未给定字节大小或为  ~nil~ ，则默认为 8。
 #+begin_src emacs-lisp
   :parity parity
 #+end_src
 
-	 该值可以是 nil（不使用奇偶校验）、符号奇数（使用奇校验）或偶数符号（使用偶校验）。如果没有给出奇偶校验，则默认为无奇偶校验。
+	 该值可以是  ~nil~ （不使用奇偶校验）、符号奇数（使用奇校验）或偶数符号（使用偶校验）。如果没有给出奇偶校验，则默认为无奇偶校验。
 #+begin_src emacs-lisp
   :stopbits stopbits
 #+end_src
@@ -2172,7 +2168,7 @@ Emacs 可以与串口通信。为了交互使用，Mx serial-term 打开一个�
   :flowcontrol flowcontrol
 #+end_src
 
-	 用于此连接的流控类型，可以是 nil（不使用流控）、符号 hw（使用 RTS/CTS 硬件流控）或符号 sw（使用 XON/XOFF 软件流控） .  如果没有给出流量控制，则默认为无流量控制。
+	 用于此连接的流控类型，可以是  ~nil~ （不使用流控）、符号 hw（使用 RTS/CTS 硬件流控）或符号 sw（使用 XON/XOFF 软件流控） .  如果没有给出流量控制，则默认为无流量控制。
 
     在内部，make-serial-process 调用 serial-process-configure 进行串口的初始配置。
 
@@ -2239,7 +2235,7 @@ Emacs 可以与串口通信。为了交互使用，Mx serial-term 打开一个�
   fill len
 #+end_src
 
-    len 个字节仅用作填充符。在打包时，这些字节保持不变，这通常意味着它们保持为零。解包时，这只是返回 nil。
+    len 个字节仅用作填充符。在打包时，这些字节保持不变，这通常意味着它们保持为零。解包时，这只是返回  ~nil~ 。
 #+begin_src emacs-lisp
   align len
 #+end_src
@@ -2302,7 +2298,7 @@ Emacs 可以与串口通信。为了交互使用，Mx serial-term 打开一个�
   Function: bindat-pack type struct &optional raw idx ¶
 #+end_src
 
-    此函数从 alist 结构中的数据返回一个根据类型打包的字节数组。它通常从头开始创建并填充一个新的字节数组。但是，如果 raw 不为 nil，则它指定要打包的预分配单字节字符串或向量。如果 idx 不是 nil，它指定打包成 raw 的起始偏移量。
+    此函数从 alist 结构中的数据返回一个根据类型打包的字节数组。它通常从头开始创建并填充一个新的字节数组。但是，如果 raw 不为  ~nil~ ，则它指定要打包的预分配单字节字符串或向量。如果 idx 不是  ~nil~ ，它指定打包成 raw 的起始偏移量。
 
     预分配时，应确保 (length raw) 满足或超过总长度以避免超出范围的错误。
 

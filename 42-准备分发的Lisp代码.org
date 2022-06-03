@@ -44,7 +44,7 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。包�
 
 安装后，已安装的包被加载：Emacs 将包的内容目录添加到 load-path，并评估 name-autoloads.el 中的自动加载定义。
 
-每当 Emacs 启动时，它会自动调用函数 package-activate-all 以使已安装的包可用于当前会话。这是在加载早期初始化文件之后但在加载常规初始化文件之前完成的（请参阅摘要：启动时的操作序列）。如果在 early init 文件中将用户选项 package-enable-at-startup 设置为 nil，则不会自动使包可用。
+每当 Emacs 启动时，它会自动调用函数 package-activate-all 以使已安装的包可用于当前会话。这是在加载早期初始化文件之后但在加载常规初始化文件之前完成的（请参阅摘要：启动时的操作序列）。如果在 early init 文件中将用户选项 package-enable-at-startup 设置为  ~nil~ ，则不会自动使包可用。
 
 #+begin_src emacs-lisp
   Function: package-activate-all ¶
@@ -60,7 +60,7 @@ Emacs 提供了一种将 Emacs Lisp 代码分发给用户的标准方法。包�
 
     该函数初始化 Emacs 内部记录安装了哪些包，然后调用 package-activate-all。
 
-    可选参数 no-activate，如果非 nil，会导致 Emacs 更新其已安装包的记录，但实际上并不使它们可用。
+    可选参数 no-activate，如果非  ~nil~ ，会导致 Emacs 更新其已安装包的记录，但实际上并不使它们可用。
 
 ** 42.2 简单包
 一个简单的包由一个 Emacs Lisp 源文件组成。该文件必须符合 Emacs Lisp 库头文件约定（请参阅 Emacs 库的约定头文件）。包的属性取自各种标头，如下例所示：

@@ -60,24 +60,24 @@
   Function: markerp object ¶
 #+end_src
 
-    如果 object 是标记，此函数返回 t，否则返回 nil。请注意，整数不是标记，即使许多函数将接受标记或整数。
+    如果 object 是标记，此函数返回 t，否则返回  ~nil~ 。请注意，整数不是标记，即使许多函数将接受标记或整数。
 
 #+begin_src emacs-lisp
   Function: integer-or-marker-p object ¶
 #+end_src
 
-    如果 object 是整数或标记，此函数返回 t，否则返回 nil。
+    如果 object 是整数或标记，此函数返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: number-or-marker-p object ¶
 #+end_src
 
-    如果 object 是数字（整数或浮点数）或标记，则此函数返回 t，否则返回 nil。
+    如果 object 是数字（整数或浮点数）或标记，则此函数返回 t，否则返回  ~nil~ 。
 
 ** 32.3 创建标记的函数
 当你创建一个新的标记时，你可以让它不指向任何地方，或者指向点的当前位置，或者指向缓冲区可访问部分的开始或结束，或者指向与另一个给定标记相同的位置。
 
-接下来的四个函数都返回插入类型为 nil 的标记。请参阅标记插入类型。
+接下来的四个函数都返回插入类型为  ~nil~  的标记。请参阅标记插入类型。
 
 #+begin_src emacs-lisp
   Function: make-marker ¶
@@ -168,13 +168,13 @@
   Function: marker-position marker ¶
 #+end_src
 
-    此函数返回标记指向的位置，如果它不指向任何地方，则返回 nil。
+    此函数返回标记指向的位置，如果它不指向任何地方，则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: marker-buffer marker ¶
 #+end_src
 
-    此函数返回标记指向的缓冲区，如果它不指向任何地方，则返回 nil。
+    此函数返回标记指向的缓冲区，如果它不指向任何地方，则返回  ~nil~ 。
 
     #+begin_src emacs-lisp
       (setq m (make-marker))
@@ -204,7 +204,7 @@
   Function: set-marker-insertion-type marker type ¶
 #+end_src
 
-    该函数将marker标记的插入类型设置为type。如果 type 为 t，则在其位置插入文本时，标记将前进。如果 type 为 nil，则在此处插入文本时标记不会前进。
+    该函数将marker标记的插入类型设置为type。如果 type 为 t，则在其位置插入文本时，标记将前进。如果 type 为  ~nil~ ，则在此处插入文本时标记不会前进。
 
 #+begin_src emacs-lisp
   Function: marker-insertion-type marker ¶
@@ -212,7 +212,7 @@
 
     此函数报告当前插入类型的标记。
 
-所有创建标记而不接受指定插入类型的参数的函数，都使用插入类型 nil 创建它们（请参阅创建标记的函数）。此外，默认情况下，该标记的插入类型为 nil。
+所有创建标记而不接受指定插入类型的参数的函数，都使用插入类型  ~nil~  创建它们（请参阅创建标记的函数）。此外，默认情况下，该标记的插入类型为  ~nil~ 。
 
 ** 32.6 移动标记位置
 本节介绍如何更改现有标记的位置。当你这样做时，确保你知道标记是否在你的程序之外使用，如果是，移动它会产生什么效果——否则，在 Emacs 的其他部分可能会发生令人困惑的事情。
@@ -223,7 +223,7 @@
 
     此函数将标记移动到缓冲区中的位置。如果未提供缓冲区，则默认为当前缓冲区。
 
-    如果 position 为 nil 或标记不指向任何地方，则标记设置为不指向任何地方。
+    如果 position 为  ~nil~  或标记不指向任何地方，则标记设置为不指向任何地方。
 
     返回的值是标记。
     #+begin_src emacs-lisp
@@ -269,9 +269,9 @@
 #+begin_src emacs-lisp
   Function: mark &optional force ¶
 #+end_src
-    此函数以整数形式返回当前缓冲区的标记位置，如果此缓冲区中没有设置标记，则返回 nil。
+    此函数以整数形式返回当前缓冲区的标记位置，如果此缓冲区中没有设置标记，则返回  ~nil~ 。
 
-    如果启用了 Transient Mark 模式，并且 mark-even-if-inactive 为 nil，则如果 mark 处于非活动状态，则 mark 会发出错误信号。但是，如果 force 不为零，则标记忽略标记的不活动，并返回标记位置（或零）。
+    如果启用了 Transient Mark 模式，并且 mark-even-if-inactive 为  ~nil~ ，则如果 mark 处于非活动状态，则 mark 会发出错误信号。但是，如果 force 不为零，则标记忽略标记的不活动，并返回标记位置（或零）。
 
 #+begin_src emacs-lisp
   Function: mark-marker ¶
@@ -312,7 +312,7 @@
   Function: push-mark &optional position nomsg activate ¶
 #+end_src
 
-    此函数将当前缓冲区的标记设置为位置，并将前一个标记的副本推送到标记环上。如果 position 为 nil，则使用 point 的值。
+    此函数将当前缓冲区的标记设置为位置，并将前一个标记的副本推送到标记环上。如果 position 为  ~nil~ ，则使用 point 的值。
 
     按钮标记功能通常不会激活标记。为此，请为参数激活指定 t。
 
@@ -338,7 +338,7 @@
   User Option: mark-even-if-inactive ¶
 #+end_src
 
-    如果它不是 nil，Lisp 程序和 Emacs 用户可以使用该标记，即使它处于非活动状态。此选项影响瞬态标记模式的行为。当该选项为非 nil 时，标记的停用会关闭区域突出显示，但使用该标记的命令的行为就像该标记仍处于活动状态一样。
+    如果它不是  ~nil~ ，Lisp 程序和 Emacs 用户可以使用该标记，即使它处于非活动状态。此选项影响瞬态标记模式的行为。当该选项为非  ~nil~  时，标记的停用会关闭区域突出显示，但使用该标记的命令的行为就像该标记仍处于活动状态一样。
 
 #+begin_src emacs-lisp
   Variable: deactivate-mark ¶
@@ -346,7 +346,7 @@
 
     如果编辑器命令将此变量设置为非零，则编辑器命令循环会在命令返回后停用标记（如果启用了瞬态标记模式）。所有更改缓冲区的原语都设置了 deactivate-mark，以在命令完成时停用该标记。设置此变量使其成为缓冲区本地。
 
-    要编写修改缓冲区而不导致在命令末尾停用标记的 Lisp 代码，请将 deactivate-mark 绑定到执行修改的代码周围的 nil 。例如：
+    要编写修改缓冲区而不导致在命令末尾停用标记的 Lisp 代码，请将 deactivate-mark 绑定到执行修改的代码周围的  ~nil~  。例如：
 
     #+begin_src emacs-lisp
       (let (deactivate-mark)
@@ -357,7 +357,7 @@
   Function: deactivate-mark &optional force ¶
 #+end_src
 
-    如果启用了 Transient Mark 模式或 force 为非 nil，则此函数停用标记并运行正常的钩子 deactivate-mark-hook。否则，它什么也不做。
+    如果启用了 Transient Mark 模式或 force 为非  ~nil~ ，则此函数停用标记并运行正常的钩子 deactivate-mark-hook。否则，它什么也不做。
 
 #+begin_src emacs-lisp
   Variable: mark-active ¶
@@ -380,7 +380,7 @@
 
     此函数实现点运动命令的移位选择行为。请参阅 GNU Emacs 手册中的 Shift 选择。每当在其交互规范中调用带有 '^' 字符的命令时，在命令本身执行之前，它就会被 Emacs 命令循环自动调用（参见 ^）。
 
-    如果 shift-select-mode 不是 nil 并且当前命令是通过 shift 转换调用的（请参阅 shift-translation），则此函数设置标记并临时激活该区域，除非该区域已经以这种方式临时激活。否则，如果该区域已被临时激活，它会停用标记并将变量瞬态标记模式恢复为其早期值。
+    如果 shift-select-mode 不是  ~nil~  并且当前命令是通过 shift 转换调用的（请参阅 shift-translation），则此函数设置标记并临时激活该区域，除非该区域已经以这种方式临时激活。否则，如果该区域已被临时激活，它会停用标记并将变量瞬态标记模式恢复为其早期值。
 
 #+begin_src emacs-lisp
   Variable: mark-ring ¶
@@ -406,7 +406,7 @@
 ** 32.8 区域
 点和标记之间的文本称为区域。各种功能对由点和标记分隔的文本进行操作，但这里只描述与区域本身特别相关的那些功能。
 
-如果标记没有指向任何地方，则接下来的两个函数会发出错误信号。如果启用了 Transient Mark 模式并且 mark-even-if-inactive 为 nil，则如果标记处于非活动状态，它们也会发出错误信号。
+如果标记没有指向任何地方，则接下来的两个函数会发出错误信号。如果启用了 Transient Mark 模式并且 mark-even-if-inactive 为  ~nil~ ，则如果标记处于非活动状态，它们也会发出错误信号。
 
 #+begin_src emacs-lisp
   Function: region-beginning ¶
@@ -428,4 +428,4 @@
 
     如果启用了瞬态标记模式、标记处于活动状态并且缓冲区中有有效区域，则此函数返回 t。当标记处于活动状态时，此功能旨在由在区域上操作的命令使用，而不是在点附近的文本上。
 
-    如果区域的大小不为零，或者用户选项 use-empty-active-region 为非 nil（默认情况下为 nil），则该区域是有效的。功能 region-active-p 类似于 use-region-p，但认为所有区域都是有效的。在大多数情况下，您不应该使用 region-active-p，因为如果区域为空，则通常更适合在点上操作。
+    如果区域的大小不为零，或者用户选项 use-empty-active-region 为非  ~nil~ （默认情况下为  ~nil~ ），则该区域是有效的。功能 region-active-p 类似于 use-region-p，但认为所有区域都是有效的。在大多数情况下，您不应该使用 region-active-p，因为如果区域为空，则通常更适合在点上操作。

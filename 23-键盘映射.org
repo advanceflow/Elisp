@@ -34,7 +34,7 @@
 
 单个键映射直接指定各个事件的定义。当键序列由单个事件组成时，它在键映射中的绑定就是该事件的键映射定义。一个较长的键序列的绑定是通过一个迭代过程找到的：首先找到第一个事件的定义（它本身必须是一个键映射）；  然后在该键映射中找到第二个事件的定义，依此类推，直到键序列中的所有事件都已被处理。
 
-如果键序列的绑定是一个键映射，我们称该键序列为前缀键。否则，我们称它为一个完整的键（因为它不能再添加任何事件）。如果绑定为 nil，我们称键未定义。前缀键的示例是 Cc、Cx 和 Cx 4。定义的完整键的示例是 X、RET 和 Cx 4 Cf。未定义的完整键的示例是 Cx Cg 和 Cc 3。有关详细信息，请参阅前缀键。
+如果键序列的绑定是一个键映射，我们称该键序列为前缀键。否则，我们称它为一个完整的键（因为它不能再添加任何事件）。如果绑定为  ~nil~ ，我们称键未定义。前缀键的示例是 Cc、Cx 和 Cx 4。定义的完整键的示例是 X、RET 和 Cx 4 Cf。未定义的完整键的示例是 Cx Cg 和 Cc 3。有关详细信息，请参阅前缀键。
 
 查找键序列绑定的规则假定中间绑定（为最后一个事件之前的事件找到）都是键映射；  如果不是这样，则事件序列不会形成一个单元——它实际上不是一个键序列。换句话说，从任何有效键序列的末尾删除一个或多个事件必须始终产生一个前缀键。例如，Cf Cn 不是键序列；  Cf 不是前缀键，因此以 Cf 开头的较长序列不能是键序列。
 
@@ -71,7 +71,7 @@
   (t . binding) ¶
 #+end_src
 
-    这指定了一个默认的键绑定；  任何不受键映射其他元素绑定的事件都被赋予绑定作为其绑定。默认绑定允许键映射绑定所有可能的事件类型，而不必枚举所有事件类型。具有默认绑定的键映射完全屏蔽任何较低优先级的键映射，但显式绑定到 nil 的事件除外（见下文）。
+    这指定了一个默认的键绑定；  任何不受键映射其他元素绑定的事件都被赋予绑定作为其绑定。默认绑定允许键映射绑定所有可能的事件类型，而不必枚举所有事件类型。具有默认绑定的键映射完全屏蔽任何较低优先级的键映射，但显式绑定到  ~nil~  的事件除外（见下文）。
 #+begin_src emacs-lisp
   char-table
 #+end_src
@@ -93,7 +93,7 @@
 
     如果一个键映射的元素本身就是一个键映射，那么它就好像这个内部键映射被内联在外部键映射中一样。这用于多重继承，例如在 make-composed-keymap 中。
 
-当绑定为 nil 时，它不构成定义，但它确实优先于默认绑定或父键映射中的绑定。另一方面， nil 的绑定不会覆盖优先级较低的键映射；  因此，如果本地映射提供 nil 绑定，Emacs 将使用来自全局映射的绑定。
+当绑定为  ~nil~  时，它不构成定义，但它确实优先于默认绑定或父键映射中的绑定。另一方面，  ~nil~  的绑定不会覆盖优先级较低的键映射；  因此，如果本地映射提供  ~nil~  绑定，Emacs 将使用来自全局映射的绑定。
 
 键映射不直接记录元字符的绑定。取而代之的是，元字符在键查找时被视为两个字符的序列，其中第一个字符是 ESC（或任何当前元前缀字符的值）。因此，键 Ma 在内部表示为 ESC a，并且它的全局绑定在 esc-map 中的 a 插槽中找到（请参阅前缀键）。
 
@@ -129,7 +129,7 @@
   Function: keymapp object ¶
 #+end_src
 
-    如果 object 是 keymap，则此函数返回 t，否则返回 nil。更准确地说，此函数测试其 CAR 为 keymap 的列表，或测试其函数定义满足 keymapp 的符号。
+    如果 object 是 keymap，则此函数返回 t，否则返回  ~nil~ 。更准确地说，此函数测试其 CAR 为 keymap 的列表，或测试其函数定义满足 keymapp 的符号。
 
     #+begin_src emacs-lisp
       (keymapp '(keymap))
@@ -162,7 +162,7 @@
   Function: make-keymap &optional prompt ¶
 #+end_src
 
-    此函数创建并返回一个新的完整键盘映射。该键映射包含一个字符表（请参阅字符表），其中包含所有字符的插槽，没有修饰符。新的键盘映射最初将所有这些字符绑定到 nil，并且不绑定任何其他类型的事件。参数 prompt 指定一个提示字符串，如 make-sparse-keymap 中一样。
+    此函数创建并返回一个新的完整键盘映射。该键映射包含一个字符表（请参阅字符表），其中包含所有字符的插槽，没有修饰符。新的键盘映射最初将所有这些字符绑定到  ~nil~ ，并且不绑定任何其他类型的事件。参数 prompt 指定一个提示字符串，如 make-sparse-keymap 中一样。
 
     #+begin_src emacs-lisp
       (make-keymap)
@@ -220,13 +220,13 @@
   Function: keymap-parent keymap ¶
 #+end_src
 
-    这将返回 keymap 的父 keymap。如果 keymap 没有父级，则 keymap-parent 返回 nil。
+    这将返回 keymap 的父 keymap。如果 keymap 没有父级，则 keymap-parent 返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: set-keymap-parent keymap parent ¶
 #+end_src
 
-    这会将 keymap 的父 keymap 设置为 parent，并返回 parent。如果 parent 为 nil，则此函数根本没有给 keymap 提供父级。
+    这会将 keymap 的父 keymap 设置为 parent，并返回 parent。如果 parent 为  ~nil~ ，则此函数根本没有给 keymap 提供父级。
 
     如果键映射具有子映射（前缀键的绑定），它们也会收到新的父键映射，这些键映射反映了父为这些前缀键指定的内容。
 
@@ -237,7 +237,7 @@
     map)
 #+end_src
 
-非稀疏键映射也可以有父级，但这不是很有用。非稀疏键映射总是为每个没有修饰符位的数字字符代码指定一些绑定，即使它是 nil，所以这些字符的绑定永远不会从父键映射继承。
+非稀疏键映射也可以有父级，但这不是很有用。非稀疏键映射总是为每个没有修饰符位的数字字符代码指定一些绑定，即使它是  ~nil~ ，所以这些字符的绑定永远不会从父键映射继承。
 
 有时你想创建一个从多个地图继承的键映射。您可以为此使用函数 make-composed-keymap 。
 
@@ -245,7 +245,7 @@
   Function: make-composed-keymap maps &optional parent ¶
 #+end_src
 
-    此函数返回一个由现有键映射映射组成的新键映射，并且可以选择从父键映射父级继承。maps 可以是单个 keymap 或多个列表。在生成的新映射中查找键时，Emacs 依次在每个映射中搜索，然后在父映射中搜索，在第一个匹配时停止。任何一个映射中的 nil 绑定都会覆盖父映射中的任何绑定，但它不会覆盖任何其他映射中的任何非 nil 绑定。
+    此函数返回一个由现有键映射映射组成的新键映射，并且可以选择从父键映射父级继承。maps 可以是单个 keymap 或多个列表。在生成的新映射中查找键时，Emacs 依次在每个映射中搜索，然后在父映射中搜索，在第一个匹配时停止。任何一个映射中的  ~nil~  绑定都会覆盖父映射中的任何绑定，但它不会覆盖任何其他映射中的任何非  ~nil~  绑定。
 
 例如，这里是 Emacs 如何设置 help-mode-map 的父级，以便它继承自 button-buffer-map 和 special-mode-map：
 
@@ -284,8 +284,6 @@
 
 在下面的示例中，我们将 Cp 作为本地键映射中的前缀键，这样 Cp 与 Cx 相同。那么 Cp Cf 的绑定就是函数 find-file，就像 Cx Cf 一样。在任何活动键映射中都找不到键序列 Cp 6。
 #+begin_src emacs-lisp
-
-
   (use-local-map (make-sparse-keymap))
       ⇒ nil
 
@@ -307,9 +305,9 @@
 
     此函数准备用作前缀键绑定的符号：它创建一个稀疏键映射并将其存储为符号的函数定义。随后将键序列绑定到符号将使该键序列成为前缀键。返回值是符号。
 
-    此函数还将符号设置为变量，键映射为其值。但如果 mapvar 不是 nil，它会将 mapvar 设置为变量。
+    此函数还将符号设置为变量，键映射为其值。但如果 mapvar 不是  ~nil~ ，它会将 mapvar 设置为变量。
 
-    如果 prompt 不为 nil，则它将成为键盘映射的整体提示字符串。应为菜单键映射提供提示字符串（请参阅定义菜单）。
+    如果 prompt 不为  ~nil~ ，则它将成为键盘映射的整体提示字符串。应为菜单键映射提供提示字符串（请参阅定义菜单）。
 
 ** 23.7 活动键盘映射
 Emacs 包含许多键盘映射，但在任何时候只有少数键盘映射处于活动状态。当 Emacs 接收到用户输入时，它会转换输入事件（请参阅 Keymaps 以了解转换事件序列），并在活动键盘映射中查找键绑定。
@@ -373,7 +371,7 @@ Emacs 包含许多键盘映射，但在任何时候只有少数键盘映射处�
 #+end_src
 在这里，find-in 和 find-in-any 是伪函数，它们分别在一个键映射和键映射列表中进行搜索。请注意，set-transient-map 函数通过设置覆盖终端本地映射来工作（请参阅控制活动键盘映射）。
 
-在上面的伪代码中，如果按键序列以鼠标事件（请参阅鼠标事件）开始，则使用该事件的位置而不是点，并且使用事件的缓冲区而不是当前缓冲区。特别是，这会影响键映射和本地映射属性的查找方式。如果鼠标事件发生在嵌入了 display、before-string 或 after-string 属性的字符串上（请参阅具有特殊含义的属性），并且该字符串具有非 nil 键映射或本地映射属性，它会覆盖相应的属性在底层缓冲区文本中（即，底层文本指定的属性被忽略）。
+在上面的伪代码中，如果按键序列以鼠标事件（请参阅鼠标事件）开始，则使用该事件的位置而不是点，并且使用事件的缓冲区而不是当前缓冲区。特别是，这会影响键映射和本地映射属性的查找方式。如果鼠标事件发生在嵌入了 display、before-string 或 after-string 属性的字符串上（请参阅具有特殊含义的属性），并且该字符串具有非  ~nil~  键映射或本地映射属性，它会覆盖相应的属性在底层缓冲区文本中（即，底层文本指定的属性被忽略）。
 
 当在其中一个活动键映射中找到键绑定，并且该绑定是命令时，搜索结束——命令被执行。但是，如果绑定是带有值或字符串的符号，Emacs 会用变量的值或字符串替换输入的键序列，并重新开始搜索活动的键映射。请参阅密钥查找。
 
@@ -405,7 +403,7 @@ Emacs 包含许多键盘映射，但在任何时候只有少数键盘映射处�
   Function: current-local-map ¶
 #+end_src
 
-    此函数返回当前缓冲区的本地键盘映射，如果没有则返回 nil。在以下示例中，*scratch* 缓冲区的键映射（使用 Lisp 交互模式）是一个稀疏键映射，其中 ESC 的条目 ASCII 代码 27 是另一个稀疏键映射。
+    此函数返回当前缓冲区的本地键盘映射，如果没有则返回  ~nil~ 。在以下示例中，*scratch* 缓冲区的键映射（使用 Lisp 交互模式）是一个稀疏键映射，其中 ESC 的条目 ASCII 代码 27 是另一个稀疏键映射。
 
     #+begin_src emacs-lisp
 
@@ -441,7 +439,7 @@ current-local-map 返回对本地键盘映射的引用，而不是它的副本�
   Function: use-local-map keymap ¶
 #+end_src
 
-    此函数使 keymap 成为当前缓冲区的新本地 keymap。如果 keymap 为 nil，则缓冲区没有本地 keymap。use-local-map 返回 nil。大多数主要模式命令都使用此功能。
+    此函数使 keymap 成为当前缓冲区的新本地 keymap。如果 keymap 为  ~nil~ ，则缓冲区没有本地 keymap。use-local-map 返回  ~nil~ 。大多数主要模式命令都使用此功能。
 
 #+begin_src emacs-lisp
   Variable: minor-mode-map-alist ¶
@@ -490,7 +488,7 @@ current-local-map 返回对本地键盘映射的引用，而不是它的副本�
   Variable: overriding-local-map-menu-flag ¶
 #+end_src
 
-    如果此变量非零，overriding-local-map 或 overriding-terminal-local-map 的值会影响菜单栏的显示。默认值为 nil，因此这些地图变量对菜单栏没有影响。
+    如果此变量非零，overriding-local-map 或 overriding-terminal-local-map 的值会影响菜单栏的显示。默认值为  ~nil~ ，因此这些地图变量对菜单栏没有影响。
 
     请注意，这两个映射变量确实会影响使用菜单栏输入的键序列的执行，即使它们不影响菜单栏的显示。因此，如果出现菜单栏键序列，则应在查找和执行该键序列之前清除变量。无论如何，使用变量的模式通常都会这样做；  通常，他们通过 ~未读~ 并退出来响应他们不处理的事件。
 
@@ -533,7 +531,7 @@ current-local-map 返回对本地键盘映射的引用，而不是它的副本�
   nil ¶
 #+end_src
 
-    nil 表示到目前为止在查找中使用的事件形成了一个未定义的键。当 keymap 根本没有提及事件类型并且没有默认绑定时，这等效于该事件类型的 nil 绑定。
+     ~nil~  表示到目前为止在查找中使用的事件形成了一个未定义的键。当 keymap 根本没有提及事件类型并且没有默认绑定时，这等效于该事件类型的  ~nil~  绑定。
 #+begin_src emacs-lisp
   command ¶
 #+end_src
@@ -568,14 +566,14 @@ current-local-map 返回对本地键盘映射的引用，而不是它的副本�
 
     符号 undefined 值得特别一提：它表示将键视为未定义。严格来说，key是定义好的，它的绑定就是命令undefined；  但是该命令执行与未定义键自动执行的相同操作：它响铃（通过调用 ding）但不表示错误。
 
-    undefined 用于本地键映射以覆盖全局键绑定并使键在本地未定义。nil 的本地绑定将无法做到这一点，因为它不会覆盖全局绑定。
+    undefined 用于本地键映射以覆盖全局键绑定并使键在本地未定义。 ~nil~  的本地绑定将无法做到这一点，因为它不会覆盖全局绑定。
 #+begin_src emacs-lisp
   anything else
 #+end_src
 
     如果找到任何其他类型的对象，则到目前为止在查找中使用的事件形成一个完整的键，并且该对象是它的绑定，但该绑定不能作为命令执行。
 
-简而言之，键映射条目可以是键映射、命令、键盘宏、通向其中之一的符号或 nil。
+简而言之，键映射条目可以是键映射、命令、键盘宏、通向其中之一的符号或  ~nil~ 。
 
 ** 23.11 键查找函数
 以下是与键查找有关的函数和变量。
@@ -599,7 +597,7 @@ current-local-map 返回对本地键盘映射的引用，而不是它的副本�
     #+end_src
     如果根据 keymap 中指定的前缀键，字符串或向量键不是有效的键序列，则它必须太长并且末尾有额外的事件不适合单个键序列。然后 value 是一个数字，即构成完整 key 的 key 前面的事件数。
 
-    如果accept-defaults 不为nil，则lookup-key 会考虑默认绑定以及key 中特定事件的绑定。否则，lookup-key 仅报告特定序列键的绑定，忽略默认绑定，除非您明确询问它们。（为此，提供 t 作为 key 的元素；请参阅 Keymap 的格式。）
+    如果accept-defaults 不为 ~nil~ ，则lookup-key 会考虑默认绑定以及key 中特定事件的绑定。否则，lookup-key 仅报告特定序列键的绑定，忽略默认绑定，除非您明确询问它们。（为此，提供 t 作为 key 的元素；请参阅 Keymap 的格式。）
 
     如果 key 包含元字符（不是功能键），则该字符隐式替换为两个字符序列：元前缀字符的值，后跟相应的非元字符。因此，下面的第一个示例通过转换为第二个示例来处理。
     #+begin_src emacs-lisp
@@ -626,7 +624,7 @@ current-local-map 返回对本地键盘映射的引用，而不是它的副本�
   Function: local-key-binding key &optional accept-defaults ¶
 #+end_src
 
-    此函数返回当前本地键映射中键的绑定，如果未定义，则返回 nil。
+    此函数返回当前本地键映射中键的绑定，如果未定义，则返回  ~nil~ 。
 
     参数accept-defaults 控制检查默认绑定，如lookup-key（上图）。
 
@@ -634,7 +632,7 @@ current-local-map 返回对本地键盘映射的引用，而不是它的副本�
   Function: global-key-binding key &optional accept-defaults ¶
 #+end_src
 
-    此函数返回当前全局键映射中命令键的绑定，如果在那里未定义，则返回 nil。
+    此函数返回当前全局键映射中命令键的绑定，如果在那里未定义，则返回  ~nil~ 。
 
     参数accept-defaults 控制检查默认绑定，如lookup-key（上图）。
 
@@ -642,7 +640,7 @@ current-local-map 返回对本地键盘映射的引用，而不是它的副本�
   Function: minor-mode-key-binding key &optional accept-defaults ¶
 #+end_src
 
-    此函数返回 key 的所有活动次要模式绑定的列表。更准确地说，它返回一个对列表（modename . binding），其中 modename 是启用次要模式的变量，而 binding 是该模式下的键绑定。如果 key 没有次要模式绑定，则值为 nil。
+    此函数返回 key 的所有活动次要模式绑定的列表。更准确地说，它返回一个对列表（modename . binding），其中 modename 是启用次要模式的变量，而 binding 是该模式下的键绑定。如果 key 没有次要模式绑定，则值为  ~nil~ 。
 
     如果找到的第一个绑定不是前缀定义（键映射或定义为键映射的符号），则忽略来自其他次要模式的所有后续绑定，因为它们将被完全隐藏。同样，该列表省略了前缀绑定之后的非前缀绑定。
 
@@ -761,7 +759,7 @@ current-local-map 返回对本地键盘映射的引用，而不是它的副本�
        'find-file 'find-file-read-only (current-global-map))
     #+end_src
 
-    如果 oldmap 不是 nil，那会改变替换键定义的行为：oldmap 中的绑定确定要重新绑定哪些键。重新绑定仍然发生在 keymap 中，而不是 oldmap 中。因此，您可以在另一张地图的绑定控制下更改一张地图。例如，
+    如果 oldmap 不是  ~nil~ ，那会改变替换键定义的行为：oldmap 中的绑定确定要重新绑定哪些键。重新绑定仍然发生在 keymap 中，而不是 oldmap 中。因此，您可以在另一张地图的绑定控制下更改一张地图。例如，
 
 #+begin_src emacs-lisp
 (substitute-key-definition
@@ -794,9 +792,9 @@ current-local-map 返回对本地键盘映射的引用，而不是它的副本�
   Function: suppress-keymap keymap &optional nodigits ¶
 #+end_src
 
-    此函数通过将 self-insert-command 重新映射到未定义的命令来更改完整键盘映射 keymap 的内容（请参阅重新映射命令）。这具有取消定义所有打印字符的效果，因此无法正常插入文本。抑制键映射返回 nil。
+    此函数通过将 self-insert-command 重新映射到未定义的命令来更改完整键盘映射 keymap 的内容（请参阅重新映射命令）。这具有取消定义所有打印字符的效果，因此无法正常插入文本。抑制键映射返回  ~nil~ 。
 
-    如果 nodigits 为 nil，则 suppress-keymap 定义数字以运行数字参数，并定义 - 以运行否定参数。否则，它会使它们像其他打印字符一样未定义。
+    如果 nodigits 为  ~nil~ ，则 suppress-keymap 定义数字以运行数字参数，并定义 - 以运行否定参数。否则，它会使它们像其他打印字符一样未定义。
 
     抑制键映射功能不会使修改缓冲区成为不可能，因为它不会抑制诸如 yank 和quoted-insert 之类的命令。要防止对缓冲区进行任何修改，请将其设为只读（请参阅只读缓冲区）。
 
@@ -835,7 +833,7 @@ current-local-map 返回对本地键盘映射的引用，而不是它的副本�
 
 kill-line 不会重新映射到 my-other-kill-line。相反，如果一个普通的键绑定指定了 kill-line，它会重新映射到 my-kill-line；  如果普通绑定指定了 my-kill-line，它会重新映射到 my-other-kill-line。
 
-要撤消命令的重新映射，请将其重新映射为 nil；  例如，
+要撤消命令的重新映射，请将其重新映射为  ~nil~ ；  例如，
 
 #+begin_src emacs-lisp
   (define-key my-mode-map [remap kill-line] nil)
@@ -845,7 +843,7 @@ kill-line 不会重新映射到 my-other-kill-line。相反，如果一个普通
   Function: command-remapping command &optional position keymaps ¶
 #+end_src
 
-    给定当前活动的键盘映射，此函数返回命令（符号）的重新映射。如果 command 没有重新映射（这是通常的情况），或者不是符号，则函数返回 nil。position 可以选择指定缓冲区位置或事件位置来确定要使用的键映射，如键绑定。
+    给定当前活动的键盘映射，此函数返回命令（符号）的重新映射。如果 command 没有重新映射（这是通常的情况），或者不是符号，则函数返回  ~nil~ 。position 可以选择指定缓冲区位置或事件位置来确定要使用的键映射，如键绑定。
 
     如果可选参数 keymaps 不为零，则它指定要搜索的键盘映射列表。如果 position 不为零，则忽略此参数。
 
@@ -890,7 +888,7 @@ kill-line 不会重新映射到 my-other-kill-line。相反，如果一个普通
 
 您可以将 input-decode-map、local-function-key-map 和 key-translation-map 用于更多的简单别名，方法是使用函数而不是键序列作为键的翻译。然后调用这个函数来计算那个键的翻译。
 
-键翻译函数接收一个参数，它是在 read-key-sequence 中指定的提示符，如果编辑器命令循环正在读取键序列，则为 nil。在大多数情况下，您可以忽略提示值。
+键翻译函数接收一个参数，它是在 read-key-sequence 中指定的提示符，如果编辑器命令循环正在读取键序列，则为  ~nil~ 。在大多数情况下，您可以忽略提示值。
 
 如果函数本身读取输入，它可以具有改变随后事件的效果。例如，下面是如何定义 Cc h 以将后面的字符转换为 Hyper 字符：
 #+begin_src emacs-lisp
@@ -1090,7 +1088,7 @@ kill-line 不会重新映射到 my-other-kill-line。相反，如果一个普通
 
     参数命令可以是任何对象；  它与使用 eq 的所有键盘映射条目进行比较。
 
-    如果 keymap 为 nil，则使用的映射是当前活动的 keymap，忽略 overriding-local-map（即假装其值为 nil）。如果 keymap 是 keymap，则搜索的映射是 keymap 和全局 keymap。如果 keymap 是 keymap 列表，则仅搜索这些 keymap。
+    如果 keymap 为  ~nil~ ，则使用的映射是当前活动的 keymap，忽略 overriding-local-map（即假装其值为  ~nil~ ）。如果 keymap 是 keymap，则搜索的映射是 keymap 和全局 keymap。如果 keymap 是 keymap 列表，则仅搜索这些 keymap。
 
     通常最好使用 overriding-local-map 作为 keymap 的表达式。然后 where-is-internal 精确搜索活动的键盘映射。要仅搜索全局映射，请将值 (keymap)（一个空的 keymap）作为 keymap 传递。
 
@@ -1102,10 +1100,10 @@ kill-line 不会重新映射到 my-other-kill-line。相反，如果一个普通
 
     如果命令 other-command 重新映射到命令：
 
-	 如果 no-remap 为 nil，则查找 other-command 的绑定并将它们视为它们也是 command 的绑定。如果 no-remap 不为零，则将向量 [remap other-command] 包含在可能的键序列列表中，而不是查找那些绑定。
+	 如果 no-remap 为  ~nil~ ，则查找 other-command 的绑定并将它们视为它们也是 command 的绑定。如果 no-remap 不为零，则将向量 [remap other-command] 包含在可能的键序列列表中，而不是查找那些绑定。
     如果命令被重新映射到其他命令：
 
-	 如果 no-remap 为 nil，则返回 other-command 而不是 command 的绑定。如果 no-remap 不为零，则返回 command 的绑定，忽略它被重新映射的事实。
+	 如果 no-remap 为  ~nil~ ，则返回 other-command 而不是 command 的绑定。如果 no-remap 不为零，则返回 command 的绑定，忽略它被重新映射的事实。
 
 #+begin_src emacs-lisp
   Command: describe-bindings &optional prefix buffer-or-name ¶
@@ -1113,11 +1111,11 @@ kill-line 不会重新映射到 my-other-kill-line。相反，如果一个普通
 
     此函数创建所有当前键绑定的列表，并将其显示在名为 *Help* 的缓冲区中。文本按模式分组——首先是次要模式，然后是主要模式，然后是全局绑定。
 
-    如果 prefix 不是 nil，它应该是一个前缀键；  那么该列表仅包含以前缀开头的键。
+    如果 prefix 不是  ~nil~ ，它应该是一个前缀键；  那么该列表仅包含以前缀开头的键。
 
     当具有连续 ASCII 码的多个字符具有相同定义时，它们会一起显示，如 'firstchar..lastchar'。在这种情况下，您需要知道 ASCII 代码才能理解这意味着哪些字符。例如，在默认全局映射中，字符 ~SPC .. ~~ 由单行描述。SPC是ASCII 32，~是ASCII 126，它们之间的字符包括所有正常的打印字符，（例如，字母、数字、标点符号等）；  所有这些字符都绑定到 self-insert-command。
 
-    如果 buffer-or-name 不为 nil，则它应该是缓冲区或缓冲区名称。然后 describe-bindings 列出该缓冲区的绑定，而不是当前缓冲区的绑定。
+    如果 buffer-or-name 不为  ~nil~ ，则它应该是缓冲区或缓冲区名称。然后 describe-bindings 列出该缓冲区的绑定，而不是当前缓冲区的绑定。
 
 ** 23.17 菜单键映射
 键盘映射可以作为菜单操作，也可以定义键盘键和鼠标按钮的绑定。菜单通常用鼠标启动，但也可以用键盘操作。如果菜单键映射对于下一个输入事件是活动的，则激活键盘菜单功能。
@@ -1129,7 +1127,7 @@ kill-line 不会重新映射到 my-other-kill-line。相反，如果一个普通
 #+begin_src emacs-lisp
   Function: keymap-prompt keymap ¶
 #+end_src
-    此函数返回 keymap 的整体提示字符串，如果没有则返回 nil。
+    此函数返回 keymap 的整体提示字符串，如果没有则返回  ~nil~ 。
 
 菜单项是键映射中的绑定。每个绑定都将事件类型与定义相关联，但事件类型对菜单外观没有意义。（通常我们使用伪事件（键盘无法生成的符号）作为菜单项绑定的事件类型。）菜单完全由与这些事件对应的键映射中的绑定生成。
 
@@ -1155,9 +1153,9 @@ help 指定当鼠标在该项目上时要显示的帮助回显字符串，其方
 
 就 define-key 而言，item-string 和 help-string 是事件绑定的一部分。但是，lookup-key 只返回 real-binding，并且只有 real-binding 用于执行 key。
 
-如果 real-binding 为 nil，则 item-string 出现在菜单中但无法选择。
+如果 real-binding 为  ~nil~ ，则 item-string 出现在菜单中但无法选择。
 
-如果 real-binding 是一个符号并且具有非 nil menu-enable 属性，则该属性是一个控制菜单项是否启用的表达式。每次使用 keymap 显示菜单时，Emacs 都会计算表达式，并且仅当表达式的值为非 nil 时才会启用菜单项。当一个菜单项被禁用时，它以模糊的方式显示，并且不能被选择。
+如果 real-binding 是一个符号并且具有非  ~nil~  menu-enable 属性，则该属性是一个控制菜单项是否启用的表达式。每次使用 keymap 显示菜单时，Emacs 都会计算表达式，并且仅当表达式的值为非  ~nil~  时才会启用菜单项。当一个菜单项被禁用时，它以模糊的方式显示，并且不能被选择。
 
 每次查看菜单时，菜单栏不会重新计算启用了哪些项目。这是因为 X 工具包需要预先设置整个菜单树。要强制重新计算菜单栏，请调用 force-mode-line-update（请参阅模式行格式）。
 
@@ -1179,7 +1177,7 @@ help 指定当鼠标在该项目上时要显示的帮助回显字符串，其方
 
 这里，item-name 是一个表达式，计算结果为菜单项字符串。因此，字符串不必是常数。
 
-第三个元素，real-binding，可以是要执行的命令（在这种情况下，您会得到一个普通的菜单项）。也可以是keymap，会产生一个子菜单，item-name作为子菜单名。最后，它可以为 nil，在这种情况下，您将获得一个不可选择的菜单项。这在创建分隔线等时非常有用。
+第三个元素，real-binding，可以是要执行的命令（在这种情况下，您会得到一个普通的菜单项）。也可以是keymap，会产生一个子菜单，item-name作为子菜单名。最后，它可以为  ~nil~ ，在这种情况下，您将获得一个不可选择的菜单项。这在创建分隔线等时非常有用。
 
 列表的尾部 item-property-list 具有包含其他信息的属性列表的形式。
 
@@ -1206,7 +1204,7 @@ help 指定当鼠标在该项目上时要显示的帮助回显字符串，其方
 
     此属性提供了一种定义单选按钮和切换按钮的方法。CAR，类型，说明：它应该是 :toggle 或 :radio。选择的 CDR 应该是一个表格；  评估它的结果表明当前是否选择了此按钮。
 
-    切换是一个菜单项，根据 selected 的值标记为打开或关闭。命令本身应该切换选中状态，如果它是 nil，则将其设置为 t，如果它是 t，则将其设置为 nil。以下是用于切换错误调试标志的菜单项的定义方式：
+    切换是一个菜单项，根据 selected 的值标记为打开或关闭。命令本身应该切换选中状态，如果它是  ~nil~ ，则将其设置为 t，如果它是 t，则将其设置为  ~nil~ 。以下是用于切换错误调试标志的菜单项的定义方式：
     #+begin_src emacs-lisp
       (menu-item "Debug on Error" toggle-debug-on-error
 		 :button (:toggle
@@ -1221,7 +1219,7 @@ help 指定当鼠标在该项目上时要显示的帮助回显字符串，其方
   :key-sequence key-sequence
 #+end_src
 
-    此属性指定要显示为等效键盘的键序列。在 Emacs 在菜单中显示 key-sequence 之前，它会验证 key-sequence 是否真的等同于这个菜单项，因此只有指定正确的键序列才会生效。为 key-sequence 指定 nil 相当于不存在 :key-sequence 属性。
+    此属性指定要显示为等效键盘的键序列。在 Emacs 在菜单中显示 key-sequence 之前，它会验证 key-sequence 是否真的等同于这个菜单项，因此只有指定正确的键序列才会生效。为 key-sequence 指定  ~nil~  相当于不存在 :key-sequence 属性。
 #+begin_src emacs-lisp
   :keys string
 #+end_src
@@ -1425,7 +1423,7 @@ Emacs 通常在每一帧的顶部显示一个菜单栏。请参阅 GNU Emacs 手
 
 当多个活动键盘映射为菜单栏定义相同的功能键时，该项目只出现一次。如果用户单击该菜单栏项，它会弹出一个组合菜单，其中包含该项的所有子命令——全局子命令、本地子命令和次要模式子命令。
 
-在确定菜单栏内容时，变量overriding-local-map 通常会被忽略。也就是说，如果 overriding-local-map 为 nil，则菜单栏是根据将处于活动状态的键映射计算出来的。请参阅活动键盘映射。
+在确定菜单栏内容时，变量overriding-local-map 通常会被忽略。也就是说，如果 overriding-local-map 为  ~nil~ ，则菜单栏是根据将处于活动状态的键映射计算出来的。请参阅活动键盘映射。
 
 这是设置菜单栏项的示例：
 #+begin_src emacs-lisp
@@ -1661,7 +1659,7 @@ Emacs 的 GTK+ 和 NS 版本忽略了项目 1 到 3，因为禁用和/或取消�
 
     该宏定义了一个弹出菜单和/或菜单栏子菜单，其内容由 menu 给出。
 
-    如果 symbol 不是 nil，它应该是一个符号；  那么这个宏将 symbol 定义为一个弹出菜单的函数（参见 Pop-Up Menus），其中 doc 作为它的文档字符串。符号不应被引用。
+    如果 symbol 不是  ~nil~ ，它应该是一个符号；  那么这个宏将 symbol 定义为一个弹出菜单的函数（参见 Pop-Up Menus），其中 doc 作为它的文档字符串。符号不应被引用。
 
     无论 symbol 的值如何，如果 maps 是一个键映射，则菜单将添加到该键映射，作为菜单栏的顶级菜单（请参阅菜单栏）。它也可以是键映射列表，在这种情况下，菜单将单独添加到每个键映射。
 
@@ -1676,16 +1674,16 @@ Emacs 的 GTK+ 和 NS 版本忽略了项目 1 到 3，因为禁用和/或取消�
   :visible include
 #+end_src
 
-	 include 是一个表达式；  如果计算结果为 nil，则菜单不可见。:included 是 :visible 的别名。
+	 include 是一个表达式；  如果计算结果为  ~nil~ ，则菜单不可见。:included 是 :visible 的别名。
 #+begin_src emacs-lisp
   :active enable
 #+end_src
 
-	 enable 是一个表达式；  如果计算结果为 nil，则菜单不可选择。:enable 是 :active 的别名。
+	 enable 是一个表达式；  如果计算结果为  ~nil~ ，则菜单不可选择。:enable 是 :active 的别名。
 
     menu 中的其余元素是菜单项。
 
-    菜单项可以是三个元素的向量，[名称回调启用]。name 是菜单项名称（字符串）。回调是选择项目时要运行的命令或要评估的表达式。enable 是一个表达式；  如果它评估为 nil，则禁用该项目以供选择。
+    菜单项可以是三个元素的向量，[名称回调启用]。name 是菜单项名称（字符串）。回调是选择项目时要运行的命令或要评估的表达式。enable 是一个表达式；  如果它评估为  ~nil~ ，则禁用该项目以供选择。
 
     或者，菜单项可能具有以下形式：
     #+begin_src emacs-lisp
@@ -1708,12 +1706,12 @@ Emacs 的 GTK+ 和 NS 版本忽略了项目 1 到 3，因为禁用和/或取消�
   :active enable
 #+end_src
 
-	 enable 是一个表达式；  如果评估为 nil，则该项目不可选择。:enable 是 :active 的别名。
+	 enable 是一个表达式；  如果评估为  ~nil~ ，则该项目不可选择。:enable 是 :active 的别名。
 #+begin_src emacs-lisp
   :visible include
 #+end_src
 
-	 include 是一个表达式；  如果它的计算结果为 nil，则该项目是不可见的。:included 是 :visible 的别名。
+	 include 是一个表达式；  如果它的计算结果为  ~nil~ ，则该项目是不可见的。:included 是 :visible 的别名。
 #+begin_src emacs-lisp
   :label form
 #+end_src

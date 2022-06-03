@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
 * 附录 A Emacs 27反新闻
 对于那些时间倒流的用户，这里是关于降级到 Emacs 版本 27.2 的信息。我们希望您会喜欢由于缺少许多 Emacs 28.1 功能而带来的更大的简单性。
 

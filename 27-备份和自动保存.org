@@ -19,7 +19,7 @@
 
     如果通过重命名进行备份，则返回值是格式为 (modes extra-alist backupname) 的 cons 单元格，其中模式是原始文件的模式位，由 file-modes 返回（请参阅测试可访问性），extra -alist 是描述原始文件扩展属性的列表，由 file-extended-attributes 返回（请参阅扩展文件属性），backupname 是备份的名称。
 
-    在所有其他情况下（即，如果通过复制进行备份或未进行备份），此函数返回 nil。
+    在所有其他情况下（即，如果通过复制进行备份或未进行备份），此函数返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Variable: buffer-backed-up ¶
@@ -31,9 +31,9 @@
   User Option: make-backup-files ¶
 #+end_src
 
-    该变量决定是否制作备份文件。如果它不是 nil，那么 Emacs 会在第一次保存每个文件时创建一个备份——前提是 backup-inhibited 是 nil（见下文）。
+    该变量决定是否制作备份文件。如果它不是  ~nil~ ，那么 Emacs 会在第一次保存每个文件时创建一个备份——前提是 backup-inhibited 是  ~nil~ （见下文）。
 
-    以下示例显示了如何仅在 Rmail 缓冲区而不是其他地方更改 make-backup-files 变量。将它设置为 nil 会阻止 Emacs 备份这些文件，这可能会节省磁盘空间。（您可以将此代码放在您的初始化文件中。）
+    以下示例显示了如何仅在 Rmail 缓冲区而不是其他地方更改 make-backup-files 变量。将它设置为  ~nil~  会阻止 Emacs 备份这些文件，这可能会节省磁盘空间。（您可以将此代码放在您的初始化文件中。）
     #+begin_src emacs-lisp
       (add-hook 'rmail-mode-hook
 		(lambda () (setq-local make-backup-files nil)))
@@ -43,7 +43,7 @@
   Variable: backup-enable-predicate ¶
 #+end_src
 
-    这个变量的值是一个函数，在某些情况下被调用来决定一个文件是否应该有备份文件。该函数接收一个参数，一个要考虑的绝对文件名。如果函数返回 nil，则禁用该文件的备份。否则，本节中的其他变量说明是否以及如何进行备份。
+    这个变量的值是一个函数，在某些情况下被调用来决定一个文件是否应该有备份文件。该函数接收一个参数，一个要考虑的绝对文件名。如果函数返回  ~nil~ ，则禁用该文件的备份。否则，本节中的其他变量说明是否以及如何进行备份。
 
     默认值为 normal-backup-enable-predicate，它检查临时文件目录和小临时文件目录中的文件。
 
@@ -67,7 +67,7 @@
 
     对于所有备份都进入一个目录的常见情况，alist 应包含一个与相应目录配对的单个元素 ~。~ 。
 
-    如果此变量为 nil（默认值），或者无法匹配文件名，则在原始文件的目录中进行备份。
+    如果此变量为  ~nil~ （默认值），或者无法匹配文件名，则在原始文件的目录中进行备份。
 
     在没有长名称的 MS-DOS 文件系统上，这个变量总是被忽略。
 
@@ -87,13 +87,13 @@ Emacs 可以通过两种方式制作备份文件：
 
 第一种方法，重命名，是默认的。
 
-变量 backup-by-copying，如果非 nil，表示使用第二种方法，即复制原始文件并用新的缓冲区内容覆盖它。变量 file-precious-flag，如果非零，也有这种效果（作为其主要意义的副业）。请参阅保存缓冲区。
+变量 backup-by-copying，如果非  ~nil~ ，表示使用第二种方法，即复制原始文件并用新的缓冲区内容覆盖它。变量 file-precious-flag，如果非零，也有这种效果（作为其主要意义的副业）。请参阅保存缓冲区。
 
 #+begin_src emacs-lisp
   User Option: backup-by-copying ¶
 #+end_src
 
-    如果这个变量不是 nil，Emacs 总是通过复制来备份文件。默认值为无。
+    如果这个变量不是  ~nil~ ，Emacs 总是通过复制来备份文件。默认值为无。
 
 以下三个变量，当非零时，会导致在某些特殊情况下使用第二种方法。它们对不属于特殊情况的文件的处理没有影响。
 
@@ -101,19 +101,19 @@ Emacs 可以通过两种方式制作备份文件：
   User Option: backup-by-copying-when-linked ¶
 #+end_src
 
-    如果这个变量不为 nil，Emacs 会通过复制具有多个名称的文件（硬链接）来进行备份。默认值为无。
+    如果这个变量不为  ~nil~ ，Emacs 会通过复制具有多个名称的文件（硬链接）来进行备份。默认值为无。
 
-    仅当按复制备份为 nil 时，此变量才有意义，因为当该变量为非 nil 时始终使用复制。
+    仅当按复制备份为  ~nil~  时，此变量才有意义，因为当该变量为非  ~nil~  时始终使用复制。
 
 #+begin_src emacs-lisp
   User Option: backup-by-copying-when-mismatch ¶
 #+end_src
 
-    如果此变量不为 nil（默认值），Emacs 会通过复制来进行备份，以防重命名会更改文件的所有者或组。
+    如果此变量不为  ~nil~ （默认值），Emacs 会通过复制来进行备份，以防重命名会更改文件的所有者或组。
 
     当重命名不会改变文件的所有者或组时，该值无效；  也就是说，对于用户拥有的文件，并且其组与用户在其中创建的新文件的默认值匹配。
 
-    仅当按复制备份为 nil 时，此变量才有意义，因为当该变量为非 nil 时始终使用复制。
+    仅当按复制备份为  ~nil~  时，此变量才有意义，因为当该变量为非  ~nil~  时始终使用复制。
 
 #+begin_src emacs-lisp
   User Option: backup-by-copying-when-privileged-mismatch ¶
@@ -137,7 +137,6 @@ Emacs 可以通过两种方式制作备份文件：
 #+begin_src emacs-lisp
   nil
 #+end_src
-
 	 如果访问的文件已经有编号备份，则进行编号备份；  否则，不要。这是默认设置。
 #+begin_src emacs-lisp
   never
@@ -170,7 +169,7 @@ Emacs 可以通过两种方式制作备份文件：
   User Option: delete-old-versions ¶
 #+end_src
 
-    如果此变量为 t，则保存文件会静默删除多余的备份版本。如果为 nil，则表示在删除多余的备份之前要求确认。否则，它们根本不会被删除。
+    如果此变量为 t，则保存文件会静默删除多余的备份版本。如果为  ~nil~ ，则表示在删除多余的备份之前要求确认。否则，它们根本不会被删除。
 
 #+begin_src emacs-lisp
   User Option: dired-kept-versions ¶
@@ -240,7 +239,7 @@ Emacs 可以通过两种方式制作备份文件：
   Function: find-backup-file-name filename ¶
 #+end_src
 
-    此函数计算文件名的新备份文件的文件名。它还可能建议删除某些现有的备份文件。find-backup-file-name 返回一个列表，其 CAR 是新备份文件的名称，其 CDR 是建议删除的备份文件的列表。该值也可以为 nil，表示不进行备份。
+    此函数计算文件名的新备份文件的文件名。它还可能建议删除某些现有的备份文件。find-backup-file-name 返回一个列表，其 CAR 是新备份文件的名称，其 CDR 是建议删除的备份文件的列表。该值也可以为  ~nil~ ，表示不进行备份。
 
     两个变量，保留旧版本和保留新版本，确定应保留哪些备份版本。此函数通过从值的 CDR 中排除这些版本来保留这些版本。请参阅制作和删除编号备份文件。
 
@@ -254,7 +253,7 @@ Emacs 可以通过两种方式制作备份文件：
   Function: file-backup-file-names filename ¶
 #+end_src
 
-    此函数返回文件名的所有备份文件名的列表，如果没有，则返回 nil。文件按修改时间降序排列，最新的文件排在第一位。
+    此函数返回文件名的所有备份文件名的列表，如果没有，则返回  ~nil~ 。文件按修改时间降序排列，最新的文件排在第一位。
 
 #+begin_src emacs-lisp
   Function: file-newest-backup filename ¶
@@ -271,7 +270,7 @@ Emacs 会定期保存您正在访问的所有文件；  这称为自动保存。
   Variable: buffer-auto-save-file-name ¶
 #+end_src
 
-    此缓冲区局部变量是用于自动保存当前缓冲区的文件的名称。如果缓冲区不应自动保存，则为 nil。
+    此缓冲区局部变量是用于自动保存当前缓冲区的文件的名称。如果缓冲区不应自动保存，则为  ~nil~ 。
 
     #+begin_src emacs-lisp
       buffer-auto-save-file-name
@@ -284,7 +283,7 @@ Emacs 会定期保存您正在访问的所有文件；  这称为自动保存。
 
     这是自动保存模式的模式命令，一种缓冲区本地次要模式。启用自动保存模式时，会在缓冲区中启用自动保存。调用约定与其他次要模式命令相同（请参阅编写次要模式的约定）。
 
-    与大多数次要模式不同，没有自动保存模式变量。如果 buffer-auto-save-file-name 为非 nil 且 buffer-saved-size（见下文）非零，则启用自动保存模式。
+    与大多数次要模式不同，没有自动保存模式变量。如果 buffer-auto-save-file-name 为非  ~nil~  且 buffer-saved-size（见下文）非零，则启用自动保存模式。
 
 #+begin_src emacs-lisp
   Variable: auto-save-file-name-transforms ¶
@@ -292,7 +291,7 @@ Emacs 会定期保存您正在访问的所有文件；  这称为自动保存。
 
     此变量列出在生成自动保存文件名之前要应用于缓冲区文件名的转换。
 
-    每个转换都是一个表单列表（正则表达式替换 [uniquify]）。regexp 是匹配文件名的正则表达式；  如果匹配，则使用replace-match 将匹配的部分替换为replacement。如果可选元素 uniquify 不为 nil，则自动保存文件名是通过将转换后的文件名的目录部分与缓冲区的文件名连接起来构建的，其中所有目录分隔符都更改为 ~！~   以防止冲突。（如果您的文件系统截断生成的名称，这将无法正常工作。）
+    每个转换都是一个表单列表（正则表达式替换 [uniquify]）。regexp 是匹配文件名的正则表达式；  如果匹配，则使用replace-match 将匹配的部分替换为replacement。如果可选元素 uniquify 不为  ~nil~ ，则自动保存文件名是通过将转换后的文件名的目录部分与缓冲区的文件名连接起来构建的，其中所有目录分隔符都更改为 ~！~   以防止冲突。（如果您的文件系统截断生成的名称，这将无法正常工作。）
 
     如果 uniquify 是 secure-hash-algorithms 的成员之一，Emacs 会通过将该安全哈希应用于缓冲区文件名来构造自动保存文件名的非目录部分。这避免了文件名过长的任何风险。
 
@@ -306,7 +305,7 @@ Emacs 会定期保存您正在访问的所有文件；  这称为自动保存。
   Function: auto-save-file-name-p filename ¶
 #+end_src
 
-    如果 filename 是一个可能是自动保存文件名称的字符串，则此函数返回一个非 nil 值。它假定自动保存文件的通常命名约定：以井号 ('#') 开头和结尾的名称是可能的自动保存文件名。参数文件名不应包含目录部分。
+    如果 filename 是一个可能是自动保存文件名称的字符串，则此函数返回一个非  ~nil~  值。它假定自动保存文件的通常命名约定：以井号 ('#') 开头和结尾的名称是可能的自动保存文件名。参数文件名不应包含目录部分。
     #+begin_src emacs-lisp
 
 
@@ -335,7 +334,7 @@ Emacs 会定期保存您正在访问的所有文件；  这称为自动保存。
   User Option: auto-save-visited-file-name ¶
 #+end_src
 
-    如果这个变量不为 nil，Emacs 会在他们正在访问的文件中自动保存缓冲区。也就是说，自动保存在您正在编辑的同一文件中完成。通常，此变量为零，因此自动保存文件具有由 make-auto-save-file-name 创建的不同名称。
+    如果这个变量不为  ~nil~ ，Emacs 会在他们正在访问的文件中自动保存缓冲区。也就是说，自动保存在您正在编辑的同一文件中完成。通常，此变量为零，因此自动保存文件具有由 make-auto-save-file-name 创建的不同名称。
 
     当您更改此变量的值时，新值不会在现有缓冲区中生效，直到下次在其中重新启用自动保存模式。如果已启用自动保存模式，则自动保存将继续以相同的文件名进行，直到再次调用自动保存模式。
 
@@ -365,7 +364,7 @@ Emacs 会定期保存您正在访问的所有文件；  这称为自动保存。
 
     此变量的值是应该导致自动保存的空闲时间秒数。每次用户暂停这么长时间，Emacs 都会自动保存所有启用该功能的缓冲区。（如果当前缓冲区很大，则指定的超时乘以一个随着大小增加而增加的因子；对于百万字节的缓冲区，该因子几乎是 4。）
 
-    如果该值为 0 或 nil，则仅在 auto-save-interval 指定的一定数量的输入事件之后，才会由于空闲而不会执行自动保存。
+    如果该值为 0 或  ~nil~ ，则仅在 auto-save-interval 指定的一定数量的输入事件之后，才会由于空闲而不会执行自动保存。
 
 #+begin_src emacs-lisp
   Variable: auto-save-hook ¶
@@ -395,13 +394,13 @@ Emacs 会定期保存您正在访问的所有文件；  这称为自动保存。
 
     如果 delete-auto-save-files 不为零，则此函数删除当前缓冲区的自动保存文件。每次保存缓冲区时都会调用它。
 
-    除非 force 为非 nil，否则此函数仅删除自上次真正保存以来由当前 Emacs 会话写入的文件。
+    除非 force 为非  ~nil~ ，否则此函数仅删除自上次真正保存以来由当前 Emacs 会话写入的文件。
 
 #+begin_src emacs-lisp
   User Option: delete-auto-save-files ¶
 #+end_src
 
-    此变量由函数 delete-auto-save-file-if-necessary 使用。如果它不是 nil，Emacs 会在真正的保存完成时删除自动保存文件（在访问的文件中）。这可以节省磁盘空间并整理您的目录。
+    此变量由函数 delete-auto-save-file-if-necessary 使用。如果它不是  ~nil~ ，Emacs 会在真正的保存完成时删除自动保存文件（在访问的文件中）。这可以节省磁盘空间并整理您的目录。
 
 #+begin_src emacs-lisp
   Function: rename-auto-save-file ¶
@@ -433,7 +432,7 @@ Emacs 会定期保存您正在访问的所有文件；  这称为自动保存。
   User Option: auto-save-list-file-prefix ¶
 #+end_src
 
-    在 Emacs 读取您的 init 文件后，它会根据此前缀初始化 auto-save-list-file-name（如果您尚未将其设置为非 nil），并添加主机名和进程 ID。如果你在你的 init 文件中将它设置为 nil，那么 Emacs 不会初始化 auto-save-list-file-name。
+    在 Emacs 读取您的 init 文件后，它会根据此前缀初始化 auto-save-list-file-name（如果您尚未将其设置为非  ~nil~ ），并添加主机名和进程 ID。如果你在你的 init 文件中将它设置为  ~nil~ ，那么 Emacs 不会初始化 auto-save-list-file-name。
 
 ** 27.3 还原
 如果您对文件进行了大量更改，然后改变主意，您可以通过使用 revert-buffer 命令读取文件的先前版本来摆脱它们。请参阅 GNU Emacs 手册中的恢复缓冲区。
@@ -444,7 +443,7 @@ Emacs 会定期保存您正在访问的所有文件；  这称为自动保存。
 
     此命令将缓冲区文本替换为磁盘上已访问文件的文本。此操作将撤消自访问或保存文件以来的所有更改。
 
-    默认情况下，如果最新的自动保存文件比访问的文件更新，并且参数 ignore-auto 为 nil，revert-buffer 会询问用户是否使用该自动保存。当您以交互方式调用此命令时，如果没有数字前缀参数，则 ignore-auto 为 t；  因此，交互默认是不检查自动保存文件。
+    默认情况下，如果最新的自动保存文件比访问的文件更新，并且参数 ignore-auto 为  ~nil~ ，revert-buffer 会询问用户是否使用该自动保存。当您以交互方式调用此命令时，如果没有数字前缀参数，则 ignore-auto 为 t；  因此，交互默认是不检查自动保存文件。
 
     通常，revert-buffer 在更改缓冲区之前会要求确认；  但如果参数 noconfirm 不为零，revert-buffer 不会要求确认。
 
@@ -508,7 +507,7 @@ Emacs 可以自动恢复缓冲区。默认情况下，它对访问文件的缓�
 
     这个变量的值指定一个函数来调用来检查缓冲区是否需要恢复。默认值仅通过检查其修改时间来处理正在访问文件的缓冲区。不访问文件的缓冲区需要一个可选参数 noconfirm 的自定义函数。如果应该恢复缓冲区，该函数应该返回非零。调用此函数时，缓冲区是当前的。
 
-    虽然此功能主要用于自动恢复，但它也可以用于其他目的。例如，如果未启用自动恢复，它可以用来警告用户缓冲区需要恢复。noconfirm 参数背后的想法是，如果要在不询问用户的情况下恢复缓冲区，则它应该是 t，如果函数只是用于警告用户缓冲区已过期，它应该是 nil。特别是，对于自动恢复的使用，noconfirm 是 t。如果该函数仅用于自动恢复，则可以忽略 noconfirm 参数。
+    虽然此功能主要用于自动恢复，但它也可以用于其他目的。例如，如果未启用自动恢复，它可以用来警告用户缓冲区需要恢复。noconfirm 参数背后的想法是，如果要在不询问用户的情况下恢复缓冲区，则它应该是 t，如果函数只是用于警告用户缓冲区已过期，它应该是  ~nil~ 。特别是，对于自动恢复的使用，noconfirm 是 t。如果该函数仅用于自动恢复，则可以忽略 noconfirm 参数。
 
     如果您只想每隔 auto-revert-interval 秒自动恢复（如缓冲区菜单），请使用：
     #+begin_src emacs-lisp
@@ -526,7 +525,7 @@ Emacs 可以自动恢复缓冲区。默认情况下，它对访问文件的缓�
 
 重要的是要确保该点不会由于自动恢复而不断跳跃。当然，如果缓冲区发生根本变化，移动点可能是不可避免的。
 
-您应该确保 revert-buffer-function 不会打印不必要地重复 Auto Revert 自己的消息的消息，如果 auto-revert-verbose 为 t 则显示，并有效地覆盖 auto-revert-verbose 的 nil 值。因此，适应自动恢复模式通常涉及摆脱此类消息。这对于每隔 auto-revert-interval 秒自动恢复的缓冲区尤为重要。
+您应该确保 revert-buffer-function 不会打印不必要地重复 Auto Revert 自己的消息的消息，如果 auto-revert-verbose 为 t 则显示，并有效地覆盖 auto-revert-verbose 的  ~nil~  值。因此，适应自动恢复模式通常涉及摆脱此类消息。这对于每隔 auto-revert-interval 秒自动恢复的缓冲区尤为重要。
 
 如果新的自动恢复是 Emacs 的一部分，您应该在 global-auto-revert-non-file-buffers 的文档字符串中提及它。
 

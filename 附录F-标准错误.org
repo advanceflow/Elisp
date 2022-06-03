@@ -1,8 +1,3 @@
-#+LATEX_COMPILER:~ xelatex
-#+LATEX_CLASS:~ elegantpaper
-#+OPTIONS:~ prop:t
-#+OPTIONS:~ ^:nil
-
 * 附录 F 标准错误
 
 这是标准 ~Emacs~ 中更重要的错误符号列表，按概念分组。该列表包括每个符号的消息和对如何发生错误的描述的交叉引用。
@@ -189,7 +184,7 @@
   setting-constant
 #+end_src
 
-    消息是 ~尝试设置一个常量符号~ 。当尝试将值分配给 nil、t、most-positive-fixnum、most-negative-fixnum 和关键字符号时，会发生这种情况。当尝试将值分配给启用多字节字符和由于某种原因不允许直接分配的其他一些符号时，也会发生这种情况。请参阅永不改变的变量。
+    消息是 ~尝试设置一个常量符号~ 。当尝试将值分配给  ~nil~ 、t、most-positive-fixnum、most-negative-fixnum 和关键字符号时，会发生这种情况。当尝试将值分配给启用多字节字符和由于某种原因不允许直接分配的其他一些符号时，也会发生这种情况。请参阅永不改变的变量。
 #+begin_src emacs-lisp
   text-read-only
 #+end_src

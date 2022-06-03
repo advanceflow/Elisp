@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS:~ elegantpaper
-#+OPTIONS:~ prop:t
-#+OPTIONS:~ ^:nil
-
 * 附录 G 标准键盘映射
 在本节中，我们列出了一些更通用的键盘映射。其中许多在 Emacs 首次启动时存在，但有些仅在访问相应功能时才加载。
 

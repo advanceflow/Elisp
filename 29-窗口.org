@@ -21,7 +21,7 @@ Emacs 使用的术语 ~窗口~ 与图形桌面环境和窗口系统（例如 X �
   Function: window-live-p object ¶
 #+end_src
 
-    如果对象是活动窗口，则此函数返回 t，否则返回 nil。实时窗口是显示缓冲区的窗口。
+    如果对象是活动窗口，则此函数返回 t，否则返回  ~nil~ 。实时窗口是显示缓冲区的窗口。
 
 每个 ~帧~ ( ~frame~ )中的窗口被组织成一个窗口树。请参阅窗和 ~帧~ ( ~frame~ )。每个窗口树的叶节点都是活动窗口——实际显示缓冲区的窗口。窗口树的内部节点是内部窗口，它们不是活的。
 
@@ -33,7 +33,7 @@ Emacs 使用的术语 ~窗口~ 与图形桌面环境和窗口系统（例如 X �
   Function: window-valid-p object ¶
 #+end_src
 
-    如果对象是活动窗口或窗口树中的内部窗口，则此函数返回 t。否则，它返回 nil，包括对象是已删除窗口的情况。
+    如果对象是活动窗口或窗口树中的内部窗口，则此函数返回 t。否则，它返回  ~nil~ ，包括对象是已删除窗口的情况。
 
 以下示意图显示了实时窗口的结构：
 
@@ -86,7 +86,7 @@ Height |  |  |  |                       |  |  |  |  | Height
 
     此函数返回指定 ~帧~ ( ~frame~ )拥有的所有活动窗口的列表。如果 frame 被省略或为零，则默认为选定的帧（请参阅输入焦点）。
 
-    可选参数 minibuffer 指定是否在该列表中包含 minibuffer 窗口（请参阅 Minibuffer Windows）。如果 minibuffer 为 t，则包含 minibuffer 窗口。如果为 nil 或省略，则仅当 minibuffer 窗口处于活动状态时才包含它。如果 minibuffer 既不是 nil 也不是 t，则永远不会包含 minibuffer 窗口。
+    可选参数 minibuffer 指定是否在该列表中包含 minibuffer 窗口（请参阅 Minibuffer Windows）。如果 minibuffer 为 t，则包含 minibuffer 窗口。如果为  ~nil~  或省略，则仅当 minibuffer 窗口处于活动状态时才包含它。如果 minibuffer 既不是  ~nil~  也不是 t，则永远不会包含 minibuffer 窗口。
 
     可选参数窗口，如果非零，则必须是指定帧上的活动窗口；  那么 window 将是返回列表中的第一个元素。如果 window 被省略或为零，则在 ~帧~ ( ~frame~ )内选择的窗口（请参阅选择窗口）是第一个元素。
 
@@ -106,7 +106,7 @@ Height |  |  |  |                       |  |  |  |  | Height
   Function: window-parent &optional window ¶
 #+end_src
 
-    该函数返回窗口的父窗口。如果 window 被省略或为零，则默认为选定的窗口。如果窗口没有父窗口，则返回值为 nil（即，它是一个 minibuffer 窗口或其 ~帧~ ( ~frame~ )的根窗口）。
+    该函数返回窗口的父窗口。如果 window 被省略或为零，则默认为选定的窗口。如果窗口没有父窗口，则返回值为  ~nil~ （即，它是一个 minibuffer 窗口或其 ~帧~ ( ~frame~ )的根窗口）。
 
 一个父窗口总是至少有两个子窗口。如果这个数字由于窗口删除而下降到 1（请参阅删除窗口），Emacs 也会自动删除父窗口，并且其唯一剩余的子窗口将在窗口树中占据它的位置。
 
@@ -138,25 +138,25 @@ Height |  |  |  |                       |  |  |  |  | Height
   Function: window-top-child &optional window ¶
 #+end_src
 
-    如果 window 是内部窗口，其子窗口形成垂直组合，则此函数返回 window 的最顶层子窗口。对于任何其他类型的窗口，返回值为 nil。
+    如果 window 是内部窗口，其子窗口形成垂直组合，则此函数返回 window 的最顶层子窗口。对于任何其他类型的窗口，返回值为  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: window-left-child &optional window ¶
 #+end_src
 
-    该函数返回window最左边的子窗口，如果window是一个内部窗口，它的子窗口形成一个水平组合。对于任何其他类型的窗口，返回值为 nil。
+    该函数返回window最左边的子窗口，如果window是一个内部窗口，它的子窗口形成一个水平组合。对于任何其他类型的窗口，返回值为  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: window-child window ¶
 #+end_src
 
-    这个函数返回内部窗口窗口的第一个子窗口——垂直组合的最上面的子窗口，或者水平组合的最左边的子窗口。如果 window 是活动窗口，则返回值为 nil。
+    这个函数返回内部窗口窗口的第一个子窗口——垂直组合的最上面的子窗口，或者水平组合的最左边的子窗口。如果 window 是活动窗口，则返回值为  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: window-combined-p &optional window horizontal ¶
 #+end_src
 
-    当且仅当 window 是垂直组合的一部分时，此函数才返回非 nil 值。
+    当且仅当 window 是垂直组合的一部分时，此函数才返回非  ~nil~  值。
 
     如果可选参数水平是非零，这意味着当且仅当窗口是水平组合的一部分时才返回非零。
 
@@ -164,13 +164,13 @@ Height |  |  |  |                       |  |  |  |  | Height
   Function: window-next-sibling &optional window ¶
 #+end_src
 
-    此函数返回指定窗口的下一个兄弟。如果 window 是其父级的最后一个子级，则返回值为 nil。
+    此函数返回指定窗口的下一个兄弟。如果 window 是其父级的最后一个子级，则返回值为  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: window-prev-sibling &optional window ¶
 #+end_src
 
-    此函数返回指定窗口的前一个兄弟。如果 window 是其父级的第一个子级，则返回值为 nil。
+    此函数返回指定窗口的前一个兄弟。如果 window 是其父级的第一个子级，则返回值为  ~nil~ 。
 
 函数 window-next-sibling 和 window-prev-sibling 不应与函数 next-window 和 previous-window 混淆，后者以窗口的循环顺序返回下一个和上一个窗口（请参阅 Windows 的循环排序）。
 
@@ -186,7 +186,7 @@ Height |  |  |  |                       |  |  |  |  | Height
   Function: window-at-side-p &optional window side ¶
 #+end_src
 
-    如果窗口位于其包含 ~帧~ ( ~frame~ )的一侧，则此函数返回 t。参数窗口必须是有效的窗口，并且默认为选定的窗口。参数侧可以是左、上、右或下的任何符号。默认值 nil 像底部一样处理。
+    如果窗口位于其包含 ~帧~ ( ~frame~ )的一侧，则此函数返回 t。参数窗口必须是有效的窗口，并且默认为选定的窗口。参数侧可以是左、上、右或下的任何符号。默认值  ~nil~  像底部一样处理。
 
     请注意，此函数忽略了 minibuffer 窗口（请参阅 Minibuffer Windows）。因此，当小缓冲区窗口出现在窗口的正下方时，当边等于底部时，它也可能返回 t。
 
@@ -196,15 +196,15 @@ Height |  |  |  |                       |  |  |  |  | Height
 
     此函数返回从窗口窗口中窗口点位置看的方向上最近的实时窗口。参数方向必须是上、下、左或右之一。可选参数 window 必须表示一个活动窗口，并且默认为选定的窗口。
 
-    此函数不返回 no-other-window 参数为非 nil 的窗口（请参阅窗口参数）。如果最近窗口的 no-other-window 参数为非 nil，则此函数尝试在指定方向上查找 no-other-window 参数为 nil 的另一个窗口。如果可选参数 ignore 不为 nil，则即使其 no-other-window 参数为非 nil，也可能返回一个窗口。
+    此函数不返回 no-other-window 参数为非  ~nil~  的窗口（请参阅窗口参数）。如果最近窗口的 no-other-window 参数为非  ~nil~ ，则此函数尝试在指定方向上查找 no-other-window 参数为  ~nil~  的另一个窗口。如果可选参数 ignore 不为  ~nil~ ，则即使其 no-other-window 参数为非  ~nil~ ，也可能返回一个窗口。
 
     如果可选参数符号为负数，则表示使用窗口的右边缘或下边缘作为参考位置，而不是窗口点。如果符号为正数，则表示以窗口的左边缘或上边缘作为参考位置。
 
     如果可选参数 wrap 不为零，这意味着将方向环绕在 ~帧~ ( ~frame~ )边框周围。例如，如果窗口位于 ~帧~ ( ~frame~ )的顶部并且方向在上方，则此函数通常在它处于活动状态时返回该 ~帧~ ( ~frame~ )的 minibuffer 窗口，否则返回一个位于 ~帧~ ( ~frame~ )底部的窗口。
 
-    如果可选参数 minibuf 为 t，则此函数可能会返回 minibuffer 窗口，即使它未处于活动状态。如果可选参数 minibuf 为 nil，这意味着当且仅当它当前处于活动状态时才返回 minibuffer 窗口。如果 minibuf 既不是 nil 也不是 t，这个函数永远不会返回 minibuffer 窗口。然而，如果 wrap 不是 nil，它总是表现得好像 minibuf 是 nil。
+    如果可选参数 minibuf 为 t，则此函数可能会返回 minibuffer 窗口，即使它未处于活动状态。如果可选参数 minibuf 为  ~nil~ ，这意味着当且仅当它当前处于活动状态时才返回 minibuffer 窗口。如果 minibuf 既不是  ~nil~  也不是 t，这个函数永远不会返回 minibuffer 窗口。然而，如果 wrap 不是  ~nil~ ，它总是表现得好像 minibuf 是  ~nil~ 。
 
-    如果没有找到合适的窗口，这个函数返回 nil。
+    如果没有找到合适的窗口，这个函数返回  ~nil~ 。
 
     请勿使用此功能检查方向是否有窗口。调用上面描述的 window-at-side-p 是一种更有效的方法。
 
@@ -245,13 +245,13 @@ Height |  |  |  |                       |  |  |  |  | Height
 
 由于历史原因，Emacs 不会在选择窗口时运行单独的钩子。应用程序和内部例程通常会临时选择一个窗口来对其执行一些操作。他们这样做是为了简化编码——因为许多函数在没有指定窗口参数时默认在选定的窗口上运行——或者因为某些函数没有（并且仍然没有）将窗口作为参数并且总是在选择的窗口。每次短时间选择一个窗口时运行一个钩子，当恢复先前选择的窗口时再次运行一个钩子是没有用的。
 
-然而，当它的 norecord 参数为 nil 时，select-window 会更新缓冲区列表，从而间接运行正常的钩子 buffer-list-update-hook（请参阅缓冲区列表）。因此，该挂钩提供了一种在窗口被更 ~永久~ 选择时运行函数的方法。
+然而，当它的 norecord 参数为  ~nil~  时，select-window 会更新缓冲区列表，从而间接运行正常的钩子 buffer-list-update-hook（请参阅缓冲区列表）。因此，该挂钩提供了一种在窗口被更 ~永久~ 选择时运行函数的方法。
 
-由于 buffer-list-update-hook 也由与窗口管理无关的函数运行，因此将所选窗口的值保存在某处并在运行该钩子时将其与 selected-window 的值进行比较通常是有意义的。此外，为避免在使用 buffer-list-update-hook 时出现误报，最好的做法是每个应该选择窗口的 select-window 调用仅临时传递一个非 nil norecord 参数。如果可能，在这种情况下应使用带有选定窗口的宏（见下文）。
+由于 buffer-list-update-hook 也由与窗口管理无关的函数运行，因此将所选窗口的值保存在某处并在运行该钩子时将其与 selected-window 的值进行比较通常是有意义的。此外，为避免在使用 buffer-list-update-hook 时出现误报，最好的做法是每个应该选择窗口的 select-window 调用仅临时传递一个非  ~nil~  norecord 参数。如果可能，在这种情况下应使用带有选定窗口的宏（见下文）。
 
 每当重新显示例程检测到自上次重新显示以来已选择另一个窗口时，Emacs 也会运行挂钩窗口选择更改函数。有关详细说明，请参阅 Hooks for Window Scrolling and Changes。window-state-change-functions （在同一部分中描述）是另一个在选择了不同的窗口后运行的异常钩子，但也被其他窗口更改触发。
 
-使用非 nil norecord 参数调用 select-window 的顺序根据它们的选择或使用时间确定窗口的顺序，见下文。例如，函数 get-lru-window 可用于检索最近最少选择的窗口（请参阅 Windows 的循环排序）。
+使用非  ~nil~  norecord 参数调用 select-window 的顺序根据它们的选择或使用时间确定窗口的顺序，见下文。例如，函数 get-lru-window 可用于检索最近最少选择的窗口（请参阅 Windows 的循环排序）。
 
 #+begin_src emacs-lisp
   Function: frame-selected-window &optional frame ¶
@@ -267,7 +267,7 @@ Height |  |  |  |                       |  |  |  |  | Height
 
     如果 frame 是选定的 ~帧~ ( ~frame~ )，这会使 window 成为选定的窗口。
 
-    如果可选参数 norecord 不为 nil，则此函数不会更改最近选择的窗口的顺序，也不会更改缓冲区列表。
+    如果可选参数 norecord 不为  ~nil~ ，则此函数不会更改最近选择的窗口的顺序，也不会更改缓冲区列表。
 
 以下宏可用于临时选择一个窗口，而不影响最近选择的窗口或缓冲区列表的顺序。
 
@@ -346,7 +346,7 @@ Emacs 提供了各种函数来查找窗口的高度和宽度。许多这些函�
   Function: window-total-size &optional window horizontal round ¶
 #+end_src
 
-    此函数返回窗口窗口的总高度（以行为单位）或以列为单位的总宽度。如果horizo​​ntal被省略或nil，这相当于为window调用window-total-height；  否则相当于为window调用window-total-width。可选参数 round 的行为与 window-total-height 的行为相同。
+    此函数返回窗口窗口的总高度（以行为单位）或以列为单位的总宽度。如果horizo​​ntal被省略或 ~nil~ ，这相当于为window调用window-total-height；  否则相当于为window调用window-total-width。可选参数 round 的行为与 window-total-height 的行为相同。
 
 以下两个函数可用于以像素为单位返回窗口的总大小。
 
@@ -390,7 +390,7 @@ Emacs 提供了各种函数来查找窗口的高度和宽度。许多这些函�
 
     如果可选参数 pixelwise 不为零，则此函数返回以像素为单位的窗口的主体高度。
 
-    如果 pixelwise 为 nil，则返回值向下舍入为最接近的整数（如有必要）。这意味着如果文本区域底部的一行仅部分可见，则该行不计算在内。这也意味着窗口主体的高度永远不能超过 window-total-height 返回的总高度。
+    如果 pixelwise 为  ~nil~ ，则返回值向下舍入为最接近的整数（如有必要）。这意味着如果文本区域底部的一行仅部分可见，则该行不计算在内。这也意味着窗口主体的高度永远不能超过 window-total-height 返回的总高度。
 
 窗口的主体宽度是它的主体和文本区域的宽度，不包括它的任何左右装饰（请参阅 Emacs Windows 的基本概念）。
 
@@ -404,13 +404,13 @@ Emacs 提供了各种函数来查找窗口的高度和宽度。许多这些函�
 
     如果可选参数 pixelwise 不为零，则此函数以像素为单位返回窗口的主体宽度。
 
-    如果 pixelwise 为 nil，则返回值向下舍入为最接近的整数（如有必要）。这意味着如果文本区域右侧的一列仅部分可见，则该列不计算在内。这也意味着窗口主体的宽度永远不能超过 window-total-width 返回的总宽度。
+    如果 pixelwise 为  ~nil~ ，则返回值向下舍入为最接近的整数（如有必要）。这意味着如果文本区域右侧的一列仅部分可见，则该列不计算在内。这也意味着窗口主体的宽度永远不能超过 window-total-width 返回的总宽度。
 
 #+begin_src emacs-lisp
   Function: window-body-size &optional window horizontal pixelwise ¶
 #+end_src
 
-    此函数返回窗口的主体高度或主体宽度。如果horizo​​ntal省略或nil，则相当于为window调用window-body-height；  否则相当于调用window-body-width。在任何一种情况下，可选参数 pixelwise 都会传递给调用的函数。
+    此函数返回窗口的主体高度或主体宽度。如果horizo​​ntal省略或 ~nil~ ，则相当于为window调用window-body-height；  否则相当于调用window-body-width。在任何一种情况下，可选参数 pixelwise 都会传递给调用的函数。
 
 可以使用下面给出的函数检索窗口模式、选项卡和标题行的像素高度。它们的返回值通常是准确的，除非该窗口之前没有显示过：在这种情况下，返回值基于对用于窗口 ~帧~ ( ~frame~ )的字体的估计。
 
@@ -466,7 +466,7 @@ Emacs 提供了各种函数来查找窗口的高度和宽度。许多这些函�
 
     该函数返回窗口的最小尺寸。window 必须是有效的窗口，并且默认为选定的窗口。可选参数水平非零表示返回窗口的最小列数；  否则返回窗口的最小行数。
 
-    如果实际设置了窗口大小，则返回值确保窗口的所有组件保持完全可见。对于水平 nil，它包括任何顶部或底部装饰。对于水平非零，它包括窗口的任何左侧或右侧装饰。
+    如果实际设置了窗口大小，则返回值确保窗口的所有组件保持完全可见。对于水平  ~nil~ ，它包括任何顶部或底部装饰。对于水平非零，它包括窗口的任何左侧或右侧装饰。
 
     可选参数忽略，如果非零，则意味着忽略固定大小的窗口、窗口最小高度或窗口最小宽度设置施加的限制。如果忽略等于安全，则活动窗口可能会变得像 window-safe-min-height 行和 window-safe-min-width 列一样小。如果 ignore 是一个窗口，则仅忽略该窗口的限制。任何其他非零值意味着忽略所有窗口的所有上述限制。
 
@@ -483,11 +483,11 @@ Emacs 提供了各种函数来查找窗口的高度和宽度。许多这些函�
 
     如果窗口的大小可以通过增量线垂直更改，则此函数返回增量。如果可选参数水平非零，则如果窗口可以通过增量列水平调整大小，则返回增量。它实际上并没有改变窗口大小。
 
-    如果 window 为 nil，则默认为选定的窗口。
+    如果 window 为  ~nil~ ，则默认为选定的窗口。
 
     delta 为正值表示检查窗口是否可以放大该行数或列数；  delta 的负值表示检查窗口是否可以缩小那么多行或列。如果 delta 不为零，则返回值 0 表示无法调整窗口大小。
 
-    通常，变量 window-min-height 和 window-min-width 指定允许的最小窗口大小（请参阅窗口大小）。但是，如果可选参数 ignore 不为 nil，则此函数将忽略 window-min-height 和 window-min-width，以及 window-size-fixed。相反，它将窗口的最小高度视为其顶部和底部装饰加上一行文本的总和；  它的最小宽度是它的左右装饰加上两列文本的总和。
+    通常，变量 window-min-height 和 window-min-width 指定允许的最小窗口大小（请参阅窗口大小）。但是，如果可选参数 ignore 不为  ~nil~ ，则此函数将忽略 window-min-height 和 window-min-width，以及 window-size-fixed。相反，它将窗口的最小高度视为其顶部和底部装饰加上一行文本的总和；  它的最小宽度是它的左右装饰加上两列文本的总和。
 
     如果可选参数 pixelwise 为非零，则 delta 被解释为像素。
 
@@ -495,9 +495,9 @@ Emacs 提供了各种函数来查找窗口的高度和宽度。许多这些函�
   Function: window-resize window delta &optional horizontal ignore pixelwise ¶
 #+end_src
 
-    此函数按增量调整窗口大小。如果水平为 nil，它通过增量线改变高度；  否则，它会按增量列更改宽度。正 delta 表示扩大窗口，负 delta 表示缩小窗口。
+    此函数按增量调整窗口大小。如果水平为  ~nil~ ，它通过增量线改变高度；  否则，它会按增量列更改宽度。正 delta 表示扩大窗口，负 delta 表示缩小窗口。
 
-    如果 window 为 nil，则默认为选定的窗口。如果窗口不能按要求调整大小，则会发出错误信号。
+    如果 window 为  ~nil~ ，则默认为选定的窗口。如果窗口不能按要求调整大小，则会发出错误信号。
 
     可选参数 ignore 与上面的函数 window-resizable 具有相同的含义。
 
@@ -509,7 +509,7 @@ Emacs 提供了各种函数来查找窗口的高度和宽度。许多这些函�
   Function: adjust-window-trailing-edge window delta &optional horizontal pixelwise ¶
 #+end_src
 
-    此函数通过增量线移动窗口的底部边缘。如果可选参数水平非零，它改为将右边缘移动增量列。如果 window 为 nil，则默认为选定的窗口。
+    此函数通过增量线移动窗口的底部边缘。如果可选参数水平非零，它改为将右边缘移动增量列。如果 window 为  ~nil~ ，则默认为选定的窗口。
 
     如果可选参数 pixelwise 为非零，则 delta 被解释为像素。
 
@@ -531,21 +531,21 @@ Emacs 提供了各种函数来查找窗口的高度和宽度。许多这些函�
   Command: fit-window-to-buffer &optional window max-height min-height max-width min-width preserve-size ¶
 #+end_src
 
-    此命令调整窗口的高度或宽度以适合其中的文本。如果能够调整窗口大小，则返回非 nil，否则返回 nil。如果 window 被省略或为零，则默认为选定的窗口。否则，它应该是一个实时窗口。
+    此命令调整窗口的高度或宽度以适合其中的文本。如果能够调整窗口大小，则返回非  ~nil~ ，否则返回  ~nil~ 。如果 window 被省略或为零，则默认为选定的窗口。否则，它应该是一个实时窗口。
 
-    如果窗口是垂直组合的一部分，则此函数调整窗口的高度。新高度是根据其缓冲区可访问部分的实际高度计算的。可选参数 max-height，如果非零，指定此函数可以给窗口的最大总高度。可选参数 min-height，如果非 nil，指定它可以给出的最小总高度，它会覆盖变量 window-min-height。最大高度和最小高度都在行中指定，包括窗口的任何顶部或底部装饰。
+    如果窗口是垂直组合的一部分，则此函数调整窗口的高度。新高度是根据其缓冲区可访问部分的实际高度计算的。可选参数 max-height，如果非零，指定此函数可以给窗口的最大总高度。可选参数 min-height，如果非  ~nil~ ，指定它可以给出的最小总高度，它会覆盖变量 window-min-height。最大高度和最小高度都在行中指定，包括窗口的任何顶部或底部装饰。
 
     如果窗口是水平组合的一部分，并且选项 fit-window-to-buffer-horizo​​ntally （见下文）的值非零，则此函数调整窗口的宽度。窗口的新宽度是根据窗口当前起始位置之后的缓冲区行的最大长度计算的。可选参数 max-width 指定最大宽度，默认为窗口 ~帧~ ( ~frame~ )的宽度。可选参数 min-width 指定最小宽度，默认为 window-min-width。max-width 和 min-width 都在列中指定，并且包括窗口的任何左侧或右侧装饰。
 
     可选参数 preserve-size，如果非零，将安装一个参数以在将来的调整大小操作期间保留窗口的大小（请参阅保留窗口大小）。
 
-    如果选项 fit-frame-to-buffer（见下文）不为 nil，则此函数将尝试通过调用 fit-frame-to-buffer（见下文）来调整窗口 ~帧~ ( ~frame~ )的大小以适应其内容。
+    如果选项 fit-frame-to-buffer（见下文）不为  ~nil~ ，则此函数将尝试通过调用 fit-frame-to-buffer（见下文）来调整窗口 ~帧~ ( ~frame~ )的大小以适应其内容。
 
 #+begin_src emacs-lisp
   User Option: fit-window-to-buffer-horizontally ¶
 #+end_src
 
-    如果这是非零，fit-window-to-buffer 可以水平调整窗口大小。如果这是 nil （默认） fit-window-to-buffer 从不水平调整窗口大小。如果仅此，它只能水平调整窗口大小。任何其他值意味着 fit-window-to-buffer 可以在两个维度上调整窗口大小。
+    如果这是非零，fit-window-to-buffer 可以水平调整窗口大小。如果这是  ~nil~  （默认） fit-window-to-buffer 从不水平调整窗口大小。如果仅此，它只能水平调整窗口大小。任何其他值意味着 fit-window-to-buffer 可以在两个维度上调整窗口大小。
 
 #+begin_src emacs-lisp
   User Option: fit-frame-to-buffer ¶
@@ -571,19 +571,19 @@ Emacs 提供了各种函数来查找窗口的高度和宽度。许多这些函�
 
     此选项可用于指定要通过 fit-frame-to-buffer 适应的帧周围的边距。例如，这样的边距对于避免调整大小的 ~帧~ ( ~frame~ )与任务栏或其父 ~帧~ ( ~frame~ )的一部分重叠可能很有用。
 
-    它指定要在应适合的帧的左侧、上方、右侧和下方留出的像素数。默认为每个指定 nil，这意味着不使用边距。此处指定的值可以通过该帧的 fit-frame-to-buffer-margins 参数（如果存在）覆盖特定帧。
+    它指定要在应适合的帧的左侧、上方、右侧和下方留出的像素数。默认为每个指定  ~nil~ ，这意味着不使用边距。此处指定的值可以通过该帧的 fit-frame-to-buffer-margins 参数（如果存在）覆盖特定帧。
 
 #+begin_src emacs-lisp
   User Option: fit-frame-to-buffer-sizes ¶
 #+end_src
 
-    此选项指定 fit-frame-to-buffer 的大小边界。它指定应适合其缓冲区的任何帧的根窗口的总最大和最小行以及最大和最小列。如果这些值中的任何一个不是 nil，它会覆盖 fit-frame-to-buffer 的相应参数。
+    此选项指定 fit-frame-to-buffer 的大小边界。它指定应适合其缓冲区的任何帧的根窗口的总最大和最小行以及最大和最小列。如果这些值中的任何一个不是  ~nil~ ，它会覆盖 fit-frame-to-buffer 的相应参数。
 
 #+begin_src emacs-lisp
   Command: shrink-window-if-larger-than-buffer &optional window ¶
 #+end_src
 
-    此命令尝试尽可能减少窗口的高度，同时仍显示其完整缓冲区，但不少于 window-min-height 行。如果调整了窗口大小，则返回值非 nil，否则返回 nil。如果 window 被省略或为零，则默认为选定的窗口。否则，它应该是一个实时窗口。
+    此命令尝试尽可能减少窗口的高度，同时仍显示其完整缓冲区，但不少于 window-min-height 行。如果调整了窗口大小，则返回值非  ~nil~ ，否则返回  ~nil~ 。如果 window 被省略或为零，则默认为选定的窗口。否则，它应该是一个实时窗口。
 
     如果窗口已经太短而无法显示其所有缓冲区，或者任何缓冲区滚动到屏幕外，或者窗口是其 ~帧~ ( ~frame~ )中唯一的活动窗口，则此命令不执行任何操作。
 
@@ -622,7 +622,7 @@ Emacs 提供了各种函数来查找窗口的高度和宽度。许多这些函�
   Variable: window-size-fixed ¶
 #+end_src
 
-    如果此缓冲区局部变量不为 nil，则显示缓冲区的任何窗口的大小通常都无法更改。如果别无选择，删除窗口或更改 ~帧~ ( ~frame~ )大小仍可能更改窗口大小。
+    如果此缓冲区局部变量不为  ~nil~ ，则显示缓冲区的任何窗口的大小通常都无法更改。如果别无选择，删除窗口或更改 ~帧~ ( ~frame~ )大小仍可能更改窗口大小。
 
     如果值为高度，则只有窗口的高度是固定的；  如果值为宽度，则只有窗口的宽度是固定的。任何其他非零值都固定宽度和高度。
 
@@ -638,7 +638,7 @@ Emacs 提供了各种函数来查找窗口的高度和宽度。许多这些函�
 
     如果可选参数 preserve 是 t，这意味着保留窗口主体的当前高度/宽度。只有当 Emacs 没有更好的选择时，窗口的高度/宽度才会改变。调整此函数保留高度/宽度的窗口大小不会引发错误。
 
-    如果 preserve 为 nil，这意味着停止保留窗口的高度/宽度，解除由先前调用此函数为窗口引起的任何相应限制。使用 window 作为参数调用放大窗口、缩小窗口或适合窗口到缓冲区也可以删除相应的约束。
+    如果 preserve 为  ~nil~ ，这意味着停止保留窗口的高度/宽度，解除由先前调用此函数为窗口引起的任何相应限制。使用 window 作为参数调用放大窗口、缩小窗口或适合窗口到缓冲区也可以删除相应的约束。
 
 window-preserve-size 当前由以下函数调用：
 
@@ -659,7 +659,7 @@ window-preserve-size 安装一个名为 window-preserved-size 的窗口参数（
 
 功能：window-preserved-size &可选窗口水平¶
 
-    此函数返回窗口窗口的保留高度（以像素为单位）。window 必须是活动窗口，并且默认为选定的窗口。如果可选参数水平非零，它返回窗口的保留宽度。如果未保留窗口大小，则返回 nil。
+    此函数返回窗口窗口的保留高度（以像素为单位）。window 必须是活动窗口，并且默认为选定的窗口。如果可选参数水平非零，它返回窗口的保留宽度。如果未保留窗口大小，则返回  ~nil~ 。
 
 ** 29.7 分割窗口
 本节介绍通过拆分现有窗口创建新窗口的功能。请注意，某些窗口是特殊的，因为这些函数可能无法按照此处所述拆分它们。此类窗口的示例是侧窗（请参阅侧窗）和原子窗（请参阅原子窗）。
@@ -672,11 +672,11 @@ window-preserve-size 安装一个名为 window-preserved-size 的窗口参数（
 
     可选的第二个参数大小确定窗口和/或新窗口的大小。如果省略或为零，则两个窗口的大小相同；  如果有奇数行，则分配给新窗口。如果 size 为正数，则窗口的大小为行（或列，取决于 side 的值）。如果 size 是负数，则新窗口被赋予 -size 行（或列）。
 
-    如果 size 为 nil，则此函数遵循变量 window-min-height 和 window-min-width（请参阅窗口大小）。因此，如果拆分会导致窗口小于这些变量指定的值，则会发出错误信号。但是，大小的非零值会导致这些变量被忽略；  在这种情况下，最小的允许窗口被认为是具有容纳一行高和/或两列宽的文本空间的窗口。
+    如果 size 为  ~nil~ ，则此函数遵循变量 window-min-height 和 window-min-width（请参阅窗口大小）。因此，如果拆分会导致窗口小于这些变量指定的值，则会发出错误信号。但是，大小的非零值会导致这些变量被忽略；  在这种情况下，最小的允许窗口被认为是具有容纳一行高和/或两列宽的文本空间的窗口。
 
     因此，如果指定了大小，则调用者有责任检查发出的窗口是否足够大以包含它们的所有装饰，例如模式行或滚动条。函数window-min-size（参见Window Sizes）可用于确定window在这方面的最低要求。由于新窗口通常从窗口继承模式行或滚动条等区域，因此该函数也是新窗口最小尺寸的一个很好的猜测。只有在下一次重新显示之前相应地删除继承区域时，调用者才应指定较小的大小。
 
-    可选的第三个参数 side 确定新窗口相对于窗口的位置。如果为 nil 或更低，则新窗口放置在窗口下方。如果在上方，则新窗口位于窗口上方。在这两种情况下，大小都指定了总窗口高度，以行为单位。
+    可选的第三个参数 side 确定新窗口相对于窗口的位置。如果为  ~nil~  或更低，则新窗口放置在窗口下方。如果在上方，则新窗口位于窗口上方。在这两种情况下，大小都指定了总窗口高度，以行为单位。
 
     如果 side 为 t 或 right，则新窗口放置在窗口的右侧。如果 side 位于左侧，则新窗口放置在窗口的左侧。在这两种情况下，size 都指定了总窗口宽度，以列为单位。
 
@@ -684,7 +684,7 @@ window-preserve-size 安装一个名为 window-preserved-size 的窗口参数（
 
     如果 window 是活动窗口，则新窗口会继承它的各种属性，包括边距和滚动条。如果 window 是内部窗口，则新窗口将继承在窗口 ~帧~ ( ~frame~ )内选择的窗口的属性。
 
-    只要变量 ignore-window-parameters 为 nil，此函数的行为可能会被 window 的窗口参数改变。如果拆分窗口窗口参数的值为 t，则此函数忽略所有其他窗口参数。否则，如果拆分窗口窗口参数的值是一个函数，则使用参数窗口、大小和边调用该函数，以代替拆分窗口的通常操作。否则，此函数遵循 window-atom 或 window-side window 参数（如果有）。请参见窗口参数。
+    只要变量 ignore-window-parameters 为  ~nil~ ，此函数的行为可能会被 window 的窗口参数改变。如果拆分窗口窗口参数的值为 t，则此函数忽略所有其他窗口参数。否则，如果拆分窗口窗口参数的值是一个函数，则使用参数窗口、大小和边调用该函数，以代替拆分窗口的通常操作。否则，此函数遵循 window-atom 或 window-side window 参数（如果有）。请参见窗口参数。
 
 例如，这里是一系列拆分窗口调用，它们产生了在 Windows 和 Frames 中讨论的窗口配置。此示例演示了拆分实时窗口以及拆分内部窗口。我们从一个包含单个窗口（活动根窗口）的 ~帧~ ( ~frame~ )开始，我们用 W4 表示。调用 (split-window W4) 产生这个窗口配置：
 #+begin_src emacs-lisp
@@ -746,7 +746,7 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
 
     如果此变量的值为非零（默认值），则 split-window-below 的行为如上所述。
 
-    如果它为 nil，split-window-below 会调整两个窗口中的每个窗口中的点以最小化重新显示。（这在慢速终端上很有用。）它选择包含该点先前所在的屏幕行的任何窗口。请注意，这仅影响 split-window-below，而不影响较低级别的拆分窗口功能。
+    如果它为  ~nil~ ，split-window-below 会调整两个窗口中的每个窗口中的点以最小化重新显示。（这在慢速终端上很有用。）它选择包含该点先前所在的屏幕行的任何窗口。请注意，这仅影响 split-window-below，而不影响较低级别的拆分窗口功能。
 
 ** 29.8 删除窗口
 删除窗口会将其从 ~帧~ ( ~frame~ )的窗口树中删除。如果窗口是活动窗口，它会从屏幕上消失。如果窗口是一个内部窗口，它的子窗口也会被删除。
@@ -757,13 +757,13 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
   Command: delete-window &optional window ¶
 #+end_src
 
-    此函数从显示中删除窗口并返回 nil。如果 window 被省略或为零，则默认为选定的窗口。
+    此函数从显示中删除窗口并返回  ~nil~ 。如果 window 被省略或为零，则默认为选定的窗口。
 
     如果删除窗口将不会在窗口树中留下更多窗口（例如，如果它是 ~帧~ ( ~frame~ )中唯一的活动窗口）或窗口 ~帧~ ( ~frame~ )上的所有剩余窗口都是侧窗口（请参阅侧窗口），则会发出错误信号。如果窗口是原子窗口的一部分（请参阅原子窗口），则此函数尝试删除该原子窗口的根。
 
     默认情况下，窗口占用的空间将分配给其相邻的兄弟窗口之一（如果有）。但是，如果变量 window-combination-resize 不为零，则空间将按比例分布在同一窗口组合中的任何剩余窗口中。请参阅重新组合 Windows。
 
-    只要变量 ignore-window-parameters 为 nil，此函数的行为可能会被 window 的窗口参数改变。如果 delete-window 窗口参数的值为 t，此函数将忽略所有其他窗口参数。否则，如果 delete-window window 参数的值是一个函数，则使用参数 window 调用该函数，以代替 delete-window 的通常操作。请参见窗口参数。
+    只要变量 ignore-window-parameters 为  ~nil~ ，此函数的行为可能会被 window 的窗口参数改变。如果 delete-window 窗口参数的值为 t，此函数将忽略所有其他窗口参数。否则，如果 delete-window window 参数的值是一个函数，则使用参数 window 调用该函数，以代替 delete-window 的通常操作。请参见窗口参数。
 
 当 delete-window 删除其 ~帧~ ( ~frame~ )的选定窗口时，它必须使另一个窗口成为该 ~帧~ ( ~frame~ )的新选定窗口。以下选项允许配置选择哪个窗口。
 
@@ -775,7 +775,7 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
 
 	 mru（默认）选择该 ~帧~ ( ~frame~ )上最近使用的窗口。
 	 pos 选择包含该帧上先前选择的窗口的点的帧坐标的窗口。
-	 nil 选择该帧上的第一个窗口（由 frame-first-window 返回的窗口）。
+	  ~nil~  选择该帧上的第一个窗口（由 frame-first-window 返回的窗口）。
 
     只有当该帧上的所有其他窗口也将该参数设置为非零值时，才会选择具有非零 no-other-window 参数的窗口。
 
@@ -785,9 +785,9 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
 
     此功能使窗口填充其 ~帧~ ( ~frame~ )，并根据需要删除其他窗口。如果 window 被省略或为零，则默认为选定的窗口。如果窗口是侧窗（请参阅侧窗），则会发出错误信号。如果窗口是原子窗口的一部分（请参阅原子窗口），则此函数会尝试使该原子窗口的根填充其 ~帧~ ( ~frame~ )。返回值为零。
 
-    只要变量 ignore-window-parameters 为 nil，此函数的行为可能会被 window 的窗口参数改变。如果 delete-other-windows 窗口参数的值为 t，则此函数忽略所有其他窗口参数。否则，如果 delete-other-windows 窗口参数的值是一个函数，则使用参数 window 调用该函数，以代替 delete-other-windows 的通常操作。请参见窗口参数。
+    只要变量 ignore-window-parameters 为  ~nil~ ，此函数的行为可能会被 window 的窗口参数改变。如果 delete-other-windows 窗口参数的值为 t，则此函数忽略所有其他窗口参数。否则，如果 delete-other-windows 窗口参数的值是一个函数，则使用参数 window 调用该函数，以代替 delete-other-windows 的通常操作。请参见窗口参数。
 
-    此外，如果 ignore-window-parameters 为 nil，则此函数不会删除 no-delete-other-windows 参数为非 nil 的任何窗口。
+    此外，如果 ignore-window-parameters 为  ~nil~ ，则此函数不会删除 no-delete-other-windows 参数为非  ~nil~  的任何窗口。
 
 #+begin_src emacs-lisp
   Command: delete-windows-on &optional buffer-or-name frame ¶
@@ -799,13 +799,13 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
 
     可选参数 frame 指定要对哪些帧进行操作：
 
-	 nil 表示对所有帧进行操作。
+	  ~nil~  表示对所有帧进行操作。
 	 t 表示对选定的帧进行操作。
 	 可见意味着对所有可见帧进行操作。
 	 0 表示对所有可见或图标化的帧进行​​操作。
 	 帧表示对该帧进行操作。
 
-    请注意，此参数与扫描所有活动窗口的其他函数的含义不同（请参阅 Windows 的循环排序）。具体来说，这里 t 和 nil 的含义与它们在其他函数中的含义相反。
+    请注意，此参数与扫描所有活动窗口的其他函数的含义不同（请参阅 Windows 的循环排序）。具体来说，这里 t 和  ~nil~  的含义与它们在其他函数中的含义相反。
 
 ** 29.9 重新组合窗口
 当删除窗口 W 的最后一个兄弟时，它的父窗口也被删除，W 在窗口树中替换它。这意味着 W 必须与其父级的兄弟重新组合以形成新的窗口组合（请参阅窗口和 ~帧~ ( ~frame~ )）。在某些情况下，删除一个实时窗口甚至可能需要删除两个内部窗口。
@@ -926,22 +926,22 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
   window-size
 #+end_src
 
-	 这意味着 display-buffer 在拆分窗口时会创建一个新的父窗口，并在 alist 参数中传递一个 window-height 或 window-width 条目（请参阅缓冲区显示的操作函数）。否则，窗口拆分的行为与 nil 值相同。
+	 这意味着 display-buffer 在拆分窗口时会创建一个新的父窗口，并在 alist 参数中传递一个 window-height 或 window-width 条目（请参阅缓冲区显示的操作函数）。否则，窗口拆分的行为与  ~nil~  值相同。
 #+begin_src emacs-lisp
   temp-buffer-resize
 #+end_src
 
-	 在这种情况下，with-temp-buffer-window 在拆分窗口并启用 temp-buffer-resize-mode 时会创建一个新的父窗口（请参阅临时显示）。否则，窗口拆分的行为与 nil 相同。
+	 在这种情况下，with-temp-buffer-window 在拆分窗口并启用 temp-buffer-resize-mode 时会创建一个新的父窗口（请参阅临时显示）。否则，窗口拆分的行为与  ~nil~  相同。
 #+begin_src emacs-lisp
   temp-buffer
 #+end_src
 
-	 在这种情况下，with-temp-buffer-window 在拆分现有窗口时总是会创建一个新的父窗口（请参阅临时显示）。否则，窗口拆分的行为与 nil 相同。
+	 在这种情况下，with-temp-buffer-window 在拆分现有窗口时总是会创建一个新的父窗口（请参阅临时显示）。否则，窗口拆分的行为与  ~nil~  相同。
 #+begin_src emacs-lisp
   display-buffer
 #+end_src
 
-	 这意味着当 display-buffer（请参阅为显示缓冲区选择窗口）拆分窗口时，它总是会创建一个新的父窗口。否则，窗口拆分的行为与 nil 相同。
+	 这意味着当 display-buffer（请参阅为显示缓冲区选择窗口）拆分窗口时，它总是会创建一个新的父窗口。否则，窗口拆分的行为与  ~nil~  相同。
 #+begin_src emacs-lisp
   t
 #+end_src
@@ -986,7 +986,7 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
 
     此函数返回窗口的组合限制。
 
-    组合限制仅对内部窗口有意义。如果为 nil，则允许 Emacs 自动删除窗口，以响应窗口删除，以便将 window 的子窗口与其兄弟窗口分组，形成新的窗口组合。如果组合限制为 t，则 window 的子窗口永远不会自动与其兄弟窗口重新组合。
+    组合限制仅对内部窗口有意义。如果为  ~nil~ ，则允许 Emacs 自动删除窗口，以响应窗口删除，以便将 window 的子窗口与其兄弟窗口分组，形成新的窗口组合。如果组合限制为 t，则 window 的子窗口永远不会自动与其兄弟窗口重新组合。
 
     如果在本节开头显示的配置中，W4（W6 和 W7 的父窗口）的组合限制为 t，则删除 W5 也不会隐式删除 W4。
 
@@ -996,11 +996,11 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
   User Option: window-combination-resize ¶
 #+end_src
 
-    如果此变量为 nil，则 split-window 只能在窗口的屏幕区域足够大以容纳其自身和新窗口的情况下拆分窗口（用 window 表示）。
+    如果此变量为  ~nil~ ，则 split-window 只能在窗口的屏幕区域足够大以容纳其自身和新窗口的情况下拆分窗口（用 window 表示）。
 
     如果这个变量是 t，split-window 会尝试调整与 window 相同组合的所有窗口的大小，以适应新窗口。特别是，即使窗口是固定大小的窗口或太小而无法正常拆分，这也可能允许拆分窗口成功。此外，随后调整或删除窗口的大小可能会调整其组合中的所有其他窗口的大小。
 
-    默认值为无。其他值保留供将来使用。如果特定的拆分操作受 window-combination-limit 的非 nil 值影响，则可能会忽略此变量的值。
+    默认值为无。其他值保留供将来使用。如果特定的拆分操作受 window-combination-limit 的非  ~nil~  值影响，则可能会忽略此变量的值。
 
 为了说明窗口组合调整大小的效果，请考虑以下 ~帧~ ( ~frame~ )布局。
 #+begin_src emacs-lisp
@@ -1022,7 +1022,7 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
 #+end_src
 
 
-如果 window-combination-resize 为 nil，则拆分窗口 W3 使 W2 的大小保持不变：
+如果 window-combination-resize 为  ~nil~ ，则拆分窗口 W3 使 W2 的大小保持不变：
 #+begin_src emacs-lisp
    ______________________________________
   | ____________________________________ |
@@ -1071,13 +1071,13 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
 
     此函数返回一个实时窗口，即窗口循环排序中的下一个窗口。窗口应该是一个活动窗口；  如果省略或为零，则默认为选定的窗口。
 
-    可选参数 minibuf 指定是否应将 minibuffer 窗口包含在循环排序中。通常，当 minibuf 为 nil 时，仅当 minibuffer 窗口当前处于活动状态时才包含它；  这与 Cx o 的行为相匹配。（请注意，只要 minibuffer 正在使用，minibuffer 窗口就处于活动状态；请参阅 Minibuffers）。
+    可选参数 minibuf 指定是否应将 minibuffer 窗口包含在循环排序中。通常，当 minibuf 为  ~nil~  时，仅当 minibuffer 窗口当前处于活动状态时才包含它；  这与 Cx o 的行为相匹配。（请注意，只要 minibuffer 正在使用，minibuffer 窗口就处于活动状态；请参阅 Minibuffers）。
 
-    如果 minibuf 为 t，则循环排序包括所有 minibuffer 窗口。如果 minibuf 既不是 t 也不是 nil，即使 minibuffer 窗口处于活动状态，也不包括在内。
+    如果 minibuf 为 t，则循环排序包括所有 minibuffer 窗口。如果 minibuf 既不是 t 也不是  ~nil~ ，即使 minibuffer 窗口处于活动状态，也不包括在内。
 
     可选参数 all-frames 指定要考虑的帧：
 
-	 nil 表示考虑窗口 ~帧~ ( ~frame~ )上的窗口。如果考虑了 minibuffer 窗口（由 minibuf 参数指定），那么共享 minibuffer 窗口的帧也会被考虑。
+	  ~nil~  表示考虑窗口 ~帧~ ( ~frame~ )上的窗口。如果考虑了 minibuffer 窗口（由 minibuf 参数指定），那么共享 minibuffer 窗口的帧也会被考虑。
 	 t 表示考虑所有现有 ~帧~ ( ~frame~ )上的窗口。
 	 可见意味着考虑所有可见 ~帧~ ( ~frame~ )上的窗口。
 	 0 表示考虑所有可见或图标化 ~帧~ ( ~frame~ )上的窗口。
@@ -1098,11 +1098,11 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
 
     此函数选择一个实时窗口，从选定的窗口开始按窗口的循环顺序计数。如果 count 为正数，则向前跳过 count 个窗口；  如果 count 是负数，它会向后跳过 -count 个窗口；  如果计数为零，则只是重新选择选定的窗口。当以交互方式调用时，count 是数字前缀参数。
 
-    可选参数 all-frames 与 next-window 中的含义相同，就像 next-window 的 nil minibuf 参数。
+    可选参数 all-frames 与 next-window 中的含义相同，就像 next-window 的  ~nil~  minibuf 参数。
 
-    如果 ignore-window-parameters 为 nil，则此函数不会选择具有非 nil no-other-window 窗口参数的窗口（请参阅窗口参数）。
+    如果 ignore-window-parameters 为  ~nil~ ，则此函数不会选择具有非 nil no-other-window 窗口参数的窗口（请参阅窗口参数）。
 
-    如果所选窗口的 other-window 参数是一个函数，并且 ignore-window-parameters 为 nil，则将使用参数 count 和 all-frames 调用该函数，而不是该函数的正常操作。
+    如果所选窗口的 other-window 参数是一个函数，并且 ignore-window-parameters 为  ~nil~ ，则将使用参数 count 和 all-frames 调用该函数，而不是该函数的正常操作。
 
 #+begin_src emacs-lisp
   Function: walk-windows fun &optional minibuf all-frames ¶
@@ -1118,9 +1118,9 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
   Function: one-window-p &optional no-mini all-frames ¶
 #+end_src
 
-    如果所选窗口是唯一的活动窗口，则此函数返回 t，否则返回 nil。
+    如果所选窗口是唯一的活动窗口，则此函数返回 t，否则返回  ~nil~ 。
 
-    如果 minibuffer 窗口处于活动状态，则通常会考虑它（因此该函数返回 nil）。但是，如果可选参数 no-mini 不为零，则即使处于活动状态，也会忽略 minibuffer 窗口。可选参数 all-frames 与 next-window 具有相同的含义。
+    如果 minibuffer 窗口处于活动状态，则通常会考虑它（因此该函数返回  ~nil~ ）。但是，如果可选参数 no-mini 不为零，则即使处于活动状态，也会忽略 minibuffer 窗口。可选参数 all-frames 与 next-window 具有相同的含义。
 
 以下函数返回一个满足某些标准的窗口，而不选择它：
 
@@ -1130,7 +1130,7 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
 
     此函数返回一个活动窗口，它是启发式的最近最少使用的窗口。最近最少使用的窗口是最近最少选择的窗口——其使用时间少于所有其他活动窗口的使用时间的窗口（请参阅选择窗口）。可选参数 all-frames 与 next-window 中的含义相同。
 
-    如果存在任何全角窗口，则仅考虑这些窗口。minibuffer 窗口永远不是候选对象。除非可选参数 dedicated 不为零，否则专用窗口（请参阅专用窗口）永远不是候选窗口。选定的窗口永远不会返回，除非它是唯一的候选者。但是，如果可选参数 not-selected 为非 nil，则此函数在这种情况下返回 nil。可选参数 no-other，如果非 nil，则意味着永远不会返回 no-other-window 参数为非 nil 的窗口。
+    如果存在任何全角窗口，则仅考虑这些窗口。minibuffer 窗口永远不是候选对象。除非可选参数 dedicated 不为零，否则专用窗口（请参阅专用窗口）永远不是候选窗口。选定的窗口永远不会返回，除非它是唯一的候选者。但是，如果可选参数 not-selected 为非  ~nil~ ，则此函数在这种情况下返回  ~nil~ 。可选参数 no-other，如果非  ~nil~ ，则意味着永远不会返回 no-other-window 参数为非  ~nil~  的窗口。
 
 #+begin_src emacs-lisp
   Function: get-mru-window &optional all-frames dedicated not-selected no-other ¶
@@ -1138,7 +1138,7 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
 
     此函数类似于 get-lru-window，但它返回最近使用的窗口。最近使用的窗口是最近选择的窗口——使用时间超过所有其他活动窗口的使用时间的窗口（请参阅选择窗口）。参数的含义与 get-lru-window 相同。
 
-    由于在实践中最近使用的窗口总是被选中的窗口，所以通常只用一个非 nil 未选中的参数调用这个函数是有意义的。
+    由于在实践中最近使用的窗口总是被选中的窗口，所以通常只用一个非  ~nil~  未选中的参数调用这个函数是有意义的。
 
 #+begin_src emacs-lisp
   Function: get-largest-window &optional all-frames dedicated not-selected no-other ¶
@@ -1150,7 +1150,7 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
   Function: get-window-with-predicate predicate &optional minibuf all-frames default ¶
 #+end_src
 
-    该函数按窗口的循环顺序依次调用每个窗口的函数谓词，并将窗口作为参数传递给它。如果谓词为任何窗口返回非零，则此函数停止并返回该窗口。如果没有找到这样的窗口，则返回值为 default（默认为 nil）。
+    该函数按窗口的循环顺序依次调用每个窗口的函数谓词，并将窗口作为参数传递给它。如果谓词为任何窗口返回非零，则此函数停止并返回该窗口。如果没有找到这样的窗口，则返回值为 default（默认为  ~nil~ ）。
 
     可选参数 minibuf 和 all-frames 指定要搜索的窗口，并且与 next-window 中的含义相同。
 
@@ -1161,17 +1161,17 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
   Function: window-buffer &optional window ¶
 #+end_src
 
-    此函数返回窗口正在显示的缓冲区。如果 window 被省略或 nil 它默认为选定的窗口。如果 window 是内部窗口，则此函数返回 nil。
+    此函数返回窗口正在显示的缓冲区。如果 window 被省略或  ~nil~  它默认为选定的窗口。如果 window 是内部窗口，则此函数返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: set-window-buffer window buffer-or-name &optional keep-margins ¶
 #+end_src
 
-    此函数使窗口显示缓冲区或名称。窗口应该是一个活动窗口；  如果为零，则默认为选定的窗口。buffer-or-name 应该是一个缓冲区，或现有缓冲区的名称。此函数不会更改选择了哪个窗口，也不会直接更改当前缓冲区（请参阅当前缓冲区）。它的返回值为 nil。
+    此函数使窗口显示缓冲区或名称。窗口应该是一个活动窗口；  如果为零，则默认为选定的窗口。buffer-or-name 应该是一个缓冲区，或现有缓冲区的名称。此函数不会更改选择了哪个窗口，也不会直接更改当前缓冲区（请参阅当前缓冲区）。它的返回值为  ~nil~ 。
 
     如果 window 专用于缓冲区并且 buffer-or-name 没有指定该缓冲区，则此函数会发出错误信号。请参阅专用窗口。
 
-    默认情况下，此函数根据指定缓冲区中的局部变量重置窗口的位置、显示边距、边缘宽度和滚动条设置。但是，如果可选参数 keep-margins 不为 nil，它将单独保留窗口的显示边距、边缘和滚动条设置。
+    默认情况下，此函数根据指定缓冲区中的局部变量重置窗口的位置、显示边距、边缘宽度和滚动条设置。但是，如果可选参数 keep-margins 不为  ~nil~ ，它将单独保留窗口的显示边距、边缘和滚动条设置。
 
     在编写应用程序时，通常应该使用 display-buffer（请参阅选择用于显示缓冲区的窗口）或在窗口中切换到缓冲区中描述的更高级别的函数，而不是直接调用 set-window-buffer。
 
@@ -1187,13 +1187,13 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
   Variable: buffer-display-time ¶
 #+end_src
 
-    这个缓冲区局部变量记录缓冲区最后一次显示在窗口中的时间。如果缓冲区从未显示过，则该值为 nil。每次为缓冲区调用 set-window-buffer 时都会更新它，其值由当前时间返回（请参阅时间）。
+    这个缓冲区局部变量记录缓冲区最后一次显示在窗口中的时间。如果缓冲区从未显示过，则该值为  ~nil~ 。每次为缓冲区调用 set-window-buffer 时都会更新它，其值由当前时间返回（请参阅时间）。
 
 #+begin_src emacs-lisp
   Function: get-buffer-window &optional buffer-or-name all-frames ¶
 #+end_src
 
-    此函数以窗口的循环顺序返回第一个显示缓冲区或名称的窗口，从选定的窗口开始（请参阅 Windows 的循环排序）。如果不存在这样的窗口，则返回值为 nil。
+    此函数以窗口的循环顺序返回第一个显示缓冲区或名称的窗口，从选定的窗口开始（请参阅 Windows 的循环排序）。如果不存在这样的窗口，则返回值为  ~nil~ 。
 
     buffer-or-name 应该是一个缓冲区或缓冲区的名称；  如果省略或为零，则默认为当前缓冲区。可选参数 all-frames 指定要考虑的窗口：
 
@@ -1232,19 +1232,19 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
 
     此命令尝试在所选窗口中显示缓冲区或名称并将其设为当前缓冲区。它通常以交互方式使用（作为 Cx b 的绑定），以及在 Lisp 程序中。返回值是切换到的缓冲区。
 
-    如果 buffer-or-name 为 nil，则默认为 other-buffer 返回的缓冲区（请参阅缓冲区列表）。如果 buffer-or-name 是一个不是任何现有缓冲区名称的字符串，则此函数创建一个具有该名称的新缓冲区；  新缓冲区的主模式由变量主模式确定（请参阅主模式）。
+    如果 buffer-or-name 为  ~nil~ ，则默认为 other-buffer 返回的缓冲区（请参阅缓冲区列表）。如果 buffer-or-name 是一个不是任何现有缓冲区名称的字符串，则此函数创建一个具有该名称的新缓冲区；  新缓冲区的主模式由变量主模式确定（请参阅主模式）。
 
     通常，指定的缓冲区放在缓冲区列表的前面——全局缓冲区列表和选定帧的缓冲区列表（请参阅缓冲区列表）。但是，如果可选参数 norecord 为非零，则不会这样做。
 
     有时，所选窗口可能不适合显示缓冲区。如果所选窗口是一个 minibuffer 窗口，或者如果所选窗口强烈专用于其缓冲区（请参阅专用窗口），则会发生这种情况。在这种情况下，该命令通常会尝试通过调用 pop-to-buffer（见下文）在其他窗口中显示缓冲区。
 
-    如果可选参数 force-same-window 不为 nil 并且所选窗口不适合显示缓冲区，则此函数在非交互调用时总是会发出错误信号。在交互使用中，如果选择的窗口是一个 minibuffer 窗口，这个函数会尝试使用其他的窗口来代替。如果所选窗口强烈专用于其缓冲区，则可以使用下面描述的选项 switch-to-buffer-in-dedicated-window 继续。
+    如果可选参数 force-same-window 不为  ~nil~  并且所选窗口不适合显示缓冲区，则此函数在非交互调用时总是会发出错误信号。在交互使用中，如果选择的窗口是一个 minibuffer 窗口，这个函数会尝试使用其他的窗口来代替。如果所选窗口强烈专用于其缓冲区，则可以使用下面描述的选项 switch-to-buffer-in-dedicated-window 继续。
 
 #+begin_src emacs-lisp
   User Option: switch-to-buffer-in-dedicated-window ¶
 #+end_src
 
-    此选项，如果非 nil，则允许在交互调用时继续切换到缓冲区，并且所选窗口强烈专用于其缓冲区。
+    此选项，如果非  ~nil~ ，则允许在交互调用时继续切换到缓冲区，并且所选窗口强烈专用于其缓冲区。
 
     遵循以下值：
 
@@ -1277,7 +1277,7 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
   User Option: switch-to-buffer-preserve-window-point ¶
 #+end_src
 
-    如果此变量为 nil，则 switch-to-buffer 将在该缓冲区点的位置显示由 buffer-or-name 指定的缓冲区。如果此变量已显示，它会尝试在所选窗口中的先前位置显示缓冲区，前提是缓冲区当前显示在任何可见或图标 ~帧~ ( ~frame~ )上的某个其他窗口中。如果此变量为 t，则 switch-to-buffer 无条件地尝试在所选窗口中的先前位置显示缓冲区。
+    如果此变量为  ~nil~ ，则 switch-to-buffer 将在该缓冲区点的位置显示由 buffer-or-name 指定的缓冲区。如果此变量已显示，它会尝试在所选窗口中的先前位置显示缓冲区，前提是缓冲区当前显示在任何可见或图标 ~帧~ ( ~frame~ )上的某个其他窗口中。如果此变量为 t，则 switch-to-buffer 无条件地尝试在所选窗口中的先前位置显示缓冲区。
 
     如果缓冲区已经显示在所选窗口中或以前从未出现在其中，或者如果 switch-to-buffer 调用 pop-to-buffer 来显示缓冲区，则忽略此变量。
 
@@ -1285,7 +1285,7 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
   User Option: switch-to-buffer-obey-display-actions ¶
 #+end_src
 
-    如果此变量不为 nil，则 switch-to-buffer 遵循由 display-buffer-overriding-action、display-buffer-alist 和其他显示相关变量指定的显示操作。
+    如果此变量不为  ~nil~ ，则 switch-to-buffer 遵循由 display-buffer-overriding-action、display-buffer-alist 和其他显示相关变量指定的显示操作。
 
 接下来的两个命令类似于 switch-to-buffer，除了所描述的功能。
 
@@ -1317,9 +1317,9 @@ split-window 调用创建了一个新的实时窗口，用 W5 表示。它还创
 
     此函数使 buffer-or-name 成为当前缓冲区并将其显示在某个窗口中，最好不是当前选择的窗口。然后它选择显示窗口。如果该窗口位于不同的图形 ~帧~ ( ~frame~ )上，则尽可能为该 ~帧~ ( ~frame~ )提供输入焦点（请参阅输入焦点）。
 
-    如果 buffer-or-name 为 nil，则默认为 other-buffer 返回的缓冲区（请参阅缓冲区列表）。如果 buffer-or-name 是一个不是任何现有缓冲区名称的字符串，则此函数创建一个具有该名称的新缓冲区；  新缓冲区的主模式由变量主模式确定（请参阅主模式）。在任何情况下，即使没有找到合适的窗口来显示它，该缓冲区也会成为当前缓冲区并返回。
+    如果 buffer-or-name 为  ~nil~ ，则默认为 other-buffer 返回的缓冲区（请参阅缓冲区列表）。如果 buffer-or-name 是一个不是任何现有缓冲区名称的字符串，则此函数创建一个具有该名称的新缓冲区；  新缓冲区的主模式由变量主模式确定（请参阅主模式）。在任何情况下，即使没有找到合适的窗口来显示它，该缓冲区也会成为当前缓冲区并返回。
 
-    如果 action 不是 nil，它应该是传递给 display-buffer 的显示操作（请参阅选择用于显示缓冲区的窗口）。或者，非零、非列表值意味着弹出到选定窗口以外的窗口——即使缓冲区已经显示在选定窗口中。
+    如果 action 不是  ~nil~ ，它应该是传递给 display-buffer 的显示操作（请参阅选择用于显示缓冲区的窗口）。或者，非零、非列表值意味着弹出到选定窗口以外的窗口——即使缓冲区已经显示在选定窗口中。
 
     与 switch-to-buffer 一样，此函数更新缓冲区列表，除非 norecord 为非零。
 
@@ -1336,7 +1336,7 @@ display-buffer 命令可以灵活选择一个窗口进行显示，并在该窗�
 
 该命令执行几个复杂的步骤来查找要在其中显示的窗口。这些步骤通过显示操作进行描述，其形式为 (functions .alist)。在这里，functions 要么是单个函数，要么是一个函数列表，称为 ~动作函数~ （参见用于缓冲区显示的动作函数）；  而alist是一个关联列表，称为 ~action alist~ （见Action Alists for Buffer Display）。有关显示操作的示例，请参阅缓冲区显示之禅。
 
-动作函数接受两个参数：要显示的缓冲区和动作列表。它尝试在某个窗口中显示缓冲区，根据自己的标准选择或创建一个窗口。如果成功，则返回窗口；  否则，它返回 nil。
+动作函数接受两个参数：要显示的缓冲区和动作列表。它尝试在某个窗口中显示缓冲区，根据自己的标准选择或创建一个窗口。如果成功，则返回窗口；  否则，它返回  ~nil~ 。
 
 display-buffer 通过组合来自多个来源的显示动作并依次调用动作函数来工作，直到其中一个设法显示缓冲区并返回非零值。
 
@@ -1344,7 +1344,7 @@ display-buffer 通过组合来自多个来源的显示动作并依次调用动�
   Command: display-buffer buffer-or-name &optional action frame ¶
 #+end_src
 
-    此命令使缓冲区或名称出现在某个窗口中，而不选择窗口或使缓冲区成为当前的。参数 buffer-or-name 必须是缓冲区或现有缓冲区的名称。返回值是选择显示缓冲区的窗口，如果没有找到合适的窗口，则返回 nil。
+    此命令使缓冲区或名称出现在某个窗口中，而不选择窗口或使缓冲区成为当前的。参数 buffer-or-name 必须是缓冲区或现有缓冲区的名称。返回值是选择显示缓冲区的窗口，如果没有找到合适的窗口，则返回  ~nil~ 。
 
     可选参数动作，如果非零，通常应该是一个显示动作（如上所述）。display-buffer 通过合并来自以下来源的显示操作（按照它们的优先级，从高到低）来构建操作函数列表和操作列表：
 
@@ -1364,7 +1364,7 @@ display-buffer 通过组合来自多个来源的显示动作并依次调用动�
 
     参数动作也可以有一个非零、非列表值。这具有特殊含义，即缓冲区应显示在所选窗口之外的窗口中，即使所选窗口已经在显示它。如果使用前缀参数交互调用，则 action 为 t。Lisp 程序应该总是提供一个列表值。
 
-    可选参数 frame，如果非 nil，则指定在确定缓冲区是否已显示时要检查哪些帧。相当于在动作的动作列表中添加一个元素（reusable-frames .frame）（请参阅用于缓冲区显示的动作列表）。提供 frame 参数是出于兼容性原因，Lisp 程序不应该使用它。
+    可选参数 frame，如果非  ~nil~ ，则指定在确定缓冲区是否已显示时要检查哪些帧。相当于在动作的动作列表中添加一个元素（reusable-frames .frame）（请参阅用于缓冲区显示的动作列表）。提供 frame 参数是出于兼容性原因，Lisp 程序不应该使用它。
 
 #+begin_src emacs-lisp
   Variable: display-buffer-overriding-action ¶
@@ -1376,7 +1376,7 @@ display-buffer 通过组合来自多个来源的显示动作并依次调用动�
   User Option: display-buffer-alist ¶
 #+end_src
 
-    该选项的值是一个列表映射条件来显示动作。每个条件可以是匹配缓冲区名称的正则表达式，也可以是带有两个参数的函数：缓冲区名称和传递给显示缓冲区的操作参数。如果传递给 display-buffer 的缓冲区名称与此 alist 中的正则表达式匹配，或者条件指定的函数返回非 nil，则 display-buffer 使用相应的显示操作来显示缓冲区。
+    该选项的值是一个列表映射条件来显示动作。每个条件可以是匹配缓冲区名称的正则表达式，也可以是带有两个参数的函数：缓冲区名称和传递给显示缓冲区的操作参数。如果传递给 display-buffer 的缓冲区名称与此 alist 中的正则表达式匹配，或者条件指定的函数返回非  ~nil~ ，则 display-buffer 使用相应的显示操作来显示缓冲区。
 
 #+begin_src emacs-lisp
   User Option: display-buffer-base-action ¶
@@ -1393,7 +1393,7 @@ display-buffer 通过组合来自多个来源的显示动作并依次调用动�
 
 *** 29.13.2 缓冲区显示的动作函数
 
-动作函数是一个函数显示缓冲区调用，用于选择一个窗口来显示缓冲区。动作函数有两个参数：缓冲区，要显示的缓冲区，和 alist，一个动作列表（请参阅用于缓冲区显示的动作列表）。如果它们成功，它们应该返回一个显示缓冲区的窗口，如果它们失败，则返回 nil。
+动作函数是一个函数显示缓冲区调用，用于选择一个窗口来显示缓冲区。动作函数有两个参数：缓冲区，要显示的缓冲区，和 alist，一个动作列表（请参阅用于缓冲区显示的动作列表）。如果它们成功，它们应该返回一个显示缓冲区的窗口，如果它们失败，则返回  ~nil~ 。
 
 Emacs 中定义了以下基本操作函数。
 
@@ -1409,7 +1409,7 @@ Emacs 中定义了以下基本操作函数。
 
     此函数尝试通过查找已显示缓冲区的窗口来显示缓冲区。所选 ~帧~ ( ~frame~ )上的窗口优先于其他 ~帧~ ( ~frame~ )上的窗口。
 
-    如果 alist 有一个非 nil 禁止相同窗口条目，则所选窗口不符合重用条件。可以在 reusable-frames action alist 条目的帮助下指定用于搜索已显示缓冲区的窗口的帧集。如果 alist 不包含可重用帧条目，则此函数仅搜索选定的帧。
+    如果 alist 有一个非  ~nil~  禁止相同窗口条目，则所选窗口不符合重用条件。可以在 reusable-frames action alist 条目的帮助下指定用于搜索已显示缓冲区的窗口的帧集。如果 alist 不包含可重用帧条目，则此函数仅搜索选定的帧。
 
     如果此函数在另一个 ~帧~ ( ~frame~ )上选择一个窗口，它将使该 ~帧~ ( ~frame~ )可见，并且除非 alist 包含禁止切换 ~帧~ ( ~frame~ )条目，否则在必要时提升该 ~帧~ ( ~frame~ )。
 
@@ -1439,9 +1439,9 @@ Emacs 中定义了以下基本操作函数。
 
     此函数尝试在先前显示缓冲区的窗口中显示缓冲区。
 
-    如果 alist 包含非 nil 禁止相同窗口条目，则所选窗口不符合使用条件。只有当它已经显示缓冲区时，专用窗口才可用。如果 alist 包含前一个窗口条目，则该条目指定的窗口是可用的，即使它之前从未显示过缓冲区。
+    如果 alist 包含非  ~nil~  禁止相同窗口条目，则所选窗口不符合使用条件。只有当它已经显示缓冲区时，专用窗口才可用。如果 alist 包含前一个窗口条目，则该条目指定的窗口是可用的，即使它之前从未显示过缓冲区。
 
-    如果 alist 包含可重用帧条目（请参阅缓冲区显示的动作列表），则其值确定要搜索合适窗口的帧。如果 alist 不包含 reusable-frames 条目，如果 display-buffer-reuse-frames 和 pop-up-frames 都为 nil，则此函数仅搜索选定的帧；  如果这些变量中的任何一个不为零，它就会搜索当前终端上的所有帧。
+    如果 alist 包含可重用帧条目（请参阅缓冲区显示的动作列表），则其值确定要搜索合适窗口的帧。如果 alist 不包含 reusable-frames 条目，如果 display-buffer-reuse-frames 和 pop-up-frames 都为  ~nil~ ，则此函数仅搜索选定的帧；  如果这些变量中的任何一个不为零，它就会搜索当前终端上的所有帧。
 
     如果根据这些规则有多个窗口符合可用条件，则此函数按以下优先顺序进行选择：
 
@@ -1521,19 +1521,19 @@ Emacs 中定义了以下基本操作函数。
 
     如果此函数在另一个 ~帧~ ( ~frame~ )上选择一个窗口，它将使该 ~帧~ ( ~frame~ )可见，并且除非 alist 包含禁止切换 ~帧~ ( ~frame~ )条目，否则在必要时提升该 ~帧~ ( ~frame~ )。
 
-    如果 alist 有一个非 nil 帧谓词条目，它的值是一个接受一个参数（一个帧）的函数，如果该帧是候选帧，则返回非 nil；  此函数替换默认谓词。
+    如果 alist 有一个非  ~nil~  帧谓词条目，它的值是一个接受一个参数（一个帧）的函数，如果该帧是候选帧，则返回非  ~nil~ ；  此函数替换默认谓词。
 
-    如果 alist 有一个非 nil 禁止相同窗口条目，则不使用选定的窗口；  因此，如果所选 ~帧~ ( ~frame~ )只有一个窗口，则不使用它。
+    如果 alist 有一个非  ~nil~  禁止相同窗口条目，则不使用选定的窗口；  因此，如果所选 ~帧~ ( ~frame~ )只有一个窗口，则不使用它。
 
 #+begin_src emacs-lisp
   Function: display-buffer-no-window buffer alist ¶
 #+end_src
 
-    如果 alist 有一个非零的 allow-no-window 条目，则此函数不显示缓冲区并返回符号失败。这构成了操作函数返回 nil 或显示缓冲区的窗口的约定的唯一例外。如果 alist 没有这样的 allow-no-window 条目，则此函数返回 nil。
+    如果 alist 有一个非零的 allow-no-window 条目，则此函数不显示缓冲区并返回符号失败。这构成了操作函数返回  ~nil~  或显示缓冲区的窗口的约定的唯一例外。如果 alist 没有这样的 allow-no-window 条目，则此函数返回  ~nil~ 。
 
-    如果此函数返回失败，则显示缓冲区将跳过任何进一步的显示操作并立即返回 nil。如果此函数返回 nil，则显示缓冲区将继续执行下一个显示操作（如果有）。
+    如果此函数返回失败，则显示缓冲区将跳过任何进一步的显示操作并立即返回  ~nil~ 。如果此函数返回  ~nil~ ，则显示缓冲区将继续执行下一个显示操作（如果有）。
 
-    假设当 display-buffer 的调用者指定一个非 nil 的 allow-no-window 条目时，它也能够处理一个 nil 返回值。
+    假设当 display-buffer 的调用者指定一个非  ~nil~  的 allow-no-window 条目时，它也能够处理一个  ~nil~  返回值。
 
 其他两个动作函数在其适当的部分中描述 - display-buffer-in-side-window（请参阅在侧窗口中显示缓冲区）和 display-buffer-in-atom-window（请参阅原子窗口）。
 
@@ -1571,20 +1571,20 @@ Emacs 中定义了以下基本操作函数。
 
     该值指定用于搜索可重复使用的窗口的帧集，因为它已经显示了缓冲区。可以如下设置：
 
-	 nil 表示只考虑选定 ~帧~ ( ~frame~ )上的窗口。（实际上，使用的最后一帧不是 minibuffer-only 帧。）
+	  ~nil~  表示只考虑选定 ~帧~ ( ~frame~ )上的窗口。（实际上，使用的最后一帧不是 minibuffer-only 帧。）
 	 t 表示考虑所有 ~帧~ ( ~frame~ )上的窗口。
 	 可见意味着考虑所有可见 ~帧~ ( ~frame~ )上的窗口。
 	 0 表示考虑所有可见或图标化 ~帧~ ( ~frame~ )上的窗口。
 	  ~帧~ ( ~frame~ )意味着仅考虑该 ~帧~ ( ~frame~ )上的窗口。
 
-    请注意，nil 的含义与 next-window 的 all-frames 参数的含义略有不同（请参阅 Windows 的循环排序）。
+    请注意， ~nil~  的含义与 next-window 的 all-frames 参数的含义略有不同（请参阅 Windows 的循环排序）。
 
     它的一个主要客户端是 display-buffer-reuse-window，但所有其他尝试重用窗口的操作函数也会受到影响。display-buffer-in-previous-window 在搜索先前在另一帧上显示缓冲区的窗口时会查询它。
 #+begin_src emacs-lisp
   inhibit-switch-frame
 #+end_src
 
-    如果 display-buffer 选择的窗口显示在那里，则非 nil 值可防止引发或选择另一个帧。主要受此影响的是 display-buffer-use-some-frame 和 display-buffer-reuse-window。理想情况下，display-buffer-pop-up-frame 也应该受到影响，但不能保证窗口管理器会遵守。
+    如果 display-buffer 选择的窗口显示在那里，则非  ~nil~  值可防止引发或选择另一个帧。主要受此影响的是 display-buffer-use-some-frame 和 display-buffer-reuse-window。理想情况下，display-buffer-pop-up-frame 也应该受到影响，但不能保证窗口管理器会遵守。
 #+begin_src emacs-lisp
   window-parameters
 #+end_src
@@ -1603,7 +1603,7 @@ Emacs 中定义了以下基本操作函数。
 
     该值指定是否以及如何调整所选窗口的高度，可以是以下之一：
 
-	 nil 表示不考虑所选窗口的高度。
+	  ~nil~  表示不考虑所选窗口的高度。
 	 整数指定所选窗口的所需总高度（以行为单位）。
 	 浮点数指定所选窗口的所需总高度相对于其 ~帧~ ( ~frame~ )根窗口的总高度的比例。
 	 如果该值指定了一个函数，则该函数将使用一个参数调用 - 所选窗口。该功能应该调整窗口的高度；  它的返回值被忽略。合适的函数是 fit-window-to-buffer 和 shrink-window-if-larger-than-buffer，请参阅调整窗口大小。
@@ -1615,7 +1615,7 @@ Emacs 中定义了以下基本操作函数。
 
     此条目类似于前面描述的 window-height 条目，但用于调整所选窗口的宽度。该值可以是以下之一：
 
-	 nil 表示不保留所选窗口的宽度。
+	  ~nil~  表示不保留所选窗口的宽度。
 	 一个整数指定所选窗口的所需总宽度（以列为单位）。
 	 浮点数指定所选窗口的所需总宽度相对于 ~帧~ ( ~frame~ )根窗口的总宽度的比例。
 	 如果该值指定了一个函数，则该函数将使用一个参数调用 - 所选窗口。该功能应该调整窗口的宽度；  它的返回值被忽略。
@@ -1630,7 +1630,7 @@ Emacs 中定义了以下基本操作函数。
   preserve-size
 #+end_src
 
-    如果非 nil，这样的条目会告诉 Emacs 保留所选窗口的大小（请参阅保留窗口大小）。该值应该是 (t . nil) 以保留窗口的宽度， (nil . t) 以保留其高度或 (t . t) 以保留其宽度和高度。仅在此列表之后指定的某些条件下才应处理此条目。
+    如果非  ~nil~ ，这样的条目会告诉 Emacs 保留所选窗口的大小（请参阅保留窗口大小）。该值应该是 (t . nil) 以保留窗口的宽度， (nil . t) 以保留其高度或 (t . t) 以保留其宽度和高度。仅在此列表之后指定的某些条件下才应处理此条目。
 #+begin_src emacs-lisp
   pop-up-frame-parameters
 #+end_src
@@ -1670,7 +1670,7 @@ Emacs 中定义了以下基本操作函数。
   allow-no-window
 #+end_src
 
-    如果该值为非 nil，则 display-buffer 不一定必须显示缓冲区并且调用者准备接受它。此条目不适用于用户自定义，因为无法保证 display-buffer 的任意调用者能够处理没有窗口将显示缓冲区的情况。display-buffer-no-window 是唯一关心这个条目的动作函数。
+    如果该值为非  ~nil~ ，则 display-buffer 不一定必须显示缓冲区并且调用者准备接受它。此条目不适用于用户自定义，因为无法保证 display-buffer 的任意调用者能够处理没有窗口将显示缓冲区的情况。display-buffer-no-window 是唯一关心这个条目的动作函数。
 #+begin_src emacs-lisp
   body-function
 #+end_src
@@ -1687,7 +1687,7 @@ Emacs 中定义了以下基本操作函数。
   User Option: pop-up-windows ¶
 #+end_src
 
-    如果此变量的值为非 nil，则允许 display-buffer 拆分现有窗口以创建一个新窗口用于显示。这是默认设置。
+    如果此变量的值为非  ~nil~ ，则允许 display-buffer 拆分现有窗口以创建一个新窗口用于显示。这是默认设置。
 
     提供此变量仅用于向后兼容。display-buffer通过display-buffer-fallback-action中的一种特殊机制来遵守它，当该选项的值为non时调用action函数display-buffer-pop-up-window（见缓冲区显示的动作函数） -零。display-buffer-pop-up-window 本身不参考它，用户可以直接在 display-buffer-alist 等中指定。
 
@@ -1697,27 +1697,27 @@ Emacs 中定义了以下基本操作函数。
 
     该变量指定一个分割窗口的函数，以便创建一个新窗口来显示缓冲区。display-buffer-pop-up-window 操作函数使用它来实际拆分窗口。
 
-    该值必须是一个函数，它接受一个参数，一个窗口，并返回一个新窗口（将用于显示所需的缓冲区）或 nil（这意味着拆分失败）。默认值是 split-window-sensibly，接下来会记录。
+    该值必须是一个函数，它接受一个参数，一个窗口，并返回一个新窗口（将用于显示所需的缓冲区）或  ~nil~ （这意味着拆分失败）。默认值是 split-window-sensibly，接下来会记录。
 
 #+begin_src emacs-lisp
   Function: split-window-sensibly &optional window ¶
 #+end_src
 
-    此函数尝试拆分窗口并返回新创建的窗口。如果窗口无法拆分，则返回 nil。如果 window 被省略或为零，则默认为选定的窗口。
+    此函数尝试拆分窗口并返回新创建的窗口。如果窗口无法拆分，则返回  ~nil~ 。如果 window 被省略或为零，则默认为选定的窗口。
 
-    此函数遵循确定何时可以拆分窗口的常用规则（请参阅拆分窗口）。它首先尝试通过将新窗口放置在下方来进行拆分，除了任何其他限制外，还受到 split-height-threshold （见下文）的限制。如果失败，它会尝试通过将新窗口放在右侧进行拆分，受拆分宽度阈值限制（见下文）。如果这也失败了，并且窗口是其 ~帧~ ( ~frame~ )上的唯一窗口，则此函数再次尝试拆分并将新窗口放置在下方，而忽略拆分高度阈值。如果这也失败了，这个函数放弃并返回 nil。
+    此函数遵循确定何时可以拆分窗口的常用规则（请参阅拆分窗口）。它首先尝试通过将新窗口放置在下方来进行拆分，除了任何其他限制外，还受到 split-height-threshold （见下文）的限制。如果失败，它会尝试通过将新窗口放在右侧进行拆分，受拆分宽度阈值限制（见下文）。如果这也失败了，并且窗口是其 ~帧~ ( ~frame~ )上的唯一窗口，则此函数再次尝试拆分并将新窗口放置在下方，而忽略拆分高度阈值。如果这也失败了，这个函数放弃并返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   User Option: split-height-threshold ¶
 #+end_src
 
-    此变量指定是否允许 split-window-sensibly 拆分窗口并将新窗口放置在下方。如果它是一个整数，这意味着只有当原始窗口至少有那么多行时才拆分。如果为nil，则表示不以这种方式拆分。
+    此变量指定是否允许 split-window-sensibly 拆分窗口并将新窗口放置在下方。如果它是一个整数，这意味着只有当原始窗口至少有那么多行时才拆分。如果为 ~nil~ ，则表示不以这种方式拆分。
 
 #+begin_src emacs-lisp
   User Option: split-width-threshold ¶
 #+end_src
 
-    此变量指定是否允许 split-window-sensibly 拆分窗口，将新窗口放置在右侧。如果该值是整数，则意味着仅当原始窗口至少具有那么多列时才进行拆分。如果该值为 nil，则表示不以这种方式拆分。
+    此变量指定是否允许 split-window-sensibly 拆分窗口，将新窗口放置在右侧。如果该值是整数，则意味着仅当原始窗口至少具有那么多列时才进行拆分。如果该值为  ~nil~ ，则表示不以这种方式拆分。
 
 #+begin_src emacs-lisp
   User Option: even-window-sizes ¶
@@ -1735,7 +1735,7 @@ Emacs 中定义了以下基本操作函数。
 
     非零值还意味着当 display-buffer 正在寻找已经显示缓冲区或名称的窗口时，它可以搜索任何可见或图标化的 ~帧~ ( ~frame~ )，而不仅仅是选定的 ~帧~ ( ~frame~ )。
 
-    提供此变量主要是为了向后兼容。display-buffer 通过 display-buffer-fallback-action 中的特殊机制遵守它，如果值为非 nil，则调用操作函数 display-buffer-pop-up-frame （请参阅缓冲区显示的操作函数）。（这是在尝试拆分窗口之前完成的。） display-buffer-pop-up-frame 本身不咨询此变量，用户可以直接在 display-buffer-alist 等中指定。
+    提供此变量主要是为了向后兼容。display-buffer 通过 display-buffer-fallback-action 中的特殊机制遵守它，如果值为非  ~nil~ ，则调用操作函数 display-buffer-pop-up-frame （请参阅缓冲区显示的操作函数）。（这是在尝试拆分窗口之前完成的。） display-buffer-pop-up-frame 本身不咨询此变量，用户可以直接在 display-buffer-alist 等中指定。
 
 #+begin_src emacs-lisp
   User Option: pop-up-frame-function ¶
@@ -1743,7 +1743,7 @@ Emacs 中定义了以下基本操作函数。
 
     该变量指定一个用于创建新 ~帧~ ( ~frame~ )的函数，以便创建一个用于显示缓冲区的新窗口。它由 display-buffer-pop-up-frame 动作函数使用。
 
-    该值应该是一个不带参数并返回一个 ~帧~ ( ~frame~ )的函数，如果无法创建 ~帧~ ( ~frame~ )，则返回 nil。默认值是使用 pop-up-frame-alist 指定的参数创建 ~帧~ ( ~frame~ )的函数（见下文）。
+    该值应该是一个不带参数并返回一个 ~帧~ ( ~frame~ )的函数，如果无法创建 ~帧~ ( ~frame~ )，则返回  ~nil~ 。默认值是使用 pop-up-frame-alist 指定的参数创建 ~帧~ ( ~frame~ )的函数（见下文）。
 
 #+begin_src emacs-lisp
   User Option: pop-up-frame-alist ¶
@@ -1761,7 +1761,7 @@ Emacs 中定义了以下基本操作函数。
   pop-up-windows ¶
 #+end_src
 
-    此变量默认为 t。与其将其自定义为 nil 并因此告诉 display-buffer 不该做什么，不如在 display-buffer-base-action 中列出它应该尝试的操作函数，例如：
+    此变量默认为 t。与其将其自定义为  ~nil~  并因此告诉 display-buffer 不该做什么，不如在 display-buffer-base-action 中列出它应该尝试的操作函数，例如：
     #+begin_src emacs-lisp
       (customize-set-variable
        'display-buffer-base-action
@@ -1961,7 +1961,7 @@ Emacs 中定义了以下基本操作函数。
 
 由于使用这样的 ~帧~ ( ~frame~ )不是很实用，默认情况下，Emacs 允许更复杂的 ~帧~ ( ~frame~ )布局，由 ~帧~ ( ~frame~ )大小的默认值以及 split-height-threshold 和 split-width-threshold 选项控制。显示尚未在帧上显示的缓冲区，然后拆分该帧上的单个窗口或（重新）使用其两个窗口之一。
 
-一旦用户自定义这些阈值之一或手动更改 ~帧~ ( ~frame~ )的布局，就会放弃默认行为。当使用非 nil 操作参数调用 display-buffer 或用户自定义前面小节中提到的选项之一时，默认行为也会被放弃。由于过多的适用显示动作和由此产生的帧布局，很快掌握显示缓冲区可能会变得令人沮丧。
+一旦用户自定义这些阈值之一或手动更改 ~帧~ ( ~frame~ )的布局，就会放弃默认行为。当使用非  ~nil~  操作参数调用 display-buffer 或用户自定义前面小节中提到的选项之一时，默认行为也会被放弃。由于过多的适用显示动作和由此产生的帧布局，很快掌握显示缓冲区可能会变得令人沮丧。
 
 但是，避免使用缓冲区显示功能并退回到拆分和删除窗口的比喻也不是一个好主意。缓冲区显示功能为 Lisp 程序和用户提供了一个 ~帧~ ( ~frame~ )来协调他们的不同需求；  不存在用于拆分和删除窗口的类似 ~帧~ ( ~frame~ )。缓冲区显示功能还允许在以后从 ~帧~ ( ~frame~ )中删除缓冲区时至少部分恢复 ~帧~ ( ~frame~ )的布局（请参阅退出 Windows）。
 
@@ -1974,10 +1974,7 @@ Emacs 中定义了以下基本操作函数。
     #+begin_src emacs-lisp
       '(nil (inhibit-same-window . t))
     #+end_src
-
-
     仅指定动作列表条目，不指定动作函数。其唯一目的是禁止在其他地方指定的 display-buffer-same-window 函数在同一窗口中显示缓冲区，另请参见上一小节的最后一个示例。
-
 
     #+begin_src emacs-lisp
       '(display-buffer-below-selected)
@@ -2096,13 +2093,13 @@ Emacs 中定义了以下基本操作函数。
   Function: window-next-buffers &optional window ¶
 #+end_src
 
-    此函数通过 switch-to-prev-buffer 返回最近在窗口中重新显示的缓冲区列表。window 参数必须表示一个活动窗口或 nil（表示选定的窗口）。
+    此函数通过 switch-to-prev-buffer 返回最近在窗口中重新显示的缓冲区列表。window 参数必须表示一个活动窗口或  ~nil~ （表示选定的窗口）。
 
 #+begin_src emacs-lisp
   Function: set-window-next-buffers window next-buffers ¶
 #+end_src
 
-    该函数将窗口的下一个缓冲区列表设置为下一个缓冲区。window 参数应该是一个活动窗口或 nil（表示选定的窗口）。参数 next-buffers 应该是一个缓冲区列表。
+    该函数将窗口的下一个缓冲区列表设置为下一个缓冲区。window 参数应该是一个活动窗口或  ~nil~ （表示选定的窗口）。参数 next-buffers 应该是一个缓冲区列表。
 
 以下命令可用于循环遍历全局缓冲区列表，很像 bury-buffer 和 unbury-buffer。但是，它们根据指定窗口的历史列表循环，而不是全局缓冲区列表。此外，它们恢复特定于窗口的窗口开始和点位置，并且可能显示缓冲区，即使它已经显示在另一个窗口中。特别是 switch-to-prev-buffer 命令被 replace-buffer-in-windows、bury-buffer 和 quit-window 用于查找窗口的替换缓冲区。
 
@@ -2110,7 +2107,7 @@ Emacs 中定义了以下基本操作函数。
   Command: switch-to-prev-buffer &optional window bury-or-kill ¶
 #+end_src
 
-    此命令在窗口中显示上一个缓冲区。参数窗口应该是一个活动窗口或零（表示选定的窗口）。如果可选参数 bury-or-kill 不是 nil，这意味着当前显示在 window 中的缓冲区即将被掩埋或杀死，因此不应在将来调用此命令时切换到该缓冲区。
+    此命令在窗口中显示上一个缓冲区。参数窗口应该是一个活动窗口或零（表示选定的窗口）。如果可选参数 bury-or-kill 不是  ~nil~ ，这意味着当前显示在 window 中的缓冲区即将被掩埋或杀死，因此不应在将来调用此命令时切换到该缓冲区。
 
     前一个缓冲区通常是在窗口中当前显示的缓冲区之前显示的缓冲区。但是，已被掩埋或杀死的缓冲区，或已通过最近调用 switch-to-prev-buffer 显示的缓冲区不符合先前缓冲区的条件。
 
@@ -2134,7 +2131,7 @@ Emacs 中定义了以下基本操作函数。
   User Option: switch-to-prev-buffer-skip ¶
 #+end_src
 
-    如果此变量为 nil，则 switch-to-prev-buffer 可以切换到任何缓冲区，包括已在其他窗口中显示的缓冲区。
+    如果此变量为  ~nil~ ，则 switch-to-prev-buffer 可以切换到任何缓冲区，包括已在其他窗口中显示的缓冲区。
 
     如果此变量非零，则 switch-to-prev-buffer 将避免切换到某些缓冲区。可以使用以下值：
 
@@ -2163,15 +2160,15 @@ Emacs 中定义了以下基本操作函数。
   Function: window-dedicated-p &optional window ¶
 #+end_src
 
-    如果窗口专用于其缓冲区，则此函数返回非 nil，否则返回 nil。更准确地说，返回值是最后一次调用 set-window-dedicated-p 为 window 分配的值，如果从未以 window 作为参数调用该函数，则返回 nil。窗口的默认值是选定的窗口。
+    如果窗口专用于其缓冲区，则此函数返回非  ~nil~ ，否则返回  ~nil~ 。更准确地说，返回值是最后一次调用 set-window-dedicated-p 为 window 分配的值，如果从未以 window 作为参数调用该函数，则返回  ~nil~ 。窗口的默认值是选定的窗口。
 
 #+begin_src emacs-lisp
   Function: set-window-dedicated-p window flag ¶
 #+end_src
 
-    如果 flag 为非 nil，则此函数将窗口标记为专用于其缓冲区，否则将其标记为非专用。
+    如果 flag 为非  ~nil~ ，则此函数将窗口标记为专用于其缓冲区，否则将其标记为非专用。
 
-    作为一种特殊情况，如果 flag 为 t，则窗口变得强烈专用于其缓冲区。当它所作用的窗口高度专用于其缓冲区并且尚未显示它被要求显示的缓冲区时，set-window-buffer 会发出错误信号。其他函数不会将 t 与任何非 nil 值区别对待。
+    作为一种特殊情况，如果 flag 为 t，则窗口变得强烈专用于其缓冲区。当它所作用的窗口高度专用于其缓冲区并且尚未显示它被要求显示的缓冲区时，set-window-buffer 会发出错误信号。其他函数不会将 t 与任何非  ~nil~  值区别对待。
 
 您还可以通过提供合适的专用操作列表条目来告诉 display-buffer 将它创建的窗口标记为专用于其缓冲区（请参阅用于缓冲区显示的操作列表）。
 
@@ -2186,7 +2183,7 @@ Emacs 中定义了以下基本操作函数。
   Command: quit-window &optional kill window ¶
 #+end_src
 
-    此命令退出窗口并掩埋其缓冲区。参数窗口必须是活动窗口，并且默认为选定的窗口。使用前缀参数 kill 非 nil，它会杀死缓冲区而不是掩埋它。
+    此命令退出窗口并掩埋其缓冲区。参数窗口必须是活动窗口，并且默认为选定的窗口。使用前缀参数 kill 非  ~nil~ ，它会杀死缓冲区而不是掩埋它。
 
     函数 quit-window 首先运行 quit-window-hook。然后它调用函数 quit-restore-window，如下所述，它完成了艰苦的工作。
 
@@ -2203,7 +2200,6 @@ Emacs 中定义了以下基本操作函数。
 #+begin_src emacs-lisp
   nil
 #+end_src
-
 	 这意味着不以任何特定方式处理缓冲区。因此，如果没有删除窗口，调用 switch-to-prev-buffer 通常会再次显示缓冲区。
 #+begin_src emacs-lisp
   append
@@ -2223,9 +2219,9 @@ Emacs 中定义了以下基本操作函数。
 
     参数 bury-or-kill 还指定当窗口应该被删除时如何处理窗口的 ~帧~ ( ~frame~ )，如果它是其 ~帧~ ( ~frame~ )上的唯一窗口，并且该 ~帧~ ( ~frame~ )的终端上还有其他 ~帧~ ( ~frame~ )。如果bury-or-kill等于kill，则表示删除帧。否则， ~帧~ ( ~frame~ )的命运是通过调用 frame-auto-hide-function（见下文）以该 ~帧~ ( ~frame~ )作为唯一参数来确定的。
 
-    此函数始终将窗口的退出恢复参数设置为 nil，除非它删除了窗口。
+    此函数始终将窗口的退出恢复参数设置为  ~nil~ ，除非它删除了窗口。
 
-窗口窗口的 quit-restore 参数（请参阅窗口参数）应为 nil 或四个元素的列表：
+窗口窗口的 quit-restore 参数（请参阅窗口参数）应为  ~nil~  或四个元素的列表：
 
 #+begin_src emacs-lisp
   (method obuffer owindow this-buffer)
@@ -2282,7 +2278,7 @@ Emacs 中定义了以下基本操作函数。
   Function: display-buffer-in-side-window buffer alist ¶
 #+end_src
 
-    此函数在所选帧的侧窗口中显示缓冲区。它返回用于显示缓冲区的窗口，如果找不到或创建这样的窗口，则返回 nil。
+    此函数在所选帧的侧窗口中显示缓冲区。它返回用于显示缓冲区的窗口，如果找不到或创建这样的窗口，则返回  ~nil~ 。
 
     alist 是用于显示缓冲区的符号和值的关联列表。alist 中的以下符号对于此功能是特殊的：
 
@@ -2324,15 +2320,15 @@ Emacs 中定义了以下基本操作函数。
   User Option: window-sides-slots ¶
 #+end_src
 
-    此选项指定 ~帧~ ( ~frame~ )每一侧的最大侧窗数量。该值是一个由四个元素组成的列表，用于指定（按此顺序）每个 ~帧~ ( ~frame~ )的左侧、顶部、右侧和底部的侧窗插槽数。如果一个元素是一个数字，则意味着在对应的一侧最多显示多少个窗口。如果元素为 nil，则表示该侧的插槽数没有限制。
+    此选项指定 ~帧~ ( ~frame~ )每一侧的最大侧窗数量。该值是一个由四个元素组成的列表，用于指定（按此顺序）每个 ~帧~ ( ~frame~ )的左侧、顶部、右侧和底部的侧窗插槽数。如果一个元素是一个数字，则意味着在对应的一侧最多显示多少个窗口。如果元素为  ~nil~ ，则表示该侧的插槽数没有限制。
 
-    如果任何指定的值为零，则不能在相应的一侧创建窗口。在这种情况下，display-buffer-in-side-window 不会发出错误信号，但会返回 nil。如果指定的值只是禁止创建额外的侧窗，则重用该侧最合适的窗口，并且可能会相应地更改其 window-slot 参数。
+    如果任何指定的值为零，则不能在相应的一侧创建窗口。在这种情况下，display-buffer-in-side-window 不会发出错误信号，但会返回  ~nil~ 。如果指定的值只是禁止创建额外的侧窗，则重用该侧最合适的窗口，并且可能会相应地更改其 window-slot 参数。
 
 #+begin_src emacs-lisp
   User Option: window-sides-reversed ¶
 #+end_src
 
-    此选项指定顶部/底部窗口是否应以相反的顺序显示。当它为 nil 时， ~帧~ ( ~frame~ )顶部和底部的侧窗总是从左到右绘制，并且槽值增加。当这是 t 时，绘制顺序颠倒， ~帧~ ( ~frame~ )顶部和底部的侧窗从右到左绘制，槽值增加。
+    此选项指定顶部/底部窗口是否应以相反的顺序显示。当它为  ~nil~  时， ~帧~ ( ~frame~ )顶部和底部的侧窗总是从左到右绘制，并且槽值增加。当这是 t 时，绘制顺序颠倒， ~帧~ ( ~frame~ )顶部和底部的侧窗从右到左绘制，槽值增加。
 
     当这是双向时，当且仅当双向段落方向（请参阅双向显示）的值在此主窗口区域内最近选择的窗口中显示的缓冲区中从右到左时，绘制顺序才会反转 ~帧~ ( ~frame~ )。有时该窗口可能很难找到，因此使用启发式方法来避免在选择另一个窗口时无意中更改绘图顺序。
 
@@ -2456,7 +2452,7 @@ Emacs 中定义了以下基本操作函数。
   Function: window-atom-root &optional window ¶
 #+end_src
 
-    这个函数返回原子窗口的根窗口是窗口的一部分。指定的窗口必须是有效的窗口，并且默认为选定的窗口。如果窗口不是原子窗口的一部分，则返回 nil。
+    这个函数返回原子窗口的根窗口是窗口的一部分。指定的窗口必须是有效的窗口，并且默认为选定的窗口。如果窗口不是原子窗口的一部分，则返回  ~nil~ 。
 
 制作新原子窗口的最简单方法是采用现有的内部窗口并应用以下函数：
 
@@ -2487,9 +2483,9 @@ Emacs 中定义了以下基本操作函数。
 
 	 这种元素的值表示新窗口应位于的现有窗口的一侧。有效值是下、右、上和左。默认值如下。新窗口的 window-atom 参数设置为此值。
 
-    返回值为新窗口，创建该窗口失败时返回 nil。
+    返回值为新窗口，创建该窗口失败时返回  ~nil~ 。
 
-请注意，window-atom 参数的值并不重要，只要它不是 nil 即可。display-buffer-in-atom-window 分配的值只允许在应用该函数后轻松检索原始窗口和新窗口。另请注意，window-atom 参数是 display-buffer-in-atom-window 分配的唯一窗口参数。应用程序必须通过 alist 中的窗口参数条目显式设置更多参数。
+请注意，window-atom 参数的值并不重要，只要它不是  ~nil~  即可。display-buffer-in-atom-window 分配的值只允许在应用该函数后轻松检索原始窗口和新窗口。另请注意，window-atom 参数是 display-buffer-in-atom-window 分配的唯一窗口参数。应用程序必须通过 alist 中的窗口参数条目显式设置更多参数。
 
 当其组成部分之一被删除时，原子窗口将自动不存在。要手动分解原子窗口，请重置其组成部分的 window-atom 参数 - 原子窗口的根及其所有后代。
 
@@ -2534,7 +2530,7 @@ Emacs 中定义了以下基本操作函数。
   Variable: window-point-insertion-type ¶
 #+end_src
 
-    此变量指定窗口点的标记插入类型（请参阅标记插入类型）。默认值为 nil，因此窗口点将停留在插入的文本后面。
+    此变量指定窗口点的标记插入类型（请参阅标记插入类型）。默认值为  ~nil~ ，因此窗口点将停留在插入的文本后面。
 
 ** 29.20 窗口开始和结束位置
 每个窗口都维护一个标记，用于跟踪缓冲区位置，该位置指定缓冲区显示应从何处开始。这个位置称为窗口的显示开始位置（或只​​是开始）。此位置之后的字符是出现在窗口左上角的字符。它通常但并非不可避免地位于文本行的开头。
@@ -2545,7 +2541,7 @@ Emacs 中定义了以下基本操作函数。
   Function: window-start &optional window ¶
 #+end_src
 
-    该函数返回窗口窗口的显示开始位置。如果 window 为 nil，则使用选定的窗口。
+    该函数返回窗口窗口的显示开始位置。如果 window 为  ~nil~ ，则使用选定的窗口。
 
     当您创建一个窗口或在其中显示不同的缓冲区时，显示开始位置设置为最近用于同一缓冲区的显示开始位置，或者如果缓冲区没有任何缓冲区，则设置为 point-min。
 
@@ -2565,7 +2561,7 @@ Emacs 中定义了以下基本操作函数。
 
     简单地更改缓冲区文本或移动点不会更新 window-end 返回的值。仅当 Emacs 重新显示并且重新显示完成而不被抢占时，才会更新该值。
 
-    如果最后一次重新显示窗口被抢占，并且没有完成，Emacs 不知道显示结束在该窗口中的位置。在这种情况下，此函数返回 nil。
+    如果最后一次重新显示窗口被抢占，并且没有完成，Emacs 不知道显示结束在该窗口中的位置。在这种情况下，此函数返回  ~nil~ 。
 
     如果 update 不为零，则 window-end 始终根据当前 window-start 值返回显示结束位置的最新值。如果先前保存的该位置的值仍然有效，则 window-end 返回该值；  否则它通过扫描缓冲区文本来计算正确的值。
 
@@ -2583,7 +2579,7 @@ Emacs 中定义了以下基本操作函数。
 
     此函数将窗口的显示开始位置设置为窗口缓冲区中的位置。它返回位置。
 
-    显示例程坚持在显示缓冲区时点的位置是可见的。通常，他们根据其内部逻辑选择显示开始位置（并在必要时滚动窗口）以使点可见。但是，如果您使用 nil 为 noforce 指定此函数的开始位置，则意味着您希望显示从位置开始，即使这会使点的位置远离屏幕。如果这确实将点放置在屏幕外，则显示例程会尝试将点移动到窗口中线的左边距。
+    显示例程坚持在显示缓冲区时点的位置是可见的。通常，他们根据其内部逻辑选择显示开始位置（并在必要时滚动窗口）以使点可见。但是，如果您使用  ~nil~  为 noforce 指定此函数的开始位置，则意味着您希望显示从位置开始，即使这会使点的位置远离屏幕。如果这确实将点放置在屏幕外，则显示例程会尝试将点移动到窗口中线的左边距。
 
     例如，如果 point 为 1 并且您将窗口的起点设置为 37，则下一行的起点将位于窗口顶部的上方。重新显示时显示程序会自动移动点，如果它仍然是 1。这是一个例子：
     #+begin_src emacs-lisp
@@ -2637,11 +2633,11 @@ Emacs 中定义了以下基本操作函数。
   Function: pos-visible-in-window-p &optional position window partially ¶
 #+end_src
 
-    如果位置在 window 屏幕上当前可见的文本范围内，则此函数返回非 nil。如果位置垂直滚动到视图之外，则返回 nil。除非部分为非零，否则部分被遮挡的位置不被视为可见。参数位置默认为窗口中点的当前位置；  窗口默认为选定的窗口。如果位置是 t，这意味着检查窗口中最后一个屏幕行的第一个可见位置，或缓冲区结束位置，以先到者为准。
+    如果位置在 window 屏幕上当前可见的文本范围内，则此函数返回非  ~nil~ 。如果位置垂直滚动到视图之外，则返回  ~nil~ 。除非部分为非零，否则部分被遮挡的位置不被视为可见。参数位置默认为窗口中点的当前位置；  窗口默认为选定的窗口。如果位置是 t，这意味着检查窗口中最后一个屏幕行的第一个可见位置，或缓冲区结束位置，以先到者为准。
 
     此函数仅考虑垂直滚动。如果仅因为窗口已水平滚动而无法查看位置，则 pos-visible-in-window-p 无论如何都会返回非零。请参阅水平滚动。
 
-    如果位置可见，则 pos-visible-in-window-p 如果部分为 nil，则返回 t；  如果 partial 为非 nil，并且跟随位置的字符完全可见，则返回 (xy) 形式的列表，其中 x 和 y 是相对于窗口左上角的像素坐标；  否则返回格式为 (xy rtop rbot rowh vpos) 的扩展列表，其中 rtop 和 rbot 指定位置所在行的顶部和底部的窗口外像素数，rowh 指定该行的可见高度，以及vpos 指定该行的垂直位置（从零开始的行号）。
+    如果位置可见，则 pos-visible-in-window-p 如果部分为  ~nil~ ，则返回 t；  如果 partial 为非  ~nil~ ，并且跟随位置的字符完全可见，则返回 (xy) 形式的列表，其中 x 和 y 是相对于窗口左上角的像素坐标；  否则返回格式为 (xy rtop rbot rowh vpos) 的扩展列表，其中 rtop 和 rbot 指定位置所在行的顶部和底部的窗口外像素数，rowh 指定该行的可见高度，以及vpos 指定该行的垂直位置（从零开始的行号）。
 
     这是一个例子：
     #+begin_src emacs-lisp
@@ -2663,9 +2659,9 @@ Emacs 中定义了以下基本操作函数。
 
     该函数返回窗口中文本行的高度。如果 line 是 header-line 或 mode-line 之一，则 window-line-height 返回有关窗口相应行的信息。否则，line 是从 0 开始的文本行号。负数从窗口末尾开始计数。line 的默认值是 window 中的当前行；  窗口的默认值是选定的窗口。
 
-    如果显示不是最新的，window-line-height 返回 nil。在这种情况下，可以使用 pos-visible-in-window-p 来获取相关信息。
+    如果显示不是最新的，window-line-height 返回  ~nil~ 。在这种情况下，可以使用 pos-visible-in-window-p 来获取相关信息。
 
-    如果没有与指定行对应的行，则 window-line-height 返回 nil。否则，它返回一个列表（height vpos ypos offbot），其中 height 是行的可见部分的高度（以像素为单位），vpos 和 ypos 是行的垂直位置和行的像素相对于第一个文本的顶部行，offbot 是文本行底部的窗口外像素数。如果（第一）文本行顶部有窗口外像素，则 ypos 为负。
+    如果没有与指定行对应的行，则 window-line-height 返回  ~nil~ 。否则，它返回一个列表（height vpos ypos offbot），其中 height 是行的可见部分的高度（以像素为单位），vpos 和 ypos 是行的垂直位置和行的像素相对于第一个文本的顶部行，offbot 是文本行底部的窗口外像素数。如果（第一）文本行顶部有窗口外像素，则 ypos 为负。
 
 ** 29.21 文本滚动
 文本滚动意味着在窗口中上下移动文本。它通过更改窗口的显示开始位置来工作。它还可以更改 window-point 的值以保持屏幕上的点（请参阅 Windows 和点）。
@@ -2676,7 +2672,7 @@ Emacs 中定义了以下基本操作函数。
 
 如果当前缓冲区不是所选窗口中显示的缓冲区，则文本滚动函数（除了 scroll-other-window 之外）会产生不可预知的结果。请参阅当前缓冲区。
 
-如果窗口包含比窗口高度高的行（例如存在大图像时），滚动函数将调整窗口的垂直滚动位置以滚动部分可见的行。Lisp 调用者可以通过将变量 auto-window-vscroll 绑定到 nil 来禁用此功能（请参阅垂直分数滚动）。
+如果窗口包含比窗口高度高的行（例如存在大图像时），滚动函数将调整窗口的垂直滚动位置以滚动部分可见的行。Lisp 调用者可以通过将变量 auto-window-vscroll 绑定到  ~nil~  来禁用此功能（请参阅垂直分数滚动）。
 
 #+begin_src emacs-lisp
   Command: scroll-up &optional count ¶
@@ -2684,7 +2680,7 @@ Emacs 中定义了以下基本操作函数。
 
     此功能在所选窗口中按计数行向前滚动。
 
-    如果 count 是负数，它会向后滚动。如果 count 为 nil（或省略），则滚动的距离为 next-screen-context-lines lines 小于窗口主体的高度。
+    如果 count 是负数，它会向后滚动。如果 count 为  ~nil~ （或省略），则滚动的距离为 next-screen-context-lines lines 小于窗口主体的高度。
 
     如果所选窗口不能再滚动，此函数会发出错误信号。否则，它返回零。
 
@@ -2712,17 +2708,17 @@ Emacs 中定义了以下基本操作函数。
   Command: scroll-other-window &optional count ¶
 #+end_src
 
-    此函数将另一个窗口中的文本向上滚动计数行。count 的负值或 nil 的处理方式与向上滚动相同。
+    此函数将另一个窗口中的文本向上滚动计数行。count 的负值或  ~nil~  的处理方式与向上滚动相同。
 
     您可以通过将变量 other-window-scroll-buffer 设置为缓冲区来指定要滚动的缓冲区。如果该缓冲区尚未显示，则 scroll-other-window 将其显示在某个窗口中。
 
-    When the selected window is the minibuffer, the next window is normally the leftmost one immediately above it.  You can specify a different window to scroll, when the minibuffer is selected, by setting the variable minibuffer-scroll-window.  This variable has no effect when any other window is selected.  当它为非 nil 并且选择了 minibuffer 时，它优先于 other-window-scroll-buffer。请参阅 minibuffer-scroll-window 的定义。
+    When the selected window is the minibuffer, the next window is normally the leftmost one immediately above it.  You can specify a different window to scroll, when the minibuffer is selected, by setting the variable minibuffer-scroll-window.  This variable has no effect when any other window is selected.  当它为非  ~nil~  并且选择了 minibuffer 时，它优先于 other-window-scroll-buffer。请参阅 minibuffer-scroll-window 的定义。
 
 #+begin_src emacs-lisp
   Command: scroll-other-window-down &optional count ¶
 #+end_src
 
-    此函数将另一个窗口中的文本向下滚动数行。count 的负值或 nil 的处理方式与向下滚动相同。在其他方面，它的行为方式与 scroll-other-window 相同。
+    此函数将另一个窗口中的文本向下滚动数行。count 的负值或  ~nil~  的处理方式与向下滚动相同。在其他方面，它的行为方式与 scroll-other-window 相同。
 
 #+begin_src emacs-lisp
   Variable: other-window-scroll-buffer ¶
@@ -2756,9 +2752,9 @@ Emacs 中定义了以下基本操作函数。
   User Option: scroll-down-aggressively ¶
 #+end_src
 
-    此变量的值应为 nil 或介于 0 和 1 之间的分数 f。如果是分数，则指定向下滚动时在屏幕上放置点的位置。更准确地说，当一个窗口向下滚动时，因为点在窗口开始上方，新的开始位置被选择为将点 f 从顶部放置窗口高度的一部分。f 越大，滚动越激进。
+    此变量的值应为  ~nil~  或介于 0 和 1 之间的分数 f。如果是分数，则指定向下滚动时在屏幕上放置点的位置。更准确地说，当一个窗口向下滚动时，因为点在窗口开始上方，新的开始位置被选择为将点 f 从顶部放置窗口高度的一部分。f 越大，滚动越激进。
 
-    nil 的值相当于 0.5，因为它的作用是指向中心点。当以任何方式设置时，此变量会自动变为缓冲区本地。
+     ~nil~  的值相当于 0.5，因为它的作用是指向中心点。当以任何方式设置时，此变量会自动变为缓冲区本地。
 
 #+begin_src emacs-lisp
   User Option: scroll-up-aggressively ¶
@@ -2778,7 +2774,7 @@ Emacs 中定义了以下基本操作函数。
 
     如果此选项为 t，则每当滚动命令将点移出窗口时，Emacs 都会尝试调整点以将光标保持在窗口中的旧垂直位置，而不是窗口边缘。
 
-    如果值不是 nil 而不是 t，Emacs 会调整 point 以使光标保持在相同的垂直位置，即使滚动命令没有将 point 移出窗口。
+    如果值不是  ~nil~  而不是 t，Emacs 会调整 point 以使光标保持在相同的垂直位置，即使滚动命令没有将 point 移出窗口。
 
     此选项影响所有具有非零滚动命令符号属性的滚动命令。
 
@@ -2786,13 +2782,13 @@ Emacs 中定义了以下基本操作函数。
   User Option: next-screen-context-lines ¶
 #+end_src
 
-    此变量的值是全屏滚动时要保留的连续行数。例如，使用 nil 参数向上滚动滚动，以便窗口底部的这么多行出现在顶部而不是顶部。默认值为 2。
+    此变量的值是全屏滚动时要保留的连续行数。例如，使用  ~nil~  参数向上滚动滚动，以便窗口底部的这么多行出现在顶部而不是顶部。默认值为 2。
 
 #+begin_src emacs-lisp
   User Option: scroll-error-top-bottom ¶
 #+end_src
 
-    如果此选项为 nil（默认值），scroll-up-command 和 scroll-down-command 只会在无法再滚动时发出错误信号。
+    如果此选项为  ~nil~ （默认值），scroll-up-command 和 scroll-down-command 只会在无法再滚动时发出错误信号。
 
     如果值为 t，这些命令将移动指向缓冲区的开头或结尾（取决于滚动方向）；  只有当点已经在那个位置时，它们才会发出错误信号。
 
@@ -2804,9 +2800,9 @@ Emacs 中定义了以下基本操作函数。
 
     如果 count 是非负数，则将包含点计数行的行从窗口顶部向下放置。如果 count 是负数，则从窗口底部向上计数，因此 -1 代表窗口中最后一个可用行。
 
-    如果 count 为 nil（或非 nil 列表），则 centerer 将包含点的行放在窗口的中间。如果count为nil且redisplay为非nil，该函数可能会根据recenter-redisplay的值重绘帧。因此，省略第二个参数可用于抵消最近重新显示为非零的效果。交互式调用传递非 ~零~ 以重新显示。
+    如果 count 为  ~nil~ （或非  ~nil~  列表），则 centerer 将包含点的行放在窗口的中间。如果count为 ~nil~ 且redisplay为非 ~nil~ ，该函数可能会根据recenter-redisplay的值重绘帧。因此，省略第二个参数可用于抵消最近重新显示为非零的效果。交互式调用传递非 ~零~ 以重新显示。
 
-    当以交互方式调用 centerer 时，count 是原始前缀参数。因此，输入 Cu 作为前缀会将 count 设置为非 nil 列表，而输入 Cu 4 会将 count 设置为 4，这会将当前行定位为距顶部四行。
+    当以交互方式调用 centerer 时，count 是原始前缀参数。因此，输入 Cu 作为前缀会将 count 设置为非  ~nil~  列表，而输入 Cu 4 会将 count 设置为 4，这会将当前行定位为距顶部四行。
 
     使用零参数，recenterer 将当前行定位在窗口的顶部。命令 centerer-top-bottom 提供了一种更方便的方法来实现这一点。
 
@@ -2820,7 +2816,7 @@ Emacs 中定义了以下基本操作函数。
   User Option: recenter-redisplay ¶
 #+end_src
 
-    如果此变量不为 nil，则使用 nil count 参数和非 nil redisplay 参数调用 centerer 会重绘帧。默认值为 tty，这意味着只有当它是一个 tty 帧时才重绘该帧。
+    如果此变量不为  ~nil~ ，则使用 nil count 参数和非 nil redisplay 参数调用 centerer 会重绘帧。默认值为 tty，这意味着只有当它是一个 tty 帧时才重绘该帧。
 
 #+begin_src emacs-lisp
   Command: recenter-top-bottom &optional count ¶
@@ -2855,7 +2851,7 @@ Emacs 中定义了以下基本操作函数。
   Function: set-window-vscroll window lines &optional pixels-p ¶
 #+end_src
 
-    此函数将窗口的垂直滚动位置设置为行。如果 window 为 nil，则使用选定的窗口。参数行应该为零或正数；  如果不是，则将其视为零。
+    此函数将窗口的垂直滚动位置设置为行。如果 window 为  ~nil~ ，则使用选定的窗口。参数行应该为零或正数；  如果不是，则将其视为零。
 
     实际的垂直滚动位置必须始终对应于整数个像素，因此您指定的值会相应地四舍五入。
 
@@ -2873,7 +2869,7 @@ Emacs 中定义了以下基本操作函数。
   Variable: auto-window-vscroll ¶
 #+end_src
 
-    如果此变量不为 nil，则 line-move、scroll-up 和 scroll-down 函数将自动修改垂直滚动位置以滚动显示高于窗口高度的行，例如在存在大图像。
+    如果此变量不为  ~nil~ ，则 line-move、scroll-up 和 scroll-down 函数将自动修改垂直滚动位置以滚动显示高于窗口高度的行，例如在存在大图像。
 
 ** 29.23 水平滚动
 水平滚动意味着将窗口中的图像向左或向右移动正常字符宽度的指定倍数。每个窗口都有一个水平滚动位置，它是一个数字，从不小于零。它指定将内容向左移动多远。将窗口内容向左移动通常会使某些字符的全部或部分从左侧消失，而某些其他字符的全部或部分则出现在右侧。通常的值为零。
@@ -2969,11 +2965,11 @@ auto-hscroll-mode 的默认值为 t；  将其设置为 current-line 会激活�
 
     请注意，这些是窗口的实际外边缘，包括它的任何装饰。在文本终端上，如果窗口右侧有邻居，则其右边缘包括窗口与其邻居之间的分隔线。
 
-    如果可选参数 body 为 nil，这意味着返回对应于窗口总大小的边。body non-nil 表示返回窗口主体的边缘。如果 body 不为零，则 window 必须指定一个活动窗口。
+    如果可选参数 body 为  ~nil~ ，这意味着返回对应于窗口总大小的边。body non-nil 表示返回窗口主体的边缘。如果 body 不为零，则 window 必须指定一个活动窗口。
 
-    如果可选参数 absolute 为 nil，这意味着返回相对于窗口 ~帧~ ( ~frame~ )的原始位置的边。absolute 非 nil 表示返回相对于窗口显示原点 (0, 0) 的坐标。在非图形系统上，此参数无效。
+    如果可选参数 absolute 为  ~nil~ ，这意味着返回相对于窗口 ~帧~ ( ~frame~ )的原始位置的边。absolute 非  ~nil~  表示返回相对于窗口显示原点 (0, 0) 的坐标。在非图形系统上，此参数无效。
 
-    如果可选参数 pixelwise 为 nil，这意味着根据窗口 ~帧~ ( ~frame~ )的默认字符宽度和高度（请参阅 ~帧~ ( ~frame~ )字体）返回坐标，必要时进行四舍五入。pixelwise non-nil 表示以像素为单位返回坐标。请注意，由 right 和 bottom 指定的像素就在这些边缘之外。如果 absolute 为非 nil，则 pixelwise 也隐式为非 nil。
+    如果可选参数 pixelwise 为  ~nil~ ，这意味着根据窗口 ~帧~ ( ~frame~ )的默认字符宽度和高度（请参阅 ~帧~ ( ~frame~ )字体）返回坐标，必要时进行四舍五入。pixelwise non-nil 表示以像素为单位返回坐标。请注意，由 right 和 bottom 指定的像素就在这些边缘之外。如果 absolute 为非  ~nil~ ，则 pixelwise 也隐式为非  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: window-body-edges &optional window ¶
@@ -2989,7 +2985,7 @@ auto-hscroll-mode 的默认值为 t；  将其设置为 current-line 会激活�
 
     此函数返回坐标 x 和 y 处的实时窗口，坐标为默认字符大小（请参阅帧字体）相对于帧的原始位置（请参阅帧几何）。
 
-    如果该位置没有窗口，则返回值为 nil。如果 frame 被省略或为零，则默认为选定的 ~帧~ ( ~frame~ )。
+    如果该位置没有窗口，则返回值为  ~nil~ 。如果 frame 被省略或为零，则默认为选定的 ~帧~ ( ~frame~ )。
 
 #+begin_src emacs-lisp
   Function: coordinates-in-window-p coordinates window ¶
@@ -2999,7 +2995,7 @@ auto-hscroll-mode 的默认值为 t；  将其设置为 current-line 会激活�
 
     坐标应该是 (x . y) 形式的 cons 单元格，其中 x 和 y 以相对于窗口 ~帧~ ( ~frame~ )的原始位置（参见 ~帧~ ( ~frame~ )几何）的默认字符大小（参见 ~帧~ ( ~frame~ )字体）给出。
 
-    如果指定位置没有窗口，则返回值为 nil 。否则，返回值为以下之一：
+    如果指定位置没有窗口，则返回值为  ~nil~  。否则，返回值为以下之一：
 
 #+begin_src emacs-lisp
   (relx . rely)
@@ -3055,7 +3051,6 @@ auto-hscroll-mode 的默认值为 t；  将其设置为 current-line 会激活�
 #+begin_src emacs-lisp
   nil
 #+end_src
-
 	 坐标不在窗口的任何部分。
 
     函数 coordinate-in-window-p 不需要 ~帧~ ( ~frame~ )作为参数，因为它总是使用窗口所在的 ~帧~ ( ~frame~ )。
@@ -3106,7 +3101,7 @@ auto-hscroll-mode 的默认值为 t；  将其设置为 current-line 会激活�
   Function: window-absolute-pixel-position &optional position window ¶
 #+end_src
 
-    如果缓冲区位置位置在窗口窗口中可见，则此函数返回字形在位置的上/左角的显示坐标。返回值是该角的 X 坐标和 Y 坐标的 cons，相对于窗口显示的 (0, 0) 处的原点。如果位置在窗口中不可见，则返回 nil。
+    如果缓冲区位置位置在窗口窗口中可见，则此函数返回字形在位置的上/左角的显示坐标。返回值是该角的 X 坐标和 Y 坐标的 cons，相对于窗口显示的 (0, 0) 处的原点。如果位置在窗口中不可见，则返回  ~nil~ 。
 
     window 必须是活动窗口，并且默认为选定的窗口。position 默认为 window 的 window-point 的值。
 
@@ -3125,7 +3120,7 @@ auto-hscroll-mode 的默认值为 t；  将其设置为 current-line 会激活�
 
     此函数计算可以在指定窗口的文本区域中内接的最大空矩形的尺寸。window 必须是活动窗口，并且默认为选定的窗口。
 
-    返回值是窗口文本区域的空白空间（不显示任何文本的空间）中最大矩形的宽度和开始和结束 y 坐标的三倍。此函数不返回 x 坐标——任何此类矩形都假定在窗口文本区域的右边缘结束。如果找不到空格，则返回值为 nil。
+    返回值是窗口文本区域的空白空间（不显示任何文本的空间）中最大矩形的宽度和开始和结束 y 坐标的三倍。此函数不返回 x 坐标——任何此类矩形都假定在窗口文本区域的右边缘结束。如果找不到空格，则返回值为  ~nil~ 。
 
     可选参数计数，如果非零，则指定要返回的最大矩形数。这意味着返回值是一个三元组列表，指定矩形的最大矩形在前。count 也可以是一个 cons 单元格，其 car 指定要返回的矩形数量，并且其 CDR（如果非零）表示返回的所有矩形必须是不相交的。
 
@@ -3133,9 +3128,9 @@ auto-hscroll-mode 的默认值为 t；  将其设置为 current-line 会激活�
 
     可选参数位置，如果非零，是一个 cons 单元格，其 CAR 指定最上方，其 CDR 指定必须由返回的任何矩形覆盖的最低像素位置。这些位置从窗口的文本区域开始测量。
 
-    可选参数 left，如果非 nil，则表示返回适用于从右到左显示文本的缓冲区的值。在这种情况下，假定返回的任何矩形都从窗口文本区域的左边缘开始。
+    可选参数 left，如果非  ~nil~ ，则表示返回适用于从右到左显示文本的缓冲区的值。在这种情况下，假定返回的任何矩形都从窗口文本区域的左边缘开始。
 
-    请注意，此函数必须通过 window-lines-pixel-dimensions 检索窗口字形矩阵的每一行的尺寸（请参阅显示文本的大小）。因此，当窗口的当前字形矩阵不是最新的时，此函数也可能返回 nil。
+    请注意，此函数必须通过 window-lines-pixel-dimensions 检索窗口字形矩阵的每一行的尺寸（请参阅显示文本的大小）。因此，当窗口的当前字形矩阵不是最新的时，此函数也可能返回  ~nil~ 。
 
 ** 29.25 鼠标窗口自动选择
 以下选项允许自动选择鼠标指针下的窗口。这实现了类似于窗口管理器的策略，只要鼠标指针进入其窗口系统窗口（请参阅输入焦点），就会将焦点赋予 ~帧~ ( ~frame~ )（并因此触发其后续选择）。
@@ -3145,7 +3140,7 @@ auto-hscroll-mode 的默认值为 t；  将其设置为 current-line 会激活�
 #+end_src
 
 
-    如果这个变量不为 nil，Emacs 将尝试自动选择鼠标指针下的窗口。以下值是有意义的：
+    如果这个变量不为  ~nil~ ，Emacs 将尝试自动选择鼠标指针下的窗口。以下值是有意义的：
 
     一个正数
 
@@ -3155,7 +3150,7 @@ auto-hscroll-mode 的默认值为 t；  将其设置为 current-line 会激活�
 	 负数具有与正数类似的效果，但只有在鼠标指针停留在该数字的绝对值的整个持续时间内并且停止移动之后，才会选择鼠标指针下方的窗口。
     其他价值
 
-	 任何其他非 nil 值意味着鼠标指针进入时立即选择一个窗口。
+	 任何其他非  ~nil~  值意味着鼠标指针进入时立即选择一个窗口。
 
     在任何一种情况下，鼠标指针都必须进入窗口的文本区域才能触发其选择。从概念上讲，拖动滚动条滑块或窗口的模式线不应导致其自动选择。
 
@@ -3181,9 +3176,9 @@ auto-hscroll-mode 的默认值为 t；  将其设置为 current-line 会激活�
 
     此函数恢复配置指定的窗口和缓冲区的配置，对于为其创建配置的 ~帧~ ( ~frame~ )，无论是否选择了该 ~帧~ ( ~frame~ )。参数配置必须是先前由当前窗口配置为该帧返回的值。通常该函数也会选择配置中记录的帧，但如果 dont-set-frame 为非零，它会保留在函数开始时已选择的帧。
 
-    通常，该函数会恢复保存的 minibuffer（如果有），但如果 dont-set-miniwindow 为非 nil，则函数开始时的 minibuffer 当前（如果有）仍保留在 mini-window 中。
+    通常，该函数会恢复保存的 minibuffer（如果有），但如果 dont-set-miniwindow 为非  ~nil~ ，则函数开始时的 minibuffer 当前（如果有）仍保留在 mini-window 中。
 
-    如果保存配置的帧已死，则此函数所做的只是恢复变量 minibuffer-scroll-window 的值并调整 minibuffer-selected-window 返回的值。在这种情况下，函数返回 nil。否则，它返回 t。
+    如果保存配置的帧已死，则此函数所做的只是恢复变量 minibuffer-scroll-window 的值并调整 minibuffer-selected-window 返回的值。在这种情况下，函数返回  ~nil~ 。否则，它返回 t。
 
     如果配置窗口的缓冲区在配置完成后已被终止，则该窗口通常会从恢复的配置中删除。但是，如果该窗口是恢复配置中剩余的最后一个窗口，则会在其中显示另一个实时缓冲区。
 
@@ -3242,9 +3237,9 @@ window-state-get 返回的值可以在同一个会话中用于在另一个窗口
   Function: window-state-put state &optional window ignore ¶
 #+end_src
 
-    该函数将窗口状态状态放入窗口。参数 state 应该是由较早的 window-state-get 调用返回的窗口的状态，见上文。可选参数窗口可以是实时窗口或内部窗口（请参阅窗口和 ~帧~ ( ~frame~ )）。如果 window 不是实时窗口，则在将状态放入其中之前，它会被在同一帧上创建的新实时窗口替换。如果 window 为 nil，它将窗口状态放入一个新窗口。
+    该函数将窗口状态状态放入窗口。参数 state 应该是由较早的 window-state-get 调用返回的窗口的状态，见上文。可选参数窗口可以是实时窗口或内部窗口（请参阅窗口和 ~帧~ ( ~frame~ )）。如果 window 不是实时窗口，则在将状态放入其中之前，它会被在同一帧上创建的新实时窗口替换。如果 window 为  ~nil~ ，它将窗口状态放入一个新窗口。
 
-    如果可选参数 ignore 不为 nil，则意味着忽略最小窗口大小和固定大小限制。如果忽略是安全的，这意味着窗口可以小到一行和/或两列。
+    如果可选参数 ignore 不为  ~nil~ ，则意味着忽略最小窗口大小和固定大小限制。如果忽略是安全的，这意味着窗口可以小到一行和/或两列。
 
 函数 window-state-get 和 window-state-put 还允许交换两个活动窗口的内容。以下函数正是这样做的：
 
@@ -3264,13 +3259,13 @@ window-state-get 返回的值可以在同一个会话中用于在另一个窗口
 #+end_src
 
 
-    此函数返回窗口的参数值。窗口的默认值是选定的窗口。如果 window 没有设置参数，这个函数返回 nil。
+    此函数返回窗口的参数值。窗口的默认值是选定的窗口。如果 window 没有设置参数，这个函数返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: window-parameters &optional window ¶
 #+end_src
 
-    此函数返回窗口的所有参数及其值。窗口的默认值是选定的窗口。返回值要么是 nil，要么是一个关联列表，其元素的形式为（参数 .value）。
+    此函数返回窗口的所有参数及其值。窗口的默认值是选定的窗口。返回值要么是  ~nil~ ，要么是一个关联列表，其元素的形式为（参数 .value）。
 
 #+begin_src emacs-lisp
   Function: set-window-parameter window parameter value ¶
@@ -3278,7 +3273,7 @@ window-state-get 返回的值可以在同一个会话中用于在另一个窗口
 
     该函数将窗口的参数值设置为值并返回值。窗口的默认值是选定的窗口。
 
-默认情况下，保存和恢复窗口配置或窗口状态的函数（请参阅窗口配置）不关心窗口参数。  这意味着，当您更改保存窗口游览主体内的参数值时，该宏退出时不会恢复先前的值。  这也意味着当您通过 window-state-put 恢复之前由 window-state-get 保存的窗口状态时，所有克隆的窗口都将其参数重置为 nil。  以下变量允许您覆盖标准行为：
+默认情况下，保存和恢复窗口配置或窗口状态的函数（请参阅窗口配置）不关心窗口参数。  这意味着，当您更改保存窗口游览主体内的参数值时，该宏退出时不会恢复先前的值。  这也意味着当您通过 window-state-put 恢复之前由 window-state-get 保存的窗口状态时，所有克隆的窗口都将其参数重置为  ~nil~ 。  以下变量允许您覆盖标准行为：
 
 
 #+begin_src emacs-lisp
@@ -3298,7 +3293,7 @@ window-state-get 返回的值可以在同一个会话中用于在另一个窗口
   t
 #+end_src
 
-	 此值指定参数由 current-window-configuration 保存，并且（如果其可写参数为 nil）由 window-state-get 保存。
+	 此值指定参数由 current-window-configuration 保存，并且（如果其可写参数为  ~nil~ ）由 window-state-get 保存。
 #+begin_src emacs-lisp
   writable
 #+end_src
@@ -3311,7 +3306,7 @@ window-state-get 返回的值可以在同一个会话中用于在另一个窗口
   Variable: ignore-window-parameters ¶
 #+end_src
 
-    如果此变量不为 nil，则某些标准函数不会处理窗口参数。目前受此影响的功能是 split-window、delete-window、delete-other-windows 和 other-window。
+    如果此变量不为  ~nil~ ，则某些标准函数不会处理窗口参数。目前受此影响的功能是 split-window、delete-window、delete-other-windows 和 other-window。
 
     应用程序可以在调用这些函数时将此变量绑定到一个非零值。如果这样做，应用程序将完全负责在退出该功能时正确分配所有相关窗口的参数。
 
@@ -3356,7 +3351,7 @@ window-state-get 返回的值可以在同一个会话中用于在另一个窗口
   window-preserved-size ¶
 #+end_src
 
-    此参数指定缓冲区、nil 表示垂直和 t 水平的方向以及以像素为单位的大小。如果这个窗口显示指定的缓冲区并且它在指定方向上的大小等于这个参数指定的大小，那么 Emacs 将尝试在指定方向上保持这个窗口的大小。此参数由函数 window-preserve-size 安装和更新（请参阅保留窗口大小）。
+    此参数指定缓冲区、 ~nil~  表示垂直和 t 水平的方向以及以像素为单位的大小。如果这个窗口显示指定的缓冲区并且它在指定方向上的大小等于这个参数指定的大小，那么 Emacs 将尝试在指定方向上保持这个窗口的大小。此参数由函数 window-preserve-size 安装和更新（请参阅保留窗口大小）。
 #+begin_src emacs-lisp
   quit-restore ¶
 #+end_src
@@ -3505,7 +3500,7 @@ window-state-get 返回的值可以在同一个会话中用于在另一个窗口
   Function: frame-window-state-change &optional frame ¶
 #+end_src
 
-    如果设置了 ~帧~ ( ~frame~ )的窗口状态更改标志，则此函数返回 t，否则返回 nil。frame 必须是实时帧，默认为选定的帧。
+    如果设置了 ~帧~ ( ~frame~ )的窗口状态更改标志，则此函数返回 t，否则返回  ~nil~ 。frame 必须是实时帧，默认为选定的帧。
 
 在运行窗口更改函数时，可以调用接下来描述的函数来更深入地了解自上次重新显示以来特定窗口或 ~帧~ ( ~frame~ )的更改内容。所有这些函数都将实时窗口作为单个可选参数，默认为选定窗口。
 
@@ -3513,7 +3508,7 @@ window-state-get 返回的值可以在同一个会话中用于在另一个窗口
   Function: window-old-buffer &optional window ¶
 #+end_src
 
-    此函数返回上次窗口更改函数为窗口 ~帧~ ( ~frame~ )运行时窗口中显示的缓冲区。如果它返回 nil，则在此之后创建了窗口。如果它返回 t，则窗口当时未显示，但之后已从先前保存的窗口配置中恢复。否则，返回值为 window 当时显示的缓冲区。
+    此函数返回上次窗口更改函数为窗口 ~帧~ ( ~frame~ )运行时窗口中显示的缓冲区。如果它返回  ~nil~ ，则在此之后创建了窗口。如果它返回 t，则窗口当时未显示，但之后已从先前保存的窗口配置中恢复。否则，返回值为 window 当时显示的缓冲区。
 
 #+begin_src emacs-lisp
   Function: window-old-pixel-width &optional window ¶
@@ -3545,7 +3540,7 @@ window-state-get 返回的值可以在同一个会话中用于在另一个窗口
   Function: frame-old-selected-window &optional frame ¶
 #+end_src
 
-    此函数返回上次运行窗口更改函数时选定的帧窗口。如果省略或 nil  ~帧~ ( ~frame~ )默认为选定的 ~帧~ ( ~frame~ )。
+    此函数返回上次运行窗口更改函数时选定的帧窗口。如果省略或  ~nil~   ~帧~ ( ~frame~ )默认为选定的 ~帧~ ( ~frame~ )。
 
 #+begin_src emacs-lisp
   Function: old-selected-window ¶

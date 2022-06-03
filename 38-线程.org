@@ -30,7 +30,7 @@ Emacs Lisp 提供了创建和控制线程，以及创建和控制互斥锁和条
   Function: threadp object ¶
 #+end_src
 
-    如果 object 表示 Emacs 线程，则此函数返回 t，否则返回 nil。
+    如果 object 表示 Emacs 线程，则此函数返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: thread-join thread ¶
@@ -62,7 +62,7 @@ Emacs Lisp 提供了创建和控制线程，以及创建和控制互斥锁和条
   Function: thread-live-p thread ¶
 #+end_src
 
-    如果线程处于活动状态，则返回 t，否则返回 nil。只要它的函数仍在执行，线程就处于活动状态。
+    如果线程处于活动状态，则返回 t，否则返回  ~nil~ 。只要它的函数仍在执行，线程就处于活动状态。
 
 #+begin_src emacs-lisp
   Function: thread--blocker thread ¶
@@ -76,7 +76,7 @@ Emacs Lisp 提供了创建和控制线程，以及创建和控制互斥锁和条
 
     如果线程在条件等待中被阻塞，则返回条件变量。
 
-    否则，这将返回 nil。
+    否则，这将返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: current-thread ¶
@@ -94,7 +94,7 @@ Emacs Lisp 提供了创建和控制线程，以及创建和控制互斥锁和条
   Variable: main-thread ¶
 #+end_src
 
-    此变量保持 Emacs 正在运行的主线程，如果 Emacs 在没有线程支持的情况下编译，则为 nil。
+    此变量保持 Emacs 正在运行的主线程，如果 Emacs 在没有线程支持的情况下编译，则为  ~nil~ 。
 
 当线程运行的代码发出未处理的错误信号时，线程退出。其他线程可以使用以下函数访问导致线程退出的错误表单。
 
@@ -102,7 +102,7 @@ Emacs Lisp 提供了创建和控制线程，以及创建和控制互斥锁和条
   Function: thread-last-error &optional cleanup ¶
 #+end_src
 
-    此函数返回线程因错误退出时记录的最后一个错误形式。每个异常退出的线程都会用一个新值覆盖前一个线程错误存储的表单，因此只能访问最后一个。如果 cleanup 不为零，则存储的表单将重置为 nil。
+    此函数返回线程因错误退出时记录的最后一个错误形式。每个异常退出的线程都会用一个新值覆盖前一个线程错误存储的表单，因此只能访问最后一个。如果 cleanup 不为零，则存储的表单将重置为  ~nil~ 。
 
 ** 38.2 互斥体
 互斥锁是排他锁。在任何时候，零个或一个线程可能拥有一个互斥锁。如果一个线程试图获取一个互斥锁，并且该互斥锁已经被某个其他线程拥有，那么获取线程将阻塞，直到该互斥锁可用。
@@ -113,7 +113,7 @@ Emacs Lisp 互斥体是一种称为递归的类型，这意味着线程可以重
   Function: mutexp object ¶
 #+end_src
 
-    如果 object 表示 Emacs 互斥体，则此函数返回 t，否则返回 nil。
+    如果 object 表示 Emacs 互斥体，则此函数返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: make-mutex &optional name ¶
@@ -176,7 +176,7 @@ Emacs Lisp 互斥体是一种称为递归的类型，这意味着线程可以重
   Function: condition-variable-p object ¶
 #+end_src
 
-    如果 object 表示条件变量，此函数返回 t，否则返回 nil。
+    如果 object 表示条件变量，此函数返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: condition-wait cond ¶

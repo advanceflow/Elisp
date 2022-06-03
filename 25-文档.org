@@ -29,7 +29,7 @@ GNU Emacs 具有方便的内置帮助工具，其中大部分从与函数和变�
 
     如果属性值引用存储在 DOC 文件或字节编译文件中的文档字符串，则此函数查找该字符串并返回它。
 
-    如果属性值不是 nil，不是字符串，并且不引用文件中的文本，则将其作为 Lisp 表达式求值以获得字符串。
+    如果属性值不是  ~nil~ ，不是字符串，并且不引用文件中的文本，则将其作为 Lisp 表达式求值以获得字符串。
 
     最后，此函数通过substitute-command-keys 传递字符串以替换键绑定（请参阅文档中的替换键绑定）。如果 verbatim 不为零，则跳过此步骤。
 
@@ -56,9 +56,9 @@ GNU Emacs 具有方便的内置帮助工具，其中大部分从与函数和变�
 
     如果 function 不是符号，或者它没有 function-documentation 属性，则文档从实际函数定义中提取文档字符串，如果需要，则从文件中读取它。
 
-    最后，除非 verbatim 不是 nil，否则此函数调用替代命令键。结果是要返回的文档字符串。
+    最后，除非 verbatim 不是  ~nil~ ，否则此函数调用替代命令键。结果是要返回的文档字符串。
 
-    如果函数没有函数定义，则文档函数会发出 void-function 错误信号。但是，如果函数定义没有文档字符串，也可以。在这种情况下，文档返回 nil。
+    如果函数没有函数定义，则文档函数会发出 void-function 错误信号。但是，如果函数定义没有文档字符串，也可以。在这种情况下，文档返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: face-documentation face ¶
@@ -219,7 +219,7 @@ describe-symbols 函数的工作方式与 apropos 类似，但提供了更多信
   User Option: text-quoting-style ¶
 #+end_src
 
-    这个变量的值是一个符号，它指定 Emacs 应该在帮助和消息的措辞中为单引号使用的样式。如果变量的值为curve，则样式为带有弯曲单引号的 ~like this~ 。如果值为直，则样式为带有直撇号的 ~like this~ 。如果值是严重的，则不翻译引号并且样式是带有重音和撇号的 ~like this~ ，这是 Emacs 版本 25 之前的标准样式。如果弯曲的单引号似乎是可显示的，则默认值 nil 的作用类似于曲线，并且喜欢否则严重。
+    这个变量的值是一个符号，它指定 Emacs 应该在帮助和消息的措辞中为单引号使用的样式。如果变量的值为curve，则样式为带有弯曲单引号的 ~like this~ 。如果值为直，则样式为带有直撇号的 ~like this~ 。如果值是严重的，则不翻译引号并且样式是带有重音和撇号的 ~like this~ ，这是 Emacs 版本 25 之前的标准样式。如果弯曲的单引号似乎是可显示的，则默认值  ~nil~  的作用类似于曲线，并且喜欢否则严重。
 
     此选项在存在弯引号问题的平台上很有用。您可以根据个人喜好自由定制。
 
@@ -276,7 +276,7 @@ User Option: text-quoting-style ¶
 #+end_src
 
 
-    这个用户选项的值是一个符号，它指定 Emacs 应该在帮助和消息的措辞中为单引号使用的样式。如果选项的值为curve，则样式为带有弯曲单引号的 ~like this~ 。如果值为直，则样式为带有直撇号的 ~like this~ 。如果值是严重的，则不翻译引号，并且样式是带有重音和撇号的 ~like this~ ，这是 Emacs 版本 25 之前的标准样式。如果弯曲的单引号似乎是可显示的，则默认值 nil 的作用类似于曲线，并且喜欢否则严重。
+    这个用户选项的值是一个符号，它指定 Emacs 应该在帮助和消息的措辞中为单引号使用的样式。如果选项的值为curve，则样式为带有弯曲单引号的 ~like this~ 。如果值为直，则样式为带有直撇号的 ~like this~ 。如果值是严重的，则不翻译引号，并且样式是带有重音和撇号的 ~like this~ ，这是 Emacs 版本 25 之前的标准样式。如果弯曲的单引号似乎是可显示的，则默认值  ~nil~  的作用类似于曲线，并且喜欢否则严重。
 
     此选项在存在弯引号问题的平台上很有用。您可以根据个人喜好自由定制。
 
@@ -306,7 +306,7 @@ Function: single-key-description event &optional no-angles ¶
 
     此函数以标准 Emacs 表示法返回一个描述事件的字符串，用于键盘输入。正常的打印字符显示为自身，但控制字符变为以'C-'开头的字符串，元字符变为以'M-'开头的字符串，空格、制表符等显示为'SPC' , 'TAB' 等。功能键符号出现在尖括号 '<...>' 内。作为列表的事件显示为列表的 CAR 中尖括号内的符号名称。
 
-    如果可选参数 no-angles 不为 nil，则省略功能键和事件符号周围的尖括号；  这是为了与不使用括号的旧版本的 Emacs 兼容。
+    如果可选参数 no-angles 不为  ~nil~ ，则省略功能键和事件符号周围的尖括号；  这是为了与不使用括号的旧版本的 Emacs 兼容。
     #+begin_src emacs-lisp
 
 
@@ -365,11 +365,11 @@ Command: apropos pattern &optional do-all ¶
        plist-doc widget-doc face-doc group-doc)
     #+end_src
 
-    在这里，score 是一个整数度量，用于衡量符号作为匹配项的重要性。剩下的每个元素都是一个文档字符串，或 nil，用于符号作为函数、变量等。
+    在这里，score 是一个整数度量，用于衡量符号作为匹配项的重要性。剩下的每个元素都是一个文档字符串，或  ~nil~ ，用于符号作为函数、变量等。
 
     它还在一个名为 *Apropos* 的缓冲区中显示符号，每个符号都有一个从其文档字符串开头获取的单行描述。
 
-    如果 do-all 不是 nil，或者如果用户选项 apropos-do-all 是 non-nil，那么 apropos 还会显示找到的函数的键绑定；  它还显示了所有的实习符号，而不仅仅是有意义的符号（它也在返回值中列出了它们）。
+    如果 do-all 不是  ~nil~ ，或者如果用户选项 apropos-do-all 是 non-nil，那么 apropos 还会显示找到的函数的键绑定；  它还显示了所有的实习符号，而不仅仅是有意义的符号（它也在返回值中列出了它们）。
 
 #+begin_src emacs-lisp
 
@@ -395,9 +395,9 @@ Prefix Command: help-command ¶
 User Option: help-char ¶
 #+end_src
 
-    这个变量的值是帮助字符——Emacs 识别为帮助的字符。默认情况下，它的值为 8，代表 Ch。当 Emacs 读取这个字符时，如果 help-form 是一个非 nil Lisp 表达式，它会计算那个表达式，如果它是一个字符串，它会在一个窗口中显示结果。
+    这个变量的值是帮助字符——Emacs 识别为帮助的字符。默认情况下，它的值为 8，代表 Ch。当 Emacs 读取这个字符时，如果 help-form 是一个非  ~nil~  Lisp 表达式，它会计算那个表达式，如果它是一个字符串，它会在一个窗口中显示结果。
 
-    通常 help-form 的值为 nil。那么帮助字符在命令输入层面没有特殊意义，它以正常方式成为键序列的一部分。Ch 的标准键绑定是几个通用帮助功能的前缀键。
+    通常 help-form 的值为  ~nil~ 。那么帮助字符在命令输入层面没有特殊意义，它以正常方式成为键序列的一部分。Ch 的标准键绑定是几个通用帮助功能的前缀键。
 
     前缀键之后的帮助字符也是特殊的。如果它没有绑定作为前缀键的子命令，它将运行 describe-prefix-bindings，它显示前缀键的所有子命令的列表。
 
@@ -413,9 +413,9 @@ User Option: help-event-list ¶
 Variable: help-form ¶
 #+end_src
 
-    如果此变量不为 nil，则它的值是每当读取字符 help-char 时评估的形式。如果评估表单产生一个字符串，则显示该字符串。
+    如果此变量不为  ~nil~ ，则它的值是每当读取字符 help-char 时评估的形式。如果评估表单产生一个字符串，则显示该字符串。
 
-    调用 read-event、read-char-choice、read-char、read-char-from-minibuffer 或 y-or-np 的命令可能应该在输入时将 help-form 绑定到非 nil 表达式。（不应该这样做的时候是 Ch 有其他含义的时候。）评估这个表达式应该产生一个字符串，解释输入的用途以及如何正确输入它。
+    调用 read-event、read-char-choice、read-char、read-char-from-minibuffer 或 y-or-np 的命令可能应该在输入时将 help-form 绑定到非  ~nil~  表达式。（不应该这样做的时候是 Ch 有其他含义的时候。）评估这个表达式应该产生一个字符串，解释输入的用途以及如何正确输入它。
 
     minibuffer 的入口将此变量绑定到 minibuffer-help-form 的值（参见 minibuffer-help-form 的定义）。
 
@@ -500,7 +500,7 @@ Macro: make-help-screen fname help-line help-text help-map ¶
 User Option: three-step-help ¶
 #+end_src
 
-    如果该变量不为 nil，则使用 make-help-screen 定义的命令首先在回显区域中显示其帮助行字符串，并且仅当用户再次键入帮助字符时才显示较长的帮助文本字符串。
+    如果该变量不为  ~nil~，则使用 make-help-screen 定义的命令首先在回显区域中显示其帮助行字符串，并且仅当用户再次键入帮助字符时才显示较长的帮助文本字符串。
 
 ** 25.7 文档组
 Emacs 可以根据各种分组列出函数。例如，string-trim 和 mapconcat 是 ~字符串~ 函数，因此 Mx shortdoc-display-group RET string RET 将概述对字符串进行操作的函数。
