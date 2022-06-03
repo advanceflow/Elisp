@@ -83,14 +83,14 @@ progn 特殊形式如下所示：
   Special Form: if condition then-form else-forms… ¶
 #+end_src
 
-    if 根据条件的值在 then-form 和 else-forms 之间进行选择。如果评估的条件不为 nil，则评估 then-form 并返回结果。否则，else-forms 将按文本顺序进行评估，并返回最后一个的值。（if 的 else 部分是隐式 progn 的一个示例。请参阅 Sequencing。）
+    if 根据条件的值在 then-form 和 else-forms 之间进行选择。如果评估的条件不为  ~nil~ ，则评估 then-form 并返回结果。否则，else-forms 将按文本顺序进行评估，并返回最后一个的值。（if 的 else 部分是隐式 progn 的一个示例。请参阅 Sequencing。）
 
-    如果 condition 的值为 nil，并且没有给出 else-forms，则 if 返回 nil。
+    如果 condition 的值为  ~nil~ ，并且没有给出 else-forms，则 if 返回  ~nil~ 。
 
     if 是一种特殊形式，因为未选择的分支永远不会被评估——它被忽略。因此，在此示例中，不会打印 true ，因为从不调用 print：
 
     #+begin_src emacs-lisp
-      (if nil
+      (if  nil 
 	  (print 'true)
 	'very-false)
       ⇒ very-false
@@ -110,9 +110,8 @@ progn 特殊形式如下所示：
     完全等同于
 
     #+begin_src emacs-lisp
-      (if condition (progn a b c) nil)
+      (if condition (progn a b c)  nil )
     #+end_src
-
 
 #+begin_src emacs-lisp
   Macro: unless condition forms… ¶
@@ -142,7 +141,7 @@ progn 特殊形式如下所示：
 
     cond 通过评估每个子句的条件，按文本顺序尝试子句。如果条件的值为非零，则该子句成功；  然后 cond 评估它的 body-forms，并返回最后一个 body-forms 的值。任何剩余的子句都将被忽略。
 
-    如果 condition 的值为 nil，则该子句失败，因此 cond 转到下一个子句，尝试其条件。
+    如果 condition 的值为  ~nil~ ，则该子句失败，因此 cond 转到下一个子句，尝试其条件。
 
     子句也可能如下所示：
 
@@ -152,7 +151,7 @@ progn 特殊形式如下所示：
 
     然后，如果条件在测试时不为零，则 cond 形式返回条件的值。
 
-    如果每个条件的计算结果都为 nil，因此每个子句都失败，则 cond 返回 nil。
+    如果每个条件的计算结果都为  ~nil~ ，因此每个子句都失败，则 cond 返回  ~nil~ 。
 
     以下示例有四个子句，分别测试 x 的值是数字、字符串、缓冲区和符号的情况：
     #+begin_src emacs-lisp
@@ -164,7 +163,7 @@ progn 特殊形式如下所示：
 	    ((symbolp x) (symbol-value x)))
     #+end_src
 
-    当前面的子句都没有成功时，我们经常希望执行最后一个子句。为此，我们使用 t 作为最后一个子句的条件，如下所示：(t body-forms)。形式 t 计算为 t，它永远不会是 nil，所以这个子句永远不会失败，只要 cond 得到它。例如：
+    当前面的子句都没有成功时，我们经常希望执行最后一个子句。为此，我们使用 t 作为最后一个子句的条件，如下所示：(t body-forms)。形式 t 计算为 t，它永远不会是  ~nil~ ，所以这个子句永远不会失败，只要 cond 得到它。例如：
 
     #+begin_src emacs-lisp
       (setq a 5)
@@ -191,7 +190,7 @@ progn 特殊形式如下所示：
   Function: not condition ¶
 #+end_src
 
-    此功能测试条件的虚假性。如果条件为 nil，则返回 t，否则返回 nil。函数 not 与 null 相同，如果您正在测试空列表，我们建议使用名称 null。 
+    此功能测试条件的虚假性。如果条件为  ~nil~ ，则返回 t，否则返回  ~nil~ 。函数 not 与 null 相同，如果您正在测试空列表，我们建议使用名称 null。 
 
 #+begin_src emacs-lisp
   Special Form: and conditions… ¶
@@ -199,11 +198,11 @@ progn 特殊形式如下所示：
 
     和特殊形式测试是否所有条件都为真。它通过按写入的顺序一一评估条件来工作。
 
-    如果任何条件的计算结果为 nil，则 and 的结果必须为 nil，而不管其余条件如何；  所以并立即返回 nil ，忽略其余条件。
+    如果任何条件的计算结果为  ~nil~ ，则 and 的结果必须为  ~nil~ ，而不管其余条件如何；  所以并立即返回  ~nil~  ，忽略其余条件。
 
     如果所有条件都非零，那么最后一个条件的值将成为 and 形式的值。Just (and)，没有条件，返回 t，因为所有条件都非零。（想想看，哪个没有？）
 
-    这是一个例子。第一个条件返回整数 1，它不是 nil。同样，第二个条件返回整数 2，它不是 nil。第三个条件为 nil，因此永远不会评估剩余的条件。
+    这是一个例子。第一个条件返回整数 1，它不是  ~nil~ 。同样，第二个条件返回整数 2，它不是  ~nil~ 。第三个条件为  ~nil~ ，因此永远不会评估剩余的条件。
     #+begin_src emacs-lisp
       (and (print 1) (print 2) nil (print 3))
 	   -| 1
@@ -218,7 +217,7 @@ progn 特殊形式如下所示：
 	  (message "foo is a list starting with x"))
     #+end_src
 
-    请注意，如果 (consp foo) 返回 nil，则不执行 (car foo)，从而避免错误。
+    请注意，如果 (consp foo) 返回  ~nil~ ，则不执行 (car foo)，从而避免错误。
 
     and 表达式也可以使用 if 或 cond 来编写。就是这样：
     #+begin_src emacs-lisp
@@ -237,9 +236,9 @@ progn 特殊形式如下所示：
 
     如果任何条件的计算结果为非零值，则 or 的结果必须为非零；  so or 立即返回，忽略其余条件。它返回的值是刚刚评估的条件的非零值。
 
-    如果所有条件都为 nil，则 or 表达式返回 nil。Just (or)，没有条件，返回 nil，因为所有条件都变成 nil。（想想看，哪个没有？）
+    如果所有条件都为  ~nil~ ，则 or 表达式返回  ~nil~ 。Just (or)，没有条件，返回  ~nil~ ，因为所有条件都变成  ~nil~ 。（想想看，哪个没有？）
 
-    例如，这个表达式测试 x 是 nil 还是整数零：
+    例如，这个表达式测试 x 是  ~nil~  还是整数零：
 
     #+begin_src emacs-lisp
       (or (eq x nil) (eq x 0))
@@ -269,7 +268,7 @@ progn 特殊形式如下所示：
   Function: xor condition1 condition2 ¶
 #+end_src
 
-    此函数返回条件 1 和条件 2 的布尔异或。也就是说，如果两个参数都为 nil，或者两者都不是 nil，则 xor 返回 nil。否则，它返回非零参数的值。
+    此函数返回条件 1 和条件 2 的布尔异或。也就是说，如果两个参数都为  ~nil~ ，或者两者都不是  ~nil~ ，则 xor 返回  ~nil~ 。否则，它返回非零参数的值。
 
     请注意，与 or 相比，两个参数总是被评估。
 
@@ -303,7 +302,7 @@ progn 特殊形式如下所示：
 
     计算表达式以确定它的值，expval。在模式与 expval 匹配的子句中查找第一个子句，并将控制权传递给该子句的主体形式。
 
-    如果匹配，则 pcase 的值是成功子句中最后一个 body-forms 的值。否则，pcase 的计算结果为 nil。 
+    如果匹配，则 pcase 的值是成功子句中最后一个 body-forms 的值。否则，pcase 的计算结果为  ~nil~ 。 
 
 每个模式都必须是一个 pcase 模式，它可以使用下面定义的核心模式之一，或者通过 pcase-defmacro 定义的模式之一（请参阅扩展 pcase）。
 
@@ -338,7 +337,7 @@ progn 特殊形式如下所示：
 
     如果symbol 是排序模式seqpat 的一部分（例如，通过使用and，下面），则绑定也可用于seqpat 出现在symbol 之后的部分。这种用法有一些注意事项，请参阅注意事项。
 
-    要避免的两个符号是 t，它的行为类似于 _（上图）并且已被弃用，以及 nil，它表示错误。同样，绑定关键字符号也没有任何意义（请参阅永不更改的变量）。
+    要避免的两个符号是 t，它的行为类似于 _（上图）并且已被弃用，以及  ~nil~ ，它表示错误。同样，绑定关键字符号也没有任何意义（请参阅永不更改的变量）。
 #+begin_src emacs-lisp
   (cl-type type)
 #+end_src
@@ -391,7 +390,7 @@ progn 特殊形式如下所示：
   (guard boolean-expression)
 #+end_src
 
-    如果 boolean-expression 计算结果为非 nil，则匹配。
+    如果 boolean-expression 计算结果为非  ~nil~ ，则匹配。
 #+begin_src emacs-lisp
   (let pattern expr)
 #+end_src
@@ -411,7 +410,7 @@ progn 特殊形式如下所示：
 
     尝试按顺序匹配 pattern1、pattern2、...，直到其中一个成功。在那种情况下，或者同样匹配，其余的子模式不会被测试。
 
-    为了向 body-forms 呈现一致的环境（参见评估简介）（从而避免匹配时的评估错误），模式绑定的变量集是每个子模式绑定的变量的并集。如果一个变量没有被匹配的子模式绑定，那么它被绑定为 nil。
+    为了向 body-forms 呈现一致的环境（参见评估简介）（从而避免匹配时的评估错误），模式绑定的变量集是每个子模式绑定的变量的并集。如果一个变量没有被匹配的子模式绑定，那么它被绑定为  ~nil~ 。
 #+begin_src emacs-lisp
   (rx rx-expr…)
 #+end_src
@@ -424,7 +423,7 @@ progn 特殊形式如下所示：
   (let ref rx-expr…)
 #+end_src
 
-        将符号 ref 绑定到匹配 rx-expr.... 的子匹配。 ref 以 body-forms 绑定到子匹配或 nil 的字符串，但也可以在 backref 中使用。
+        将符号 ref 绑定到匹配 rx-expr.... 的子匹配。 ref 以 body-forms 绑定到子匹配或  ~nil~  的字符串，但也可以在 backref 中使用。
 #+begin_src emacs-lisp
   (backref ref)
 #+end_src
@@ -505,9 +504,9 @@ progn 特殊形式如下所示：
 
 grok/pcase 的大部分是 pcase 形式的单个子句，第 1-8 行的模式，第 9 行的（单个）主体形式。模式是 or，它尝试依次匹配其参数子模式，首先是 and（第 2-7 行），然后是 let（第 8 行），直到其中一个成功。
 
-与前面的示例一样（参见示例 1），并以 pred 子模式开始，以确保以下子模式与正确类型的对象（在本例中为字符串）一起工作。如果 (stringp expval) 返回 nil，则 pred 失败，因此也失败了。
+与前面的示例一样（参见示例 1），并以 pred 子模式开始，以确保以下子模式与正确类型的对象（在本例中为字符串）一起工作。如果 (stringp expval) 返回  ~nil~ ，则 pred 失败，因此也失败了。
 
-下一个 pred（第 4-5 行）计算 (string-match RX expval) 并在结果为非 nil 时进行匹配，这意味着 expval 具有所需的形式：key:NUMBER。再一次，失败了，pred 失败了，and 也失败了。
+下一个 pred（第 4-5 行）计算 (string-match RX expval) 并在结果为非  ~nil~  时进行匹配，这意味着 expval 具有所需的形式：key:NUMBER。再一次，失败了，pred 失败了，and 也失败了。
 
 最后（在这一系列和子模式中），app 评估 (match-string 1 expval)（第 6 行）以获取临时值 tmp（即 ~NUMBER~ 子字符串）并尝试将 tmp 与模式 val（行7）。由于这是一个符号模式，它无条件匹配并且另外将 val 绑定到 tmp。
 
@@ -747,16 +746,13 @@ pcase 宏支持多种模式（请参阅模式匹配条件）。您可以使用 p
 #+end_src
 
 *** 11.4.4 解构 pcase模式
-
 Pcase 模式不仅表达了它们可以匹配的对象形式的条件，而且它们还可以提取这些对象的子字段。例如，我们可以使用以下代码从变量 my-list 的值的列表中提取 2 个元素：
 
 #+begin_src emacs-lisp
   (pcase my-list
     (`(add ,x ,y)  (message "Contains %S and %S" x y)))
 #+end_src
-
-
-这不仅会提取 x 和 y，还会额外测试 my-list 是否是一个恰好包含 3 个元素且其第一个元素是符号 add 的列表。如果这些测试中的任何一个失败，pcase 将立即返回 nil 而不会调用 message。
+这不仅会提取 x 和 y，还会额外测试 my-list 是否是一个恰好包含 3 个元素且其第一个元素是符号 add 的列表。如果这些测试中的任何一个失败，pcase 将立即返回  ~nil~  而不会调用 message。
 
 提取存储在对象中的多个值称为解构。使用 pcase 模式允许执行解构绑定，这类似于局部绑定（请参阅局部变量），但通过从兼容结构的对象中提取这些值来为变量的多个元素提供值。
 
@@ -768,7 +764,7 @@ Pcase 模式不仅表达了它们可以匹配的对象形式的条件，而且�
 #+end_src
 
 
-与前面的示例相同，只是它直接尝试从 my-list 中提取 x 和 y，而无需首先验证 my-list 是否是具有正确数量的元素并且将 add 作为其第一个元素的列表。当对象实际上与模式不匹配时的精确行为是未定义的，尽管主体不会被静默地跳过：要么发出错误信号，要么运行主体，其中一些变量可能绑定到任意值，如 nil。
+与前面的示例相同，只是它直接尝试从 my-list 中提取 x 和 y，而无需首先验证 my-list 是否是具有正确数量的元素并且将 add 作为其第一个元素的列表。当对象实际上与模式不匹配时的精确行为是未定义的，尽管主体不会被静默地跳过：要么发出错误信号，要么运行主体，其中一些变量可能绑定到任意值，如  ~nil~ 。
 
 对解构绑定有用的 pcase 模式通常是反引号样式模式中描述的那些模式，因为它们表达了将匹配的对象结构的规范。
 
@@ -816,7 +812,7 @@ Pcase 模式不仅表达了它们可以匹配的对象形式的条件，而且�
 
     而首先评估条件。如果结果非零，它会按文本顺序评估表单。然后它重新评估条件，如果结果是非零，它再次评估表格。重复此过程，直到条件评估为零。
 
-    可能发生的迭代次数没有限制。循环将继续，直到任一条件评估为 nil 或直到错误或 throw 跳出它（请参阅非本地退出）。
+    可能发生的迭代次数没有限制。循环将继续，直到任一条件评估为  ~nil~  或直到错误或 throw 跳出它（请参阅非本地退出）。
 
     #+begin_src emacs-lisp
       (setq num 0)
@@ -833,14 +829,11 @@ Pcase 模式不仅表达了它们可以匹配的对象形式的条件，而且�
     #+end_src
 
     要编写一个 repeat-until 循环，它将在每次迭代中执行某些操作，然后进行结束测试，请将主体后跟结束测试作为 while 的第一个参数放在 progn 中，如下所示：
-
     #+begin_src emacs-lisp
       (while (progn
 	       (forward-line 1)
 	       (not (looking-at "^$"))))
     #+end_src
-
-
     这将向前移动一行并继续逐行移动，直到到达空行。奇怪的是，while 没有主体，只是结束测试（它也完成了移动点的实际工作）。 
 
 dolist 和 dotimes 宏提供了方便的方法来编写两种常见的循环。
@@ -849,7 +842,7 @@ dolist 和 dotimes 宏提供了方便的方法来编写两种常见的循环。
   Macro: dolist (var list [result]) body… ¶
 #+end_src
 
-    此构造对列表的每个元素执行一次 body，在本地绑定变量 var 以保存当前元素。然后它返回评估结果的值，如果省略结果，则返回 nil。例如，以下是如何使用 dolist 定义反向函数：
+    此构造对列表的每个元素执行一次 body，在本地绑定变量 var 以保存当前元素。然后它返回评估结果的值，如果省略结果，则返回  ~nil~ 。例如，以下是如何使用 dolist 定义反向函数：
 
     #+begin_src emacs-lisp
       (defun reverse (list)
@@ -863,7 +856,7 @@ dolist 和 dotimes 宏提供了方便的方法来编写两种常见的循环。
   Macro: dotimes (var count [result]) body… ¶
 #+end_src
 
-    此构造对从 0（包括）到 count（不包括）的每个整数执行一次 body，将变量 var 绑定到当前迭代的整数。然后它返回评估结果的值，如果省略结果，则返回 nil。不推荐使用结果。下面是一个使用 dotimes 做某事 100 次的例子：
+    此构造对从 0（包括）到 count（不包括）的每个整数执行一次 body，将变量 var 绑定到当前迭代的整数。然后它返回评估结果的值，如果省略结果，则返回  ~nil~ 。不推荐使用结果。下面是一个使用 dotimes 做某事 100 次的例子：
 
     #+begin_src emacs-lisp
       (dotimes (i 100)
@@ -984,7 +977,7 @@ throw 不需要在它跳转到的 catch 中出现在词汇上。它同样可以�
   Special Form: catch tag body… ¶
 #+end_src
 
-    catch 为 throw 函数建立一个返回点。返回点通过标签与其他此类返回点区分开来，标签可以是除 nil 之外的任何 Lisp 对象。在建立返回点之前，通常会评估参数标记。
+    catch 为 throw 函数建立一个返回点。返回点通过标签与其他此类返回点区分开来，标签可以是除  ~nil~  之外的任何 Lisp 对象。在建立返回点之前，通常会评估参数标记。
 
     在返回点生效的情况下，catch 按文本顺序评估正文的形式。如果表单正常执行（没有错误或非本地退出），则从 catch 返回最后一个正文表单的值。
 
@@ -1014,7 +1007,7 @@ throw 不需要在它跳转到的 catch 中出现在词汇上。它同样可以�
 	  (setq i (1+ i))))))
 #+end_src
 
-如果 foo 返回非 nil，我们立即停止并返回 i 和 j 的列表。如果 foo 总是返回 nil，则 catch 正常返回，并且值为 nil，因为这是 while 的结果。
+如果 foo 返回非  ~nil~ ，我们立即停止并返回 i 和 j 的列表。如果 foo 总是返回  ~nil~ ，则 catch 正常返回，并且值为  ~nil~ ，因为这是 while 的结果。
 
 这里有两个棘手的例子，略有不同，同时显示两个返回点。首先，两个相同标签的返回点，hack：
 #+begin_src emacs-lisp
@@ -1123,7 +1116,7 @@ throw 不需要在它跳转到的 catch 中出现在词汇上。它同样可以�
   Variable: command-error-function ¶
 #+end_src
 
-    这个变量，如果非 nil，指定一个函数用来处理返回控制给 Emacs 命令循环的错误。该函数应该接受三个参数：数据，一个与条件案例绑定到其变量的形式相同的列表；  context，一个描述错误发生情况的字符串，或者（更常见的）nil；  和调用者，Lisp 函数调用发出错误信号的原语。 
+    这个变量，如果非  ~nil~ ，指定一个函数用来处理返回控制给 Emacs 命令循环的错误。该函数应该接受三个参数：数据，一个与条件案例绑定到其变量的形式相同的列表；  context，一个描述错误发生情况的字符串，或者（更常见的） ~nil~ ；  和调用者，Lisp 函数调用发出错误信号的原语。 
 
 没有显式处理程序的错误可能会调用 Lisp 调试器。如果变量 debug-on-error（请参阅在出现错误时进入调试器）非零，则启用调试器。与错误处理程序不同，调试器在错误环境中运行，因此您可以准确地检查变量的值，就像它们在错误发生时一样。
 
@@ -1136,7 +1129,7 @@ throw 不需要在它跳转到的 catch 中出现在词汇上。它同样可以�
     (error nil))
 #+end_src
 
-这将删除名为 filename 的文件，捕获任何错误并在发生错误时返回 nil。（对于这样的简单情况，您可以使用宏忽略错误；见下文。）
+这将删除名为 filename 的文件，捕获任何错误并在发生错误时返回  ~nil~ 。（对于这样的简单情况，您可以使用宏忽略错误；见下文。）
 
 condition-case 构造通常用于捕获可预测的错误，例如在调用 insert-file-contents 时无法打开文件。它还用于捕获完全不可预测的错误，例如当程序评估从用户读取的表达式时。
 
@@ -1194,9 +1187,9 @@ condition-case 构造通常用于捕获可预测的错误，例如在调用 inse
 
     参数 var 是一个变量。condition-case 在执行 protected-form 时不绑定此变量，仅在它处理错误时。那时，它将 var 本地绑定到错误描述，这是一个给出错误细节的列表。错误描述的形式为 (error-symbol . data)。处理程序可以参考这个列表来决定做什么。例如，如果错误是因为打开文件失败，则文件名是数据的第二个元素——错误描述的第三个元素。
 
-    如果 var 为 nil，则表示没有绑定任何变量。然后错误符号和相关数据对处理程序不可用。
+    如果 var 为  ~nil~ ，则表示没有绑定任何变量。然后错误符号和相关数据对处理程序不可用。
 
-    作为一种特殊情况，其中一个处理程序可以是表单 (:success body...) 的列表，其中执行 body 时，当该表达式无错误终止时，绑定到 protected-form 的返回值的 var（如果非 nil） .
+    作为一种特殊情况，其中一个处理程序可以是表单 (:success body...) 的列表，其中执行 body 时，当该表达式无错误终止时，绑定到 protected-form 的返回值的 var（如果非  ~nil~ ） .
 
     有时有必要重新抛出一个被条件案例捕获的信号，以便某些外层处理程序捕获。以下是如何做到这一点：
 
@@ -1240,7 +1233,6 @@ condition-case 构造通常用于捕获可预测的错误，例如在调用 inse
        error→ Wrong type argument: number-or-marker-p, nil
 #+end_src
 
-
 这是一个捕获各种错误的条件案例，包括来自错误的错误：
 #+begin_src emacs-lisp
   (setq baz 34)
@@ -1260,12 +1252,11 @@ condition-case 构造通常用于捕获可预测的错误，例如在调用 inse
 #+end_src
 
 
-
 #+begin_src emacs-lisp
   Macro: ignore-errors body… ¶
 #+end_src
 
-    此构造执行主体，忽略执行期间发生的任何错误。如果执行没有错误，则ignore-errors返回body中最后一个表单的值；  否则，它返回 nil。
+    此构造执行主体，忽略执行期间发生的任何错误。如果执行没有错误，则ignore-errors返回body中最后一个表单的值；  否则，它返回  ~nil~ 。
 
     这是本小节开头使用忽略错误重写的示例：
 

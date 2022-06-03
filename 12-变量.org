@@ -36,7 +36,7 @@
 #+end_src
 
 **  12.2 永不改变的变量
-在 Emacs Lisp 中，某些符号通常会对自己求值。这些包括 nil 和 t，以及名称以“:”开头的任何符号（这些称为关键字）。这些符号不能被反弹，也不能改变它们的值。任何设置或绑定 nil 或 t 的尝试都表示设置常量错误。对于关键字（名称以':'开头的符号）也是如此，如果它被实习在标准 obarray 中，除了将这样的符号设置为自身不是错误。
+在 Emacs Lisp 中，某些符号通常会对自己求值。这些包括  ~nil~  和 t，以及名称以“:”开头的任何符号（这些称为关键字）。这些符号不能被反弹，也不能改变它们的值。任何设置或绑定  ~nil~  或 t 的尝试都表示设置常量错误。对于关键字（名称以':'开头的符号）也是如此，如果它被实习在标准 obarray 中，除了将这样的符号设置为自身不是错误。
 
 #+begin_src emacs-lisp
   nil ≡ 'nil
@@ -50,7 +50,7 @@
   Function: keywordp object ¶
 #+end_src
 
-    如果 object 是一个名称以 ':' 开头的符号，则函数返回 t，并在标准 obarray 中实习，否则返回 nil。 
+    如果 object 是一个名称以 ':' 开头的符号，则函数返回 t，并在标准 obarray 中实习，否则返回  ~nil~ 。 
 
 这些常量与使用 defconst 特殊形式定义的常量根本不同（请参阅定义全局变量）。defconst 形式用于通知人类读者您不打算更改变量的值，但如果您实际更改它，Emacs 不会引发错误。
 
@@ -77,7 +77,7 @@
 
     这种特殊形式为特定的一组变量设置本地绑定，由绑定指定，然后按文本顺序评估所有形式。它的返回值是表单中最后一个表单的值。let 设置的本地绑定仅在表单主体内有效。
 
-    每个绑定都是 (i) 一个符号，在这种情况下，该符号在本地绑定到 nil；  或 (ii) 形式列表 (symbol value-form)，在这种情况下，符号本地绑定到评估 value-form 的结果。如果省略 value-form，则使用 nil。
+    每个绑定都是 (i) 一个符号，在这种情况下，该符号在本地绑定到  ~nil~ ；  或 (ii) 形式列表 (symbol value-form)，在这种情况下，符号本地绑定到评估 value-form 的结果。如果省略 value-form，则使用  ~nil~ 。
 
     绑定中的所有值形式都按照它们出现的顺序在将任何符号绑定到它们之前进行评估。下面是一个例子：z 绑定到 y 的旧值，即 2，而不是 y 的新值，即 1。
 
@@ -186,7 +186,7 @@
 **  12.4 当变量为空时
 如果一个变量的符号有一个未赋值的单元格，我们就说这个变量是无效的（参见符号组件）。
 
-在 Emacs Lisp 的默认动态范围规则下（请参阅变量绑定的范围规则），值单元格存储变量的当前（本地或全局）值。请注意，未分配的值单元格与值单元格中的 nil 不同。符号 nil 是一个 Lisp 对象，可以是变量的值，就像任何其他对象一样；  但它仍然是一个值。如果变量为 void，则尝试评估该变量会发出 void-variable 错误信号，而不是返回值。
+在 Emacs Lisp 的默认动态范围规则下（请参阅变量绑定的范围规则），值单元格存储变量的当前（本地或全局）值。请注意，未分配的值单元格与值单元格中的  ~nil~  不同。符号  ~nil~  是一个 Lisp 对象，可以是变量的值，就像任何其他对象一样；  但它仍然是一个值。如果变量为 void，则尝试评估该变量会发出 void-variable 错误信号，而不是返回值。
 
 在可选的词法范围规则下，值单元仅保存变量的全局值——任何词法绑定结构之外的值。当一个变量被词法绑定时，局部值由词法环境决定；  因此，即使变量符号的值单元未分配，变量也可以具有局部值。
 
@@ -230,7 +230,7 @@
   Function: boundp variable ¶
 #+end_src
 
-    如果变量（符号）不为 void，则此函数返回 t，如果为 void，则返回 nil。
+    如果变量（符号）不为 void，则此函数返回 t，如果为 void，则返回  ~nil~ 。
 
     以下是一些示例（假设动态绑定有效）：
     #+begin_src emacs-lisp
@@ -268,7 +268,7 @@ defconst 和 defvar 之间的区别主要是意图问题，用于告知人类读
 
     如果指定了 value，并且 symbol 为 void（即，它没有动态绑定的值；请参阅当变量为 Void 时），则计算 value 并将 symbol 设置为结果。但如果 symbol 不是 void，则不会评估 value，并且 symbol 的值保持不变。如果省略 value，则符号的值在任何情况下都不会改变。
 
-    请注意，指定一个值，即使是 nil，也会将变量永久标记为特殊。而如果 value 被省略，则该变量仅在本地标记为特殊（即在当前词法范围内，或者如果在顶层，则为文件）。这对于抑制字节编译警告很有用，请参阅编译器错误。
+    请注意，指定一个值，即使是  ~nil~ ，也会将变量永久标记为特殊。而如果 value 被省略，则该变量仅在本地标记为特殊（即在当前词法范围内，或者如果在顶层，则为文件）。这对于抑制字节编译警告很有用，请参阅编译器错误。
 
     如果 symbol 在当前缓冲区中具有缓冲区本地绑定，则 defvar 作用于与缓冲区无关的默认值，而不是缓冲区本地绑定。如果默认值为 void，它会设置默认值。请参阅缓冲区局部变量。
 
@@ -537,7 +537,7 @@ defconst 和 defvar 之间的区别主要是意图问题，用于告知人类读
 
     此函数安排在修改符号时调用 watch-function。通过别名进行修改（请参阅变量别名）将具有相同的效果。
 
-    watch-function 将在更改 symbol 的值之前被调用，带有 4 个参数：symbol、newval、operation 和 where。symbol 是被改变的变量。newval 是将更改为的值。（旧值可作为 symbol 的值用于 watch-function，因为它尚未更改为 newval。） operation 是表示更改类型的符号，其中之一是：set、let、unlet、makunbound 或 defvaralias。如果变量的缓冲区局部值正在更改，则 where 是缓冲区，否则为 nil。 
+    watch-function 将在更改 symbol 的值之前被调用，带有 4 个参数：symbol、newval、operation 和 where。symbol 是被改变的变量。newval 是将更改为的值。（旧值可作为 symbol 的值用于 watch-function，因为它尚未更改为 newval。） operation 是表示更改类型的符号，其中之一是：set、let、unlet、makunbound 或 defvaralias。如果变量的缓冲区局部值正在更改，则 where 是缓冲区，否则为  ~nil~ 。 
 
 #+begin_src emacs-lisp
   Function: remove-variable-watcher symbol watch-function ¶
@@ -693,16 +693,14 @@ Emacs 可以选择创建词法绑定。词法绑定具有词法范围，这意�
 let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在这个绑定构造中，我们定义了一个 lambda 表达式，它将 x 递增 1 并返回递增后的值。这个 lambda 表达式会自动变成一个闭包，即使在 let 绑定结构退出之后，词法环境仍然存在。每次我们评估闭包时，它都会增加 x，使用 x 在该词法环境中的绑定。
 
 请注意，与绑定到符号对象本身的动态变量不同，词法变量和符号之间的关系仅存在于解释器（或编译器）中。因此，接受符号参数的函数（如符号值、boundp 和集合）只能检索或修改变量的动态绑定（即，其符号值单元格的内容）。
-
 *** 12.10.4 使用词法绑定
-
-在加载 Emacs Lisp 文件或评估 Lisp 缓冲区时，如果缓冲区局部变量 lexical-binding 为非 nil，则启用词法绑定：
+在加载 Emacs Lisp 文件或评估 Lisp 缓冲区时，如果缓冲区局部变量 lexical-binding 为非  ~nil~ ，则启用词法绑定：
 
 #+begin_src emacs-lisp
   Variable: lexical-binding ¶
 #+end_src
 
-    如果这个缓冲区局部变量不为 nil，Emacs Lisp 文件和缓冲区将使用词法绑定而不是动态绑定进行评估。（但是，特殊变量仍然是动态绑定的；见下文。）如果为 nil，则动态绑定用于所有局部变量。此变量通常为整个 Emacs Lisp 文件设置为文件局部变量（请参阅文件局部变量）。请注意，与其他此类变量不同，此变量必须在文件的第一行中设置。 
+    如果这个缓冲区局部变量不为  ~nil~ ，Emacs Lisp 文件和缓冲区将使用词法绑定而不是动态绑定进行评估。（但是，特殊变量仍然是动态绑定的；见下文。）如果为  ~nil~ ，则动态绑定用于所有局部变量。此变量通常为整个 Emacs Lisp 文件设置为文件局部变量（请参阅文件局部变量）。请注意，与其他此类变量不同，此变量必须在文件的第一行中设置。 
 
 当使用 eval 调用直接评估 Emacs Lisp 代码时，如果 eval 的词法参数不为零，则启用词法绑定。见评估。
 
@@ -735,9 +733,9 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
   Function: special-variable-p symbol ¶
 #+end_src
 
-    如果 symbol 是特殊变量（即，它具有 defvar、defcustom 或 defconst 变量定义），则此函数返回非 nil。否则，返回值为 nil。
+    如果 symbol 是特殊变量（即，它具有 defvar、defcustom 或 defconst 变量定义），则此函数返回非  ~nil~ 。否则，返回值为  ~nil~ 。
 
-    请注意，由于这是一个函数，它只能为永久特殊的变量返回非 nil，但不能为仅在当前词法范围内特殊的变量返回非 nil。 
+    请注意，由于这是一个函数，它只能为永久特殊的变量返回非  ~nil~ ，但不能为仅在当前词法范围内特殊的变量返回非  ~nil~ 。 
 
 不支持在函数中使用特殊变量作为形式参数。
 *** 12.10.5 转换为词法绑定
@@ -877,7 +875,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
 
     此功能的一个特殊问题是绑定变量（使用 let 或其他绑定结构）不会为其创建缓冲区本地绑定。仅设置变量（使用 set 或 setq），而变量没有在当前缓冲区中创建的 let 样式绑定，这样做。
 
-    如果变量没有默认值，则调用此命令将给它一个默认值 nil。如果变量已经具有默认值，则该值保持不变。随后在变量上调用 makunbound 将产生一个 void 缓冲区局部值，并且不影响默认值。
+    如果变量没有默认值，则调用此命令将给它一个默认值  ~nil~ 。如果变量已经具有默认值，则该值保持不变。随后在变量上调用 makunbound 将产生一个 void 缓冲区局部值，并且不影响默认值。
 
     返回的值是可变的。
 
@@ -962,13 +960,13 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
 
     此函数消除了当前缓冲区的所有缓冲区局部变量绑定，除了标记为永久的变量和具有非零永久局部钩子属性的局部钩子函数（请参阅设置钩子）。结果，缓冲区将看到大多数变量的默认值。
 
-    此函数还重置与缓冲区有关的某些其他信息：它将本地键映射设置为 nil，将语法表设置为 (standard-syntax-table) 的值，将案例表设置为 (standard-case-table)，并将缩写table 到 basic-mode-abbrev-table 的值。
+    此函数还重置与缓冲区有关的某些其他信息：它将本地键映射设置为  ~nil~ ，将语法表设置为 (standard-syntax-table) 的值，将案例表设置为 (standard-case-table)，并将缩写table 到 basic-mode-abbrev-table 的值。
 
     这个函数做的第一件事就是运行普通的钩子 change-major-mode-hook（见下文）。
 
     每个主模式命令都以调用此函数开始，该函数具有切换到基本模式的效果，并擦除之前主模式的大部分效果。为确保其发挥作用，不应将主要模式设置的变量标记为永久。
 
-    kill-all-local-variables 返回 nil。 
+    kill-all-local-variables 返回  ~nil~ 。 
 
 #+begin_src emacs-lisp
   Variable: change-major-mode-hook ¶
@@ -978,7 +976,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
 
     为获得最佳效果，请将此变量设置为缓冲区本地，以便在完成工作后它会消失，并且不会干扰后续的主要模式。请参阅挂钩。 
 
-如果变量名（符号）具有非 nil 的永久局部属性，则缓冲区局部变量是永久的。这些变量不受 kill-all-local-variables 的影响，因此它们的本地绑定不会通过更改主要模式来清除。永久本地变量适用于与文件来自何处或如何保存文件有关的数据，而不是与如何编辑内容有关的数据。
+如果变量名（符号）具有非  ~nil~  的永久局部属性，则缓冲区局部变量是永久的。这些变量不受 kill-all-local-variables 的影响，因此它们的本地绑定不会通过更改主要模式来清除。永久本地变量适用于与文件来自何处或如何保存文件有关的数据，而不是与如何编辑内容有关的数据。
 
 *** 12.11.3 缓冲区局部变量的默认值
 具有缓冲区局部绑定的变量的全局值也称为默认值，因为它是在当前缓冲区和选定帧都没有自己的变量绑定时生效的值。
@@ -997,7 +995,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
   Function: default-boundp symbol ¶
 #+end_src
 
-    函数 default-boundp 告诉您符号的默认值是否为非空值。如果 (default-boundp 'foo) 返回 nil，则 (default-value 'foo) 会出错。
+    函数 default-boundp 告诉您符号的默认值是否为非空值。如果 (default-boundp 'foo) 返回  ~nil~ ，则 (default-value 'foo) 会出错。
 
     default-boundp 对应于默认值，就像 boundp 对应于符号值一样。 
 
@@ -1093,7 +1091,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
 
 如果文件局部变量可以指定稍后调用的任意函数或 Lisp 表达式，则访问文件可能会接管您的 Emacs。Emacs 通过仅自动设置那些指定值已知是安全的文件局部变量来防止这种情况发生。只有在用户同意的情况下，才会设置其他文件局部变量。
 
-为了更加安全，当 Emacs 读取文件局部变量时， read-circle 临时绑定为 nil（请参阅输入函数）。这可以防止 Lisp 阅读器识别循环和共享的 Lisp 结构（请参阅循环对象的读取语法）。
+为了更加安全，当 Emacs 读取文件局部变量时， read-circle 临时绑定为  ~nil~ （请参阅输入函数）。这可以防止 Lisp 阅读器识别循环和共享的 Lisp 结构（请参阅循环对象的读取语法）。
 
 #+begin_src emacs-lisp
   User Option: enable-local-variables ¶
@@ -1119,25 +1117,20 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
 #+begin_src emacs-lisp
   nil
 #+end_src
-
         不要设置任何变量。 
 #+begin_src emacs-lisp
   anything else
 #+end_src
-
         查询（一次）所有变量。 
-
 #+begin_src emacs-lisp
   Variable: inhibit-local-variables-regexps ¶
 #+end_src
-
     这是一个正则表达式列表。如果文件的名称与此列表的元素匹配，则不会扫描它以查找任何形式的文件局部变量。有关您可能想要使用它的原因的示例，请参阅 Emacs 如何选择主要模式。 
-
 #+begin_src emacs-lisp
   Variable: permanently-enabled-local-variables ¶
 #+end_src
 
-    即使 enable-local-variables 为 nil，默认情况下也会注意某些局部变量设置。默认情况下，这仅适用于词法绑定局部变量设置，但这可以通过使用这个变量来控制，它是一个符号列表。 
+    即使 enable-local-variables 为  ~nil~ ，默认情况下也会注意某些局部变量设置。默认情况下，这仅适用于词法绑定局部变量设置，但这可以通过使用这个变量来控制，它是一个符号列表。 
 
 #+begin_src emacs-lisp
   Function: hack-local-variables &optional handle-mode ¶
@@ -1147,7 +1140,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
 
     此函数通过遍历存储在 file-local-variables-alist 中的 alist 并依次应用每个局部变量来工作。它分别在应用变量之前和之后调用 before-hack-local-variables-hook 和 hack-local-variables-hook。如果 alist 不为零，它只会调用前钩子；  它总是调用另一个钩子。如果该函数指定了与缓冲区已有的相同的主模式，则此函数将忽略“模式”元素。
 
-    如果可选参数句柄模式是 t，那么这个函数所做的就是返回一个指定主模式的符号，如果'-*-' 行或局部变量列表指定一个，否则返回 nil。它不设置模式或任何其他文件局部变量。如果handle-mode 具有除nil 或t 以外的任何值，则'-*-' 行或局部变量列表中的'mode' 的任何设置都将被忽略，并应用其他设置。如果句柄模式为 nil，则设置所有文件局部变量。 
+    如果可选参数句柄模式是 t，那么这个函数所做的就是返回一个指定主模式的符号，如果'-*-' 行或局部变量列表指定一个，否则返回  ~nil~ 。它不设置模式或任何其他文件局部变量。如果handle-mode 具有除 ~nil~  或t 以外的任何值，则'-*-' 行或局部变量列表中的'mode' 的任何设置都将被忽略，并应用其他设置。如果句柄模式为  ~nil~ ，则设置所有文件局部变量。 
 
 #+begin_src emacs-lisp
   Variable: file-local-variables-alist ¶
@@ -1197,7 +1190,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
   Function: safe-local-variable-p sym val ¶
 #+end_src
 
-    如果根据上述标准将值 val 赋予 sym 是安全的，则此函数返回非 nil。 
+    如果根据上述标准将值 val 赋予 sym 是安全的，则此函数返回非  ~nil~ 。 
 
 一些变量被认为是有风险的。如果一个变量有风险，它永远不会自动输入到安全局部变量值中；  Emacs 总是在设置有风险的变量之前进行查询，除非用户通过直接自定义 safe-local-variable-values 明确允许一个值。
 
@@ -1221,7 +1214,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
   User Option: enable-local-eval ¶
 #+end_src
 
-    此变量控制“-*-”行中的“Eval:”或正在访问的文件中的局部变量列表的处理。t 值表示无条件处理它们；  nil 表示忽略它们；  任何其他意味着询问用户对每个文件做什么。默认值为可能。 
+    此变量控制“-*-”行中的“Eval:”或正在访问的文件中的局部变量列表的处理。t 值表示无条件处理它们；   ~nil~  表示忽略它们；  任何其他意味着询问用户对每个文件做什么。默认值为可能。 
 
 #+begin_src emacs-lisp
   User Option: safe-local-eval-forms ¶
@@ -1260,7 +1253,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
   Function: dir-locals-set-class-variables class variables ¶
 #+end_src
 
-    该函数为命名类定义了一组变量设置，这是一个符号。您可以稍后将类分配给一个或多个目录，Emacs 会将这些变量设置应用到这些目录中的所有文件。变量中的列表可以是以下两种形式之一：（major-mode .alist）或（directory .list）。对于第一种形式，如果文件的缓冲区打开了从主要模式派生的模式，则应用关联 alist 中的所有变量；  alist 应该是 (name . value) 的形式。主模式的特殊值 nil 表示设置适用于任何模式。在 alist 中，您可以使用一个特殊的名称：subdirs。如果关联值为 nil，则 alist 仅适用于相关目录中的文件，而不适用于任何子目录中的文件。
+    该函数为命名类定义了一组变量设置，这是一个符号。您可以稍后将类分配给一个或多个目录，Emacs 会将这些变量设置应用到这些目录中的所有文件。变量中的列表可以是以下两种形式之一：（major-mode .alist）或（directory .list）。对于第一种形式，如果文件的缓冲区打开了从主要模式派生的模式，则应用关联 alist 中的所有变量；  alist 应该是 (name . value) 的形式。主模式的特殊值  ~nil~  表示设置适用于任何模式。在 alist 中，您可以使用一个特殊的名称：subdirs。如果关联值为  ~nil~ ，则 alist 仅适用于相关目录中的文件，而不适用于任何子目录中的文件。
 
     对于第二种形式的变量，如果目录是文件目录的初始子字符串，则按照上述规则递归应用列表；  list 应该是此函数在变量中接受的两种形式之一。 
 
@@ -1270,7 +1263,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
 
     该函数将类分配给目录及其子目录中的所有文件。此后，为类指定的所有变量设置将应用于目录及其子目录中的任何访问文件。类必须已经由 dir-locals-set-class-variables 定义。
 
-    当 Emacs 从 .dir-locals.el 文件加载目录变量时，它在内部使用这个函数。在这种情况下，可选参数 mtime 保存文件修改时间（由文件属性返回）。Emacs 使用这个时间来检查存储的局部变量是否仍然有效。如果你是直接分配一个类，而不是通过一个文件，这个参数应该是 nil。 
+    当 Emacs 从 .dir-locals.el 文件加载目录变量时，它在内部使用这个函数。在这种情况下，可选参数 mtime 保存文件修改时间（由文件属性返回）。Emacs 使用这个时间来检查存储的局部变量是否仍然有效。如果你是直接分配一个类，而不是通过一个文件，这个参数应该是  ~nil~ 。 
 
 #+begin_src emacs-lisp
   Variable: dir-locals-class-alist ¶
@@ -1339,7 +1332,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
   Function: connection-local-set-profiles criteria &rest profiles ¶
 #+end_src
 
-    此功能将作为符号的配置文件分配给由标准标识的所有远程连接。标准是一个 plist 标识一个连接和使用这个连接的应用程序。属性名称可能是 :application、:protocol、:user 和 :machine。:application 的属性值是一个符号，所有其他属性值都是字符串。所有属性都是可选的；  如果条件为 nil，则始终适用。例子：
+    此功能将作为符号的配置文件分配给由标准标识的所有远程连接。标准是一个 plist 标识一个连接和使用这个连接的应用程序。属性名称可能是 :application、:protocol、:user 和 :machine。:application 的属性值是一个符号，所有其他属性值都是字符串。所有属性都是可选的；  如果条件为  ~nil~ ，则始终适用。例子：
 
     #+begin_src emacs-lisp
       (connection-local-set-profiles
@@ -1353,7 +1346,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
 	'remote-ksh 'remote-null-device)
     #+end_src
 
-    如果条件为 nil，则适用于所有远程连接。因此，上面的例子相当于
+    如果条件为  ~nil~ ，则适用于所有远程连接。因此，上面的例子相当于
     #+begin_src emacs-lisp
       (connection-local-set-profiles
 	'(:application 'tramp :protocol "ssh" :machine "localhost")
@@ -1369,8 +1362,6 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
       (connection-local-set-profiles
 	nil 'remote-null-device)
     #+end_src
-
-
 
     配置文件的任何连接配置文件必须已由 connection-local-set-profile-variables 定义。 
 
@@ -1447,7 +1438,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
 
     此函数将符号 new-alias 定义为符号 base-variable 的变量别名。这意味着检索 new-alias 的值会返回 base-variable 的值，而改变 new-alias 的值会改变 base-variable 的值。两个别名变量名称始终共享相同的值和相同的绑定。
 
-    如果 docstring 参数不为 nil，它指定新别名的文档；  否则，别名将获得与 base-variable 相同的文档（如果有），除非 base-variable 本身就是一个别名，在这种情况下，new-alias 会在别名链的末尾获取变量的文档。
+    如果 docstring 参数不为  ~nil~ ，它指定新别名的文档；  否则，别名将获得与 base-variable 相同的文档（如果有），除非 base-variable 本身就是一个别名，在这种情况下，new-alias 会在别名链的末尾获取变量的文档。
 
     此函数返回基变量。 
 
@@ -1512,7 +1503,7 @@ let 绑定定义了一个词法环境，其中变量 x 本地绑定到 0。在�
 **  12.16 有限制值的变量
 可以为普通 Lisp 变量分配任何有效的 Lisp 对象的值。但是，某些 Lisp 变量不是在 Lisp 中定义的，而是在 C 中定义的。这些变量中的大多数是在 C 代码中使用 DEFVAR_LISP 定义的。就像在 Lisp 中定义的变量一样，它们可以取任何值。但是，有些变量是使用 DEFVAR_INT 或 DEFVAR_BOOL 定义的。有关 C 实现的简要讨论，请参阅编写 Emacs Primitives，特别是 syms_of_filename 类型的函数的描述。
 
-DEFVAR_BOOL 类型的变量只能取值 nil 或 t。尝试为它们分配任何其他值会将它们设置为 t：
+DEFVAR_BOOL 类型的变量只能取值  ~nil~  或 t。尝试为它们分配任何其他值会将它们设置为 t：
 
 #+begin_src emacs-lisp
   (let ((display-hourglass 5))
@@ -1640,11 +1631,9 @@ cl-lib 库为通用变量定义了各种扩展，包括额外的 setf 位置。�
 			      ,v))))))))
     #+end_src
 
-
 #+begin_src emacs-lisp
   Macro: gv-letplace (getter setter) place &rest body ¶
 #+end_src
-
     宏 gv-letplace 在定义执行类似于 setf 的宏时很有用；  例如，Common Lisp 的 incf 宏可以这样实现：
 
     #+begin_src emacs-lisp
@@ -1653,7 +1642,6 @@ cl-lib 库为通用变量定义了各种扩展，包括额外的 setf 位置。�
 	  (macroexp-let2 nil v (or n 1)
 	    (funcall setter `(+ ,v ,getter)))))
     #+end_src
-
     getter 将绑定到返回 place 值的可复制表达式。setter 将绑定到一个函数，该函数接受一个表达式 v 并返回一个将 place 设置为 v 的新表达式。body 应该返回一个 Emacs Lisp 表达式，通过 getter 和 setter 操作 place。 
 
 有关详细信息，请参阅源文件 gv.el。

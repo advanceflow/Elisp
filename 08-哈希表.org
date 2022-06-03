@@ -40,7 +40,7 @@ Obarrays 也是一种哈希表，但它们是不同类型的对象，仅用于�
 
 	 哈希表的弱点指定哈希表中存在的键或值是否会使其免受垃圾收集。
 
-	 弱值必须是 nil、key、value、key-or-value、key-and-value 或 t 之一，它是 key-and-value 的别名。如果弱是键，则哈希表不会阻止其键被作为垃圾收集（如果它们没有在其他任何地方引用）；  如果确实收集了特定的键，则从哈希表中删除相应的关联。
+	 弱值必须是  ~nil~ 、key、value、key-or-value、key-and-value 或 t 之一，它是 key-and-value 的别名。如果弱是键，则哈希表不会阻止其键被作为垃圾收集（如果它们没有在其他任何地方引用）；  如果确实收集了特定的键，则从哈希表中删除相应的关联。
 
 	 如果弱值是值，则哈希表不会阻止值被作为垃圾收集（如果它们没有在其他任何地方引用）；  如果确实收集了特定值，则从哈希表中删除相应的关联。
 
@@ -48,7 +48,7 @@ Obarrays 也是一种哈希表，但它们是不同类型的对象，仅用于�
 
 	 如果weak 是key-or-value，则key 或value 都可以保留关联。因此，当关联的键和值都被作为垃圾收集时（如果不是来自弱哈希表的引用），关联就会从哈希表中删除。
 
-	 weak 的默认值是 nil，因此哈希表中引用的所有键和值都不会被垃圾回收。
+	 weak 的默认值是  ~nil~ ，因此哈希表中引用的所有键和值都不会被垃圾回收。
     :size 大小
 
 	 这指定了您计划在哈希表中存储多少关联的提示。如果您知道大概的数字，您可以通过这种方式指定它来提高效率。如果您指定的大小太小，哈希表会在必要时自动增长，但这样做需要一些额外的时间。
@@ -99,7 +99,7 @@ Obarrays 也是一种哈希表，但它们是不同类型的对象，仅用于�
 
     此函数从表中删除键的关联，如果有的话。如果 key 没有关联，remhash 什么也不做。
 
-    Common Lisp 注意：在 Common Lisp 中，如果 remhash 实际删除了关联，则返回非 nil，否则返回 nil。在 Emacs Lisp 中，remhash 总是返回 nil。
+    Common Lisp 注意：在 Common Lisp 中，如果 remhash 实际删除了关联，则返回非  ~nil~ ，否则返回  ~nil~ 。在 Emacs Lisp 中，remhash 总是返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: clrhash table ¶
@@ -107,7 +107,7 @@ Obarrays 也是一种哈希表，但它们是不同类型的对象，仅用于�
 
     此函数从哈希表中删除所有关联，使其变为空。这也称为清除哈希表。
 
-    Common Lisp 注意：在 Common Lisp 中，clrhash 返回空表。在 Emacs Lisp 中，它返回 nil。
+    Common Lisp 注意：在 Common Lisp 中，clrhash 返回空表。在 Emacs Lisp 中，它返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: maphash function table ¶
@@ -196,7 +196,7 @@ Lisp 程序不应该依赖在 Emacs 会话之间保留的哈希码，因为哈�
   Function: hash-table-p table ¶
 #+end_src
 
-    如果 table 是哈希表对象，则返回非 nil。
+    如果 table 是哈希表对象，则返回非  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: copy-hash-table table ¶
