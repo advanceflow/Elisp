@@ -200,55 +200,54 @@ Variable: user-emacs-directory ¶
 #+end_src
     此变量保存Emacs默认目录的名称。如果该目录存在并且 =~/.emacs.d/= 和 =~/.emacs= 不存在，则默认为 =${XDG_CONFIG_HOME-'~/.config'}/emacs/= ，否则在所有平台上为 =~/.emacs.d/= 但在 =MS-DOS= 平台上除外。这里，=${XDG_CONFIG_HOME-'~/.config'}= 代表环境变量 =XDG_CONFIG_HOME= 的值（如果设置了该变量），否则代表 =~/.config= 。请参阅GNU Emacs手册中的Emacs如何找到您的初始化文件。
 *** 41.1.3 终端特定初始化
-每个终端类型都可以有自己的 Lisp 库，当在该类型的终端上运行时，Emacs 会加载该库。库的名称是通过连接变量 term-file-prefix 的值和终端类型（由环境变量 TERM 指定）构成的。通常，term-file-prefix 的值为 ~term/~ ；  不建议更改此设置。如果在 term-file-aliases 关联列表中存在与 TERM 匹配的条目，Emacs 将使用关联的值代替 TERM。Emacs 通过搜索加载路径目录并尝试使用 ~.elc~ 和 ~.el~ 后缀以正常方式查找文件。
+每个终端类型都可以有自己的Lisp库，当在该类型的终端上运行时，Emacs会加载该库。库的名称是通过连接变量 ~term-file-prefix~ 的值和终端类型（由环境变量 ~TERM~ 指定）构成的。通常， ~term-file-prefix~ 的值为 ~term/~ ；  不建议更改此设置。如果在 ~term-file-aliases~ 关联列表中存在与 ~TERM~ 匹配的条目，Emacs将使用关联的值代替 ~TERM~ 。Emacs通过搜索加载路径目录并尝试使用 ~.elc~ 和 ~.el~ 后缀以正常方式查找文件。
 
-终端特定库的通常作用是启用特殊键来发送Emacs可以识别的序列。如果 Termcap 或 Terminfo 条目未指定所有终端的功能键，则可能还需要设置或添加到 input-decode-map。请参阅终端输入。
+终端特定库的通常作用是启用特殊键来发送Emacs可以识别的序列。如果 ~Termcap~ 或 ~Terminfo~ 条目未指定所有终端的功能键，则可能还需要设置或添加到 ~input-decode-map~ 。请参阅终端输入。
 
-当终端类型的名称包含连字符或下划线，并且没有找到名称与终端名称相同的库时，Emacs 会从终端名称中删除最后一个连字符或下划线及其后面的所有内容，然后重试。重复这个过程，直到Emacs找到匹配的库，或者直到名称中不再有连字符或下划线（即，没有终端特定的库）。例如，如果终端名称是 'xterm-256color' 并且没有 term/xterm-256color.el 库，Emacs 会尝试加载 term/xterm.el。如有必要，终端库可以评估 (getenv "TERM") 以找到终端类型的全名。
+当终端类型的名称包含连字符或下划线，并且没有找到名称与终端名称相同的库时，Emacs会从终端名称中删除最后一个连字符或下划线及其后面的所有内容，然后重试。重复这个过程，直到Emacs找到匹配的库，或者直到名称中不再有连字符或下划线（即，没有终端特定的库）。例如，如果终端名称是 ~xterm-256color~ 并且没有 ~term/xterm-256color.el~ 库，Emacs会尝试加载 ~term/xterm.el~ 。如有必要，终端库可以评估 ~(getenv "TERM")~ 以找到终端类型的全名。
 
-您的 init 文件可以通过将变量 term-file-prefix 设置为 nil 来阻止加载特定于终端的库。
+您的初始化文件可以通过将变量 ~term-file-prefix~ 设置为 ~nil~ 来阻止加载特定于终端的库。
 
-您还可以使用 tty-setup-hook 来安排覆盖终端特定库的一些操作。这是Emacs在初始化一个新的文本终端后运行的一个普通钩子。您可以使用此挂钩为没有自己的库的终端定义初始化。请参阅挂钩。
+您还可以使用 ~tty-setup-hook~ 来安排覆盖终端特定库的一些操作。这是Emacs在初始化一个新的文本终端后运行的一个普通钩子。您可以使用此挂钩为没有自己的库的终端定义初始化。请参阅钩子。
 
 #+begin_src emacs-lisp
   User Option: term-file-prefix ¶
 #+end_src
 
-    如果这个变量的值不是 nil，Emacs 会加载一个终端特定的初始化文件，如下所示：
+    如果这个变量的值不是 ~nil~ ，Emacs会加载一个终端特定的初始化文件，如下所示：
     #+begin_src emacs-lisp
       (load (concat term-file-prefix (getenv "TERM")))
     #+end_src
 
-    如果您不想加载终端初始化文件，您可以在初始化文件中将 term-file-prefix 变量设置为 nil。
+    如果您不想加载终端初始化文件，您可以在初始化文件中将 ~term-file-prefix~ 变量设置为 ~nil~ 。
 
-    在 MS-DOS 上，Emacs 将 TERM 环境变量设置为 ~内部~ 。
+    在 ~MS-DOS~ 上，Emacs将 ~TERM~ 环境变量设置为 ~internal~ 。
 
 #+begin_src emacs-lisp
   User Option: term-file-aliases ¶
 #+end_src
-    此变量是将终端类型映射到它们的别名的关联列表。例如，形式为 ("vt102" . "vt100") 的元素意味着将类型为 ~vt102~ 的终端视为 ~vt100~ 类型的终端。
+    此变量是将终端类型映射到它们的别名的关联列表。例如，形式为 ~("vt102" . "vt100")~ 的元素意味着将类型为 ~vt102~ 的终端视为 ~vt100~ 类型的终端。
 
 #+begin_src emacs-lisp
   Variable: tty-setup-hook ¶
 #+end_src
-    这个变量是Emacs在初始化一个新的文本终端后运行的一个普通的钩子。（这适用于Emacs在非窗口模式下启动以及建立 tty emacsclient 连接时。）该钩子在加载您的 init 文件（如果适用）和特定于终端的 Lisp 文件后运行，因此您可以使用它来调整该文件所做的定义。
+    这个变量是Emacs在初始化一个新的文本终端后运行的一个普通的钩子。（这适用于Emacs在非窗口模式下启动以及建立一个tty ~emacsclient~ 连接时。）该钩子在加载您的初始化文件（如果适用）和特定于终端的Lisp 文件后运行，因此您可以使用它来调整该文件所做的定义。
 
-    有关相关功能，请参阅 window-setup-hook。
+    有关相关功能，请参阅 ~window-setup-hook~ 。
 *** 41.1.4 命令行参数
-当您启动Emacs时，您可以使用命令行参数来请求各种操作。请注意，使用Emacs的推荐方法是在登录后只启动一次，然后在同一个Emacs会话中进行所有编辑（请​​参阅 The GNU EmacsManual 中的 Entering Emacs）。出于这个原因，您可能不会经常使用命令行参数。尽管如此，在从会话脚本调用Emacs或调试Emacs时，它们还是很有用的。本节描述Emacs如何处理命令行参数。
+当您启动Emacs时，您可以使用命令行参数来请求各种操作。请注意，使用Emacs的推荐方法是在登录后只启动一次，然后在同一个Emacs会话中进行所有编辑（请​​参阅The GNU Emacs Manual中的Entering Emacs）。出于这个原因，您可能不会经常使用命令行参数。尽管如此，在从会话脚本调用Emacs或调试Emacs时，它们还是很有用的。本节描述Emacs如何处理命令行参数。
 
 #+begin_src emacs-lisp
   Function: command-line ¶
 #+end_src
-    该函数解析调用Emacs的命令行，对其进行处理，并且（除其他外）加载用户的 init 文件并显示启动消息。
+    该函数解析调用Emacs的命令行，对其进行处理，并且（除其他外）加载用户的初始化文件并显示启动消息。
 
 #+begin_src emacs-lisp
   Variable: command-line-processed ¶
 #+end_src
+    一旦处理了命令行，此变量的值就是 ~t~ 。
 
-    一旦处理了命令行，此变量的值就是 t。
-
-    如果您通过调用 dump-emacs（请参阅 Building Emacs）来转储 Emacs，您可能希望首先将此变量设置为 nil，以便使新转储的Emacs处理其新的命令行参数。
+    如果您通过调用 ~dump-emacs~ （请参阅Building Emacs）来转储Emacs，您可能希望首先将此变量设置为 ~nil~ ，以便使新转储的Emacs处理其新的命令行参数。
 
 #+begin_src emacs-lisp
   Variable: command-switch-alist ¶
@@ -260,18 +259,17 @@ Variable: user-emacs-directory ¶
       -option
     #+end_src
 
-    command-switch-alist 的元素如下所示：
-
+    ~command-switch-alist~ 的元素如下所示：
     #+begin_src emacs-lisp
       (option . handler-function)
     #+end_src
-    CAR 选项是一个字符串，是命令行选项的名称（包括初始连字符）。调用处理函数来处理选项，并接收选项名称作为其唯一参数。
+    ~CAR~ ， ~OPTION~ 是一个字符串，是命令行选项的名称（包括初始连字符）。调用 ~HANDLER-FUNCTION~ 来处理选项，并接收选项名称作为其唯一参数。
 
-    在某些情况下，该选项在命令行中后跟一个参数。在这些情况下，处理函数可以在变量 command-line-args-left 中找到所有剩余的命令行参数（见下文）。（命令行参数的完整列表在命令行参数中。）
+    在某些情况下，该选项在命令行中后跟一个参数。在这些情况下，处理函数可以在变量 ~command-line-args-left~ 中找到所有剩余的命令行参数（见下文）。（命令行参数的完整列表在命令行参数中。）
 
-    请注意，command-switch-alist 的处理不会专门处理选项中的等号。也就是说，如果命令行上有类似 --name=value 的选项，那么只有 car 字面为 --name=value 的 command-switch-alist 成员才会匹配此选项。如果要解析此类选项，则需要改用命令行函数（见下文）。
+    请注意， ~command-switch-alist~ 的处理不会专门处理选项中的等号。也就是说，如果命令行上有类似 ~--name=value~ 的选项，那么只有 ~car~ 字面为 ~--name=value~ 的 ~command-switch-alist~ 成员才会匹配此选项。如果要解析此类选项，则需要改用命令行函数（见下文）。
 
-    命令行参数由 startup.el 文件中的 command-line-1 函数解析。另请参阅 GNU Emacs手册中的Emacs调用的命令行参数。
+    命令行参数由 ~startup.el~ 文件中的 ~command-line-1~ 函数解析。另请参阅 GNU Emacs手册中的Emacs调用的命令行参数。
 
 #+begin_src emacs-lisp
   Variable: command-line-args ¶
@@ -288,48 +286,45 @@ Variable: user-emacs-directory ¶
 #+end_src
     此变量的值是用于处理无法识别的命令行参数的函数列表。每次要处理的下一个参数没有特殊含义时，都会按照出现的顺序调用此列表中的函数，直到其中一个返回非零值。
 
-    这些函数在没有参数的情况下被调用。他们可以通过此时临时绑定的变量 argi 访问正在考虑的命令行参数。其余参数（不包括当前参数）在变量 command-line-args-left 中。
+    这些函数在没有参数的情况下被调用。他们可以通过此时临时绑定的变量 ~argi~ 访问正在考虑的命令行参数。其余参数（不包括当前参数）在变量 ~command-line-args-left~ 中。
 
-    当一个函数识别并处理 argi 中的参数时，它应该返回一个非零值来表示它已经处理了该参数。如果它还处理了以下一些参数，则可以通过从 command-line-args-left 中删除它们来表明这一点。
+    当一个函数识别并处理 ~argi~ 中的参数时，它应该返回一个非零值来表示它已经处理了该参数。如果它还处理了以下一些参数，则可以通过从 ~command-line-args-left~ 中删除它们来表明这一点。
 
-    如果所有这些函数都返回 nil，则将参数视为要访问的文件名。
+    如果所有这些函数都返回 ~nil~ ，则将参数视为要访问的文件名。
 
 ** 41.2 退出 Emacs
-有两种方法可以退出 Emacs：您可以终止Emacs作业，它会永久退出，或者您可以暂停它，这允许您稍后重新进入Emacs进程。（在图形环境中，您当然可以简单地切换到另一个应用程序而无需对Emacs做任何特殊操作，然后在需要时切换回 Emacs。）
+有两种方法可以退出Emacs：您可以终止Emacs作业，它会永久退出，或者您可以暂停它，这允许您稍后重新进入Emacs进程。（在图形环境中，您当然可以简单地切换到另一个应用程序而无需对Emacs做任何特殊操作，然后在需要时切换回Emacs。）
 
 *** 41.2.1 杀死 Emacs
-杀死Emacs意味着结束Emacs进程的执行。如果您从终端启动 Emacs，父进程通常会恢复控制。杀死Emacs的低级原语是 kill-emacs。
+杀死Emacs意味着结束Emacs进程的执行。如果您从终端启动Emacs，父进程通常会恢复控制。杀死Emacs的低级原语是kill-emacs。
 
 #+begin_src emacs-lisp
   Command: kill-emacs &optional exit-data ¶
 #+end_src
 
-    该命令调用 hook kill-emacs-hook，然后退出Emacs进程并杀死它。
+    该命令调用 ~hook kill-emacs-hook~ ，然后退出Emacs进程并杀死它。
 
-    如果 exit-data 是一个整数，则用作Emacs进程的退出状态。（这主要在批处理操作中很有用；请参阅批处理模式。）
+    如果 ~exit-data~ 是一个整数，则用作Emacs进程的退出状态。（这主要在批处理操作中很有用；请参阅批处理模式。）
 
-    如果 exit-data 是一个字符串，它的内容将被填充到终端输入缓冲区中，以便 shell（或接下来读取输入的任何程序）可以读取它们。
+    如果 ~exit-data~ 是一个字符串，它的内容将被填充到终端输入缓冲区中，以便shell（或接下来读取输入的任何程序）可以读取它们。
 
-    如果 exit-data 既不是整数也不是字符串，或者被省略，这意味着使用（系统特定的）退出状态，表明程序成功终止。
+    如果 ~exit-data~ 既不是整数也不是字符串，或者被省略，这意味着使用（系统特定的）退出状态，表明程序成功终止。
 
-kill-emacs 函数通常通过更高级别的命令 Cx Cc (save-buffers-kill-terminal) 调用。请参阅 GNU Emacs手册中的退出。如果Emacs接收到 SIGTERM 或 SIGHUP 操作系统信号（例如，当控制终端断开连接时），或者如果它在批处理模式下运行时接收到 SIGINT 信号（请参阅批处理模式），它也会自动调用。
+~kill-emacs~ 函数通常通过更高级别的命令 ~C-x C-c~ ( ~save-buffers-kill-terminal~ ) 调用。请参阅GNU Emacs手册中的退出。如果Emacs接收到 ~SIGTERM~ 或 ~SIGHUP~ 操作系统信号（例如，当控制终端断开连接时），或者如果它在批处理模式下运行时接收到 ~SIGINT~ 信号（请参阅批处理模式），它也会自动调用。
 
 #+begin_src emacs-lisp
   Variable: kill-emacs-hook ¶
 #+end_src
+    这个普通的钩子在杀死Emacs之前由 ~kill-emacs~ 运行。
 
-    这个普通的钩子在杀死Emacs之前由 kill-emacs 运行。
+    因为 ~kill-emacs~ 可以在用户交互不可能的情况下被调用（例如，当终端断开时），这个钩子上的函数不应该尝试与用户交互。如果您想在Emacs关闭时与用户交互，请使用 ~kill-emacs-query-functions~ ，如下所述。
 
-    因为 kill-emacs 可以在用户交互不可能的情况下被调用（例如，当终端断开时），这个钩子上的函数不应该尝试与用户交互。如果您想在Emacs关闭时与用户交互，请使用 kill-emacs-query-functions，如下所述。
-
-当Emacs被杀死时，Emacs 进程中的所有信息，除了已保存的文件，都将丢失。因为无意中杀死Emacs会丢失大量工作，所以 save-buffers-kill-terminal 命令会查询以确认您是否有需要保存的缓冲区或正在运行的子进程。它还运行异常的钩子kill-emacs-query-functions：
+当Emacs被杀死时，Emacs进程中的所有信息，除了已保存的文件，都将丢失。因为无意中杀死Emacs会丢失大量工作，所以 ~save-buffers-kill-terminal~ 命令会查询以确认您是否有需要保存的缓冲区或正在运行的子进程。它还运行异常的钩子 ~kill-emacs-query-functions~ ：
 
 #+begin_src emacs-lisp
   User Option: kill-emacs-query-functions ¶
 #+end_src
-
-    当 save-buffers-kill-terminal 杀死Emacs时，它会在询问标准问题之后和调用 kill-emacs 之前调用此钩子中的函数。这些函数按出现的顺序调用，没有参数。每个功能都可以要求用户进行额外确认。如果其中任何一个返回 nil，则 save-buffers-kill-emacs 不会杀死 Emacs，并且不会运行此钩子中的其余函数。直接调用 kill-emacs 不会运行这个钩子。
-
+    当 ~save-buffers-kill-terminal~ 杀死Emacs时，它会在询问标准问题之后和调用 ~kill-emacs~ 之前调用此钩子中的函数。这些函数按出现的顺序调用，没有参数。每个功能都可以要求用户进行额外确认。如果其中任何一个返回 ~nil~ ，则 ~save-buffers-kill-emacs~ 不会杀死 ~Emacs~ ，并且不会运行此钩子中的其余函数。直接调用 ~kill-emacs~ 不会运行这个钩子。
 *** 41.2.2 挂起 Emacs
 在文本终端上，可以暂停 Emacs，这意味着暂时停止Emacs并将控制权返回给其上级进程，通常是 shell。这允许您稍后在相同的Emacs进程中恢复编辑，使用相同的缓冲区、相同的终止环、相同的撤消历史记录等。要恢复 Emacs，请在父 shell 中使用适当的命令——很可能是 fg。
 
@@ -347,7 +342,7 @@ kill-emacs 函数通常通过更高级别的命令 Cx Cc (save-buffers-kill-term
 
     如果 string 不是 nil，它的字符被发送到Emacs的上层 shell，作为终端输入读取。string 中的字符不被上级 shell 回显；  只显示结果。
 
-    在挂起之前，suspend-emacs 运行正常的挂起钩子。用户恢复Emacs后，suspend-emacs 运行正常的 hooksuspend-resume-hook。请参阅挂钩。
+    在挂起之前，suspend-emacs 运行正常的挂起钩子。用户恢复Emacs后，suspend-emacs 运行正常的 hooksuspend-resume-hook。请参阅钩子。
 
     恢复后的下一次重新显示将重绘整个屏幕，除非变量 no-redraw-on-reenter 为非零。请参阅刷新屏幕。
 
