@@ -997,7 +997,7 @@
    | 40.13.6 叠加箭头             | DONE | DONE |                   |
    | 40.14 滚动条                 | DONE | DONE |                   |
    | 40.15 窗口分隔线             | DONE | DONE |                   |
-   | 40.16 display财产            | DONE | DONE |                   |
+   | 40.16 display属性          | DONE | DONE |                   |
    | 40.16.1 替换文本的显示规范   | DONE | DONE |                   |
    | 40.16.2 指定空间             | DONE | DONE |                   |
    | 40.16.3 以像素为单位指定间隔 | DONE | DONE | Rosario S.E. 3vau |
