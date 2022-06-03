@@ -1,8 +1,3 @@
-#+LATEX_COMPILER: xelatex
-#+LATEX_CLASS: elegantpaper
-#+OPTIONS: prop:t
-#+OPTIONS: ^:nil
-
 * 40 Emacs显示
 本章描述了许多与Emacs呈现给用户的显示相关的特性。
 
@@ -104,7 +99,7 @@ Emacs 通常会在等待输入时尝试重新显示屏幕。使用以下函数�
     也可以使用 line-prefix text 或 overlay 属性为文本区域指定行前缀。这优先于行前缀变量。请参阅具有特殊含义的属性。
 
 ** 40.4 回显区
-回显区域用于显示错误消息（请参阅错误）、使用消息原语生成的消息以及回显击键。它与 minibuffer 不同，尽管 minibuffer 出现在屏幕上与回显区域相同的位置（当激活时）。请参阅 GNUEmacs手册中的 Minibuffer。
+回显区域用于显示错误消息（请参阅错误）、使用消息原语生成的消息以及回显击键。它与 minibuffer 不同，尽管 minibuffer 出现在屏幕上与回显区域相同的位置（当激活时）。请参阅 GNU Emacs手册中的 Minibuffer。
 
 除了本节中记录的函数之外，您还可以通过将 t 指定为输出流来将 Lisp 对象打印到回显区域。请参阅输出流。
 
@@ -1286,7 +1281,7 @@ window-text-pixel-size 将窗口中显示的文本视为一个整体，而不关
 
     此函数返回所选窗口中点的线的高度（以像素为单位）。该值包括行的行距（请参阅行高）。
 
-当缓冲区显示行号时（参见 GNUEmacs手册中的 Display Custom），有时了解显示行号所采用的宽度很有用。以下函数适用于需要此信息进行布局计算的 Lisp 程序。
+当缓冲区显示行号时（参见 GNU Emacs手册中的 Display Custom），有时了解显示行号所采用的宽度很有用。以下函数适用于需要此信息进行布局计算的 Lisp 程序。
 
 #+begin_src emacs-lisp
   Function: line-number-display-width &optional pixelwise ¶
@@ -1366,11 +1361,8 @@ Emacs 的某些部分需要命名面（例如，面属性函数中记录的函�
   Function: facep object ¶
 #+end_src
 
-
     如果对象是一个命名的面，这个函数返回一个非零值：一个 Lisp 符号或字符串，用作面名。否则，它返回零。
-
 *** 40.12.1 面属性
-
 面属性决定了面的视觉外观。下表列出了所有面属性、它们的可能值及其效果。
 
 除了下面给出的值之外，每个面属性都可以具有未指定的值。这个特殊值意味着面不直接指定该属性。一个未指定的属性告诉Emacs引用父面（参见下面的描述 :inherit 属性）；  或者，如果失败，则到底层面（请参阅显示面）。默认面必须指定所有属性。
@@ -1381,12 +1373,12 @@ Emacs 的某些部分需要命名面（例如，面属性函数中记录的函�
   :family
 #+end_src
 
-    字体系列名称（字符串）。有关字体系列的更多信息，请参阅 GNUEmacs手册中的字体。函数 font-family-list（见下文）返回可用家族名称的列表。
+    字体系列名称（字符串）。有关字体系列的更多信息，请参阅 GNU Emacs手册中的字体。函数 font-family-list（见下文）返回可用家族名称的列表。
 #+begin_src emacs-lisp
   :foundry
 #+end_src
 
-    由 :family 属性（字符串）指定的字体系列的字体代工厂的名称。请参阅 GNUEmacs手册中的字体。
+    由 :family 属性（字符串）指定的字体系列的字体代工厂的名称。请参阅 GNU Emacs手册中的字体。
 #+begin_src emacs-lisp
   :width
 #+end_src
@@ -1541,7 +1533,7 @@ Emacs 的某些部分需要命名面（例如，面属性函数中记录的函�
 
     用于显示面的字体。它的值应该是一个字体对象或一个字体集。如果它是一个字体对象，它指定了面用来显示 ASCII 字符的字体。有关字体对象、字体规范和字体实体的信息，请参阅低级字体表示。有关字体集的信息，请参阅字体集。
 
-    当使用 set-face-attribute 或 set-face-font 指定此属性时（请参阅 Face Attribute Functions），您还可以提供字体规范、字体实体或字符串。Emacs 将这些值转换为适当的字体对象，并将该字体对象存储为实际的属性值。如果你指定一个字符串，字符串的内容应该是一个字体名称（参见 GNUEmacs手册中的字体）；  如果字体名称是包含通配符的 XLFD，Emacs 会选择第一个匹配这些通配符的字体。指定此属性还会更改 :family、:foundry、:width、:height、:weight 和 :slant 属性的值。
+    当使用 set-face-attribute 或 set-face-font 指定此属性时（请参阅 Face Attribute Functions），您还可以提供字体规范、字体实体或字符串。Emacs 将这些值转换为适当的字体对象，并将该字体对象存储为实际的属性值。如果你指定一个字符串，字符串的内容应该是一个字体名称（参见 GNU Emacs手册中的字体）；  如果字体名称是包含通配符的 XLFD，Emacs 会选择第一个匹配这些通配符的字体。指定此属性还会更改 :family、:foundry、:width、:height、:weight 和 :slant 属性的值。
 #+begin_src emacs-lisp
   :inherit
 #+end_src
@@ -1578,7 +1570,6 @@ Emacs 的某些部分需要命名面（例如，面属性函数中记录的函�
     如果 object 是有效的位图规范，则返回 t，适合与 :stipple 一起使用（见上文）。否则返回 nil 。
 
 *** 40.12.2 定义面
-
 定义面的常用方法是通过 defface 宏。此宏将面名称（符号）与默认面规格相关联。面规范是一种构造，它指定面在任何给定终端上应具有的属性；  例如，面规范可能会在高颜色终端上指定一种前景色，在低颜色终端上指定不同的前景色。
 
 人们有时很想创建一个值是面名称的变量。在绝大多数情况下，这不是必需的；  通常的程序是用 defface 定义一个面，然后直接使用它的名字。
@@ -1595,7 +1586,7 @@ Emacs 的某些部分需要命名面（例如，面属性函数中记录的函�
 
     当没有自定义生效时，默认面规格确定面的外观（请参阅自定义设置）。如果面已经被自定义（通过自定义主题或通过从 init 文件中读取的自定义），则其外观由自定义面规范确定，该规范会覆盖默认面规范规范。但是，如果随后删除了自定义，则面外观将再次由其默认面规格确定。
 
-    作为例外，如果您在EmacsLisp 模式下使用 ~C-M x~ (eval-defun) 或 ~C-x C-e~ (eval-last-sexp) 评估 defface 表单，这些命令的一个特殊功能会覆盖面上的任何自定义面规范，从而导致face 以准确反映 deface 所说的内容。
+    作为例外，如果您在Emacs Lisp 模式下使用 ~C-M x~ (eval-defun) 或 ~C-x C-e~ (eval-last-sexp) 评估 defface 表单，这些命令的一个特殊功能会覆盖面上的任何自定义面规范，从而导致face 以准确反映 deface 所说的内容。
 
     spec 参数是一个面规范，它说明面应该如何出现在不同类型的终端上。它应该是一个 alist，其每个元素都具有以下形式
 
@@ -1685,7 +1676,6 @@ Emacs 的某些部分需要命名面（例如，面属性函数中记录的函�
     可选参数 spec-type 确定要设置的规范。如果省略或 nil 或 face-override-spec，此函数设置覆盖规范，它覆盖下面提到的所有其他类型的 face 上的面规范。这在自定义代码之外调用此函数时很有用。如果spec-type是customized-face或者saved-face，这个函数分别设置自定义的spec或者保存的自定义spec。如果是face-defface-spec，这个函数设置默认的face spec（和defface设置的一样）。如果重置，此函数会清除所有自定义规范并覆盖面中的规范（在这种情况下，忽略规范的值）。spec-type 的任何其他值对 face specs 的影响保留供内部使用，但该函数仍将定义 face 本身并重新计算其属性，如上所述。
 
 *** 40.12.3 面属性函数
-
 本节介绍直接访问和修改命名面属性的函数。
 
 #+begin_src emacs-lisp
@@ -1866,11 +1856,10 @@ Emacs 的某些部分需要命名面（例如，面属性函数中记录的函�
     如果 face face 指定了非 nil :extend 属性，则此函数返回非 nil。继承参数被传递给 face-attribute。
 
 *** 40.12.4 显示面
-
 当Emacs显示一段给定的文本时，文本的视觉外观可能由来自不同来源的面决定。如果这些不同的来源一起为特定字符指定了多个面，Emacs 会合并各种面的属性。这是Emacs合并面的顺序，从最高优先级到最低优先级：
 
     如果文本由特殊字形组成，则字形可以指定特定的面。请参见字形。
-    如果文本位于活动区域内，Emacs 会使用区域面突出显示它。请参阅 GNUEmacs手册中的标准面。
+    如果文本位于活动区域内，Emacs 会使用区域面突出显示它。请参阅 GNU Emacs手册中的标准面。
     如果文本位于具有非零面属性的覆盖层内，Emacs 将应用该属性指定的面。如果覆盖层具有 mouse-face 属性并且鼠标离覆盖层足够近，Emacs 将应用由 mouse-face 属性指定的 face 或 face 属性。请参见叠加属性。
 
     当多个覆盖覆盖一个字符时，具有较高优先级的覆盖覆盖具有较低优先级的覆盖。请参见叠加。
@@ -1882,8 +1871,7 @@ Emacs 的某些部分需要命名面（例如，面属性函数中记录的函�
 在每个阶段，如果一个面具有有效的 :inherit 属性，Emacs 将任何具有未指定值的属性视为具有从父面提取的相应值。请参见面属性。请注意，父面也可能未指定属性；  在这种情况下，该属性在下一级面合并中保持未指定。
 
 *** 40.12.5 面重映射
-
-变量 face-remapping-alist 用于面外观的缓冲区局部或全局变化。例如，它用于实现 text-scale-adjust 命令（参见 GNUEmacs手册中的文本缩放）。
+变量 face-remapping-alist 用于面外观的缓冲区局部或全局变化。例如，它用于实现 text-scale-adjust 命令（参见 GNU Emacs手册中的文本缩放）。
 
 #+begin_src emacs-lisp
   Variable: face-remapping-alist ¶
@@ -1950,7 +1938,6 @@ Emacs 的某些部分需要命名面（例如，面属性函数中记录的函�
     此函数将 face 的基本重新映射设置为其默认值，该值继承自 face 的全局定义。
 
 *** 40.12.6 处理面的函数
-
 以下是用于创建和使用面的附加功能。
 
 #+begin_src emacs-lisp
@@ -1995,7 +1982,6 @@ Emacs 的某些部分需要命名面（例如，面属性函数中记录的函�
 
     该宏将obsolete-face定义为current-face的别名，同时也将其标记为obsolete，表示将来可能会被移除。when 应该是一个字符串，指示 obsolete-face 何时被废弃（通常是版本号字符串）。
 *** 40.12.7 自动面分配
-
 该钩子用于自动将面分配给缓冲区中的文本。它是 Font-Lock 使用的 Jit-Lock 模式实现的一部分。
 
 #+begin_src emacs-lisp
@@ -2013,15 +1999,13 @@ Emacs 的某些部分需要命名面（例如，面属性函数中记录的函�
     为了提高效率，我们建议编写这些函数，以便它们通常在每次调用时将面分配给大约 4​​00 到 600 个字符。
 
 *** 40.12.8 基本面
-
-如果您的EmacsLisp 程序需要为文本分配一些面，则使用某些现有面或从它们继承通常是一个好主意，而不是定义全新的面。这样，如果其他用户自定义了基本面以赋予Emacs某种外观，您的程序无需额外自定义即可适应。
+如果您的Emacs Lisp程序需要为文本分配一些面，则使用某些现有面或从它们继承通常是一个好主意，而不是定义全新的面。这样，如果其他用户自定义了基本面以赋予Emacs某种外观，您的程序无需额外自定义即可适应。
 
 下面列出了Emacs中定义的一些基本面。除此之外，如果字体锁定模式尚未处理突出显示，或者某些字体锁定面未使用，您可能希望使用字体锁定面进行语法突出显示。请参见字体锁定的面。
 
 #+begin_src emacs-lisp
 default
 #+end_src
-
 
     默认面，其属性全部指定。所有其他面都隐式继承自它：任何未指定的属性默认为该面上的属性（请参阅面属性）。
 #+begin_src emacs-lisp
@@ -2051,7 +2035,7 @@ default
   shadow
 #+end_src
 
-    对于变暗的文本。例如，它用于 minibuffer 中文件名的被忽略部分（请参阅 The GNUEmacsManual 中的 Minibuffers for File Names）。
+    对于变暗的文本。例如，它用于 minibuffer 中文件名的被忽略部分（请参阅 The GNU EmacsManual 中的 Minibuffers for File Names）。
 #+begin_src emacs-lisp
   link
 #+end_src
@@ -2089,8 +2073,7 @@ default
     有关错误、警告或成功的文本。例如，这些用于 *Compilation* 缓冲区中的消息。
 
 *** 40.12.9 字体选择
-
-在Emacs可以在图形显示器上绘制字符之前，它必须为该字符选择一种字体25。请参阅 GNUEmacs手册中的字体。通常，Emacs 会根据分配给该字符的面自动选择字体——特别是面属性 :family、:weight、:slant 和 :width（请参阅面属性）。字体的选​​择还取决于要显示的字符；  某些字体只能显示有限的字符集。如果没有可用的字体完全符合要求，Emacs 会寻找最接近的匹配字体。本节中的变量控制Emacs如何进行此选择。
+在Emacs可以在图形显示器上绘制字符之前，它必须为该字符选择一种字体25。请参阅 GNU Emacs手册中的字体。通常，Emacs 会根据分配给该字符的面自动选择字体——特别是面属性 :family、:weight、:slant 和 :width（请参阅面属性）。字体的选​​择还取决于要显示的字符；  某些字体只能显示有限的字符集。如果没有可用的字体完全符合要求，Emacs 会寻找最接近的匹配字体。本节中的变量控制Emacs如何进行此选择。
 
 #+begin_src emacs-lisp
   User Option: face-font-family-alternatives ¶
@@ -2159,12 +2142,11 @@ Emacs 可以使用可缩放字体，但默认情况下它不使用它们。
 在这种情况下，术语字体与字体锁定无关（请参阅字体锁定模式）。
 
 *** 40.12.10 查找字体
-
 #+begin_src emacs-lisp
   Function: x-list-fonts name &optional reference-face frame maximum width ¶
 #+end_src
 
-    此函数返回与名称匹配的可用字体名称列表。name 应该是包含 Fontconfig、GTK+ 或 XLFD 格式的字体名称的字符串（请参阅 GNUEmacs手册中的字体）。在 XLFD 字符串中，可以使用通配符：'*' 字符匹配任何子字符串，'?'  字符匹配任何单个字符。匹配字体名称时忽略大小写。
+    此函数返回与名称匹配的可用字体名称列表。name 应该是包含 Fontconfig、GTK+ 或 XLFD 格式的字体名称的字符串（请参阅 GNU Emacs手册中的字体）。在 XLFD 字符串中，可以使用通配符：'*' 字符匹配任何子字符串，'?'  字符匹配任何单个字符。匹配字体名称时忽略大小写。
 
     如果指定了可选参数 reference-face 和 frame，则返回的列表仅包括与当前在框架框架上的 reference-face（面名称）大小相同的字体。
 
@@ -2191,7 +2173,6 @@ Emacs 可以使用可缩放字体，但默认情况下它不使用它们。
     最后三个元素提供有关字体的附加信息。如果字体是固定间距的，则 fixed-p 不为零。full 是字体的全名，registry-and-encoding 是一个字符串，给出了字体的注册和编码。
 
 *** 40.12.11 字体集
-
 字体集是一个字体列表，每个字体都分配给一系列字符代码。单个字体不能显示Emacs支持的整个字符范围，但字体集可以。字体集具有名称，就像字体一样，当您为框架或面指定字体时，您可以使用字体集名称代替字体名称。这是有关在 Lisp 程序控制下定义字体集的信息。
 
 #+begin_src emacs-lisp
@@ -2293,10 +2274,9 @@ ASCII 字符的字体规范是这样的：
     即使没有可用的字体，此函数也可能返回非零，因为它还检查文本终端的编码系统是否可以对字符进行编码（请参阅终端 I/O 编码）。
 
 *** 40.12.12 低级字体表示
-
 通常，没有必要直接操作字体。如果您需要这样做，本节将说明如何进行。
 
-在EmacsLisp 中，字体使用三种不同的 Lisp 对象类型来表示：字体对象、字体规范和字体实体。
+在Emacs Lisp中，字体使用三种不同的 Lisp 对象类型来表示：字体对象、字体规范和字体实体。
 
 #+begin_src emacs-lisp
   Function: fontp object &optional type ¶
@@ -2326,7 +2306,7 @@ ASCII 字符的字体规范是这样的：
   :name
 #+end_src
 
-	 字体名称（字符串），采用 XLFD、Fontconfig 或 GTK+ 格式。请参阅 GNUEmacs手册中的字体。
+	 字体名称（字符串），采用 XLFD、Fontconfig 或 GTK+ 格式。请参阅 GNU Emacs手册中的字体。
 #+begin_src emacs-lisp
   :family
 #+end_src
@@ -2445,7 +2425,7 @@ ASCII 字符的字体规范是这样的：
   Function: font-xlfd-name font &optional fold-wildcards ¶
 #+end_src
 
-    此函数返回 XLFD（X 逻辑字体描述符），一个字符串，匹配字体。有关 XLFD 的信息，请参阅 GNUEmacs手册中的字体。如果名称对于 XLFD 来说太长（最多可以包含 255 个字符），则函数返回 nil。
+    此函数返回 XLFD（X 逻辑字体描述符），一个字符串，匹配字体。有关 XLFD 的信息，请参阅 GNU Emacs手册中的字体。如果名称对于 XLFD 来说太长（最多可以包含 255 个字符），则函数返回 nil。
 
     如果可选参数 fold-wildcards 不为零，则 XLFD 中的连续通配符将折叠为一个。
 
@@ -2606,7 +2586,6 @@ ASCII 字符的字体规范是这样的：
 
 ** 40.13 条纹
 在图形显示上，Emacs 在每个窗口旁边画出边缘：细的垂直条在侧面向下，可以显示位图，指示截断、继续、水平滚动等。
-
 *** 40.13.1 条纹尺寸和位置
 以下缓冲区局部变量控制显示该缓冲区的窗口中边缘的位置和宽度。
 
@@ -3574,7 +3553,7 @@ xbm 图像类型支持的其他图像属性包括：
     值，symbols，应该是一个 alist，其元素的格式为 (name.color)。在每个元素中，name 是出现在图像文件中的颜色名称，而 color 指定用于显示该名称的实际颜色。
 
 *** 40.17.5 ImageMagick 图像
-如果您的Emacs构建支持 ImageMagick，您可以使用 ImageMagick 库来加载许多图像格式（请参阅 GNUEmacs手册中的文件便利）。通过 ImageMagick 加载的图像的图像类型符号是 imagemagick，与实际的底层图像格式无关。
+如果您的Emacs构建支持 ImageMagick，您可以使用 ImageMagick 库来加载许多图像格式（请参阅 GNU Emacs手册中的文件便利）。通过 ImageMagick 加载的图像的图像类型符号是 imagemagick，与实际的底层图像格式无关。
 
 要检查 ImageMagick 支持，请使用以下命令：
 
@@ -4979,7 +4958,7 @@ ewoc 是一种结构，用于组织构建表示某些 Lisp 数据的缓冲区文
 以下是显示每个字符代码的约定（在没有显示表的情况下，可以覆盖这些约定；请参阅显示表）。
 
     - 可打印的 ASCII 字符、字符代码 32 到 126（由数字、英文字母和 ~#~ 等符号组成）按字面显示。
-    - 制表符（字符代码 9）显示为空格，一直延伸到下一个制表位列。请参阅 GNUEmacs手册中的文本显示。变量 tab-width 控制每个制表位的空格数（见下文）。
+    - 制表符（字符代码 9）显示为空格，一直延伸到下一个制表位列。请参阅 GNU Emacs手册中的文本显示。变量 tab-width 控制每个制表位的空格数（见下文）。
     - 换行符（字符代码 10）有一个特殊的效果：它结束前一行并开始一个新行。
     - 不可打印的 ASCII 控制字符——字符代码 0 到 31，以及 DEL 字符（字符代码 127）——根据变量 ctl-arrow 以两种方式之一显示。如果此变量不为 nil（默认值），则这些字符显示为两个字形的序列，其中第一个字形是 '^'（显示表可以指定要使用的字形而不是 '^'）；  例如，DEL 字符显示为 ~^?~ 。
 
@@ -5024,7 +5003,7 @@ ewoc 是一种结构，用于组织构建表示某些 Lisp 数据的缓冲区文
   0
 #+end_src
 
-    截断屏幕行末尾的字形（默认为 ~$~ ）。请参见字形。在图形终端上，Emacs 默认使用边缘中的箭头来表示截断，因此显示表没有效果，除非您禁用边缘（请参阅 GNUEmacs手册中的窗口边缘）。
+    截断屏幕行末尾的字形（默认为 ~$~ ）。请参见字形。在图形终端上，Emacs 默认使用边缘中的箭头来表示截断，因此显示表没有效果，除非您禁用边缘（请参阅 GNU Emacs手册中的窗口边缘）。
 #+begin_src emacs-lisp
   1
 #+end_src
@@ -5233,7 +5212,7 @@ disp-table 库定义了几个用于更改标准显示表的函数。
   c0-control
 #+end_src
 
-	 ASCII 控制字符 U+0000 到 U+001F，不包括换行符和制表符（通常显示为转义序列，如 '^A'；请参阅 GNUEmacs手册中的文本显示方式）。
+	 ASCII 控制字符 U+0000 到 U+001F，不包括换行符和制表符（通常显示为转义序列，如 '^A'；请参阅 GNU Emacs手册中的文本显示方式）。
 #+begin_src emacs-lisp
   c1-control
 #+end_src
@@ -5322,7 +5301,7 @@ Emacs 可与多个窗口系统一起使用，其中最著名的是 X 窗口系�
 #+begin_src emacs-lisp
   Variable: initial-window-system ¶
 #+end_src
-    此变量保存用于Emacs在启动期间创建的第一帧的 window-system 的值。（当Emacs作为守护进程调用时，它不会创建任何初始帧，因此 initial-window-system 为 nil，除了在 MS-Windows 上，它仍然是 w32。请参阅 GNUEmacs手册中的守护进程。）
+    此变量保存用于Emacs在启动期间创建的第一帧的 window-system 的值。（当Emacs作为守护进程调用时，它不会创建任何初始帧，因此 initial-window-system 为 nil，除了在 MS-Windows 上，它仍然是 w32。请参阅 GNU Emacs手册中的守护进程。）
 
 
 
@@ -5347,16 +5326,14 @@ Function: tooltip-mode ¶
 工具提示显示在称为工具提示框架的特殊框架中，这些框架具有自己的框架参数（请参阅框架参数）。与其他框架不同，工具提示框架的默认参数存储在一个特殊变量中。
 
 #+begin_src emacs-lisp
-
 User Option: tooltip-frame-parameters ¶
 #+end_src
 
-    此可自定义选项包含用于显示工具提示的默认框架参数。任何字体和颜色参数都将被忽略，而使用工具提示面的相应属性。如果包含 left 或 top 参数，它们将用作应显示工具提示的绝对帧相对坐标。（工具提示的鼠标相对位置可以使用 GNUEmacs手册中工具提示中描述的变量进行自定义。）请注意，如果存在 left 和 top 参数，则会覆盖鼠标相对偏移的值。
+    此可自定义选项包含用于显示工具提示的默认框架参数。任何字体和颜色参数都将被忽略，而使用工具提示面的相应属性。如果包含 left 或 top 参数，它们将用作应显示工具提示的绝对帧相对坐标。（工具提示的鼠标相对位置可以使用 GNU Emacs手册中工具提示中描述的变量进行自定义。）请注意，如果存在 left 和 top 参数，则会覆盖鼠标相对偏移的值。
 
 工具提示面决定了工具提示中显示的文本的外观。它通常应使用大小最好小于默认框架字体的可变间距字体。
 
 #+begin_src emacs-lisp
-
 Variable: tooltip-functions ¶
 #+end_src
 
@@ -5365,13 +5342,12 @@ Variable: tooltip-functions ¶
 如果您编写自己的函数以放入工具提示功能列表中，您可能需要知道触发工具提示显示的鼠标事件的缓冲区。以下函数提供了该信息。
 
 #+begin_src emacs-lisp
-
 Function: tooltip-event-buffer event ¶
 #+end_src
 
     此函数返回发生事件的缓冲区。使用来自 tooltip-functions 的函数参数调用它，以获取其文本触发工具提示的缓冲区。请注意，事件可能不会发生在缓冲区上（例如，在工具栏上），在这种情况下，此函数将返回 nil。
 
-工具提示显示的其他方面由几个可自定义的设置控制；  请参阅 GNUEmacs手册中的工具提示。
+工具提示显示的其他方面由几个可自定义的设置控制；  请参阅GNU Emacs手册中的工具提示。
 
 ** 40.26 双向显示
 Emacs 可以显示用脚本编写的文本，例如阿拉伯语、波斯语和希伯来语，其水平文本显示的自然顺序是从右到左。此外，嵌入在从右到左的文本中的拉丁字母和数字段从左到右显示，而从左到右的文本中嵌入的从右到左的脚本段（例如，评论中的阿拉伯语或希伯来语文本）或程序源文件中的字符串）适当地从右到左显示。我们将这种从左到右和从右到左文本的混合称为双向文本。本节介绍用于编辑和显示双向文本的工具和选项。
@@ -5379,7 +5355,6 @@ Emacs 可以显示用脚本编写的文本，例如阿拉伯语、波斯语和�
 文本以逻辑（或阅读）顺序存储在Emacs缓冲区和字符串中，即人类阅读每个字符的顺序。在从右到左和双向文本中，字符在屏幕上的显示顺序（称为视觉顺序）与逻辑顺序不同；  字符的屏幕位置不会随字符串或缓冲区位置单调增加。在执行这种双向重新排序时，Emacs 遵循 Unicode 双向算法（又名 UBA），该算法在 Unicode 标准（https://www.unicode.org/reports/tr9/）的附件 #9 中进行了描述。Emacs 提供了 UBA 的 ~完全双向~ 类实现，符合 Unicode 标准 v9.0 的要求。但是请注意，当文本方向与基本段落方向相反时，Emacs 显示续行的方式与 UBA 有所不同，UBA 需要在重新排序文本以进行显示之前执行换行。
 
 #+begin_src emacs-lisp
-
 Variable: bidi-display-reordering ¶
 #+end_src
 
@@ -5405,14 +5380,12 @@ Emacs 从不重新排序单字节缓冲区的文本，即使缓冲区中的双�
 就EmacsUBA 实现而言，段落的确切开始和结束位置由以下两个缓冲区局部变量确定（请注意，段落开始和段落分隔对此没有影响）。默认情况下，这两个变量都为 nil，段落以空行为界，即完全由零个或多个空格字符组成的行，后跟换行符。
 
 #+begin_src emacs-lisp
-
 Variable: bidi-paragraph-start-re ¶
 #+end_src
 
     如果非零，则该变量的值应该是一个正则表达式，匹配开始或分隔两个段落的行。正则表达式总是在换行符之后匹配，因此最好将其锚定，即以 ~^~ 开头。
 
 #+begin_src emacs-lisp
-
 Variable: bidi-paragraph-separate-re ¶
 #+end_src
 
@@ -5423,7 +5396,6 @@ Variable: bidi-paragraph-separate-re ¶
 默认情况下，Emacs 通过查看开头的文本来确定每个段落的基本方向。确定基准方向的精确方法由 UBA 规定；  简而言之，段落中具有明确方向性的第一个字符决定了段落的基本方向。但是，有时缓冲区可能需要为其段落强制使用某个基本方向。例如，包含程序源代码的缓冲区应该强制所有段落从左到右显示。您可以使用以下变量来执行此操作：
 
 #+begin_src emacs-lisp
-
 User Option: bidi-paragraph-direction ¶
 #+end_src
 
@@ -5432,7 +5404,6 @@ User Option: bidi-paragraph-direction ¶
     程序源代码的模式应将其设置为从左到右。Prog 模式默认执行此操作，因此从 Prog 模式派生的模式不需要显式设置（请参阅基本主要模式）。
 
 #+begin_src emacs-lisp
-
 Function: current-bidi-paragraph-direction &optional buffer ¶
 #+end_src
 

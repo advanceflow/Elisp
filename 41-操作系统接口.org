@@ -9,9 +9,9 @@
 *** 41.1.1 小结：启动时的动作顺序
 当Emacs启动时，它会执行以下操作（参见 ~startup.el~ 中的 ~normal-top-level~ ）：
 
-1. 它通过在列表中的每个目录中运行名为 ~subdirs.el~ 的文件，将子目录添加到 ~load-path~ 。通常，此文件会将目录的子目录添加到列表中，然后依次扫描这些子目录。subdirs.el 文件通常在安装Emacs时自动生成。
+1. 它通过在列表中的每个目录中运行名为 ~subdirs.el~ 的文件，将子目录添加到 ~load-path~ 。通常，此文件会将目录的子目录添加到列表中，然后依次扫描这些子目录。 ~subdirs.el~ 文件通常在安装Emacs时自动生成。
 
-2. 它加载它在加载路径目录中找到的任何 leim-list.el。该文件用于注册输入法。仅搜索您可能创建的任何个人 leim-list.el 文件；  它会跳过包含标准Emacs库的目录（这些应该只包含一个 leim-list.el 文件，该文件被编译成Emacs可执行文件）。
+2. 它加载在 ~load-path~ 目录中找到的任何 ~leim-list.el~ 。该文件用于注册输入法。仅搜索您可能创建的任何个人 ~leim-list.el~ 文件；  它会跳过包含标准Emacs库的目录（这些应该只包含一个 leim-list.el 文件，该文件被编译成Emacs可执行文件）。
 
 3. 它将变量 before-init-time 设置为 current-time 的值（请参阅时间）。它还将 after-init-time 设置为 nil，这向 Lisp 程序发出Emacs正在初始化的信号。
 
@@ -19,9 +19,9 @@
 
 5. 它对命令行参数进行一些基本的解析。
 
-6. 它加载您的早期初始化文件（请参阅 GNUEmacs手册中的早期初始化文件）。如果指定了选项 ~-q~ 、 ~-Q~ 或 ~--batch~ ，则不会执行此操作。如果指定了 '-u' 选项，Emacs 会在该用户的主目录中查找 init 文件。
+6. 它加载您的早期初始化文件（请参阅 GNU Emacs手册中的早期初始化文件）。如果指定了选项 ~-q~ 、 ~-Q~ 或 ~--batch~ ，则不会执行此操作。如果指定了 '-u' 选项，Emacs 会在该用户的主目录中查找 init 文件。
 
-7. 它调用函数 package-activate-all 来激活任何已安装的可选EmacsLisp 包。请参阅包装基础知识。但是，当 package-enable-at-startup 为 nil 或使用选项 ~-q~ 、 ~-Q~ 或 ~--batch~ 之一启动时，Emacs 不会激活包。要在后一种情况下激活包，应该显式调用 package-activate-all（例如，通过 ~--funcall~ 选项）。
+7. 它调用函数 package-activate-all 来激活任何已安装的可选Emacs Lisp 包。请参阅包装基础知识。但是，当 package-enable-at-startup 为 nil 或使用选项 ~-q~ 、 ~-Q~ 或 ~--batch~ 之一启动时，Emacs 不会激活包。要在后一种情况下激活包，应该显式调用 package-activate-all（例如，通过 ~--funcall~ 选项）。
 8. 如果不在批处理模式下运行，它会初始化变量 initial-window-system 指定的窗口系统（参见 initial-window-system）。初始化函数 window-system-initialization 是一个通用函数（请参阅通用函数），其实际实现对于每个支持的窗口系统都不同。如果initial-window-system的值为windowsystem，那么初始化函数的适当实现定义在文件term/windowsystem-win.el中。该文件在构建时应该已经编译到Emacs可执行文件中。
 9. 它在初始化钩子之前运行正常的钩子。
 10. 如果合适，它会创建一个图形框架。作为创建图形框架的一部分，它通过为该窗口系统调用 window-system-initialization 函数来为图形框架初始化由 initial-frame-alist 和 default-frame-alist 指定的窗口系统（请参阅初始帧参数） .  这不是在批处理（非交互）或守护程序模式下完成的。
@@ -44,7 +44,7 @@
 27. 它调用 frame-notice-user-settings，它根据 init 文件指定的任何内容修改所选框架的参数。
 28. 它运行窗口设置挂钩。这个钩子和 emacs-startup-hook 的唯一区别是这个钩子是在前面提到的对帧参数的修改之后运行的。
 29. 它显示启动屏幕，这是一个特殊的缓冲区，包含有关 copyleft 和基本Emacs使用的信息。如果 inhibitor-startup-screen 或 initial-buffer-choice 不为零，或者指定了 ~--no-splash~ 或 ~-Q~ 命令行选项，则不会执行此操作。
-30. 如果请求了一个守护进程，它会调用 server-start。（在 POSIX 系统上，如果请求后台守护程序，它会从控制终端分离。）请参阅 The GNUEmacsManual 中的EmacsServer。
+30. 如果请求了一个守护进程，它会调用 server-start。（在 POSIX 系统上，如果请求后台守护程序，它会从控制终端分离。）请参阅 The GNU EmacsManual 中的EmacsServer。
 31. 如果由 X 会话管理器启动，它会调用 emacs-session-restore 将前一个会话的 ID 作为参数传递给它。请参阅会话管理。
 
 以下选项会影响启动顺序的某些方面。
@@ -84,7 +84,7 @@
 
     这个变量，如果非零，应该是一个字符串，当Emacs启动时，它被当作文档插入到 *scratch* 缓冲区中。如果为 nil，则 *scratch* 缓冲区为空。
 
-以下命令行选项会影响启动顺序的某些方面。请参阅 GNUEmacs手册中的初始选项。
+以下命令行选项会影响启动顺序的某些方面。请参阅 GNU Emacs手册中的初始选项。
 
 #+begin_src emacs-lisp
   --no-splash
@@ -132,9 +132,9 @@
 *** 41.1.2 初始化文件
 当您启动Emacs时，它通常会尝试加载您的 init 文件。这可以是主目录中名为 .emacs 或 .emacs.el 的文件，或者是主目录中名为 .emacs.d 的子目录中名为 init.el 的文件。
 
-命令行开关 ~-q~ 、 ~-Q~ 和 ~-u~ 控制是否以及在哪里找到初始化文件；  '-q'（和更强的'-Q'）表示不加载init文件，而'-u user'表示加载用户的init文件而不是你的。请参阅 GNUEmacs手册中的输入 Emacs。如果两个选项都没有指定，Emacs 使用 LOGNAME 环境变量，或者 USER（大多数系统）或 USERNAME（MS 系统）变量来查找你的主目录，从而找到你的 init 文件；  这样，即使你有 su'd，Emacs 仍然会加载你自己的 init 文件。但是，如果没有这些环境变量，Emacs 会使用您的用户 ID 来查找您的主目录。
+命令行开关 ~-q~ 、 ~-Q~ 和 ~-u~ 控制是否以及在哪里找到初始化文件；  '-q'（和更强的'-Q'）表示不加载init文件，而'-u user'表示加载用户的init文件而不是你的。请参阅 GNU Emacs手册中的输入 Emacs。如果两个选项都没有指定，Emacs 使用 LOGNAME 环境变量，或者 USER（大多数系统）或 USERNAME（MS 系统）变量来查找你的主目录，从而找到你的 init 文件；  这样，即使你有 su'd，Emacs 仍然会加载你自己的 init 文件。但是，如果没有这些环境变量，Emacs 会使用您的用户 ID 来查找您的主目录。
 
-Emacs 还尝试加载第二个 init 文件，称为 early init 文件（如果存在）。这是 ~/.emacs.d 目录中名为 early-init.el 的文件。early init 文件和常规 init 文件的区别在于，early init 文件在启动过程中加载得更早，因此您可以使用它来自定义一些在加载常规 init 文件之前初始化的东西。例如，您可以通过设置 package-load-list 或 package-enable-at-startup 等变量来自定义初始化包系统的过程。请参阅 GNUEmacs手册中的软件包安装。
+Emacs 还尝试加载第二个 init 文件，称为 early init 文件（如果存在）。这是 ~/.emacs.d 目录中名为 early-init.el 的文件。early init 文件和常规 init 文件的区别在于，early init 文件在启动过程中加载得更早，因此您可以使用它来自定义一些在加载常规 init 文件之前初始化的东西。例如，您可以通过设置 package-load-list 或 package-enable-at-startup 等变量来自定义初始化包系统的过程。请参阅 GNU Emacs手册中的软件包安装。
 
 Emacs 安装可能有一个默认的 init 文件，它是一个名为 default.el 的 Lisp 库。Emacs 通过库的标准搜索路径找到这个文件（参见程序如何加载）。Emacs 发行版不附带此文件；  它用于本地定制。如果默认的 init 文件存在，它会在您启动Emacs时加载。但是你自己的个人初始化文件，如果有的话，首先被加载；  如果它将禁止默认初始化设置为非零值，则Emacs不会随后加载 default.el 文件。在批处理模式下，或者如果您指定 ~-q~ （或 ~-Q~ ），Emacs 既不会加载您的个人 init 文件，也不会加载默认的 init 文件。
 
@@ -144,7 +144,7 @@ Emacs 安装可能有一个默认的 init 文件，它是一个名为 default.el
 
     此变量指定要在用户的 init 文件之前加载的站点自定义文件。它的正常值为 ~site-start~ 。您可以真正改变它的唯一方法是在转储Emacs之前这样做。
 
-有关如何在 .emacs 文件中进行各种常用自定义的示例，请参阅 GNUEmacs手册中的初始化文件示例。
+有关如何在 .emacs 文件中进行各种常用自定义的示例，请参阅 GNU Emacs手册中的初始化文件示例。
 
 #+begin_src emacs-lisp
   User Option: site-run-file ¶
@@ -186,7 +186,7 @@ Emacs 安装可能有一个默认的 init 文件，它是一个名为 default.el
   Variable: user-init-file ¶
 #+end_src
 
-    此变量保存Emacs默认目录的名称。如果该目录存在并且 ~/.emacs.d/ 和 ~/.emacs 不存在，则默认为 ${XDG_CONFIG_HOME-'~/.config'}/emacs/，否则在所有平台上为 ~/.emacs.d/但MS-DOS。这里，${XDG_CONFIG_HOME-'~/.config'} 代表环境变量 XDG_CONFIG_HOME 的值（如果设置了该变量），否则代表 ~/.config。请参阅 GNUEmacs手册中的Emacs如何找到您的初始化文件。
+    此变量保存Emacs默认目录的名称。如果该目录存在并且 ~/.emacs.d/ 和 ~/.emacs 不存在，则默认为 ${XDG_CONFIG_HOME-'~/.config'}/emacs/，否则在所有平台上为 ~/.emacs.d/但MS-DOS。这里，${XDG_CONFIG_HOME-'~/.config'} 代表环境变量 XDG_CONFIG_HOME 的值（如果设置了该变量），否则代表 ~/.config。请参阅 GNU Emacs手册中的Emacs如何找到您的初始化文件。
 
 *** 41.1.3 终端特定初始化
 每个终端类型都可以有自己的 Lisp 库，当在该类型的终端上运行时，Emacs 会加载该库。库的名称是通过连接变量 term-file-prefix 的值和终端类型（由环境变量 TERM 指定）构成的。通常，term-file-prefix 的值为 ~term/~ ；  不建议更改此设置。如果在 term-file-aliases 关联列表中存在与 TERM 匹配的条目，Emacs 将使用关联的值代替 TERM。Emacs 通过搜索加载路径目录并尝试使用 ~.elc~ 和 ~.el~ 后缀以正常方式查找文件。
@@ -227,7 +227,7 @@ Emacs 安装可能有一个默认的 init 文件，它是一个名为 default.el
     有关相关功能，请参阅 window-setup-hook。
 
 *** 41.1.4 命令行参数
-当您启动Emacs时，您可以使用命令行参数来请求各种操作。请注意，使用Emacs的推荐方法是在登录后只启动一次，然后在同一个Emacs会话中进行所有编辑（请​​参阅 The GNUEmacsManual 中的 Entering Emacs）。出于这个原因，您可能不会经常使用命令行参数。尽管如此，在从会话脚本调用Emacs或调试Emacs时，它们还是很有用的。本节描述Emacs如何处理命令行参数。
+当您启动Emacs时，您可以使用命令行参数来请求各种操作。请注意，使用Emacs的推荐方法是在登录后只启动一次，然后在同一个Emacs会话中进行所有编辑（请​​参阅 The GNU EmacsManual 中的 Entering Emacs）。出于这个原因，您可能不会经常使用命令行参数。尽管如此，在从会话脚本调用Emacs或调试Emacs时，它们还是很有用的。本节描述Emacs如何处理命令行参数。
 
 #+begin_src emacs-lisp
   Function: command-line ¶
@@ -267,7 +267,7 @@ Emacs 安装可能有一个默认的 init 文件，它是一个名为 default.el
 
     请注意，command-switch-alist 的处理不会专门处理选项中的等号。也就是说，如果命令行上有类似 --name=value 的选项，那么只有 car 字面为 --name=value 的 command-switch-alist 成员才会匹配此选项。如果要解析此类选项，则需要改用命令行函数（见下文）。
 
-    命令行参数由 startup.el 文件中的 command-line-1 函数解析。另请参阅 GNUEmacs手册中的Emacs调用的命令行参数。
+    命令行参数由 startup.el 文件中的 command-line-1 函数解析。另请参阅 GNU Emacs手册中的Emacs调用的命令行参数。
 
 #+begin_src emacs-lisp
   Variable: command-line-args ¶
@@ -311,7 +311,7 @@ Emacs 安装可能有一个默认的 init 文件，它是一个名为 default.el
 
     如果 exit-data 既不是整数也不是字符串，或者被省略，这意味着使用（系统特定的）退出状态，表明程序成功终止。
 
-kill-emacs 函数通常通过更高级别的命令 Cx Cc (save-buffers-kill-terminal) 调用。请参阅 GNUEmacs手册中的退出。如果Emacs接收到 SIGTERM 或 SIGHUP 操作系统信号（例如，当控制终端断开连接时），或者如果它在批处理模式下运行时接收到 SIGINT 信号（请参阅批处理模式），它也会自动调用。
+kill-emacs 函数通常通过更高级别的命令 Cx Cc (save-buffers-kill-terminal) 调用。请参阅 GNU Emacs手册中的退出。如果Emacs接收到 SIGTERM 或 SIGHUP 操作系统信号（例如，当控制终端断开连接时），或者如果它在批处理模式下运行时接收到 SIGINT 信号（请参阅批处理模式），它也会自动调用。
 
 #+begin_src emacs-lisp
   Variable: kill-emacs-hook ¶
@@ -2107,7 +2107,7 @@ Emacs 能够在支持 freedesktop.org 桌面通知规范的系统和 MS-Windows 
 ** 41.20 文件更改通知
 一些操作系统支持监视文件系统以查找文件更改。如果配置正确，Emacs 会静态链接相应的库，如 inotify、kqueue、gfilenotify 或 w32notify。这些库可以监视本地机器上的文件系统。
 
-也可以查看远程机器上的文件系统，参见 GNUEmacs手册中的远程文件 这不依赖于链接到Emacs的库之一。
+也可以查看远程机器上的文件系统，参见GNU Emacs手册中的远程文件 这不依赖于链接到Emacs的库之一。
 
 由于所有这些库都会在通知文件更改时发出不同的事件，因此Emacs库 filenotify 提供了一个统一的接口。想要接收文件通知的 Lisp 程序应该始终优先使用这个库而不是本地库。
 

@@ -1000,6 +1000,7 @@
    | 40.16 display财产          | DONE | DONE |   |
    | 40.16.1 替换文本的显示规范 | DONE | DONE |   |
    | 40.16.2 指定空间           | DONE | DONE |   |
+
    | 40.16.3 空间的像素规范     | DONE | DONE |   |
    | 40.16.4 其他显示规格       | DONE | DONE |   |
    | 40.16.5 在边缘显示         | DONE | DONE |   |
