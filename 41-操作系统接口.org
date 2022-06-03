@@ -14,7 +14,7 @@
 2. 它加载在 ~load-path~ 目录中找到的任何 ~leim-list.el~ 。该文件用于注册输入法。仅搜索您可能创建的任何个人 ~leim-list.el~ 文件；  它会跳过包含标准Emacs库的目录（这些应该只包含一个 ~leim-list.el~ 文件，该文件被编译成Emacs可执行文件）。
 
 3. 它将变量 ~before-init-time~ 设置为 ~current-time~ 的值（请参阅时间）。它还将 ~after-init-time~ 设置为 ~nil~ ，这向Lisp程序发出Emacs正在初始化的信号。
-# todo
+
 4. 如果 ~LANG~ 等环境变量要求，它设置语言环境和终端编码系统。
 
 5. 它对命令行参数进行一些基本的解析。
