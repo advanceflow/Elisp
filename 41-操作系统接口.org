@@ -11,91 +11,112 @@
 
 1. 它通过在列表中的每个目录中运行名为 ~subdirs.el~ 的文件，将子目录添加到 ~load-path~ 。通常，此文件会将目录的子目录添加到列表中，然后依次扫描这些子目录。 ~subdirs.el~ 文件通常在安装Emacs时自动生成。
 
-2. 它加载在 ~load-path~ 目录中找到的任何 ~leim-list.el~ 。该文件用于注册输入法。仅搜索您可能创建的任何个人 ~leim-list.el~ 文件；  它会跳过包含标准Emacs库的目录（这些应该只包含一个 leim-list.el 文件，该文件被编译成Emacs可执行文件）。
+2. 它加载在 ~load-path~ 目录中找到的任何 ~leim-list.el~ 。该文件用于注册输入法。仅搜索您可能创建的任何个人 ~leim-list.el~ 文件；  它会跳过包含标准Emacs库的目录（这些应该只包含一个 ~leim-list.el~ 文件，该文件被编译成Emacs可执行文件）。
 
-3. 它将变量 before-init-time 设置为 current-time 的值（请参阅时间）。它还将 after-init-time 设置为 nil，这向 Lisp 程序发出Emacs正在初始化的信号。
-
-4. 如果 LANG 等环境变量要求，它设置语言环境和终端编码系统。
+3. 它将变量 ~before-init-time~ 设置为 ~current-time~ 的值（请参阅时间）。它还将 ~after-init-time~ 设置为 ~nil~ ，这向Lisp程序发出Emacs正在初始化的信号。
+# todo
+4. 如果 ~LANG~ 等环境变量要求，它设置语言环境和终端编码系统。
 
 5. 它对命令行参数进行一些基本的解析。
 
-6. 它加载您的早期初始化文件（请参阅 GNU Emacs手册中的早期初始化文件）。如果指定了选项 ~-q~ 、 ~-Q~ 或 ~--batch~ ，则不会执行此操作。如果指定了 '-u' 选项，Emacs 会在该用户的主目录中查找 init 文件。
+6. 它加载您的早期初始化文件（请参阅 GNU Emacs手册中的 ~Early Init File~ ）。如果指定了选项 ~-q~ 、 ~-Q~ 或 ~--batch~ ，则不会执行此操作。如果指定了 ~-u~ 选项，Emacs会在该用户的主目录中查找初始化文件。
 
-7. 它调用函数 package-activate-all 来激活任何已安装的可选Emacs Lisp 包。请参阅包装基础知识。但是，当 package-enable-at-startup 为 nil 或使用选项 ~-q~ 、 ~-Q~ 或 ~--batch~ 之一启动时，Emacs 不会激活包。要在后一种情况下激活包，应该显式调用 package-activate-all（例如，通过 ~--funcall~ 选项）。
-8. 如果不在批处理模式下运行，它会初始化变量 initial-window-system 指定的窗口系统（参见 initial-window-system）。初始化函数 window-system-initialization 是一个通用函数（请参阅通用函数），其实际实现对于每个支持的窗口系统都不同。如果initial-window-system的值为windowsystem，那么初始化函数的适当实现定义在文件term/windowsystem-win.el中。该文件在构建时应该已经编译到Emacs可执行文件中。
-9. 它在初始化钩子之前运行正常的钩子。
-10. 如果合适，它会创建一个图形框架。作为创建图形框架的一部分，它通过为该窗口系统调用 window-system-initialization 函数来为图形框架初始化由 initial-frame-alist 和 default-frame-alist 指定的窗口系统（请参阅初始帧参数） .  这不是在批处理（非交互）或守护程序模式下完成的。
-11. 它初始化初始帧的面，并在需要时设置菜单栏和工具栏。如果支持图形框架，即使当前框架不是图形框架，它也会设置工具栏，因为稍后可能会创建图形框架。
-12. 它使用 custom-reevaluate-setting 重新初始化列表 custom-delayed-init-variables 的成员。这些是任何预加载的用户选项，其默认值取决于运行时而不是构建时上下文。请参阅自定义初始化延迟。
-13. 它会加载库站点启动（如果存在）。如果指定了选项 ~-Q~ 或 ~--no-site-file~ ，则不会这样做。
-14. 它加载您的初始化文件（请参阅初始化文件）。如果指定了选项 ~-q~ 、 ~-Q~ 或 ~--batch~ ，则不会执行此操作。如果指定了 '-u' 选项，Emacs 会在该用户的主目录中查找 init 文件。
-15. 它加载库默认值（如果存在）。如果 inhibitor-default-init 为非 nil，或者指定了选项 ~-q~ 、 ~-Q~ 或 ~--batch~ ，则不会执行此操作。
-16. 它从 abbrev-file-name 指定的文件加载您的缩写，如果该文件存在并且可以读取（请参阅 abbrev-file-name）。如果指定了选项 ~--batch~ ，则不会这样做。
-17. 它将变量 after-init-time 设置为 current-time 的值。这个变量之前被设置为 nil；  将其设置为当前时间表示初始化阶段结束，并与 before-init-time 一起提供对所用时间的测量。
-18. 它在初始化钩子之后运行正常的钩子。
-19. 如果缓冲区 *scratch* 存在并且仍处于基本模式（默认情况下应该如此），它会根据 initial-major-mode 设置其主要模式。
-20. 如果在文本终端上启动，它会加载特定于终端的 Lisp 库（请参阅特定于终端的初始化），并运行挂钩 tty-setup-hook。这不是在 --batch 模式下完成的，如果 term-file-prefix 为 nil 也不会。
-21. 它会显示初始回声区域消息，除非您使用禁止启动回声区域消息抑制了该消息。
+7. 它调用函数 ~package-activate-all~ 来激活任何已安装的可选Emacs Lisp包。请参阅包装基础知识。但是，当 ~package-enable-at-startup~ 为 ~nil~ 或使用选项 ~-q~ 、 ~-Q~ 或 ~--batch~ 之一启动时，Emacs不会激活包。要在后一种情况下激活包，应该显式调用 ~package-activate-all~ （例如，通过 ~--funcall~ 选项）。
+
+8. 如果不在批处理模式下运行，它会初始化变量 ~initial-window-system~ 指定的窗口系统（参见 ~initial-window-system~ ）。初始化函数 ~window-system-initialization~ 是一个 ~generic function~ （请参阅 ~generic function~ ），其实际实现对于每个支持的窗口系统都不同。如果 ~initial-window-system~ 的值为 ~WINDOWSYSTEM~ ，那么初始化函数的适当实现定义在文件 ~term/windowsystem-win.el~ 中。该文件在构建时应该已经编译到Emacs可执行文件中。
+
+9. 它在运行钩子 ~before-init-hook~ 。
+
+10. 如果合适，它会创建一个帧。作为创建帧的一部分，它通过为该窗口系统调用 ~window-system-initialization~ 函数来为帧初始化由 ~initial-frame-alist~ 和 ~default-frame-alist~ 指定的窗口系统（请参阅初始参数）。这不是在批处理（非交互）或守护程序模式下完成的。
+
+11. 它初始化初始帧的面，并在需要时设置菜单栏和工具栏。如果支持图形帧，即使当前帧不是图形帧，它也会设置工具栏，因为稍后可能会创建图形帧。
+
+12. 它使用 ~custom-reevaluate-setting~ 重新初始化列表 ~custom-delayed-init-variables~ 的成员。这些是任何预加载的用户选项，其默认值取决于运行时而不是构建时上下文。请参阅自定义初始化延迟。
+
+13. 它会加载库 ~site-start~ （如果存在）。如果指定了选项 ~-Q~ 或 ~--no-site-file~ ，则不会这样做。
+
+14. 它加载您的初始化文件（请参阅初始化文件）。如果指定了选项 ~-q~ 、 ~-Q~ 或 ~--batch~ ，则不会执行此操作。如果指定了 ~-u~ 选项，Emacs会在该用户的主目录中查找初始化文件。
+
+15. 它加载库 ~default~ （如果存在）。如果 ~inhibitor-default-init~ 为非 ~nil~ ，或者指定了选项 ~-q~ 、 ~-Q~ 或 ~--batch~ ，则不会执行此操作。
+
+16. 它从 ~abbrev-file-name~ 指定的文件加载您的缩写，如果该文件存在并且可以读取（请参阅 ~abbrev-file-name~ ）。如果指定了选项 ~--batch~ ，则不会这样做。
+
+17. 它将变量 ~after-init-time~ 设置为 ~current-time~ 的值。这个变量之前被设置为 ~nil~ ；  将其设置为当前时间表示初始化阶段结束，并与 ~before-init-time~ 一起提供对所用时间的测量。
+
+18. 它运行钩子 ~after-init-hook~ 。
+
+19. 如果缓冲区 ~*scratch*~ 存在并且仍处于基本模式（默认情况下应该如此），它会根据 ~initial-major-mode~ 设置其主要模式。
+
+20. 如果在文本终端上启动，它会加载特定于终端的Lisp库（请参阅特定于终端的初始化），并运行挂钩 ~tty-setup-hook~ 。这不是在 ~--batch~ 模式下完成的，如果 ~term-file-prefix~ 为 ~nil~ 也不会。
+
+21. 它会显示初始回声区域消息，除非您使用 ~inhibit-startup-echo-area-message~ 抑制了该消息。
+
 22. 它处理之前未处理的任何命令行选项。
-23. 如果指定了 --batch 选项，它现在退出。
-24. 如果 *scratch* 缓冲区存在并且为空，它会将 (substitute-command-keys initial-scratch-message) 插入该缓冲区。
-25. 如果 initial-buffer-choice 是一个字符串，它会访问具有该名称的文件（或目录）。如果它是一个函数，它会调用不带参数的函数并选择它返回的缓冲区。如果一个文件作为命令行参数给出，则访问该文件并将其缓冲区显示在 initial-buffer-choice 旁边。如果给出了多个文件，则访问所有文件并且 *Buffer List* 缓冲区显示在 initial-buffer-choice 旁边。
-26. 它运行 emacs-startup-hook。
-27. 它调用 frame-notice-user-settings，它根据 init 文件指定的任何内容修改所选框架的参数。
-28. 它运行窗口设置挂钩。这个钩子和 emacs-startup-hook 的唯一区别是这个钩子是在前面提到的对帧参数的修改之后运行的。
-29. 它显示启动屏幕，这是一个特殊的缓冲区，包含有关 copyleft 和基本Emacs使用的信息。如果 inhibitor-startup-screen 或 initial-buffer-choice 不为零，或者指定了 ~--no-splash~ 或 ~-Q~ 命令行选项，则不会执行此操作。
-30. 如果请求了一个守护进程，它会调用 server-start。（在 POSIX 系统上，如果请求后台守护程序，它会从控制终端分离。）请参阅 The GNU EmacsManual 中的EmacsServer。
-31. 如果由 X 会话管理器启动，它会调用 emacs-session-restore 将前一个会话的 ID 作为参数传递给它。请参阅会话管理。
+
+23. 如果指定了 ~--batch~ 选项，它现在退出。
+
+24. 如果 ~*scratch*~ 缓冲区存在并且为空，它会将 ~(substitute-command-keys initial-scratch-message)~ 插入该缓冲区。
+
+25. 如果 ~initial-buffer-choice~ 是一个字符串，它会访问具有该名称的文件（或目录）。如果它是一个函数，它会调用不带参数的函数并选择它返回的缓冲区。如果一个文件作为命令行参数给出，则访问该文件并将其缓冲区显示在 ~initial-buffer-choice~ 旁边。如果给出了多个文件，则访问所有文件并且 ~*Buffer List*~ 缓冲区显示在 ~initial-buffer-choice~ 旁边。
+
+26. 它运行 ~emacs-startup-hook~ 。
+
+27. 它调用 ~frame-notice-user-settings~ ，它根据初始化文件指定的任何内容修改所选帧的参数。
+
+28. 它运行 ~window-setup-hook~ 。这个钩子和 ~emacs-startup-hook~ 的唯一区别是这个钩子是在前面提到的对帧参数的修改之后运行的。
+
+29. 它显示 ~startup screen~ ，这是一个特殊的缓冲区，包含有关copyleft和基本Emacs使用的信息。如果 ~inhibitor-startup-screen~ 或 ~initial-buffer-choice~ 不为 ~nil~ ，或者指定了 ~--no-splash~ 或 ~-Q~ 命令行选项，则不会执行此操作。
+
+30. 如果请求了一个守护进程，它会调用 ~server-start~ 。（在POSIX系统上，如果请求后台守护程序，它会从控制终端分离。）请参阅The GNU Emacs Manual中的Emacs Server。
+
+31. 如果由X会话管理器启动，它会调用 ~emacs-session-restore~ 将前一个会话的ID作为参数传递给它。请参阅会话管理。
 
 以下选项会影响启动顺序的某些方面。
 
 #+begin_src emacs-lisp
   User Option: inhibit-startup-screen ¶
 #+end_src
+    此变量，如果非 ~nil~ ，禁止启动屏幕。在这种情况下，Emacs通常会显示 ~*scratch*~ 缓冲区；  但请参阅下面的初始缓冲区选择。
 
-    此变量，如果非零，禁止启动屏幕。在这种情况下，Emacs 通常会显示 *scratch* 缓冲区；  但请参阅下面的初始缓冲区选择。
+    不要在新用户的初始化文件中设置此变量，或者以影响多个用户的方式设置此变量，因为这会阻止新用户接收有关copyleft和基本Emacs使用的信息。
 
-    不要在新用户的 init 文件中设置此变量，或者以影响多个用户的方式设置此变量，因为这会阻止新用户接收有关 copyleft 和基本Emacs使用的信息。
-
-    禁止启动消息和禁止启动屏幕是此变量的别名。
+    ~inhibit-startup-message~ 和 ~inhibit-splash-screen~ 屏幕是此变量的别名。
 
 #+begin_src emacs-lisp
   User Option: initial-buffer-choice ¶
 #+end_src
-
-    如果非零，此变量是一个字符串，它指定Emacs在启动后显示的文件或目录，而不是启动屏幕。如果它的值是一个函数，Emacs 调用该函数，该函数必须返回一个缓冲区，然后显示该缓冲区。如果它的值为 t，Emacs 将显示 *scratch* 缓冲区。
+    如果非 ~nil~ ，此变量是一个字符串，它指定Emacs在启动后显示的文件或目录，而不是启动屏幕。如果它的值是一个函数，Emacs调用该函数，该函数必须返回一个缓冲区，然后显示该缓冲区。如果它的值为 ~t~ ，Emacs将显示 ~*scratch*~ 缓冲区。
 
 #+begin_src emacs-lisp
   User Option: inhibit-startup-echo-area-message ¶
 #+end_src
-
-    此变量控制启动回显区域消息的显示。您可以通过将此表单的文本添加到您的 init 文件来抑制启动回显区域消息：
+    此变量控制启动回显区域消息的显示。您可以通过将此表单的文本添加到您的初始化文件来抑制启动回显区域消息：
 
     #+begin_src emacs-lisp
       (setq inhibit-startup-echo-area-message
 	    "your-login-name")
     #+end_src
 
-   Emacs在你的 init 文件中显式检查如上所示的表达式；  您的登录名必须作为 Lisp 字符串常量出现在表达式中。您还可以使用自定义界面。将 inhibitor-startup-echo-area-message 设置为相同值的其他方法不会禁止启动消息。这样，如果您愿意，您可以轻松地为自己禁止消息，但不假思索地复制您的 init 文件不会禁止其他人的消息。
+   Emacs在你的初始化文件中显式检查如上所示的表达式； 您的登录名必须作为Lisp字符串常量出现在表达式中。您还可以使用自定义界面。将 ~inhibitor-startup-echo-area-message~ 设置为相同值的其他方法不会禁止启动消息。这样，如果您愿意，您可以轻松地为自己禁止消息，但不假思索地复制您的初始化文件不会禁止其他人的消息。
 
 #+begin_src emacs-lisp
   User Option: initial-scratch-message ¶
 #+end_src
 
-    这个变量，如果非零，应该是一个字符串，当Emacs启动时，它被当作文档插入到 *scratch* 缓冲区中。如果为 nil，则 *scratch* 缓冲区为空。
+    这个变量，如果非 ~nil~ ，应该是一个字符串，当Emacs启动时，它被当作文档插入到 ~*scratch*~ 缓冲区中。如果为 ~nil~ ，则 ~*scratch*~ 缓冲区为空。
 
-以下命令行选项会影响启动顺序的某些方面。请参阅 GNU Emacs手册中的初始选项。
+以下命令行选项会影响启动顺序的某些方面。请参阅GNU Emacs手册中的初始选项。
 
 #+begin_src emacs-lisp
   --no-splash
 #+end_src
-
     不要显示启动画面。
+
 #+begin_src emacs-lisp
   --batch
 #+end_src
-
     在没有交互式终端的情况下运行。请参阅批处理模式。
+
 #+begin_src emacs-lisp
   --daemon
 #+end_src
@@ -105,7 +126,6 @@
 #+begin_src emacs-lisp
   --fg-daemon
 #+end_src
-
     不要初始化任何显示；  只需启动一个服务器。（ ~后台~ 守护程序自动在后台运行。）
 #+begin_src emacs-lisp
   --no-init-file
@@ -113,22 +133,20 @@
 #+begin_src emacs-lisp
   -q
 #+end_src
-
     不要加载初始化文件或默认库。
+
 #+begin_src emacs-lisp
   --no-site-file
 #+end_src
+    不要加载 ~site-start~ 库。
 
-    不要加载站点启动库。
 #+begin_src emacs-lisp
   --quick
 #+end_src
 #+begin_src emacs-lisp
   -Q
 #+end_src
-
-    相当于'-q --no-site-file --no-splash'。
-
+    相当于 ~-q --no-site-file --no-splash~ 。
 *** 41.1.2 初始化文件
 当您启动Emacs时，它通常会尝试加载您的 init 文件。这可以是主目录中名为 .emacs 或 .emacs.el 的文件，或者是主目录中名为 .emacs.d 的子目录中名为 init.el 的文件。
 
