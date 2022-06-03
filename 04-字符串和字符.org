@@ -27,19 +27,19 @@ Emacs 字符串（和缓冲区）中的非 ASCII 字符有两种文本表示：�
   Function: stringp object
 #+end_src
 
-    如果 object 是字符串，此函数返回 t，否则返回 nil。
+    如果 object 是字符串，此函数返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
 Function: string-or-null-p object
 #+end_src
 
-    如果 object 是字符串或 nil，则此函数返回 t。否则返回 nil 。
+    如果 object 是字符串或  ~nil~ ，则此函数返回 t。否则返回  ~nil~  。
 
 #+begin_src emacs-lisp
 Function: char-or-string-p object
 #+end_src
 
-    如果 object 是字符串或字符（即整数），则此函数返回 t，否则返回 nil。
+    如果 object 是字符串或字符（即整数），则此函数返回 t，否则返回  ~nil~ 。
 
 ** 4.3 创建字符串
 以下函数创建字符串，可以从头开始，也可以将字符串放在一起，或者将它们分开。（对于根据其他字符串的修改内容创建字符串的函数，如 string-replace 和 replace-regexp-in-string，请参阅搜索和替换。）
@@ -59,7 +59,7 @@ Function: char-or-string-p object
     #+end_src
 
 
-    通常，如果字符是 ASCII 字符，则结果是单字节字符串。但是，如果可选参数 multibyte 不为 nil，则该函数将生成一个多字节字符串。当您稍后需要将结果与非 ASCII 字符串连接或用非 ASCII 字符替换其中的一些字符时，这很有用。
+    通常，如果字符是 ASCII 字符，则结果是单字节字符串。但是，如果可选参数 multibyte 不为  ~nil~ ，则该函数将生成一个多字节字符串。当您稍后需要将结果与非 ASCII 字符串连接或用非 ASCII 字符替换其中的一些字符时，这很有用。
 
     与此比较的其他函数包括 make-vector（请参阅 Vectors）和 make-list（请参阅 Building Cons Cells and Lists）。
 
@@ -96,14 +96,14 @@ Function: substring string &optional start end
 
     在此示例中， ~e~ 的索引为 -3， ~f~ 的索引为 -2， ~g~ 的索引为 -1。因此， ~e~ 和 ~f~ 被包括在内， ~g~ 被排除在外。
 
-    当 nil 用于 end 时，它代表字符串的长度。因此，
+    当  ~nil~  用于 end 时，它代表字符串的长度。因此，
 
 #+begin_src emacs-lisp
   (substring "abcdefg" -3 nil)
        ⇒ "efg"
 #+end_src
 
-    省略参数 end 等效于指定 nil。随之而来的是 (substring string 0) 返回所有字符串的副本。
+    省略参数 end 等效于指定  ~nil~ 。随之而来的是 (substring string 0) 返回所有字符串的副本。
 
 #+begin_src emacs-lisp
   (substring "abcdefg" 0)
@@ -121,7 +121,7 @@ Function: substring string &optional start end
        ⇒ [b (c)]
 #+end_src
 
-    如果 start 不是整数或 end 既不是整数也不是 nil，则会发出错误类型参数错误的信号。如果 start 指示字符跟在 end 之后，或者任何一个整数超出字符串的范围，则会发出 args-out-of-range 错误信号。
+    如果 start 不是整数或 end 既不是整数也不是  ~nil~ ，则会发出错误类型参数错误的信号。如果 start 指示字符跟在 end 之后，或者任何一个整数超出字符串的范围，则会发出 args-out-of-range 错误信号。
 
     将此函数与 buffer-substring 进行对比（请参阅检查缓冲区内容），后者返回一个字符串，其中包含当前缓冲区中的部分文本。字符串的开头是索引 0，但缓冲区的开头是索引 1。
 
@@ -129,7 +129,7 @@ Function: substring string &optional start end
   Function: substring-no-properties string &optional start end
 #+end_src
 
-    这类似于子字符串，但会丢弃值中的所有文本属性。此外， start 可以省略或 nil，相当于 0。因此，(substring-no-properties string) 返回字符串的副本，删除所有文本属性。
+    这类似于子字符串，但会丢弃值中的所有文本属性。此外， start 可以省略或  ~nil~ ，相当于 0。因此，(substring-no-properties string) 返回字符串的副本，删除所有文本属性。
 
 #+begin_src emacs-lisp
   Function: concat &rest sequences
@@ -163,11 +163,11 @@ Function: substring string &optional start end
 
     此函数根据正则表达式分隔符将字符串拆分为子字符串（请参阅正则表达式）。分隔符的每个匹配定义一个拆分点；  将分割点之间的子串做成一个列表，并返回。
 
-    如果 separators 为 nil（或省略），则默认值为 split-string-default-separators 的值，并且该函数的行为就像 omit-nulls 为 t。
+    如果 separators 为  ~nil~ （或省略），则默认值为 split-string-default-separators 的值，并且该函数的行为就像 omit-nulls 为 t。
 
-    如果 omit-nulls 为 nil（或省略），则只要有两个连续的分隔符匹配，或者匹配与字符串的开头或结尾相邻，结果就会包含空字符串。如果 omit-nulls 为 t，则从结果中省略这些空字符串。
+    如果 omit-nulls 为  ~nil~ （或省略），则只要有两个连续的分隔符匹配，或者匹配与字符串的开头或结尾相邻，结果就会包含空字符串。如果 omit-nulls 为 t，则从结果中省略这些空字符串。
 
-    如果可选参数 trim 不是 nil，它应该是一个正则表达式来匹配要从每个子字符串的开头和结尾修剪的文本。如果修剪使子字符串为空，则将其视为 null。
+    如果可选参数 trim 不是  ~nil~ ，它应该是一个正则表达式来匹配要从每个子字符串的开头和结尾修剪的文本。如果修剪使子字符串为空，则将其视为 null。
 
     如果您需要将字符串拆分为适合调用进程或启动进程的单个命令行参数列表，请参阅 split-string-and-unquote。
 
@@ -217,7 +217,6 @@ Function: substring string &optional start end
 	   ⇒ ("N" "i" "c" "e" " " "d" "o" "g" "g" "y" "!")
       (split-string "" "" t)
 	   ⇒ nil
-
     #+end_src
 
 
@@ -228,8 +227,6 @@ Function: substring string &optional start end
       (split-string "ooo" "\\|o+" t)
 	   ⇒ ("o" "o" "o")
     #+end_src
-
-
 
 #+begin_src emacs-lisp
   Variable: split-string-default-separators
@@ -293,7 +290,7 @@ Function: substring string &optional start end
   Function: string-pad string length &optional padding start
 #+end_src
 
-    使用 padding 作为填充字符（默认为空格字符）将字符串填充到长度。如果字符串短于长度，则不进行填充。如果 start 为 nil（或不存在），则填充到字符串的末尾，如果它不是 nil，则填充到字符串的开头。 
+    使用 padding 作为填充字符（默认为空格字符）将字符串填充到长度。如果字符串短于长度，则不进行填充。如果 start 为  ~nil~ （或不存在），则填充到字符串的末尾，如果它不是  ~nil~ ，则填充到字符串的开头。 
 
 
 #+begin_src emacs-lisp
@@ -331,7 +328,7 @@ Function: store-substring string idx obj
      Function: char-equal character1 character2
    #+end_src
 
-    如果参数表示相同的字符，此函数返回 t，否则返回 nil。如果 case-fold-search 不为零，此函数将忽略大小写的差异。
+    如果参数表示相同的字符，此函数返回 t，否则返回  ~nil~ 。如果 case-fold-search 不为零，此函数将忽略大小写的差异。
 
     #+begin_src emacs-lisp
       (char-equal ?x ?x)
@@ -340,7 +337,6 @@ Function: store-substring string idx obj
 	(char-equal ?x ?X))
 	   ⇒ nil
     #+end_src
-
 
 
     #+begin_src emacs-lisp
@@ -360,9 +356,7 @@ Function: store-substring string idx obj
 	   ⇒ nil
     #+end_src
 
-
     出于技术原因，当且仅当单字节和多字节字符串包含相同的字符代码序列并且所有这些代码都在 0 到 127（ASCII）或 160 到 255（八位图形）范围内时，它们才相等.  但是，当单字节字符串转换为多字节字符串时，代码在 160 到 255 范围内的所有字符都将转换为代码更高的字符，而 ASCII 字符保持不变。因此，单字节字符串及其到多字节的转换只有在字符串都是 ASCII 时才相等。字符代码 160 到 255 在多字节文本中并不完全正确，即使它们可能出现。因此，一个单字节字符串和一个多字节字符串是相等的而不都是 ASCII 的情况是一个技术上的怪事，很少有 Emacs Lisp 程序员遇到过。请参阅文本表示。
-
 
     #+begin_src emacs-lisp
       Function: string-equal string1 string2
@@ -399,7 +393,7 @@ Function: store-substring string idx obj
     #+begin_src emacs-lisp
       Function: string< string1 string2
     #+end_src
-    此函数一次比较两个字符串一个字符。它同时扫描两个字符串以找到第一对不匹配的对应字符。如果这两个中较小的字符是来自 string1 的字符，则 string1 较小，并且此函数返回 t。如果较小的字符是来自 string2 的字符，则 string1 较大，并且此函数返回 nil。如果两个字符串完全匹配，则值为 nil。
+    此函数一次比较两个字符串一个字符。它同时扫描两个字符串以找到第一对不匹配的对应字符。如果这两个中较小的字符是来自 string1 的字符，则 string1 较小，并且此函数返回 t。如果较小的字符是来自 string2 的字符，则 string1 较大，并且此函数返回  ~nil~ 。如果两个字符串完全匹配，则值为  ~nil~ 。
 
     成对的字符根据它们的字符代码进行比较。请记住，小写字母在 ASCII 字符集中的数值高于其对应的大写字母；  数字和许多标点字符的数值低于大写字母。一个 ASCII 字符小于任何非 ASCII 字符；  单字节非 ASCII 字符总是小于任何多字节非 ASCII 字符（参见文本表示）。
 
@@ -411,7 +405,6 @@ Function: store-substring string idx obj
       (string< "123" "abc")
 	   ⇒ t
     #+end_src
-
 
     当字符串具有不同的长度，并且它们匹配到 string1 的长度时，则结果为 t。如果它们匹配到 string2 的长度，则结果为零。没有字符的字符串小于任何其他字符串。
 
@@ -427,8 +420,6 @@ Function: store-substring string idx obj
       (string< "" "")
 	   ⇒ nil
     #+end_src
-
-
     符号也可以作为参数，在这种情况下，它们的打印名称会被比较。
 
 #+begin_src emacs-lisp
@@ -487,27 +478,27 @@ Function: string-version-lessp string1 string2
 Function: string-prefix-p string1 string2 &optional ignore-case
     #+end_src
 
-    如果 string1 是 string2 的前缀，则此函数返回非 nil；  即，如果string2 以string1 开头。如果可选参数 ignore-case 不为零，则比较忽略大小写差异。
+    如果 string1 是 string2 的前缀，则此函数返回非  ~nil~ ；  即，如果string2 以string1 开头。如果可选参数 ignore-case 不为零，则比较忽略大小写差异。
 
 
     #+begin_src emacs-lisp
 Function: string-suffix-p suffix string &optional ignore-case
     #+end_src
 
-    如果 suffix 是字符串的后缀，此函数返回非 nil；  即，如果字符串以后缀结尾。如果可选参数 ignore-case 不为零，则比较忽略大小写差异。
+    如果 suffix 是字符串的后缀，此函数返回非  ~nil~ ；  即，如果字符串以后缀结尾。如果可选参数 ignore-case 不为零，则比较忽略大小写差异。
 
 
     #+begin_src emacs-lisp
       Function: string-search needle haystack &optional start-pos
     #+end_src
 
-    返回 haystack 中第一个 needle 实例的位置，两者都是字符串。如果 start-pos 不为零，则从针中的该位置开始搜索。如果未找到匹配项，则返回 nil。该函数在进行比较时只考虑字符串中的字符；  文本属性被忽略。匹配始终区分大小写。
+    返回 haystack 中第一个 needle 实例的位置，两者都是字符串。如果 start-pos 不为零，则从针中的该位置开始搜索。如果未找到匹配项，则返回  ~nil~ 。该函数在进行比较时只考虑字符串中的字符；  文本属性被忽略。匹配始终区分大小写。
 
     #+begin_src emacs-lisp
       Function: compare-strings string1 start1 end1 string2 start2 end2 &optional ignore-case
     #+end_src
 
-    此函数将 string1 的指定部分与 string2 的指定部分进行比较。string1 的指定部分从索引 start1（包括）一直到索引 end1（不包括）；  start1 的 nil 表示字符串的开头，而 end1 的 nil 表示字符串的长度。同样，string2 的指定部分从索引 start2 一直运行到索引 end2。
+    此函数将 string1 的指定部分与 string2 的指定部分进行比较。string1 的指定部分从索引 start1（包括）一直到索引 end1（不包括）；  start1 的  ~nil~  表示字符串的开头，而 end1 的  ~nil~  表示字符串的长度。同样，string2 的指定部分从索引 start2 一直运行到索引 end2。
 
     字符串通过其字符的数值进行比较。例如，如果 str1 的第一个不同字符具有较小的数值，则认为 str1 小于 str2。如果 ignore-case 不为零，则字符在比较之前转换为大写。单字节字符串被​​转换为多字节以进行比较（请参阅文本表示），因此单字节字符串及其到多字节的转换始终被视为相等。
 
@@ -520,14 +511,14 @@ Function: string-suffix-p suffix string &optional ignore-case
 
     此函数返回源字符串 string1 和目标字符串 string2 之间的 Levenshtein 距离。Levenshtein 距离是将源字符串转换为目标字符串所需的单个字符更改（删除、插入或替换）的数量；  这是字符串之间编辑距离的一种可能定义。
 
-    字符串的字母大小写对于计算距离很重要，但它们的文本属性被忽略。如果可选参数 bytecompare 不为 nil，则函数以字节而不是字符来计算距离。逐字节比较使用字符的内部 Emacs 表示，因此对于包含原始字节的多字节字符串会产生不准确的结果（请参阅文本表示）；  如果您需要原始字节的准确结果，请通过对字符串进行编码（请参阅显式编码和解码）使字符串成为单字节。
+    字符串的字母大小写对于计算距离很重要，但它们的文本属性被忽略。如果可选参数 bytecompare 不为  ~nil~ ，则函数以字节而不是字符来计算距离。逐字节比较使用字符的内部 Emacs 表示，因此对于包含原始字节的多字节字符串会产生不准确的结果（请参阅文本表示）；  如果您需要原始字节的准确结果，请通过对字符串进行编码（请参阅显式编码和解码）使字符串成为单字节。
 
 
     #+begin_src emacs-lisp
       Function: assoc-string key alist &optional case-fold
     #+end_src
 
-    这个函数和 assoc 一样工作，除了 key 必须是一个字符串或符号，并且比较是使用 compare-strings 完成的。符号在测试前被转换为字符串。如果 case-fold 不为 nil，则 key 和 alist 的元素在比较之前转换为大写。与 assoc 不同，此函数还可以匹配 alist 中的字符串或符号元素，而不是 conses。特别是，alist 可以是字符串或符号的列表，而不是实际的 alist。请参阅关联列表。
+    这个函数和 assoc 一样工作，除了 key 必须是一个字符串或符号，并且比较是使用 compare-strings 完成的。符号在测试前被转换为字符串。如果 case-fold 不为  ~nil~ ，则 key 和 alist 的元素在比较之前转换为大写。与 assoc 不同，此函数还可以匹配 alist 中的字符串或符号元素，而不是 conses。特别是，alist 可以是字符串或符号的列表，而不是实际的 alist。请参阅关联列表。
 
 另请参阅比较文本中的函数 compare-buffer-substrings，了解比较缓冲区中文本的方法。函数 string-match 将正则表达式与字符串进行匹配，可用于一种字符串比较；  请参阅正则表达式搜索。
 
@@ -563,7 +554,7 @@ Function: string-suffix-p suffix string &optional ignore-case
   Function: string-to-number string &optional base
 #+end_src
 
-    该函数返回字符串中字符的数值。如果 base 不是 nil，它必须是 2 到 16（含）之间的整数，并且整数在该基数中转换。如果 base 为 nil，则使用 base 10。浮点转换仅适用于十进制；  我们还没有为浮点数实现其他基数，因为那会做更多的工作并且似乎没有用。如果 string 看起来像一个整数，但它的值太大而无法放入 Lisp 整数，则 string-to-number 返回一个浮点结果。
+    该函数返回字符串中字符的数值。如果 base 不是  ~nil~ ，它必须是 2 到 16（含）之间的整数，并且整数在该基数中转换。如果 base 为  ~nil~ ，则使用 base 10。浮点转换仅适用于十进制；  我们还没有为浮点数实现其他基数，因为那会做更多的工作并且似乎没有用。如果 string 看起来像一个整数，但它的值太大而无法放入 Lisp 整数，则 string-to-number 返回一个浮点结果。
 
     解析会跳过字符串开头的空格和制表符，然后读取尽可能多的字符串，因为它可以解释为给定基数中的数字。（在某些系统上，它会忽略开头的其他空格，而不仅仅是空格和制表符。）如果字符串不能解释为数字，则此函数返回 0。
 
@@ -814,9 +805,9 @@ Function: string-suffix-p suffix string &optional ignore-case
         如果 template 多次包含相同的规范字符，则在 spec-alist 中找到的相同替换将用作所有该字符替换的基础。
         模板中规范的顺序不必与规范列表中的关联顺序相对应。
 
-    可选参数 ignore-missing 指示如何处理模板中未在 spec-alist 中找到的规范字符。如果它为 nil 或省略，则函数发出错误信号；  如果忽略，则将这些格式规范逐字保留在输出中，包括它们的文本属性（如果有）；  如果是删除，则从输出中删除这些格式规范；  任何其他非 nil 值都像忽略一样处理，但任何出现的 '%%' 也会逐字保留在输出中。
+    可选参数 ignore-missing 指示如何处理模板中未在 spec-alist 中找到的规范字符。如果它为  ~nil~  或省略，则函数发出错误信号；  如果忽略，则将这些格式规范逐字保留在输出中，包括它们的文本属性（如果有）；  如果是删除，则从输出中删除这些格式规范；  任何其他非  ~nil~  值都像忽略一样处理，但任何出现的 '%%' 也会逐字保留在输出中。
 
-    如果可选参数 split 不为 nil，则 format-spec 将根据执行替换的位置将结果拆分为字符串列表，而不是返回单个字符串。例如：
+    如果可选参数 split 不为  ~nil~ ，则 format-spec 将根据执行替换的位置将结果拆分为字符串列表，而不是返回单个字符串。例如：
 
     #+begin_src emacs-lisp
       (format-spec "foo %b bar" '((?b . "zot")) nil t)
@@ -1046,7 +1037,7 @@ format-spec 接受的格式规范的语法与 format 接受的语法相似，但
 
 额外的表等价是一个循环置换每个等价类（具有相同规范等价的字符）的映射。（对于普通的 ASCII，这会将 ~a~ 映射到 ~A~ ，将 ~A~ 映射到 ~a~ ，对于每组等效字符也是如此。）
 
-构造案例表时，可以为canonicalize提供nil；  然后 Emacs 从小写和大写映射中填充这个槽。您还可以为等价提供 nil ；  然后 Emacs 从 canonicalize 填充这个槽。在实际使用的案例表中，这些组件是非零的。不要试图在没有指定规范化的情况下指定等价。
+构造案例表时，可以为canonicalize提供 ~nil~ ；  然后 Emacs 从小写和大写映射中填充这个槽。您还可以为等价提供  ~nil~  ；  然后 Emacs 从 canonicalize 填充这个槽。在实际使用的案例表中，这些组件是非零的。不要试图在没有指定规范化的情况下指定等价。
 
 以下是处理案例表的函数：
 
@@ -1054,7 +1045,7 @@ format-spec 接受的格式规范的语法与 format 接受的语法相似，但
   Function: case-table-p object
 #+end_src
 
-    如果 object 是有效的 case 表，则此谓词返回非 nil。
+    如果 object 是有效的 case 表，则此谓词返回非  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: set-standard-case-table table

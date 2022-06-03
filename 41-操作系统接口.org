@@ -326,30 +326,28 @@ Variable: user-emacs-directory ¶
 #+end_src
     当 ~save-buffers-kill-terminal~ 杀死Emacs时，它会在询问标准问题之后和调用 ~kill-emacs~ 之前调用此钩子中的函数。这些函数按出现的顺序调用，没有参数。每个功能都可以要求用户进行额外确认。如果其中任何一个返回 ~nil~ ，则 ~save-buffers-kill-emacs~ 不会杀死 ~Emacs~ ，并且不会运行此钩子中的其余函数。直接调用 ~kill-emacs~ 不会运行这个钩子。
 *** 41.2.2 挂起 Emacs
-在文本终端上，可以暂停 Emacs，这意味着暂时停止Emacs并将控制权返回给其上级进程，通常是 shell。这允许您稍后在相同的Emacs进程中恢复编辑，使用相同的缓冲区、相同的终止环、相同的撤消历史记录等。要恢复 Emacs，请在父 shell 中使用适当的命令——很可能是 fg。
+在文本终端上，可以暂停Emacs，这意味着暂时停止Emacs并将控制权返回给其上级进程，通常是shell。这允许您稍后在相同的Emacs进程中恢复编辑，使用相同的缓冲区、相同的终止环、相同的撤消历史记录等。要恢复Emacs，请在父shell中使用适当的命令——很可能是 ~fg~ 。
 
 挂起仅适用于启动Emacs会话的终端设备。我们称该设备为会话的控制终端。如果控制终端是图形终端，则不允许挂起。挂起通常与图形环境无关，因为您可以简单地切换到另一个应用程序，而无需对Emacs做任何特殊的事情。
 
-某些操作系统（没有 SIGTSTP 或 MS-DOS 的操作系统）不支持暂停作业；  在这些系统上，挂起实际上会临时创建一个新的 shell 作为Emacs的子进程。然后您将退出 shell 以返回 Emacs。
+某些操作系统（没有 ~SIGTSTP~ 或 ~MS-DOS~ 的操作系统）不支持暂停作业；  在这些系统上，挂起实际上会临时创建一个新的 ~shell~ 作为Emacs的子进程。然后您将退出 ~shell~ 以返回Emacs。
 
 #+begin_src emacs-lisp
   Command: suspend-emacs &optional string ¶
 #+end_src
 
-    此函数停止Emacs并将控制权返回给上级进程。如果并且当上级进程恢复Emacs时，suspend-emacs 将 nil 返回给其在 Lisp 中的调用者。
+    此函数停止Emacs并将控制权返回给上级进程。如果并且当上级进程恢复Emacs时， ~suspend-emacs~ 将 ~nil~ 返回给其在 ~Lisp~ 中的调用者。
 
-    该功能仅在Emacs会话的控制终端上有效；  要放弃对其他 tty 设备的控制，请使用 suspend-tty（见下文）。如果Emacs会话使用多个终端，则必须在挂起Emacs之前删除所有其他终端上的帧，否则此函数会发出错误信号。请参阅多个终端。
+    该功能仅在Emacs会话的控制终端上有效；  要放弃对其他 ~tty~ 设备的控制，请使用 ~suspend-tty~ （见下文）。如果Emacs会话使用多个终端，则必须在挂起Emacs之前删除所有其他终端上的帧，否则此函数会发出错误信号。请参阅多个终端。
 
-    如果 string 不是 nil，它的字符被发送到Emacs的上层 shell，作为终端输入读取。string 中的字符不被上级 shell 回显；  只显示结果。
+~    如果 ~string~ 不是 ~nil~ ，它的字符被发送到Emacs的上层 ~shell~ ，作为终端输入读取。 ~string~ 中的字符不被上级 shell 回显；  只显示结果。
 
-    在挂起之前，suspend-emacs 运行正常的挂起钩子。用户恢复Emacs后，suspend-emacs 运行正常的 hooksuspend-resume-hook。请参阅钩子。
+    在挂起之前， ~suspend-emacs~  运行正常的挂起钩子。用户恢复Emacs后， ~suspend-emacs~  运行正常的  ~hooksuspend-resume-hook~ 。请参阅钩子。
 
-    恢复后的下一次重新显示将重绘整个屏幕，除非变量 no-redraw-on-reenter 为非零。请参阅刷新屏幕。
+    恢复后的下一次重新显示将重绘整个屏幕，除非变量  ~no-redraw-on-reenter~  为非零。请参阅刷新屏幕。
 
     以下是如何使用这些钩子的示例：
     #+begin_src emacs-lisp
-
-
       (add-hook 'suspend-hook
 		(lambda () (or (y-or-n-p "Really suspend?")
 			       (error "Suspend canceled"))))
@@ -358,10 +356,8 @@ Variable: user-emacs-directory ¶
 				       (sit-for 2)))
     #+end_src
 
-    以下是您在评估时会看到的内容 (suspend-emacs "pwd")：
+    以下是您在评估时会看到的内容  ~(suspend-emacs "pwd")~ ：
     #+begin_src emacs-lisp
-
-
       ---------- Buffer: Minibuffer ----------
       Really suspend? y
       ---------- Buffer: Minibuffer ----------
@@ -375,7 +371,7 @@ Variable: user-emacs-directory ¶
       ---------- Echo Area ----------
       Resumed!
     #+end_src
-    请注意，Emacs 挂起后不会回显 ~pwd~ 。但它是由 shell 读取和执行的。
+    请注意，Emacs挂起后不会回显 ~pwd~ 。但它是由shell读取和执行的。
 
 #+begin_src emacs-lisp
   Variable: suspend-hook ¶
@@ -393,42 +389,42 @@ Variable: user-emacs-directory ¶
   Function: suspend-tty &optional tty ¶
 #+end_src
 
-    如果 tty 指定Emacs使用的终端设备，此函数将放弃该设备并将其恢复到之前的状态。使用该设备的帧继续存在，但不会更新，并且Emacs不会从它们读取输入。tty 可以是终端对象、框架（表示该框架的终端）或 nil（表示所选框架的终端）。请参阅多个终端。
+    如果  ~tty~  指定Emacs使用的终端设备，此函数将放弃该设备并将其恢复到之前的状态。使用该设备的帧继续存在，但不会更新，并且Emacs不会从它们读取输入。 ~tty~  可以是终端对象、框架（表示该框架的终端）或  ~nil~ （表示所选框架的终端）。请参阅多个终端。
 
-    如果 tty 已经挂起，这个函数什么也不做。
+    如果  ~tty~  已经挂起，这个函数什么也不做。
 
-    该函数运行 hook 挂起 tty 函数，将终端对象作为参数传递给每个函数。
+    该函数运行  ~hook~  挂起  ~tty~  函数，将终端对象作为参数传递给每个函数。
 
 #+begin_src emacs-lisp
   Function: resume-tty &optional tty ¶
 #+end_src
 
-    该函数恢复之前挂起的终端设备tty；  其中 tty 具有与 suspend-tty 相同的可能值。
+    该函数恢复之前挂起的终端设备 ~tty~  ；  其中  ~tty~  具有与  ~suspend-tty~  相同的可能值。
 
-    此函数重新打开终端设备，重新初始化它，并使用该终端的选定帧重新绘制它。然后它运行钩子 resume-tty-functions，将终端对象作为参数传递给每个函数。
+    此函数重新打开终端设备，重新初始化它，并使用该终端的选定帧重新绘制它。然后它运行钩子  ~resume-tty-functions~ ，将终端对象作为参数传递给每个函数。
 
-    如果同一设备已被另一个Emacs终端使用，则此函数会发出错误信号。如果 tty 没有挂起，这个函数什么也不做。
+    如果同一设备已被另一个Emacs终端使用，则此函数会发出错误信号。如果  ~tty~  没有挂起，这个函数什么也不做。
 
 #+begin_src emacs-lisp
   Function: controlling-tty-p &optional tty ¶
 #+end_src
 
-    如果 tty 是Emacs会话的控制终端，则此函数返回非 nil；  tty 可以是终端对象、框架（表示该框架的终端）或 nil（表示所选框架的终端）。
+    如果  ~tty~  是Emacs会话的控制终端，则此函数返回非  ~nil~ ；   ~tty~  可以是终端对象、框架（表示该框架的终端）或  ~nil~ （表示所选框架的终端）。
 
 #+begin_src emacs-lisp
   Command: suspend-frame ¶
 #+end_src
 
-    此命令暂停一帧。对于 GUI 框架，它调用 iconify-frame（参见框架的可见性）；  对于文本终端上的框架，它调用suspend-emacs 或suspend-tty，这取决于框架是否显示在控制终端设备上。
+    此命令暂停一帧。对于GUI框架，它调用  ~iconify-frame~ （参见框架的可见性）； 对于文本终端上的框架，它调用  ~suspend-emacs~  或  ~suspend-tty~ ，这取决于框架是否显示在控制终端设备上。
 
 ** 41.3 操作系统环境
-Emacs 通过各种函数提供对操作系统环境中变量的访问。这些变量包括系统名称、用户的 UID 等。
+Emacs通过各种函数提供对操作系统环境中变量的访问。这些变量包括系统名称、用户的 ~UID~ 等。
 
 #+begin_src emacs-lisp
   Variable: system-configuration ¶
 #+end_src
 
-    此变量以字符串形式保存系统硬件/软件配置的标准 GNU 配置名称。例如，64 位 GNU/Linux 系统的典型值为 '"x86_64-unknown-linux-gnu"'。
+    此变量以字符串形式保存系统硬件/软件配置的标准GNU配置名称。例如，64位GNU/Linux系统的典型值为  ~x86_64-unknown-linux-gnu~  。
 
 #+begin_src emacs-lisp
   Variable: system-type ¶
@@ -440,61 +436,60 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
   aix
 #+end_src
 
-	 IBM 的 AIX。
+	 IBM的AIX。
 #+begin_src emacs-lisp
   berkeley-unix
 #+end_src
 
-	 伯克利 BSD 及其变体。
+	 伯克利BSD及其变体。
 #+begin_src emacs-lisp
   cygwin
 #+end_src
+	 Cygwin，MS-Windows 之上的POSIX层。
 
-	 Cygwin，MS-Windows 之上的 POSIX 层。
 #+begin_src emacs-lisp
   darwin
 #+end_src
-
 	 达尔文 (macOS)。
+
 #+begin_src emacs-lisp
   gnu
 #+end_src
+	 GNU系统（使用GNU内核，由HURD和Mach组成）。
 
-	 GNU 系统（使用 GNU 内核，由 HURD 和 Mach 组成）。
 #+begin_src emacs-lisp
   gnu/linux
 #+end_src
+	 GNU/Linux 系统——即使用Linux内核的变体GNU系统。（这些系统就是人们常说的Linux ，但实际上 Linux只是内核，而不是整个系统。）
 
-	 GNU/Linux 系统——即使用 Linux 内核的变体 GNU 系统。（这些系统就是人们常说的 ~Linux~ ，但实际上 Linux 只是内核，而不是整个系统。）
 #+begin_src emacs-lisp
   gnu/kfreebsd
 #+end_src
-
 	 具有 FreeBSD 内核的 GNU（基于 glibc）系统。
+
 #+begin_src emacs-lisp
   hpux
 #+end_src
-
 	 惠普 HPUX 操作系统。
+
 #+begin_src emacs-lisp
   nacl
 #+end_src
-
 	 Google Native Client (NaCl) 沙盒系统。
+
 #+begin_src emacs-lisp
   ms-dos
 #+end_src
+	 微软的DOS。使用DJGPP为MS-DOS编译的Emacs将系统类型绑定到ms-dos，即使您在 MS-Windows 上运行它也是如此。
 
-	 微软的 DOS。使用 DJGPP 为 MS-DOS 编译的Emacs将系统类型绑定到 ms-dos，即使您在 MS-Windows 上运行它也是如此。
 #+begin_src emacs-lisp
   usg-unix-v
 #+end_src
-
 	 AT&T Unix System V.
+
 #+begin_src emacs-lisp
   windows-nt
 #+end_src
-
 	 Microsoft Windows NT、9X 及更高版本。system-type 的值始终为 windows-nt，例如，即使在 Windows 10 上也是如此。
 
     除非绝对必要，否则我们不希望添加新符号来进行更精细的区分！  事实上，我们希望在未来消除其中的一些替代方案。如果您需要比系统类型允许的更精细的区分，您可以测试系统配置，例如，针对正则表达式。
@@ -502,27 +497,24 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
 #+begin_src emacs-lisp
   Function: system-name ¶
 #+end_src
-
     此函数以字符串形式返回您正在运行的机器的名称。
 
 #+begin_src emacs-lisp
   User Option: mail-host-address ¶
 #+end_src
-
-    如果此变量不为 nil，则使用它代替 system-name 来生成电子邮件地址。例如，在构造用户邮件地址的默认值时使用。请参阅用户标识。
+    如果此变量不为  ~nil~  ，则使用它代替  ~system-name~  来生成电子邮件地址。例如，在构造用户邮件地址的默认值时使用。请参阅用户标识。
 
 #+begin_src emacs-lisp
   Command: getenv var &optional frame ¶
 #+end_src
-
-    此函数以字符串形式返回环境变量 var 的值。var 应该是一个字符串。如果环境中未定义 var，则 getenv 返回 nil。如果设置了 var 但为 null，则返回 '""'。在Emacs中，环境变量及其值的列表保存在变量 process-environment 中。
+    此函数以字符串形式返回环境变量  ~var~  的值。 ~var~  应该是一个字符串。如果环境中未定义  ~var~  ，则  ~getenv~  返回  ~nil~  。如果设置了  ~var~  但为  ~null~  ，则返回 '""'。在Emacs中，环境变量及其值的列表保存在变量  ~process-environment~ 中。
 
     #+begin_src emacs-lisp
       (getenv "USER")
 	   ⇒ "lewis"
     #+end_src
 
-    shell 命令 printenv 打印全部或部分环境：
+    shell命令  ~printenv~  打印全部或部分环境：
     #+begin_src emacs-lisp
       bash$ printenv
       PATH=/usr/local/bin:/usr/bin:/bin
@@ -539,19 +531,19 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
   Command: setenv variable &optional value substitute ¶
 #+end_src
 
-    此命令将名为 variable 的环境变量的值设置为 value。变量应该是一个字符串。在内部，Emacs Lisp 可以处理任何字符串。但是，通常变量应该是有效的外壳标识符，即字母、数字和下划线的序列，以字母或下划线开头。否则，如果Emacs的子进程尝试访问变量的值，可能会出现错误。如果 value 被省略或 nil （或者，交互地，使用前缀参数）， setenv 从环境中删除变量。否则，值应该是一个字符串。
+    此命令将名为  ~variable~  的环境变量的值设置为  ~value~  。变量应该是一个字符串 。在内部，Emacs Lisp可以处理任何字符串 。但是，通常变量应该是有效的外壳标识符，即字母、数字和下划线的序列，以字母或下划线开头 。否则，如果Emacs的子进程尝试访问变量的值，可能会出现错误 。如果  ~value~  被省略或  ~nil~  （或者，交互地，使用前缀参数），  ~setenv~ 从环境中删除变量 。否则，值应该是一个字符串 。
 
-    如果可选参数替代非零，Emacs 调用函数替代环境变量来扩展任何环境变量的值。
+    如果可选参数替代非零，Emacs调用函数替代环境变量来扩展任何环境变量的值 。
 
-    setenv 通过修改进程环境来工作；  将该变量与 let 绑定也是合理的做法。
+     ~setenv~  通过修改进程环境来工作；  将该变量与  ~let~ 绑定也是合理的做法 。
 
-    setenv 返回变量的新值，如果从环境中删除变量，则返回 nil。
+     ~setenv~  返回变量的新值，如果从环境中删除变量，则返回  ~nil~  。
 
 #+begin_src emacs-lisp
   Macro: with-environment-variables variables body… ¶
 #+end_src
 
-    该宏在执行body时临时根据变量设置环境变量。表单完成后将恢复以前的值。参数变量应该是格式为 (var value) 的字符串对列表，其中 var 是环境变量的名称，value 是该变量的值。
+    该宏在执行  ~body~ 时临时根据变量设置环境变量 。表单完成后将恢复以前的值 。参数变量应该是格式为  ~(var value)~ 的字符串对列表，其中  ~var~  是环境变量的名称， ~value~ 是该变量的值 。
 
     #+begin_src emacs-lisp
       (with-environment-variables (("LANG" "C")
@@ -563,11 +555,9 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
   Variable: process-environment ¶
 #+end_src
 
-    该变量是一个字符串列表，每个字符串描述一个环境变量。函数 getenv 和 setenv 通过这个变量工作。
+    该变量是一个字符串列表，每个字符串描述一个环境变量 。函数  ~getenv~  和  ~setenv~ 通过这个变量工作 。
 
     #+begin_src emacs-lisp
-
-
       process-environment
       ⇒ ("PATH=/usr/local/bin:/usr/bin:/bin"
 	  "USER=lewis"
@@ -578,31 +568,28 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
 	  …)
     #+end_src
 
-    如果 process-environment 包含多个指定相同环境变量的元素，则这些元素中的第一个指定变量，而其他元素将被忽略。
-
+    如果  ~process-environment~  包含多个指定相同环境变量的元素，则这些元素中的第一个指定变量，而其他元素将被忽略 。
 #+begin_src emacs-lisp
   Variable: initial-environment ¶
 #+end_src
 
-    此变量保存Emacs启动时从其父进程继承的环境变量列表。
-
+    此变量保存Emacs启动时从其父进程继承的环境变量列表 。
 #+begin_src emacs-lisp
   Variable: path-separator ¶
 #+end_src
 
-    此变量包含一个字符串，该字符串表示搜索路径中的哪个字符分隔目录（如在环境变量中找到的那样）。对于 Unix 和 GNU 系统，它的值是 ~:~ ，而 ~;~   用于 MS 系统。
-
+    此变量包含一个字符串，该字符串表示搜索路径中的哪个字符分隔目录（如在环境变量中找到的那样） 。对于 Unix 和 GNU 系统，它的值是 ~:~ ，而 ~;~   用于 MS 系统 。
 #+begin_src emacs-lisp
   Function: path-separator ¶
 #+end_src
 
-    此函数返回变量路径分隔符的连接局部值。那是 ~ ;~   对于 MS 系统和本地默认目录， ~：~ 对于 Unix 和 GNU 系统，或远程默认目录。
+    此函数返回变量路径分隔符的连接局部值 。那是 ~;~ 对于MS系统和本地默认目录， ~：~ 对于Unix和GNU 系统，或远程默认目录 。
 
 #+begin_src emacs-lisp
   Function: parse-colon-path path ¶
 #+end_src
 
-    此函数采用搜索路径字符串（例如 PATH 环境变量的值），并在分隔符处将其拆分，返回目录列表。此列表中的 nil 表示当前目录。虽然函数的名称是 ~冒号~ ，但它实际上使用了变量路径分隔符的值。
+    此函数采用搜索路径字符串（例如 PATH 环境变量的值），并在分隔符处将其拆分，返回目录列表 。此列表中的 ~nil~  表示当前目录 。虽然函数的名称是 ~冒号~ ，但它实际上使用了变量路径分隔符的值 。
 
     #+begin_src emacs-lisp
       (parse-colon-path ":/foo:/bar")
@@ -613,31 +600,31 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
   Variable: invocation-name ¶
 #+end_src
 
-    此变量保存调用Emacs的程序名称。该值是一个字符串，并且不包括目录名称。
+    此变量保存调用Emacs的程序名称 。该值是一个字符串，并且不包括目录名称 。
 
 #+begin_src emacs-lisp
   Variable: invocation-directory ¶
 #+end_src
 
-    此变量保存Emacs可执行文件在运行时所在的目录，如果无法确定该目录，则为 nil。
+    此变量保存Emacs可执行文件在运行时所在的目录，如果无法确定该目录，则为 ~nil~  。
 
 #+begin_src emacs-lisp
   Variable: installation-directory ¶
 #+end_src
 
-    如果非零，这是一个目录，可以在其中查找 lib-src 和 etc 子目录。在已安装的Emacs中，它通常为 nil。当Emacs无法在其标准安装位置找到这些目录，但可以在与包含Emacs可执行文件的目录（即调用目录）相关的目录中找到它们时，它是非零的。
+    如果非零，这是一个目录，可以在其中查找 lib-src 和 etc 子目录 。在已安装的Emacs中，它通常为 ~nil~  。当Emacs无法在其标准安装位置找到这些目录，但可以在与包含Emacs可执行文件的目录（即调用目录）相关的目录中找到它们时，它是非零的 。
 
 #+begin_src emacs-lisp
   Function: load-average &optional use-float ¶
 #+end_src
 
-    此函数以列表的形式返回当前 1 分钟、5 分钟和 15 分钟的系统负载平均值。平均负载表示试图在系统上运行的进程数。
+    此函数以列表的形式返回当前 1 分钟、5 分钟和 15 分钟的系统负载平均值 。平均负载表示试图在系统上运行的进程数 。
 
-    默认情况下，这些值是系统负载平均值的 100 倍的整数，但如果 use-float 不为零，则它们将作为浮点数返回，而不乘以 100。
+    默认情况下，这些值是系统负载平均值的 100 倍的整数，但如果 use-float 不为零，则它们将作为浮点数返回，而不乘以 100 。
 
-    如果无法获得负载平均值，则此函数会发出错误信号。在某些平台上，访问平均负载需要将Emacs安装为 setuid 或 setgid，以便它可以读取内核信息，这通常是不可取的。
+    如果无法获得负载平均值，则此函数会发出错误信号 。在某些平台上，访问平均负载需要将Emacs安装为 setuid 或 setgid，以便它可以读取内核信息，这通常是不可取的 。
 
-    如果 1 分钟负载平均值可用，但 5 或 15 分钟平均值不可用，则此函数返回包含可用平均值的缩短列表。
+    如果 1 分钟负载平均值可用，但 5 或 15 分钟平均值不可用，则此函数返回包含可用平均值的缩短列表 。
     #+begin_src emacs-lisp
       (load-average)
 	   ⇒ (169 48 36)
@@ -646,139 +633,139 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
 	   ⇒ (1.69 0.48 0.36)
     #+end_src
 
-    shell 命令 uptime 返回类似的信息。
+    shell 命令 uptime 返回类似的信息 。
 
 #+begin_src emacs-lisp
   Function: emacs-pid ¶
 #+end_src
 
-    此函数以整数形式返回Emacs进程的进程 ID。
+    此函数以整数形式返回Emacs进程的进程 ID 。
 
 #+begin_src emacs-lisp
   Variable: tty-erase-char ¶
 #+end_src
 
-    此变量保存在Emacs启动之前在系统终端驱动程序中选择的擦除字符。
+    此变量保存在Emacs启动之前在系统终端驱动程序中选择的擦除字符 。
 
 #+begin_src emacs-lisp
   Variable: null-device ¶
 #+end_src
 
-    此变量保存系统空设备。对于 Unix 和 GNU 系统，其值为 ~/dev/null~ ，对于 MS 系统，其值为 ~NUL~ 。
+    此变量保存系统空设备 。对于 Unix 和 GNU 系统，其值为 ~/dev/null~ ，对于 MS 系统，其值为 ~NUL~  。
 
 #+begin_src emacs-lisp
   Function: null-device ¶
 #+end_src
 
-    此函数返回变量 null-device 的连接本地值。对于 MS 系统和本地默认目录是 ~NUL~ ，对于 Unix 和 GNU 系统是 ~/dev/null~ ，或者是远程默认目录。
+    此函数返回变量 null-device 的连接本地值 。对于 MS 系统和本地默认目录是 ~NUL~ ，对于 Unix 和 GNU 系统是 ~/dev/null~ ，或者是远程默认目录 。
 
 ** 41.4 用户识别
 #+begin_src emacs-lisp
   Variable: init-file-user ¶
 #+end_src
 
-    这个变量表示Emacs应该使用哪个用户的 init 文件——如果没有，则为 nil。"" 代表最初登录的用户。该值反映了命令行选项，例如 ~-q~ 或 ~-u 用户~ 。
+    这个变量表示Emacs应该使用哪个用户的 init 文件——如果没有，则为 ~nil~  。"" 代表最初登录的用户 。该值反映了命令行选项，例如 ~-q~ 或 ~-u 用户~  。
 
-    加载自定义文件或任何其他类型的用户配置文件的 Lisp 包在决定在哪里找到它时应该遵循这个变量。他们应该加载在这个变量中找到的用户名的配置文件。如果 init-file-user 为 nil，意味着使用了 ~-q~ 、 ~-Q~ 或 ~-batch~ 选项，则 Lisp 包不应加载任何自定义文件或用户配置文件。
+    加载自定义文件或任何其他类型的用户配置文件的 Lisp 包在决定在哪里找到它时应该遵循这个变量 。他们应该加载在这个变量中找到的用户名的配置文件 。如果 init-file-user 为 ~nil~ ，意味着使用了 ~-q~ 、 ~-Q~ 或 ~-batch~ 选项，则 Lisp 包不应加载任何自定义文件或用户配置文件 。
 
 #+begin_src emacs-lisp
   User Option: user-mail-address ¶
 #+end_src
 
-    这包含使用Emacs的用户的电子邮件地址。
+    这包含使用Emacs的用户的电子邮件地址 。
 
 #+begin_src emacs-lisp
   Function: user-login-name &optional uid ¶
 #+end_src
 
-    此函数返回用户登录的名称。它使用环境变量 LOGNAME 或 USER（如果已设置）。否则，该值基于有效 UID，而不是真实 UID。
+    此函数返回用户登录的名称 。它使用环境变量 LOGNAME 或 USER（如果已设置） 。否则，该值基于有效 UID，而不是真实 UID 。
 
-    如果指定 uid（一个数字），则结果是对应于 uid 的用户名，如果没有这样的用户，则返回 nil。
+    如果指定 uid（一个数字），则结果是对应于 uid 的用户名，如果没有这样的用户，则返回 ~nil~  。
 
 #+begin_src emacs-lisp
   Function: user-real-login-name ¶
 #+end_src
 
-    该函数返回Emacs的真实 UID 对应的用户名。这将忽略有效的 UID，以及环境变量 LOGNAME 和 USER。
+    该函数返回Emacs的真实 UID 对应的用户名 。这将忽略有效的 UID，以及环境变量 LOGNAME 和 USER 。
 
 #+begin_src emacs-lisp
   Function: user-full-name &optional uid ¶
 #+end_src
 
-    此函数返回登录用户的全名，或者环境变量 NAME 的值（如果已设置）。
+    此函数返回登录用户的全名，或者环境变量 NAME 的值（如果已设置） 。
 
-    如果Emacs进程的用户 ID 不对应于任何已知用户（并且未设置 NAME），则结果为 ~未知~ 。
+    如果Emacs进程的用户 ID 不对应于任何已知用户（并且未设置 NAME），则结果为 ~未知~  。
 
-    如果 uid 不是 nil，那么它应该是一个数字（一个用户 ID）或一个字符串（一个登录名）。然后 user-full-name 返回与该用户 ID 或登录名对应的全名。如果您指定未定义的用户 ID 或登录名，则返回 nil。
+    如果 uid 不是 ~nil~ ，那么它应该是一个数字（一个用户 ID）或一个字符串（一个登录名） 。然后 user-full-name 返回与该用户 ID 或登录名对应的全名 。如果您指定未定义的用户 ID 或登录名，则返回 ~nil~  。
 
-符号 user-login-name、user-real-login-name 和 user-full-name 是变量和函数。这些函数返回与变量相同的值。这些变量允许您通过告诉函数返回什么来伪造 Emacs。这些变量对于构造框架标题也很有用（请参阅框架标题）。
+符号 user-login-name、user-real-login-name 和 user-full-name 是变量和函数 。这些函数返回与变量相同的值 。这些变量允许您通过告诉函数返回什么来伪造 Emacs 。这些变量对于构造框架标题也很有用（请参阅框架标题） 。
 
 #+begin_src emacs-lisp
   Function: user-real-uid ¶
 #+end_src
 
-    此函数返回用户的真实 UID。
+    此函数返回用户的真实 UID 。
 
 #+begin_src emacs-lisp
   Function: user-uid ¶
 #+end_src
 
-    该函数返回用户的有效 UID。
+    该函数返回用户的有效 UID 。
 
 #+begin_src emacs-lisp
   Function: group-gid ¶
 #+end_src
 
-    该函数返回Emacs进程的有效 GID。
+    该函数返回Emacs进程的有效 GID 。
 
 #+begin_src emacs-lisp
   Function: group-real-gid ¶
 #+end_src
 
-    该函数返回Emacs进程的真实 GID。
+    该函数返回Emacs进程的真实 GID 。
 
 #+begin_src emacs-lisp
   Function: system-users ¶
 #+end_src
 
-    此函数返回字符串列表，列出系统上的用户名。如果Emacs无法检索此信息，则返回值是一个仅包含 user-real-login-name 值的列表。
+    此函数返回字符串列表，列出系统上的用户名 。如果Emacs无法检索此信息，则返回值是一个仅包含 user-real-login-name 值的列表 。
 
 #+begin_src emacs-lisp
   Function: system-groups ¶
 #+end_src
 
-    该函数返回一个字符串列表，列出系统上用户组的名称。如果Emacs无法检索此信息，则返回值为 nil。
+    该函数返回一个字符串列表，列出系统上用户组的名称 。如果Emacs无法检索此信息，则返回值为 ~nil~  。
 
 #+begin_src emacs-lisp
   Function: group-name gid ¶
 #+end_src
 
-    此函数返回与数字组 ID gid 对应的组名，如果没有这样的组，则返回 nil。
+    此函数返回与数字组 ID gid 对应的组名，如果没有这样的组，则返回 ~nil~  。
 
 ** 41.5 时间
-本节说明如何确定当前时间和时区。
+本节说明如何确定当前时间和时区 。
 
-当前时间和文件属性等许多函数返回计数秒数的 Lisp 时间戳值，并且可以通过从 1970-01-01 00:00:00 UTC 的纪元开始计数秒来表示绝对时间。
+当前时间和文件属性等许多函数返回计数秒数的 Lisp 时间戳值，并且可以通过从 1970-01-01 00:00:00 UTC 的纪元开始计数秒来表示绝对时间 。
 
-尽管传统上 Lisp 时间戳是整数对，但它们的形式已经发展，程序通常不应该依赖于当前的默认形式。如果您的程序需要特定的时间戳形式，您可以使用 time-convert 函数将其转换为所需的形式。请参阅时间转换。
+尽管传统上 Lisp 时间戳是整数对，但它们的形式已经发展，程序通常不应该依赖于当前的默认形式 。如果您的程序需要特定的时间戳形式，您可以使用 time-convert 函数将其转换为所需的形式 。请参阅时间转换 。
 
 目前有三种形式的 Lisp 时间戳，每一种都代表秒数：
 
-    一个整数。虽然这是最简单的形式，但它不能表示亚秒级时间戳。
-    一对整数（记号 .hz），其中 hz 为正数。这表示滴答/hz 秒，如果 hz 为 1，则与普通滴答时间相同。对于纳秒分辨率时钟，hz 的常见值为 1000000000。27
-    四个整数的列表（高低微 pico），其中 0≤low<65536、0≤micro<1000000 和 0≤pico<1000000。这表示使用以下公式的秒数：high * 2**16 + low + micro * 10**-6 + pico * 10**-12。在某些情况下，函数可能默认返回两个或三个元素的列表，省略的 micro 和 pico 组件默认为零。在所有当前机器上，pico 是 1000 的倍数，但随着更高分辨率时钟的可用，这可能会发生变化。
+    一个整数 。虽然这是最简单的形式，但它不能表示亚秒级时间戳 。
+    一对整数（记号 .hz），其中 hz 为正数 。这表示滴答/hz 秒，如果 hz 为 1，则与普通滴答时间相同 。对于纳秒分辨率时钟，hz 的常见值为 1000000000 。27
+    四个整数的列表（高低微 pico），其中 0≤low<65536、0≤micro<1000000 和 0≤pico<1000000 。这表示使用以下公式的秒数：high * 2**16 + low + micro * 10**-6 + pico * 10**-12 。在某些情况下，函数可能默认返回两个或三个元素的列表，省略的 micro 和 pico 组件默认为零 。在所有当前机器上，pico 是 1000 的倍数，但随着更高分辨率时钟的可用，这可能会发生变化 。
 
-函数参数，例如，当前时间字符串的时间参数，接受更通用的时间值格式，可以是 Lisp 时间戳、当前时间的 nil、秒的单个浮点数或列表 ( high low micro) 或 (high low)，它是一个截断的列表时间戳，缺少的元素被视为零。
+函数参数，例如，当前时间字符串的时间参数，接受更通用的时间值格式，可以是 Lisp 时间戳、当前时间的 ~nil~ 、秒的单个浮点数或列表 ( high low micro) 或 (high low)，它是一个截断的列表时间戳，缺少的元素被视为零 。
 
-时间值可以与日历和其他形式相互转换。其中一些转换依赖于限制可能时间值范围的操作系统功能，如果超出限制，则会发出错误信号，例如 ~指定时间不可表示~ 。例如，系统可能不支持 1970 年之前的年份、1901 年之前的年份或遥远的未来年份。您可以使用 format-time-string 将时间值转换为人类可读的字符串，使用 time-convert 将时间值转换为 Lisp 时间戳，并使用 decode-time 和 float-time 将其转换为其他形式。这些功能将在以下部分中描述。
+时间值可以与日历和其他形式相互转换 。其中一些转换依赖于限制可能时间值范围的操作系统功能，如果超出限制，则会发出错误信号，例如 ~指定时间不可表示~  。例如，系统可能不支持 1970 年之前的年份、1901 年之前的年份或遥远的未来年份 。您可以使用 format-time-string 将时间值转换为人类可读的字符串，使用 time-convert 将时间值转换为 Lisp 时间戳，并使用 decode-time 和 float-time 将其转换为其他形式 。这些功能将在以下部分中描述 。
 
 #+begin_src emacs-lisp
   Function: current-time-string &optional time zone ¶
 #+end_src
 
-    此函数将当前时间和日期作为人类可读的字符串返回。字符串的初始部分的格式没有变化，其中包含按顺序排列的星期几、月份、月份中的日期和时间：用于这些字段的字符数始终相同，尽管（除非无论语言环境如何，您都需要英文工作日或月份缩写）通常使用格式时间字符串比从当前时间字符串的输出中提取字段更方便，因为年份可能不完全是四位数字，以及其他信息可能有一天会在最后添加。
+    此函数将当前时间和日期作为人类可读的字符串返回 。字符串的初始部分的格式没有变化，其中包含按顺序排列的星期几、月份、月份中的日期和时间：用于这些字段的字符数始终相同，尽管（除非无论语言环境如何，您都需要英文工作日或月份缩写）通常使用格式时间字符串比从当前时间字符串的输出中提取字段更方便，因为年份可能不完全是四位数字，以及其他信息可能有一天会在最后添加 。
 
-    如果给定参数时间，则指定要格式化的时间，而不是当前时间。可选参数 zone 默认为当前时区规则。请参阅时区规则。操作系统限制时间和区域值的范围。
+    如果给定参数时间，则指定要格式化的时间，而不是当前时间 。可选参数 zone 默认为当前时区规则 。请参阅时区规则 。操作系统限制时间和区域值的范围 。
 
     #+begin_src emacs-lisp
       (current-time-string)
@@ -789,62 +776,62 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
   Function: current-time ¶
 #+end_src
 
-    此函数以 Lisp 时间戳的形式返回当前时间。尽管时间戳在当前Emacs版本中采用（高低微 pico）形式，但计划在未来的Emacs版本中进行更改。您可以使用 time-convert 函数将时间戳转换为其他形式。请参阅时间转换。
+    此函数以 Lisp 时间戳的形式返回当前时间 。尽管时间戳在当前Emacs版本中采用（高低微 pico）形式，但计划在未来的Emacs版本中进行更改 。您可以使用 time-convert 函数将时间戳转换为其他形式 。请参阅时间转换 。
 
 #+begin_src emacs-lisp
   Function: float-time &optional time ¶
 #+end_src
 
-    此函数将当前时间作为自纪元以来的浮点秒数返回。如果给定可选参数 time，则指定要转换的时间而不是当前时间。
+    此函数将当前时间作为自纪元以来的浮点秒数返回 。如果给定可选参数 time，则指定要转换的时间而不是当前时间 。
 
-    警告：由于结果是浮点数，因此可能不准确。如果需要精确的时间戳，请勿使用此功能。例如，在典型系统上（浮点时间 '(1 . 10)）显示为 '0.1' 但略大于 1/10。
+    警告：由于结果是浮点数，因此可能不准确 。如果需要精确的时间戳，请勿使用此功能 。例如，在典型系统上（浮点时间 '(1 . 10)）显示为 '0.1' 但略大于 1/10 。
 
-    time-to-seconds 是此函数的别名。
+    time-to-seconds 是此函数的别名 。
 
 脚注
 (27)
 
-当前 hz 应该至少为 65536 以避免在将时间戳传递给标准函数时出现兼容性警告，因为以前版本的Emacs由于向后兼容性问题会以不同方式解释此类时间戳。这些警告旨在在未来的Emacs版本中删除。
+当前 hz 应该至少为 65536 以避免在将时间戳传递给标准函数时出现兼容性警告，因为以前版本的Emacs由于向后兼容性问题会以不同方式解释此类时间戳 。这些警告旨在在未来的Emacs版本中删除 。
 
 ** 41.6 时区规则
-默认时区由 TZ 环境变量确定。请参阅操作系统环境。例如，您可以使用 (setenv "TZ" "UTC0") 告诉Emacs默认为世界时。如果 TZ 不在环境中，Emacs 使用系统挂钟时间，这是一个依赖于平台的默认时区。
+默认时区由 TZ 环境变量确定 。请参阅操作系统环境 。例如，您可以使用 (setenv "TZ" "UTC0") 告诉Emacs默认为世界时 。如果 TZ 不在环境中，Emacs 使用系统挂钟时间，这是一个依赖于平台的默认时区 。
 
-支持的 TZ 字符串集取决于系统。GNU 和许多其他系统支持 tzdata 数据库，例如，'"America/New_York"' 指定纽约市附近位置的时区和夏令时历史。GNU 和大多数其他系统支持 POSIX 样式的 TZ 字符串，例如，'"EST+5EDT,M4.1.0/2,M10.5.0/2"' 指定纽约从 1987 年到 2006 年使用的规则。所有系统都支持该字符串'"UTC0"' 表示世界时。
+支持的 TZ 字符串集取决于系统 。GNU 和许多其他系统支持 tzdata 数据库，例如，'"America/New_York"' 指定纽约市附近位置的时区和夏令时历史 。GNU 和大多数其他系统支持 POSIX 样式的 TZ 字符串，例如，'"EST+5EDT,M4.1.0/2,M10.5.0/2"' 指定纽约从 1987 年到 2006 年使用的规则 。所有系统都支持该字符串'"UTC0"' 表示世界时 。
 
-与本地时间相互转换的函数接受可选的时区规则参数，该参数指定转换的时区和夏令时历史。如果时区规则被省略或为零，则转换使用Emacs的默认时区。如果是 t，则转换使用世界时。如果是 wall，则转换使用系统挂钟时间。如果是字符串，则转换使用相当于将 TZ 设置为该字符串的时区规则。如果它是一个列表（偏移量缩写），其中偏移量是世界时间以东的整数秒数，而缩写是一个字符串，则转换使用具有给定偏移量和缩写的固定时区。整数偏移量被视为 (offset abbr)，其中 abbr 是 POSIX 兼容平台上的数字缩写，在 MS-Windows 上未指定。
+与本地时间相互转换的函数接受可选的时区规则参数，该参数指定转换的时区和夏令时历史 。如果时区规则被省略或为零，则转换使用Emacs的默认时区 。如果是 t，则转换使用世界时 。如果是 wall，则转换使用系统挂钟时间 。如果是字符串，则转换使用相当于将 TZ 设置为该字符串的时区规则 。如果它是一个列表（偏移量缩写），其中偏移量是世界时间以东的整数秒数，而缩写是一个字符串，则转换使用具有给定偏移量和缩写的固定时区 。整数偏移量被视为 (offset abbr)，其中 abbr 是 POSIX 兼容平台上的数字缩写，在 MS-Windows 上未指定 。
 
 #+begin_src emacs-lisp
   Function: current-time-zone &optional time zone ¶
 #+end_src
 
-    此函数返回一个描述用户所在时区的列表。
+    此函数返回一个描述用户所在时区的列表 。
 
-    该值的形式为（偏移缩写）。这里的 offset 是一个整数，表示世界时间（格林威治以东）之前的秒数。负值表示格林威治以西。第二个元素 abbr 是一个字符串，它给出了时区的缩写，例如， ~CST~ 代表中国标准时间或美国中部标准时间。当夏令时开始或结束时，这两个元素都可以改变；  如果用户指定了不使用季节性时间调整的时区，则该值在时间上是恒定的。
+    该值的形式为（偏移缩写） 。这里的 offset 是一个整数，表示世界时间（格林威治以东）之前的秒数 。负值表示格林威治以西 。第二个元素 abbr 是一个字符串，它给出了时区的缩写，例如， ~CST~ 代表中国标准时间或美国中部标准时间 。当夏令时开始或结束时，这两个元素都可以改变；  如果用户指定了不使用季节性时间调整的时区，则该值在时间上是恒定的 。
 
-    如果操作系统没有提供计算该值所需的所有信息，则列表的未知元素为零。
+    如果操作系统没有提供计算该值所需的所有信息，则列表的未知元素为零 。
 
-    如果给定参数时间，则指定要分析的时间值而不是当前时间。可选参数 zone 默认为当前时区规则。操作系统限制时间和区域值的范围。
+    如果给定参数时间，则指定要分析的时间值而不是当前时间 。可选参数 zone 默认为当前时区规则 。操作系统限制时间和区域值的范围 。
 
 ** 41.7 时间转换
-这些函数将时间值（参见时间）转换为 Lisp 时间戳，或转换为日历信息，反之亦然。
+这些函数将时间值（参见时间）转换为 Lisp 时间戳，或转换为日历信息，反之亦然 。
 
-许多 32 位操作系统仅限于在其秒组件中包含 32 位信息的系统时间；  这些系统通常只处理从 1901-12-13 20:45:52 到 2038-01-19 03:14:07 世界时的时间。但是，64 位和一些 32 位操作系统具有更大的秒组件，并且可以表示过去或未来的时间。
+许多 32 位操作系统仅限于在其秒组件中包含 32 位信息的系统时间；  这些系统通常只处理从 1901-12-13 20:45:52 到 2038-01-19 03:14:07 世界时的时间 。但是，64 位和一些 32 位操作系统具有更大的秒组件，并且可以表示过去或未来的时间 。
 
-日历转换函数始终使用公历，即使对于引入公历之前的日期也是如此。年份数字计算自公元前 1 年以来的年数，并且不要像传统的公历年份那样跳过零；  例如，年份数字 -37 表示公历 38 BC。
+日历转换函数始终使用公历，即使对于引入公历之前的日期也是如此 。年份数字计算自公元前 1 年以来的年数，并且不要像传统的公历年份那样跳过零；  例如，年份数字 -37 表示公历 38 BC 。
 
 #+begin_src emacs-lisp
   Function: time-convert time &optional form ¶
 #+end_src
 
-    此函数将时间值转换为 Lisp 时间戳。
+    此函数将时间值转换为 Lisp 时间戳 。
 
-    可选形式参数指定要返回的时间戳形式。如果 form 是符号整数，则此函数返回以秒为单位的整数计数。如果form是一个正整数，它指定一个时钟频率并且这个函数返回一个整数对时间戳（ticks .form）。28如果form是t，这个函数把它当作一个正整数来表示时间戳；  例如，如果时间为零并且平台时间戳具有纳秒分辨率，则将其视为 1000000000。如果form是list，这个函数返回一个整数列表（高低微微微）。尽管当前省略或 nil 形式的行为类似于列表，但计划在未来的Emacs版本中进行更改，因此需要列表时间戳的调用者应显式传递列表。
+    可选形式参数指定要返回的时间戳形式 。如果 form 是符号整数，则此函数返回以秒为单位的整数计数 。如果form是一个正整数，它指定一个时钟频率并且这个函数返回一个整数对时间戳（ticks .form） 。28如果form是t，这个函数把它当作一个正整数来表示时间戳；  例如，如果时间为零并且平台时间戳具有纳秒分辨率，则将其视为 1000000000 。如果form是list，这个函数返回一个整数列表（高低微微微） 。尽管当前省略或 ~nil~  形式的行为类似于列表，但计划在未来的Emacs版本中进行更改，因此需要列表时间戳的调用者应显式传递列表 。
 
-    如果时间是无限的或 NaN，则此函数会发出错误信号。否则，如果无法准确表示时间，则转换会将其截断为负无穷大。当form为t时，转换总是精确的，不会发生截断，返回的时钟分辨率不小于时间。相比之下，float-time 可以转换任何 Lisp 时间值而不会发出错误信号，尽管结果可能不准确。请参阅一天中的时间。
+    如果时间是无限的或 NaN，则此函数会发出错误信号 。否则，如果无法准确表示时间，则转换会将其截断为负无穷大 。当form为t时，转换总是精确的，不会发生截断，返回的时钟分辨率不小于时间 。相比之下，float-time 可以转换任何 Lisp 时间值而不会发出错误信号，尽管结果可能不准确 。请参阅一天中的时间 。
 
-    为了提高效率，这个函数可能返回一个与时间相等的值，或者与时间共享结构的值。
+    为了提高效率，这个函数可能返回一个与时间相等的值，或者与时间共享结构的值 。
 
-    虽然 (time-convert nil nil) 等价于 (current-time)，但后者可能会快一点。
+    虽然 (time-convert nil nil) 等价于 (current-time)，但后者可能会快一点 。
     #+begin_src emacs-lisp
 
 
@@ -865,9 +852,9 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
   Function: decode-time &optional time zone form ¶
 #+end_src
 
-    此函数将时间值转换为日历信息。如果您不指定时间，它会解码当前时间，并且类似地，区域默认为当前时区规则。请参阅时区规则。操作系统限制时间和区域值的范围。
+    此函数将时间值转换为日历信息 。如果您不指定时间，它会解码当前时间，并且类似地，区域默认为当前时区规则 。请参阅时区规则 。操作系统限制时间和区域值的范围 。
 
-    form 参数控制返回的 seconds 元素的形式，如下所述。返回值是九个元素的列表，如下：
+    form 参数控制返回的 seconds 元素的形式，如下所述 。返回值是九个元素的列表，如下：
 
     #+begin_src emacs-lisp
       (seconds minutes hour day month year dow dst utcoff)
@@ -879,53 +866,53 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
   seconds
 #+end_src
 
-	 分钟后的秒数，格式如下所述。
+	 分钟后的秒数，格式如下所述 。
 #+begin_src emacs-lisp
   minutes
 #+end_src
 
-	 一小时后的分钟数，为 0 到 59 之间的整数。
+	 一小时后的分钟数，为 0 到 59 之间的整数 。
 #+begin_src emacs-lisp
   hour
 #+end_src
 
-	 一天中的小时，为 0 到 23 之间的整数。
+	 一天中的小时，为 0 到 23 之间的整数 。
 #+begin_src emacs-lisp
   day
 #+end_src
 
-	 月份中的日期，为 1 到 31 之间的整数。
+	 月份中的日期，为 1 到 31 之间的整数 。
 #+begin_src emacs-lisp
   month
 #+end_src
 
-	 一年中的月份，为 1 到 12 之间的整数。
+	 一年中的月份，为 1 到 12 之间的整数 。
 #+begin_src emacs-lisp
   year
 #+end_src
 
-	 年份，通常大于 1900 的整数。
+	 年份，通常大于 1900 的整数 。
 #+begin_src emacs-lisp
   dow
 #+end_src
 
-	 星期几，0 到 6 之间的整数，其中 0 代表星期日。
+	 星期几，0 到 6 之间的整数，其中 0 代表星期日 。
 #+begin_src emacs-lisp
   dst
 #+end_src
 
-	 t 如果夏令时有效，nil 如果无效，-1 如果此信息不可用。
+	 t 如果夏令时有效， ~nil~  如果无效，-1 如果此信息不可用 。
 #+begin_src emacs-lisp
   utcoff
 #+end_src
 
-	 一个整数，表示以秒为单位的世界时偏移量，即格林威治以东的秒数。
+	 一个整数，表示以秒为单位的世界时偏移量，即格林威治以东的秒数 。
 
-    seconds 元素是一个非负数且小于 61 的 Lisp 时间戳；  它小于 60，除非在正闰秒期间（假设操作系统支持闰秒）。如果可选的表单参数是 t，秒使用与时间相同的精度；  如果 form 是整数，秒被截断为整数。例如，如果 time 是时间戳 (1566009571321 . 1000)，它在缺少闰秒的典型系统上表示 2019-08-17 02:39:31.321 UTC，则 (decode-time time tt) 返回 ((31321 . 1000) 39 2 17 8 2019 6 nil 0)，而 (decode-time time t 'integer) 返回 (31 39 2 17 8 2019 6 nil 0)。如果 form 被省略或为零，它当前默认为整数，但此默认值可能会在未来的Emacs版本中更改，因此需要特定表单的调用者应指定 form。
+    seconds 元素是一个非负数且小于 61 的 Lisp 时间戳；  它小于 60，除非在正闰秒期间（假设操作系统支持闰秒） 。如果可选的表单参数是 t，秒使用与时间相同的精度；  如果 form 是整数，秒被截断为整数 。例如，如果 time 是时间戳 (1566009571321 . 1000)，它在缺少闰秒的典型系统上表示 2019-08-17 02:39:31.321 UTC，则 (decode-time time tt) 返回 ((31321 . 1000) 39 2 17 8 2019 6 ~nil~  0)，而 (decode-time time t 'integer) 返回 (31 39 2 17 8 2019 6 ~nil~  0) 。如果 form 被省略或为零，它当前默认为整数，但此默认值可能会在未来的Emacs版本中更改，因此需要特定表单的调用者应指定 form 。
 
-    Common Lisp 注意：Common Lisp 对于 dow 和 utcoff 有不同的含义，它的第二个是 0 到 59 之间的整数。
+    Common Lisp 注意：Common Lisp 对于 dow 和 utcoff 有不同的含义，它的第二个是 0 到 59 之间的整数 。
 
-    要访问（或更改）时间值中的元素，解码时间-秒、解码时间-分钟、解码时间-小时、解码时间-日、解码时间-月、解码时间-年，可以使用decoded-time-weekday、decoded-time-dst 和decoded-time-zone 访问器。
+    要访问（或更改）时间值中的元素，解码时间-秒、解码时间-分钟、解码时间-小时、解码时间-日、解码时间-月、解码时间-年，可以使用decoded-time-weekday、decoded-time-dst 和decoded-time-zone 访问器 。
 
     例如，要在解码时间内增加年份，您可以说：
     #+begin_src emacs-lisp
@@ -933,13 +920,13 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
 	    (+ (decoded-time-year decoded-time) 4))
     #+end_src
 
-    另请参阅以下功能。
+    另请参阅以下功能 。
 
 #+begin_src emacs-lisp
   Function: decoded-time-add time delta ¶
 #+end_src
 
-    此函数采用解码的时间结构并向其添加 delta（也是解码的时间结构）。delta 中为 nil 的元素将被忽略。
+    此函数采用解码的时间结构并向其添加 delta（也是解码的时间结构） 。delta 中为 ~nil~  的元素将被忽略 。
 
     例如，如果你想要 ~下个月的同一时间~ ，你可以说：
 
@@ -949,19 +936,19 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
 	 (encode-time (decoded-time-add time delta)))
     #+end_src
 
-    如果此日期不存在（例如，如果您在 1 月 31 日运行此日期），则日期将向后移动，直到您获得有效日期（取决于 2 月 28 日或 29 日）。
+    如果此日期不存在（例如，如果您在 1 月 31 日运行此日期），则日期将向后移动，直到您获得有效日期（取决于 2 月 28 日或 29 日） 。
 
-    字段按最重要到最不重要的顺序添加，因此如果发生上述调整，则在添加天、小时、分钟或秒之前发生。
+    字段按最重要到最不重要的顺序添加，因此如果发生上述调整，则在添加天、小时、分钟或秒之前发生 。
 
-    delta 中的值可以是负数来减去值。
+    delta 中的值可以是负数来减去值 。
 
-    返回值是一个解码的时间结构。
+    返回值是一个解码的时间结构 。
 
 #+begin_src emacs-lisp
   Function: make-decoded-time &key second minute hour day month year dst zone ¶
 #+end_src
 
-    返回一个解码的时间结构，只填写给定的关键字，其余的为零。例如，要获得一个表示 ~两个月~ 的结构，您可以说：
+    返回一个解码的时间结构，只填写给定的关键字，其余的为零 。例如，要获得一个表示 ~两个月~ 的结构，您可以说：
 
     #+begin_src emacs-lisp
       (make-decoded-time :month 2)
@@ -972,34 +959,34 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
   Function: encode-time time &rest obsolescent-arguments ¶
 #+end_src
 
-    此函数将时间转换为 Lisp 时间戳。它可以作为解码时间的倒​​数。
+    此函数将时间转换为 Lisp 时间戳 。它可以作为解码时间的倒​​数 。
 
-    通常，第一个参数是一个列表（第二分钟小时日月年忽略 dst 区域），它以 decode-time 的样式指定解码时间，因此 (encode-time (decode-time ...)) 有效。这些列表成员的含义见decode-time下的表格。
+    通常，第一个参数是一个列表（第二分钟小时日月年忽略 dst 区域），它以 decode-time 的样式指定解码时间，因此 (encode-time (decode-time ...)) 有效 。这些列表成员的含义见decode-time下的表格 。
 
-    作为一个过时的调用约定，这个函数可以有六个或更多的参数。前六个参数 second、minute、hour、day、month 和 year 指定解码时间的大部分组成部分。如果有超过六个参数，则最后一个参数用作区域，并且任何其他额外参数都将被忽略，因此 (apply #'encode-time (decode-time ...)) 有效。在这个过时的约定中，区域默认为当前时区规则（请参阅时区规则），并且 dst 被视为 -1。
+    作为一个过时的调用约定，这个函数可以有六个或更多的参数 。前六个参数 second、minute、hour、day、month 和 year 指定解码时间的大部分组成部分 。如果有超过六个参数，则最后一个参数用作区域，并且任何其他额外参数都将被忽略，因此 (apply #'encode-time (decode-time ...)) 有效 。在这个过时的约定中，区域默认为当前时区规则（请参阅时区规则），并且 dst 被视为 -1 。
 
-    小于 100 的年份不作特殊处理。如果您希望它们代表 1900 年以上或 2000 年以上的年份，您必须在调用编码时间之前自己更改它们。操作系统限制时间和区域值的范围。
+    小于 100 的年份不作特殊处理 。如果您希望它们代表 1900 年以上或 2000 年以上的年份，您必须在调用编码时间之前自己更改它们 。操作系统限制时间和区域值的范围 。
 
-    编码时间函数作为解码时间的粗略逆。例如，您可以将后者的输出传递给前者，如下所示：
+    编码时间函数作为解码时间的粗略逆 。例如，您可以将后者的输出传递给前者，如下所示：
 
     #+begin_src emacs-lisp
       (encode-time (decode-time …))
     #+end_src
-    您可以通过使用超出范围的秒、分、小时、日和月值来执行简单的日期算术；  例如，第 0 天表示给定月份的前一天。
+    您可以通过使用超出范围的秒、分、小时、日和月值来执行简单的日期算术；  例如，第 0 天表示给定月份的前一天 。
 
 脚注
 (28)
 
-目前，如果返回值旨在提供给期望 Lisp 时间戳的标准函数，则正整数形式应至少为 65536。
+目前，如果返回值旨在提供给期望 Lisp 时间戳的标准函数，则正整数形式应至少为 65536 。
 
 ** 41.8 解析和格式化时间
-这些函数将时间值转换为字符串中的文本，反之亦然。时间值包括 nil、数字和 Lisp 时间戳（请参阅时间）。
+这些函数将时间值转换为字符串中的文本，反之亦然 。时间值包括 ~nil~ 、数字和 Lisp 时间戳（请参阅时间） 。
 
 #+begin_src emacs-lisp
   Function: date-to-time string ¶
 #+end_src
 
-    该函数解析时间字符串并返回相应的 Lisp 时间戳。参数字符串应表示日期时间，并且应采用 parse-time-string 识别的形式之一（见下文）。如果字符串缺少明确的时区信息，则此函数采用世界时间。操作系统限制时间和区域值的范围。
+    该函数解析时间字符串并返回相应的 Lisp 时间戳 。参数字符串应表示日期时间，并且应采用 parse-time-string 识别的形式之一（见下文） 。如果字符串缺少明确的时区信息，则此函数采用世界时间 。操作系统限制时间和区域值的范围 。
 
 #+begin_src emacs-lisp
   Function: parse-time-string string ¶
@@ -1011,249 +998,249 @@ Emacs 通过各种函数提供对操作系统环境中变量的访问。这些�
       (sec min hour day mon year dow dst tz)
     #+end_src
 
-    此列表的格式与 decode-time 接受的格式相同（请参阅时间转换），并在此处进行了更详细的描述。任何无法从输入中确定的 dst 元素设置为 -1，任何其他未知元素设置为 nil。参数字符串应类似于 RFC 822（或更高版本）或 ISO 8601 字符串，例如 ~Fri, 25 Mar 2016 16:24:56 +0100~ 或 ~1998-09-12T12:21:54-0200~ ，但此函数也将尝试解析格式不太好的时间字符串。
+    此列表的格式与 decode-time 接受的格式相同（请参阅时间转换），并在此处进行了更详细的描述 。任何无法从输入中确定的 dst 元素设置为 -1，任何其他未知元素设置为 ~nil~  。参数字符串应类似于 RFC 822（或更高版本）或 ISO 8601 字符串，例如 ~Fri, 25 Mar 2016 16:24:56 +0100~ 或 ~1998-09-12T12:21:54-0200~ ，但此函数也将尝试解析格式不太好的时间字符串 。
 
 #+begin_src emacs-lisp
   Function: iso8601-parse string ¶
 #+end_src
 
-    对于更严格的函数（在输入无效时会出错），可以使用此函数代替。它可以解析 ISO 8601 标准的所有变体，因此除了上述格式之外，它还解析诸如 ~1998W45-3~ （周数）和 ~1998-245~ （序数天数）之类的内容。要解析持续时间，有 iso8601-parse-duration，要解析间隔，有 iso8601-parse-interval。所有这些函数都返回解码的时间结构，除了最后一个，它返回其中的三个（开始、结束和持续时间）。
+    对于更严格的函数（在输入无效时会出错），可以使用此函数代替 。它可以解析 ISO 8601 标准的所有变体，因此除了上述格式之外，它还解析诸如 ~1998W45-3~ （周数）和 ~1998-245~ （序数天数）之类的内容 。要解析持续时间，有 iso8601-parse-duration，要解析间隔，有 iso8601-parse-interval 。所有这些函数都返回解码的时间结构，除了最后一个，它返回其中的三个（开始、结束和持续时间） 。
 
 #+begin_src emacs-lisp
 Function: format-time-string format-string &optional time zone ¶
 #+end_src
 
 
-    此函数根据格式字符串将时间（或当前时间，如果时间省略或为零）转换为字符串。转换使用时区规则 zone，默认为当前时区规则。请参阅时区规则。参数格式字符串可能包含 '%' 序列，表示替换部分时间。以下是 '%' 序列的含义表：
+    此函数根据格式字符串将时间（或当前时间，如果时间省略或为零）转换为字符串 。转换使用时区规则 zone，默认为当前时区规则 。请参阅时区规则 。参数格式字符串可能包含 '%' 序列，表示替换部分时间 。以下是 '%' 序列的含义表：
 
 #+begin_src emacs-lisp
   ‘%a’
 #+end_src
 
-	 这代表星期几的缩写名称。
+	 这代表星期几的缩写名称 。
 #+begin_src emacs-lisp
   ‘%A’
 #+end_src
 
-	 这代表星期几的全名。
+	 这代表星期几的全名 。
 #+begin_src emacs-lisp
   ‘%b’
 #+end_src
 
-	 这代表月份的缩写名称。
+	 这代表月份的缩写名称 。
 #+begin_src emacs-lisp
   ‘%B’
 #+end_src
 
-	 这代表月份的全名。
+	 这代表月份的全名 。
 #+begin_src emacs-lisp
   ‘%c’
 #+end_src
 
-	 这是 ~%x %X~ 的同义词。
+	 这是 ~%x %X~ 的同义词 。
 #+begin_src emacs-lisp
   ‘%C’
 #+end_src
 
-	 这代表世纪，即年份除以 100，向零截断。默认字段宽度为 2。
+	 这代表世纪，即年份除以 100，向零截断 。默认字段宽度为 2 。
 #+begin_src emacs-lisp
   ‘%d’
 #+end_src
 
-	 这代表一个月中的一天，零填充。
+	 这代表一个月中的一天，零填充 。
 #+begin_src emacs-lisp
   ‘%D’
 #+end_src
 
-	 这是 '%m/%d/%y' 的同义词。
+	 这是 '%m/%d/%y' 的同义词 。
 #+begin_src emacs-lisp
   ‘%e’
 #+end_src
 
-	 这代表月份的日期，空白填充。
+	 这代表月份的日期，空白填充 。
 #+begin_src emacs-lisp
   ‘%F’
 #+end_src
 
-	 这代表 ISO 8601 日期格式，类似于 '%+4Y-%m-%d'，除了任何标志或字段宽度覆盖 ~+~ 和（减去 6 后） ~4~ 。
+	 这代表 ISO 8601 日期格式，类似于 '%+4Y-%m-%d'，除了任何标志或字段宽度覆盖 ~+~ 和（减去 6 后） ~4~  。
 #+begin_src emacs-lisp
   ‘%g’ ¶
 #+end_src
 
-	 这代表对应于当前 ISO 周数的没有世纪 (00–99) 的年份。ISO 周从星期一开始，到星期日结束。如果一个 ISO 周从一年开始并在另一年结束，那么关于 '%g' 将产生哪一年的规则很复杂，此处不再赘述；  但是，一般来说，如果一周中的大部分时间都在结束年份，则 '%g' 将产生那一年。
+	 这代表对应于当前 ISO 周数的没有世纪 (00–99) 的年份 。ISO 周从星期一开始，到星期日结束 。如果一个 ISO 周从一年开始并在另一年结束，那么关于 '%g' 将产生哪一年的规则很复杂，此处不再赘述；  但是，一般来说，如果一周中的大部分时间都在结束年份，则 '%g' 将产生那一年 。
 #+begin_src emacs-lisp
   ‘%G’
 #+end_src
 
-	 这代表与当前 ISO 周数对应的带有世纪的年份。
+	 这代表与当前 ISO 周数对应的带有世纪的年份 。
 #+begin_src emacs-lisp
   ‘%h’
 #+end_src
 
-	 这是 '%b' 的同义词。
+	 这是 '%b' 的同义词 。
 #+begin_src emacs-lisp
   ‘%H’
 #+end_src
 
-	 这代表小时 (00–23)。
+	 这代表小时 (00–23) 。
 #+begin_src emacs-lisp
   ‘%I’
 #+end_src
 
-	 这代表小时 (01–12)。
+	 这代表小时 (01–12) 。
 #+begin_src emacs-lisp
   ‘%j’
 #+end_src
 
-	 这代表一年中的某一天 (001–366)。
+	 这代表一年中的某一天 (001–366) 。
 #+begin_src emacs-lisp
   ‘%k’
 #+end_src
 
-	 这代表小时（0-23），空白填充。
+	 这代表小时（0-23），空白填充 。
 #+begin_src emacs-lisp
   ‘%l’
 #+end_src
 
-	 这代表小时（1-12），空白填充。
+	 这代表小时（1-12），空白填充 。
 #+begin_src emacs-lisp
   ‘%m’
 #+end_src
 
-	 这代表月份 (01–12)。
+	 这代表月份 (01–12) 。
 #+begin_src emacs-lisp
   ‘%M’
 #+end_src
 
-	 这代表分钟 (00–59)。
+	 这代表分钟 (00–59) 。
 #+begin_src emacs-lisp
   ‘%n’
 #+end_src
 
-	 这代表换行符。
+	 这代表换行符 。
 #+begin_src emacs-lisp
   ‘%N’
 #+end_src
 
-	 这代表纳秒 (000000000–999999999)。要要求更少的数字，请使用 '%3N' 表示毫秒，使用 '%6N' 表示微秒等。任何多余的数字都将被丢弃，不进行四舍五入。
+	 这代表纳秒 (000000000–999999999) 。要要求更少的数字，请使用 '%3N' 表示毫秒，使用 '%6N' 表示微秒等 。任何多余的数字都将被丢弃，不进行四舍五入 。
 #+begin_src emacs-lisp
   ‘%p’
 #+end_src
 
-	 这代表 ~AM~ 或 ~PM~ ，视情况而定。
+	 这代表 ~AM~ 或 ~PM~ ，视情况而定 。
 #+begin_src emacs-lisp
   ‘%q’
 #+end_src
 
-	 这代表日历季度 (1-4)。
+	 这代表日历季度 (1-4) 。
 #+begin_src emacs-lisp
   ‘%r’
 #+end_src
 
-	 这是 '%I:%M:%S %p' 的同义词。
+	 这是 '%I:%M:%S %p' 的同义词 。
 #+begin_src emacs-lisp
   ‘%R’
 #+end_src
 
-	 这是 '%H:%M' 的同义词。
+	 这是 '%H:%M' 的同义词 。
 #+begin_src emacs-lisp
   ‘%s’
 #+end_src
 
-	 这代表自纪元以来的整数秒数。
+	 这代表自纪元以来的整数秒数 。
 #+begin_src emacs-lisp
   ‘%S’
 #+end_src
 
-	 这代表秒（在支持闰秒的平台上为 00-59 或 00-60）。
+	 这代表秒（在支持闰秒的平台上为 00-59 或 00-60） 。
 #+begin_src emacs-lisp
   ‘%t’
 #+end_src
 
-	 这代表制表符。
+	 这代表制表符 。
 #+begin_src emacs-lisp
   ‘%T’
 #+end_src
 
-	 这是 '%H:%M:%S' 的同义词。
+	 这是 '%H:%M:%S' 的同义词 。
 #+begin_src emacs-lisp
   ‘%u’
 #+end_src
 
-	 这代表一周中的数字天 (1–7)。星期一是第 1 天。
+	 这代表一周中的数字天 (1–7) 。星期一是第 1 天 。
 #+begin_src emacs-lisp
   ‘%U’
 #+end_src
 
-	 这代表一年中的第几周（01-52），假设星期从星期日开始。
+	 这代表一年中的第几周（01-52），假设星期从星期日开始 。
 #+begin_src emacs-lisp
   ‘%V’
 #+end_src
 
-	 根据 ISO 8601，这代表一年中的一周。
+	 根据 ISO 8601，这代表一年中的一周 。
 #+begin_src emacs-lisp
   ‘%w’
 #+end_src
 
-	 这代表数字星期几 (0–6)。星期日是第 0 天。
+	 这代表数字星期几 (0–6) 。星期日是第 0 天 。
 #+begin_src emacs-lisp
   ‘%W’
 #+end_src
 
-	 这代表一年中的一周（01-52），假设周从星期一开始。
+	 这代表一年中的一周（01-52），假设周从星期一开始 。
 #+begin_src emacs-lisp
   ‘%x’
 #+end_src
 
-	 这具有特定于语言环境的含义。在默认语言环境（名为 ~C~ ）中，它等同于 ~%D~ 。
+	 这具有特定于语言环境的含义 。在默认语言环境（名为 ~C~ ）中，它等同于 ~%D~  。
 #+begin_src emacs-lisp
   ‘%X’
 #+end_src
 
-	 这具有特定于语言环境的含义。在默认语言环境（名为 ~C~ ）中，它等同于 ~%T~ 。
+	 这具有特定于语言环境的含义 。在默认语言环境（名为 ~C~ ）中，它等同于 ~%T~  。
 #+begin_src emacs-lisp
   ‘%y’
 #+end_src
 
-	 这代表没有世纪的年份（00-99）。
+	 这代表没有世纪的年份（00-99） 。
 #+begin_src emacs-lisp
   ‘%Y’
 #+end_src
 
-	 这代表有世纪的年份。
+	 这代表有世纪的年份 。
 #+begin_src emacs-lisp
   ‘%Z’
 #+end_src
 
-	 这代表时区缩写（例如， ~EST~ ）。
+	 这代表时区缩写（例如， ~EST~ ） 。
 #+begin_src emacs-lisp
   ‘%z’
 #+end_src
 
-	 这代表时区数字偏移量。 ~z~ 前面可以有一个、两个或三个冒号；  如果简单的 ~%z~ 代表 ~-0500~ ，那么 ~%:z~ 代表 ~-05:00~ ， ~%::z~ 代表 ~-05:00:00~ ， ~%::~  :z' 与 '%::z' 类似，只是它抑制了 ':00' 的尾随实例，因此在同一个示例中它代表 '-05'。
+	 这代表时区数字偏移量 。 ~z~ 前面可以有一个、两个或三个冒号；  如果简单的 ~%z~ 代表 ~-0500~ ，那么 ~%:z~ 代表 ~-05:00~ ， ~%::z~ 代表 ~-05:00:00~ ， ~%::~  :z' 与 '%::z' 类似，只是它抑制了 ':00' 的尾随实例，因此在同一个示例中它代表 '-05' 。
 #+begin_src emacs-lisp
   ‘%%’
 #+end_src
 
-	 这代表单个 ~％~ 。
+	 这代表单个 ~％~  。
 
-    一个或多个标志字符可以紧跟在 '%' 之后。'0' 用零填充，'+' 用零填充，并且在多于四位的非负年份数字之前放置 '+'，'_' 用空格填充，'-' 禁止填充，'^' 大写字母， '#' 反转字母的大小写。
+    一个或多个标志字符可以紧跟在 '%' 之后 。'0' 用零填充，'+' 用零填充，并且在多于四位的非负年份数字之前放置 '+'，'_' 用空格填充，'-' 禁止填充，'^' 大写字母， '#' 反转字母的大小写 。
 
-    您还可以为这些 '%' 序列中的任何一个指定字段宽度和填充类型。这与在 printf 中一样工作：您将字段宽度写为 '%' 序列中的数字，在任何标志之后。例如，'%S' 指定从分钟开始的秒数；  '%03S' 表示用零填充到 3 个位置，'%_3S' 用空格填充到 3 个位置。普通的 '%3S' 用零填充，因为这就是 '%S' 通常填充到两个位置的方式。
+    您还可以为这些 '%' 序列中的任何一个指定字段宽度和填充类型 。这与在 printf 中一样工作：您将字段宽度写为 '%' 序列中的数字，在任何标志之后 。例如，'%S' 指定从分钟开始的秒数；  '%03S' 表示用零填充到 3 个位置，'%_3S' 用空格填充到 3 个位置 。普通的 '%3S' 用零填充，因为这就是 '%S' 通常填充到两个位置的方式 。
 
-    当在 ~%~ 序列中的任何标志和字段宽度之后使用时，字符 ~E~ 和 ~O~ 充当修饰符。'E' 指定使用当前语言环境的替代版本的日期和时间。例如，在日本语言环境中，%Ex 可能会生成基于日本天皇在位的日期格式。在 ~%Ec~ 、 ~%EC~ 、 ~%Ex~ 、 ~%EX~ 、 ~%Ey~ 和 ~%EY~ 中允许使用 ~E~ 。
+    当在 ~%~ 序列中的任何标志和字段宽度之后使用时，字符 ~E~ 和 ~O~ 充当修饰符 。'E' 指定使用当前语言环境的替代版本的日期和时间 。例如，在日本语言环境中，%Ex 可能会生成基于日本天皇在位的日期格式 。在 ~%Ec~ 、 ~%EC~ 、 ~%Ex~ 、 ~%EX~ 、 ~%Ey~ 和 ~%EY~ 中允许使用 ~E~  。
 
-    'O' 表示使用当前语言环境的替代数字表示，而不是普通的十进制数字。大多数字母都允许这样做，所有输出数字的字母。
+    'O' 表示使用当前语言环境的替代数字表示，而不是普通的十进制数字 。大多数字母都允许这样做，所有输出数字的字母 。
 
-    为了帮助调试程序，无法识别的 '%' 序列代表它们自己并按原样输出。程序不应依赖这种行为，因为未来版本的Emacs可能会将新的 '%' 序列识别为扩展。
+    为了帮助调试程序，无法识别的 '%' 序列代表它们自己并按原样输出 。程序不应依赖这种行为，因为未来版本的Emacs可能会将新的 '%' 序列识别为扩展 。
 
-    该函数使用 C 库函数 strftime（参见 GNU C 库参考手册中的格式化日历时间）来完成大部分工作。为了与该函数进行通信，它首先将时间和区域转换为内部形式；  操作系统限制时间和区域值的范围。此函数还使用由 locale-coding-system 指定的编码系统对格式字符串进行编码（请参阅区域设置）；  在 strftime 返回结果字符串后，此函数使用相同的编码系统对字符串进行解码。
+    该函数使用 C 库函数 strftime（参见 GNU C 库参考手册中的格式化日历时间）来完成大部分工作 。为了与该函数进行通信，它首先将时间和区域转换为内部形式；  操作系统限制时间和区域值的范围 。此函数还使用由 locale-coding-system 指定的编码系统对格式字符串进行编码（请参阅区域设置）；  在 strftime 返回结果字符串后，此函数使用相同的编码系统对字符串进行解码 。
 
 #+begin_src emacs-lisp
   Function: format-seconds format-string seconds ¶
 #+end_src
 
-    该函数根据 format-string 将其参数 seconds 转换为由年、日、小时等组成的字符串。参数格式字符串可能包含控制转换的 ~%~ 序列。以下是 '%' 序列的含义表：
+    该函数根据 format-string 将其参数 seconds 转换为由年、日、小时等组成的字符串 。参数格式字符串可能包含控制转换的 ~%~ 序列 。以下是 '%' 序列的含义表：
 
 #+begin_src emacs-lisp
   ‘%y’
@@ -1262,7 +1249,7 @@ Function: format-time-string format-string &optional time zone ¶
   ‘%Y’
 #+end_src
 
-	 365 天年的整数。
+	 365 天年的整数 。
 #+begin_src emacs-lisp
   ‘%d’
 #+end_src
@@ -1270,7 +1257,7 @@ Function: format-time-string format-string &optional time zone ¶
   ‘%D’
 #+end_src
 
-	 整数天数。
+	 整数天数 。
 #+begin_src emacs-lisp
   ‘%h’
 #+end_src
@@ -1278,7 +1265,7 @@ Function: format-time-string format-string &optional time zone ¶
   ‘%H’
 #+end_src
 
-	 整数小时数。
+	 整数小时数 。
 #+begin_src emacs-lisp
   ‘%m’
 #+end_src
@@ -1286,7 +1273,7 @@ Function: format-time-string format-string &optional time zone ¶
   ‘%M’
 #+end_src
 
-	 整数分钟数。
+	 整数分钟数 。
 #+begin_src emacs-lisp
   ‘%s’
 #+end_src
@@ -1294,75 +1281,75 @@ Function: format-time-string format-string &optional time zone ¶
   ‘%S’
 #+end_src
 
-	 秒数。如果使用了可选的','参数，它是一个浮点数，','后面的数字指定使用多少个小数。'%,2s' 表示 ~使用两位小数~ 。
+	 秒数 。如果使用了可选的','参数，它是一个浮点数，','后面的数字指定使用多少个小数 。'%,2s' 表示 ~使用两位小数~  。
 #+begin_src emacs-lisp
   ‘%z’
 #+end_src
 
-	 非打印控制标志。使用时，其他说明符必须按大小递减的顺序给出，即年在天之前，小时在分钟之前，等等。在'%z'左侧的结果字符串中不会产生任何内容，直到第一个非遇到零转换。例如 emacs-uptime 使用的默认格式（见 emacs-uptime） ~%Y, %D, %H, %M, %z%S~  表示总是会产生秒数，但会产生年数、天数、小时和分钟仅在非零时才会显示。
+	 非打印控制标志 。使用时，其他说明符必须按大小递减的顺序给出，即年在天之前，小时在分钟之前，等等 。在'%z'左侧的结果字符串中不会产生任何内容，直到第一个非遇到零转换 。例如 emacs-uptime 使用的默认格式（见 emacs-uptime） ~%Y, %D, %H, %M, %z%S~  表示总是会产生秒数，但会产生年数、天数、小时和分钟仅在非零时才会显示 。
 #+begin_src emacs-lisp
   ‘%%’
 #+end_src
 
-	 产生一个文字 '%'。
+	 产生一个文字 '%' 。
 
-    大写格式序列除了数字之外还产生单位，小写格式只产生数字。
+    大写格式序列除了数字之外还产生单位，小写格式只产生数字 。
 
-    您还可以通过在 ~％~ 后面加上数字来指定字段宽度；  较短的数字将用空格填充。宽度请求零填充之前的可选时间段。例如， ~%.3Y~ 可能会产生 ~004 年~ 。
+    您还可以通过在 ~％~ 后面加上数字来指定字段宽度；  较短的数字将用空格填充 。宽度请求零填充之前的可选时间段 。例如， ~%.3Y~ 可能会产生 ~004 年~  。
 
 ** 41.9 处理器运行时间
-Emacs 提供了几个函数和原语，它们返回Emacs进程使用的时间，包括已用时间和处理器时间。
+Emacs 提供了几个函数和原语，它们返回Emacs进程使用的时间，包括已用时间和处理器时间 。
 
 #+begin_src emacs-lisp
   Command: emacs-uptime &optional format ¶
 #+end_src
 
-    这个函数返回一个代表Emacs正常运行时间的字符串——这个Emacs实例正在运行的挂钟时间。字符串根据可选参数格式由 format-seconds 格式化。有关可用的格式描述符，请参阅格式秒。如果 format 为 nil 或省略，则默认为 "%Y, %D, %H, %M, %z%S"。
+    这个函数返回一个代表Emacs正常运行时间的字符串——这个Emacs实例正在运行的挂钟时间 。字符串根据可选参数格式由 format-seconds 格式化 。有关可用的格式描述符，请参阅格式秒 。如果 format 为 ~nil~  或省略，则默认为 "%Y, %D, %H, %M, %z%S" 。
 
-    当以交互方式调用时，它会在回声区域打印正常运行时间。
+    当以交互方式调用时，它会在回声区域打印正常运行时间 。
 
 #+begin_src emacs-lisp
   Function: get-internal-run-time ¶
 #+end_src
 
-    此函数返回Emacs使用的处理器运行时间，作为 Lisp 时间戳（请参阅时间）。
+    此函数返回Emacs使用的处理器运行时间，作为 Lisp 时间戳（请参阅时间） 。
 
-    注意这个函数返回的时间不包括Emacs没有使用处理器的时间，如果Emacs进程有多个线程，则返回值是所有Emacs线程使用的处理器时间的总和。
+    注意这个函数返回的时间不包括Emacs没有使用处理器的时间，如果Emacs进程有多个线程，则返回值是所有Emacs线程使用的处理器时间的总和 。
 
-    如果系统没有提供确定处理器运行时间的方法，get-internal-run-time 将返回与当前时间相同的时间。
+    如果系统没有提供确定处理器运行时间的方法，get-internal-run-time 将返回与当前时间相同的时间 。
 
 #+begin_src emacs-lisp
   Command: emacs-init-time ¶
 #+end_src
 
-    此函数以字符串形式返回Emacs初始化的持续时间（请参阅摘要：启动时的操作序列），以秒为单位。当以交互方式调用时，它会在回声区域打印持续时间。
+    此函数以字符串形式返回Emacs初始化的持续时间（请参阅摘要：启动时的操作序列），以秒为单位 。当以交互方式调用时，它会在回声区域打印持续时间 。
 
 ** 41.10 时间计算
-这些函数使用时间值执行日历计算（请参阅时间）。与任何时间值一样，其任何时间值参数的 nil 值代表当前系统时间，单个数字代表自纪元以来的秒数。
+这些函数使用时间值执行日历计算（请参阅时间） 。与任何时间值一样，其任何时间值参数的 ~nil~  值代表当前系统时间，单个数字代表自纪元以来的秒数 。
 
 #+begin_src emacs-lisp
   Function: time-less-p t1 t2 ¶
 #+end_src
 
-    如果时间值 t1 小于时间值 t2，则返回 t。如果任一参数是 NaN，则结果为零。
+    如果时间值 t1 小于时间值 t2，则返回 t 。如果任一参数是 NaN，则结果为零 。
 
 #+begin_src emacs-lisp
   Function: time-equal-p t1 t2 ¶
 #+end_src
 
-    如果 t1 和 t2 是相等的时间值，则返回 t。如果任一参数是 NaN，则结果为零。
+    如果 t1 和 t2 是相等的时间值，则返回 t 。如果任一参数是 NaN，则结果为零 。
 
 #+begin_src emacs-lisp
   Function: time-subtract t1 t2 ¶
 #+end_src
 
-    这将返回两个时间值之间的时间差 t1 - t2，作为 Lisp 时间值。结果是准确的，它的时钟分辨率并不比它的两个参数的分辨率差。仅当它是无限的或 NaN 时，结果才是浮点数。如果需要经过秒数单位的差异，可以使用 time-convert 或 float-time 进行转换。请参阅时间转换。
+    这将返回两个时间值之间的时间差 t1 - t2，作为 Lisp 时间值 。结果是准确的，它的时钟分辨率并不比它的两个参数的分辨率差 。仅当它是无限的或 NaN 时，结果才是浮点数 。如果需要经过秒数单位的差异，可以使用 time-convert 或 float-time 进行转换 。请参阅时间转换 。
 
 #+begin_src emacs-lisp
   Function: time-add t1 t2 ¶
 #+end_src
 
-    这将返回两个时间值的总和，使用与时间减法相同的转换规则。一个参数应该表示一个时间差而不是一个时间点，作为一个时间值，通常只是一个经过的秒数。以下是如何将秒数添加到时间值：
+    这将返回两个时间值的总和，使用与时间减法相同的转换规则 。一个参数应该表示一个时间差而不是一个时间点，作为一个时间值，通常只是一个经过的秒数 。以下是如何将秒数添加到时间值：
 
     #+begin_src emacs-lisp
       (time-add time seconds)
@@ -1372,165 +1359,165 @@ Emacs 提供了几个函数和原语，它们返回Emacs进程使用的时间，
   Function: time-to-days time-value ¶
 #+end_src
 
-    假设默认时区，此函数返回第 1 年开始与时间值之间的天数。操作系统限制时间和区域值的范围。
+    假设默认时区，此函数返回第 1 年开始与时间值之间的天数 。操作系统限制时间和区域值的范围 。
 
 #+begin_src emacs-lisp
   Function: time-to-day-in-year time-value ¶
 #+end_src
 
-    假设默认时区，这将返回与时间值对应的一年中的天数。操作系统限制时间和区域值的范围。
+    假设默认时区，这将返回与时间值对应的一年中的天数 。操作系统限制时间和区域值的范围 。
 
 #+begin_src emacs-lisp
   Function: date-leap-year-p year ¶
 #+end_src
 
-    如果 year 是闰年，此函数返回 t。
+    如果 year 是闰年，此函数返回 t 。
 
 #+begin_src emacs-lisp
   Function: date-days-in-month year month ¶
 #+end_src
 
-    返回一年中月份的天数。例如，2020 年 2 月有 29 天。
+    返回一年中月份的天数 。例如，2020 年 2 月有 29 天 。
 
 #+begin_src emacs-lisp
   Function: date-ordinal-to-time year ordinal ¶
 #+end_src
 
-    将年份中的序数日期作为解码的时间结构返回。例如，2004 年的第 120 天是 4 月 29 日。
+    将年份中的序数日期作为解码的时间结构返回 。例如，2004 年的第 120 天是 4 月 29 日 。
 
 ** 41.11 延迟执行的定时器
-您可以设置一个计时器，以在指定的未来时间或一定时间的空闲时间后调用函数。计时器是一个特殊的对象，它存储有关下一次调用时间和要调用的函数的信息。
+您可以设置一个计时器，以在指定的未来时间或一定时间的空闲时间后调用函数 。计时器是一个特殊的对象，它存储有关下一次调用时间和要调用的函数的信息 。
 
 #+begin_src emacs-lisp
   Function: timerp object ¶
 #+end_src
 
-    如果 object 是计时器，则此谓词函数返回非 nil。
+    如果 object 是计时器，则此谓词函数返回非 ~nil~  。
 
-Emacs 不能在 Lisp 程序的任意点运行计时器；  只有当Emacs可以接受来自子进程的输出时，它才能运行它们：即，在等待时或在某些可以等待的原始函数（如坐席或读取事件）内。因此，如果Emacs忙，计时器的执行可能会延迟。但是，如果Emacs空闲，则执行时间非常精确。
+Emacs 不能在 Lisp 程序的任意点运行计时器；  只有当Emacs可以接受来自子进程的输出时，它才能运行它们：即，在等待时或在某些可以等待的原始函数（如坐席或读取事件）内 。因此，如果Emacs忙，计时器的执行可能会延迟 。但是，如果Emacs空闲，则执行时间非常精确 。
 
-Emacs 在调用定时器函数之前将禁止退出绑定到 t，因为退出许多定时器函数会使事物处于不一致的状态。这通常是没有问题的，因为大多数计时器功能不会做很多工作。实际上，对于一个需要大量时间来运行的函数来说，一个计时器可能会很烦人。如果一个定时器函数需要允许退出，它应该使用 with-local-quit（参见 Quitting）。例如，如果一个计时器函数调用accept-process-output 来接收来自外部进程的输出，那么该调用应该包含在with-local-quit 中，以确保在外部进程挂起时Cg 可以正常工作。
+Emacs 在调用定时器函数之前将禁止退出绑定到 t，因为退出许多定时器函数会使事物处于不一致的状态 。这通常是没有问题的，因为大多数计时器功能不会做很多工作 。实际上，对于一个需要大量时间来运行的函数来说，一个计时器可能会很烦人 。如果一个定时器函数需要允许退出，它应该使用 with-local-quit（参见 Quitting） 。例如，如果一个计时器函数调用accept-process-output 来接收来自外部进程的输出，那么该调用应该包含在with-local-quit 中，以确保在外部进程挂起时Cg 可以正常工作 。
 
-定时器函数更改缓冲区内容通常是个坏主意。当他们这样做时，他们通常应该在更改缓冲区之前和之后调用 undo-boundary，以将计时器的更改与用户命令的更改分开，并防止单个撤消条目变得非常大。
+定时器函数更改缓冲区内容通常是个坏主意 。当他们这样做时，他们通常应该在更改缓冲区之前和之后调用 undo-boundary，以将计时器的更改与用户命令的更改分开，并防止单个撤消条目变得非常大 。
 
-定时器函数还应该避免调用导致Emacs等待的函数，例如坐等（请参阅等待经过的时间或输入）。这可能会导致不可预知的效果，因为其他计时器（甚至同一个计时器）可以在等待时运行。如果一个定时器函数需要在某个时间过去后执行一个动作，它可以通过调度一个新的定时器来完成。
+定时器函数还应该避免调用导致Emacs等待的函数，例如坐等（请参阅等待经过的时间或输入） 。这可能会导致不可预知的效果，因为其他计时器（甚至同一个计时器）可以在等待时运行 。如果一个定时器函数需要在某个时间过去后执行一个动作，它可以通过调度一个新的定时器来完成 。
 
-如果定时器函数执行远程文件操作，它可能与同一连接的已经运行的远程文件操作发生冲突。检测到此类冲突，它们会导致远程文件错误错误（请参阅标准错误）。这应该通过将定时器函数体包装起来来保护
+如果定时器函数执行远程文件操作，它可能与同一连接的已经运行的远程文件操作发生冲突 。检测到此类冲突，它们会导致远程文件错误错误（请参阅标准错误） 。这应该通过将定时器函数体包装起来来保护
 
 #+begin_src emacs-lisp
   (ignore-error 'remote-file-error
     …)
 #+end_src
 
-如果计时器函数调用可以更改匹配数据的函数，它应该保存和恢复匹配数据。请参阅保存和恢复匹配数据。
+如果计时器函数调用可以更改匹配数据的函数，它应该保存和恢复匹配数据 。请参阅保存和恢复匹配数据 。
 
 #+begin_src emacs-lisp
   Command: run-at-time time repeat function &rest args ¶
 #+end_src
 
-    这设置了一个计时器，该计时器在时间时间调用带有参数 args 的函数函数。如果repeat 是一个数字（整数或浮点数），则定时器计划在time 之后每隔repeat 秒再次运行。如果repeat 为nil，则定时器只运行一次。
+    这设置了一个计时器，该计时器在时间时间调用带有参数 args 的函数函数 。如果repeat 是一个数字（整数或浮点数），则定时器计划在time 之后每隔repeat 秒再次运行 。如果repeat 为 ~nil~ ，则定时器只运行一次 。
 
-    time 可以指定绝对时间或相对时间。
+    time 可以指定绝对时间或相对时间 。
 
-    绝对时间可以使用具有有限多种格式的字符串来指定，并且被认为是今天的时间，即使已经在过去。可识别的形式为 ~xxxx~ 、 ~x:xx~ 或 ~xx:xx~ （军用时间），以及 ~xxam~ 、 ~xxAM~ 、 ~xxpm~ 、 ~xxPM~ 、 ~xx:xxam~ 、 ~xx~  :xxAM'、'xx:xxpm' 或 'xx:xxPM'。可以使用句点代替冒号来分隔小时和分钟部分。
+    绝对时间可以使用具有有限多种格式的字符串来指定，并且被认为是今天的时间，即使已经在过去 。可识别的形式为 ~xxxx~ 、 ~x:xx~ 或 ~xx:xx~ （军用时间），以及 ~xxam~ 、 ~xxAM~ 、 ~xxpm~ 、 ~xxPM~ 、 ~xx:xxam~ 、 ~xx~  :xxAM'、'xx:xxpm' 或 'xx:xxPM' 。可以使用句点代替冒号来分隔小时和分钟部分 。
 
-    要将相对时间指定为字符串，请使用数字后跟单位。例如：
+    要将相对时间指定为字符串，请使用数字后跟单位 。例如：
 
 #+begin_src emacs-lisp
   ‘1 min’
 #+end_src
 
-	 表示从现在开始 1 分钟。
+	 表示从现在开始 1 分钟 。
 #+begin_src emacs-lisp
   ‘1 min 5 sec’
 #+end_src
 
-	 表示从现在起 65 秒。
+	 表示从现在起 65 秒 。
 #+begin_src emacs-lisp
   ‘1 min 2 sec 3 hour 4 day 5 week 6 fortnight 7 month 8 year’
 #+end_src
 
-	 正好表示从现在开始的 103 个月、123 天和 10862 秒。
+	 正好表示从现在开始的 103 个月、123 天和 10862 秒 。
 
-    对于相对时间值，Emacs 认为一个月正好是 30 天，而一年正好是 365.25 天。
+    对于相对时间值，Emacs 认为一个月正好是 30 天，而一年正好是 365.25 天 。
 
-    并非所有方便的格式都是字符串。如果 time 是一个数字（整数或浮点），则指定以秒为单位的相对时间。encode-time 的结果也可以用来指定时间的绝对值。
+    并非所有方便的格式都是字符串 。如果 time 是一个数字（整数或浮点），则指定以秒为单位的相对时间 。encode-time 的结果也可以用来指定时间的绝对值 。
 
-    在大多数情况下，重复对第一次调用发生的时间没有影响——只有时间指定了这一点。有一个例外：如果时间是 t，那么只要时间是 epoch 后重复秒数的倍数，计时器就会运行。这对于显示时间等功能很有用。
+    在大多数情况下，重复对第一次调用发生的时间没有影响——只有时间指定了这一点 。有一个例外：如果时间是 t，那么只要时间是 epoch 后重复秒数的倍数，计时器就会运行 。这对于显示时间等功能很有用 。
 
-    如果Emacs在定时器运行时没有获得任何 CPU 时间（例如，如果系统正忙于运行另一个进程，或者计算机正在睡眠或处于挂起状态），则定时器将在Emacs恢复时立即运行，并且闲。
+    如果Emacs在定时器运行时没有获得任何 CPU 时间（例如，如果系统正忙于运行另一个进程，或者计算机正在睡眠或处于挂起状态），则定时器将在Emacs恢复时立即运行，并且闲 。
 
-    run-at-time 函数返回一个计时器值，该值标识特定的计划未来操作。您可以使用此值来调用取消计时器（见下文）。
+    run-at-time 函数返回一个计时器值，该值标识特定的计划未来操作 。您可以使用此值来调用取消计时器（见下文） 。
 
 #+begin_src emacs-lisp
   Command: run-with-timer secs repeat function &rest args ¶
 #+end_src
 
-    这与 run-at-time 完全相同（请参阅该定义以了解参数的说明；secs 作为时间传递给该函数），但应在以秒为单位指定延迟时使用。
+    这与 run-at-time 完全相同（请参阅该定义以了解参数的说明；secs 作为时间传递给该函数），但应在以秒为单位指定延迟时使用 。
 
-重复计时器名义上应该每隔重复秒运行一次，但请记住，计时器的任何调用都可能延迟。一次重复的迟到对下一次重复的预定时间没有影响。例如，如果Emacs忙于计算足够长的时间以覆盖定时器的三个计划重复，然后开始等待，它会立即连续调用定时器函数 3 次（假设在它们之前或它们之间没有其他定时器触发）。如果您希望计时器在上次调用后不少于 n 秒再次运行，请不要使用 repeat 参数。相反，定时器函数应该显式地重新调度定时器。
+重复计时器名义上应该每隔重复秒运行一次，但请记住，计时器的任何调用都可能延迟 。一次重复的迟到对下一次重复的预定时间没有影响 。例如，如果Emacs忙于计算足够长的时间以覆盖定时器的三个计划重复，然后开始等待，它会立即连续调用定时器函数 3 次（假设在它们之前或它们之间没有其他定时器触发） 。如果您希望计时器在上次调用后不少于 n 秒再次运行，请不要使用 repeat 参数 。相反，定时器函数应该显式地重新调度定时器 。
 
 #+begin_src emacs-lisp
   User Option: timer-max-repeats ¶
 #+end_src
 
-    此变量的值指定在许多先前计划的调用不可避免地延迟时，连续重复调用计时器函数的最大次数。
+    此变量的值指定在许多先前计划的调用不可避免地延迟时，连续重复调用计时器函数的最大次数 。
 
 #+begin_src emacs-lisp
   Macro: with-timeout (seconds timeout-forms…) body… ¶
 #+end_src
 
-    执行身体，但在几秒钟后放弃。如果 body 在时间结束之前完成，with-timeout 返回 body 中最后一个表单的值。但是，如果 body 的执行被超时中断，那么 with-timeout 会执行所有的 timeout-forms 并返回它们中最后一个的值。
+    执行身体，但在几秒钟后放弃 。如果 body 在时间结束之前完成，with-timeout 返回 body 中最后一个表单的值 。但是，如果 body 的执行被超时中断，那么 with-timeout 会执行所有的 timeout-forms 并返回它们中最后一个的值 。
 
-    这个宏的工作原理是设置一个计时器在几秒后运行。如果 body 在此时间之前完成，它将取消计时器。如果计时器实际运行，它会终止 body 的执行，然后执行 timeout-forms。
+    这个宏的工作原理是设置一个计时器在几秒后运行 。如果 body 在此时间之前完成，它将取消计时器 。如果计时器实际运行，它会终止 body 的执行，然后执行 timeout-forms 。
 
-    由于计时器只能在程序调用可以等待的原语时在 Lisp 程序中运行，所以 with-timeout 不能在计算过程中停止执行主体——只有当它调用这些原语之一时。因此，with-timeout 只能用于等待输入的主体，而不是进行长时间计算的主体。
+    由于计时器只能在程序调用可以等待的原语时在 Lisp 程序中运行，所以 with-timeout 不能在计算过程中停止执行主体——只有当它调用这些原语之一时 。因此，with-timeout 只能用于等待输入的主体，而不是进行长时间计算的主体 。
 
-函数 y-or-np-with-timeout 提供了一种使用计时器的简单方法，以避免等待太久才能得到答案。请参阅是或否查询。
+函数 y-or-np-with-timeout 提供了一种使用计时器的简单方法，以避免等待太久才能得到答案 。请参阅是或否查询 。
 
 #+begin_src emacs-lisp
   Function: cancel-timer timer ¶
 #+end_src
 
-    这取消了计时器的请求操作，它应该是一个计时器——通常是之前由 run-at-time 或 run-with-idle-timer 返回的计时器。这取消了对这些函数之一的调用的效果；  指定时间的到来不会导致任何特别的事情发生。
+    这取消了计时器的请求操作，它应该是一个计时器——通常是之前由 run-at-time 或 run-with-idle-timer 返回的计时器 。这取消了对这些函数之一的调用的效果；  指定时间的到来不会导致任何特别的事情发生 。
 
-list-timers 命令列出所有当前活动的计时器。命令 c (timer-list-cancel) 将取消点下行的计时器。您可以使用命令 S (tabulated-list-sort) 按列对列表进行排序。
+list-timers 命令列出所有当前活动的计时器 。命令 c (timer-list-cancel) 将取消点下行的计时器 。您可以使用命令 S (tabulated-list-sort) 按列对列表进行排序 。
 
 ** 41.12 空闲定时器
-以下是如何设置在Emacs空闲一定时间长度时运行的计时器。除了如何设置它们之外，空闲计时器的工作方式与普通计时器一样。
+以下是如何设置在Emacs空闲一定时间长度时运行的计时器 。除了如何设置它们之外，空闲计时器的工作方式与普通计时器一样 。
 
 #+begin_src emacs-lisp
   Command: run-with-idle-timer secs repeat function &rest args ¶
 #+end_src
 
-    设置一个计时器，该计时器在Emacs下一次空闲 secs 秒时运行。secs 的值可以是数字，也可以是 current-idle-time 返回的类型的值。
+    设置一个计时器，该计时器在Emacs下一次空闲 secs 秒时运行 。secs 的值可以是数字，也可以是 current-idle-time 返回的类型的值 。
 
-    如果repeat 为nil，定时器只运行一次，第一次Emacs 保持空闲足够长的时间。更常见的重复是非零，这意味着每次Emacs保持空闲 secs 秒时运行计时器。
+    如果repeat 为 ~nil~ ，定时器只运行一次，第一次Emacs 保持空闲足够长的时间 。更常见的重复是非零，这意味着每次Emacs保持空闲 secs 秒时运行计时器 。
 
-    run-with-idle-timer 函数返回一个计时器值，您可以在调用取消计时器时使用它（请参阅延迟执行的计时器）。
+    run-with-idle-timer 函数返回一个计时器值，您可以在调用取消计时器时使用它（请参阅延迟执行的计时器） 。
 
-Emacs 在开始等待用户输入时变为空闲状态，并且在用户提供一些输入之前它保持空闲状态。如果一个定时器设置为 5 秒空闲，它会在Emacs第一次空闲后运行大约 5 秒。即使repeat 不是nil，只要Emacs 保持空闲，这个定时器就不会再次运行，因为空闲的持续时间会继续增加，不会再次下降到5 秒。
+Emacs 在开始等待用户输入时变为空闲状态，并且在用户提供一些输入之前它保持空闲状态 。如果一个定时器设置为 5 秒空闲，它会在Emacs第一次空闲后运行大约 5 秒 。即使repeat 不是 ~nil~ ，只要Emacs 保持空闲，这个定时器就不会再次运行，因为空闲的持续时间会继续增加，不会再次下降到5 秒 。
 
-Emacs 可以在空闲时做各种事情：垃圾收集、自动保存或处理来自子进程的数据。但是空闲期间的这些插曲不会干扰空闲计时器，因为它们不会将空闲时钟重置为零。设置为 600 秒的空闲计时器将在自最后一个用户命令完成十分钟后运行，即使在这十分钟内子进程输出已被接受数千次，即使已经进行了垃圾收集和自动保存。
+Emacs 可以在空闲时做各种事情：垃圾收集、自动保存或处理来自子进程的数据 。但是空闲期间的这些插曲不会干扰空闲计时器，因为它们不会将空闲时钟重置为零 。设置为 600 秒的空闲计时器将在自最后一个用户命令完成十分钟后运行，即使在这十分钟内子进程输出已被接受数千次，即使已经进行了垃圾收集和自动保存 。
 
-当用户提供输入时，Emacs 在执行输入时变为非空闲状态。然后它再次变得空闲，所有设置为重复的空闲计时器随后将一个接一个地运行另一个时间。
+当用户提供输入时，Emacs 在执行输入时变为非空闲状态 。然后它再次变得空闲，所有设置为重复的空闲计时器随后将一个接一个地运行另一个时间 。
 
-不要编写包含循环的空闲计时器函数，该循环每次都会执行一定数量的处理，并在 (input-pending-p) 为非零时退出。这种方法看起来很自然，但有两个问题：
+不要编写包含循环的空闲计时器函数，该循环每次都会执行一定数量的处理，并在 (input-pending-p) 为非零时退出 。这种方法看起来很自然，但有两个问题：
 
-    它阻止所有进程输出（因为Emacs仅在等待时接受进程输出）。
-    它会阻止任何应该在此期间运行的空闲计时器。
+    它阻止所有进程输出（因为Emacs仅在等待时接受进程输出） 。
+    它会阻止任何应该在此期间运行的空闲计时器 。
 
-同样，不要编写一个空闲定时器函数来设置另一个空闲定时器（包括相同的空闲定时器），其 secs 参数小于或等于当前空闲时间。这样的计时器将几乎立即运行，并一次又一次地继续运行，而不是等待Emacs下一次空闲。正确的做法是使用空闲时间的当前值的适当增量重新调度，如下所述。
+同样，不要编写一个空闲定时器函数来设置另一个空闲定时器（包括相同的空闲定时器），其 secs 参数小于或等于当前空闲时间 。这样的计时器将几乎立即运行，并一次又一次地继续运行，而不是等待Emacs下一次空闲 。正确的做法是使用空闲时间的当前值的适当增量重新调度，如下所述 。
 
 #+begin_src emacs-lisp
   Function: current-idle-time ¶
 #+end_src
 
-    如果Emacs空闲，此函数返回Emacs空闲的时间长度，使用与当前时间相同的格式（请参阅时间）。
+    如果Emacs空闲，此函数返回Emacs空闲的时间长度，使用与当前时间相同的格式（请参阅时间） 。
 
-    当Emacs不空闲时，current-idle-time 返回 nil。这是测试Emacs是否空闲的一种便捷方法。
+    当Emacs不空闲时，current-idle-time 返回  ~nil~  。这是测试Emacs是否空闲的一种便捷方法 。
 
-current-idle-time 的主要用途是当一个空闲计时器函数想要 ~休息~ 一段时间。它可以设置另一个空闲计时器来再次调用相同的函数，在几秒钟之后再空闲。这是一个例子：
+current-idle-time 的主要用途是当一个空闲计时器函数想要 ~休息~ 一段时间 。它可以设置另一个空闲计时器来再次调用相同的函数，在几秒钟之后再空闲 。这是一个例子：
 
 #+begin_src emacs-lisp
   (defvar my-resume-timer nil
@@ -1554,95 +1541,95 @@ current-idle-time 的主要用途是当一个空闲计时器函数想要 ~休息
 #+end_src
 
 ** 41.13 终端输入
-本节介绍用于记录或操作终端输入的函数和变量。有关相关功能，请参阅EmacsDisplay。
+本节介绍用于记录或操作终端输入的函数和变量 。有关相关功能，请参阅EmacsDisplay 。
 
 *** 41.13.1 输入模式
 #+begin_src emacs-lisp
   Function: set-input-mode interrupt flow meta &optional quit-char ¶
 #+end_src
 
-    该函数设置读取键盘输入的模式。如果中断是非零，那么Emacs使用输入中断。如果为 nil，则使用 CBREAK 模式。默认设置取决于系统。无论指定什么，某些系统总是使用 CBREAK 模式。
+    该函数设置读取键盘输入的模式 。如果中断是非零，那么Emacs使用输入中断 。如果为  ~nil~ ，则使用 CBREAK 模式 。默认设置取决于系统 。无论指定什么，某些系统总是使用 CBREAK 模式 。
 
-    当Emacs直接与 X 通信时，它会忽略此参数并使用中断（如果这是它知道如何通信的方式）。
+    当Emacs直接与 X 通信时，它会忽略此参数并使用中断（如果这是它知道如何通信的方式） 。
 
-    如果 flow 不是 nil，那么Emacs使用 XON/XOFF (Cq, Cs) 流控制来输出到终端。除了 CBREAK 模式外，这没有任何影响。
+    如果 flow 不是  ~nil~ ，那么Emacs使用 XON/XOFF (Cq, Cs) 流控制来输出到终端 。除了 CBREAK 模式外，这没有任何影响 。
 
-    参数 meta 控制对 127 以上的输入字符代码的支持。如果 meta 为 t，Emacs 将设置第 8 位的字符转换为 Meta 字符，然后根据需要对它们进行解码（请参阅终端 I/O 编码）。如果 meta 为 nil，Emacs 忽略第 8 位；  当终端将其用作奇偶校验位时，这是必需的。如果 meta 是编码的符号，Emacs 首先使用每个字节的所有 8 位对字符进行解码，然后将解码后的单字节字符转换为 Meta 字符（如果设置了第 8 位）。最后，如果 meta 既不是 t 也不是 nil 也不是编码的，Emacs 使用所有 8 位输入不变，无论是在解码之前还是之后。这对于使用 8 位字符集并且不将 Meta 修饰符编码为第八位的终端非常有用。
+    参数 meta 控制对 127 以上的输入字符代码的支持 。如果 meta 为 t，Emacs 将设置第 8 位的字符转换为 Meta 字符，然后根据需要对它们进行解码（请参阅终端 I/O 编码） 。如果 meta 为  ~nil~ ，Emacs 忽略第 8 位；  当终端将其用作奇偶校验位时，这是必需的 。如果 meta 是编码的符号，Emacs 首先使用每个字节的所有 8 位对字符进行解码，然后将解码后的单字节字符转换为 Meta 字符（如果设置了第 8 位） 。最后，如果 meta 既不是 t 也不是  ~nil~  也不是编码的，Emacs 使用所有 8 位输入不变，无论是在解码之前还是之后 。这对于使用 8 位字符集并且不将 Meta 修饰符编码为第八位的终端非常有用 。
 
-    如果 quit-char 不为 nil，它指定用于退出的字符。通常这个角色是Cg。请参阅退出。
+    如果 quit-char 不为  ~nil~ ，它指定用于退出的字符 。通常这个角色是Cg 。请参阅退出 。
 
-current-input-mode 函数返回Emacs当前使用的输入模式设置。
+current-input-mode 函数返回Emacs当前使用的输入模式设置 。
 
 #+begin_src emacs-lisp
   Function: current-input-mode ¶
 #+end_src
 
-    此函数返回读取键盘输入的当前模式。它返回一个列表，对应于 set-input-mode 的参数，形式为（中断流元退出），其中：
+    此函数返回读取键盘输入的当前模式 。它返回一个列表，对应于 set-input-mode 的参数，形式为（中断流元退出），其中：
 
 #+begin_src emacs-lisp
   interrupt
 #+end_src
 
-	 当Emacs使用中断驱动输入时为非零。如果为零，则Emacs使用 CBREAK 模式。
+	 当Emacs使用中断驱动输入时为非零 。如果为零，则Emacs使用 CBREAK 模式 。
 #+begin_src emacs-lisp
   flow
 #+end_src
 
-	 如果Emacs使用 XON/XOFF (Cq, Cs) 流控制输出到终端，则为非零。该值仅在中断为 nil 时才有意义。
+	 如果Emacs使用 XON/XOFF (Cq, Cs) 流控制输出到终端，则为非零 。该值仅在中断为  ~nil~  时才有意义 。
 #+begin_src emacs-lisp
   meta
 #+end_src
 
-	 如果Emacs将输入字符的第 8 位视为解码输入之前的 Meta 位，则为 t；  如果Emacs将解码后的单字节字符的第 8 位视为 Meta 位，则进行编码；  如果Emacs清除每个输入字符的第 8 位，则为 nil；  任何其他值意味着Emacs使用所有八位作为基本字符代码。
+	 如果Emacs将输入字符的第 8 位视为解码输入之前的 Meta 位，则为 t；  如果Emacs将解码后的单字节字符的第 8 位视为 Meta 位，则进行编码；  如果Emacs清除每个输入字符的第 8 位，则为  ~nil~ ；  任何其他值意味着Emacs使用所有八位作为基本字符代码 。
 #+begin_src emacs-lisp
   quit
 #+end_src
 
-	 是Emacs当前用于退出的字符，通常是 Cg。
+	 是Emacs当前用于退出的字符，通常是 Cg 。
 
 *** 41.13.2 录音输入
 #+begin_src emacs-lisp
   Function: recent-keys &optional include-cmds ¶
 #+end_src
 
-    此函数返回一个向量，其中包含来自键盘或鼠标的最后 300 个输入事件。包括所有输入事件，无论它们是否被用作键序列的一部分。因此，您始终会获得最后 300 个输入事件，不包括键盘宏生成的事件。（这些被排除在外，因为它们对调试不太感兴趣；看到调用宏的事件就足够了。）
+    此函数返回一个向量，其中包含来自键盘或鼠标的最后 300 个输入事件 。包括所有输入事件，无论它们是否被用作键序列的一部分 。因此，您始终会获得最后 300 个输入事件，不包括键盘宏生成的事件 。（这些被排除在外，因为它们对调试不太感兴趣；看到调用宏的事件就足够了 。）
 
-    如果 include-cmds 不是 nil，则结果向量中的完整键序列与 (nil . COMMAND) 形式的伪事件交错，其中 COMMAND 是键序列的绑定（请参阅命令循环概述）。
+    如果 include-cmds 不是  ~nil~ ，则结果向量中的完整键序列与 ( ~nil~  . COMMAND) 形式的伪事件交错，其中 COMMAND 是键序列的绑定（请参阅命令循环概述） 。
 
-    对 clear-this-command-keys 的调用（请参阅命令循环中的信息）会导致此函数随后立即返回一个空向量。
+    对 clear-this-command-keys 的调用（请参阅命令循环中的信息）会导致此函数随后立即返回一个空向量 。
 
 #+begin_src emacs-lisp
   Command: open-dribble-file filename ¶
 #+end_src
 
-    此函数打开一个名为 filename 的 dribbble 文件。当一个 dribble 文件打开时，来自键盘或鼠标的每个输入事件（但不是来自键盘宏的输入事件）都会写入该文件中。非字符事件使用由 ~<…>~ 包围的打印表示来表示。请注意，敏感信息（例如密码）最终可能会记录在 dribble 文件中。
+    此函数打开一个名为 filename 的 dribbble 文件 。当一个 dribble 文件打开时，来自键盘或鼠标的每个输入事件（但不是来自键盘宏的输入事件）都会写入该文件中 。非字符事件使用由 ~<…>~ 包围的打印表示来表示 。请注意，敏感信息（例如密码）最终可能会记录在 dribble 文件中 。
 
-    通过使用 nil 参数调用此函数来关闭 dribble 文件。
+    通过使用  ~nil~  参数调用此函数来关闭 dribble 文件 。
 
-另请参阅 open-termscript 函数（请参阅终端输出）。
+另请参阅 open-termscript 函数（请参阅终端输出） 。
 
 ** 41.14 终端输出
-终端输出功能将输出发送到文本终端，或跟踪发送到终端的输出。变量波特率告诉你Emacs认为终端的输出速度是多少。
+终端输出功能将输出发送到文本终端，或跟踪发送到终端的输出 。变量波特率告诉你Emacs认为终端的输出速度是多少 。
 
 #+begin_src emacs-lisp
   User Option: baud-rate ¶
 #+end_src
 
-    这个变量的值是终端的输出速度，据Emacs所知。设置此变量不会改变实际数据传输的速度，但该值用于填充等计算。
+    这个变量的值是终端的输出速度，据Emacs所知 。设置此变量不会改变实际数据传输的速度，但该值用于填充等计算 。
 
-    它还影响有关是否滚动部分屏幕或在文本终端上重新绘制的决定。有关图形终端上的相应功能，请参阅强制重新显示。
+    它还影响有关是否滚动部分屏幕或在文本终端上重新绘制的决定 。有关图形终端上的相应功能，请参阅强制重新显示 。
 
-    该值以波特为单位。
+    该值以波特为单位 。
 
-如果您在网络上运行，并且网络的不同部分以不同的波特率工作，则Emacs返回的值可能与您本地终端使用的值不同。一些网络协议将本地终端速度传达给远程机器，以便Emacs和其他程序可以获得正确的值，但其他程序则不能。如果Emacs有错误的值，它会做出不是最优的决策。要解决此问题，请设置波特率。
+如果您在网络上运行，并且网络的不同部分以不同的波特率工作，则Emacs返回的值可能与您本地终端使用的值不同 。一些网络协议将本地终端速度传达给远程机器，以便Emacs和其他程序可以获得正确的值，但其他程序则不能 。如果Emacs有错误的值，它会做出不是最优的决策 。要解决此问题，请设置波特率 。
 
 #+begin_src emacs-lisp
   Function: send-string-to-terminal string &optional terminal ¶
 #+end_src
 
-    此函数将字符串发送到终端而不进行更改。字符串中的控制字符具有与终端相关的效果。（如果您需要在终端上显示非 ASCII 文本，请使用显式编码和解码中描述的函数之一对其进行编码。）此函数仅在文本终端上运行。终端可以是终端对象、框架或选定框架终端的 nil。在批处理模式下，当终端为 nil 时，字符串被发送到标准输出。
+    此函数将字符串发送到终端而不进行更改 。字符串中的控制字符具有与终端相关的效果 。（如果您需要在终端上显示非 ASCII 文本，请使用显式编码和解码中描述的函数之一对其进行编码 。）此函数仅在文本终端上运行 。终端可以是终端对象、框架或选定框架终端的  ~nil~  。在批处理模式下，当终端为  ~nil~  时，字符串被发送到标准输出 。
 
-    该功能的一种用途是在具有可下载功能键定义的终端上定义功能键。例如，这是如何（在某些终端上）定义功能键 4 以向前移动四个字符（通过将字符 Cu Cf 传输到计算机）：
+    该功能的一种用途是在具有可下载功能键定义的终端上定义功能键 。例如，这是如何（在某些终端上）定义功能键 4 以向前移动四个字符（通过将字符 Cu Cf 传输到计算机）：
 
     #+begin_src emacs-lisp
       (send-string-to-terminal "\eF4\^U\^F")
@@ -1653,27 +1640,27 @@ current-input-mode 函数返回Emacs当前使用的输入模式设置。
   Command: open-termscript filename ¶
 #+end_src
 
-    此函数用于打开一个 termscript 文件，该文件将记录Emacs发送到终端的所有字符。它返回零。Termscript 文件对于调查Emacs屏幕乱码的问题非常有用，这些问题是由于 Termcap 条目不正确或终端选项的不良设置导致的问题，而不是实际的Emacs错误。一旦确定实际输出了哪些字符，就可以可靠地确定它们是否符合使用的 Termcap 规范。
+    此函数用于打开一个 termscript 文件，该文件将记录Emacs发送到终端的所有字符 。它返回零 。Termscript 文件对于调查Emacs屏幕乱码的问题非常有用，这些问题是由于 Termcap 条目不正确或终端选项的不良设置导致的问题，而不是实际的Emacs错误 。一旦确定实际输出了哪些字符，就可以可靠地确定它们是否符合使用的 Termcap 规范 。
 
     #+begin_src emacs-lisp
       (open-termscript "../junk/termscript")
 	   ⇒ nil
     #+end_src
 
-    通过使用 nil 参数调用此函数来关闭 termscript 文件。
+    通过使用  ~nil~  参数调用此函数来关闭 termscript 文件 。
 
-    另请参阅录制输入中的 open-dribble-file。
+    另请参阅录制输入中的 open-dribble-file 。
 
 ** 41.15 声音输出
-要使用Emacs播放声音，请使用函数 play-sound。仅支持某些系统；  如果您在无法真正完成工作的系统上调用 play-sound，则会出现错误。
+要使用Emacs播放声音，请使用函数 play-sound 。仅支持某些系统；  如果您在无法真正完成工作的系统上调用 play-sound，则会出现错误 。
 
-声音必须存储为 RIFF-WAVE 格式 ('.wav') 或 Sun Audio 格式 ('.au') 的文件。
+声音必须存储为 RIFF-WAVE 格式 ('.wav') 或 Sun Audio 格式 ('.au') 的文件 。
 
 #+begin_src emacs-lisp
   Function: play-sound sound ¶
 #+end_src
 
-    此函数播放指定的声音。参数 sound 的形式为 (sound properties...)，其中属性由交替的关键字（特别识别的特定符号）和对应的值组成。
+    此函数播放指定的声音 。参数 sound 的形式为 (sound properties...)，其中属性由交替的关键字（特别识别的特定符号）和对应的值组成 。
 
     以下是当前在声音中有意义的关键字及其含义的表格：
 
@@ -1681,52 +1668,52 @@ current-input-mode 函数返回Emacs当前使用的输入模式设置。
   :file file
 #+end_src
 
-	 这指定了包含要播放的声音的文件。如果文件名不是绝对的，则根据目录数据目录进行扩展。
+	 这指定了包含要播放的声音的文件 。如果文件名不是绝对的，则根据目录数据目录进行扩展 。
 #+begin_src emacs-lisp
   :data data
 #+end_src
 
-	 这指定了无需引用文件即可播放的声音。值 data 应该是一个字符串，包含与声音文件相同的字节。我们建议使用单字节字符串。
+	 这指定了无需引用文件即可播放的声音 。值 data 应该是一个字符串，包含与声音文件相同的字节 。我们建议使用单字节字符串 。
 #+begin_src emacs-lisp
   :volume volume
 #+end_src
 
-	 这指定了播放声音的音量。它应该是 0 到 1 范围内的数字。默认值是使用之前指定的任何音量。
+	 这指定了播放声音的音量 。它应该是 0 到 1 范围内的数字 。默认值是使用之前指定的任何音量 。
 #+begin_src emacs-lisp
   :device device
 #+end_src
 
-	 这将在其上播放声音的系统设备指定为字符串。默认设备取决于系统。
+	 这将在其上播放声音的系统设备指定为字符串 。默认设备取决于系统 。
 
-    在实际播放声音之前，play-sound 会调用列表 play-sound-functions 中的函数。每个函数都用一个参数调用，声音。
+    在实际播放声音之前，play-sound 会调用列表 play-sound-functions 中的函数 。每个函数都用一个参数调用，声音 。
 
 #+begin_src emacs-lisp
   Command: play-sound-file file &optional volume device ¶
 #+end_src
 
-    此功能是播放指定可选音量和设备的声音文件的替代接口。
+    此功能是播放指定可选音量和设备的声音文件的替代接口 。
 
 #+begin_src emacs-lisp
   Variable: play-sound-functions ¶
 #+end_src
 
-    在播放声音之前要调用的函数列表。每个函数都用一个参数调用，一个描述声音的属性列表。
+    在播放声音之前要调用的函数列表 。每个函数都用一个参数调用，一个描述声音的属性列表 。
 
 
 ** 41.16 X11 Keysyms 上的操作
-要定义系统特定的 X11 键符，请设置变量 system-key-alist。
+要定义系统特定的 X11 键符，请设置变量 system-key-alist 。
 
 #+begin_src emacs-lisp
   Variable: system-key-alist ¶
 #+end_src
 
-    这个变量的值应该是一个列表，每个系统特定的键符都有一个元素。每个元素都有格式 (code.symbol)，其中 code 是数字键符代码（不包括特定于供应商的位，-2**28），symbol 是功能键的名称。
+    这个变量的值应该是一个列表，每个系统特定的键符都有一个元素 。每个元素都有格式 (code.symbol)，其中 code 是数字键符代码（不包括特定于供应商的位，-2**28），symbol 是功能键的名称 。
 
-    例如 (168 . mute-acute) 定义一个系统特定的键（由 HP X 服务器使用），其数字代码为 -2**28 + 168。
+    例如 (168 . mute-acute) 定义一个系统特定的键（由 HP X 服务器使用），其数字代码为 -2**28 + 168 。
 
-    从 alist 中排除其他 X 服务器的键符并不重要；  只要它们不与实际使用的 X 服务器所使用的相冲突，它们就没有害处。
+    从 alist 中排除其他 X 服务器的键符并不重要；  只要它们不与实际使用的 X 服务器所使用的相冲突，它们就没有害处 。
 
-    该变量始终是当前终端的本地变量，并且不能是缓冲区本地的。请参阅多个终端。
+    该变量始终是当前终端的本地变量，并且不能是缓冲区本地的 。请参阅多个终端 。
 
 您可以通过设置这些变量来指定Emacs应该为 Control、Meta、Alt、Hyper 和 Super 修饰符使用哪些键符：
 
@@ -1746,7 +1733,7 @@ current-input-mode 函数返回Emacs当前使用的输入模式设置。
   Variable: x-super-keysym ¶
 #+end_src
 
-    应代表 Control 修饰符的键符名称（分别代表 Alt、Meta、Hyper 和 Super）。例如，这里是如何在Emacs中交换 Meta 和 Alt 修饰符：
+    应代表 Control 修饰符的键符名称（分别代表 Alt、Meta、Hyper 和 Super） 。例如，这里是如何在Emacs中交换 Meta 和 Alt 修饰符：
 
     #+begin_src emacs-lisp
       (setq x-alt-keysym 'meta)
@@ -1754,17 +1741,17 @@ current-input-mode 函数返回Emacs当前使用的输入模式设置。
     #+end_src
 
 ** 41.17 批处理模式
-命令行选项 '-batch' 使Emacs以非交互方式运行。在这种模式下，Emacs 不会从终端读取命令，它不会改变终端模式，也不会期望输出到可擦除屏幕。这个想法是您指定要运行的 Lisp 程序；  完成后，Emacs 应该退出。指定要运行的程序的方法是使用'-l file'，它加载名为file 的库，或'-f function'，它调用不带参数的函数，或'--eval=form'。
+命令行选项 '-batch' 使Emacs以非交互方式运行 。在这种模式下，Emacs 不会从终端读取命令，它不会改变终端模式，也不会期望输出到可擦除屏幕 。这个想法是您指定要运行的 Lisp 程序；  完成后，Emacs 应该退出 。指定要运行的程序的方法是使用'-l file'，它加载名为file 的库，或'-f function'，它调用不带参数的函数，或'--eval=form' 。
 
-任何 Lisp 程序的输出，无论是使用消息，还是使用 prin1 等，以 t 作为流（请参阅输出流），在批处理模式下都会转到Emacs的标准描述符：消息写入标准错误描述符，而 prin1 和其他打印函数写入标准输出。类似地，通常来自 minibuffer 的输入是从标准输入描述符中读取的。因此，Emacs 的行为很像一个非交互式应用程序。（Emacs 本身通常生成的回显区域输出，例如命令回显，完全被抑制。）
+任何 Lisp 程序的输出，无论是使用消息，还是使用 prin1 等，以 t 作为流（请参阅输出流），在批处理模式下都会转到Emacs的标准描述符：消息写入标准错误描述符，而 prin1 和其他打印函数写入标准输出 。类似地，通常来自 minibuffer 的输入是从标准输入描述符中读取的 。因此，Emacs 的行为很像一个非交互式应用程序 。（Emacs 本身通常生成的回显区域输出，例如命令回显，完全被抑制 。）
 
-写入标准输出或错误描述符的非 ASCII 文本默认情况下使用 locale-coding-system（请参阅 Locales）进行编码，如果它是非零的话；  这可以通过将 coding-system-for-write 绑定到您选择的编码系统来覆盖（请参阅显式编码和解码）。
+写入标准输出或错误描述符的非 ASCII 文本默认情况下使用 locale-coding-system（请参阅 Locales）进行编码，如果它是非零的话；  这可以通过将 coding-system-for-write 绑定到您选择的编码系统来覆盖（请参阅显式编码和解码） 。
 
 #+begin_src emacs-lisp
   Variable: noninteractive ¶
 #+end_src
 
-    当Emacs以批处理模式运行时，此变量不为零。
+    当Emacs以批处理模式运行时，此变量不为零 。
 
 如果Emacs由于在批处理模式下发出错误信号而退出，则Emacs命令的退出状态为非零：
 
@@ -1775,21 +1762,21 @@ current-input-mode 函数返回Emacs当前使用的输入模式设置。
 #+end_src
 
 ** 41.18 会话管理
-Emacs 支持 X 会话管理协议，该协议用于暂停和重新启动应用程序。在 X Window 系统中，一个称为会话管理器的程序负责跟踪正在运行的应用程序。当 X 服务器关闭时，会话管理器要求应用程序保存它们的状态，并延迟实际关闭，直到它们做出响应。应用程序也可以取消关闭。
+Emacs 支持 X 会话管理协议，该协议用于暂停和重新启动应用程序 。在 X Window 系统中，一个称为会话管理器的程序负责跟踪正在运行的应用程序 。当 X 服务器关闭时，会话管理器要求应用程序保存它们的状态，并延迟实际关闭，直到它们做出响应 。应用程序也可以取消关闭 。
 
-当会话管理器重新启动暂停的会话时，它会指示这些应用程序单独重新加载其保存的状态。它通过指定一个特殊的命令行参数来执行此操作，该参数说明要恢复的已保存会话。对于 Emacs，这个参数是 '--smid session'。
+当会话管理器重新启动暂停的会话时，它会指示这些应用程序单独重新加载其保存的状态 。它通过指定一个特殊的命令行参数来执行此操作，该参数说明要恢复的已保存会话 。对于 Emacs，这个参数是 '--smid session' 。
 
 #+begin_src emacs-lisp
   Variable: emacs-save-session-functions ¶
 #+end_src
 
-   Emacs通过名为 emacs-save-session-functions 的钩子支持保存状态。当会话管理器告诉它窗口系统正在关闭时，Emacs 运行这个钩子。这些函数在没有参数的情况下被调用，并且当前缓冲区设置为临时缓冲区。每个函数都可以使用 insert 将 Lisp 代码添加到此缓冲区。最后，Emacs 将缓冲区保存在一个文件中，称为会话文件。
+   Emacs通过名为 emacs-save-session-functions 的钩子支持保存状态 。当会话管理器告诉它窗口系统正在关闭时，Emacs 运行这个钩子 。这些函数在没有参数的情况下被调用，并且当前缓冲区设置为临时缓冲区 。每个函数都可以使用 insert 将 Lisp 代码添加到此缓冲区 。最后，Emacs 将缓冲区保存在一个文件中，称为会话文件 。
 
-    随后，当会话管理器重新启动Emacs时，它会自动加载会话文件（请参阅加载）。这是由一个名为 emacs-session-restore 的函数执行的，该函数在启动期间被调用。请参阅摘要：启动时的操作顺序。
+    随后，当会话管理器重新启动Emacs时，它会自动加载会话文件（请参阅加载） 。这是由一个名为 emacs-session-restore 的函数执行的，该函数在启动期间被调用 。请参阅摘要：启动时的操作顺序 。
 
-    如果 emacs-save-session-functions 中的函数返回非 nil，Emacs 会告诉会话管理器取消关闭。
+    如果 emacs-save-session-functions 中的函数返回非  ~nil~ ，Emacs 会告诉会话管理器取消关闭 。
 
-这是一个示例，当会话管理器重新启动Emacs时，它只是在 *scratch* 中插入一些文本。
+这是一个示例，当会话管理器重新启动Emacs时，它只是在 *scratch* 中插入一些文本 。
 #+begin_src emacs-lisp
 
 
@@ -1803,109 +1790,109 @@ Emacs 支持 X 会话管理协议，该协议用于暂停和重新启动应用�
     nil)
 #+end_src
 ** 41.19 桌面通知
-Emacs 能够在支持 freedesktop.org 桌面通知规范的系统和 MS-Windows 上发送通知。为了在 POSIX 主机上使用此功能，必须使用 D-Bus 支持编译 Emacs，并且必须加载通知库。请参阅Emacs中的 D-Bus 集成中的 D-Bus。当 D-Bus 支持可用时，支持以下功能：
+Emacs 能够在支持 freedesktop.org 桌面通知规范的系统和 MS-Windows 上发送通知 。为了在 POSIX 主机上使用此功能，必须使用 D-Bus 支持编译 Emacs，并且必须加载通知库 。请参阅Emacs中的 D-Bus 集成中的 D-Bus 。当 D-Bus 支持可用时，支持以下功能：
 
 #+begin_src emacs-lisp
   Function: notifications-notify &rest params ¶
 #+end_src
 
-    该函数通过 D-Bus 向桌面发送通知，通知由 params 参数指定的参数组成。这些参数应该由交替的关键字和值对组成。支持的关键字和值如下：
+    该函数通过 D-Bus 向桌面发送通知，通知由 params 参数指定的参数组成 。这些参数应该由交替的关键字和值对组成 。支持的关键字和值如下：
 
 #+begin_src emacs-lisp
   :bus bus
 #+end_src
 
-	 D-Bus 总线。仅当应使用 :session 以外的总线时才需要此参数。
+	 D-Bus 总线 。仅当应使用 :session 以外的总线时才需要此参数 。
 #+begin_src emacs-lisp
   :title title
 #+end_src
 
-	 通知标题。
+	 通知标题 。
 #+begin_src emacs-lisp
   :body text
 #+end_src
 
-	 通知正文。根据通知服务器的实现，文本可能包含 HTML 标记，如 ~<b>粗体文本</b>~ 、超链接或图像。必须将特殊的 HTML 字符编码为 ~联系 <postmaster@localhost>!~ 。
+	 通知正文 。根据通知服务器的实现，文本可能包含 HTML 标记，如 ~<b>粗体文本</b>~ 、超链接或图像 。必须将特殊的 HTML 字符编码为 ~联系 <postmaster@localhost>!~  。
 #+begin_src emacs-lisp
   :app-name name
 #+end_src
 
-	 发送通知的应用程序的名称。默认值为通知应用程序名称。
+	 发送通知的应用程序的名称 。默认值为通知应用程序名称 。
 #+begin_src emacs-lisp
   :replaces-id id
 #+end_src
 
-	 此通知替换的通知 ID。id 必须是先前通知通知调用的结果。
+	 此通知替换的通知 ID 。id 必须是先前通知通知调用的结果 。
 #+begin_src emacs-lisp
   :app-icon icon-file
 #+end_src
 
-	 通知图标的文件名。如果设置为 nil，则不显示图标。默认为通知应用程序图标。
+	 通知图标的文件名 。如果设置为  ~nil~ ，则不显示图标 。默认为通知应用程序图标 。
 #+begin_src emacs-lisp
   :actions (key title key title ...)
 #+end_src
 
-	 要应用的操作列表。key 和 title 都是字符串。默认操作（通常通过单击通知调用）应该有一个名为 ~默认~ 的键。标题可以是任何东西，尽管实现可以不显示它。
+	 要应用的操作列表 。key 和 title 都是字符串 。默认操作（通常通过单击通知调用）应该有一个名为 ~默认~ 的键 。标题可以是任何东西，尽管实现可以不显示它 。
 #+begin_src emacs-lisp
   :timeout timeout
 #+end_src
 
-	 自显示通知后通知应自动关闭的超时时间（以毫秒为单位）。如果为 -1，则通知的到期时间取决于通知服务器的设置，并且可能因通知类型而异。如果为 0，则通知永不过期。默认值为 -1。
+	 自显示通知后通知应自动关闭的超时时间（以毫秒为单位） 。如果为 -1，则通知的到期时间取决于通知服务器的设置，并且可能因通知类型而异 。如果为 0，则通知永不过期 。默认值为 -1 。
 #+begin_src emacs-lisp
   :urgency urgency
 #+end_src
 
-	 紧急程度。它可以是低的、正常的或严重的。
+	 紧急程度 。它可以是低的、正常的或严重的 。
 #+begin_src emacs-lisp
   :action-items
 #+end_src
 
-	 当给出这个关键字时，动作的标题字符串被解释为图标名称。
+	 当给出这个关键字时，动作的标题字符串被解释为图标名称 。
 #+begin_src emacs-lisp
   :category category
 #+end_src
 
-	 通知的类型是字符串。有关标准类别的列表，请参阅桌面通知规范。
+	 通知的类型是字符串 。有关标准类别的列表，请参阅桌面通知规范 。
 #+begin_src emacs-lisp
   :desktop-entry filename
 #+end_src
 
-	 这指定了代表调用程序的桌面文件名的名称，例如 ~emacs~ 。
+	 这指定了代表调用程序的桌面文件名的名称，例如 ~emacs~  。
 #+begin_src emacs-lisp
   :image-data (width height rowstride has-alpha bits channels data)
 #+end_src
 
-	 这是一种原始数据图像格式，分别描述了宽度、高度、行距、是否有 alpha 通道、每个样本的位数、通道和图像数据。
+	 这是一种原始数据图像格式，分别描述了宽度、高度、行距、是否有 alpha 通道、每个样本的位数、通道和图像数据 。
 #+begin_src emacs-lisp
   :image-path path
 #+end_src
 
-	 这表示为 URI（ ~file://~ 是目前唯一支持的 URI 模式）或来自 ~$XDG_DATA_DIRS/icons~ 的符合 freedesktop.org 的图标主题中的名称。
+	 这表示为 URI（ ~file://~ 是目前唯一支持的 URI 模式）或来自 ~$XDG_DATA_DIRS/icons~ 的符合 freedesktop.org 的图标主题中的名称 。
 #+begin_src emacs-lisp
   :sound-file filename
 #+end_src
 
-	 弹出通知时要播放的声音文件的路径。
+	 弹出通知时要播放的声音文件的路径 。
 #+begin_src emacs-lisp
   :sound-name name
 #+end_src
 
-	 来自 ~$XDG_DATA_DIRS/sounds~ 的 freedesktop.org 声音命名规范中的主题命名声音，在通知弹出时播放。类似于图标名称，仅用于声音。一个例子是'"message-new-instant"'。
+	 来自 ~$XDG_DATA_DIRS/sounds~ 的 freedesktop.org 声音命名规范中的主题命名声音，在通知弹出时播放 。类似于图标名称，仅用于声音 。一个例子是'"message-new-instant"' 。
 #+begin_src emacs-lisp
   :suppress-sound
 #+end_src
 
-	 使服务器抑制播放任何声音，如果它有能力的话。
+	 使服务器抑制播放任何声音，如果它有能力的话 。
 #+begin_src emacs-lisp
   :resident
 #+end_src
 
-	 设置后，服务器不会在调用操作时自动删除通知。通知将一直驻留在服务器中，直到它被用户或发送者明确删除。此提示可能仅在服务器具有 :persistence 功能时才有用。
+	 设置后，服务器不会在调用操作时自动删除通知 。通知将一直驻留在服务器中，直到它被用户或发送者明确删除 。此提示可能仅在服务器具有 :persistence 功能时才有用 。
 #+begin_src emacs-lisp
   :transient
 #+end_src
 
-	 设置时，服务器会将通知视为瞬态并绕过服务器的持久性能力（如果它应该存在）。
+	 设置时，服务器会将通知视为瞬态并绕过服务器的持久性能力（如果它应该存在） 。
 #+begin_src emacs-lisp
   :x position
 #+end_src
@@ -1913,26 +1900,26 @@ Emacs 能够在支持 freedesktop.org 桌面通知规范的系统和 MS-Windows 
   :y position
 #+end_src
 
-	 指定通知应指向的屏幕上的 X、Y 位置。两个参数必须一起使用。
+	 指定通知应指向的屏幕上的 X、Y 位置 。两个参数必须一起使用 。
 #+begin_src emacs-lisp
   :on-action function
 #+end_src
 
-	 调用动作时调用的函数。通知 id 和操作的键作为参数传递给函数。
+	 调用动作时调用的函数 。通知 id 和操作的键作为参数传递给函数 。
 #+begin_src emacs-lisp
   :on-close function
 #+end_src
 
-	 当通知因超时或用户关闭时调用的函数。该函数接收通知 ID 和关闭原因作为参数：
+	 当通知因超时或用户关闭时调用的函数 。该函数接收通知 ID 和关闭原因作为参数：
 
 	     如果通知已过期，则过期
 	     如果通知被用户驳回，则驳回
 	     close-notification 如果通知是通过调用通知关闭通知关闭的
 	     如果通知服务器未提供原因，则未定义
 
-    通知服务器接受哪些参数可以通过通知获取功能进行检查。
+    通知服务器接受哪些参数可以通过通知获取功能进行检查 。
 
-    此函数返回一个通知 id，一个整数，可用于使用通知关闭通知或另一个通知通知调用的 :replaces-id 参数来操作通知项。例如：
+    此函数返回一个通知 id，一个整数，可用于使用通知关闭通知或另一个通知通知调用的 :replaces-id 参数来操作通知项 。例如：
 
     #+begin_src emacs-lisp
       (defun my-on-action-function (id key)
@@ -1963,90 +1950,90 @@ Emacs 能够在支持 freedesktop.org 桌面通知规范的系统和 MS-Windows 
   Function: notifications-close-notification id &optional bus ¶
 #+end_src
 
-    此函数关闭带有标识符 id 的通知。bus 可以是表示 D-Bus 连接的字符串，默认为 :session。
+    此函数关闭带有标识符 id 的通知 。bus 可以是表示 D-Bus 连接的字符串，默认为 :session 。
 
 #+begin_src emacs-lisp
   Function: notifications-get-capabilities &optional bus ¶
 #+end_src
 
-    返回通知服务器的功能，符号列表。bus 可以是表示 D-Bus 连接的字符串，默认为 :session。可以预期以下功能：
+    返回通知服务器的功能，符号列表 。bus 可以是表示 D-Bus 连接的字符串，默认为 :session 。可以预期以下功能：
 
 #+begin_src emacs-lisp
   :actions
 #+end_src
 
-	 服务器将向用户提供指定的操作。
+	 服务器将向用户提供指定的操作 。
 #+begin_src emacs-lisp
   :body
 #+end_src
 
-	 支持正文。
+	 支持正文 。
 #+begin_src emacs-lisp
   :body-hyperlinks
 #+end_src
 
-	 服务器支持通知中的超链接。
+	 服务器支持通知中的超链接 。
 #+begin_src emacs-lisp
   :body-images
 #+end_src
 
-	 服务器支持通知中的图像。
+	 服务器支持通知中的图像 。
 #+begin_src emacs-lisp
   :body-markup
 #+end_src
 
-	 支持正文中的标记。
+	 支持正文中的标记 。
 #+begin_src emacs-lisp
   :icon-multi
 #+end_src
 
-	 服务器将渲染给定图像数组中所有帧的动画。
+	 服务器将渲染给定图像数组中所有帧的动画 。
 #+begin_src emacs-lisp
   :icon-static
 #+end_src
 
-	 支持显示任何给定图像阵列的精确 1 帧。该值与 :icon-multi 互斥。
+	 支持显示任何给定图像阵列的精确 1 帧 。该值与 :icon-multi 互斥 。
 #+begin_src emacs-lisp
   :persistence
 #+end_src
 
-	 服务器支持通知的持久性。
+	 服务器支持通知的持久性 。
 #+begin_src emacs-lisp
   :sound
 #+end_src
 
-	 服务器支持通知声音。
+	 服务器支持通知声音 。
 
-    更多特定于供应商的上限以 :x-vendor 开头，例如 :x-gnome-foo-cap。
+    更多特定于供应商的上限以 :x-vendor 开头，例如 :x-gnome-foo-cap 。
 
 #+begin_src emacs-lisp
   Function: notifications-get-server-information &optional bus ¶
 #+end_src
 
-    返回通知服务器上的信息，字符串列表。bus 可以是表示 D-Bus 连接的字符串，默认为 :session。返回的列表是 (name vendor version spec-version)。
+    返回通知服务器上的信息，字符串列表 。bus 可以是表示 D-Bus 连接的字符串，默认为 :session 。返回的列表是 (name vendor version spec-version) 。
 
 #+begin_src emacs-lisp
   name
 #+end_src
 
-	 服务器的产品名称。
+	 服务器的产品名称 。
 #+begin_src emacs-lisp
   vendor
 #+end_src
 
-	 供应商名称。例如，'"KDE"'、'"GNOME"'。
+	 供应商名称 。例如，'"KDE"'、'"GNOME"' 。
 #+begin_src emacs-lisp
   version
 #+end_src
 
-	 服务器的版本号。
+	 服务器的版本号 。
 #+begin_src emacs-lisp
   spec-version
 #+end_src
 
-	 服务器符合的规范版本。
+	 服务器符合的规范版本 。
 
-    如果 spec_version 为 nil，则服务器支持 '"1.0"' 之前的规范。
+    如果 spec_version 为  ~nil~ ，则服务器支持 '"1.0"' 之前的规范 。
 
 当Emacs作为 GUI 会话在 MS-Windows 上运行时，它通过原生原语支持一小部分 D-Bus 通知功能：
 
@@ -2054,11 +2041,11 @@ Emacs 能够在支持 freedesktop.org 桌面通知规范的系统和 MS-Windows 
   Function: w32-notification-notify &rest params ¶
 #+end_src
 
-    此函数显示由 params 指定的 MS-Windows 托盘通知。MS-Windows 托盘通知显示在任务栏通知区域中的图标的气球中。
+    此函数显示由 params 指定的 MS-Windows 托盘通知 。MS-Windows 托盘通知显示在任务栏通知区域中的图标的气球中 。
 
-    值是通知的整数唯一 ID，可用于使用 w32-notification-close 删除通知，如下所述。如果函数失败，则返回值为 nil。
+    值是通知的整数唯一 ID，可用于使用 w32-notification-close 删除通知，如下所述 。如果函数失败，则返回值为  ~nil~  。
 
-    参数 params 被指定为关键字/值对。所有参数都是可选的，但是如果没有指定参数，函数什么也不做，返回 nil。
+    参数 params 被指定为关键字/值对 。所有参数都是可选的，但是如果没有指定参数，函数什么也不做，返回  ~nil~  。
 
     支持以下参数：
 
@@ -2066,31 +2053,31 @@ Emacs 能够在支持 freedesktop.org 桌面通知规范的系统和 MS-Windows 
   :icon icon
 #+end_src
 
-	 在系统托盘中显示图标。如果 icon 是一个字符串，它应该指定一个从中加载图标的文件名；  指定的文件应该是 .ico Windows 图标文件。如果 icon 不是字符串，或者没有指定此参数，则将使用标准Emacs图标。
+	 在系统托盘中显示图标 。如果 icon 是一个字符串，它应该指定一个从中加载图标的文件名；  指定的文件应该是 .ico Windows 图标文件 。如果 icon 不是字符串，或者没有指定此参数，则将使用标准Emacs图标 。
 #+begin_src emacs-lisp
   :tip tip
 #+end_src
 
-	 使用tip 作为通知的工具提示。如果tip 是一个字符串，则这是当鼠标指针悬停在通知添加的托盘图标上时将显示的工具提示文本。如果tip 不是字符串，或者未指定此参数，则默认工具提示文本为 ~Emacs 通知~ 。工具提示文本最长可达 127 个字符（W2K 之前的 Windows 版本为 63 个）。较长的字符串将被截断。
+	 使用tip 作为通知的工具提示 。如果tip 是一个字符串，则这是当鼠标指针悬停在通知添加的托盘图标上时将显示的工具提示文本 。如果tip 不是字符串，或者未指定此参数，则默认工具提示文本为 ~Emacs 通知~  。工具提示文本最长可达 127 个字符（W2K 之前的 Windows 版本为 63 个） 。较长的字符串将被截断 。
 #+begin_src emacs-lisp
   :level level
 #+end_src
 
-	 通知严重性级别，信息、警告或错误之一。如果给定，则该值确定显示在通知标题左侧的图标，但前提是还指定了 :title 参数（见下文）并且是字符串。
+	 通知严重性级别，信息、警告或错误之一 。如果给定，则该值确定显示在通知标题左侧的图标，但前提是还指定了 :title 参数（见下文）并且是字符串 。
 #+begin_src emacs-lisp
   :title title
 #+end_src
 
-	 通知的标题。如果标题是一个字符串，它会在正文上方以较大的字体显示。标题文本最长可达 63 个字符；  较长的文本将被截断。
+	 通知的标题 。如果标题是一个字符串，它会在正文上方以较大的字体显示 。标题文本最长可达 63 个字符；  较长的文本将被截断 。
 #+begin_src emacs-lisp
   :body body
 #+end_src
 
-	 通知的正文。如果 body 是一个字符串，它指定通知消息的文本。使用嵌入的换行符来控制文本被分成几行的方式。正文文本最长可达 255 个字符，如果过长将被截断。与 D-Bus 不同，正文应该是纯文本，没有标记。
+	 通知的正文 。如果 body 是一个字符串，它指定通知消息的文本 。使用嵌入的换行符来控制文本被分成几行的方式 。正文文本最长可达 255 个字符，如果过长将被截断 。与 D-Bus 不同，正文应该是纯文本，没有标记 。
 
-    请注意，W2K 之前的 Windows 版本仅支持 :icon 和 :tip。可以传递其他参数，但在那些旧系统上它们将被忽略。
+    请注意，W2K 之前的 Windows 版本仅支持 :icon 和 :tip 。可以传递其他参数，但在那些旧系统上它们将被忽略 。
 
-    在任何给定时间最多只能有一个活动通知。必须通过调用 w32-notification-close 删除活动通知，然后才能显示新通知。
+    在任何给定时间最多只能有一个活动通知 。必须通过调用 w32-notification-close 删除活动通知，然后才能显示新通知 。
 
 要从任务栏中删除通知及其图标，请使用以下函数：
 
@@ -2098,28 +2085,28 @@ Emacs 能够在支持 freedesktop.org 桌面通知规范的系统和 MS-Windows 
   Function: w32-notification-close id ¶
 #+end_src
 
-    此函数删除由其唯一 ID 给出的托盘通知。
+    此函数删除由其唯一 ID 给出的托盘通知 。
 
 ** 41.20 文件更改通知
-一些操作系统支持监视文件系统以查找文件更改。如果配置正确，Emacs 会静态链接相应的库，如 inotify、kqueue、gfilenotify 或 w32notify。这些库可以监视本地机器上的文件系统。
+一些操作系统支持监视文件系统以查找文件更改 。如果配置正确，Emacs 会静态链接相应的库，如 inotify、kqueue、gfilenotify 或 w32notify 。这些库可以监视本地机器上的文件系统 。
 
-也可以查看远程机器上的文件系统，参见GNU Emacs手册中的远程文件 这不依赖于链接到Emacs的库之一。
+也可以查看远程机器上的文件系统，参见GNU Emacs手册中的远程文件 这不依赖于链接到Emacs的库之一 。
 
-由于所有这些库都会在通知文件更改时发出不同的事件，因此Emacs库 filenotify 提供了一个统一的接口。想要接收文件通知的 Lisp 程序应该始终优先使用这个库而不是本地库。
+由于所有这些库都会在通知文件更改时发出不同的事件，因此Emacs库 filenotify 提供了一个统一的接口 。想要接收文件通知的 Lisp 程序应该始终优先使用这个库而不是本地库 。
 
 #+begin_src emacs-lisp
   Function: file-notify-add-watch file flags callback ¶
 #+end_src
 
-    添加对与文件有关的文件系统事件的监视。这安排了与要报告给Emacs的文件有关的文件系统事件。
+    添加对与文件有关的文件系统事件的监视 。这安排了与要报告给Emacs的文件有关的文件系统事件 。
 
-    返回值是添加的手表的描述符。它的类型取决于底层库，不能假定为整数，如下例所示。它应该仅用于相等的比较。
+    返回值是添加的手表的描述符 。它的类型取决于底层库，不能假定为整数，如下例所示 。它应该仅用于相等的比较 。
 
-    如果由于某种原因无法查看文件，则此函数会发出 file-notify-error 错误信号。
+    如果由于某种原因无法查看文件，则此函数会发出 file-notify-error 错误信号 。
 
-    有时，无法监视已挂载的文件系统的文件更改。此函数未检测到这一点，非零返回值不保证将通知文件更改。
+    有时，无法监视已挂载的文件系统的文件更改 。此函数未检测到这一点，非零返回值不保证将通知文件更改 。
 
-    flags 是设置要监视的条件的列表。它可以包括以下符号：
+    flags 是设置要监视的条件的列表 。它可以包括以下符号：
 
 #+begin_src emacs-lisp
   change
@@ -2132,7 +2119,7 @@ Emacs 能够在支持 freedesktop.org 桌面通知规范的系统和 MS-Windows 
 
 	 监视文件属性更改，例如权限或修改时间
 
-    如果 file 是一个目录，则更改该目录中文件创建或删除的监视。一些文件通知后端报告还文件更改。这不能递归地工作。
+    如果 file 是一个目录，则更改该目录中文件创建或删除的监视 。一些文件通知后端报告还文件更改 。这不能递归地工作 。
 
     当任何事件发生时，Emacs 将调用回调函数传递给它一个单参数事件，其形式为
 
@@ -2140,7 +2127,7 @@ Emacs 能够在支持 freedesktop.org 桌面通知规范的系统和 MS-Windows 
       (descriptor action file [file1])
     #+end_src
 
-    描述符是与此函数返回的对象相同的对象。action 是事件的描述。它可以是以下任何一种符号：
+    描述符是与此函数返回的对象相同的对象 。action 是事件的描述 。它可以是以下任何一种符号：
 
 #+begin_src emacs-lisp
   created
@@ -2173,11 +2160,11 @@ Emacs 能够在支持 freedesktop.org 桌面通知规范的系统和 MS-Windows 
 
 	 观看文件已停止
 
-    请注意，w32notify 库不报告属性更改事件。当某些文件的属性（例如权限或修改时间）发生更改时，此库会报告更改事件。同样，kqueue 库在监视目录时不会可靠地报告文件属性更改。
+    请注意，w32notify 库不报告属性更改事件 。当某些文件的属性（例如权限或修改时间）发生更改时，此库会报告更改事件 。同样，kqueue 库在监视目录时不会可靠地报告文件属性更改 。
 
-    停止事件报告，观看文件已停止。这可能是因为调用了 file-notify-rm-watch（见下文），或者因为正在监视的文件被删除，或者由于底层库报告了另一个错误。
+    停止事件报告，观看文件已停止 。这可能是因为调用了 file-notify-rm-watch（见下文），或者因为正在监视的文件被删除，或者由于底层库报告了另一个错误 。
 
-    file 和 file1 是正在报告其事件的文件的名称。例如：
+    file 和 file1 是正在报告其事件的文件的名称 。例如：
     #+begin_src emacs-lisp
       (require 'filenotify)
 	   ⇒ filenotify
@@ -2212,8 +2199,6 @@ Emacs 能够在支持 freedesktop.org 桌面通知规范的系统和 MS-Windows 
 Whether the action renamed is returned, depends on the used watch library. Otherwise, the actions deleted and created could be returned in a random order.
 
     #+begin_src emacs-lisp
-
-
       (rename-file "/tmp/foo" "/tmp/bla")
 	   ⇒ Event (35025468 renamed "/tmp/foo" "/tmp/bla")
 
@@ -2225,16 +2210,14 @@ Whether the action renamed is returned, depends on the used watch library. Other
 #+begin_src emacs-lisp
   Function: file-notify-rm-watch descriptor ¶
 #+end_src
-
-    删除由其描述符指定的现有文件监视。描述符应该是 file-notify-add-watch 返回的对象。
+    删除由其描述符指定的现有文件监视 。描述符应该是 file-notify-add-watch 返回的对象 。
 
 #+begin_src emacs-lisp
   Function: file-notify-valid-p descriptor ¶
 #+end_src
+    检查由其描述符指定的手表的有效性 。描述符应该是 file-notify-add-watch 返回的对象 。
 
-    检查由其描述符指定的手表的有效性。描述符应该是 file-notify-add-watch 返回的对象。
-
-    如果监视的文件或目录被删除，或者监视线程由于任何其他原因异常退出，则监视可能会变得无效。通过调用 file-notify-rm-watch 删除监视也会使其无效。
+    如果监视的文件或目录被删除，或者监视线程由于任何其他原因异常退出，则监视可能会变得无效 。通过调用 file-notify-rm-watch 删除监视也会使其无效 。
     #+begin_src emacs-lisp
 
 
@@ -2284,19 +2267,19 @@ Whether the action renamed is returned, depends on the used watch library. Other
 	   ⇒ nil
     #+end_src
 ** 41.21 动态加载的库
-动态加载的库是在首次需要其设施时按需加载的库。Emacs 支持对其某些功能的这种按需加载支持库。
+动态加载的库是在首次需要其设施时按需加载的库 。Emacs 支持对其某些功能的这种按需加载支持库 。
 
 #+begin_src emacs-lisp
   Variable: dynamic-library-alist ¶
 #+end_src
 
-    这是动态库和实现它们的外部库文件的列表。
+    这是动态库和实现它们的外部库文件的列表 。
 
-    每个元素都是表单（库文件...）的列表，其中 car 是表示支持的外部库的符号，其余是为该库提供备用文件名的字符串。
+    每个元素都是表单（库文件...）的列表，其中 car 是表示支持的外部库的符号，其余是为该库提供备用文件名的字符串 。
 
-   Emacs尝试按照它们在列表中出现的顺序从文件中加载库；  如果没有找到，Emacs 会话将无法访问该库，并且它提供的功能将不可用。
+   Emacs尝试按照它们在列表中出现的顺序从文件中加载库；  如果没有找到，Emacs 会话将无法访问该库，并且它提供的功能将不可用 。
 
-    某些平台上的图像支持使用此功能。下面是设置此变量以支持 MS-Windows 上的图像的示例：
+    某些平台上的图像支持使用此功能 。下面是设置此变量以支持 MS-Windows 上的图像的示例：
 
     #+begin_src emacs-lisp
       (setq dynamic-library-alist
@@ -2313,64 +2296,62 @@ Whether the action renamed is returned, depends on the used watch library. Other
 	      (gobject "libgobject-2.0-0.dll")))
     #+end_src
 
-    请注意，图像类型 pbm 和 xbm 不需要此变量中的条目，因为它们不依赖于外部库并且在Emacs中始终可用。
+    请注意，图像类型 pbm 和 xbm 不需要此变量中的条目，因为它们不依赖于外部库并且在Emacs中始终可用 。
 
-    另请注意，此变量并非用于访问外部库的通用工具；  只有Emacs已知的那些才能通过它加载。
+    另请注意，此变量并非用于访问外部库的通用工具；  只有Emacs已知的那些才能通过它加载 。
 
-    如果给定的库静态链接到 Emacs，则忽略此变量。
+    如果给定的库静态链接到 Emacs，则忽略此变量 。
 
 ** 41.22 安全考虑
-与任何应用程序一样，Emacs 可以在安全的环境中运行，其中操作系统强制执行有关访问等的规则。稍加注意，基于Emacs的应用程序也可以成为检查此类规则的安全边界的一部分。尽管Emacs的默认设置适用于典型的软件开发环境，但它们可能需要在包含可能包括攻击者的不受信任用户的环境中进行调整。如果您正在开发此类应用程序，以下是安全问题的概要，可能会对您有所帮助。它绝不是完整的；  它旨在让您了解所涉及的安全问题，而不是作为安全清单。
+与任何应用程序一样，Emacs 可以在安全的环境中运行，其中操作系统强制执行有关访问等的规则 。稍加注意，基于Emacs的应用程序也可以成为检查此类规则的安全边界的一部分 。尽管Emacs的默认设置适用于典型的软件开发环境，但它们可能需要在包含可能包括攻击者的不受信任用户的环境中进行调整 。如果您正在开发此类应用程序，以下是安全问题的概要，可能会对您有所帮助 。它绝不是完整的；  它旨在让您了解所涉及的安全问题，而不是作为安全清单 。
 
 #+begin_src emacs-lisp
   File local variables ¶
 #+end_src
 
-   Emacs访问的文件可以包含影响访问该文件的缓冲区的变量设置；  请参阅文件局部变量。类似地，一个目录可以指定该目录中所有文件共有的局部变量值；  请参阅目录局部变量。尽管Emacs采取了一些措施来防止这些变量的滥用，但仅仅通过过于乐观地设置 safe-local-variable 的包就可以创建一个安全漏洞，这个问题太常见了。要对文件和目录禁用此功能，请将 enable-local-variables 设置为 nil。
+   Emacs访问的文件可以包含影响访问该文件的缓冲区的变量设置；  请参阅文件局部变量 。类似地，一个目录可以指定该目录中所有文件共有的局部变量值；  请参阅目录局部变量 。尽管Emacs采取了一些措施来防止这些变量的滥用，但仅仅通过过于乐观地设置 safe-local-variable 的包就可以创建一个安全漏洞，这个问题太常见了 。要对文件和目录禁用此功能，请将 enable-local-variables 设置为  ~nil~  。
 #+begin_src emacs-lisp
   Access control
 #+end_src
-
-    尽管Emacs通常尊重底层操作系统的访问权限，但在某些情况下它会专门处理访问。例如，文件名可以具有专门处理文件的处理程序，并具有自己的访问检查。请参阅使某些文件名 ~神奇~ 。此外，即使相应的文件是可写的，缓冲区也可以是只读的，反之亦然，这可能导致诸如'File passwd is write-protected;  无论如何尝试保存？  （是还是不是）'。请参阅只读缓冲区。
+    尽管Emacs通常尊重底层操作系统的访问权限，但在某些情况下它会专门处理访问 。例如，文件名可以具有专门处理文件的处理程序，并具有自己的访问检查 。请参阅使某些文件名 ~神奇~  。此外，即使相应的文件是可写的，缓冲区也可以是只读的，反之亦然，这可能导致诸如'File passwd is write-protected;  无论如何尝试保存？  （是还是不是）' 。请参阅只读缓冲区 。
 #+begin_src emacs-lisp
   Authentication
 #+end_src
 
-   Emacs有几个处理密码的函数，例如 read-passwd。请参阅读取密码。尽管这些函数不会尝试向世界广播密码，但它们的实现并不能证明可以访问Emacs内部的坚定攻击者。例如，即使 Elisp 代码在使用后使用 clear-string 从其内存中清除密码，密码的残余部分仍可能驻留在垃圾回收的空闲列表中。请参阅修改字符串。
+   Emacs有几个处理密码的函数，例如 read-passwd 。请参阅读取密码 。尽管这些函数不会尝试向世界广播密码，但它们的实现并不能证明可以访问Emacs内部的坚定攻击者 。例如，即使 Elisp 代码在使用后使用 clear-string 从其内存中清除密码，密码的残余部分仍可能驻留在垃圾回收的空闲列表中 。请参阅修改字符串 。
 #+begin_src emacs-lisp
   Code injection
 #+end_src
 
-   Emacs可以向许多其他应用程序发送命令，并且应用程序应该注意作为这些命令的操作数发送的字符串不会被误解为指令。例如，当使用 shell 命令将文件 a 重命名为 b 时，不要简单地使用字符串 mv ab，因为文件名可能以 ~-~ 开头，或者可能包含 shell 元字符，如 ~;~ 。尽管 shell-quote-argument 之类的函数可以帮助避免此类问题，但它们并不是万能的；  例如，在 POSIX 平台上，shell-quote-argument 引用 shell 元字符但不前导 ~-~ 。在 MS-Windows 上，引用 '%' 假定所有环境变量的名称中都没有 '^'。请参阅 Shell 参数。通常使用 call-process 比使用 subshel​​l 更安全。请参阅创建同步进程。而且使用内置的Emacs函数更安全；  例如，使用 (rename-file "a" "b" t) 而不是调用 mv。请参阅更改文件名和属性。
+   Emacs可以向许多其他应用程序发送命令，并且应用程序应该注意作为这些命令的操作数发送的字符串不会被误解为指令 。例如，当使用 shell 命令将文件 a 重命名为 b 时，不要简单地使用字符串 mv ab，因为文件名可能以 ~-~ 开头，或者可能包含 shell 元字符，如 ~;~  。尽管 shell-quote-argument 之类的函数可以帮助避免此类问题，但它们并不是万能的；  例如，在 POSIX 平台上，shell-quote-argument 引用 shell 元字符但不前导 ~-~  。在 MS-Windows 上，引用 '%' 假定所有环境变量的名称中都没有 '^' 。请参阅 Shell 参数 。通常使用 call-process 比使用 subshel​​l 更安全 。请参阅创建同步进程 。而且使用内置的Emacs函数更安全；  例如，使用 (rename-file "a" "b" t) 而不是调用 mv 。请参阅更改文件名和属性 。
 #+begin_src emacs-lisp
   Coding systems
 #+end_src
 
-   Emacs尝试推断它访问的文件和网络连接的编码系统。请参阅编码系统。如果Emacs推断不正确，或者如果网络连接的其他方不同意Emacs的推断，则生成的系统可能不可靠。此外，即使推断正确，Emacs 也经常可以使用其他程序无法使用的字节。例如，尽管对于Emacs空字节只是一个字符，但许多其他应用程序将其视为字符串终止符并错误处理包含空字节的字符串或文件。
+   Emacs尝试推断它访问的文件和网络连接的编码系统 。请参阅编码系统 。如果Emacs推断不正确，或者如果网络连接的其他方不同意Emacs的推断，则生成的系统可能不可靠 。此外，即使推断正确，Emacs 也经常可以使用其他程序无法使用的字节 。例如，尽管对于Emacs空字节只是一个字符，但许多其他应用程序将其视为字符串终止符并错误处理包含空字节的字符串或文件 。
 #+begin_src emacs-lisp
   Environment and configuration variables
 #+end_src
 
-    POSIX 指定了几个可以影响Emacs行为方式的环境变量。任何名称完全由大写 ASCII 字母、数字和下划线组成的环境变量都可能影响Emacs的内部行为。Emacs 使用了几个这样的变量，例如，EMACSLOADPATH。请参阅图书馆搜索。在某些平台上，某些环境变量（例如，PATH、POSIXLY_CORRECT、SHELL、TMPDIR）需要具有正确配置的值，以便获得Emacs可能调用的任何实用程序的标准行为。即使像 TZ 这样看似良性的变量也可能具有安全隐患。请参阅操作系统环境。
+    POSIX 指定了几个可以影响Emacs行为方式的环境变量 。任何名称完全由大写 ASCII 字母、数字和下划线组成的环境变量都可能影响Emacs的内部行为 。Emacs 使用了几个这样的变量，例如，EMACSLOADPATH 。请参阅图书馆搜索 。在某些平台上，某些环境变量（例如，PATH、POSIXLY_CORRECT、SHELL、TMPDIR）需要具有正确配置的值，以便获得Emacs可能调用的任何实用程序的标准行为 。即使像 TZ 这样看似良性的变量也可能具有安全隐患 。请参阅操作系统环境 。
 
-   Emacs具有自定义和其他具有类似考虑的变量。例如，如果变量 shell-file-name 指定了具有非标准行为的 shell，则基于Emacs的应用程序可能会出现异常。
+   Emacs具有自定义和其他具有类似考虑的变量 。例如，如果变量 shell-file-name 指定了具有非标准行为的 shell，则基于Emacs的应用程序可能会出现异常 。
 #+begin_src emacs-lisp
   Installation
 #+end_src
 
-    在安装Emacs时，如果安装目录层次结构可以被不受信任的用户修改，则应用程序不能被信任。这也适用于Emacs使用的程序的目录层次结构，以及Emacs读取和写入的文件的目录层次结构。
+    在安装Emacs时，如果安装目录层次结构可以被不受信任的用户修改，则应用程序不能被信任 。这也适用于Emacs使用的程序的目录层次结构，以及Emacs读取和写入的文件的目录层次结构 。
 #+begin_src emacs-lisp
   Network access
 #+end_src
 
-   Emacs经常访问网络，您可能需要对其进行配置以避免它通常会进行的网络访问。例如，除非您将 tramp-mode 设置为 nil，否则使用特定语法的文件名将被解释为网络文件，并通过网络进行检索。请参阅《流浪汉手册》中的《流浪汉手册》。
+   Emacs经常访问网络，您可能需要对其进行配置以避免它通常会进行的网络访问 。例如，除非您将 tramp-mode 设置为  ~nil~ ，否则使用特定语法的文件名将被解释为网络文件，并通过网络进行检索 。请参阅《流浪汉手册》中的《流浪汉手册》 。
 #+begin_src emacs-lisp
   Race conditions
 #+end_src
-
-   Emacs应用程序具有与其他应用程序相同的竞争条件问题。例如，即使 (file-readable-p "foo.txt") 返回 t，也可能是 foo.txt 不可读，因为其他程序在调用 file-readable-p 和现在之间更改了文件的权限。请参阅测试可访问性。
+   Emacs应用程序具有与其他应用程序相同的竞争条件问题 。例如，即使 (file-readable-p "foo.txt") 返回 t，也可能是 foo.txt 不可读，因为其他程序在调用 file-readable-p 和现在之间更改了文件的权限 。请参阅测试可访问性 。
 #+begin_src emacs-lisp
   Resource limits
 #+end_src
 
-    当Emacs耗尽内存或其他操作系统资源时，它的行为可能不太可靠，因为通常运行到完成的计算可能会中止回到顶层。这可能会导致Emacs忽略它通常会执行的操作。
+    当Emacs耗尽内存或其他操作系统资源时，它的行为可能不太可靠，因为通常运行到完成的计算可能会中止回到顶层 。这可能会导致Emacs忽略它通常会执行的操作 。

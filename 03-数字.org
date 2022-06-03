@@ -75,7 +75,7 @@ Emacs Lisp 将 -0.0 视为在数值上等于普通的零，对于像 = 这样的
 
 IEEE 浮点标准支持正无穷大和负无穷大作为浮点值。它还提供了一类称为 NaN 或~ 非数字~ 的值；  在没有正确答案的情况下，数值函数会返回此类值。例如，(/0.0 0.0) 返回一个 NaN。NaN 在数值上永远不等于任何值，甚至不等于它自己。NaN 带有一个符号和一个有效数字，非数字函数在两个 NaN 的符号和有效数字一致时将其视为相等。NaN 的有效位是机器相关的，它们的字符串表示中的数字也是如此。
 
-当涉及到 NaN 和有符号零时，诸如 eql、equal、sxhash-eql、sxhash-equal 和 gethash 之类的非数字函数确定值是否不可区分，而不是它们在数值上是否相等。例如，当 x 和 y 是相同的 NaN 时，(equal xy) 返回 t，而 (= xy) 使用数值比较并返回 nil；  相反，(equal 0.0 -0.0) 返回 nil，而 (= 0.0 -0.0) 返回 t。
+当涉及到 NaN 和有符号零时，诸如 eql、equal、sxhash-eql、sxhash-equal 和 gethash 之类的非数字函数确定值是否不可区分，而不是它们在数值上是否相等。例如，当 x 和 y 是相同的 NaN 时，(equal xy) 返回 t，而 (= xy) 使用数值比较并返回  ~nil~ ；  相反，(equal 0.0 -0.0) 返回  ~nil~ ，而 (= 0.0 -0.0) 返回 t。
 
 以下是这些特殊浮点值的读取语法：
 
@@ -96,7 +96,7 @@ not-a-number
   Function: isnan x
 #+end_src
 
-    如果它的浮点参数是 NaN，则此谓词返回 t，否则返回 nil。
+    如果它的浮点参数是 NaN，则此谓词返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: frexp x
@@ -135,48 +135,48 @@ not-a-number
 #+begin_src emacs-lisp
   Function: bignump object
 #+end_src
-    该谓词测试其参数是否为大整数，如果是则返回 t，否则返回 nil。与小整数不同，大整数可以是 = 或 eql，即使它们不是 eq。
+    该谓词测试其参数是否为大整数，如果是则返回 t，否则返回  ~nil~ 。与小整数不同，大整数可以是 = 或 eql，即使它们不是 eq。
 
 #+begin_src emacs-lisp
   Function: fixnump object
 #+end_src
-    此谓词测试其参数是否为小整数，如果是则返回 t，否则返回 nil。小整数可以与 eq 进行比较。
+    此谓词测试其参数是否为小整数，如果是则返回 t，否则返回  ~nil~ 。小整数可以与 eq 进行比较。
 
 #+begin_src emacs-lisp
   Function: floatp object
 #+end_src
-    该谓词测试其参数是否为浮点数，如果是则返回 t，否则返回 nil。
+    该谓词测试其参数是否为浮点数，如果是则返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: integerp object
 #+end_src
-    该谓词测试其参数是否为整数，如果是则返回 t，否则返回 nil。
+    该谓词测试其参数是否为整数，如果是则返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: numberp object
 #+end_src
 
-    此谓词测试其参数是否为数字（整数或浮点数），如果是则返回 t，否则返回 nil。
+    此谓词测试其参数是否为数字（整数或浮点数），如果是则返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: natnump object
 #+end_src
 
-    该谓词（其名称来自短语~ 自然数~ ）测试其参数是否为非负整数，如果是则返回 t，否则返回 nil。0 被认为是非负数。
+    该谓词（其名称来自短语~ 自然数~ ）测试其参数是否为非负整数，如果是则返回 t，否则返回  ~nil~ 。0 被认为是非负数。
 
     Wholenump 是 natnump 的同义词。
 
 #+begin_src emacs-lisp
   Function: zerop number
 #+end_src
-    该谓词测试其参数是否为零，如果是则返回 t，否则返回 nil。参数必须是一个数字。
+    该谓词测试其参数是否为零，如果是则返回 t，否则返回  ~nil~ 。参数必须是一个数字。
 
     #+begin_src emacs-lisp
       (zerop x) is equivalent to (= x 0)
     #+end_src
 
 ** 3.4 数字比较
-要测试数字是否相等，通常应该使用 = 而不是非数字比较谓词，如 eq、eql 和 equal。不同的浮点数和大整数对象可以在数值上相等。如果你用 eq 来比较它们，你测试它们是否是同一个对象；  如果使用 eql 或 equal，则测试它们的值是否无法区分。相反，= 使用数字比较，当非数字比较返回 nil 时，有时会返回 t，反之亦然。请参阅浮点基础知识。
+要测试数字是否相等，通常应该使用 = 而不是非数字比较谓词，如 eq、eql 和 equal。不同的浮点数和大整数对象可以在数值上相等。如果你用 eq 来比较它们，你测试它们是否是同一个对象；  如果使用 eql 或 equal，则测试它们的值是否无法区分。相反，= 使用数字比较，当非数字比较返回  ~nil~  时，有时会返回 t，反之亦然。请参阅浮点基础知识。
 
 在 Emacs Lisp 中，如果两个 fixnum 在数值上相等，则它们是同一个 Lisp 对象。也就是说，eq 等价于 = on fixnums。有时使用 eq 比较未知值与固定值比较方便，因为如果未知值不是数字，eq 不会报告错误——它接受任何类型的参数。相反，如果参数不是数字或标记，则 = 表示错误。但是，如果可以，最好使用 =，即使是比较整数也是如此。
 
@@ -198,39 +198,39 @@ not-a-number
   Function: = number-or-marker &rest number-or-markers
 #+end_src
 
-    此函数测试其所有参数在数值上是否相等，如果相等则返回 t，否则返回 nil。
+    此函数测试其所有参数在数值上是否相等，如果相等则返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: eql value1 value2
 #+end_src
 
-    此函数的作用类似于 eq，除非两个参数都是数字。它按类型和数值比较数字，因此 (eql 1.0 1) 返回 nil，但 (eql 1.0 1.0) 和 (eql 1 1) 都返回 t。这可用于比较大整数和小整数。具有相同符号、指​​数和分数的浮点值是 eql。这与数值比较不同：(eql 0.0 -0.0) 返回 nil，(eql 0.0e+NaN 0.0e+NaN) 返回 t，而 = 则相反。
+    此函数的作用类似于 eq，除非两个参数都是数字。它按类型和数值比较数字，因此 (eql 1.0 1) 返回  ~nil~ ，但 (eql 1.0 1.0) 和 (eql 1 1) 都返回 t。这可用于比较大整数和小整数。具有相同符号、指​​数和分数的浮点值是 eql。这与数值比较不同：(eql 0.0 -0.0) 返回  ~nil~ ，(eql 0.0e+NaN 0.0e+NaN) 返回 t，而 = 则相反。
 
 #+begin_src emacs-lisp
   Function: /= number-or-marker1 number-or-marker2
 #+end_src
 
-    此函数测试其参数在数值上是否相等，如果不相等则返回 t，如果相等则返回 nil。
+    此函数测试其参数在数值上是否相等，如果不相等则返回 t，如果相等则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: < number-or-marker &rest number-or-markers
 #+end_src
-    此函数测试每个参数是否严格小于以下参数。如果是，则返回 t，否则返回 nil。
+    此函数测试每个参数是否严格小于以下参数。如果是，则返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: <= number-or-marker &rest number-or-markers
 #+end_src
-    此函数测试每个参数是否小于或等于以下参数。如果是，则返回 t，否则返回 nil。
+    此函数测试每个参数是否小于或等于以下参数。如果是，则返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: > number-or-marker &rest number-or-markers
 #+end_src
-    此函数测试每个参数是否严格大于以下参数。如果是，则返回 t，否则返回 nil。
+    此函数测试每个参数是否严格大于以下参数。如果是，则返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: >= number-or-marker &rest number-or-markers
 #+end_src
-    此函数测试每个参数是否大于或等于以下参数。如果是，则返回 t，否则返回 nil。
+    此函数测试每个参数是否大于或等于以下参数。如果是，则返回 t，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: max number-or-marker &rest numbers-or-markers
@@ -271,7 +271,7 @@ not-a-number
 
     这将返回转换为浮点数的数字。如果 number 已经是浮点数，则 float 将其原封不动地返回。
 
-有四个函数可以将浮点数转换为整数；  它们的舍入方式不同。都接受一个参数编号和一个可选的参数除数。两个参数都可以是整数或浮点数。除数也可能为零。如果 divisor 为 nil 或省略，这些函数将数字转换为整数，如果它已经是整数，则将其原样返回。如果 divisor 不为 nil，则它们将数字除以除数并将结果转换为整数。如果除数为零（无论是整数还是浮点数），Emacs 都会发出算术错误错误信号。
+有四个函数可以将浮点数转换为整数；  它们的舍入方式不同。都接受一个参数编号和一个可选的参数除数。两个参数都可以是整数或浮点数。除数也可能为零。如果 divisor 为  ~nil~  或省略，这些函数将数字转换为整数，如果它已经是整数，则将其原样返回。如果 divisor 不为  ~nil~ ，则它们将数字除以除数并将结果转换为整数。如果除数为零（无论是整数还是浮点数），Emacs 都会发出算术错误错误信号。
 
 #+begin_src emacs-lisp
 Function: truncate number &optional divisor
