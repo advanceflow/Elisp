@@ -156,7 +156,7 @@ Emacs还尝试加载第二个 ~init file~ ，称为 ~early init~ 文件（如果
 
 Emacs安装可能有一个默认的 ~init file~ ，它是一个名为 ~default.el~ 的Lisp库。Emacs通过库的标准搜索路径找到这个文件（参见程序如何加载）。Emacs发行版不附带此文件； 它用于本地定制。如果默认的 ~init file~ 存在，它会在您启动Emacs时加载。但是你自己的个人初始化文件，如果有的话，首先被加载； 如果它将禁止默认初始化设置为非零值，则Emacs不会随后加载 ~default.el~ 文件。在批处理模式下，或者如果您指定 ~-q~ （或 ~-Q~ ），Emacs 既不会加载您的个人 ~init file~ ，也不会加载默认的 ~init file~ 。
 
-站点定制的另一个文件是 site-start.el。Emacs 在用户的 init 文件之前加载它。您可以使用选项 ~--no-site-file~ 来禁止加载此文件。
+站点定制的另一个文件是 ~site-start.el~ 。Emacs 在用户的 ~init file~ 之前加载它。您可以使用选项 ~--no-site-file~ 来禁止加载此文件。
 
 #+begin_src emacs-lisp
 User Option: site-run-file ¶
@@ -198,7 +198,7 @@ Variable: user-init-file ¶
 #+begin_src emacs-lisp
 Variable: user-emacs-directory ¶
 #+end_src
-    此变量保存Emacs默认目录的名称。如果该目录存在并且 ~~/.emacs.d/~ 和 ~~/.emacs~ 不存在，则默认为 ~${XDG_CONFIG_HOME-'~/.config'}/emacs/~ ，否则在所有平台上为 ~~/.emacs.d/~ 但在 ~MS-DOS~ 平台上除外。这里，~${XDG_CONFIG_HOME-'~/.config'}~ 代表环境变量 ~XDG_CONFIG_HOME~ 的值（如果设置了该变量），否则代表 ~~/.config~ 。请参阅GNU Emacs手册中的Emacs如何找到您的初始化文件。
+    此变量保存Emacs默认目录的名称。如果该目录存在并且 =~/.emacs.d/= 和 =~/.emacs= 不存在，则默认为 =${XDG_CONFIG_HOME-'~/.config'}/emacs/= ，否则在所有平台上为 =~/.emacs.d/= 但在 =MS-DOS= 平台上除外。这里，=${XDG_CONFIG_HOME-'~/.config'}= 代表环境变量 =XDG_CONFIG_HOME= 的值（如果设置了该变量），否则代表 =~/.config= 。请参阅GNU Emacs手册中的Emacs如何找到您的初始化文件。
 *** 41.1.3 终端特定初始化
 每个终端类型都可以有自己的 Lisp 库，当在该类型的终端上运行时，Emacs 会加载该库。库的名称是通过连接变量 term-file-prefix 的值和终端类型（由环境变量 TERM 指定）构成的。通常，term-file-prefix 的值为 ~term/~ ；  不建议更改此设置。如果在 term-file-aliases 关联列表中存在与 TERM 匹配的条目，Emacs 将使用关联的值代替 TERM。Emacs 通过搜索加载路径目录并尝试使用 ~.elc~ 和 ~.el~ 后缀以正常方式查找文件。
 
@@ -226,24 +226,20 @@ Variable: user-emacs-directory ¶
 #+begin_src emacs-lisp
   User Option: term-file-aliases ¶
 #+end_src
-
     此变量是将终端类型映射到它们的别名的关联列表。例如，形式为 ("vt102" . "vt100") 的元素意味着将类型为 ~vt102~ 的终端视为 ~vt100~ 类型的终端。
 
 #+begin_src emacs-lisp
   Variable: tty-setup-hook ¶
 #+end_src
-
     这个变量是Emacs在初始化一个新的文本终端后运行的一个普通的钩子。（这适用于Emacs在非窗口模式下启动以及建立 tty emacsclient 连接时。）该钩子在加载您的 init 文件（如果适用）和特定于终端的 Lisp 文件后运行，因此您可以使用它来调整该文件所做的定义。
 
     有关相关功能，请参阅 window-setup-hook。
-
 *** 41.1.4 命令行参数
 当您启动Emacs时，您可以使用命令行参数来请求各种操作。请注意，使用Emacs的推荐方法是在登录后只启动一次，然后在同一个Emacs会话中进行所有编辑（请​​参阅 The GNU EmacsManual 中的 Entering Emacs）。出于这个原因，您可能不会经常使用命令行参数。尽管如此，在从会话脚本调用Emacs或调试Emacs时，它们还是很有用的。本节描述Emacs如何处理命令行参数。
 
 #+begin_src emacs-lisp
   Function: command-line ¶
 #+end_src
-
     该函数解析调用Emacs的命令行，对其进行处理，并且（除其他外）加载用户的 init 文件并显示启动消息。
 
 #+begin_src emacs-lisp
@@ -257,11 +253,9 @@ Variable: user-emacs-directory ¶
 #+begin_src emacs-lisp
   Variable: command-switch-alist ¶
 #+end_src
-
     此变量是用户定义的命令行选项和相关处理函数的列表。默认情况下它是空的，但您可以根据需要添加元素。
 
     命令行选项是命令行上的一个参数，其形式为：
-
     #+begin_src emacs-lisp
       -option
     #+end_src
@@ -271,7 +265,6 @@ Variable: user-emacs-directory ¶
     #+begin_src emacs-lisp
       (option . handler-function)
     #+end_src
-
     CAR 选项是一个字符串，是命令行选项的名称（包括初始连字符）。调用处理函数来处理选项，并接收选项名称作为其唯一参数。
 
     在某些情况下，该选项在命令行中后跟一个参数。在这些情况下，处理函数可以在变量 command-line-args-left 中找到所有剩余的命令行参数（见下文）。（命令行参数的完整列表在命令行参数中。）
@@ -283,19 +276,16 @@ Variable: user-emacs-directory ¶
 #+begin_src emacs-lisp
   Variable: command-line-args ¶
 #+end_src
-
     这个变量的值是传递给Emacs的命令行参数列表。
 
 #+begin_src emacs-lisp
   Variable: command-line-args-left ¶
 #+end_src
-
     此变量的值是尚未处理的命令行参数列表。
 
 #+begin_src emacs-lisp
   Variable: command-line-functions ¶
 #+end_src
-
     此变量的值是用于处理无法识别的命令行参数的函数列表。每次要处理的下一个参数没有特殊含义时，都会按照出现的顺序调用此列表中的函数，直到其中一个返回非零值。
 
     这些函数在没有参数的情况下被调用。他们可以通过此时临时绑定的变量 argi 访问正在考虑的命令行参数。其余参数（不包括当前参数）在变量 command-line-args-left 中。
