@@ -28,13 +28,13 @@
   User Option: debug-on-error ¶
 #+end_src
 
-    此变量确定在发出错误信号但未处理时是否调用调试器。如果 debug-on-error 为 t，则所有类型的错误都会调用调试器，除了 debug-ignored-errors 中列出的错误（见下文）。如果为 nil，则没有人调用调试器。
+    此变量确定在发出错误信号但未处理时是否调用调试器。如果 debug-on-error 为 t，则所有类型的错误都会调用调试器，除了 debug-ignored-errors 中列出的错误（见下文）。如果为  ~nil~ ，则没有人调用调试器。
 
     该值也可以是错误条件列表（请参阅如何发出错误信号）。然后仅针对此列表中的错误条件调用调试器（除了那些也在 debug-ignored-errors 中列出的情况）。例如，如果您将 debug-on-error 设置为列表 (void-variable)，则调试器只会针对没有值的变量的错误调用。
 
     请注意， eval-expression-debug-on-error 在某些情况下会覆盖此变量；  见下文。
 
-    当这个变量不为 nil 时，Emacs 不会围绕进程过滤函数和哨兵创建错误处理程序。因此，这些函数中的错误也会调用调试器。请参阅进程。
+    当这个变量不为  ~nil~  时，Emacs 不会围绕进程过滤函数和哨兵创建错误处理程序。因此，这些函数中的错误也会调用调试器。请参阅进程。
 
 #+begin_src emacs-lisp
   User Option: debug-ignored-errors ¶
@@ -42,15 +42,15 @@
 
     此变量指定不应进入调试器的错误，无论 debug-on-error 的值如何。它的值是错误条件符号和/或正则表达式的列表。如果错误具有这些条件符号中的任何一个，或者如果错误消息与任何正则表达式匹配，则该错误不会进入调试器。
 
-    此变量的正常值包括用户错误，以及在编辑过程中经常发生但很少由 Lisp 程序中的错误引起的几个错误。然而， ~很少~ 不是 ~从不~ ；  如果您的程序因与此列表匹配的错误而失败，您可以尝试更改此列表以调试错误。最简单的方法通常是将 debug-ignored-errors 设置为 nil。
+    此变量的正常值包括用户错误，以及在编辑过程中经常发生但很少由 Lisp 程序中的错误引起的几个错误。然而， ~很少~ 不是 ~从不~ ；  如果您的程序因与此列表匹配的错误而失败，您可以尝试更改此列表以调试错误。最简单的方法通常是将 debug-ignored-errors 设置为  ~nil~ 。
 
 #+begin_src emacs-lisp
   User Option: eval-expression-debug-on-error ¶
 #+end_src
 
-    如果此变量具有非 nil 值（默认值），则运行命令 eval-expression 会导致 debug-on-error 临时绑定到 t。请参阅 GNU Emacs 手册中的 Emacs Lisp 表达式求值。
+    如果此变量具有非  ~nil~  值（默认值），则运行命令 eval-expression 会导致 debug-on-error 临时绑定到 t。请参阅 GNU Emacs 手册中的 Emacs Lisp 表达式求值。
 
-    如果 eval-expression-debug-on-error 为 nil，则在 eval-expression 期间不会更改 debug-on-error 的值。
+    如果 eval-expression-debug-on-error 为  ~nil~ ，则在 eval-expression 期间不会更改 debug-on-error 的值。
 
 #+begin_src emacs-lisp
   User Option: debug-on-signal ¶
@@ -58,9 +58,9 @@
 
     通常，条件案例捕获的错误永远不会调用调试器。在调试器有机会之前，条件案例有机会处理错误。
 
-    如果您将 debug-on-signal 更改为非 nil 值，则无论是否存在条件情况，调试器都会在每个错误中获得第一次机会。（要调用调试器，错误仍必须满足 debug-on-error 和 debug-ignored-errors 指定的条件。）
+    如果您将 debug-on-signal 更改为非  ~nil~  值，则无论是否存在条件情况，调试器都会在每个错误中获得第一次机会。（要调用调试器，错误仍必须满足 debug-on-error 和 debug-ignored-errors 指定的条件。）
 
-    例如，设置此变量对于从 emacsclient 的 --eval 选项评估的代码中获取回溯很有用。如果由 emacsclient 评估的 Lisp 代码在此变量为非 nil 时发出错误信号，则回溯将在运行的 Emacs 中弹出。
+    例如，设置此变量对于从 emacsclient 的 --eval 选项评估的代码中获取回溯很有用。如果由 emacsclient 评估的 Lisp 代码在此变量为非  ~nil~  时发出错误信号，则回溯将在运行的 Emacs 中弹出。
 
     警告：将此变量设置为非零可能会产生烦人的效果。Emacs 的各个部分在正常的事务过程中捕获错误，您甚至可能没有意识到错误发生在那里。如果您需要调试包含在条件案例中的代码，请考虑使用条件案例除非调试（请参阅编写代码以处理错误）。
 
@@ -90,7 +90,7 @@
   User Option: debug-on-quit ¶
 #+end_src
 
-    此变量确定在发出退出信号但未处理时是否调用调试器。如果 debug-on-quit 不为 nil，则在您退出时调用调试器（即，键入 Cg）。如果 debug-on-quit 为 nil（默认值），则退出时不会调用调试器。
+    此变量确定在发出退出信号但未处理时是否调用调试器。如果 debug-on-quit 不为  ~nil~ ，则在您退出时调用调试器（即，键入 Cg）。如果 debug-on-quit 为  ~nil~ （默认值），则退出时不会调用调试器。
 
 *** 19.1.3 在函数调用中进入调试器
 
@@ -132,7 +132,7 @@
   Command: cancel-debug-on-entry &optional function-name ¶
 #+end_src
 
-    此函数撤消 debug-on-entry 对函数名的影响。当以交互方式调用时，它会提示输入 minibuffer 中的函数名。如果 function-name 被省略或 nil，它将取消所有函数的 break-on-entry。调用 cancel-debug-on-entry 对当前未设置为在进入时中断的函数没有任何作用。
+    此函数撤消 debug-on-entry 对函数名的影响。当以交互方式调用时，它会提示输入 minibuffer 中的函数名。如果 function-name 被省略或  ~nil~ ，它将取消所有函数的 break-on-entry。调用 cancel-debug-on-entry 对当前未设置为在进入时中断的函数没有任何作用。
 
 *** 19.1.4 修改变量时进入调试器
 有时，函数的问题是由于变量设置错误造成的。将调试器设置为在变量更改时触发是一种快速查找设置来源的方法。
@@ -163,7 +163,7 @@
 
 回溯缓冲区是只读的，并使用一种特殊的主要模式，调试器模式，其中字母被定义为调试器命令。可以使用常用的 Emacs 编辑命令；  因此，您可以切换窗口以检查发生错误时正在编辑的缓冲区、切换缓冲区、访问文件或进行任何其他类型的编辑。但是，调试器是递归编辑级别（请参阅递归编辑），当您完成调试器时，最好返回回溯缓冲区并退出调试器（使用 q 命令）。退出调试器退出递归编辑并掩埋回溯缓冲区。（您可以通过设置变量 debugger-bury-or-kill 来自定义 q 命令对回溯缓冲区的作用。例如，如果您更喜欢杀死缓冲区而不是埋葬它，请将其设置为 kill。有关更多信息，请参阅变量的文档可能性。）
 
-进入调试器后，根据 eval-expression-debug-on-error 临时设置 debug-on-error 变量。如果后一个变量不为 nil，则 debug-on-error 将临时设置为 t。这意味着在进行调试会话时发生的任何进一步错误将（默认情况下）触发另一个回溯。如果这不是您想要的，您可以将 eval-expression-debug-on-error 设置为 nil，或者在 debugger-mode-hook 中将 debug-on-error 设置为 nil。
+进入调试器后，根据 eval-expression-debug-on-error 临时设置 debug-on-error 变量。如果后一个变量不为  ~nil~ ，则 debug-on-error 将临时设置为 t。这意味着在进行调试会话时发生的任何进一步错误将（默认情况下）触发另一个回溯。如果这不是您想要的，您可以将 eval-expression-debug-on-error 设置为  ~nil~ ，或者在 debugger-mode-hook 中将 debug-on-error 设置为  ~nil~ 。
 
 调试器本身必须运行字节编译，因为它对 Lisp 解释器的状态做出假设。如果调试器正在解释运行，则这些假设是错误的。
 
@@ -306,7 +306,7 @@ Debugger 模式源自 Backtrace 模式，Edebug 和 ERT 也用于显示回溯。
       lambda ¶
     #+end_src
 
-	 lambda 的第一个参数表示当 debug-on-next-call 为非 nil 时，由于进入函数而调用了调试。调试器在缓冲区顶部将 ~已输入调试器--输入函数：~ 显示为一行文本。
+	 lambda 的第一个参数表示当 debug-on-next-call 为非  ~nil~  时，由于进入函数而调用了调试。调试器在缓冲区顶部将 ~已输入调试器--输入函数：~ 显示为一行文本。
 #+begin_src emacs-lisp
   debug
 #+end_src
@@ -316,7 +316,7 @@ Debugger 模式源自 Backtrace 模式，Edebug 和 ERT 也用于显示回溯。
   t
 #+end_src
 
-	 当第一个参数为 t 时，这表示由于在 debug-on-next-call 为非 nil 时评估函数调用形式而调用 debug。调试器在缓冲区的第一行显示 ~已进入调试器——开始评估函数调用形式：~ 。
+	 当第一个参数为 t 时，这表示由于在 debug-on-next-call 为非  ~nil~  时评估函数调用形式而调用 debug。调试器在缓冲区的第一行显示 ~已进入调试器——开始评估函数调用形式：~ 。
 #+begin_src emacs-lisp
   exit
 #+end_src
@@ -345,8 +345,7 @@ Debugger 模式源自 Backtrace 模式，Edebug 和 ERT 也用于显示回溯。
 #+begin_src emacs-lisp
   nil
 #+end_src
-
-	 当你想显式地进入调试器时，使用 nil 作为调试器参数的第一个。其余的调试器参数打印在缓冲区的顶行。您可以使用此功能来显示消息——例如，提醒自己在哪些条件下调用了调试。
+	 当你想显式地进入调试器时，使用  ~nil~  作为调试器参数的第一个。其余的调试器参数打印在缓冲区的顶行。您可以使用此功能来显示消息——例如，提醒自己在哪些条件下调用了调试。
 
 *** 19.1.10 调试器的内部结构
 本节介绍调试器内部使用的函数和变量。
@@ -403,7 +402,7 @@ Debugger 模式源自 Backtrace 模式，Edebug 和 ERT 也用于显示回溯。
 
     如果此变量不为零，则回溯的每个堆栈帧都显示为列表。这旨在以特殊形式不再与常规函数调用在视觉上有所不同为代价来提高回溯的可读性。
 
-    使用 debugger-stack-frame-as-list 非 nil 时，上面的示例如下所示：
+    使用 debugger-stack-frame-as-list 非  ~nil~  时，上面的示例如下所示：
     #+begin_src emacs-lisp
       ----------- Buffer: backtrace-output ------------
 	(backtrace)
@@ -428,7 +427,7 @@ Debugger 模式源自 Backtrace 模式，Edebug 和 ERT 也用于显示回溯。
   Variable: debug-on-next-call ¶
 #+end_src
 
-    如果这个变量不为零，它表示在下一次 eval、apply 或 funcall 之前调用调试器。进入调试器会将 debug-on-next-call 设置为 nil。
+    如果这个变量不为零，它表示在下一次 eval、apply 或 funcall 之前调用调试器。进入调试器会将 debug-on-next-call 设置为  ~nil~ 。
 
     调试器中的 d 命令通过设置此变量来工作。
 
@@ -444,7 +443,7 @@ Debugger 模式源自 Backtrace 模式，Edebug 和 ERT 也用于显示回溯。
   Variable: command-debug-status ¶
 #+end_src
 
-    该变量记录当前交互命令的调试状态。每次以交互方式调用命令时，此变量都绑定为 nil。调试器可以设置此变量，以便在同一命令调用期间为将来的调试器调用留下信息。
+    该变量记录当前交互命令的调试状态。每次以交互方式调用命令时，此变量都绑定为  ~nil~ 。调试器可以设置此变量，以便在同一命令调用期间为将来的调试器调用留下信息。
 
     使用这个变量而不是普通的全局变量的优点是数据永远不会转移到后续的命令调用中。
 
@@ -464,7 +463,7 @@ Debugger 模式源自 Backtrace 模式，Edebug 和 ERT 也用于显示回溯。
 
     如果指定了基数，则帧数相对于函数为基数的最顶层帧计数。
 
-    如果 frame-number 超出范围，则 backtrace-frame 返回 nil。
+    如果 frame-number 超出范围，则 backtrace-frame 返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: mapbacktrace function &optional base ¶
@@ -474,7 +473,7 @@ Debugger 模式源自 Backtrace 模式，Edebug 和 ERT 也用于显示回溯。
 
     使用四个参数调用函数：evald、func、args 和 flags。
 
-    如果一个框架还没有评估它的参数或者是一个特殊的形式，那么 evald 是 nil 并且 args 是一个形式的列表。
+    如果一个框架还没有评估它的参数或者是一个特殊的形式，那么 evald 是  ~nil~  并且 args 是一个形式的列表。
 
     如果一个框架已经评估了它的参数并调用了它的函数，那么 evald 是 t 并且 args 是一个值列表。flags 是当前帧的属性列表：目前，唯一支持的属性是 :debug-on-exit，如果设置了堆栈帧的 debug-on-exit 标志，则为 t。
 
@@ -541,9 +540,9 @@ Edebug 是 Emacs Lisp 程序的源代码级调试器，您可以使用它：
 
 为了使用 Edebug 调试 Lisp 代码，您必须首先检测代码。检测代码会在其中插入额外的代码，以便在适当的位置调用 Edebug。
 
-当您在函数定义上调用带有前缀参数的命令 CMx (eval-defun) 时，它会在对定义进行评估之前对其进行检测。（这不会修改源代码本身。）如果变量 edebug-all-defs 不为 nil，则会反转前缀参数的含义：在这种情况下，CMx 检测定义，除非它具有前缀参数。edebug-all-defs 的默认值为 nil。命令 Mx edebug-all-defs 切换变量 edebug-all-defs 的值。
+当您在函数定义上调用带有前缀参数的命令 CMx (eval-defun) 时，它会在对定义进行评估之前对其进行检测。（这不会修改源代码本身。）如果变量 edebug-all-defs 不为  ~nil~ ，则会反转前缀参数的含义：在这种情况下，CMx 检测定义，除非它具有前缀参数。edebug-all-defs 的默认值为  ~nil~ 。命令 Mx edebug-all-defs 切换变量 edebug-all-defs 的值。
 
-如果 edebug-all-defs 不是 nil，那么命令 eval-region、eval-current-buffer 和 eval-buffer 也会检测它们评估的任何定义。同样， edebug-all-forms 控制 eval-region 是否应该检测任何形式，甚至是非定义形式。这不适用于 minibuffer 中的加载或评估。命令 Mx edebug-all-forms 切换此选项。
+如果 edebug-all-defs 不是  ~nil~ ，那么命令 eval-region、eval-current-buffer 和 eval-buffer 也会检测它们评估的任何定义。同样， edebug-all-forms 控制 eval-region 是否应该检测任何形式，甚至是非定义形式。这不适用于 minibuffer 中的加载或评估。命令 Mx edebug-all-forms 切换此选项。
 
 另一个命令 Mx edebug-eval-top-level-form 可用于检测任何顶级表单，而不管 edebug-all-defs 和 edebug-all-forms 的值如何。edebug-defun 是 edebug-eval-top-level-form 的别名。
 
@@ -551,7 +550,7 @@ Edebug 是 Emacs Lisp 程序的源代码级调试器，您可以使用它：
 
 Edebug 知道如何检测所有标准的特殊形式、带有表达式参数的交互式形式、匿名 lambda 表达式和其他定义形式。但是，Edebug 无法自行确定用户定义的宏将如何处理宏调用的参数，因此您必须使用 Edebug 规范提供该信息；  有关详细信息，请参阅 Edebug 和宏。
 
-当 Edebug 即将在会话中第一次检测代码时，它会运行钩子 edebug-setup-hook，然后将其设置为 nil。您可以使用它来加载与您正在使用的包关联的 Edebug 规范，但仅限于使用 Edebug 时。
+当 Edebug 即将在会话中第一次检测代码时，它会运行钩子 edebug-setup-hook，然后将其设置为  ~nil~ 。您可以使用它来加载与您正在使用的包关联的 Edebug 规范，但仅限于使用 Edebug 时。
 
 如果 Edebug 在检测时检测到语法错误，它将指向错误代码并发出无效读取语法错误信号。例子：
 
@@ -681,7 +680,7 @@ f 命令在一个表达式上向前运行程序。更准确地说，它在 forwa
 
 o 命令从表达式继续。它在 sexp 包含点的末尾放置一个临时断点。如果包含的 sexp 本身是一个函数定义，则 o 会一直持续到定义中的最后一个 sexp 之前。如果那是您现在所在的位置，它会从函数返回然后停止。换句话说，该命令不会退出当前正在执行的函数，除非您位于最后一个 sexp 之后。
 
-通常，h、f 和 o 命令会显示 ~Break~ 并暂停 edebug-sit-for-seconds，然后再显示刚刚评估的表单的结果。您可以通过将 edebug-sit-on-break 设置为 nil 来避免这种暂停。请参阅 Edebug 选项。
+通常，h、f 和 o 命令会显示 ~Break~ 并暂停 edebug-sit-for-seconds，然后再显示刚刚评估的表单的结果。您可以通过将 edebug-sit-on-break 设置为  ~nil~  来避免这种暂停。请参阅 Edebug 选项。
 
 i 命令在点之后进入由列表形式调用的函数或宏，并在其第一个停止点停止。请注意，表格不必是即将被评估的表格。但是如果表单是一个即将被评估的函数调用，请记住在评估任何参数之前使用此命令，否则为时已​​晚。
 
@@ -959,7 +958,7 @@ Edebug 的每个条目通过在缓冲区中插入每个表达式，然后是其�
 
 如果您的程序中的表达式产生一个包含循环列表结构的值，当 Edebug 尝试打印它时，您可能会遇到错误。
 
-处理循环结构的一种方法是设置打印长度或打印级别以截断打印。Edebug 为你做这件事；  它将 print-length 和 print-level 绑定到变量 edebug-print-length 和 edebug-print-level 的值（只要它们具有非 nil 值）。请参阅影响输出的变量。
+处理循环结构的一种方法是设置打印长度或打印级别以截断打印。Edebug 为你做这件事；  它将 print-length 和 print-level 绑定到变量 edebug-print-length 和 edebug-print-level 的值（只要它们具有非  ~nil~  值）。请参阅影响输出的变量。
 
 #+begin_src emacs-lisp
   User Option: edebug-print-length ¶
@@ -971,9 +970,9 @@ Edebug 的每个条目通过在缓冲区中插入每个表达式，然后是其�
   User Option: edebug-print-level ¶
 #+end_src
 
-    如果非 nil，Edebug 会在打印结果时将 print-level 绑定到该值。默认值为 50。
+    如果非  ~nil~ ，Edebug 会在打印结果时将 print-level 绑定到该值。默认值为 50。
 
-您还可以通过将 print-circle 绑定到非 nil 值来打印循环结构和共享元素的结构。
+您还可以通过将 print-circle 绑定到非  ~nil~  值来打印循环结构和共享元素的结构。
 
 下面是一个创建循环结构的代码示例：
 
@@ -1065,7 +1064,7 @@ Edebug 试图对您正在调试的程序透明，但它并没有完全成功。�
 每当进入 Edebug 时，它甚至需要在决定是否制作跟踪信息或停止程序之前保存和恢复某些数据。
 
     max-lisp-eval-depth（参见 Eval）和 max-specpdl-size（参见局部变量）都增加以减少 Edebug 对堆栈的影响。但是，在使用 Edebug 时，您仍然可能会用完堆栈空间。如果 Edebug 达到包含非常大的引用列表的递归深度检测代码的限制，您还可以扩大 edebug-max-depth 的值。
-    键盘宏执行的状态被保存和恢复。当 Edebug 处于活动状态时，executing-kbd-macro 绑定为 nil，除非 edebug-continue-kbd-macro 为非 nil。
+    键盘宏执行的状态被保存和恢复。当 Edebug 处于活动状态时，executing-kbd-macro 绑定为  ~nil~ ，除非 edebug-continue-kbd-macro 为非  ~nil~ 。
 
 **** 19.2.14.2 调试显示更新
 
@@ -1083,7 +1082,7 @@ Emacs 只有在暂停时才会重新显示。通常，当您继续执行时，�
     但是，源代码缓冲区的窗口开始和水平滚动不会恢复，因此显示在 Edebug 中保持一致。
     如果 edebug-save-displayed-buffer-points 不为零，则保存和恢复每个显示缓冲区中的点值。
     变量 overlay-arrow-position 和 overlay-arrow-string 被保存和恢复，因此您可以安全地从同一缓冲区中其他地方的递归编辑调用 Edebug。
-    cursor-in-echo-area 本地绑定到 nil 以便光标显示在窗口中。
+    cursor-in-echo-area 本地绑定到  ~nil~  以便光标显示在窗口中。
 
 **** 19.2.14.3 Edebug 递归编辑
 
@@ -1097,7 +1096,7 @@ Emacs 只有在暂停时才会重新显示。通常，当您继续执行时，�
     Edebug 无法保存和恢复 unread-command-events 的值。在此变量具有重要值时输入 Edebug 可能会干扰您正在调试的程序的执行。
     在 Edebug 中执行的复杂命令被添加到变量 command-history。在极少数情况下，这可能会改变执行。
     在 Edebug 内，递归深度似乎比 Edebug 外的递归深度深一。自动更新的评估列表窗口并非如此。
-    递归编辑将标准输出和标准输入绑定为 nil，但 Edebug 会在评估期间临时恢复它们。
+    递归编辑将标准输出和标准输入绑定为  ~nil~ ，但 Edebug 会在评估期间临时恢复它们。
     键盘宏定义的状态被保存和恢复。当 Edebug 处于活动状态时，defining-kbd-macro 绑定到 edebug-continue-kbd-macro。
 
 *** 19.2.15 调试和宏
@@ -1154,7 +1153,7 @@ Edebug 规范说明了对宏的调用的哪些部分是要评估的表单。对�
   User Option: edebug-eval-macro-args ¶
 #+end_src
 
-    这控制了 Edebug 处理没有明确 Edebug 规范的宏参数的方式。如果它是 nil（默认值），则不会对任何参数进行评估。否则，所有参数都会被检测。
+    这控制了 Edebug 处理没有明确 Edebug 规范的宏参数的方式。如果它是  ~nil~ （默认值），则不会对任何参数进行评估。否则，所有参数都会被检测。
 
 **** 19.2.15.2 规格表
 
@@ -1229,8 +1228,8 @@ Edebug 规范提供了正则表达式匹配的强大功能，以及一些上下�
 #+begin_src emacs-lisp
   nil
 #+end_src
-
     当当前参数列表级别没有更多参数匹配时，这是成功的；  否则失败。请参阅子列表规范和反引号示例。
+
 #+begin_src emacs-lisp
   gate ¶
 #+end_src
@@ -1258,7 +1257,7 @@ Edebug 规范提供了正则表达式匹配的强大功能，以及一些上下�
 
 	 定义用于代替符号元素的规范。规范必须是一个列表。
 
-    否则，符号应该是谓词。谓词与参数一起调用，如果谓词返回 nil，则规范失败并且参数不会被检测。
+    否则，符号应该是谓词。谓词与参数一起调用，如果谓词返回  ~nil~ ，则规范失败并且参数不会被检测。
 
     一些合适的谓词包括 symbolp、integerp、stringp、vectorp 和 atom。
 #+begin_src emacs-lisp
@@ -1282,9 +1281,9 @@ Edebug 规范提供了正则表达式匹配的强大功能，以及一些上下�
 
     任何其他列表都是子列表规范，并且参数必须是其元素与规范元素匹配的列表。
 
-    子列表规范可以是一个点列表，然后相应的列表参数可以是一个点列表。或者，点列表规范的最后一个 CDR 可以是另一个子列表规范（通过分组或间接规范，例如 (spec . [(more specs…)])），其元素与非点列表参数匹配。这在递归规范中很有用，例如在反引号示例中。另请参阅上面对 nil 规范的描述以终止此类递归。
+    子列表规范可以是一个点列表，然后相应的列表参数可以是一个点列表。或者，点列表规范的最后一个 CDR 可以是另一个子列表规范（通过分组或间接规范，例如 (spec . [(more specs…)])），其元素与非点列表参数匹配。这在递归规范中很有用，例如在反引号示例中。另请参阅上面对  ~nil~  规范的描述以终止此类递归。
 
-    请注意，写为 (specs . nil) 的子列表规范等价于 (specs)，并且 (specs . (sublist-elements...)) 等价于 (specs sublist-elements...)。
+    请注意，写为 (specs .  ~nil~ ) 的子列表规范等价于 (specs)，并且 (specs . (sublist-elements...)) 等价于 (specs sublist-elements...)。
 
 以下是可能仅在 &define 之后出现的附加规范列表。请参阅 defun 示例。
 
@@ -1373,7 +1372,7 @@ Edebug 对 defun 以及相关的参数列表和交互规范使用以下规范。
 
 
 
-下面的反引号规范说明了如何匹配点列表并使用 nil 来终止递归。它还说明了如何匹配向量的分量。（由 Edebug 定义的实际规范略有不同，并且不支持点列表，因为这样做会导致非常深的递归，可能会失败。）
+下面的反引号规范说明了如何匹配点列表并使用  ~nil~  来终止递归。它还说明了如何匹配向量的分量。（由 Edebug 定义的实际规范略有不同，并且不支持点列表，因为这样做会导致非常深的递归，可能会失败。）
 #+begin_src emacs-lisp
   (def-edebug-spec \` (backquote-form))   ; Alias just for clarity.
 
@@ -1392,7 +1391,7 @@ Edebug 对 defun 以及相关的参数列表和交互规范使用以下规范。
   User Option: edebug-setup-hook ¶
 #+end_src
 
-    在使用 Edebug 之前调用的函数。每次将其设置为新值时，Edebug 都会调用这些函数一次，然后将 edebug-setup-hook 重置为 nil。您可以使用它来加载与您正在使用的包关联的 Edebug 规范，但前提是您也使用 Edebug。请参阅 Edebug 检测。
+    在使用 Edebug 之前调用的函数。每次将其设置为新值时，Edebug 都会调用这些函数一次，然后将 edebug-setup-hook 重置为  ~nil~ 。您可以使用它来加载与您正在使用的包关联的 Edebug 规范，但前提是您也使用 Edebug。请参阅 Edebug 检测。
 
 #+begin_src emacs-lisp
   User Option: edebug-all-defs ¶
@@ -1406,7 +1405,7 @@ Edebug 对 defun 以及相关的参数列表和交互规范使用以下规范。
   User Option: edebug-all-forms ¶
 #+end_src
 
-    如果这不是 nil，则命令 eval-defun、eval-region、eval-buffer 和 eval-current-buffer 仪器所有形式，即使是那些没有定义任何东西的形式。这不适用于 minibuffer 中的加载或评估。
+    如果这不是  ~nil~ ，则命令 eval-defun、eval-region、eval-buffer 和 eval-current-buffer 仪器所有形式，即使是那些没有定义任何东西的形式。这不适用于 minibuffer 中的加载或评估。
 
     使用命令 Mx edebug-all-forms 切换此选项的值。请参阅 Edebug 检测。
 
@@ -1420,7 +1419,7 @@ Edebug 对 defun 以及相关的参数列表和交互规范使用以下规范。
   User Option: edebug-save-windows ¶
 #+end_src
 
-    如果这是非零，Edebug 保存并恢复窗口配置。这需要一些时间，所以如果您的程序不关心窗口配置会发生什么，最好将此变量设置为 nil。
+    如果这是非零，Edebug 保存并恢复窗口配置。这需要一些时间，所以如果您的程序不关心窗口配置会发生什么，最好将此变量设置为  ~nil~ 。
 
     如果该值为列表，则仅保存和恢复列出的窗口。
 
@@ -1468,19 +1467,19 @@ Edebug 对 defun 以及相关的参数列表和交互规范使用以下规范。
   User Option: edebug-print-length ¶
 #+end_src
 
-    如果非 nil，则在 Edebug 中打印结果的默认值 print-length。请参阅影响输出的变量。
+    如果非  ~nil~ ，则在 Edebug 中打印结果的默认值 print-length。请参阅影响输出的变量。
 
 #+begin_src emacs-lisp
   User Option: edebug-print-level ¶
 #+end_src
 
-    如果非 nil，则在 Edebug 中打印结果的默认值 print-level。请参阅影响输出的变量。
+    如果非  ~nil~ ，则在 Edebug 中打印结果的默认值 print-level。请参阅影响输出的变量。
 
 #+begin_src emacs-lisp
   User Option: edebug-print-circle ¶
 #+end_src
 
-    如果非 nil，则在 Edebug 中打印结果的 print-circle 的默认值。请参阅影响输出的变量。
+    如果非  ~nil~ ，则在 Edebug 中打印结果的 print-circle 的默认值。请参阅影响输出的变量。
 
 #+begin_src emacs-lisp
   User Option: edebug-unwrap-results ¶
@@ -1500,13 +1499,13 @@ Edebug 对 defun 以及相关的参数列表和交互规范使用以下规范。
   User Option: edebug-on-error ¶
 #+end_src
 
-    如果 debug-on-error 以前为 nil，则 Edebug 将 debug-on-error 绑定到此值。请参阅捕获错误。
+    如果 debug-on-error 以前为  ~nil~ ，则 Edebug 将 debug-on-error 绑定到此值。请参阅捕获错误。
 
 #+begin_src emacs-lisp
   User Option: edebug-on-quit ¶
 #+end_src
 
-    如果 debug-on-quit 以前为 nil，则 Edebug 将 debug-on-quit 绑定到此值。请参阅捕获错误。
+    如果 debug-on-quit 以前为  ~nil~ ，则 Edebug 将 debug-on-quit 绑定到此值。请参阅捕获错误。
 
 如果在 Edebug 处于活动状态时更改 edebug-on-error 或 edebug-on-quit 的值，则在下次通过新命令调用 Edebug 之前不会使用它们的值。
 
@@ -1526,7 +1525,7 @@ Edebug 对 defun 以及相关的参数列表和交互规范使用以下规范。
   User Option: edebug-sit-on-break ¶
 #+end_src
 
-    到达断点时是否暂停 edebug-sit-for-seconds。设置为 nil 以防止暂停，非 nil 以允许它。
+    到达断点时是否暂停 edebug-sit-for-seconds。设置为  ~nil~  以防止暂停，非  ~nil~  以允许它。
 
 #+begin_src emacs-lisp
   User Option: edebug-behavior-alist ¶
@@ -1607,7 +1606,7 @@ Emacs 对此有内置支持。要开始分析，请键入 Mx profiler-start。�
 
 按 j 或 mouse-2 跳转到该点的函数定义。按 d 查看函数的文档。您可以使用 Cx Cw 将配置文件保存到文件中。您可以使用 = 比较两个配置文件。
 
-elp 库提供了一种替代方法，当您提前知道要分析哪些 Lisp 函数时，该方法很有用。使用该库，您首先将 elp-function-list 设置为函数符号列表——这些是您要分析的函数。然后键入 Mx elp-instrument-list RET nil RET 以安排分析这些功能。运行要分析的代码后，调用 Mx elp-results 以显示当前结果。有关更详细的说明，请参阅文件 elp.el。这种方法仅限于分析用 Lisp 编写的函数，它不能分析 Emacs 原语。
+elp 库提供了一种替代方法，当您提前知道要分析哪些 Lisp 函数时，该方法很有用。使用该库，您首先将 elp-function-list 设置为函数符号列表——这些是您要分析的函数。然后键入 Mx elp-instrument-list RET  ~nil~  RET 以安排分析这些功能。运行要分析的代码后，调用 Mx elp-results 以显示当前结果。有关更详细的说明，请参阅文件 elp.el。这种方法仅限于分析用 Lisp 编写的函数，它不能分析 Emacs 原语。
 
 您可以使用基准库来衡量评估单个 Emacs Lisp 表单所花费的时间。在 benchmark.el 中查看函数 benchmark-call 以及 benchmark-run、benchmark-run-compiled、benchmark-progn 和 benchmark-call 宏。您还可以交互地使用基准命令来计时表格。
 

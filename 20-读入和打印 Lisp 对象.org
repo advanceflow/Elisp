@@ -56,7 +56,7 @@
   nil ¶
 #+end_src
 
-    nil 作为输入流提供意味着使用标准输入的值来代替；  该值是默认输入流，并且必须是非零输入流。
+     ~nil~  作为输入流提供意味着使用标准输入的值来代替；  该值是默认输入流，并且必须是非零输入流。
 #+begin_src emacs-lisp
   symbol
 #+end_src
@@ -148,11 +148,11 @@
        ⇒ (40 41)
 #+end_src
 
-请注意，左括号和右括号仍保留在列表中。Lisp 阅读器遇到了左括号，决定结束输入，然后取消阅读。此时从流中读取的另一次尝试将读取 '()' 并返回 nil。
+请注意，左括号和右括号仍保留在列表中。Lisp 阅读器遇到了左括号，决定结束输入，然后取消阅读。此时从流中读取的另一次尝试将读取 '()' 并返回  ~nil~ 。
 ** 20.3 输入函数
 本节介绍与阅读有关的 Lisp 函数和变量。
 
-在下面的函数中，stream 代表输入流（参见上一节）。如果 stream 为 nil 或省略，则默认为标准输入的值。
+在下面的函数中，stream 代表输入流（参见上一节）。如果 stream 为  ~nil~  或省略，则默认为标准输入的值。
 
 如果读取遇到未终止的列表、向量或字符串，则会发出文件结束错误信号。
 
@@ -199,7 +199,7 @@
   Variable: standard-input ¶
 #+end_src
 
-    此变量保存默认输入流——当流参数为 nil 时读取使用的流。默认值为 t，表示使用 minibuffer。
+    此变量保存默认输入流——当流参数为  ~nil~  时读取使用的流。默认值为 t，表示使用 minibuffer。
 
 #+begin_src emacs-lisp
   Variable: read-circle ¶
@@ -242,7 +242,7 @@
   nil ¶
 #+end_src
 
-    nil 指定为输出流意味着使用标准输出变量的值；  该值是默认输出流，并且不能为 nil。
+     ~nil~  指定为输出流意味着使用标准输出变量的值；  该值是默认输出流，并且不能为  ~nil~ 。
 #+begin_src emacs-lisp
   symbol
 #+end_src
@@ -367,7 +367,7 @@ Lisp 对象可以引用自己。以正常方式打印自引用对象将需要无
        ⇒ (#0)
 #+end_src
 
-在下面的函数中，stream 代表输出流。（有关输出流的描述，请参见上一节。另请参见 external-debugging-output，这是一个对调试有用的流值。）如果 stream 为 nil 或省略，则默认为标准输出的值。
+在下面的函数中，stream 代表输出流。（有关输出流的描述，请参见上一节。另请参见 external-debugging-output，这是一个对调试有用的流值。）如果 stream 为  ~nil~  或省略，则默认为标准输出的值。
 
 #+begin_src emacs-lisp
   Function: print object &optional stream ¶
@@ -481,7 +481,7 @@ Lisp 对象可以引用自己。以正常方式打印自引用对象将需要无
 #+begin_src emacs-lisp
   Variable: standard-output ¶
 #+end_src
-    此变量的值是默认输出流——当流参数为 nil 时打印函数使用的流。默认为 t，表示在回显区域显示。
+    此变量的值是默认输出流——当流参数为  ~nil~  时打印函数使用的流。默认为 t，表示在回显区域显示。
 
 #+begin_src emacs-lisp
   Variable: print-quoted ¶
@@ -493,7 +493,7 @@ Lisp 对象可以引用自己。以正常方式打印自引用对象将需要无
   Variable: print-escape-newlines ¶
 #+end_src
 
-    如果此变量不为 nil，则字符串中的换行符将打印为 '\n'，而换页符将打印为 '\f'。通常这些字符打印为实际的换行符和换页符。
+    如果此变量不为  ~nil~ ，则字符串中的换行符将打印为 '\n'，而换页符将打印为 '\f'。通常这些字符打印为实际的换行符和换页符。
 
     此变量影响打印函数 prin1 和 print 带引号的打印。它不影响princ。下面是一个使用prin1的例子：
 
@@ -517,7 +517,7 @@ Lisp 对象可以引用自己。以正常方式打印自引用对象将需要无
   Variable: print-escape-control-characters ¶
 #+end_src
 
-    如果此变量为非零，则字符串中的控制字符将由打印函数 prin1 打印为反斜杠序列，并打印带有引号的打印。如果此变量和 print-escape-newlines 都不是 nil，则后者优先于换行符和换页符。
+    如果此变量为非零，则字符串中的控制字符将由打印函数 prin1 打印为反斜杠序列，并打印带有引号的打印。如果此变量和 print-escape-newlines 都不是  ~nil~ ，则后者优先于换行符和换页符。
 
 #+begin_src emacs-lisp
   Variable: print-escape-nonascii ¶
@@ -539,9 +539,9 @@ Lisp 对象可以引用自己。以正常方式打印自引用对象将需要无
   Variable: print-charset-text-property ¶
 #+end_src
 
-    此变量控制打印字符串时 ~charset~ 文本属性的打印。该值应为 nil、t 或默认值。
+    此变量控制打印字符串时 ~charset~ 文本属性的打印。该值应为  ~nil~ 、t 或默认值。
 
-    如果值为 nil，则永远不会打印字符集文本属性。如果 t，它们总是被打印出来。
+    如果值为  ~nil~ ，则永远不会打印字符集文本属性。如果 t，它们总是被打印出来。
 
     如果值为默认值，则仅在存在 ~意外~ 字符集属性时才打印字符集文本属性。对于 ascii 字符，所有字符集都被认为是 ~预期的~ 。否则，字符的预期 charset 属性由 char-charset 给出。
 
@@ -551,7 +551,7 @@ Lisp 对象可以引用自己。以正常方式打印自引用对象将需要无
 
     此变量的值是要在任何列表、向量或布尔向量中打印的最大元素数。如果要打印的对象的元素多于这么多，则用省略号缩写。
 
-    如果该值为 nil（默认值），则没有限制。
+    如果该值为  ~nil~ （默认值），则没有限制。
     #+begin_src emacs-lisp
       (setq print-length 2)
 	   ⇒ 2
@@ -564,7 +564,7 @@ Lisp 对象可以引用自己。以正常方式打印自引用对象将需要无
   Variable: print-level ¶
 #+end_src
 
-    此变量的值是打印时括号和括号的最大嵌套深度。深度超过此限制的任何列表或向量都用省略号缩写。nil 值（默认值）表示没有限制。
+    此变量的值是打印时括号和括号的最大嵌套深度。深度超过此限制的任何列表或向量都用省略号缩写。 ~nil~  值（默认值）表示没有限制。
 
 #+begin_src emacs-lisp
   User Option: eval-expression-print-length ¶
@@ -593,19 +593,19 @@ Lisp 对象可以引用自己。以正常方式打印自引用对象将需要无
   Variable: print-continuous-numbering ¶
 #+end_src
 
-    如果非零，这意味着在打印调用中连续编号。这会影响为 ~#n=~ 标签和 ~#m#~ 引用打印的数字。不要用 setq 设置这个变量；  你应该只用 let 将它临时绑定到 t。当你这样做时，你还应该将 print-number-table 绑定到 nil。
+    如果非零，这意味着在打印调用中连续编号。这会影响为 ~#n=~ 标签和 ~#m#~ 引用打印的数字。不要用 setq 设置这个变量；  你应该只用 let 将它临时绑定到 t。当你这样做时，你还应该将 print-number-table 绑定到  ~nil~ 。
 
 #+begin_src emacs-lisp
   Variable: print-number-table ¶
 #+end_src
 
-    这个变量保存了一个打印内部使用的向量，以实现打印圈功能。除非在绑定 print-continuous-numbering 时将其绑定到 nil，否则不应使用它。
+    这个变量保存了一个打印内部使用的向量，以实现打印圈功能。除非在绑定 print-continuous-numbering 时将其绑定到  ~nil~ ，否则不应使用它。
 
 #+begin_src emacs-lisp
   Variable: float-output-format ¶
 #+end_src
 
-    此变量指定如何打印浮点数。默认值为 nil，这意味着使用代表数字的最短输出而不会丢失信息。
+    此变量指定如何打印浮点数。默认值为  ~nil~ ，这意味着使用代表数字的最短输出而不会丢失信息。
 
     要更精确地控制输出格式，您可以在此变量中放置一个字符串。该字符串应包含要在 C 函数 sprintf 中使用的 ~%~ 规范。有关您可以使用的更多限制，请参阅变量的文档字符串。
 

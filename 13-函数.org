@@ -61,7 +61,7 @@ Lisp 程序主要由 Lisp 函数组成。本章解释什么是函数，它们如
   Function: functionp object ¶
 #+end_src
 
-    如果 object 是任何类型的函数，即可以传递给 funcall，则此函数返回 t。请注意，对于作为函数名称的符号，functionp 返回 t，对于特殊形式返回 nil。
+    如果 object 是任何类型的函数，即可以传递给 funcall，则此函数返回 t。请注意，对于作为函数名称的符号，functionp 返回 t，对于特殊形式返回  ~nil~ 。
 
 还可以找出任意函数需要多少个参数：
 
@@ -189,9 +189,9 @@ lambda 表达式的第一个元素始终是符号 lambda。这表明该列表表
 
 对函数的调用需要每个必需变量的一个实际参数。可能有零个或多个可选变量的实际参数，除此之外不能有任何实际参数，除非 lambda 列表使用 &rest。在这种情况下，可能有任意数量的额外实际参数。
 
-如果省略了可选变量和剩余变量的实际参数，则它们始终默认为 nil。该函数无法区分 nil 的显式参数和省略的参数。但是，函数体可以自由地将 nil 视为其他一些有意义值的缩写。这就是子字符串的作用；  nil 作为 substring 的第三个参数意味着使用提供的字符串的长度。
+如果省略了可选变量和剩余变量的实际参数，则它们始终默认为  ~nil~ 。该函数无法区分  ~nil~  的显式参数和省略的参数。但是，函数体可以自由地将  ~nil~  视为其他一些有意义值的缩写。这就是子字符串的作用；   ~nil~  作为 substring 的第三个参数意味着使用提供的字符串的长度。
 
-    Common Lisp 注意：Common Lisp 允许函数指定在省略可选参数时使用的默认值；  Emacs Lisp 总是使用 nil。Emacs Lisp 不支持提供的-p 变量来告诉您参数是否被显式传递。
+    Common Lisp 注意：Common Lisp 允许函数指定在省略可选参数时使用的默认值；  Emacs Lisp 总是使用  ~nil~ 。Emacs Lisp 不支持提供的-p 变量来告诉您参数是否被显式传递。
 
 例如，如下所示的参数列表：
 
@@ -199,7 +199,7 @@ lambda 表达式的第一个元素始终是符号 lambda。这表明该列表表
   (a b &optional c d &rest e)
 #+end_src
 
-将 a 和 b 绑定到前两个实际参数，这是必需的。如果提供了一个或两个以上参数，则 c 和 d 分别绑定到它们；  前四个之后的任何参数都被收集到一个列表中，并且 e 绑定到该列表。因此，如果只有两个参数，c、d 和 e 为零；  如果两个或三个参数，d 和 e 为零；  如果四个参数或更少，e 为零。请注意，恰好为 e 提供了具有显式 nil 参数的五个参数将导致该 nil 参数作为具有一个元素 (nil) 的列表传递，与 e 的任何其他单个值一样。
+将 a 和 b 绑定到前两个实际参数，这是必需的。如果提供了一个或两个以上参数，则 c 和 d 分别绑定到它们；  前四个之后的任何参数都被收集到一个列表中，并且 e 绑定到该列表。因此，如果只有两个参数，c、d 和 e 为零；  如果两个或三个参数，d 和 e 为零；  如果四个参数或更少，e 为零。请注意，恰好为 e 提供了具有显式  ~nil~  参数的五个参数将导致该  ~nil~  参数作为具有一个元素 ( ~nil~ ) 的列表传递，与 e 的任何其他单个值一样。
 
 没有办法在可选参数后面加上必需的参数——这是没有意义的。要了解为什么必须如此，假设示例中的 c 是可选的，而 d 是必需的。假设给出了三个实际参数；  第三个参数用于哪个变量？  它将用于 c 还是 d？  人们可以为这两种可能性争论不休。同样，在 &rest 参数之后再添加任何参数（必需的或可选的）也没有任何意义。
 
@@ -299,8 +299,6 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。�
 	(capitalize-word 1))
 
     #+end_src
-
-
     注意不要无意中重新定义现有功能。defun 甚至毫不犹豫地重新定义了汽车等原始功能。Emacs 不会阻止你这样做，因为重新定义一个函数有时是故意的，没有办法区分故意的重新定义和无意的重新定义。
 
 #+begin_src emacs-lisp
@@ -309,7 +307,7 @@ lambda 表达式可以选择在 lambda 列表之后有一个文档字符串。�
 
     该函数将符号名称定义为一个函数，带有定义定义（可以是任何有效的 Lisp 函数）。它的返回值是未定义的。
 
-    如果 doc 不为 nil，则成为 name 的函数文档。否则，将使用定义提供的任何文档。
+    如果 doc 不为  ~nil~ ，则成为 name 的函数文档。否则，将使用定义提供的任何文档。
 
     在内部，defalias 通常使用 fset 来设置定义。但是，如果 name 具有 defalias-fset-function 属性，则关联的值将用作函数来代替 fset 调用。
 
@@ -427,7 +425,7 @@ Lisp 函数通常接受函数作为参数或在数据结构中找到它们（尤
   Function: ignore &rest arguments ¶
 #+end_src
 
-    此函数忽略任何参数并返回 nil。
+    此函数忽略任何参数并返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Function: always &rest arguments ¶
@@ -795,7 +793,7 @@ Emacs 提供对多态性的支持。与其他 Lisp 环境一样，尤其是 Comm
   Function: cl-next-method-p ¶
 #+end_src
 
-    当从主方法或 :around 辅助方法的词法体中调用此函数时，如果有下一个方法要调用，则返回非 nil。
+    当从主方法或 :around 辅助方法的词法体中调用此函数时，如果有下一个方法要调用，则返回非  ~nil~ 。
 
 ** 13.9 访问函数单元格内容
 符号的函数定义是存储在符号的函数单元中的对象。此处描述的功能访问、测试和设置符号的功能单元。
@@ -808,7 +806,7 @@ Emacs 提供对多态性的支持。与其他 Lisp 环境一样，尤其是 Comm
 
     这将返回符号函数单元格中的对象。它不检查返回的对象是否是合法函数。
 
-    如果函数单元格为 void，则返回值为 nil。要区分为 void 的函数单元格和设置为 nil 的函数单元格，请使用 fboundp（见下文）。
+    如果函数单元格为 void，则返回值为  ~nil~ 。要区分为 void 的函数单元格和设置为  ~nil~  的函数单元格，请使用 fboundp（见下文）。
     #+begin_src emacs-lisp
 
 
@@ -825,7 +823,7 @@ Emacs 提供对多态性的支持。与其他 Lisp 环境一样，尤其是 Comm
 
 如果您从未给符号任何函数定义，我们说该符号的函数单元格是无效的。换句话说，函数单元格中没有任何 Lisp 对象。如果您尝试将符号作为函数调用，Emacs 会发出 void-function 错误信号。
 
-请注意，void 与 nil 或符号 void 不同。符号 nil 和 void 是 Lisp 对象，并且可以像任何其他对象一样存储到函数单元中（如果您依次使用 defun 定义它们，它们可以是有效函数）。空函数单元格不包含任何对象。
+请注意，void 与  ~nil~  或符号 void 不同。符号  ~nil~  和 void 是 Lisp 对象，并且可以像任何其他对象一样存储到函数单元中（如果您依次使用 defun 定义它们，它们可以是有效函数）。空函数单元格不包含任何对象。
 
 您可以使用 fboundp 测试符号函数定义的无效性。给符号定义函数后，可以使用 fmakunbound 再次使其无效。
 
@@ -833,7 +831,7 @@ Emacs 提供对多态性的支持。与其他 Lisp 环境一样，尤其是 Comm
   Function: fboundp symbol ¶
 #+end_src
 
-    如果符号在其函数单元格中有对象，则此函数返回 t，否则返回 nil。它不检查对象是否是合法函数。
+    如果符号在其函数单元格中有对象，则此函数返回 t，否则返回  ~nil~ 。它不检查对象是否是合法函数。
 
 #+begin_src emacs-lisp
   Function: fmakunbound symbol ¶
@@ -1046,7 +1044,7 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
   Macro: define-advice symbol (where lambda-list &optional name depth) &rest body ¶
 #+end_src
 
-    该宏定义了一条建议并将其添加到名为 symbol 的函数中。如果 name 为 nil 或名为 symbol@name 的函数，则建议是匿名函数。有关其他参数的解释，请参阅advice-add。
+    该宏定义了一条建议并将其添加到名为 symbol 的函数中。如果 name 为  ~nil~  或名为 symbol@name 的函数，则建议是匿名函数。有关其他参数的解释，请参阅advice-add。
 
 #+begin_src emacs-lisp
   Function: advice-add symbol where function &optional props ¶
@@ -1119,7 +1117,7 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
   :before-while
 #+end_src
 
-    在旧函数之前调用函数，如果函数返回 nil，则不要调用旧函数。两个函数接收相同的参数，组合的返回值是旧函数的返回值。更具体地说，这两个函数的组合行为如下：
+    在旧函数之前调用函数，如果函数返回  ~nil~ ，则不要调用旧函数。两个函数接收相同的参数，组合的返回值是旧函数的返回值。更具体地说，这两个函数的组合行为如下：
 
     #+begin_src emacs-lisp
       (lambda (&rest r) (and (apply function r) (apply oldfun r)))
@@ -1130,7 +1128,7 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
   :before-until
 #+end_src
 
-    在旧函数之前调用函数，并且仅在函数返回 nil 时才调用旧函数。更具体地说，这两个函数的组合行为如下：
+    在旧函数之前调用函数，并且仅在函数返回  ~nil~  时才调用旧函数。更具体地说，这两个函数的组合行为如下：
 
     #+begin_src emacs-lisp
       (lambda (&rest r) (or (apply function r) (apply oldfun r)))
@@ -1150,7 +1148,7 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
   :after-until
 #+end_src
 
-    在旧函数之后调用函数，并且仅当旧函数返回 nil 时。更具体地说，这两个函数的组合行为如下：
+    在旧函数之后调用函数，并且仅当旧函数返回  ~nil~  时。更具体地说，这两个函数的组合行为如下：
 
     #+begin_src emacs-lisp
       (lambda (&rest r) (or  (apply oldfun r) (apply function r)))
@@ -1253,7 +1251,7 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
     此函数将过时的名称标记为过时。obsolete-name 应该是命名函数或宏的符号，或者是函数或宏的别名。
 
-    如果 current-name 是一个符号，则警告消息说使用 current-name 而不是 obsolete-name。current-name 不需要是 obsolete-name 的别名；  它可以是具有相似功能的不同功能。current-name 也可以是一个字符串，用作警告信息。消息应以小写字母开头，并以句点结尾。它也可以为 nil，在这种情况下，警告消息不提供其他详细信息。
+    如果 current-name 是一个符号，则警告消息说使用 current-name 而不是 obsolete-name。current-name 不需要是 obsolete-name 的别名；  它可以是具有相似功能的不同功能。current-name 也可以是一个字符串，用作警告信息。消息应以小写字母开头，并以句点结尾。它也可以为  ~nil~ ，在这种情况下，警告消息不提供其他详细信息。
 
     参数 when 应该是一个字符串，指示函数第一次被废弃的时间——例如，日期或版本号。
 
@@ -1346,7 +1344,7 @@ Emacs 的建议系统为此提供了两组原语：核心集，用于保存在�
 
     绑定的每个元素都应该是一个符号或形式的列表（var expr）；  结果是评估 expr 并将 var 绑定到结果。但是，当绑定的元素只是一个符号 var 时，评估 var 的结果会重新绑定到 var（这与 let 的工作方式完全不同）。
 
-    绑定的尾部可以是 nil 或应该包含参数列表的符号，在这种情况下，每个参数都被评估，并且符号被绑定到结果列表。
+    绑定的尾部可以是  ~nil~  或应该包含参数列表的符号，在这种情况下，每个参数都被评估，并且符号被绑定到结果列表。
 
 #+begin_src emacs-lisp
   Macro: inline-const-p expression ¶
@@ -1389,7 +1387,7 @@ declare 是一个特殊的宏，可用于向函数或宏添加元属性：例如
   Macro: declare specs… ¶
 #+end_src
 
-    这个宏忽略它的参数并计算为 nil；  它没有运行时影响。但是，当 defun 或 defsubst 函数定义（请参阅定义函数）或 defmacro 宏定义（请参阅定义宏）的 declare 参数中出现声明形式时，它会将 specs 指定的属性附加到函数或宏。这项工作由 defun、defsubst 和 defmacro 专门执行。
+    这个宏忽略它的参数并计算为  ~nil~ ；  它没有运行时影响。但是，当 defun 或 defsubst 函数定义（请参阅定义函数）或 defmacro 宏定义（请参阅定义宏）的 declare 参数中出现声明形式时，它会将 specs 指定的属性附加到函数或宏。这项工作由 defun、defsubst 和 defmacro 专门执行。
 
     specs 中的每个元素都应具有 (property args...) 形式，不应被引用。它们具有以下效果：
 
@@ -1422,7 +1420,7 @@ declare 是一个特殊的宏，可用于向函数或宏添加元属性：例如
   (obsolete current-name when)
 #+end_src
 
-	 将函数或宏标记为过时，类似于调用 make-obsolete（请参阅声明函数过时）。current-name 应该是一个符号（在这种情况下，警告消息说要使用它）、一个字符串（指定警告消息）或 nil（在这种情况下，警告消息没有提供额外的细节）。when 应该是一个字符串，指示函数或宏何时首次过时。
+	 将函数或宏标记为过时，类似于调用 make-obsolete（请参阅声明函数过时）。current-name 应该是一个符号（在这种情况下，警告消息说要使用它）、一个字符串（指定警告消息）或  ~nil~ （在这种情况下，警告消息没有提供额外的细节）。when 应该是一个字符串，指示函数或宏何时首次过时。
 #+begin_src emacs-lisp
   (compiler-macro expander)
 #+end_src
@@ -1465,13 +1463,13 @@ simple.el:8727:1:Warning: the function ‘shell-mode’ is not known to be
 #+end_src
 这表示 shell 模式是在 shell.el 中定义的（ ~.el~ 可以省略）。编译器理所当然地认为该文件确实定义了函数，并且不检查。
 
-可选的第三个参数指定 shell-mode 的参数列表。在这种情况下，它不接受任何参数（nil 与不指定值不同）。在其他情况下，这可能类似于（文件和可选覆盖）。您不必指定参数列表，但如果您这样做，字节编译器可以检查调用是否与声明匹配。
+可选的第三个参数指定 shell-mode 的参数列表。在这种情况下，它不接受任何参数（ ~nil~  与不指定值不同）。在其他情况下，这可能类似于（文件和可选覆盖）。您不必指定参数列表，但如果您这样做，字节编译器可以检查调用是否与声明匹配。
 
 #+begin_src emacs-lisp
   Macro: declare-function function file &optional arglist fileonly ¶
 #+end_src
 
-告诉字节编译器假设函数是在文件文件中定义的。可选的第三个参数 arglist 要么是 t，即未指定参数列表，要么是与 defun 样式相同的形式参数列表。省略的 arglist 默认为 t，而不是 nil；  这是省略参数的非典型行为，这意味着要提供第四个但不提供第三个参数，必须为第三个参数占位符指定 t 而不是通常的 nil。可选的第四个参数 fileonly non-nil 表示只检查该文件是否存在，而不是它实际上定义了函数。
+告诉字节编译器假设函数是在文件文件中定义的。可选的第三个参数 arglist 要么是 t，即未指定参数列表，要么是与 defun 样式相同的形式参数列表。省略的 arglist 默认为 t，而不是  ~nil~ ；  这是省略参数的非典型行为，这意味着要提供第四个但不提供第三个参数，必须为第三个参数占位符指定 t 而不是通常的  ~nil~ 。可选的第四个参数 fileonly non-nil 表示只检查该文件是否存在，而不是它实际上定义了函数。
 
 要验证这些函数是否确实在 declare-function 所说的位置声明，请使用 check-declare-file 检查一个源文件中的所有 declare-function 调用，或使用 check-declare-directory 检查某个文件中和下的所有文件目录。
 
@@ -1481,7 +1479,7 @@ simple.el:8727:1:Warning: the function ‘shell-mode’ is not known to be
 
 有时文件会选择性地使用外部包中的函数。如果在 declare-function 语句中的文件名前加上 'ext:' ，则将检查是否找到，否则跳过而不会出错。
 
-有一些'check-declare' 不理解的函数定义（例如，defstruct 和其他一些宏）。在这种情况下，您可以将一个非零的 fileonly 参数传递给 declare-function，这意味着只检查文件是否存在，而不是它实际定义了函数。请注意，要在不必指定参数列表的情况下执行此操作，您应该将 arglist 参数设置为 t（因为 nil 表示空参数列表，而不是未指定的）。
+有一些'check-declare' 不理解的函数定义（例如，defstruct 和其他一些宏）。在这种情况下，您可以将一个非零的 fileonly 参数传递给 declare-function，这意味着只检查文件是否存在，而不是它实际定义了函数。请注意，要在不必指定参数列表的情况下执行此操作，您应该将 arglist 参数设置为 t（因为  ~nil~  表示空参数列表，而不是未指定的）。
 
 ** 13.16 判断一个函数是否可以安全调用
 一些主要模式，例如 SES，调用存储在用户文件中的函数。（有关 SES 的更多信息，请参阅 (ses)Simple Emacs 电子表格。）用户文件的谱系有时很差——您可以从刚认识的人那里获得电子表格，也可以通过从未见过的人的电子邮件获得电子表格.  因此，在您确定它是安全的之前，调用其源代码存储在用户文件中的函数是有风险的。
@@ -1490,9 +1488,9 @@ simple.el:8727:1:Warning: the function ‘shell-mode’ is not known to be
   Function: unsafep form &optional unsafep-vars ¶
 #+end_src
 
-    如果 form 是一个安全的 Lisp 表达式，则返回 nil，或者返回一个描述它可能不安全的原因的列表。参数 unsafep-vars 是一个已知在此时具有临时绑定的符号列表；  它主要用于内部递归调用。当前缓冲区是一个隐式参数，它提供了缓冲区本地绑定的列表。
+    如果 form 是一个安全的 Lisp 表达式，则返回  ~nil~ ，或者返回一个描述它可能不安全的原因的列表。参数 unsafep-vars 是一个已知在此时具有临时绑定的符号列表；  它主要用于内部递归调用。当前缓冲区是一个隐式参数，它提供了缓冲区本地绑定的列表。
 
-由于快速而简单，unsafep 进行了非常简单的分析，并拒绝了许多实际上是安全的 Lisp 表达式。没有已知的情况下 unsafep 为不安全的表达式返回 nil。但是，一个安全的 Lisp 表达式可以返回一个带有 display 属性的字符串，其中包含一个关联的 Lisp 表达式，该表达式将在字符串插入缓冲区后执行。这种相关的表达可以是病毒。为了安全起见，您必须先从用户代码计算的所有字符串中删除属性，然后再将它们插入缓冲区。
+由于快速而简单，unsafep 进行了非常简单的分析，并拒绝了许多实际上是安全的 Lisp 表达式。没有已知的情况下 unsafep 为不安全的表达式返回  ~nil~ 。但是，一个安全的 Lisp 表达式可以返回一个带有 display 属性的字符串，其中包含一个关联的 Lisp 表达式，该表达式将在字符串插入缓冲区后执行。这种相关的表达可以是病毒。为了安全起见，您必须先从用户代码计算的所有字符串中删除属性，然后再将它们插入缓冲区。
 
 ** 13.17 其他与函数相关的话题
 下面是几个函数的表格，这些函数执行与函数调用和函数定义相关的事情。它们记录在其他地方，但我们在此处提供交叉引用。
