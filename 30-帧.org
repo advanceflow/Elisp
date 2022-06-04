@@ -125,7 +125,7 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
   Function: get-device-terminal device ¶
 #+end_src
 
-    此函数返回一个终端，其设备名称由 ~device~ 给出。如果 ~device~ 是字符串，它可以是终端设备的文件名，也可以是 ~~host:server.screen~~ 形式的 ~X~ 显示器的名称。如果设备是一个帧，这个函数返回那个帧的终端； ~~nil~ ~ 表示选中的帧。最后，如果 ~device~ 是一个表示活动终端的终端对象，则返回该终端。如果函数的参数不是上述任何一个，则该函数会发出错误信号。
+    此函数返回一个终端，其设备名称由 ~device~ 给出。如果 ~device~ 是字符串，它可以是终端设备的文件名，也可以是 ~host:server.screen~ 形式的 ~X~ 显示器的名称。如果设备是一个帧，这个函数返回那个帧的终端； ~nil~ ~ 表示选中的帧。最后，如果 ~device~ 是一个表示活动终端的终端对象，则返回该终端。如果函数的参数不是上述任何一个，则该函数会发出错误信号。
 
 #+begin_src emacs-lisp
   Function: delete-terminal &optional terminal force ¶
@@ -145,7 +145,7 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
 
 一些 ~Lisp~ 变量是终端本地的；也就是说，它们对每个终端都有单独的绑定。任何时候生效的绑定都是针对当前选择的帧所属的终端的绑定。这些变量包括 ~default-minibuffer-frame~ 、defining-kbd-macro、last-kbd-macro 和 ~system-key-alist~ 。它们始终是终端本地的，并且永远不能是缓冲区本地的（请参阅缓冲区本地变量）。
 
-在 ~GNU~ 和 ~Unix~ 系统上，每个 ~X~ 显示器都是一个单独的图形终端。当 ~Emacs~ 从 ~X~ 窗口系统中启动时，它使用由 ~DISPLAY~ 环境变量或 ~~--display~~ 选项指定的 ~X~ 显示（参见 ~GNU Emacs~ 手册中的初始选项）。Emacs 可以通过命令 ~make-frame-on-display~ 连接到其他 ~X~ 显示器。每个 ~X~ 显示器都有自己的选定帧和自己的 ~minibuffer~ 窗口；但是，在任何给定时刻，只有这些帧中的一个是选定的帧（请参阅输入焦点）。通过与 ~emacsclient~ 程序交互，Emacs 甚至可以连接到其他文本终端。请参阅 ~GNU Emacs~ 手册中的 ~Emacs~ 服务器。
+在 ~GNU~ 和 ~Unix~ 系统上，每个 ~X~ 显示器都是一个单独的图形终端。当 ~Emacs~ 从 ~X~ 窗口系统中启动时，它使用由 ~DISPLAY~ 环境变量或 ~--display~ 选项指定的 ~X~ 显示（参见 ~GNU Emacs~ 手册中的初始选项）。Emacs 可以通过命令 ~make-frame-on-display~ 连接到其他 ~X~ 显示器。每个 ~X~ 显示器都有自己的选定帧和自己的 ~minibuffer~ 窗口；但是，在任何给定时刻，只有这些帧中的一个是选定的帧（请参阅输入焦点）。通过与 ~emacsclient~ 程序交互，Emacs 甚至可以连接到其他文本终端。请参阅 ~GNU Emacs~ 手册中的 ~Emacs~ 服务器。
 
 单个 ~X~ 服务器可以处理多个显示。每个 ~X~ 显示器都有一个由三部分组成的名称，'hostname:displaynumber.screennumber'。第一部分，主机名，指定显示器物理连接的机器的名称。第二部分 ~displaynumber~ 是一个从零开始的数字，用于标识连接到该机器的一个或多个监视器，这些监视器共享一个公共键盘和指点设备（鼠标、平板电脑等）。第三部分 ~screennumber~ 标识从零开始的屏幕编号（一个单独的监视器），它是该 ~X~ 服务器上单个监视器集合的一部分。当您使用属于一个服务器的两个或多个屏幕时，Emacs 通过名称的相似性知道它们共享一个键盘。
 
@@ -222,7 +222,7 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
   ‘source’
 #+end_src
 
-	 多显示器信息的来源为字符串；例如， ~~XRandr~~ 或 ~~Xinerama~~ 。
+	 多显示器信息的来源为字符串；例如， ~XRandr~ 或 ~Xinerama~ 。
 
     x、y、宽度和高度是整数。 ~名称~ 和 ~来源~ 可能不存在。
 
@@ -302,7 +302,7 @@ Emacs 将每个终端表示为终端对象数据类型（请参阅终端类型�
     外部位置由左侧和顶部帧参数指定并可通过其设置（请参阅位置参数）。对于普通的顶级帧，这些参数通常表示其相对于其显示原点的绝对位置（见下文）。对于子帧（请参阅子帧），这些参数表示其相对于其父帧的原始位置（见下文）的位置。对于文本终端上的帧，这些参数的值是无意义的并且始终为零。
 外部边框¶
 
-    外部边框是窗口管理器提供的装饰的一部分。它通常用于使用鼠标调整帧的大小，因此不会在 ~~fullboth~~ 和最大化的帧上显示（请参阅大小参数）。它的宽度由窗口管理器决定，不能被 ~Emacs~ 的函数改变。
+    外部边框是窗口管理器提供的装饰的一部分。它通常用于使用鼠标调整帧的大小，因此不会在 ~fullboth~ 和最大化的帧上显示（请参阅大小参数）。它的宽度由窗口管理器决定，不能被 ~Emacs~ 的函数改变。
 
     文本终端帧上不存在外部边框。对于图形帧，可以通过设置 ~override-redirect~ 或 ~undecorated frame~ 参数来抑制它们的显示（请参阅窗口管理参数）。
 外边界¶
@@ -713,7 +713,7 @@ User Option: frame-inhibit-implied-resize ¶
 
     设置此变量不会影响现有帧。此外，在单独的帧中显示缓冲区的函数可以通过提供自己的参数来覆盖默认参数。
 
-如果您使用指定帧外观的命令行选项调用 ~Emacs~ ，这些选项会通过将元素添加到 ~initial-frame-alist~ 或 ~default-frame-alist~ 来生效。仅影响初始帧的选项，例如 ~~--geometry~~ 和 ~~--maximized~~ ，添加到initial-frame-alist；其他添加到默认帧列表。请参阅 ~GNU Emacs~ 手册中的 ~Emacs~ 调用的命令行参数。
+如果您使用指定帧外观的命令行选项调用 ~Emacs~ ，这些选项会通过将元素添加到 ~initial-frame-alist~ 或 ~default-frame-alist~ 来生效。仅影响初始帧的选项，例如 ~--geometry~ 和 ~--maximized~ ，添加到initial-frame-alist；其他添加到默认帧列表。请参阅 ~GNU Emacs~ 手册中的 ~Emacs~ 调用的命令行参数。
 
 *** 30.4.3 窗框参数
 帧具有哪些参数取决于它使用的显示机制。本节介绍在某些或所有类型的终端上具有特殊含义的参数。其中，名称、标题、高度、宽度、缓冲区列表和缓冲区谓词在终端帧中提供有意义的信息，而 ~tty-color-mode~ 仅对文本终端上的帧有意义。
@@ -725,7 +725,7 @@ User Option: frame-inhibit-implied-resize ¶
   display
 #+end_src
 
-    在其上打开此帧的显示器。它应该是 ~~host:dpy.screen~~ 形式的字符串，就像 ~DISPLAY~ 环境变量一样。有关显示名称的更多详细信息，请参阅多个终端。
+    在其上打开此帧的显示器。它应该是 ~host:dpy.screen~ 形式的字符串，就像 ~DISPLAY~ 环境变量一样。有关显示名称的更多详细信息，请参阅多个终端。
 #+begin_src emacs-lisp
   display-type
 #+end_src
@@ -881,7 +881,7 @@ User Option: frame-inhibit-implied-resize ¶
   fullscreen
 #+end_src
 
-    此参数指定是否最大化帧的宽度、高度或两者。它的值可以是 ~fullwidth~ 、fullheight、fullboth 或最大化。全宽帧尽可能宽，全高帧尽可能高，全宽帧尽可能宽和高。最大化的帧类似于 ~~fullboth~~ 帧，不同之处在于它通常保留其标题栏以及用于调整帧大小和关闭帧的按钮。此外，最大化的帧通常会避免隐藏桌面上显示的任何任务栏或面板。另一方面， ~~fullboth~~ 帧通常会省略标题栏并占据整个可用屏幕空间。
+    此参数指定是否最大化帧的宽度、高度或两者。它的值可以是 ~fullwidth~ 、fullheight、fullboth 或最大化。全宽帧尽可能宽，全高帧尽可能高，全宽帧尽可能宽和高。最大化的帧类似于 ~fullboth~ 帧，不同之处在于它通常保留其标题栏以及用于调整帧大小和关闭帧的按钮。此外，最大化的帧通常会避免隐藏桌面上显示的任何任务栏或面板。另一方面， ~fullboth~ 帧通常会省略标题栏并占据整个可用屏幕空间。
 
     在这方面，全高和全宽帧更类似于最大化的帧。但是，这些通常会显示一个外部边框，最大化的帧可能会缺少该边框。因此，最大化和全高帧的高度以及最大化和全宽帧的宽度通常相差几个像素。
 
@@ -892,7 +892,7 @@ User Option: frame-inhibit-implied-resize ¶
   fullscreen-restore
 #+end_src
 
-    此参数指定在 ~~fullboth~~ 状态下调用 ~toggle-frame-fullscreen~ 命令（参见 ~GNU Emacs~ 手册中的帧命令）后所需的帧全屏状态。通常，当将状态切换为 ~fullboth~ 时，该命令会自动安装此参数。但是，如果您以 ~~fullboth~~ 状态启动 ~Emacs~ ，则必须在初始文件中指定所需的行为，例如
+    此参数指定在 ~fullboth~ 状态下调用 ~toggle-frame-fullscreen~ 命令（参见 ~GNU Emacs~ 手册中的帧命令）后所需的帧全屏状态。通常，当将状态切换为 ~fullboth~ 时，该命令会自动安装此参数。但是，如果您以 ~fullboth~ 状态启动 ~Emacs~ ，则必须在初始文件中指定所需的行为，例如
 
     #+begin_src emacs-lisp
       (setq default-frame-alist
