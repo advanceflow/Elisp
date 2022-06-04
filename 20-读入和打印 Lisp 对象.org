@@ -242,7 +242,7 @@
   nil ¶
 #+end_src
 
-     ~nil~  指定为输出流意味着使用标准输出变量的值；  该值是默认输出流，并且不能为  ~nil~ 。
+     ~nil~  指定为输出流意味着使用标准输出变量的值；该值是默认输出流，并且不能为  ~nil~ 。
 #+begin_src emacs-lisp
   symbol
 #+end_src
@@ -593,7 +593,7 @@ Lisp 对象可以引用自己。以正常方式打印自引用对象将需要无
   Variable: print-continuous-numbering ¶
 #+end_src
 
-    如果非零，这意味着在打印调用中连续编号。这会影响为 ~#n=~ 标签和 ~#m#~ 引用打印的数字。不要用 setq 设置这个变量；  你应该只用 let 将它临时绑定到 t。当你这样做时，你还应该将 print-number-table 绑定到  ~nil~ 。
+    如果非零，这意味着在打印调用中连续编号。这会影响为 ~#n=~ 标签和 ~#m#~ 引用打印的数字。不要用 setq 设置这个变量；你应该只用 let 将它临时绑定到 t。当你这样做时，你还应该将 print-number-table 绑定到  ~nil~ 。
 
 #+begin_src emacs-lisp
   Variable: print-number-table ¶

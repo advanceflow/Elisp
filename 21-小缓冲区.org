@@ -10,7 +10,7 @@ minibuffer 的窗口通常是一行；  如果内容需要更多空间，它会�
 
 使用 minibuffer 读取输入事件，这会改变变量的值，例如 this-command 和 last-command（请参阅命令循环中的信息）。如果您不想更改它们，您的程序应该将它们绑定在使用 minibuffer 的代码周围。
 
-在某些情况下，即使存在活动的 minibuffer，命令也可以使用 minibuffer；  这样的 minibuffer 称为递归 minibuffer。第一个 minibuffer 被命名为 '*Minibuf-1*'。递归小缓冲区通过增加名称末尾的数字来命名。（名称以空格开头，这样它们就不会出现在正常的缓冲区列表中。）在几个递归小缓冲区中，最里面的（或最近进入的）是活动的小缓冲区——你可以通过键入 RET ( exit-minibuffer) 中。我们通常称它为 minibuffer。您可以通过设置变量 enable-recursive-minibuffers 或将该名称的属性放在命令符号上来允许或禁止递归 minibuffers（请参阅 Recursive Minibuffers。）
+在某些情况下，即使存在活动的 minibuffer，命令也可以使用 minibuffer；这样的 minibuffer 称为递归 minibuffer。第一个 minibuffer 被命名为 '*Minibuf-1*'。递归小缓冲区通过增加名称末尾的数字来命名。（名称以空格开头，这样它们就不会出现在正常的缓冲区列表中。）在几个递归小缓冲区中，最里面的（或最近进入的）是活动的小缓冲区——你可以通过键入 RET ( exit-minibuffer) 中。我们通常称它为 minibuffer。您可以通过设置变量 enable-recursive-minibuffers 或将该名称的属性放在命令符号上来允许或禁止递归 minibuffers（请参阅 Recursive Minibuffers。）
 
 与其他缓冲区一样，迷你缓冲区使用本地键映射（请参阅键映射）来指定特殊键绑定。调用 minibuffer 的函数还根据要完成的工作设置其本地映射。有关未完成的 minibuffer 本地映射，请参阅Reading Text Strings with the Minibuffer。有关完成的小缓冲区本地映射，请参阅执行完成的小缓冲区命令。
 
@@ -29,7 +29,7 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
   Function: read-from-minibuffer prompt &optional initial keymap read history default inherit-input-method ¶
 #+end_src
 
-    此函数是从 minibuffer 获取输入的最通用方法。默认情况下，它接受任意文本并将其作为字符串返回；  但是，如果 read 不为零，则它使用 read 将文本转换为 Lisp 对象（请参阅输入函数）。
+    此函数是从 minibuffer 获取输入的最通用方法。默认情况下，它接受任意文本并将其作为字符串返回；但是，如果 read 不为零，则它使用 read 将文本转换为 Lisp 对象（请参阅输入函数）。
 
     这个函数做的第一件事是激活一个小缓冲区并以提示符（必须是一个字符串）作为提示符显示它。然后用户可以在 minibuffer 中编辑文本。
 
@@ -58,7 +58,7 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
 
     如果参数inherit-input-method 不为 ~nil~ ，那么minibuffer 会继承当前输入法（参见Input Methods）和enable-multibyte-characters 的设置（参见Text Representations）从进入minibuffer 之前的当前缓冲区。
 
-    不推荐使用 initial ；  我们建议仅在为历史指定 cons 单元格的同时使用非  ~nil~  值。请参阅初始输入。
+    不推荐使用 initial ；我们建议仅在为历史指定 cons 单元格的同时使用非  ~nil~  值。请参阅初始输入。
 
 #+begin_src emacs-lisp
   Function: read-string prompt &optional initial history default inherit-input-method ¶
@@ -86,7 +86,7 @@ minibuffer 输入最基本的原语是 read-from-minibuffer，它可以用来读
 
     此函数从 minibuffer 中读取一个正则表达式作为字符串并返回它。如果 minibuffer 提示字符串 prompt 不以 ':' 结尾（后跟可选空格），则函数添加 ':' 到末尾，前面是默认返回值（见下文），如果那是非空的。
 
-    可选参数 defaults 控制用户输入 null 输入时返回的默认值，并且应该是以下之一：字符串；   ~nil~ ，相当于一个空字符串；  字符串列表；  或一个符号。
+    可选参数 defaults 控制用户输入 null 输入时返回的默认值，并且应该是以下之一：字符串； ~nil~ ，相当于一个空字符串；字符串列表；或一个符号。
 
     如果 defaults 是一个符号，read-regexp 会查询变量 read-regexp-defaults-function 的值（见下文），如果它不是  ~nil~ ，则优先使用它而不是默认值。这种情况下的值应该是：
 
@@ -324,7 +324,7 @@ minibuffer 历史列表记录以前的 minibuffer 输入，以便用户可以方
 
     为了保持一致性，您还应该使用 minibuffer 输入函数的初始参数将历史元素指定为初始 minibuffer 内容（请参阅初始输入）。
 
-如果您不指定历史，则使用默认历史列表 minibuffer-history。有关其他标准历史列表，请参见下文。您还可以创建自己的历史列表变量；  只需在第一次使用之前将其初始化为零。如果变量是本地缓冲区，那么每个缓冲区都有自己的输入历史列表。
+如果您不指定历史，则使用默认历史列表 minibuffer-history。有关其他标准历史列表，请参见下文。您还可以创建自己的历史列表变量；只需在第一次使用之前将其初始化为零。如果变量是本地缓冲区，那么每个缓冲区都有自己的输入历史列表。
 
 read-from-minibuffer 和 complete-read 都会自动将新元素添加到历史列表中，并提供命令以允许用户重用列表中的项目。程序使用历史列表唯一需要做的就是初始化它，并在需要时将其名称传递给输入函数。但是当 minibuffer 输入函数不使用它时，手动修改列表是安全的。
 
@@ -441,14 +441,14 @@ read-from-minibuffer 和 complete-read 都会自动将新元素添加到历史�
 
 initial 也可以是形式的 cons 单元格（字符串 . 位置）。这意味着在 minibuffer 中插入字符串，但将点放在字符串文本中的位置。
 
-作为一个历史偶然，不同职能部门的立场不一致。在完成读取中，位置的值被解释为原点零；  也就是说，值 0 表示字符串的开头，1 表示在第一个字符之后，等等。在 read-minibuffer 和其他支持此参数的非完成 minibuffer 输入函数中，1 表示字符串的开头， 2 表示在第一个字符之后，依此类推。
+作为一个历史偶然，不同职能部门的立场不一致。在完成读取中，位置的值被解释为原点零；也就是说，值 0 表示字符串的开头，1 表示在第一个字符之后，等等。在 read-minibuffer 和其他支持此参数的非完成 minibuffer 输入函数中，1 表示字符串的开头， 2 表示在第一个字符之后，依此类推。
 
 不推荐使用 cons 单元格作为初始参数的值。
 
 ** 21.6 完成
 补全是一项功能，它从名称的缩写开始填充名称的其余部分。完成通过将用户的输入与有效名称列表进行比较，并确定有多少名称是由用户键入的内容唯一确定的。例如，当你输入 Cx b (switch-to-buffer)，然后输入你想切换到的缓冲区名称的前几个字母，然后输入 TAB (minibuffer-complete)，Emacs 将名称扩展为尽其所能。
 
-标准 Emacs 命令提供符号、文件、缓冲区和进程名称的补全；  使用本节中的函数，您可以实现其他类型名称的补全。
+标准 Emacs 命令提供符号、文件、缓冲区和进程名称的补全；使用本节中的函数，您可以实现其他类型名称的补全。
 
 try-completion 函数是完成的基本原语：它返回给定初始字符串的最长确定完成，以及要匹配的给定字符串集。
 
@@ -474,7 +474,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     如果集合是一个哈希表，那么作为字符串或符号的键是可能的补全。其他键被忽略。
 
-    您还可以将函数用作集合。然后该函数单独负责执行完成；  尝试完成返回此函数返回的任何内容。该函数使用三个参数调用：字符串、谓词和  ~nil~ （第三个参数是为了使同一个函数可以在所有完成中使用，并在任何一种情况下都执行适当的操作）。请参阅程序完成。
+    您还可以将函数用作集合。然后该函数单独负责执行完成；尝试完成返回此函数返回的任何内容。该函数使用三个参数调用：字符串、谓词和  ~nil~ （第三个参数是为了使同一个函数可以在所有完成中使用，并在任何一种情况下都执行适当的操作）。请参阅程序完成。
 
     如果参数谓词非零，那么它必须是一个参数的函数，除非集合是一个哈希表，在这种情况下它应该是两个参数的函数。它用于测试每个可能的匹配，并且仅当谓词返回非零时才接受匹配。为 predicate 提供的参数是来自 alist 的字符串或 cons 单元格（其 CAR 是字符串），或者来自 obarray 的符号（不是符号名称）。如果 collection 是一个哈希表，则使用两个参数调用谓词，即字符串键和关联值。
 
@@ -519,7 +519,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     此函数返回字符串的所有可能完成的列表。此函数的参数与 try-completion 的参数相同，它使用 completion-regexp-list 的方式与 try-completion 相同。
 
-    如果collection是一个函数，它会用三个参数调用：字符串、谓词和t；  然后所有完成返回函数返回的任何内容。请参阅程序完成。
+    如果collection是一个函数，它会用三个参数调用：字符串、谓词和t；然后所有完成返回函数返回的任何内容。请参阅程序完成。
 
     这是一个示例，使用示例中显示的函数 test 进行尝试完成：
     #+begin_src emacs-lisp
@@ -545,7 +545,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     如果谓词是非零并且如果集合包含多个彼此相等的字符串，由比较字符串根据完成忽略大小写确定，那么谓词应该接受全部或不接受。否则，测试完成的返回值本质上是不可预测的。
 
-    如果 collection 是一个函数，则使用三个参数调用它，即字符串、谓词和 lambda 值；  无论它返回什么，测试完成都会依次返回。
+    如果 collection 是一个函数，则使用三个参数调用它，即字符串、谓词和 lambda 值；无论它返回什么，测试完成都会依次返回。
 
 #+begin_src emacs-lisp
   Function: completion-boundaries string collection predicate suffix ¶
@@ -553,7 +553,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     此函数返回集合将操作的字段的边界，假设字符串保存点之前的文本，后缀保存点之后的文本。
 
-    通常完成对整个字符串进行操作，因此对于所有普通集合，这将始终返回 (0 . (length suffix))。但更复杂的完成，例如文件完成，一次完成一个字段。例如， ~/usr/sh~ 的完成将包括 ~/usr/share/~ 但不包括 ~/usr/share/doc~ ，即使 ~/usr/share/doc~ 存在。此外， ~/usr/sh~ 上的所有完成将不包括 ~/usr/share/~ ，而只包括 ~share/~ 。因此，如果字符串是 ~/usr/sh~ 且后缀是 ~e/doc~ ，完成边界将返回 (5 . 1)，这告诉我们该集合将仅返回与 ~/usr/~ 之后的区域相关的完成信息" 和 "/doc" 之前。尝试完成不受非平凡边界的影响；  例如， ~/usr/sh~ 上的尝试完成可能仍会返回 ~/usr/share/~ ，而不是 ~share/~ 。
+    通常完成对整个字符串进行操作，因此对于所有普通集合，这将始终返回 (0 . (length suffix))。但更复杂的完成，例如文件完成，一次完成一个字段。例如， ~/usr/sh~ 的完成将包括 ~/usr/share/~ 但不包括 ~/usr/share/doc~ ，即使 ~/usr/share/doc~ 存在。此外， ~/usr/sh~ 上的所有完成将不包括 ~/usr/share/~ ，而只包括 ~share/~ 。因此，如果字符串是 ~/usr/sh~ 且后缀是 ~e/doc~ ，完成边界将返回 (5 . 1)，这告诉我们该集合将仅返回与 ~/usr/~ 之后的区域相关的完成信息" 和 "/doc" 之前。尝试完成不受非平凡边界的影响；例如， ~/usr/sh~ 上的尝试完成可能仍会返回 ~/usr/share/~ ，而不是 ~share/~ 。
 
 如果您将完成列表存储在变量中，您应该通过给它一个非零风险局部变量属性来将该变量标记为有风险的。请参阅文件局部变量。
 
@@ -561,7 +561,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
   Variable: completion-ignore-case ¶
 #+end_src
 
-    如果此变量的值不为  ~nil~ ，则认为 case 在完成中不重要。在 read-file-name 中，此变量被 read-file-name-completion-ignore-case 覆盖（请参阅读取文件名）；  在 read-buffer 中，它被 read-buffer-completion-ignore-case 覆盖（请参阅高级完成函数）。
+    如果此变量的值不为  ~nil~ ，则认为 case 在完成中不重要。在 read-file-name 中，此变量被 read-file-name-completion-ignore-case 覆盖（请参阅读取文件名）；在 read-buffer 中，它被 read-buffer-completion-ignore-case 覆盖（请参阅高级完成函数）。
 
 #+begin_src emacs-lisp
   Variable: completion-regexp-list ¶
@@ -602,13 +602,13 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 	 如果confirm-after-completion，用户可以使用任何输入退出，但如果前面的命令是完成命令（即minibuffer-confirm-exit-commands中的命令之一）并且结果输入不是，则要求确认收藏的一个元素。请参阅完成完成的 Minibuffer 命令。
 	 require-match 的任何其他值的行为都类似于 t，除了 exit 命令在执行完成时不会退出。
 
-    但是，无论 require-match 的值如何，始终允许空输入；  在这种情况下，如果它是一个列表，则完成读取返回默认的第一个元素；  ""，如果默认为  ~nil~ ；  或默认。用户也可以通过历史命令使用默认的一个或多个字符串。
+    但是，无论 require-match 的值如何，始终允许空输入；在这种情况下，如果它是一个列表，则完成读取返回默认的第一个元素；""，如果默认为  ~nil~ ；或默认。用户也可以通过历史命令使用默认的一个或多个字符串。
 
     如果 require-match 为  ~nil~ ，则函数 completed-read 使用 minibuffer-local-completion-map 作为键映射，如果 require-match 为非  ~nil~ ，则使用 minibuffer-local-must-match-map。请参阅完成完成的 Minibuffer 命令。
 
     参数 history 指定用于保存输入和 minibuffer 历史命令的历史列表变量。它默认为 minibuffer-history。如果历史是符号 t，则不记录历史。请参阅小缓冲区历史记录。
 
-    参数 initial 大多已被弃用；  我们建议仅在为历史指定 cons 单元格的同时使用非  ~nil~  值。请参阅初始输入。对于默认输入，请改用默认值。
+    参数 initial 大多已被弃用；我们建议仅在为历史指定 cons 单元格的同时使用非  ~nil~  值。请参阅初始输入。对于默认输入，请改用默认值。
 
     如果参数inherit-input-method 不为 ~nil~ ，那么minibuffer 会继承当前输入法（参见Input Methods）和enable-multibyte-characters 的设置（参见Text Representations）从进入minibuffer 之前的当前缓冲区。
 
@@ -662,7 +662,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
   Variable: minibuffer-completion-confirm ¶
 #+end_src
 
-    这个变量决定了 Emacs 在退出 minibuffer 之前是否要求确认；  complete-read 设置此变量，函数 minibuffer-complete-and-exit 在退出前检查该值。如果值为  ~nil~ ，则不需要确认。如果值为confirm，用户可能会退出一个不是有效的完成替代的输入，但Emacs 要求确认。如果值为confirm-after-completion，则用户可能会以不是有效的完成替代的输入退出，但如果用户在minibuffer-confirm-exit-中的任何完成命令之后立即提交输入，Emacs 会要求确认命令。
+    这个变量决定了 Emacs 在退出 minibuffer 之前是否要求确认；complete-read 设置此变量，函数 minibuffer-complete-and-exit 在退出前检查该值。如果值为  ~nil~ ，则不需要确认。如果值为confirm，用户可能会退出一个不是有效的完成替代的输入，但Emacs 要求确认。如果值为confirm-after-completion，则用户可能会以不是有效的完成替代的输入退出，但如果用户在minibuffer-confirm-exit-中的任何完成命令之后立即提交输入，Emacs 会要求确认命令。
 
 #+begin_src emacs-lisp
   Variable: minibuffer-confirm-exit-commands ¶
@@ -760,7 +760,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
   Variable: minibuffer-local-filename-completion-map ¶
 #+end_src
 
-    这是一个简单地解除绑定 SPC 的稀疏键映射；  因为文件名可以包含空格。函数 read-file-name 将此键映射与 minibuffer-local-completion-map 或 minibuffer-local-must-match-map 组合。
+    这是一个简单地解除绑定 SPC 的稀疏键映射；因为文件名可以包含空格。函数 read-file-name 将此键映射与 minibuffer-local-completion-map 或 minibuffer-local-must-match-map 组合。
 
 #+begin_src emacs-lisp
   Variable: minibuffer-beginning-of-buffer-movement ¶
@@ -822,7 +822,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     此函数读取命令的名称并将其作为 Lisp 符号返回。参数提示在 read-from-minibuffer 中使用。回想一下，命令是 commandp 返回 t 的任何东西，命令名称是 commandp 返回 t 的符号。请参阅交互式呼叫。
 
-    参数 default 指定用户输入空输入时返回的内容。它可以是符号、字符串或字符串列表。如果它是一个字符串，read-command 会在返回它之前对其进行实习。如果它是一个列表，则 read-command 会实习该列表的第一个元素。如果 default 为  ~nil~ ，则表示没有指定默认值；  那么如果用户输入 null 输入，则返回值为 (intern "")，即名称为空字符串的符号，其打印表示为 ##（参见符号类型）。
+    参数 default 指定用户输入空输入时返回的内容。它可以是符号、字符串或字符串列表。如果它是一个字符串，read-command 会在返回它之前对其进行实习。如果它是一个列表，则 read-command 会实习该列表的第一个元素。如果 default 为  ~nil~ ，则表示没有指定默认值；那么如果用户输入 null 输入，则返回值为 (intern "")，即名称为空字符串的符号，其打印表示为 ##（参见符号类型）。
     #+begin_src emacs-lisp
 
 
@@ -982,7 +982,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     该函数从 minibuffer 中读取一个 shell 命令，以提示符提示并提供智能完成。它使用适合命令名称的候选词来完成命令的第一个单词，其余的命令单词作为文件名。
 
-    此函数使用 minibuffer-local-shell-command-map 作为 minibuffer 输入的键映射。history 参数指定要使用的历史列表；  如果省略或为零，则默认为 shell-command-history（请参阅 shell-command-history）。可选参数 initial 指定 minibuffer 的初始内容（参见初始输入）。其余的 args（如果存在）用作 read-from-minibuffer 中的默认参数和继承输入方法参数（请参阅Reading Text Strings with the Minibuffer）。
+    此函数使用 minibuffer-local-shell-command-map 作为 minibuffer 输入的键映射。history 参数指定要使用的历史列表；如果省略或为零，则默认为 shell-command-history（请参阅 shell-command-history）。可选参数 initial 指定 minibuffer 的初始内容（参见初始输入）。其余的 args（如果存在）用作 read-from-minibuffer 中的默认参数和继承输入方法参数（请参阅Reading Text Strings with the Minibuffer）。
 
 #+begin_src emacs-lisp
   Variable: minibuffer-local-shell-command-map ¶
@@ -1009,7 +1009,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
       (style try-completion all-completions doc)
     #+end_src
 
-    这里的style是完成样式的名称（一个符号），可以在completion-styles变量中用来指代这个样式；  try-completion 是完成完成的函数；  all-completions 是列出完成的函数；  doc 是描述完成样式的字符串。
+    这里的style是完成样式的名称（一个符号），可以在completion-styles变量中用来指代这个样式；try-completion 是完成完成的函数；all-completions 是列出完成的函数；doc 是描述完成样式的字符串。
 
     try-completion 和 all-completion 函数都应该接受四个参数：字符串、集合、谓词和点。字符串、集合和谓词参数与 try-completion 中的含义相同（请参阅基本完成函数），并且 point 参数是字符串中 point 的位置。如果每个函数执行了它的工作，它应该返回一个非  ~nil~  值，如果它没有完成它应该返回一个  ~nil~ （例如，如果没有办法根据完成样式完成字符串）。
 
@@ -1021,7 +1021,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
   User Option: completion-category-overrides ¶
 #+end_src
 
-    此变量指定在完成某些类型的文本时要使用的特殊完成样式和其他完成行为。它的值应该是一个具有表单元素的列表 (category . alist)。类别是描述正在完成的事情的符号；  目前，定义了缓冲区、文件和 unicode-name 类别，但其他类别可以通过专门的完成函数定义（参见 Programmed Completion）。alist 是一个关联列表，描述了相应类别的完成应如何表现。支持以下 alist 键：
+    此变量指定在完成某些类型的文本时要使用的特殊完成样式和其他完成行为。它的值应该是一个具有表单元素的列表 (category . alist)。类别是描述正在完成的事情的符号；目前，定义了缓冲区、文件和 unicode-name 类别，但其他类别可以通过专门的完成函数定义（参见 Programmed Completion）。alist 是一个关联列表，描述了相应类别的完成应如何表现。支持以下 alist 键：
 
 #+begin_src emacs-lisp
   styles
@@ -1067,13 +1067,13 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     要完成的字符串。
     一个谓词函数，用于过滤可能的匹配项，如果没有，则为  ~nil~ 。该函数应该为每个可能的匹配调用谓词，如果谓词返回  ~nil~ ，则忽略匹配。
-    指定要执行的完成操作类型的标志；  有关这些操作的详细信息，请参阅基本完成功能。此标志可能是以下值之一。
+    指定要执行的完成操作类型的标志；有关这些操作的详细信息，请参阅基本完成功能。此标志可能是以下值之一。
 
 #+begin_src emacs-lisp
   nil
 #+end_src
 
-	 这指定了一个尝试完成操作。如果没有匹配项，该函数应返回  ~nil~ ；  如果指定的字符串是唯一且完全匹配的，它应该返回 t；  否则它应该返回所有匹配项中最长的公共前缀子字符串。
+	 这指定了一个尝试完成操作。如果没有匹配项，该函数应返回  ~nil~ ；如果指定的字符串是唯一且完全匹配的，它应该返回 t；否则它应该返回所有匹配项中最长的公共前缀子字符串。
 #+begin_src emacs-lisp
   t
 #+end_src
@@ -1083,7 +1083,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
   lambda
 #+end_src
 
-	 这指定了一个测试完成操作。如果指定的字符串与某个完成选项完全匹配，则该函数应返回 t；  否则为零。
+	 这指定了一个测试完成操作。如果指定的字符串与某个完成选项完全匹配，则该函数应返回 t；否则为零。
 #+begin_src emacs-lisp
   (boundaries . suffix)
 #+end_src
@@ -1136,7 +1136,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
   Function: completion-table-dynamic function &optional switch-buffer ¶
 #+end_src
 
-    此函数是编写可充当编程完成函数的函数的便捷方式。参数函数应该是一个函数，它接受一个参数，一个字符串，并返回一个包含所有可能完成的完成表（参见基本完成函数）。函数返回的表还可以包含与字符串参数不匹配的元素；  它们会被完成表动态自动过滤掉。特别是，函数可以忽略其参数并返回所有可能完成的完整列表。您可以将完成表动态视为函数和编程完成函数的接口之间的转换器。
+    此函数是编写可充当编程完成函数的函数的便捷方式。参数函数应该是一个函数，它接受一个参数，一个字符串，并返回一个包含所有可能完成的完成表（参见基本完成函数）。函数返回的表还可以包含与字符串参数不匹配的元素；它们会被完成表动态自动过滤掉。特别是，函数可以忽略其参数并返回所有可能完成的完整列表。您可以将完成表动态视为函数和编程完成函数的接口之间的转换器。
 
     如果可选参数 switch-buffer 不为零，并且在 minibuffer 中执行完成，则将调用函数并将当前缓冲区设置为进入 minibuffer 的缓冲区。
 
@@ -1163,7 +1163,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
       (start end collection . props)
     #+end_src
 
-    start 和 end 分隔要完成的文本（应该包含点）。collection 是用于完成该文本的完成表，其形式适合作为第二个参数传递给 try-completion（请参阅基本完成函数）；  通过完成样式中定义的完成样式（请参阅完成变量），将以通常的方式从此完成表生成完成替代项。props 是附加信息的属性列表；  识别完成额外属性中的任何属性（请参阅完成变量），以及以下附加属性：
+    start 和 end 分隔要完成的文本（应该包含点）。collection 是用于完成该文本的完成表，其形式适合作为第二个参数传递给 try-completion（请参阅基本完成函数）；通过完成样式中定义的完成样式（请参阅完成变量），将以通常的方式从此完成表生成完成替代项。props 是附加信息的属性列表；识别完成额外属性中的任何属性（请参阅完成变量），以及以下附加属性：
 
     ：谓词
 
@@ -1190,7 +1190,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
 
     此外，集合通常不应根据开始和结束之间的当前文本进行预过滤，因为这是完成点函数的调用者根据它决定使用的完成样式来执行此操作的责任。
 
-    完成点函数中的函数也可以返回一个函数而不是如上所述的列表。在这种情况下，调用返回的函数，没有参数，它完全负责执行完成。我们不鼓励这种用法；  它仅旨在帮助将旧代码转换为使用完成点。
+    完成点函数中的函数也可以返回一个函数而不是如上所述的列表。在这种情况下，调用返回的函数，没有参数，它完全负责执行完成。我们不鼓励这种用法；它仅旨在帮助将旧代码转换为使用完成点。
 
     完成点函数中第一个返回非零值的函数由点完成函数使用。不调用其余函数。例外情况是存在 :exclusive 规范，如上所述。
 
@@ -1207,7 +1207,7 @@ try-completion 函数是完成的基本原语：它返回给定初始字符串�
     要使此功能起作用，点必须位于开始和结束之间的某个位置。
 
 ** 21.7 是或否查询
-本节介绍用于向用户询问是或否问题的功能。函数 y-or-np 可以用单个字符来回答；  对于无意的错误答案不会造成严重后果的问题，它很有用。yes-or-no-p 适用于更重要的问题，因为它需要三个或四个字符来回答。
+本节介绍用于向用户询问是或否问题的功能。函数 y-or-np 可以用单个字符来回答；对于无意的错误答案不会造成严重后果的问题，它很有用。yes-or-no-p 适用于更重要的问题，因为它需要三个或四个字符来回答。
 
 如果在使用鼠标调用的命令中调用了这些函数中的任何一个——更准确地说，如果 last-nonmenu-event（请参阅命令循环中的信息）为  ~nil~  或列表——则它使用对话框或 pop-向上菜单询问问题。否则，它使用键盘输入。您可以通过将 last-nonmenu-event 绑定到调用周围的合适值来强制使用鼠标或键盘输入。
 
@@ -1231,7 +1231,7 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
   Function: y-or-n-p-with-timeout prompt seconds default ¶
 #+end_src
 
-    和 y-or-np 一样，除了如果用户在几秒内没有回答，这个函数停止等待并返回默认值。它通过设置计时器来工作；  请参阅延迟执行的计时器。参数 seconds 应该是一个数字。
+    和 y-or-np 一样，除了如果用户在几秒内没有回答，这个函数停止等待并返回默认值。它通过设置计时器来工作；请参阅延迟执行的计时器。参数 seconds 应该是一个数字。
 
 #+begin_src emacs-lisp
   Function: yes-or-no-p prompt ¶
@@ -1239,7 +1239,7 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
 
     该函数向用户询问一个问题，期望在 minibuffer 中输入。如果用户输入 ~是~ ，则返回 t，如果用户输入 ~否~ ，则返回  ~nil~ 。用户必须键入 RET 才能完成响应。大写和小写是等价的。
 
-    yes-or-no-p 首先在 minibuffer 中显示提示，然后是 '(yes or no) '。用户必须键入预期的响应之一；  否则，该函数会响应 ~请回答是或否。~ ，等待大约两秒钟并重复请求。
+    yes-or-no-p 首先在 minibuffer 中显示提示，然后是 '(yes or no) '。用户必须键入预期的响应之一；否则，该函数会响应 ~请回答是或否。~ ，等待大约两秒钟并重复请求。
 
     yes-or-no-p 比 y-or-np 需要用户更多的工作，并且适用于更关键的决策。
 
@@ -1335,9 +1335,9 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
 
 	 得到帮助
 
-    这些是 query-replace 接受的相同答案。keymap query-replace-map 定义了它们对 map-y-or-np 和 query-replace 的含义；  请参阅搜索和替换。
+    这些是 query-replace 接受的相同答案。keymap query-replace-map 定义了它们对 map-y-or-np 和 query-replace 的含义；请参阅搜索和替换。
 
-    您可以使用 action-alist 指定其他可能的答案及其含义。如果提供，action-alist 应该是一个 alist，其元素的格式为 (char function help)。每个 alist 元素都定义了一个附加答案。在每个元素中，char 是一个字符（答案）；  函数是一个参数的函数（列表中的一个对象）；  帮助是一个字符串。当用户使用 char 响应时，map-y-or-np 调用函数。如果它返回非  ~nil~ ，则认为该对象已被执行，并且 map-y-or-np 前进到列表中的下一个对象。如果它返回  ~nil~ ，则对同一对象重复提示。如果用户请求帮助，帮助中的文本用于描述这些附加答案。
+    您可以使用 action-alist 指定其他可能的答案及其含义。如果提供，action-alist 应该是一个 alist，其元素的格式为 (char function help)。每个 alist 元素都定义了一个附加答案。在每个元素中，char 是一个字符（答案）；函数是一个参数的函数（列表中的一个对象）；帮助是一个字符串。当用户使用 char 响应时，map-y-or-np 调用函数。如果它返回非  ~nil~ ，则认为该对象已被执行，并且 map-y-or-np 前进到列表中的下一个对象。如果它返回  ~nil~ ，则对同一对象重复提示。如果用户请求帮助，帮助中的文本用于描述这些附加答案。
 
     通常，map-y-or-np 在提示时绑定 cursor-in-echo-area。但是，如果 no-cursor-in-echo-area 不为零，则它不会那样做。
 
@@ -1355,7 +1355,7 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
     #+begin_src emacs-lisp
       (long-answer short-answer help-message)
     #+end_src
-    其中 long-answer 是用户响应的完整文本，一个字符串；  short-answer 是相同响应、单个字符或功能键的缩写形式；  help-message 是描述答案含义的文本。如果变量 read-answer-short 不为零，则提示将显示可能答案的简短变体，并且用户应键入提示中显示的单个字符/键；  否则提示将显示答案的长变体，并且用户应键入其中一个答案的全文并按 RET 键结束。如果 use-dialog-box 不为  ~nil~ ，并且此函数由鼠标事件调用，则问题和答案将显示在 GUI 对话框中。
+    其中 long-answer 是用户响应的完整文本，一个字符串；short-answer 是相同响应、单个字符或功能键的缩写形式；help-message 是描述答案含义的文本。如果变量 read-answer-short 不为零，则提示将显示可能答案的简短变体，并且用户应键入提示中显示的单个字符/键；否则提示将显示答案的长变体，并且用户应键入其中一个答案的全文并按 RET 键结束。如果 use-dialog-box 不为  ~nil~ ，并且此函数由鼠标事件调用，则问题和答案将显示在 GUI 对话框中。
 
     该函数返回用户选择的长答案的文本，无论提示中显示长答案还是短答案并由用户键入。
 
@@ -1374,7 +1374,7 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
   Function: read-char-from-minibuffer prompt &optional chars history ¶
 #+end_src
 
-    此函数使用 minibuffer 读取并返回单个字符。可选地，它忽略任何不是 chars 成员的输入，这是一个接受的字符列表。history 参数指定要使用的历史列表符号；  如果省略或为零，则此函数不使用历史记录。
+    此函数使用 minibuffer 读取并返回单个字符。可选地，它忽略任何不是 chars 成员的输入，这是一个接受的字符列表。history 参数指定要使用的历史列表符号；如果省略或为零，则此函数不使用历史记录。
 
     如果在调用 read-char-from-minibuffer 时将 help-form（请参阅帮助函数）绑定到非  ~nil~  值，则按 help-char 会导致它评估 help-form 并显示结果。
 
@@ -1385,7 +1385,7 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
   Function: read-passwd prompt &optional confirm default ¶
 #+end_src
 
-    该函数读取密码，以提示符提示。它不会在用户键入密码时回显密码；  相反，它会为密码中的每个字符回显 ~*~ 。如果要应用另一个字符来隐藏密码，请将变量 read-hide-char 与该字符绑定。
+    该函数读取密码，以提示符提示。它不会在用户键入密码时回显密码；相反，它会为密码中的每个字符回显 ~*~ 。如果要应用另一个字符来隐藏密码，请将变量 read-hide-char 与该字符绑定。
 
     可选参数确认，如果非零，表示读取两次密码并坚持两次必须相同。如果不一样，用户必须一遍又一遍地输入，直到最后两次匹配。
 
@@ -1499,7 +1499,7 @@ yes-or-no-p 和 y-or-np 都使用 minibuffer。
   User Option: max-mini-window-height ¶
 #+end_src
 
-    此选项为自动调整 minibuffer 窗口大小提供了最大高度。浮点数将最大高度指定为框​​架高度的一部分；  一个整数指定以框架的规范字符高度为单位的最大高度（请参阅框架字体）。默认值为 0.25。
+    此选项为自动调整 minibuffer 窗口大小提供了最大高度。浮点数将最大高度指定为框​​架高度的一部分；一个整数指定以框架的规范字符高度为单位的最大高度（请参阅框架字体）。默认值为 0.25。
 
 请注意，上述两个变量的值在显示时生效，因此将它们绑定在产生回显区域消息的代码周围将不起作用。如果您想在显示长消息时阻止调整 minibuffer 窗口的大小，请改为绑定 message-truncate-lines 变量（请参阅回声区域自定义）。
 

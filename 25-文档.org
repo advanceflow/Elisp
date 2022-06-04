@@ -500,7 +500,8 @@ Macro: make-help-screen fname help-line help-text help-map ¶
 User Option: three-step-help ¶
 #+end_src
 
-    如果该变量不为  ~nil~，则使用 make-help-screen 定义的命令首先在回显区域中显示其帮助行字符串，并且仅当用户再次键入帮助字符时才显示较长的帮助文本字符串。
+    如果该变量不为  ~nil~rs
+    ，则使用 make-help-screen 定义的命令首先在回显区域中显示其帮助行字符串，并且仅当用户再次键入帮助字符时才显示较长的帮助文本字符串。
 
 ** 25.7 文档组
 Emacs 可以根据各种分组列出函数。例如，string-trim 和 mapconcat 是 ~字符串~ 函数，因此 Mx shortdoc-display-group RET string RET 将概述对字符串进行操作的函数。

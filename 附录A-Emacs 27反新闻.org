@@ -13,7 +13,7 @@
    - Emacs 模块不能再提供交互功能，或者安装终结器，也不能打开现有管道子进程的通道。所有这些都是额外的镇流器，特别是因为我们计划在过去的 Emacs 版本中删除模块。出于同样的原因，make_unibyte_string 模块 API 已被删除。
    - 为了保持 Emacs 的简洁和优雅，我们删除了 print-integers-as-characters 选项。通过十进制代码识别字符是 Emacs Lisp 程序员的基本要求，并且随着 Unicode 字符使用的预期减少，这将很快仅限于 ASCII：当然你们都可以掌握！
    - 目录文件函数的可选计数参数已被删除。从完整列表中提取前 n 个成员是微不足道的，因此对于微不足道的成本来说，这是一个显着的简化。
-   - 创建子进程和网络连接的函数不再接受 :coding 参数；  改用 set-process-coding-system 或 bind coding-system-for-read/write：同样，以很少或没有成本显着降低 Emacs 复杂性。
+   - 创建子进程和网络连接的函数不再接受 :coding 参数；改用 set-process-coding-system 或 bind coding-system-for-read/write：同样，以很少或没有成本显着降低 Emacs 复杂性。
    - 我们从宏 define-derived-mode 和 define-minor-mode 中删除了允许使用 :interactive 参数的代码。将模式标记为非交互的可能性很小，
    - 在文档字符串中包含指向手册页的链接的可能性已被删除。如果您需要此类参考，请改用纯文本。
    - 临时缓冲区不再免除运行任何与缓冲区相关的挂钩。不希望在某个缓冲区中出现此类钩子的程序总是可以在本地禁用它，而使这变得更简单会使 Emacs 无缘无故地复杂化。

@@ -175,7 +175,7 @@
   multi-query-replace-map
 #+end_src
 
-    用于查询替换和相关命令中的响应的稀疏键映射；  也适用于 y-or-np 和 map-y-or-np。使用此映射的函数不支持前缀键；  他们一次查找一个事件。multi-query-replace-map 扩展 query-replace-map 以进行多缓冲区替换。请参阅查询替换映射。
+    用于查询替换和相关命令中的响应的稀疏键映射；也适用于 y-or-np 和 map-y-or-np。使用此映射的函数不支持前缀键；他们一次查找一个事件。multi-query-replace-map 扩展 query-replace-map 以进行多缓冲区替换。请参阅查询替换映射。
 #+begin_src emacs-lisp
   search-map
 #+end_src

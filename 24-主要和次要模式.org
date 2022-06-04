@@ -2407,7 +2407,7 @@ SMIE 提供了各种专门设计用于缩进规则功能的功能（如果在其
 需要注意的几点：
 
     第一种情况表示要使用的基本缩进增量。如果 sample-indent-basic 为  ~nil~ ，则 SMIE 使用全局设置 smie-indent-basic。主要模式可以设置 smie-indent-basic buffer-locally，但不鼓励这样做。
-    标记 ~，~ 的规则使 SMIE 在逗号分隔符放在行首时尝试更聪明。它尝试突出分隔符以对齐逗号后的代码；  例如：
+    标记 ~，~ 的规则使 SMIE 在逗号分隔符放在行首时尝试更聪明。它尝试突出分隔符以对齐逗号后的代码；例如：
 
     #+begin_src emacs-lisp
       x = longfunctionname (
@@ -2451,7 +2451,7 @@ SMIE 提供了各种专门设计用于缩进规则功能的功能（如果在其
   User Option: smie-config ¶
 #+end_src
 
-    此选项允许您基于每个模式自定义缩进。它是一个具有表单元素的列表（模式.规则）。有关规则的精确形式，请参阅变量的文档；  但您可能会发现使用命令 smie-config-guess 更容易。
+    此选项允许您基于每个模式自定义缩进。它是一个具有表单元素的列表（模式.规则）。有关规则的精确形式，请参阅变量的文档；但您可能会发现使用命令 smie-config-guess 更容易。
 
 #+begin_src emacs-lisp
   Command: smie-config-guess ¶

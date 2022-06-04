@@ -7,7 +7,7 @@
 
 某些缩写，称为系统缩写，由主模式而不是用户定义。系统缩写由其非  ~nil~  :system 属性标识（请参阅缩写属性）。将缩写保存到缩写文件时，系统缩写将被省略。请参阅在文件中保存缩写。
 
-因为用于缩写的符号没有被嵌入到通常的 obarray 中，所以它们永远不会作为读取 Lisp 表达式的结果出现；  事实上，除了处理缩写的代码之外，它们通常从不使用。因此，以非标准方式使用它们是安全的。
+因为用于缩写的符号没有被嵌入到通常的 obarray 中，所以它们永远不会作为读取 Lisp 表达式的结果出现；事实上，除了处理缩写的代码之外，它们通常从不使用。因此，以非标准方式使用它们是安全的。
 
 如果启用了次要模式 Abbrev 模式，则缓冲区局部变量 abbrev-mode 为非  ~nil~ ，并且 abbrevs 会自动在缓冲区中展开。有关 abbrevs 的用户级命令，请参阅 The GNU Emacs Manual 中的 Abbrev Mode。
 
@@ -36,7 +36,7 @@
   Function: copy-abbrev-table abbrev-table ¶
 #+end_src
 
-    此函数返回 abbrev-table 的副本——一个包含相同缩写定义的新缩写表。它不复制任何属性列表；  只有名称、值和函数。
+    此函数返回 abbrev-table 的副本——一个包含相同缩写定义的新缩写表。它不复制任何属性列表；只有名称、值和函数。
 
 #+begin_src emacs-lisp
   Function: define-abbrev-table tabname definitions &optional docstring &rest props ¶
@@ -75,7 +75,7 @@ define-abbrev 是用于在缩写表中定义缩写的低级基本函数。
 
     名称应该是一个字符串。参数扩展通常是所需的扩展（字符串），或者  ~nil~  取消定义缩写。如果它不是字符串或  ~nil~ ，则缩写仅通过运行 hook 扩展。
 
-    参数挂钩是一个函数或  ~nil~ 。如果 hook 不为  ~nil~ ，则在将缩写替换为展开式后不带参数调用它；  当调用 hook 时，point 位于展开的末尾。
+    参数挂钩是一个函数或  ~nil~ 。如果 hook 不为  ~nil~ ，则在将缩写替换为展开式后不带参数调用它；当调用 hook 时，point 位于展开的末尾。
 
     如果 hook 是一个非  ~nil~  符号，其 no-self-insert 属性为非  ~nil~ ，则 hook 可以显式控制是否插入触发扩展的自插入输入字符。如果在这种情况下钩子返回非零，则禁止插入字符。相反，如果钩子返回  ~nil~ ，expand-abbrev（或 abbrev-insert）也返回  ~nil~ ，就好像展开并没有真正发生一样。
 
@@ -85,7 +85,7 @@ define-abbrev 是用于在缩写表中定义缩写的低级基本函数。
   User Option: only-global-abbrevs ¶
 #+end_src
 
-    如果此变量非零，则表示用户计划仅使用全局缩写。这告诉定义特定模式缩写的命令改为定义全局缩写。该变量不会改变本节中函数的行为；  他们的来电者会检查它。
+    如果此变量非零，则表示用户计划仅使用全局缩写。这告诉定义特定模式缩写的命令改为定义全局缩写。该变量不会改变本节中函数的行为；他们的来电者会检查它。
 
 ** 37.3 在文件中保存缩写
 保存的缩写定义文件实际上是一个 Lisp 代码文件。缩写以 Lisp 程序的形式保存，以定义具有相同内容的相同缩写表。因此，您可以使用 load 加载文件（请参阅程序如何加载）。但是，作为更方便的接口提供了 quiet-read-abbrev-file 功能。Emacs 在启动时会自动调用这个函数。
@@ -96,7 +96,7 @@ define-abbrev 是用于在缩写表中定义缩写的低级基本函数。
   User Option: abbrev-file-name ¶
 #+end_src
 
-    这是读取和保存缩写的默认文件名。默认情况下，Emacs 将查找 ~/.emacs.d/abbrev_defs，如果没有找到，则查找 ~/.abbrev_defs；  如果两个文件都不存在，Emacs 将创建 ~/.emacs.d/abbrev_defs。
+    这是读取和保存缩写的默认文件名。默认情况下，Emacs 将查找 ~/.emacs.d/abbrev_defs，如果没有找到，则查找 ~/.abbrev_defs；如果两个文件都不存在，Emacs 将创建 ~/.emacs.d/abbrev_defs。
 
 #+begin_src emacs-lisp
   Function: quietly-read-abbrev-file &optional filename ¶
@@ -151,7 +151,7 @@ define-abbrev 是用于在缩写表中定义缩写的低级基本函数。
   Function: abbrev-insert abbrev &optional name start end ¶
 #+end_src
 
-    此函数插入​​ abbrev 的 abbrev 扩展，替换 start 和 end 之间的文本。如果省略 start，则默认为 point。name，如果非零，应该是找到这个缩写的名字（一个字符串）；  用于判断是否调整扩张的资本化。如果 abbrev 插入成功，该函数返回 abbrev，否则返回  ~nil~ 。
+    此函数插入​​ abbrev 的 abbrev 扩展，替换 start 和 end 之间的文本。如果省略 start，则默认为 point。name，如果非零，应该是找到这个缩写的名字（一个字符串）；用于判断是否调整扩张的资本化。如果 abbrev 插入成功，该函数返回 abbrev，否则返回  ~nil~ 。
 
 #+begin_src emacs-lisp
   Command: abbrev-prefix-mark &optional arg ¶
@@ -244,7 +244,7 @@ define-abbrev 是用于在缩写表中定义缩写的低级基本函数。
   Variable: fundamental-mode-abbrev-table ¶
 #+end_src
 
-    这是基本模式中使用的本地缩写表；  换句话说，它是基本模式下所有缓冲区中的本地缩写表。
+    这是基本模式中使用的本地缩写表；换句话说，它是基本模式下所有缓冲区中的本地缩写表。
 
 #+begin_src emacs-lisp
   Variable: text-mode-abbrev-table ¶
