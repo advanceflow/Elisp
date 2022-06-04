@@ -1,13 +1,3 @@
-
-# Table of Contents
-
-1.  [18 Lisp编译成Native代码](#org4ffc2ea)
-    1.  [18.1 本机编译函数](#orgb77a97b)
-    2.  [18.2 本机编译变量](#org9ffcba4)
-
-
-<a id="org4ffc2ea"></a>
-
 # 18 Lisp编译成Native代码
 
 除了上一章中描述的字节编译之外，Emacs还可以选择性地将Lisp函数定义编译成真正的编译代码，称为 ~ 本地代码~ 。此功能使用 `libgccjit`  库，它是GCC发行版的一部分，并且要求构建Emacs时支持使用该库。它还需要在您的系统上安装GCC和Binutils（汇编器和链接器），以便您能够本地编译Lisp代码。
