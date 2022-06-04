@@ -1,11 +1,3 @@
-
-# Table of Contents
-
-1.  [附录 H 标准钩子](#org82ecada)
-
-
-<a id="org82ecada"></a>
-
 # 附录 H 标准钩子
 
 以下是一些钩子变量的列表，这些变量让您可以在适当的情况下提供从 Emacs 中调用的函数。
