@@ -303,445 +303,445 @@
 
 ** 14 宏
    | Content                     | S1   | S2   | S3/Author |
-   | 14.1 一个简单的宏例子       | DONE | DONE |             |
-   | 14.2 宏调用的扩展           | DONE | DONE |             |
-   | 14.3 宏和字节编译           | DONE | DONE |             |
-   | 14.4 定义宏                 | DONE | DONE |             |
-   | 14.5 使用宏的常见问题       | DONE | DONE |             |
-   | 14.5.1 错误时间             | DONE | DONE |             |
-   | 14.5.2 反复评估宏参数       | DONE | DONE |             |
-   | 14.5.3 宏展开中的局部变量   | DONE | DONE |             |
-   | 14.5.4 评估扩展中的宏观参数 | DONE | DONE |             |
-   | 14.5.5 宏扩展了多少次？     | DONE | DONE |             |
-   | 14.6 缩进宏                 | DONE | DONE |             |
+   | 14.1 一个简单的宏例子       | DONE | DONE |0.8          |
+   | 14.2 宏调用的扩展           | DONE | DONE |0.8          |
+   | 14.3 宏和字节编译           | DONE | DONE |0.8          |
+   | 14.4 定义宏                 | DONE | DONE |0.8          |
+   | 14.5 使用宏的常见问题       | DONE | DONE |0.8          |
+   | 14.5.1 错误时间             | DONE | DONE |0.8          |
+   | 14.5.2 反复评估宏参数       | DONE | DONE |0.8          |
+   | 14.5.3 宏展开中的局部变量   | DONE | DONE |0.8          |
+   | 14.5.4 评估扩展中的宏观参数 | DONE | DONE |0.8          |
+   | 14.5.5 宏扩展了多少次？     | DONE | DONE |0.8          |
+   | 14.6 缩进宏                 | DONE | DONE |0.8          |
 
 
 ** 15 自定义设置
    | Content             | S1   | S2   | S3/Author |
-   | 15.1 常用项关键字   | DONE | DONE |             |
-   | 15.2 定义自定义组   | DONE | DONE |             |
-   | 15.3 定义自定义变量 | DONE | DONE |             |
-   | 15.4 自定义类型     | DONE | DONE |             |
-   | 15.4.1 简单类型     | DONE | DONE |             |
-   | 15.4.2 复合类型     | DONE | DONE |             |
-   | 15.4.3 拼接成列表   | DONE | DONE |             |
-   | 15.4.4 键入关键字   | DONE | DONE |             |
-   | 15.4.5 定义新类型   | DONE | DONE |             |
-   | 15.5 应用自定义     | DONE | DONE |             |
-   | 15.6 自定义主题     | DONE | DONE |             |
+   | 15.1 常用项关键字   | DONE | DONE | 0.8         |
+   | 15.2 定义自定义组   | DONE | DONE | 0.8         |
+   | 15.3 定义自定义变量 | DONE | DONE | 0.8         |
+   | 15.4 自定义类型     | DONE | DONE | 0.8         |
+   | 15.4.1 简单类型     | DONE | DONE | 0.8         |
+   | 15.4.2 复合类型     | DONE | DONE | 0.8         |
+   | 15.4.3 拼接成列表   | DONE | DONE | 0.8         |
+   | 15.4.4 键入关键字   | DONE | DONE | 0.8         |
+   | 15.4.5 定义新类型   | DONE | DONE | 0.8         |
+   | 15.5 应用自定义     | DONE | DONE | 0.8         |
+   | 15.6 自定义主题     | DONE | DONE | 0.8         |
 
 ** 16 加载
    | Content                     | S1   | S2   | S3/Author |
-   | 16.1 程序如何加载           | DONE | DONE |             |
-   | 16.2 加载后缀               | DONE | DONE |             |
-   | 16.3 图书馆搜索             | DONE | DONE |             |
-   | 16.4 加载非 ASCII 字符      | DONE | DONE |             |
-   | 16.5 自动加载               | DONE | DONE |             |
-   | 16.5.1 按前缀自动加载       | DONE | DONE |             |
-   | 16.5.2 何时使用自动加载     | DONE | DONE |             |
-   | 16.6 重复加载               | DONE | DONE |             |
-   | 16.7 特点                   | DONE | DONE |             |
-   | 16.8 哪个文件定义了某个符号 | DONE | DONE |             |
-   | 16.9 卸载                   | DONE | DONE |             |
-   | 16.10 装载挂钩              | DONE | DONE |             |
-   | 16.11 Emacs 动态模块        | DONE | DONE |             |
+   | 16.1 程序如何加载           | DONE | DONE |0.8          |
+   | 16.2 加载后缀               | DONE | DONE |0.8          |
+   | 16.3 图书馆搜索             | DONE | DONE |0.8          |
+   | 16.4 加载非 ASCII 字符      | DONE | DONE |0.8          |
+   | 16.5 自动加载               | DONE | DONE |0.8          |
+   | 16.5.1 按前缀自动加载       | DONE | DONE |0.8          |
+   | 16.5.2 何时使用自动加载     | DONE | DONE |0.8          |
+   | 16.6 重复加载               | DONE | DONE |0.8          |
+   | 16.7 特点                   | DONE | DONE |0.8          |
+   | 16.8 哪个文件定义了某个符号 | DONE | DONE |0.8          |
+   | 16.9 卸载                   | DONE | DONE |0.8          |
+   | 16.10 装载挂钩              | DONE | DONE |0.8          |
+   | 16.11 Emacs 动态模块        | DONE | DONE |0.8          |
 
 
 ** 17 字节编译
    | Content                 | S1   | S2   | S3/Author |
-   | 17.1 字节编译代码的性能 | DONE | DONE |             |
-   | 17.2 字节编译函数       | DONE | DONE |             |
-   | 17.3 文档字符串和编译   | DONE | DONE |             |
-   | 17.4 单个函数的动态加载 | DONE | DONE |             |
-   | 17.5 编译期间的评估     | DONE | DONE |             |
-   | 17.6 编译器错误         | DONE | DONE |             |
-   | 17.7 字节码函数对象     | DONE | DONE |             |
-   | 17.8 反汇编字节码       | DONE | DONE |             |
+   | 17.1 字节编译代码的性能 | DONE | DONE | 0.8         |
+   | 17.2 字节编译函数       | DONE | DONE | 0.8         |
+   | 17.3 文档字符串和编译   | DONE | DONE | 0.8         |
+   | 17.4 单个函数的动态加载 | DONE | DONE | 0.8         |
+   | 17.5 编译期间的评估     | DONE | DONE | 0.8         |
+   | 17.6 编译器错误         | DONE | DONE | 0.8         |
+   | 17.7 字节码函数对象     | DONE | DONE | 0.8         |
+   | 17.8 反汇编字节码       | DONE | DONE | 0.8         |
 
 
 ** 18 Lisp编译成Native代码
    | Content           | S1   | S2   | S3/Author |
-   | 18.1 本机编译函数 | DONE | DONE |             |
-   | 18.2 本机编译变量 | DONE | DONE |             |
+   | 18.1 本机编译函数 | DONE | DONE |0.8          |
+   | 18.2 本机编译变量 | DONE | DONE |0.8          |
 
 ** 19 调试 Lisp 程序
    | Content                       | S1   | S2   | S3/Author |
-   | 19.1 Lisp 调试器              | DONE | DONE |             |
-   | 19.1.1 出错时进入调试器       | DONE | DONE |             |
-   | 19.1.2 调试无限循环           | DONE | DONE |             |
-   | 19.1.3 在函数调用中进入调试器 | DONE | DONE |             |
-   | 19.1.4 修改变量时进入调试器   | DONE | DONE |             |
-   | 19.1.5 显式进入调试器         | DONE | DONE |             |
-   | 19.1.6 使用调试器             | DONE | DONE |             |
-   | 19.1.7 回溯                   | DONE | DONE |             |
-   | 19.1.8 调试器命令             | DONE | DONE |             |
-   | 19.1.9 调用调试器             | DONE | DONE |             |
-   | 19.1.10 调试器的内部结构      | DONE | DONE |             |
-   | 19.2 调试                     | DONE | DONE |             |
-   | 19.2.1 使用 Edebug            | DONE | DONE |             |
-   | 19.2.2 为 Edebug 检测         | DONE | DONE |             |
-   | 19.2.3 Edebug 执行模式        | DONE | DONE |             |
-   | 19.2.4 跳跃                   | DONE | DONE |             |
-   | 19.2.5 其他 Edebug 命令       | DONE | DONE |             |
-   | 19.2.6 断点                   | DONE | DONE |             |
-   | 19.2.6.1 调试断点             | DONE | DONE |             |
-   | 19.2.6.2 全局中断条件         | DONE | DONE |             |
-   | 19.2.6.3 源断点               | DONE | DONE |             |
-   | 19.2.7 捕获错误               | DONE | DONE |             |
-   | 19.2.8 调试视图               | DONE | DONE |             |
-   | 19.2.9 评估                   | DONE | DONE |             |
-   | 19.2.10 评估列表缓冲区        | DONE | DONE |             |
-   | 19.2.11 在 Edebug 中打印      | DONE | DONE |             |
-   | 19.2.12 跟踪缓冲区            | DONE | DONE |             |
-   | 19.2.13 覆盖测试              | DONE | DONE |             |
-   | 19.2.14 外部环境              | DONE | DONE |             |
-   | 19.2.14.1 检查是否停止        | DONE | DONE |             |
-   | 19.2.14.2 调试显示更新        | DONE | DONE |             |
-   | 19.2.14.3 Edebug 递归编辑     | DONE | DONE |             |
-   | 19.2.15 调试和宏              | DONE | DONE |             |
-   | 19.2.15.1 检测宏调用          | DONE | DONE |             |
-   | 19.2.15.2 规格表              | DONE | DONE |             |
-   | 19.2.15.3 规范中的回溯        | DONE | DONE |             |
-   | 19.2.15.4 规范示例            | DONE | DONE |             |
-   | 19.2.16 调试选项              | DONE | DONE |             |
-   | 19.3 调试无效的 Lisp 语法     | DONE | DONE |             |
-   | 19.3.1 多余的开括号           | DONE | DONE |             |
-   | 19.3.2 多余的右括号           | DONE | DONE |             |
-   | 19.4 测试覆盖率               | DONE | DONE |             |
-   | 19.5 剖析                     | DONE | DONE |             |
+   | 19.1 Lisp 调试器              | DONE | DONE | 0.8         |
+   | 19.1.1 出错时进入调试器       | DONE | DONE | 0.8         |
+   | 19.1.2 调试无限循环           | DONE | DONE | 0.8         |
+   | 19.1.3 在函数调用中进入调试器 | DONE | DONE | 0.8         |
+   | 19.1.4 修改变量时进入调试器   | DONE | DONE | 0.8         |
+   | 19.1.5 显式进入调试器         | DONE | DONE | 0.8         |
+   | 19.1.6 使用调试器             | DONE | DONE | 0.8         |
+   | 19.1.7 回溯                   | DONE | DONE | 0.8         |
+   | 19.1.8 调试器命令             | DONE | DONE | 0.8         |
+   | 19.1.9 调用调试器             | DONE | DONE | 0.8         |
+   | 19.1.10 调试器的内部结构      | DONE | DONE | 0.8         |
+   | 19.2 调试                     | DONE | DONE | 0.8         |
+   | 19.2.1 使用 Edebug            | DONE | DONE | 0.8         |
+   | 19.2.2 为 Edebug 检测         | DONE | DONE | 0.8         |
+   | 19.2.3 Edebug 执行模式        | DONE | DONE | 0.8         |
+   | 19.2.4 跳跃                   | DONE | DONE | 0.8         |
+   | 19.2.5 其他 Edebug 命令       | DONE | DONE | 0.8         |
+   | 19.2.6 断点                   | DONE | DONE | 0.8         |
+   | 19.2.6.1 调试断点             | DONE | DONE | 0.8         |
+   | 19.2.6.2 全局中断条件         | DONE | DONE | 0.8         |
+   | 19.2.6.3 源断点               | DONE | DONE | 0.8         |
+   | 19.2.7 捕获错误               | DONE | DONE | 0.8         |
+   | 19.2.8 调试视图               | DONE | DONE | 0.8         |
+   | 19.2.9 评估                   | DONE | DONE | 0.8         |
+   | 19.2.10 评估列表缓冲区        | DONE | DONE | 0.8         |
+   | 19.2.11 在 Edebug 中打印      | DONE | DONE | 0.8         |
+   | 19.2.12 跟踪缓冲区            | DONE | DONE | 0.8         |
+   | 19.2.13 覆盖测试              | DONE | DONE | 0.8         |
+   | 19.2.14 外部环境              | DONE | DONE | 0.8         |
+   | 19.2.14.1 检查是否停止        | DONE | DONE | 0.8         |
+   | 19.2.14.2 调试显示更新        | DONE | DONE | 0.8         |
+   | 19.2.14.3 Edebug 递归编辑     | DONE | DONE | 0.8         |
+   | 19.2.15 调试和宏              | DONE | DONE | 0.8         |
+   | 19.2.15.1 检测宏调用          | DONE | DONE | 0.8         |
+   | 19.2.15.2 规格表              | DONE | DONE | 0.8         |
+   | 19.2.15.3 规范中的回溯        | DONE | DONE | 0.8         |
+   | 19.2.15.4 规范示例            | DONE | DONE | 0.8         |
+   | 19.2.16 调试选项              | DONE | DONE | 0.8         |
+   | 19.3 调试无效的 Lisp 语法     | DONE | DONE | 0.8         |
+   | 19.3.1 多余的开括号           | DONE | DONE | 0.8         |
+   | 19.3.2 多余的右括号           | DONE | DONE | 0.8         |
+   | 19.4 测试覆盖率               | DONE | DONE | 0.8         |
+   | 19.5 剖析                     | DONE | DONE | 0.8         |
 
 
 ** 20 读入和打印 Lisp 对象
    | Content             | S1   | S2   | S3/Author |
-   | 20.1 读入与打印简介 | DONE | DONE |             |
-   | 20.2 输入流         | DONE | DONE |             |
-   | 20.3 输入函数       | DONE | DONE |             |
-   | 20.4 输出流         | DONE | DONE |             |
-   | 20.5 输出函数       | DONE | DONE |             |
-   | 20.6 影响输出的变量 | DONE | DONE |             |
+   | 20.1 读入与打印简介 | DONE | DONE | 0.8         |
+   | 20.2 输入流         | DONE | DONE | 0.8         |
+   | 20.3 输入函数       | DONE | DONE | 0.8         |
+   | 20.4 输出流         | DONE | DONE | 0.8         |
+   | 20.5 输出函数       | DONE | DONE | 0.8         |
+   | 20.6 影响输出的变量 | DONE | DONE | 0.8         |
 
 
 ** 21 小缓冲区
    | Content                           | S1   | S2   | S3/Author |
-   | 21.1 Minibuffers 简介             | DONE | DONE |             |
-   | 21.2 用 Minibuffer 读取文本字符串 | DONE | DONE |             |
-   | 21.3 用 Minibuffer 读取 Lisp 对象 | DONE | DONE |             |
-   | 21.4 小缓冲区历史                 | DONE | DONE |             |
-   | 21.5 初始输入                     | DONE | DONE |             |
-   | 21.6 完成                         | DONE | DONE |             |
-   | 21.6.1 基本完成函数               | DONE | DONE |             |
-   | 21.6.2 完成和小缓冲区             | DONE | DONE |             |
-   | 21.6.3 完成完成的 Minibuffer 命令 | DONE | DONE |             |
-   | 21.6.4 高级完成函数               | DONE | DONE |             |
-   | 21.6.5 读取文件名                 | DONE | DONE |             |
-   | 21.6.6 完成变量                   | DONE | DONE |             |
-   | 21.6.7 编程完成                   | DONE | DONE |             |
-   | 21.6.8 在普通缓冲区中完成         | DONE | DONE |             |
-   | 21.7 是或否查询                   | DONE | DONE |             |
-   | 21.8 提出多项选择题               | DONE | DONE |             |
-   | 21.9 读取密码                     | DONE | DONE |             |
-   | 21.10 小缓冲区命令                | DONE | DONE |             |
-   | 21.11 小缓冲窗口                  | DONE | DONE |             |
-   | 21.12 小缓冲区内容                | DONE | DONE |             |
-   | 21.13 递归小缓冲区                | DONE | DONE |             |
-   | 21.14 抑制交互                    | DONE | DONE |             |
-   | 21.15 小缓冲区杂记                | DONE | DONE |             |
+   | 21.1 Minibuffers 简介             | DONE | DONE | 0.8         |
+   | 21.2 用 Minibuffer 读取文本字符串 | DONE | DONE | 0.8         |
+   | 21.3 用 Minibuffer 读取 Lisp 对象 | DONE | DONE | 0.8         |
+   | 21.4 小缓冲区历史                 | DONE | DONE | 0.8         |
+   | 21.5 初始输入                     | DONE | DONE | 0.8         |
+   | 21.6 完成                         | DONE | DONE | 0.8         |
+   | 21.6.1 基本完成函数               | DONE | DONE | 0.8         |
+   | 21.6.2 完成和小缓冲区             | DONE | DONE | 0.8         |
+   | 21.6.3 完成完成的 Minibuffer 命令 | DONE | DONE | 0.8         |
+   | 21.6.4 高级完成函数               | DONE | DONE | 0.8         |
+   | 21.6.5 读取文件名                 | DONE | DONE | 0.8         |
+   | 21.6.6 完成变量                   | DONE | DONE | 0.8         |
+   | 21.6.7 编程完成                   | DONE | DONE | 0.8         |
+   | 21.6.8 在普通缓冲区中完成         | DONE | DONE | 0.8         |
+   | 21.7 是或否查询                   | DONE | DONE | 0.8         |
+   | 21.8 提出多项选择题               | DONE | DONE | 0.8         |
+   | 21.9 读取密码                     | DONE | DONE | 0.8         |
+   | 21.10 小缓冲区命令                | DONE | DONE | 0.8         |
+   | 21.11 小缓冲窗口                  | DONE | DONE | 0.8         |
+   | 21.12 小缓冲区内容                | DONE | DONE | 0.8         |
+   | 21.13 递归小缓冲区                | DONE | DONE | 0.8         |
+   | 21.14 抑制交互                    | DONE | DONE | 0.8         |
+   | 21.15 小缓冲区杂记                | DONE | DONE | 0.8         |
 
 
 ** 22 命令循环
    | Content                        | S1   | S2   | S3/Author |
-   | 22.1 命令循环概述              | DONE | DONE |             |
-   | 22.2 定义命令                  | DONE | DONE |             |
-   | 22.2.1 使用 interactive        | DONE | DONE |             |
-   | 22.2.2 代码字符 interactive    | DONE | DONE |             |
-   | 22.2.3 使用示例 interactive    | DONE | DONE |             |
-   | 22.2.4 指定命令模式            | DONE | DONE |             |
-   | 22.2.5 在命令选项中进行选择    | DONE | DONE |             |
-   | 22.3 交互调用                  | DONE | DONE |             |
-   | 22.4 区分交互调用              | DONE | DONE |             |
-   | 22.5 来自命令循环的信息        | DONE | DONE |             |
-   | 22.6 指令后点调整              | DONE | DONE |             |
-   | 22.7 输入事件                  | DONE | DONE |             |
-   | 22.7.1 键盘事件                | DONE | DONE |             |
-   | 22.7.2 功能键                  | DONE | DONE |             |
-   | 22.7.3 鼠标事件                | DONE | DONE |             |
-   | 22.7.4 点击事件                | DONE | DONE |             |
-   | 22.7.5 拖动事件                | DONE | DONE |             |
-   | 22.7.6 按钮按下事件            | DONE | DONE |             |
-   | 22.7.7 重复事件                | DONE | DONE |             |
-   | 22.7.8 运动事件                | DONE | DONE |             |
-   | 22.7.9 焦点事件                | DONE | DONE |             |
-   | 22.7.10 其他系统事件           | DONE | DONE |             |
-   | 22.7.11 事件示例               | DONE | DONE |             |
-   | 22.7.12 分类事件               | DONE | DONE |             |
-   | 22.7.13 访问鼠标事件           | DONE | DONE |             |
-   | 22.7.14 访问滚动条事件         | DONE | DONE |             |
-   | 22.7.15 将键盘事件放入字符串中 | DONE | DONE |             |
-   | 22.8 读数输入                  | DONE | DONE |             |
-   | 22.8.1 按键序列输入            | DONE | DONE |             |
-   | 22.8.2 读取一个事件            | DONE | DONE |             |
-   | 22.8.3 修改和翻译输入事件      | DONE | DONE |             |
-   | 22.8.4 调用输入法              | DONE | DONE |             |
-   | 22.8.5 引用字符输入            | DONE | DONE |             |
-   | 22.8.6 杂项事件输入功能        | DONE | DONE |             |
-   | 22.9 特别活动                  | DONE | DONE |             |
-   | 22.10 等待经过时间或输入       | DONE | DONE |             |
-   | 22.11 退出                     | DONE | DONE |             |
-   | 22.12 前缀命令参数             | DONE | DONE |             |
-   | 22.13 递归编辑                 | DONE | DONE |             |
-   | 22.14 禁用命令                 | DONE | DONE |             |
-   | 22.15 命令历史                 | DONE | DONE |             |
-   | 22.16 键盘宏                   | DONE | DONE |             |
+   | 22.1 命令循环概述              | DONE | DONE | 0.8         |
+   | 22.2 定义命令                  | DONE | DONE | 0.8         |
+   | 22.2.1 使用 interactive        | DONE | DONE | 0.8         |
+   | 22.2.2 代码字符 interactive    | DONE | DONE | 0.8         |
+   | 22.2.3 使用示例 interactive    | DONE | DONE | 0.8         |
+   | 22.2.4 指定命令模式            | DONE | DONE | 0.8         |
+   | 22.2.5 在命令选项中进行选择    | DONE | DONE | 0.8         |
+   | 22.3 交互调用                  | DONE | DONE | 0.8         |
+   | 22.4 区分交互调用              | DONE | DONE | 0.8         |
+   | 22.5 来自命令循环的信息        | DONE | DONE | 0.8         |
+   | 22.6 指令后点调整              | DONE | DONE | 0.8         |
+   | 22.7 输入事件                  | DONE | DONE | 0.8         |
+   | 22.7.1 键盘事件                | DONE | DONE | 0.8         |
+   | 22.7.2 功能键                  | DONE | DONE | 0.8         |
+   | 22.7.3 鼠标事件                | DONE | DONE | 0.8         |
+   | 22.7.4 点击事件                | DONE | DONE | 0.8         |
+   | 22.7.5 拖动事件                | DONE | DONE | 0.8         |
+   | 22.7.6 按钮按下事件            | DONE | DONE | 0.8         |
+   | 22.7.7 重复事件                | DONE | DONE | 0.8         |
+   | 22.7.8 运动事件                | DONE | DONE | 0.8         |
+   | 22.7.9 焦点事件                | DONE | DONE | 0.8         |
+   | 22.7.10 其他系统事件           | DONE | DONE | 0.8         |
+   | 22.7.11 事件示例               | DONE | DONE | 0.8         |
+   | 22.7.12 分类事件               | DONE | DONE | 0.8         |
+   | 22.7.13 访问鼠标事件           | DONE | DONE | 0.8         |
+   | 22.7.14 访问滚动条事件         | DONE | DONE | 0.8         |
+   | 22.7.15 将键盘事件放入字符串中 | DONE | DONE | 0.8         |
+   | 22.8 读数输入                  | DONE | DONE | 0.8         |
+   | 22.8.1 按键序列输入            | DONE | DONE | 0.8         |
+   | 22.8.2 读取一个事件            | DONE | DONE | 0.8         |
+   | 22.8.3 修改和翻译输入事件      | DONE | DONE | 0.8         |
+   | 22.8.4 调用输入法              | DONE | DONE | 0.8         |
+   | 22.8.5 引用字符输入            | DONE | DONE | 0.8         |
+   | 22.8.6 杂项事件输入功能        | DONE | DONE | 0.8         |
+   | 22.9 特别活动                  | DONE | DONE | 0.8         |
+   | 22.10 等待经过时间或输入       | DONE | DONE | 0.8         |
+   | 22.11 退出                     | DONE | DONE | 0.8         |
+   | 22.12 前缀命令参数             | DONE | DONE | 0.8         |
+   | 22.13 递归编辑                 | DONE | DONE | 0.8         |
+   | 22.14 禁用命令                 | DONE | DONE | 0.8         |
+   | 22.15 命令历史                 | DONE | DONE | 0.8         |
+   | 22.16 键盘宏                   | DONE | DONE | 0.8         |
 
 
 ** 23 键映射
    | Content                        | S1   | S2   | S3/Author |
-   | 23.1 按键序列                  | DONE | DONE |             |
-   | 23.2 键映射基础                | DONE | DONE |             |
-   | 23.3 键映射格式                | DONE | DONE |             |
-   | 23.4 创建键映射                | DONE | DONE |             |
-   | 23.5 继承和键映射              | DONE | DONE |             |
-   | 23.6 前缀键                    | DONE | DONE |             |
-   | 23.7 活动键映射                | DONE | DONE |             |
-   | 23.8 搜索活动键映射            | DONE | DONE |             |
-   | 23.9 控制激活的键映射          | DONE | DONE |             |
-   | 23.10 密钥查找                 | DONE | DONE |             |
-   | 23.11 键查找函数               | DONE | DONE |             |
-   | 23.12 更改键绑定               | DONE | DONE |             |
-   | 23.13 重映射命令               | DONE | DONE |             |
-   | 23.14 用于翻译事件序列的键映射 | DONE | DONE |             |
-   | 23.14.1 与普通键映射的交互     | DONE | DONE |             |
-   | 23.15 绑定键的命令             | DONE | DONE |             |
-   | 23.16 扫描键映射               | DONE | DONE |             |
-   | 23.17 菜单键映射               | DONE | DONE |             |
-   | 23.17.1 定义菜单               | DONE | DONE |             |
-   | 23.17.1.1 简单菜单项           | DONE | DONE |             |
-   | 23.17.1.2 扩展菜单项           | DONE | DONE |             |
-   | 23.17.1.3 菜单分隔符           | DONE | DONE |             |
-   | 23.17.1.4 别名菜单项           | DONE | DONE |             |
-   | 23.17.2 菜单和鼠标             | DONE | DONE |             |
-   | 23.17.3 菜单和键盘             | DONE | DONE |             |
-   | 23.17.4 菜单示例               | DONE | DONE |             |
-   | 23.17.5 菜单栏                 | DONE | DONE |             |
-   | 23.17.6 工具栏                 | DONE | DONE |             |
-   | 23.17.7 修改菜单               | DONE | DONE |             |
-   | 23.17.8 简易菜单               | DONE | DONE |             |
+   | 23.1 按键序列                  | DONE | DONE | 0.8         |
+   | 23.2 键映射基础                | DONE | DONE | 0.8         |
+   | 23.3 键映射格式                | DONE | DONE | 0.8         |
+   | 23.4 创建键映射                | DONE | DONE | 0.8         |
+   | 23.5 继承和键映射              | DONE | DONE | 0.8         |
+   | 23.6 前缀键                    | DONE | DONE | 0.8         |
+   | 23.7 活动键映射                | DONE | DONE | 0.8         |
+   | 23.8 搜索活动键映射            | DONE | DONE | 0.8         |
+   | 23.9 控制激活的键映射          | DONE | DONE | 0.8         |
+   | 23.10 密钥查找                 | DONE | DONE | 0.8         |
+   | 23.11 键查找函数               | DONE | DONE | 0.8         |
+   | 23.12 更改键绑定               | DONE | DONE | 0.8         |
+   | 23.13 重映射命令               | DONE | DONE | 0.8         |
+   | 23.14 用于翻译事件序列的键映射 | DONE | DONE | 0.8         |
+   | 23.14.1 与普通键映射的交互     | DONE | DONE | 0.8         |
+   | 23.15 绑定键的命令             | DONE | DONE | 0.8         |
+   | 23.16 扫描键映射               | DONE | DONE | 0.8         |
+   | 23.17 菜单键映射               | DONE | DONE | 0.8         |
+   | 23.17.1 定义菜单               | DONE | DONE | 0.8         |
+   | 23.17.1.1 简单菜单项           | DONE | DONE | 0.8         |
+   | 23.17.1.2 扩展菜单项           | DONE | DONE | 0.8         |
+   | 23.17.1.3 菜单分隔符           | DONE | DONE | 0.8         |
+   | 23.17.1.4 别名菜单项           | DONE | DONE | 0.8         |
+   | 23.17.2 菜单和鼠标             | DONE | DONE | 0.8         |
+   | 23.17.3 菜单和键盘             | DONE | DONE | 0.8         |
+   | 23.17.4 菜单示例               | DONE | DONE | 0.8         |
+   | 23.17.5 菜单栏                 | DONE | DONE | 0.8         |
+   | 23.17.6 工具栏                 | DONE | DONE | 0.8         |
+   | 23.17.7 修改菜单               | DONE | DONE | 0.8         |
+   | 23.17.8 简易菜单               | DONE | DONE | 0.8         |
 
 
 ** 24 主和次模式
    | Content                             | S1   | S2   | S3/Author |
-   | 24.1 钩子                           | DONE | DONE |             |
-   | 24.1.1 运行钩子                     | DONE | DONE |             |
-   | 24.1.2 设置挂钩                     | DONE | DONE |             |
-   | 24.2 主模式                         | DONE | DONE |             |
-   | 24.2.1 主模式约定                   | DONE | DONE |             |
-   | 24.2.2 Emacs 如何选择主模式         | DONE | DONE |             |
-   | 24.2.3 获取有关主模式的帮助         | DONE | DONE |             |
-   | 24.2.4 定义派生模式                 | DONE | DONE |             |
-   | 24.2.5 基本主模式                   | DONE | DONE |             |
-   | 24.2.6 模式挂钩                     | DONE | DONE |             |
-   | 24.2.7 列表模式                     | DONE | DONE |             |
-   | 24.2.8 通用模式                     | DONE | DONE |             |
-   | 24.2.9 主模式示例                   | DONE | DONE |             |
-   | 24.3 次模式                         | DONE | DONE |             |
-   | 24.3.1 编写次模式的约定             | DONE | DONE |             |
-   | 24.3.2 键映射和次模式               | DONE | DONE |             |
-   | 24.3.3 定义次模式                   | DONE | DONE |             |
-   | 24.4 模式线格式                     | DONE | DONE |             |
-   | 24.4.1 模式线基础                   | DONE | DONE |             |
-   | 24.4.2 模式行的数据结构             | DONE | DONE |             |
-   | 24.4.3 顶层模式线控制               | DONE | DONE |             |
-   | 24.4.4 模式行中使用的变量           | DONE | DONE |             |
-   | 24.4.5 %- 模式线中的构造            | DONE | DONE |             |
-   | 24.4.6 模式行中的属性               | DONE | DONE |             |
-   | 24.4.7 窗口标题行                   | DONE | DONE |             |
-   | 24.4.8 模拟模式行格式               | DONE | DONE |             |
-   | 24.5 名称                           | DONE | DONE |             |
-   | 24.6 字体锁定模式                   | DONE | DONE |             |
-   | 24.6.1 字体锁定基础                 | DONE | DONE |             |
-   | 24.6.2 基于搜索的字体               | DONE | DONE |             |
-   | 24.6.3 自定义基于搜索的字体         | DONE | DONE |             |
-   | 24.6.4 其他字体锁定变量             | DONE | DONE |             |
-   | 24.6.5 字体锁定级别                 | DONE | DONE |             |
-   | 24.6.6 预计算字体                   | DONE | DONE |             |
-   | 24.6.7 字体锁定面                   | DONE | DONE |             |
-   | 24.6.8 语法字体锁定                 | DONE | DONE |             |
-   | 24.6.9 多行字体锁定结构             | DONE | DONE |             |
-   | 24.6.9.1 字体锁定多行               | DONE | DONE |             |
-   | 24.6.9.2 缓冲区更改后要字体化的区域 | DONE | DONE |             |
-   | 24.7 代码自动缩进                   | DONE | DONE |             |
-   | 24.7.1 简单的缩进引擎               | DONE | DONE |             |
-   | 24.7.1.1 SMIE 设置和功能            | DONE | DONE |             |
-   | 24.7.1.2 运算符优先级文法           | DONE | DONE |             |
-   | 24.7.1.3 定义语言的语法             | DONE | DONE |             |
-   | 24.7.1.4 定义令牌                   | DONE | DONE |             |
-   | 24.7.1.5 使用弱解析器               | DONE | DONE |             |
-   | 24.7.1.6 指定缩进规则               | DONE | DONE |             |
-   | 24.7.1.7 缩进规则的辅助函数         | DONE | DONE |             |
-   | 24.7.1.8 缩进规则示例               | DONE | DONE |             |
-   | 24.7.1.9 自定义缩进                 | DONE | DONE |             |
-   | 24.8 桌面保存模式                   | DONE | DONE |             |
+   | 24.1 钩子                           | DONE | DONE | 0.8         |
+   | 24.1.1 运行钩子                     | DONE | DONE | 0.8         |
+   | 24.1.2 设置挂钩                     | DONE | DONE | 0.8         |
+   | 24.2 主模式                         | DONE | DONE | 0.8         |
+   | 24.2.1 主模式约定                   | DONE | DONE | 0.8         |
+   | 24.2.2 Emacs 如何选择主模式         | DONE | DONE | 0.8         |
+   | 24.2.3 获取有关主模式的帮助         | DONE | DONE | 0.8         |
+   | 24.2.4 定义派生模式                 | DONE | DONE | 0.8         |
+   | 24.2.5 基本主模式                   | DONE | DONE | 0.8         |
+   | 24.2.6 模式挂钩                     | DONE | DONE | 0.8         |
+   | 24.2.7 列表模式                     | DONE | DONE | 0.8         |
+   | 24.2.8 通用模式                     | DONE | DONE | 0.8         |
+   | 24.2.9 主模式示例                   | DONE | DONE | 0.8         |
+   | 24.3 次模式                         | DONE | DONE | 0.8         |
+   | 24.3.1 编写次模式的约定             | DONE | DONE | 0.8         |
+   | 24.3.2 键映射和次模式               | DONE | DONE | 0.8         |
+   | 24.3.3 定义次模式                   | DONE | DONE | 0.8         |
+   | 24.4 模式线格式                     | DONE | DONE | 0.8         |
+   | 24.4.1 模式线基础                   | DONE | DONE | 0.8         |
+   | 24.4.2 模式行的数据结构             | DONE | DONE | 0.8         |
+   | 24.4.3 顶层模式线控制               | DONE | DONE | 0.8         |
+   | 24.4.4 模式行中使用的变量           | DONE | DONE | 0.8         |
+   | 24.4.5 %- 模式线中的构造            | DONE | DONE | 0.8         |
+   | 24.4.6 模式行中的属性               | DONE | DONE | 0.8         |
+   | 24.4.7 窗口标题行                   | DONE | DONE | 0.8         |
+   | 24.4.8 模拟模式行格式               | DONE | DONE | 0.8         |
+   | 24.5 名称                           | DONE | DONE | 0.8         |
+   | 24.6 字体锁定模式                   | DONE | DONE | 0.8         |
+   | 24.6.1 字体锁定基础                 | DONE | DONE | 0.8         |
+   | 24.6.2 基于搜索的字体               | DONE | DONE | 0.8         |
+   | 24.6.3 自定义基于搜索的字体         | DONE | DONE | 0.8         |
+   | 24.6.4 其他字体锁定变量             | DONE | DONE | 0.8         |
+   | 24.6.5 字体锁定级别                 | DONE | DONE | 0.8         |
+   | 24.6.6 预计算字体                   | DONE | DONE | 0.8         |
+   | 24.6.7 字体锁定面                   | DONE | DONE | 0.8         |
+   | 24.6.8 语法字体锁定                 | DONE | DONE | 0.8         |
+   | 24.6.9 多行字体锁定结构             | DONE | DONE | 0.8         |
+   | 24.6.9.1 字体锁定多行               | DONE | DONE | 0.8         |
+   | 24.6.9.2 缓冲区更改后要字体化的区域 | DONE | DONE | 0.8         |
+   | 24.7 代码自动缩进                   | DONE | DONE | 0.8         |
+   | 24.7.1 简单的缩进引擎               | DONE | DONE | 0.8         |
+   | 24.7.1.1 SMIE 设置和功能            | DONE | DONE | 0.8         |
+   | 24.7.1.2 运算符优先级文法           | DONE | DONE | 0.8         |
+   | 24.7.1.3 定义语言的语法             | DONE | DONE | 0.8         |
+   | 24.7.1.4 定义令牌                   | DONE | DONE | 0.8         |
+   | 24.7.1.5 使用弱解析器               | DONE | DONE | 0.8         |
+   | 24.7.1.6 指定缩进规则               | DONE | DONE | 0.8         |
+   | 24.7.1.7 缩进规则的辅助函数         | DONE | DONE | 0.8         |
+   | 24.7.1.8 缩进规则示例               | DONE | DONE | 0.8         |
+   | 24.7.1.9 自定义缩进                 | DONE | DONE | 0.8         |
+   | 24.8 桌面保存模式                   | DONE | DONE | 0.8         |
 
 
 ** 25 文档
    | Content                 | S1   | S2   | S3/Author |
-   | 25.1 文档基础           | DONE | DONE |             |
-   | 25.2 访问文档字符串     | DONE | DONE |             |
-   | 25.3 替换文档中的键绑定 | DONE | DONE |             |
-   | 25.4 文本引用样式       | DONE | DONE |             |
-   | 25.5 描述帮助信息的字符 | DONE | DONE |             |
-   | 25.6 帮助功能           | DONE | DONE |             |
-   | 25.7 文档组             | DONE | DONE |             |
+   | 25.1 文档基础           | DONE | DONE |0.8          |
+   | 25.2 访问文档字符串     | DONE | DONE |0.8          |
+   | 25.3 替换文档中的键绑定 | DONE | DONE |0.8          |
+   | 25.4 文本引用样式       | DONE | DONE |0.8          |
+   | 25.5 描述帮助信息的字符 | DONE | DONE |0.8          |
+   | 25.6 帮助功能           | DONE | DONE |0.8          |
+   | 25.7 文档组             | DONE | DONE |0.8          |
 
 
 ** 26 文件
    | Content                    | S1   | S2   | S3/Author |
-   | 26.1 访问文件              | DONE | DONE |             |
-   | 26.1.1 文件访问函数        | DONE | DONE |             |
-   | 26.1.2 访问子程序          | DONE | DONE |             |
-   | 26.2 保存缓冲区            | DONE | DONE |             |
-   | 26.3 从文件中读取          | DONE | DONE |             |
-   | 26.4 写入文件              | DONE | DONE |             |
-   | 26.5 文件锁                | DONE | DONE |             |
-   | 26.6 文件信息              | DONE | DONE |             |
-   | 26.6.1 测试可访问性        | DONE | DONE |             |
-   | 26.6.2 区分文件种类        | DONE | DONE |             |
-   | 26.6.3 真名                | DONE | DONE |             |
-   | 26.6.4 文件属性            | DONE | DONE |             |
-   | 26.6.5 扩展文件属性        | DONE | DONE |             |
-   | 26.6.6 在标准位置定位文件  | DONE | DONE |             |
-   | 26.7 更改文件名和属性      | DONE | DONE |             |
-   | 26.8 文件和二级存储        | DONE | DONE |             |
-   | 26.9 文件名                | DONE | DONE |             |
-   | 26.9.1 文件名组件          | DONE | DONE |             |
-   | 26.9.2 绝对和相对文件名    | DONE | DONE |             |
-   | 26.9.3 目录名称            | DONE | DONE |             |
-   | 26.9.4 扩展文件名的函数    | DONE | DONE |             |
-   | 26.9.5 生成唯一文件名      | DONE | DONE |             |
-   | 26.9.6 文件名补全          | DONE | DONE |             |
-   | 26.9.7 标准文件名          | DONE | DONE |             |
-   | 26.10 目录的内容           | DONE | DONE |             |
-   | 26.11 创建、复制和删除目录 | DONE | DONE |             |
-   | 26.12 使某些文件名“神奇”   | DONE | DONE |             |
-   | 26.13 文件格式转换         | DONE | DONE |             |
-   | 26.13.1 概述               | DONE | DONE |             |
-   | 26.13.2 往返规范           | DONE | DONE |             |
-   | 26.13.3 零碎规格           | DONE | DONE |             |
+   | 26.1 访问文件              | DONE | DONE |0.8          |
+   | 26.1.1 文件访问函数        | DONE | DONE |0.8          |
+   | 26.1.2 访问子程序          | DONE | DONE |0.8          |
+   | 26.2 保存缓冲区            | DONE | DONE |0.8          |
+   | 26.3 从文件中读取          | DONE | DONE |0.8          |
+   | 26.4 写入文件              | DONE | DONE |0.8          |
+   | 26.5 文件锁                | DONE | DONE |0.8          |
+   | 26.6 文件信息              | DONE | DONE |0.8          |
+   | 26.6.1 测试可访问性        | DONE | DONE |0.8          |
+   | 26.6.2 区分文件种类        | DONE | DONE |0.8          |
+   | 26.6.3 真名                | DONE | DONE |0.8          |
+   | 26.6.4 文件属性            | DONE | DONE |0.8          |
+   | 26.6.5 扩展文件属性        | DONE | DONE |0.8          |
+   | 26.6.6 在标准位置定位文件  | DONE | DONE |0.8          |
+   | 26.7 更改文件名和属性      | DONE | DONE |0.8          |
+   | 26.8 文件和二级存储        | DONE | DONE |0.8          |
+   | 26.9 文件名                | DONE | DONE |0.8          |
+   | 26.9.1 文件名组件          | DONE | DONE |0.8          |
+   | 26.9.2 绝对和相对文件名    | DONE | DONE |0.8          |
+   | 26.9.3 目录名称            | DONE | DONE |0.8          |
+   | 26.9.4 扩展文件名的函数    | DONE | DONE |0.8          |
+   | 26.9.5 生成唯一文件名      | DONE | DONE |0.8          |
+   | 26.9.6 文件名补全          | DONE | DONE |0.8          |
+   | 26.9.7 标准文件名          | DONE | DONE |0.8          |
+   | 26.10 目录的内容           | DONE | DONE |0.8          |
+   | 26.11 创建、复制和删除目录 | DONE | DONE |0.8          |
+   | 26.12 使某些文件名“神奇”   | DONE | DONE |0.8          |
+   | 26.13 文件格式转换         | DONE | DONE |0.8          |
+   | 26.13.1 概述               | DONE | DONE |0.8          |
+   | 26.13.2 往返规范           | DONE | DONE |0.8          |
+   | 26.13.3 零碎规格           | DONE | DONE |0.8          |
 
 
 ** 27 备份和自动保存
    | Content                         | S1   | S2   | S3/Author |
-   | 27.1 备份文件                   | DONE | DONE |             |
-   | 27.1.1 制作备份文件             | DONE | DONE |             |
-   | 27.1.2 重命名备份还是复制备份？ | DONE | DONE |             |
-   | 27.1.3 制作和删除编号备份文件   | DONE | DONE |             |
-   | 27.1.4 命名备份文件             | DONE | DONE |             |
-   | 27.2 自动保存                   | DONE | DONE |             |
-   | 27.3 还原                       | DONE | DONE |             |
+   | 27.1 备份文件                   | DONE | DONE |0.8          |
+   | 27.1.1 制作备份文件             | DONE | DONE |0.8          |
+   | 27.1.2 重命名备份还是复制备份？ | DONE | DONE |0.8          |
+   | 27.1.3 制作和删除编号备份文件   | DONE | DONE |0.8          |
+   | 27.1.4 命名备份文件             | DONE | DONE |0.8          |
+   | 27.2 自动保存                   | DONE | DONE |0.8          |
+   | 27.3 还原                       | DONE | DONE |0.8          |
 
 
 ** 28 缓冲区
    | Content                        | S1   | S2   | S3/Author |
-   | 28.1 缓冲区基础                | DONE | DONE |             |
-   | 28.2 当前缓冲区                | DONE | DONE |             |
-   | 28.3 缓冲区名称                | DONE | DONE |             |
-   | 28.4 缓冲区文件名              | DONE | DONE |             |
-   | 28.5 缓冲区修改                | DONE | DONE |             |
-   | 28.6 缓冲区修改时间            | DONE | DONE |             |
-   | 28.7 只读缓冲区                | DONE | DONE |             |
-   | 28.8 缓冲区列表                | DONE | DONE |             |
-   | 28.9 创建缓冲区                | DONE | DONE |             |
-   | 28.10 终止缓冲区               | DONE | DONE |             |
-   | 28.11 间接缓冲区               | DONE | DONE |             |
-   | 28.12 在两个缓冲区之间交换文本 | DONE | DONE |             |
-   | 28.13 缓冲间隙                 | DONE | DONE |             |
+   | 28.1 缓冲区基础                | DONE | DONE |0.8          |
+   | 28.2 当前缓冲区                | DONE | DONE |0.8          |
+   | 28.3 缓冲区名称                | DONE | DONE |0.8          |
+   | 28.4 缓冲区文件名              | DONE | DONE |0.8          |
+   | 28.5 缓冲区修改                | DONE | DONE |0.8          |
+   | 28.6 缓冲区修改时间            | DONE | DONE |0.8          |
+   | 28.7 只读缓冲区                | DONE | DONE |0.8          |
+   | 28.8 缓冲区列表                | DONE | DONE |0.8          |
+   | 28.9 创建缓冲区                | DONE | DONE |0.8          |
+   | 28.10 终止缓冲区               | DONE | DONE |0.8          |
+   | 28.11 间接缓冲区               | DONE | DONE |0.8          |
+   | 28.12 在两个缓冲区之间交换文本 | DONE | DONE |0.8          |
+   | 28.13 缓冲间隙                 | DONE | DONE |0.8          |
 
 ** 29 窗口
    | Content                        | S1   | S2   | S3/Author |
-   | 29.1 Emacs Windows的基本概念   | DONE | DONE |             |
-   | 29.2 窗户和框架                | DONE | DONE |             |
-   | 29.3 选择窗口                  | DONE | DONE |             |
-   | 29.4 窗口大小                  | DONE | DONE |             |
-   | 29.5 调整窗口大小              | DONE | DONE |             |
-   | 29.6 保留窗口大小              | DONE | DONE |             |
-   | 29.7 分割窗口                  | DONE | DONE |             |
-   | 29.8 删除窗口                  | DONE | DONE |             |
-   | 29.9 重新组合窗口              | DONE | DONE |             |
-   | 29.10 Windows的循环排序        | DONE | DONE |             |
-   | 29.11 缓冲区和窗口             | DONE | DONE |             |
-   | 29.12 切换到窗口中的缓冲区     | DONE | DONE |             |
-   | 29.13 在合适的窗口中显示缓冲区 | DONE | DONE |             |
-   | 29.13.1 选择显示缓冲区的窗口   | DONE | DONE |             |
-   | 29.13.2 缓冲区显示的动作函数   | DONE | DONE |             |
-   | 29.13.3 缓冲区显示的动作列表   | DONE | DONE |             |
-   | 29.13.4 显示缓冲区的附加选项   | DONE | DONE |             |
-   | 29.13.5 动作函数的优先级       | DONE | DONE |             |
-   | 29.13.6 缓冲区显示之禅         | DONE | DONE |             |
-   | 29.14 窗口历史                 | DONE | DONE |             |
-   | 29.15 专用窗口                 | DONE | DONE |             |
-   | 29.16 退出窗口                 | DONE | DONE |             |
-   | 29.17 侧窗                     | DONE | DONE |             |
-   | 29.17.1 在侧窗中显示缓冲区     | DONE | DONE |             |
-   | 29.17.2 侧窗选项和功能         | DONE | DONE |             |
-   | 29.17.3 带有侧窗的框架布局     | DONE | DONE |             |
-   | 29.18 原子窗口                 | DONE | DONE |             |
-   | 29.19 窗口和点                 | DONE | DONE |             |
-   | 29.20 窗口开始和结束位置       | DONE | DONE |             |
-   | 29.21 文本滚动                 | DONE | DONE |             |
-   | 29.22 垂直小数滚动             | DONE | DONE |             |
-   | 29.23 水平滚动                 | DONE | DONE |             |
-   | 29.24 坐标和窗口               | DONE | DONE |             |
-   | 29.25 鼠标窗口自动选择         | DONE | DONE |             |
-   | 29.26 窗口配置                 | DONE | DONE |             |
-   | 29.27 窗口参数                 | DONE | DONE |             |
-   | 29.28 窗口滚动和改变的钩子     | DONE | DONE |             |
+   | 29.1 Emacs Windows的基本概念   | DONE | DONE |0.8          |
+   | 29.2 窗户和框架                | DONE | DONE |0.8          |
+   | 29.3 选择窗口                  | DONE | DONE |0.8          |
+   | 29.4 窗口大小                  | DONE | DONE |0.8          |
+   | 29.5 调整窗口大小              | DONE | DONE |0.8          |
+   | 29.6 保留窗口大小              | DONE | DONE |0.8          |
+   | 29.7 分割窗口                  | DONE | DONE |0.8          |
+   | 29.8 删除窗口                  | DONE | DONE |0.8          |
+   | 29.9 重新组合窗口              | DONE | DONE |0.8          |
+   | 29.10 Windows的循环排序        | DONE | DONE |0.8          |
+   | 29.11 缓冲区和窗口             | DONE | DONE |0.8          |
+   | 29.12 切换到窗口中的缓冲区     | DONE | DONE |0.8          |
+   | 29.13 在合适的窗口中显示缓冲区 | DONE | DONE |0.8          |
+   | 29.13.1 选择显示缓冲区的窗口   | DONE | DONE |0.8          |
+   | 29.13.2 缓冲区显示的动作函数   | DONE | DONE |0.8          |
+   | 29.13.3 缓冲区显示的动作列表   | DONE | DONE |0.8          |
+   | 29.13.4 显示缓冲区的附加选项   | DONE | DONE |0.8          |
+   | 29.13.5 动作函数的优先级       | DONE | DONE |0.8          |
+   | 29.13.6 缓冲区显示之禅         | DONE | DONE |0.8          |
+   | 29.14 窗口历史                 | DONE | DONE |0.8          |
+   | 29.15 专用窗口                 | DONE | DONE |0.8          |
+   | 29.16 退出窗口                 | DONE | DONE |0.8          |
+   | 29.17 侧窗                     | DONE | DONE |0.8          |
+   | 29.17.1 在侧窗中显示缓冲区     | DONE | DONE |0.8          |
+   | 29.17.2 侧窗选项和功能         | DONE | DONE |0.8          |
+   | 29.17.3 带有侧窗的框架布局     | DONE | DONE |0.8          |
+   | 29.18 原子窗口                 | DONE | DONE |0.8          |
+   | 29.19 窗口和点                 | DONE | DONE |0.8          |
+   | 29.20 窗口开始和结束位置       | DONE | DONE |0.8          |
+   | 29.21 文本滚动                 | DONE | DONE |0.8          |
+   | 29.22 垂直小数滚动             | DONE | DONE |0.8          |
+   | 29.23 水平滚动                 | DONE | DONE |0.8          |
+   | 29.24 坐标和窗口               | DONE | DONE |0.8          |
+   | 29.25 鼠标窗口自动选择         | DONE | DONE |0.8          |
+   | 29.26 窗口配置                 | DONE | DONE |0.8          |
+   | 29.27 窗口参数                 | DONE | DONE |0.8          |
+   | 29.28 窗口滚动和改变的钩子     | DONE | DONE |0.8          |
 
 ** 30 帧
    | Content                        | S1   | S2   | S3/Author |
-   | 30.1 创建帧                    | DONE | DONE |             |
-   | 30.2 多终端                    | DONE | DONE |             |
-   | 30.3 帧几何                    | DONE | DONE |             |
-   | 30.3.1 帧布局                  | DONE | DONE |             |
-   | 30.3.2 帧字体                  | DONE | DONE |             |
-   | 30.3.3 帧位置                  | DONE | DONE |             |
-   | 30.3.4 帧大小                  | DONE | DONE |             |
-   | 30.3.5 隐含的帧大小调整        | DONE | DONE |             |
-   | 30.4 帧参数                    | DONE | DONE |             |
-   | 30.4.1 访问帧参数              | DONE | DONE |             |
-   | 30.4.2 初始帧参数              | DONE | DONE |             |
-   | 30.4.3 窗框参数                | DONE | DONE |             |
-   | 30.4.3.1 基本参数              | DONE | DONE |             |
-   | 30.4.3.2 位置参数              | DONE | DONE |             |
-   | 30.4.3.3 尺寸参数              | DONE | DONE |             |
-   | 30.4.3.4 布局参数              | DONE | DONE |             |
-   | 30.4.3.5 缓冲区参数            | DONE | DONE |             |
-   | 30.4.3.6 帧交互参数            | DONE | DONE |             |
-   | 30.4.3.7 鼠标拖动参数          | DONE | DONE |             |
-   | 30.4.3.8 窗口管理参数          | DONE | DONE |             |
-   | 30.4.3.9 光标参数              | DONE | DONE |             |
-   | 30.4.3.10 字体和颜色参数       | DONE | DONE |             |
-   | 30.4.4 几何                    | DONE | DONE |             |
-   | 30.5 终端参数                  | DONE | DONE |             |
-   | 30.6 帧标题                    | DONE | DONE |             |
-   | 30.7 删除帧                    | DONE | DONE |             |
-   | 30.8 查找所有帧                | DONE | DONE |             |
-   | 30.9 小缓冲区和帧              | DONE | DONE |             |
-   | 30.10 输入焦点                 | DONE | DONE |             |
-   | 30.11 框架的可见性             | DONE | DONE |             |
-   | 30.12 提升、降低和重新堆叠框架 | DONE | DONE |             |
-   | 30.13 帧配置                   | DONE | DONE |             |
-   | 30.14 子框架                   | DONE | DONE |             |
-   | 30.15 鼠标跟踪                 | DONE | DONE |             |
-   | 30.16 鼠标位置                 | DONE | DONE |             |
-   | 30.17 弹出菜单                 | DONE | DONE |             |
-   | 30.18 对话框                   | DONE | DONE |             |
-   | 30.19 指针形状                 | DONE | DONE |             |
-   | 30.20 窗口系统选择             | DONE | DONE |             |
-   | 30.21 拖放                     | DONE | DONE |             |
-   | 30.22 颜色名称                 | DONE | DONE |             |
-   | 30.23 文本终端颜色             | DONE | DONE |             |
-   | 30.24 X 资源                   | DONE | DONE |             |
-   | 30.25 显示功能测试             | DONE | DONE |             |
+   | 30.1 创建帧                    | DONE | DONE |0.8          |
+   | 30.2 多终端                    | DONE | DONE |0.8          |
+   | 30.3 帧几何                    | DONE | DONE |0.8          |
+   | 30.3.1 帧布局                  | DONE | DONE |0.8          |
+   | 30.3.2 帧字体                  | DONE | DONE |0.8          |
+   | 30.3.3 帧位置                  | DONE | DONE |0.8          |
+   | 30.3.4 帧大小                  | DONE | DONE |0.8          |
+   | 30.3.5 隐含的帧大小调整        | DONE | DONE |0.8          |
+   | 30.4 帧参数                    | DONE | DONE |0.8          |
+   | 30.4.1 访问帧参数              | DONE | DONE |0.8          |
+   | 30.4.2 初始帧参数              | DONE | DONE |0.8          |
+   | 30.4.3 窗框参数                | DONE | DONE |0.8          |
+   | 30.4.3.1 基本参数              | DONE | DONE |0.8          |
+   | 30.4.3.2 位置参数              | DONE | DONE |0.8          |
+   | 30.4.3.3 尺寸参数              | DONE | DONE |0.8          |
+   | 30.4.3.4 布局参数              | DONE | DONE |0.8          |
+   | 30.4.3.5 缓冲区参数            | DONE | DONE |0.8          |
+   | 30.4.3.6 帧交互参数            | DONE | DONE |0.8          |
+   | 30.4.3.7 鼠标拖动参数          | DONE | DONE |0.8          |
+   | 30.4.3.8 窗口管理参数          | DONE | DONE |0.8          |
+   | 30.4.3.9 光标参数              | DONE | DONE |0.8          |
+   | 30.4.3.10 字体和颜色参数       | DONE | DONE |0.8          |
+   | 30.4.4 几何                    | DONE | DONE |0.8          |
+   | 30.5 终端参数                  | DONE | DONE |0.8          |
+   | 30.6 帧标题                    | DONE | DONE |0.8          |
+   | 30.7 删除帧                    | DONE | DONE |0.8          |
+   | 30.8 查找所有帧                | DONE | DONE |0.8          |
+   | 30.9 小缓冲区和帧              | DONE | DONE |0.8          |
+   | 30.10 输入焦点                 | DONE | DONE |0.8          |
+   | 30.11 框架的可见性             | DONE | DONE |0.8          |
+   | 30.12 提升、降低和重新堆叠框架 | DONE | DONE |0.8          |
+   | 30.13 帧配置                   | DONE | DONE |0.8          |
+   | 30.14 子框架                   | DONE | DONE |0.8          |
+   | 30.15 鼠标跟踪                 | DONE | DONE |0.8          |
+   | 30.16 鼠标位置                 | DONE | DONE |0.8          |
+   | 30.17 弹出菜单                 | DONE | DONE |0.8          |
+   | 30.18 对话框                   | DONE | DONE |0.8          |
+   | 30.19 指针形状                 | DONE | DONE |0.8          |
+   | 30.20 窗口系统选择             | DONE | DONE |0.8          |
+   | 30.21 拖放                     | DONE | DONE |0.8          |
+   | 30.22 颜色名称                 | DONE | DONE |0.8          |
+   | 30.23 文本终端颜色             | DONE | DONE |0.8          |
+   | 30.24 X 资源                   | DONE | DONE |0.8          |
+   | 30.25 显示功能测试             | DONE | DONE |0.8          |
 
 ** 31 位置
    | Content                 | S1   | S2   | S3/Author |
